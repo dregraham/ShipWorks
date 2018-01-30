@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -33,5 +34,10 @@ namespace ShipWorks.Stores.Communication
         /// Whether or not the downloader should download the given order number
         /// </summary>
         bool ShouldDownload(string orderNumber);
+		
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        StoreEntity Store { get; }
     }
 }

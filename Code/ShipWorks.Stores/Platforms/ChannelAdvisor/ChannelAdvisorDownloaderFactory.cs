@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Func<StoreEntity, IChannelAdvisorSoapDownloader> createSoapDownloader,
             Func<StoreEntity, IChannelAdvisorRestDownloader> createRestDownloader)
         {
+            Store = store;
             ChannelAdvisorStoreEntity typedStore = store as ChannelAdvisorStoreEntity;
             downloader = string.IsNullOrWhiteSpace(typedStore.RefreshToken) ?
                 (IStoreDownloader) createSoapDownloader(store) :
@@ -38,6 +39,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
         public int QuantityNew => downloader.QuantityNew;
+
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
 
         /// <summary>
         /// Download orders from the store

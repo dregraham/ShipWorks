@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             Func<GenericFileStoreEntity, IGenericFileCsvDownloader> createCsvDownloader,
             Func<GenericFileStoreEntity, IGenericFileExcelDownloader> createExcelDownloader)
         {
+            Store = store;
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
             switch ((GenericFileFormat) generic.FileFormat)
@@ -54,6 +55,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
         public int QuantityNew => downloader.QuantityNew;
+
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
 
         /// <summary>
         /// Download orders from the store

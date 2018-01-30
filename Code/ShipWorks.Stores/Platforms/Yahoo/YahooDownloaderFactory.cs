@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             Func<YahooStoreEntity, IYahooEmailDownloader> createEmailDownloader,
             Func<YahooStoreEntity, IYahooApiDownloader> createApiDownloader)
         {
+            Store = store;
             YahooStoreEntity typedStore = store as YahooStoreEntity;
             downloader = typedStore.YahooStoreID.IsNullOrWhiteSpace() ?
                 (IStoreDownloader) createEmailDownloader(typedStore) :
@@ -41,6 +42,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
         public int QuantityNew => downloader.QuantityNew;
+
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
 
         /// <summary>
         /// Download orders from the store

@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             Func<MarketplaceAdvisorStoreEntity, IMarketplaceAdvisorLegacyDownloader> createLegacyDownloader,
             Func<MarketplaceAdvisorStoreEntity, IMarketplaceAdvisorOmsDownloader> createOmsDownloader)
         {
+            Store = store;
             MarketplaceAdvisorStoreEntity typedStore = store as MarketplaceAdvisorStoreEntity;
             downloader = typedStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS ?
                 (IStoreDownloader) createOmsDownloader(typedStore) :
@@ -38,6 +39,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
         public int QuantityNew => downloader.QuantityNew;
+
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
 
         /// <summary>
         /// Download orders from the store
