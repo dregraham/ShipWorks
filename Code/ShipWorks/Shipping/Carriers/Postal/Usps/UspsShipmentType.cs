@@ -222,6 +222,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;
+                shipment.Insurance = shipment.Postal.Usps.Insurance;
             }
 
             shipment.InsuranceProvider = (int) (UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);

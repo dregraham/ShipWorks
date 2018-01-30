@@ -107,6 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             // Other only has the option to use ShipWorks Insurance
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            shipment.Insurance = shipment.Other.Insurance;
         }
 
         /// <summary>

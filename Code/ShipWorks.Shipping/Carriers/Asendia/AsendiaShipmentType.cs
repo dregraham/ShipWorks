@@ -161,6 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
+            shipment.Insurance = shipment.Asendia.Insurance;
         }
 
         /// <summary>

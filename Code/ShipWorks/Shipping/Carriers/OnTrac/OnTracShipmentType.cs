@@ -341,6 +341,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             shipment.InsuranceProvider = settings.OnTracInsuranceProvider;
             shipment.OnTrac.InsurancePennyOne = settings.OnTracInsurancePennyOne;
+            shipment.Insurance = shipment.OnTrac.Insurance;
 
             // If they are using carrier insurance, send the actual value of the shipment as declared value
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)

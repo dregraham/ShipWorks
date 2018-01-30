@@ -275,6 +275,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Endicia.RequestedLabelFormat;
+
+                shipment.Insurance = shipment.Postal.Endicia.Insurance;
             }
         }
                
