@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void ShouldDownload_ReturnsFalse()
         {
-            StoreEntity store = new ChannelAdvisorStoreEntity();
+            StoreEntity store = new YahooStoreEntity();
             var shouldDownload = mock.Create<YahooDownloaderFactory>(TypedParameter.From(store)).ShouldDownload("1");
             Assert.False(shouldDownload);
         }
