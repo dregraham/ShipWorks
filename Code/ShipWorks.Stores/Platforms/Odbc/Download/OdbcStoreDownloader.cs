@@ -11,7 +11,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
@@ -59,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public override async Task Download(string orderNumber, long downloadID, DbConnection con)
         {
             Progress = new ProgressItem("Download single order");
-            downloadLogID = downloadID;
+            //downloadLogID = downloadID;
             connection = con;
             try
             {

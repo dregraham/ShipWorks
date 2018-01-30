@@ -45,7 +45,9 @@ namespace ShipWorks.Filters.Search
                 selectStatements.Add($"SELECT OrderId FROM [OrderSearch] WHERE OrderNumber = {numericParamName}");
             }
 
-            // Now create the SQL
+            // Now create the SQL predicate.
+            // This will ultimately be part of a where clause created by SearchSqlGenerator.GenerateSql. [Order] o is pulled in from
+            // SqlGenerationScope.GetFromClause()
             string searchSql = $@" o.OrderId in
             (
 	            {string.Join($" {Environment.NewLine} UNION {Environment.NewLine}", selectStatements)}
