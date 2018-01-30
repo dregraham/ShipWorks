@@ -32,7 +32,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -166,10 +166,18 @@ namespace ShipWorks.Stores.Communication
             {
                 await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
-                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
-                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+                CollectDownloadTelemetry(trackedDurationEvent);
             }
+        }
+
+        /// <summary>
+        /// Collect the download telemetry
+        /// </summary>
+        private void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
+        {
+            trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+            trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+            trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
         }
 
         /// <summary>
@@ -1183,7 +1191,24 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download the order with matching order number for the store
         /// </summary>
-        public virtual Task Download(string orderNumber, long downloadID, DbConnection con)
+        public async virtual Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            Progress = new ProgressItem("Download single order");
+            downloadLogID = downloadID;
+            connection = con;
+            
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                await Download(orderNumber, trackedDurationEvent).ConfigureAwait(false);
+
+                CollectDownloadTelemetry(trackedDurationEvent);
+            }
+        }
+
+        /// <summary>
+        /// store specific download by order number
+        /// </summary>
+        protected virtual Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent)
         {
             return Task.CompletedTask;
         }

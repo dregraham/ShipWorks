@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
@@ -228,6 +229,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Upload.QueryType", expectedResult));
+        }
+
+        [Theory]
+        [InlineData(OdbcImportStrategy.All)]
+        [InlineData(OdbcImportStrategy.ByModifiedTime)]
+        [InlineData(OdbcImportStrategy.OnDemand)]
+        public void CollectTelemetry_ImportStrategyTypeSetFromOdbcStore(OdbcImportStrategy sourceType)
+        {
+            odbcStore.ImportStrategy = (int) sourceType;
+
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.Strategy", EnumHelper.GetApiValue(sourceType)));
         }
 
         private void MockDataSourceService()

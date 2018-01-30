@@ -55,11 +55,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Download the order with matching order number for the store
         /// </summary>
-        public override async Task Download(string orderNumber, long downloadID, DbConnection con)
+        protected override async Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent)
         {
-            Progress = new ProgressItem("Download single order");
-            //downloadLogID = downloadID;
-            connection = con;
             try
             {
                 // Try to find an existing order
@@ -67,6 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 if (order == null)
                 {
                     IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                    AddTelemetryData(trackedDurationEvent, downloadCommand);
                     await Download(downloadCommand).ConfigureAwait(false);
                 }
             }
@@ -104,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             try
             {
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
-                trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
+                AddTelemetryData(trackedDurationEvent, downloadCommand);
 
                 await Download(downloadCommand).ConfigureAwait(false);
             }
@@ -112,6 +110,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Add telemetry data to the TrackedDurationEvent
+        /// </summary>
+        private void AddTelemetryData(TrackedDurationEvent trackedDurationEvent, IOdbcCommand downloadCommand)
+        {
+            trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
+            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) store.ImportStrategy));
         }
 
         /// <summary>
