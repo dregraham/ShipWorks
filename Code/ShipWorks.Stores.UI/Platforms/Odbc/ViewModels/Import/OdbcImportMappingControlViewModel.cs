@@ -277,8 +277,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 // Default to 1 item per order
                 NumberOfItemsPerOrder = 1;
             }
-
-            RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
+            
+            RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource, "unknown");
 
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, true).SingleOrDefault();
@@ -349,7 +349,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                         c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
                     {
                         columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
-                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
+                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName, "unknown");
                     }
                 }
                 if (columnsNotFound.Any())
@@ -378,7 +378,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn(EmptyColumnName));
+            Columns.Insert(0, new OdbcColumn(EmptyColumnName, "unknown"));
         }
 
         /// <summary>

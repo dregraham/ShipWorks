@@ -246,7 +246,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         private void MockFieldMap()
         {
             var orderNumberExternalFieldMock = mock.MockRepository.Create<IExternalOdbcMappableField>();
-            orderNumberExternalFieldMock.Setup(e => e.Column).Returns(() => new OdbcColumn(orderNumberExternalColumnName));
+            orderNumberExternalFieldMock.Setup(e => e.Column).Returns(() => new OdbcColumn(orderNumberExternalColumnName, "unknown"));
 
             var orderNumberFieldMapEntryMock = mock.MockRepository.Create<IOdbcFieldMapEntry>();
             orderNumberFieldMapEntryMock.Setup(e => e.ExternalField).Returns(() => orderNumberExternalFieldMock.Object);

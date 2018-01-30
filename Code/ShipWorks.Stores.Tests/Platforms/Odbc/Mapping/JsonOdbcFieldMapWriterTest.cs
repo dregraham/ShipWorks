@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             JsonOdbcFieldMapSerializer testObject = new JsonOdbcFieldMapSerializer(map);
             ioFactory.Setup(f => f.CreateWriter(map)).Returns(testObject);
 
-            OdbcColumn column = new OdbcColumn("OrderNumberColumn");
+            OdbcColumn column = new OdbcColumn("OrderNumberColumn", "unknown");
 
             ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(column);
             ShipWorksOdbcMappableField shipworksOdbcMappableField =
