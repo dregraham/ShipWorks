@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -614,6 +615,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BestRateShipmentEntity", "ServiceLevel", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.ServiceLevel, 0, 0, 10);
 			this.AddElementFieldInfo("BestRateShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("BestRateShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("BestRateShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()
@@ -1171,6 +1173,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ScanBasedReturn", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ScanBasedReturn, 0, 0, 0);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits EtsyOrderEntity's FieldInfo objects</summary>
 		private void InitEtsyOrderEntityInfos()
@@ -2425,6 +2428,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OtherShipmentEntity", "Carrier", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Carrier, 50, 0, 0);
 			this.AddElementFieldInfo("OtherShipmentEntity", "Service", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Service, 50, 0, 0);
 			this.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			this.AddElementFieldInfo("OtherShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)OtherShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits PayPalOrderEntity's FieldInfo objects</summary>
 		private void InitPayPalOrderEntityInfos()
@@ -2520,6 +2524,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalShipmentEntity", "Memo2", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo2, 300, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "Memo3", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "NoPostage", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.NoPostage, 0, 0, 0);
+			this.AddElementFieldInfo("PostalShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits PrintResultEntity's FieldInfo objects</summary>
 		private void InitPrintResultEntityInfos()
@@ -3560,6 +3565,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UspsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 			this.AddElementFieldInfo("UspsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UspsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("UspsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.RateShop, 0, 0, 0);
+			this.AddElementFieldInfo("UspsShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits ValidatedAddressEntity's FieldInfo objects</summary>
 		private void InitValidatedAddressEntityInfos()
@@ -3707,6 +3713,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WorldShipPackageEntity", "DryIceMedicalPurpose", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceMedicalPurpose, 1, 0, 0);
 			this.AddElementFieldInfo("WorldShipPackageEntity", "DryIceOption", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceOption, 1, 0, 0);
 			this.AddElementFieldInfo("WorldShipPackageEntity", "DryIceWeightUnitOfMeasure", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, 10, 0, 0);
+			this.AddElementFieldInfo("WorldShipPackageEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)WorldShipPackageFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits WorldShipProcessedEntity's FieldInfo objects</summary>
 		private void InitWorldShipProcessedEntityInfos()

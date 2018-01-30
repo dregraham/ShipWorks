@@ -498,6 +498,8 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>AmazonUniqueShipmentID. </summary>
 		AmazonUniqueShipmentID,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -908,6 +910,8 @@ namespace ShipWorks.Data.Model
 		InsuranceValue,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2890,6 +2894,8 @@ namespace ShipWorks.Data.Model
 		ScanBasedReturn,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7836,6 +7842,8 @@ namespace ShipWorks.Data.Model
 		Service,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8214,6 +8222,8 @@ namespace ShipWorks.Data.Model
 		Memo3,
 		///<summary>NoPostage. </summary>
 		NoPostage,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11134,6 +11144,8 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>RateShop. </summary>
 		RateShop,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11706,6 +11718,8 @@ namespace ShipWorks.Data.Model
 		DryIceOption,
 		///<summary>DryIceWeightUnitOfMeasure. </summary>
 		DryIceWeightUnitOfMeasure,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}

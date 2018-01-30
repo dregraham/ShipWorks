@@ -1107,6 +1107,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonUniqueShipmentID);}
 		}
+		/// <summary>Creates a new AmazonShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Insurance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonStoreEntity</summary>
@@ -2031,6 +2036,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.Insurance);}
 		}
 	}
 
@@ -6636,6 +6646,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.Insurance);}
 		}
 	}
 
@@ -18212,6 +18227,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OtherShipmentFieldIndex.InsuranceValue);}
 		}
+		/// <summary>Creates a new OtherShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OtherShipmentFieldIndex.Insurance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PayPalOrderEntity</summary>
@@ -19096,6 +19116,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 NoPostage
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.NoPostage);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Insurance);}
 		}
 	}
 
@@ -25767,6 +25792,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.RateShop);}
 		}
+		/// <summary>Creates a new UspsShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.Insurance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ValidatedAddressEntity</summary>
@@ -27106,6 +27136,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceWeightUnitOfMeasure
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.Insurance);}
 		}
 	}
 
