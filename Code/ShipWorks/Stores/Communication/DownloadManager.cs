@@ -168,56 +168,89 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public static async Task<IEnumerable<Exception>> Download(string orderNumber)
         {
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            List<Exception> caughtExceptions = new List<Exception>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
+                Dictionary<StoreEntity, IStoreDownloader> storeDownloaders = GetOnDemandStoreDownloaders(orderNumber, caughtExceptions, lifetimeScope);
+
+                if (storeDownloaders.Any())
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        return await Download(orderNumber, con, lifetimeScope).ConfigureAwait(false);
+                        using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
+                        {
+                            return await Download(orderNumber, storeDownloaders, caughtExceptions, con).ConfigureAwait(false);
+                        }
                     }
                 }
+
+                return caughtExceptions;
             }
         }
-
+        
         /// <summary>
         /// Download from all stores by order number
         /// </summary>
-        private static async Task<IEnumerable<Exception>> Download(string orderNumber, DbConnection con, ILifetimeScope lifetimeScope)
+        private static async Task<IEnumerable<Exception>> Download(string orderNumber, Dictionary<StoreEntity, IStoreDownloader> storeDownloaders, List<Exception> caughtExceptions, DbConnection con)
         {
-            List<StoreEntity> stores = StoreManager.GetEnabledStores();
-            List<Exception> caughtExceptions = new List<Exception>();
-            
-            foreach (StoreEntity store in stores)
+            foreach (KeyValuePair<StoreEntity, IStoreDownloader> storeDownloader in storeDownloaders)
             {
-                if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+                StoreEntity store = storeDownloader.Key;
+                IStoreDownloader downloader = storeDownloader.Value;
+
+                DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
+                try
                 {
-                    DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
-                    try
-                    {
-                        CheckLicense(store);
+                    CheckLicense(store);
 
-                        IStoreDownloader downloader =
-                            lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                    await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
 
-                        await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
-
-                        downloadLog.QuantityTotal = downloader.QuantitySaved;
-                        downloadLog.QuantityNew = downloader.QuantityNew;
-                        downloadLog.Result = (int) DownloadResult.Success;                        
-                    }
-                    catch (Exception ex)
-                    {
-                        caughtExceptions.Add(ex);
-                        downloadLog.Result = (int) DownloadResult.Error;
-                        downloadLog.ErrorMessage = ex.Message;
-                    }
-                    await SaveDownloadLog(downloadLog).ConfigureAwait(false);
+                    downloadLog.QuantityTotal = downloader.QuantitySaved;
+                    downloadLog.QuantityNew = downloader.QuantityNew;
+                    downloadLog.Result = (int) DownloadResult.Success;
                 }
+                catch (Exception ex)
+                {
+                    caughtExceptions.Add(ex);
+                    downloadLog.Result = (int) DownloadResult.Error;
+                    downloadLog.ErrorMessage = ex.Message;
+                }
+                await SaveDownloadLog(downloadLog).ConfigureAwait(false);
             }
 
             DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(caughtExceptions.Any(), false));
             return caughtExceptions;
+        }
+
+        /// <summary>
+        /// Get key value pairs of stores and store downloaders for stores that should download, with on demand enabled.
+        /// </summary>
+        private static Dictionary<StoreEntity, IStoreDownloader> GetOnDemandStoreDownloaders(string orderNumber, List<Exception> caughtExceptions, ILifetimeScope lifetimeScope)
+        {
+            Dictionary<StoreEntity, IStoreDownloader> storeDownloaders = new Dictionary<StoreEntity, IStoreDownloader>();
+            List<StoreEntity> stores = StoreManager.GetEnabledStores();
+
+            foreach (StoreEntity store in stores)
+            {
+                if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+                {
+                    IStoreDownloader downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                    try
+                    {
+                        if (downloader.ShouldDownload(orderNumber))
+                        {
+                            storeDownloaders.Add(store, downloader);
+                        }
+                    }
+                    catch (DownloadException ex)
+                    {
+                        caughtExceptions.Add(ex);
+                    }
+                }
+            }
+
+            return storeDownloaders;
         }
 
         /// <summary>
