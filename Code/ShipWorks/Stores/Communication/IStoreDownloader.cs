@@ -28,5 +28,10 @@ namespace ShipWorks.Stores.Communication
         /// Download the orderNumber from the store
         /// </summary>
         Task Download(string orderNumber, long downloadID, DbConnection con);
+
+        /// <summary>
+        /// Whether or not the downloader should download the given order number
+        /// </summary>
+        bool ShouldDownload(string orderNumber);
     }
 }
