@@ -30,6 +30,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Equal(Task.CompletedTask, task);
         }
 
+        [Fact]
+        public void ShouldDownload_ReturnsFalse()
+        {
+            StoreEntity store = new ChannelAdvisorStoreEntity();
+            var shouldDownload = mock.Create<ChannelAdvisorDownloaderFactory>(TypedParameter.From(store)).ShouldDownload("1");
+            Assert.False(shouldDownload);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

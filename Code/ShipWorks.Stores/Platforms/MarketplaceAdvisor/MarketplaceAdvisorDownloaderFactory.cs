@@ -52,5 +52,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

@@ -68,5 +68,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

@@ -53,5 +53,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

@@ -53,5 +53,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

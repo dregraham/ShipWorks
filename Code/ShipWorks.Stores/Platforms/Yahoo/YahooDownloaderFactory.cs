@@ -55,5 +55,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }
