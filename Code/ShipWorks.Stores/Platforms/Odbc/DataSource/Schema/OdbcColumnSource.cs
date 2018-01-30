@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
                     for (int j = 0; j < columnData.Rows.Count; j++)
                     {
                         string columnName = columnData.Rows[j].ItemArray[3].ToString();
-                        string dataType = columnData.Rows[j].ItemArray[5].ToString();
+                        string dataType = columnData.Rows[j].ItemArray[5].ToString().ToLower();
                         Columns = Columns.Concat(new[] { new OdbcColumn(columnName, dataType) });
                     }
                 }
@@ -124,7 +124,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 
                         foreach (DataRow row in table.Rows.OfType<DataRow>())
                         {
-                            Columns = Columns.Concat(new[] { new OdbcColumn(row["ColumnName"].ToString(), row["DataType"].ToString()) });
+                            string dataType = row["DataType"].ToString().Replace("System.", string.Empty).ToLower();
+                            Columns = Columns.Concat(new[] { new OdbcColumn(row["ColumnName"].ToString(), dataType) });
                         }
 
                         cmd.Cancel();
