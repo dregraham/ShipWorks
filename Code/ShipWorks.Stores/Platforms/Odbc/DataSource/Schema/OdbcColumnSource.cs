@@ -17,6 +17,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
     {
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly ILog log;
+        private const int ColumnNameIndex = 3;
+        private const int ColumnDataTypeIndex = 5;
 
         public OdbcColumnSource(string name, IShipWorksDbProviderFactory dbProviderFactory, Func<Type, ILog> logFactory)
         {
@@ -81,8 +83,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 
                     for (int j = 0; j < columnData.Rows.Count; j++)
                     {
-                        string columnName = columnData.Rows[j].ItemArray[3].ToString();
-                        string dataType = columnData.Rows[j].ItemArray[5].ToString().ToLower();
+                        string columnName = columnData.Rows[j].ItemArray[ColumnNameIndex].ToString();
+                        string dataType = columnData.Rows[j].ItemArray[ColumnDataTypeIndex].ToString().ToLower();
                         Columns = Columns.Concat(new[] { new OdbcColumn(columnName, dataType) });
                     }
                 }

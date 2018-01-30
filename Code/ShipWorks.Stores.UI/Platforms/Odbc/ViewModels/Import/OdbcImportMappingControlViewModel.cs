@@ -350,7 +350,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     {
                         columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
                         entry.ExternalField.Column = new OdbcColumn(EmptyColumnName, "unknown");
-                    } else
+                    }
+                    else
                     {
                         OdbcColumn entryColumn = Columns.FirstOrDefault(c => c.Name == entry.ExternalField.Column.Name);
                         if (entryColumn != null)
@@ -413,8 +414,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Save(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
-
+            
             IOdbcFieldMap map = CreateMap();
             try
             {
