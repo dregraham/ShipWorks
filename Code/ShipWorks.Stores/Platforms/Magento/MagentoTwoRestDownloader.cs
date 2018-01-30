@@ -374,12 +374,12 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             foreach (CustomOption option in options)
             {
-                ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+                ProductOptionDetail optionDetail = product?.Options?.FirstOrDefault(o => o.OptionID == option.OptionID);
 
                 if (optionDetail == null)
                 {
                     product = GetProduct(item, productId, true);
-                    optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+                    optionDetail = product?.Options?.FirstOrDefault(o => o.OptionID == option.OptionID);
                 }
 
                 OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);

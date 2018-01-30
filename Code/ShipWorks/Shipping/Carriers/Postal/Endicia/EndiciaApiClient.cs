@@ -966,9 +966,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             string errorMessage = response.ErrorMessage;
 
                             // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as
-                            // an authentication error message in the response; also do some fuzzy logic in case there are other errors when
-                            // rates are not found for cubic packages
-                            if (response.Status == 55001 && response.ErrorMessage.ToUpperInvariant().Contains("CUBIC"))
+                            // an authentication error message in the response
+                            if (response.Status == 55001)
                             {
                                 errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
                             }
