@@ -1792,6 +1792,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.NonMachinable);}
 		}
+		/// <summary>Creates a new AsendiaShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Insurance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AuditEntity</summary>
@@ -16951,6 +16956,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OnTracShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new OnTracShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OnTracShipmentFieldIndex.Insurance);}
 		}
 	}
 

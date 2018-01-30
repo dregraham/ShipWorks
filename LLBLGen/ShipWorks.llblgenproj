@@ -391,6 +391,7 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="12" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="9" />
+          <Field Name="Insurance" Type="bool" FieldIndex="15" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="13" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="14" />
@@ -1930,6 +1931,7 @@
           <Field Name="DimsWeight" Type="double" FieldIndex="14" />
           <Field Name="DimsWidth" Type="double" FieldIndex="12" />
           <Field Name="Instructions" Type="string" MaxLength="300" FieldIndex="9" />
+          <Field Name="Insurance" Type="bool" FieldIndex="22" />
           <Field Name="InsurancePennyOne" Type="bool" FieldIndex="19" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
           <Field Name="IsCod" Type="bool" FieldIndex="3" />
@@ -4277,7 +4279,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T19:20:47.9987792Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T20:39:02.9975331Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4588,6 +4590,7 @@
                     <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="Insurance" Ordinal="16" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -7074,6 +7077,7 @@
                     <Field Name="InsurancePennyOne" Ordinal="20" DbType="2" />
                     <Field Name="DeclaredValue" Ordinal="21" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="22" DbType="8" Precision="10" />
+                    <Field Name="Insurance" Ordinal="23" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Order">
@@ -10532,6 +10536,7 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
@@ -12108,6 +12113,7 @@
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="Instructions" TargetFieldName="Instructions" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsurancePennyOne" TargetFieldName="InsurancePennyOne" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="IsCod" TargetFieldName="IsCod" />

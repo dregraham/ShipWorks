@@ -792,6 +792,8 @@ namespace ShipWorks.Data.Model
 		InsuranceValue,
 		///<summary>NonMachinable. </summary>
 		NonMachinable,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7288,6 +7290,8 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -58,6 +58,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             InsurancePennyOne = source.InsurancePennyOne;
             DeclaredValue = source.DeclaredValue;
             RequestedLabelFormat = source.RequestedLabelFormat;
+            Insurance = source.Insurance;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -199,6 +200,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 RequestedLabelFormat { get; }
+        /// <summary> The Insurance property of the Entity OnTracShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OnTracShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         public IShipmentEntity Shipment { get; }
         

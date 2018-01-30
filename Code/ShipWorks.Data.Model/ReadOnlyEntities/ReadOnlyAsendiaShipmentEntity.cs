@@ -51,6 +51,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DimsWeight = source.DimsWeight;
             InsuranceValue = source.InsuranceValue;
             NonMachinable = source.NonMachinable;
+            Insurance = source.Insurance;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -150,6 +151,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean NonMachinable { get; }
+        /// <summary> The Insurance property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         public IShipmentEntity Shipment { get; }
         

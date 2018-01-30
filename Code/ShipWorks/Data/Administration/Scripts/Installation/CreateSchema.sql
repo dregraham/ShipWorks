@@ -2828,7 +2828,8 @@ CREATE TABLE [dbo].[OnTracShipment]
 [InsuranceValue] [money] NOT NULL,
 [InsurancePennyOne] [bit] NOT NULL,
 [DeclaredValue] [money] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OnTracShipment] on [dbo].[OnTracShipment]'
