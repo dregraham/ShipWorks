@@ -269,6 +269,9 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml.cs">
       <DependentUpon>UpsLocalRatingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Insurance\InsuranceBehaviorChangeDialog.xaml.cs">
+      <DependentUpon>InsuranceBehaviorChangeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
@@ -606,6 +609,10 @@
     <Page Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Insurance\InsuranceBehaviorChangeDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
