@@ -32,6 +32,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         [InlineData("bigint", "abc", false)]
         [InlineData("nvarchar(17)", "5", true)]
         [InlineData("nvarchar(17)", "abcd", true)]
+        [InlineData("int(2)", "5", true)]
+        [InlineData("int identity", "5", true)]
+        [InlineData("int(2)", "a", false)]
+        [InlineData("int identity", "b", false)]
         public void ShouldDownload_ReturnsTrue_WhenOrderNumberCompleteIsMappedToNonNumericField(string type, string orderNumber, bool shouldDownload)
         {
             OdbcStoreEntity storeEntity = new OdbcStoreEntity();

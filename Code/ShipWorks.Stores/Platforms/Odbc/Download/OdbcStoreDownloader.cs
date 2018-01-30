@@ -34,7 +34,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly OdbcStoreType odbcStoreType;
 
         // not including decimal, money, numeric, real and float because that would be stupid
-        private readonly string[] numericSqlDataTypes = { "tinyint", "smallint", "int", "bigint" };
+        // included names for integers from sql, mysql, oracle, and db2
+        private readonly string[] numericSqlDataTypes =
+        {
+            "tinyint", "smallint", "mediumint", "int", "bigint", "integer", "shortinteger", "longinteger",
+            "sql_smallint","sql_integer","sql_bigint", "number"
+        };
         private readonly string[] numericSystemTypes = { "byte", "int16", "int", "int32", "int64" };
 
         /// <summary>
@@ -87,7 +92,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             // if datatype is a primary key it will be called something like "bigint identity"
             // so, grab the first word.
-            string dataType = GetOrderNumberFieldMapEntry().ExternalField?.Column?.DataType?.Split(' ')[0];
+            // Also, mySql includes lengths of fields within parenthesis. 
+            string dataType = GetOrderNumberFieldMapEntry().ExternalField?.Column?.DataType?.Split(' ', '(')[0];
 
             // I don't think this should ever happen...
             if (string.IsNullOrEmpty(dataType))
@@ -101,8 +107,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             bool shouldDownload = true;
             if (isNumeric)
             {
-                long number;
-                shouldDownload = long.TryParse(orderNumber, out number);
+                shouldDownload = long.TryParse(orderNumber, out _);
             }
 
             return shouldDownload;
