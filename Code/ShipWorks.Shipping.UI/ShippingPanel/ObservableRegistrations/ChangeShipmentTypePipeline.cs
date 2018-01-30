@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IMessenger messenger;
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChangeViewModel;
 
         /// <summary>
         /// Constructor
@@ -27,8 +29,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public ChangeShipmentTypePipeline(IShippingManager shippingManager,
             IMessenger messenger,
             ISchedulerProvider schedulerProvider,
+            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChangeViewModel,
             Func<Type, ILog> logFactory)
         {
+            this.createInsuranceBehaviorChangeViewModel = createInsuranceBehaviorChangeViewModel;
             log = logFactory(typeof(ChangeShipmentTypePipeline));
             this.shippingManager = shippingManager;
             this.messenger = messenger;
@@ -57,8 +61,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Get a shipping adapter from the changed shipment type
         /// </summary>
-        private ICarrierShipmentAdapter ChangeShipmentType(ShippingPanelViewModel viewModel) =>
-            shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
+        private ICarrierShipmentAdapter ChangeShipmentType(ShippingPanelViewModel viewModel)
+        {
+            bool originalInsuranceSelection = viewModel.Shipment.Insurance;
+            var shipmentAdapter = shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
+            createInsuranceBehaviorChangeViewModel().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+
+            return shipmentAdapter;
+        }
 
         /// <summary>
         /// Dispose the subscription

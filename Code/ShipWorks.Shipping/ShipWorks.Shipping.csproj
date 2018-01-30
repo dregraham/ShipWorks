@@ -365,7 +365,6 @@
     <Compile Include="Carriers\Postal\Usps\IFirstClassInternationalWarningDialog.cs" />
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
-    <Compile Include="Insurance\IInsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />

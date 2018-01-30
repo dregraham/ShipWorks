@@ -1,9 +1,14 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Users;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Disposables;
 using System.Reflection;
 using System.Windows.Input;
 
@@ -19,6 +24,7 @@ namespace ShipWorks.Shipping.Insurance
         private readonly IInsuranceBehaviorChangeDialog dialog;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
+        private readonly ISchedulerProvider schedulerProvider;
         private readonly PropertyChangedHandler handler;
 
         private bool doNotShowAgain;
@@ -26,8 +32,14 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsuranceBehaviorChangeViewModel(IInsuranceBehaviorChangeDialog dialog, ICurrentUserSettings currentUserSettings, IMessageHelper messageHelper)
+        public InsuranceBehaviorChangeViewModel(
+            IInsuranceBehaviorChangeDialog dialog,
+            ICurrentUserSettings currentUserSettings,
+            IMessageHelper messageHelper,
+            ISchedulerProvider schedulerProvider
+            )
         {
+            this.schedulerProvider = schedulerProvider;
             this.messageHelper = messageHelper;
             this.dialog = dialog;
             this.currentUserSettings = currentUserSettings;
@@ -57,24 +69,58 @@ namespace ShipWorks.Shipping.Insurance
             get { return doNotShowAgain; }
             set { handler.Set(nameof(DoNotShowAgain), ref doNotShowAgain, value); }
         }
+
         /// <summary>
         /// Notify the user of the change
         /// </summary>
         public void Notify(bool originalInsuranceSelection, bool newInsuranceSelection)
         {
             // Only show the dialog if the shipment went from using insurance to not using insurance.
-            if (newInsuranceSelection || !originalInsuranceSelection)
+            if (ShouldBeNotified(originalInsuranceSelection, newInsuranceSelection))
             {
-                return;
+                PerformNotification();
             }
+        }
 
+        /// <summary>
+        /// Notify the user of the change
+        /// </summary>
+        public void Notify(IDictionary<long, bool> originalInsuranceSelection, IDictionary<long, bool> newInsuranceSelection)
+        {
+            bool shouldBeNotified = originalInsuranceSelection.LeftJoin(newInsuranceSelection, x => x.Key, x => x.Key)
+                .Any(x => ShouldBeNotified(x.Item1.Value, x.Item2.Value));
+
+            // Only show the dialog if the shipment went from using insurance to not using insurance.
+            if (shouldBeNotified)
+            {
+                PerformNotification();
+            }
+        }
+
+        /// <summary>
+        /// Should the customer be notified
+        /// </summary>
+        private static bool ShouldBeNotified(bool originalInsuranceSelection, bool newInsuranceSelection) =>
+            !newInsuranceSelection && originalInsuranceSelection;
+
+        /// <summary>
+        /// Perform the actual notification, if necessary
+        /// </summary>
+        private void PerformNotification()
+        {
             if (!currentUserSettings.ShouldShowNotification(notificationType))
             {
                 return;
             }
 
             dialog.DataContext = this;
-            messageHelper.ShowDialog(dialog);
+
+            // This is being scheduled so that the change carrier process can finish before we actually show the dialog
+            schedulerProvider.Dispatcher.Schedule(dialog, (s, d) =>
+            {
+                messageHelper.ShowDialog(d);
+                return Disposable.Empty;
+            });
         }
 
         /// <summary>
