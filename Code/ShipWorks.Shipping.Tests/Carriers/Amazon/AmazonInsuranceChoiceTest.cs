@@ -2,10 +2,6 @@
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Insurance;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -64,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(false)]
         public void Insured_ReturnsInsuranceFromShipment(bool insured)
         {
-            AmazonInsuranceChoice testObject = new AmazonInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity(), Insurance = insured });
+            AmazonInsuranceChoice testObject = new AmazonInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { Insurance = insured }});
             Assert.Equal(insured, testObject.Insured);
         }
 
