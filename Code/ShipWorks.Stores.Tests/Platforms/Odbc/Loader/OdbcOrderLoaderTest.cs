@@ -179,8 +179,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var orderItemLoader = mock.Mock<IOdbcOrderItemLoader>();
 
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
-                var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
+                var orderEntity = new OrderEntity() { IsNew = false };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);

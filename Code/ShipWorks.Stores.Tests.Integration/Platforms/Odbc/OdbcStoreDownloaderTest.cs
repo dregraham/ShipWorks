@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
@@ -151,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
-        public async Task DownloadByOrderNumber_DoesNotDownloadExistingOrder()
+        public async Task DownloadByOrderNumber_DownloadsExistingOrder()
         {
             odbcRecord = GetOdbcRecord("1", "Kevin");
 
@@ -171,7 +172,37 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
             await testObject.Download("1", downloadLogID, dbConnection);
 
-            odbcCommand.Verify(v => v.Execute(), Times.Never);
+            odbcCommand.Verify(v => v.Execute(), Times.Once);
+        }
+        [Fact]
+        public async Task DownloadByOrderNumber_ReplacesLineItems_WhenDownloadingExistingOrder()
+        {
+            odbcRecord = GetOdbcRecord("1", "Kevin");
+
+            Create.Order<OrderEntity>(store, context.Customer)
+                .WithItem(i=>i.Set(item=>item.Name = "blah"))
+                .Set(o => o.OrderNumber = 1)
+                .Save();
+
+            Mock<IOdbcCommand> odbcCommand = mock.CreateMock<IOdbcCommand>();
+            odbcCommand.Setup(c => c.Execute())
+                .Returns(() => new[] { odbcRecord });
+
+            mock.Mock<IOdbcDownloadCommandFactory>()
+                .Setup(f => f.CreateDownloadCommand(It.IsAny<OdbcStoreEntity>(), AnyString, It.IsAny<IOdbcFieldMap>()))
+                .Returns(odbcCommand.Object);
+
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            await testObject.Download("1", downloadLogID, dbConnection);
+
+            List<OrderItemEntity> orderItems;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                orderItems = new LinqMetaData(adapter).OrderItem.ToList();
+            }
+
+            Assert.True(orderItems.None());
         }
 
         [Fact]
