@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new DownloadException("OrderNumberComplete needs to be remapped.");
             }
 
-            bool isNumeric = numericSqlDataTypes.Any(t => dataType == t) ||
+            bool isNumeric = numericSqlDataTypes.Any(t => dataType.Equals(t, StringComparison.InvariantCultureIgnoreCase)) ||
                    numericSystemTypes.Any(t => dataType.Equals(t, StringComparison.InvariantCultureIgnoreCase));
 
             bool shouldDownload = true;
