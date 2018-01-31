@@ -193,15 +193,18 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             MagentoInvoiceRequest request = new MagentoInvoiceRequest();
             request.Invoice.MagentoOrderID = magentoOrderID;
 
-            foreach (Item item in items)
+            // Fetch the order items
+            IEnumerable<(OrderItemEntity OrderItem, Item MagentoItem)> itemsToProcess = GetItemsForInvoiceAndShipmentUpload(orderEntity, items, originalOrderID);
+
+            foreach (var item in itemsToProcess)
             {
                 MagentoInvoiceItem magentoInvoiceItem = new MagentoInvoiceItem
                 {
-                    Qty = GetQuantity(orderEntity, item, originalOrderID),
-                    MagentoOrderItemId = item.ItemId
+                    Qty = GetQuantity(item.OrderItem, item.MagentoItem, originalOrderID),
+                    MagentoOrderItemId = item.MagentoItem.ItemId
                 };
                 request.Invoice.Items.Add(magentoInvoiceItem);
-                request.Invoice.TotalQty += item.QtyOrdered;
+                request.Invoice.TotalQty += magentoInvoiceItem.Qty;
             }
 
             return JsonConvert.SerializeObject(request);
@@ -211,14 +214,9 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         /// First tries to get the actual quantity from the ShipWorks order, but if it cannot
         /// match the item, return the quantity from Magento
         /// </summary>
-        private double GetQuantity(MagentoOrderEntity orderEntity, Item magentoItem, long originalOrderID)
+        private double GetQuantity(OrderItemEntity orderItemEntity, Item magentoItem, long originalOrderID)
         {
-            return
-                orderEntity.OrderItems
-                    .Where(oi => oi.OriginalOrderID == originalOrderID || oi.OriginalOrderID == orderEntity.OrderID)
-                    .FirstOrDefault(
-                        x => x.Code == magentoItem.ItemId.ToString() || x.SKU == magentoItem.Sku || x.Name == magentoItem.Name)?.Quantity ??
-                    magentoItem.QtyOrdered;
+            return orderItemEntity?.Quantity ?? magentoItem.QtyOrdered;
         }
 
         /// <summary>
@@ -267,21 +265,44 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             }
 
             // Fetch the order items
+            IEnumerable<(OrderItemEntity OrderItem, Item MagentoItem)> itemsToProcess = GetItemsForInvoiceAndShipmentUpload(orderEntity, items, originalOrderID);
+
+            request.Items = itemsToProcess.Select(i => new ShipmentItem()
+            {
+                Qty = GetQuantity(i.OrderItem, i.MagentoItem, originalOrderID),
+                OrderItemId = i.MagentoItem.ItemId
+            }).ToList();
+
+            return JsonConvert.SerializeObject(request);
+        }
+
+        /// <summary>
+        /// Get a list of (OrderItemEntity, Item) for use in generating an invoice or shipment
+        /// </summary>
+        private IEnumerable<(OrderItemEntity, Item)> GetItemsForInvoiceAndShipmentUpload(MagentoOrderEntity orderEntity, IEnumerable<Item> items, long originalOrderID)
+        {
+            // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.FetchEntityCollection(orderEntity.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == orderEntity.OrderID));
             }
 
-            if (orderEntity.OrderItems?.Any() ?? false)
+            if (orderEntity.OrderItems?.Any(oi => !oi.IsManual) ?? false)
             {
-                request.Items = items.Select(item => new ShipmentItem()
-                {
-                    Qty = GetQuantity(orderEntity, item, originalOrderID),
-                    OrderItemId = item.ItemId
-                }).ToList();
+                var query =
+                    from orderItemEntity in orderEntity.OrderItems
+                    from magentoItemDto in items
+                    where (orderItemEntity.OriginalOrderID == originalOrderID || orderItemEntity.OriginalOrderID == orderEntity.OrderID)
+                          &&
+                          (orderItemEntity.Code == magentoItemDto.ItemId.ToString() ||
+                           orderItemEntity.SKU == magentoItemDto.Sku ||
+                           orderItemEntity.Name == magentoItemDto.Name)
+                    select (OrderItem: orderItemEntity, MagentoItem: magentoItemDto);
+
+                return query;
             }
 
-            return JsonConvert.SerializeObject(request);
+            return Enumerable.Empty<(OrderItemEntity, Item)>();
         }
 
         /// <summary>

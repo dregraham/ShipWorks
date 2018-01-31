@@ -425,6 +425,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                 return;
             }
 
+            Assert.Equal(allItems.Keys.OrderBy(k => k), identities_A_0.OrdersToUpload.Where(o => !o.IsManual).Select(o => o.OrderID).Distinct().OrderBy(k => k));
             Assert.True(updateDetailsResult.Success);
 
             var bigCommerceOnlineItems = updateDetailsResult.Value;
