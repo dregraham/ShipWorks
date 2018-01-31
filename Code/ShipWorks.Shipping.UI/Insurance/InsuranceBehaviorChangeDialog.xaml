@@ -72,7 +72,6 @@
                         Margin="0,0,0,4">
                     You have switched shipping providers and the level of package insurance or declared value protection has changed. 
                     Please review your package protection details to ensure it is properly configured."
-
                 </TextBlock>
 
                 <ScrollViewer Grid.Row="1"
