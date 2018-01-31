@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -304,6 +303,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
+            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ShippingProfile.Insurance, onTracShipment, OnTracShipmentFields.Insurance);
 
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);

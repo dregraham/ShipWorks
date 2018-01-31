@@ -90,6 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             ShippingProfileUtility.ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
+            ShippingProfileUtility.ApplyProfileValue(otherProfile.ShippingProfile.Insurance, otherShipment, OtherShipmentFields.Insurance);
 
             UpdateDynamicShipmentData(shipment);
         }

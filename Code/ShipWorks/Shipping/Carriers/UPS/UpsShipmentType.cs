@@ -490,6 +490,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationName, package, UpsPackageFields.VerbalConfirmationName);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhone, package, UpsPackageFields.VerbalConfirmationPhone);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhoneExtension, package, UpsPackageFields.VerbalConfirmationPhoneExtension);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhoneExtension, package, UpsPackageFields.VerbalConfirmationPhoneExtension);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.UpsProfile.ShippingProfile.Insurance, package, UpsPackageFields.Insurance);
             }
 
             // Remove any packages that are too many for the profile

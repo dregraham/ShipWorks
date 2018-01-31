@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -329,6 +328,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.PostalProfile.Profile.Insurance, uspsShipment, UspsShipmentFields.Insurance);
             }
         }
 
