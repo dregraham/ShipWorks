@@ -70,7 +70,8 @@
                         TextWrapping="Wrap"
                         VerticalAlignment="Center"
                         Margin="0,0,0,4">
-                    The behavior of insurance selection has changed.
+                    You have recently changed shipping providers and the level of package protection has changed.
+                    Please review your shipment details to ensure you have properly dispositioned your shipment.
                 </TextBlock>
 
                 <ScrollViewer Grid.Row="1"
