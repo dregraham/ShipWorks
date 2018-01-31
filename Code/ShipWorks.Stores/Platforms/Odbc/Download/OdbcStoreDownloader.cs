@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
@@ -32,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
+        private readonly bool reloadEntireOrder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
@@ -50,6 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
+            reloadEntireOrder = this.store.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
         }
 
         /// <summary>
@@ -59,14 +59,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             try
             {
-                // Try to find an existing order
-                OrderEntity order = await FindOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
-                if (order == null)
-                {
-                    IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
-                    AddTelemetryData(trackedDurationEvent, downloadCommand);
-                    await Download(downloadCommand).ConfigureAwait(false);
-                }
+                IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                AddTelemetryData(trackedDurationEvent, downloadCommand);
+                await Download(downloadCommand).ConfigureAwait(false);
             }
             catch (ShipWorksOdbcException ex)
             {
@@ -278,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
            
             OrderEntity orderEntity = orderResultToUse.Value;
 
-            orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
+            orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder, reloadEntireOrder);
 
             orderEntity.ChangeOrderNumber(orderNumberToUse);
 
