@@ -111,6 +111,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 shouldDownload = long.TryParse(orderNumber, out _);
             }
 
+            if (!shouldDownload)
+            {
+                log.Info($"SearchTerm '{orderNumber}' could not be converted to a long. Skipping search for store '{store.StoreName}'");
+            }
+
             return shouldDownload;
         }
 
