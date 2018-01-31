@@ -22,11 +22,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database.IntegrationDB;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
-using SQL.LocalDB.Test;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -72,6 +72,8 @@ namespace ShipWorks.Tests.Shared.Database
                     .Replace("-", "_")
                     .Replace("(", string.Empty)
                     .Replace(")", string.Empty).Truncate(50);
+
+                databasePrefix += Guid.NewGuid().ToString("N").Substring(0, 8);
             }
             catch (Exception ex)
             {
@@ -91,9 +93,9 @@ namespace ShipWorks.Tests.Shared.Database
             if (clearTestData)
             {
                 checkpoint = new Checkpoint();
-                TempLocalDb db = new TempLocalDb(databaseName);
+                TempIntegrationDB db = new TempIntegrationDB(databaseName, @"localhost\Development");
 
-            	sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+                sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
 
                 SqlUtility.EnableClr(db.Open());
 
@@ -107,7 +109,7 @@ namespace ShipWorks.Tests.Shared.Database
             }
             else
             {
-                string connectionString = $"Data Source = (localdb)\\v11.0; Initial Catalog = {databaseName}";
+                string connectionString = $"Data Source = localhost\\Development; Initial Catalog = {databaseName}";
 
                 sqlSessionScope = CreateSqlSessionScope(connectionString);
             }
@@ -237,12 +239,12 @@ namespace ShipWorks.Tests.Shared.Database
                 {
                     using (var connection = SqlSession.Current.OpenConnection())
                     {
-                    	checkpoint.Reset(connection);
+                        checkpoint.Reset(connection);
                         var command = connection.CreateCommand();
                         command.CommandText =
 @"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
 DROP PROCEDURE [dbo].[GetDatabaseGuid]";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
                 }
             }
