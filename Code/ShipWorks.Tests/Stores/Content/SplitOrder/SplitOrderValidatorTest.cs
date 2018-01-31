@@ -104,6 +104,19 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
         }
 
         [Fact]
+        public void Validate_ReturnFailure_WhenStoreIsSears()
+        {
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(1006))
+                .Returns(new SearsStoreEntity { StoreTypeCode = StoreTypeCode.Sears });
+
+            var testObject = mock.Create<OrderSplitValidator>();
+            var result = testObject.Validate(new long[] { 1006 });
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
         public void Validate_ReturnFalse_WhenOrderCanNotBeSplit()
         {
             mock.Mock<IOrderSplitGateway>()

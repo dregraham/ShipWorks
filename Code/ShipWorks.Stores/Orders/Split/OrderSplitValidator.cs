@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IStoreManager storeManager;
         private readonly IEnumerable<StoreTypeCode> storeTypeCodesNotAllowed = 
-            new[] {StoreTypeCode.Walmart, StoreTypeCode.Groupon, StoreTypeCode.NeweggMarketplace};
+            new[] {StoreTypeCode.Walmart, StoreTypeCode.Groupon, StoreTypeCode.NeweggMarketplace, StoreTypeCode.Sears};
 
         /// <summary>
         /// Constructor
