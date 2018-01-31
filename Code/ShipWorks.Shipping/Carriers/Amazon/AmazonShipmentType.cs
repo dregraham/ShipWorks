@@ -161,10 +161,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
 
-            IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;
-
-            Debug.Assert(amazonCredentials != null);
-
             amazonShipment.DimsWeight = shipment.ContentWeight;
             amazonShipment.Insurance = false;
 
