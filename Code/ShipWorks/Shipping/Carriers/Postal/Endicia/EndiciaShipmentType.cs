@@ -103,6 +103,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             base.ConfigureNewShipment(shipment);
+
+            shipment.Postal.Endicia.Insurance = false;
         }
 
         /// <summary>
@@ -541,6 +543,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // We want to be able to show counter rates to users that don't have
             return new NullShippingBroker();
+        }
+
+        /// <summary>
+        /// Get the parcel data for the shipment
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.Postal.Endicia, shipment.Postal, null),
+                new DimensionsAdapter(shipment.Postal))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
     }
 }

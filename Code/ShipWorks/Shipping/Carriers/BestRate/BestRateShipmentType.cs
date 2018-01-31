@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.BestRate, null),
+                new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null),
                 new DimensionsAdapter(shipment.BestRate));
         }
 
@@ -254,6 +254,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.RequestedLabelFormat = (int)LabelFormatType.Standard;
+            shipment.BestRate.Insurance = false;
         }
 
         /// <summary>

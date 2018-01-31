@@ -259,6 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.Postal.Usps.UspsTransactionID = Guid.Empty;
                 shipment.Postal.Usps.RequestedLabelFormat = (int) ThermalLanguage.None;
                 shipment.Postal.Usps.RateShop = false;
+                shipment.Postal.Usps.Insurance = false;
             }
 
             // We need to call the base after setting up the USPS specific information because LLBLgen was
@@ -514,6 +515,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 default:
                     return base.GetServiceDescription(shipment);
             }
+        }
+
+        /// <summary>
+        /// Get the parcel data for the shipment
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.Postal.Usps, shipment.Postal, null),
+                new DimensionsAdapter(shipment.Postal))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
     }
 }

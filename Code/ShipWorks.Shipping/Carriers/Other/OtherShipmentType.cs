@@ -58,6 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             if (shipment.Other == null)
             {
                 shipment.Other = new OtherShipmentEntity(shipment.ShipmentID);
+                shipment.Other.Insurance = false;
             }
 
             base.ConfigureNewShipment(shipment);
@@ -125,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Other, null),
+                new InsuranceChoice(shipment, shipment.Other, shipment.Other, null),
                 new DimensionsAdapter())
             {
                 TotalWeight = shipment.TotalWeight

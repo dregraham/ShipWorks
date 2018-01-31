@@ -246,6 +246,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
+            onTracShipment.Insurance = false;
 
             shipment.OnTrac.RequestedLabelFormat = (int) ThermalLanguage.None;
 

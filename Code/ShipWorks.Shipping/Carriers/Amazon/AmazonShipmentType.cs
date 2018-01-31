@@ -166,6 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Debug.Assert(amazonCredentials != null);
 
             amazonShipment.DimsWeight = shipment.ContentWeight;
+            amazonShipment.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }

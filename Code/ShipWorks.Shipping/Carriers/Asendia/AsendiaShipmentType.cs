@@ -96,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.DimsWeight = 0;
             asendiaShipment.DimsAddWeight = true;
             asendiaShipment.InsuranceValue = 0;
+            asendiaShipment.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -127,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Asendia, null),
+                new InsuranceChoice(shipment, shipment.Asendia, shipment.Asendia, null),
                 new DimensionsAdapter(shipment.Asendia))
             {
                 TotalWeight = shipment.TotalWeight

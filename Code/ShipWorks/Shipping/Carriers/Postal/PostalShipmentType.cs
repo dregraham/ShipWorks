@@ -60,6 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             base.ConfigureNewShipment(shipment);
+
+            shipment.Postal.Insurance = false;
         }
 
         /// <summary>
@@ -334,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Postal, null),
+                new InsuranceChoice(shipment, shipment.Postal, shipment.Postal, null),
                 new DimensionsAdapter(shipment.Postal))
             {
                 TotalWeight = shipment.TotalWeight
