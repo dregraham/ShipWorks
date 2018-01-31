@@ -38,7 +38,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly string[] numericSqlDataTypes =
         {
             "tinyint", "smallint", "mediumint", "int", "bigint", "integer", "shortinteger", "longinteger",
-            "sql_smallint","sql_integer","sql_bigint", "number"
+            "sql_smallint","sql_integer","sql_bigint", "number", "smallserial", "serial", "bigserial", "long",
+            "autonumber", "short", "number"
         };
         private readonly string[] numericSystemTypes = { "byte", "int16", "int", "int32", "int64" };
 
@@ -102,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             bool isNumeric = numericSqlDataTypes.Any(t => dataType == t) ||
-                   numericSystemTypes.Any(t => dataType == t);
+                   numericSystemTypes.Any(t => dataType.Equals(t, StringComparison.InvariantCultureIgnoreCase));
 
             bool shouldDownload = true;
             if (isNumeric)
