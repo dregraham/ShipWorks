@@ -675,8 +675,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryMaterial, package, FedExPackageFields.BatteryMaterial);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryPacking, package, FedExPackageFields.BatteryPacking);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryRegulatorySubtype, package, FedExPackageFields.BatteryRegulatorySubtype);
-
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.FedExProfile.ShippingProfile.Insurance, package, FedExPackageFields.Insurance);
             }
 
             // Remove any packages that are too many for the profile
