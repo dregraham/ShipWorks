@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <remarks>
         /// It is assumed that the map is loaded with the initial record.
         /// </remarks>
-        public void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> records)
+        public void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> records, bool reloadEntireOrder)
         {
             MethodConditions.EnsureArgumentIsNotNull(map, nameof(map));
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
