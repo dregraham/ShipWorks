@@ -243,6 +243,13 @@ namespace ShipWorks.Stores.Communication
             {
                 log.Debug($"Found existing {orderIdentifier}");
 
+                if (order.CombineSplitStatus != CombineSplitStatusType.None)
+                {
+                    string combineSplitStatus = EnumHelper.GetDescription(order.CombineSplitStatus);
+                    log.InfoFormat($"{orderIdentifier} was {combineSplitStatus}, skipping");
+                    return GenericResult.FromError<OrderEntity>(combineSplitStatus);
+                }
+
                 ShippingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
 
