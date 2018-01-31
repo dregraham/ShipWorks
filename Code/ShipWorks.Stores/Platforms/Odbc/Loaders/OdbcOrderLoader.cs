@@ -58,10 +58,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                     {
                         adapter.DeleteEntityCollection(order.OrderItems);
                         adapter.Commit();
-                        adapter.SaveAndRefetch(order);
                     }
+                    order.OrderItems.Clear();
                 }
-                
+
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);
 
