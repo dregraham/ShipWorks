@@ -1,8 +1,10 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -15,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         private readonly IOdbcOrderItemLoader orderItemLoader;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IOrderChargeCalculator orderChargeCalculator;
+        private readonly ISqlAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
@@ -22,12 +25,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         public OdbcOrderLoader(IEnumerable<IOdbcOrderDetailLoader> orderDetailLoaders,
             IOdbcOrderItemLoader orderItemLoader,
             IDateTimeProvider dateTimeProvider,
-            IOrderChargeCalculator orderChargeCalculator)
+            IOrderChargeCalculator orderChargeCalculator, 
+            ISqlAdapterFactory adapterFactory)
         {
             this.orderDetailLoaders = orderDetailLoaders;
             this.orderItemLoader = orderItemLoader;
             this.dateTimeProvider = dateTimeProvider;
             this.orderChargeCalculator = orderChargeCalculator;
+            this.adapterFactory = adapterFactory;
         }
 
         /// <summary>
@@ -45,8 +50,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             map.CopyToEntity(order);
 
             // If the order is new load all the items
-            if (order.IsNew)
+            if (order.IsNew || reloadEntireOrder)
             {
+                if (order.OrderItems.Any())
+                {
+                    using (ISqlAdapter adapter = adapterFactory.Create())
+                    {
+                        adapter.DeleteEntityCollection(order.OrderItems);
+                        adapter.Commit();
+                        adapter.SaveAndRefetch(order);
+                    }
+                }
+                
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);
 
