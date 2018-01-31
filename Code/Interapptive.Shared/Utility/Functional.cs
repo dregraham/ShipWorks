@@ -32,6 +32,17 @@ namespace Interapptive.Shared.Utility
         /// <param name="disposable">Object that will be disposed after func is done</param>
         /// <param name="func">Function that will be called with the disposable object</param>
         /// <returns>Value returned by func</returns>
+        public static Task<TResult> UsingAsync<TDisposable, TResult>(TDisposable disposable, Func<TDisposable, Task<TResult>> func) where TDisposable : IDisposable =>
+            UsingAsync(Task.FromResult(disposable), func);
+
+        /// <summary>
+        /// Call a method with a disposable object
+        /// </summary>
+        /// <typeparam name="TDisposable">Type of disposable object</typeparam>
+        /// <typeparam name="TResult">Return type</typeparam>
+        /// <param name="disposable">Object that will be disposed after func is done</param>
+        /// <param name="func">Function that will be called with the disposable object</param>
+        /// <returns>Value returned by func</returns>
         public static async Task<TResult> UsingAsync<TDisposable, TResult>(Task<TDisposable> disposable, Func<TDisposable, Task<TResult>> func) where TDisposable : IDisposable
         {
             using (var x = await disposable.ConfigureAwait(false))

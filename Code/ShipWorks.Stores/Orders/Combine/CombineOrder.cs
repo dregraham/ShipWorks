@@ -91,6 +91,7 @@ namespace ShipWorks.Stores.Orders.Combine
             string newOrderNumber, IProgressUpdater progress)
         {
             GenericResult<long> result;
+            CombineSplitStatusType originalCombineStatus = orders.First(o => o.OrderID == survivingOrderID).CombineSplitStatus;
 
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Combined"))
             {
@@ -108,7 +109,7 @@ namespace ShipWorks.Stores.Orders.Combine
                     await combinedOrderAuditor.Audit(result.Value, orders);
                 }
 
-                AddTelemetryProperties(trackedDurationEvent, orders, result.Success);
+                AddTelemetryProperties(trackedDurationEvent, orders, originalCombineStatus, result.Success);
             }
 
             return result;
@@ -117,13 +118,14 @@ namespace ShipWorks.Stores.Orders.Combine
         /// <summary>
         /// Add telemetry properties
         /// </summary>
-        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, IEnumerable<IOrderEntity> orders, bool result)
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, IEnumerable<IOrderEntity> orders, CombineSplitStatusType originalCombineStatus, bool result)
         {
             try
             {
                 IOrderEntity order = orders.First();
                 trackedDurationEvent.AddProperty("Orders.Combined.Result", result ? "Success" : "Failed");
                 trackedDurationEvent.AddProperty("Orders.Combined.Quantity", orders.Count().ToString());
+                trackedDurationEvent.AddProperty("Orders.Combine.PreCombineStatus", EnumHelper.GetDescription(originalCombineStatus));
                 trackedDurationEvent.AddProperty("Orders.Combined.StoreType", storeTypeManager.GetType(order.StoreID).StoreTypeName);
                 trackedDurationEvent.AddProperty("Orders.Combined.StoreId", order.StoreID.ToString());
                 trackedDurationEvent.AddProperty("Orders.Combined.Strategy", "Standard");
