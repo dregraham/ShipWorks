@@ -189,6 +189,28 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             Assert.Equal(expectedSummary, testResult.Summary);
         }
 
+        [Theory]
+        [InlineData(true, 9.99)]
+        [InlineData(false, 6.66)]
+        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = !insured,
+                Asendia = new AsendiaShipmentEntity
+                {
+                    Insurance = insured,
+                    InsuranceValue = insuranceValue
+                }
+            };
+
+            var testObject = mock.Create<AsendiaShipmentType>();
+            ShipmentParcel parcel = testObject.GetParcelDetail(shipment, 0);
+
+            Assert.Equal(insured, parcel.Insurance.Insured);
+            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

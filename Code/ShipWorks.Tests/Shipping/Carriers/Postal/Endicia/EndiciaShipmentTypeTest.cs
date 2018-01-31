@@ -4,11 +4,13 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using ShipWorks.Shipping.Insurance;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
@@ -127,6 +129,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
 
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
+        }
+
+        [Theory]
+        [InlineData(true, 9.99)]
+        [InlineData(false, 6.66)]
+        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = !insured,
+                Postal = new PostalShipmentEntity
+                {
+                    Insurance = !insured,
+                    InsuranceValue = insuranceValue,
+                    Endicia = new EndiciaShipmentEntity { Insurance = insured}
+                }
+            };
+
+            ShipmentParcel parcel = new EndiciaShipmentType().GetParcelDetail(shipment, 0);
+            
+            Assert.Equal(insured, parcel.Insurance.Insured);
+            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
         }
     }
 }

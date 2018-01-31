@@ -583,7 +583,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 DeliveryConfirmation = "N",
                 DeliveryConfirmationAdult = "N",
                 DeliveryConfirmationSignature = "N",
-                MIDeliveryConfirmation = "N"
+                MIDeliveryConfirmation = "N",
+                Insurance = package.Insurance
             };
 
             double weight = UpsUtility.GetPackageTotalWeight(package);

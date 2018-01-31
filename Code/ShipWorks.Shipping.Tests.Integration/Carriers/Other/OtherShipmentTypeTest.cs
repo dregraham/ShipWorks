@@ -3,6 +3,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
@@ -96,6 +97,47 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Other
             Assert.True(shipment.Other.Insurance);
 
             testObject.UpdateDynamicShipmentData(shipment);
+        }
+
+        [Theory]
+        [InlineData(true, 9.99)]
+        [InlineData(false, 6.66)]
+        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = !insured,
+                Other = new OtherShipmentEntity
+                {
+                    Insurance = insured,
+                    InsuranceValue = insuranceValue
+                }
+            };
+
+            var testObject = context.Mock.Create<OtherShipmentType>();
+            ShipmentParcel parcel = testObject.GetParcelDetail(shipment, 0);
+
+            Assert.Equal(insured, parcel.Insurance.Insured);
+            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UpdateDynamicShipmentData_SetsShipmentInsuranceFromCarrierShipment(bool insured)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsOther()
+                .Save();
+
+            shipment.Insurance = !insured;
+            shipment.Other.Insurance = insured;
+
+            OtherShipmentType shipmentType = context.Mock.Create<OtherShipmentType>();
+            shipmentType.UpdateDynamicShipmentData(shipment);
+
+            Assert.Equal(insured, shipment.Other.Insurance);
+            Assert.Equal(insured, shipment.Insurance);
         }
 
         public void Dispose() => context.Dispose();

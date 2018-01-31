@@ -449,6 +449,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiExceptionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsExceptionTest.cs" />

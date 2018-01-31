@@ -42,6 +42,11 @@ GO
 IF COL_LENGTH(N'[dbo].[OnTracShipment]', N'Insurance') IS NULL
 	ALTER TABLE [dbo].[OnTracShipment] ADD [Insurance] [bit] NOT NULL CONSTRAINT [DF_OnTracShipment_Insurance] DEFAULT ((0))
 GO
+PRINT N'Altering [dbo].[AsendiaShipment]'
+GO
+IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'Insurance') IS NULL
+	ALTER TABLE [dbo].[AsendiaShipment] ADD [Insurance] [bit] NOT NULL CONSTRAINT [DF_AsendiaShipment_Insurance] DEFAULT ((0))
+GO
 
 
 PRINT N'Updating [dbo].[AmazonShipment].[Insurance]'
@@ -107,6 +112,13 @@ UPDATE a
 	FROM OnTracShipment a
 	JOIN Shipment s ON s.ShipmentID = a.ShipmentID;
 
+PRINT N'Updating [dbo].[AsendiaShipment].[Insurance]'
+GO
+UPDATE a 
+	SET a.Insurance = s.Insurance
+	FROM AsendiaShipment a
+	JOIN Shipment s ON s.ShipmentID = a.ShipmentID;
+
 PRINT N'Dropping constraints from [dbo].[AmazonShipment]'
 GO
 IF EXISTS (SELECT 1 FROM sys.columns WHERE name = N'Insurance' AND object_id = OBJECT_ID(N'[dbo].[AmazonShipment]', 'U') AND default_object_id = OBJECT_ID(N'[dbo].[DF_AmazonShipment_Insurance]', 'D'))
@@ -147,3 +159,11 @@ GO
 IF EXISTS (SELECT 1 FROM sys.columns WHERE name = N'Insurance' AND object_id = OBJECT_ID(N'[dbo].[OnTracShipment]', 'U') AND default_object_id = OBJECT_ID(N'[dbo].[DF_OnTracShipment_Insurance]', 'D'))
 ALTER TABLE [dbo].[OnTracShipment] DROP CONSTRAINT [DF_OnTracShipment_Insurance]
 GO
+PRINT N'Dropping constraints from [dbo].[AsendiaShipment]'
+GO
+IF EXISTS (SELECT 1 FROM sys.columns WHERE name = N'Insurance' AND object_id = OBJECT_ID(N'[dbo].[AsendiaShipment]', 'U') AND default_object_id = OBJECT_ID(N'[dbo].[DF_AsendiaShipment_Insurance]', 'D'))
+ALTER TABLE [dbo].[AsendiaShipment] DROP CONSTRAINT [DF_AsendiaShipment_Insurance]
+GO
+
+
+

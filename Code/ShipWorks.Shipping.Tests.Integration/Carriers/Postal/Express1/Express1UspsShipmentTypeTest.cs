@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Express1Usps
         }
 
         [Fact]
-        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToExpress1EndiciaShipmentInsurance()
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToExpress1UspsShipmentInsurance()
         {
             var shipment = Create.Shipment(context.Order)
                 .AsPostal(x => x.AsExpress1Usps())
@@ -99,6 +99,25 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Express1Usps
             Assert.True(shipment.Postal.Usps.Insurance);
 
             testObject.UpdateDynamicShipmentData(shipment);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UpdateDynamicShipmentData_SetsShipmentInsuranceFromCarrierShipment(bool insured)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsExpress1Usps())
+                .Save();
+
+            shipment.Insurance = !insured;
+            shipment.Postal.Usps.Insurance = insured;
+
+            Express1UspsShipmentType shipmentType = context.Mock.Create<Express1UspsShipmentType>();
+            shipmentType.UpdateDynamicShipmentData(shipment);
+
+            Assert.Equal(insured, shipment.Postal.Usps.Insurance);
+            Assert.Equal(insured, shipment.Insurance);
         }
 
         public void Dispose() => context.Dispose();

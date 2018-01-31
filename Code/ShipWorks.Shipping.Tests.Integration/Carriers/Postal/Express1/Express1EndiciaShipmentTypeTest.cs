@@ -101,6 +101,25 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Express1Endicia
             testObject.UpdateDynamicShipmentData(shipment);
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UpdateDynamicShipmentData_SetsShipmentInsuranceFromCarrierShipment(bool insured)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsExpress1Endicia())
+                .Save();
+
+            shipment.Insurance = !insured;
+            shipment.Postal.Endicia.Insurance = insured;
+
+            Express1EndiciaShipmentType shipmentType = context.Mock.Create<Express1EndiciaShipmentType>();
+            shipmentType.UpdateDynamicShipmentData(shipment);
+
+            Assert.Equal(insured, shipment.Postal.Endicia.Insurance);
+            Assert.Equal(insured, shipment.Insurance);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }
