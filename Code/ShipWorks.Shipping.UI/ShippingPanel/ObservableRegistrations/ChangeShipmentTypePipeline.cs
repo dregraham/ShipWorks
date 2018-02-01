@@ -65,7 +65,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             bool originalInsuranceSelection = viewModel.Shipment.Insurance;
             var shipmentAdapter = shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
-            createInsuranceBehaviorChangeViewModel().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+            var newInsuranceSelection = shipmentAdapter.GetPackageAdapters().Any(x => x.InsuranceChoice.Insured);
+            createInsuranceBehaviorChangeViewModel().Notify(originalInsuranceSelection, newInsuranceSelection);
 
             return shipmentAdapter;
         }
