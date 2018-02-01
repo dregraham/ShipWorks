@@ -281,7 +281,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             RecordIdentifier =
                 columns.Any(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ?
                     new OdbcColumn(storeFieldMap.RecordIdentifierSource) :
-                    columns[0];
+                    columns.Single(c=>c.Name == EmptyColumnName);
 
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, true).SingleOrDefault();
