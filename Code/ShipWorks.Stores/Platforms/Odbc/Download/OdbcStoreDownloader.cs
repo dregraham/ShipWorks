@@ -295,6 +295,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
+                    foreach (OrderItemEntity item in order.OrderItems)
+                    {
+                        if (item.OrderItemAttributes.Any())
+                        {
+                            adapter.DeleteEntityCollection(item.OrderItemAttributes);
+                        }
+                    }
+
                     adapter.DeleteEntityCollection(order.OrderItems);
                     adapter.Commit();
                 }
