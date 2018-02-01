@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
         {
-            if (!shipment.Processed)
+            if (!shipment.Processed || shipment.Postal == null)
             {
                 return false;
             }
