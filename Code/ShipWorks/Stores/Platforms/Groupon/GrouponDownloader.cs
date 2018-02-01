@@ -36,7 +36,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         private readonly IDataProvider dataProvider;
         private readonly IGrouponWebClient webClient;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -48,12 +47,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
             ICombineOrder orderCombiner,
             IDataProvider dataProvider,
             IDateTimeProvider dateTimeProvider,
-            Func<Type, ILog> createLogger,
-            ISqlAdapterFactory sqlAdapterFactory)
+            Func<Type, ILog> createLogger)
             : base(store, storeTypeManager.GetType(store))
         {
             this.dateTimeProvider = dateTimeProvider;
-            this.sqlAdapterFactory = sqlAdapterFactory;
             this.webClient = webClient;
             this.dataProvider = dataProvider;
             this.orderCombiner = orderCombiner;

@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Communication
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
         private readonly IConfigurationEntity config;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        protected readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderUtility orderUtility;
         protected long downloadLogID;
         protected DbConnection connection;
@@ -250,6 +250,13 @@ namespace ShipWorks.Stores.Communication
             if (order != null)
             {
                 log.Debug($"Found existing {orderIdentifier}");
+
+                if (order.CombineSplitStatus != CombineSplitStatusType.None)
+                {
+                    string combineSplitStatus = EnumHelper.GetDescription(order.CombineSplitStatus);
+                    log.InfoFormat($"{orderIdentifier} was {combineSplitStatus}, skipping");
+                    return GenericResult.FromError<OrderEntity>(combineSplitStatus);
+                }
 
                 ShippingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
