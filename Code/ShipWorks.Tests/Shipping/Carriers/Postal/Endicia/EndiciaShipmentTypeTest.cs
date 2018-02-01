@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
@@ -151,6 +152,30 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             
             Assert.Equal(insured, parcel.Insurance.Insured);
             Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+        }
+
+        [Fact]
+        public void GetPackageAdapters_ReturnEndiciaValues()
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = false,
+                Postal = new PostalShipmentEntity
+                {
+                    Insurance = false,
+                    InsuranceValue = 3,
+                    Endicia = new EndiciaShipmentEntity { Insurance = true }
+                }
+            };
+
+            IEnumerable<IPackageAdapter> packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.True(packageAdapters.First().InsuranceChoice.Insured);
+
+            shipment.Insurance = true;
+            shipment.Postal.Insurance = true;
+            shipment.Postal.Endicia.Insurance = false;
+            packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.False(packageAdapters.First().InsuranceChoice.Insured);
         }
     }
 }

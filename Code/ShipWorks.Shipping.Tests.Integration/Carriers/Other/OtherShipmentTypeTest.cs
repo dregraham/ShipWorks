@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -6,6 +8,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
@@ -138,6 +141,24 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Other
 
             Assert.Equal(insured, shipment.Other.Insurance);
             Assert.Equal(insured, shipment.Insurance);
+        }
+
+        [Fact]
+        public void GetPackageAdapters_ReturnOtherValues()
+        {
+            ShipmentEntity shipment = Create.Shipment(context.Order)
+                .AsOther(x => x.Set(o => o.Insurance, true))
+                .Set(o => o.Insurance, false)
+                .Save();
+
+            OtherShipmentType shipmentType = context.Mock.Create<OtherShipmentType>();
+            IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
+            Assert.True(packageAdapters.First().InsuranceChoice.Insured);
+
+            shipment.Insurance = true;
+            shipment.Other.Insurance = false;
+            packageAdapters = shipmentType.GetPackageAdapters(shipment);
+            Assert.False(packageAdapters.First().InsuranceChoice.Insured);
         }
 
         public void Dispose() => context.Dispose();

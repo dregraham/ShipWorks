@@ -22,8 +22,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -560,6 +560,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 new DimensionsAdapter(shipment.Postal))
             {
                 TotalWeight = shipment.TotalWeight
+            };
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Endicia == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            return new List<IPackageAdapter>()
+            {
+                new PostalPackageAdapter(shipment, shipment.Postal.Endicia)
             };
         }
     }

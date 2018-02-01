@@ -541,7 +541,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            if (shipment.Postal == null)
+            if (shipment.Postal?.Usps == null)
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
