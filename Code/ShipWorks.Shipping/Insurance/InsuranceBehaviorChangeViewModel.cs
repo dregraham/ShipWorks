@@ -5,6 +5,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -116,7 +117,8 @@ namespace ShipWorks.Shipping.Insurance
             dialog.DataContext = this;
 
             // This is being scheduled so that the change carrier process can finish before we actually show the dialog
-            schedulerProvider.Dispatcher.Schedule(dialog, (s, d) =>
+            // The 1ms delay is to ensure that the dialog doesn't get shown immediately if we already happen to be on the UI thread
+            schedulerProvider.WindowsFormsEventLoop.Schedule(dialog, TimeSpan.FromMilliseconds(1), (s, d) =>
             {
                 messageHelper.ShowDialog(d);
                 return Disposable.Empty;

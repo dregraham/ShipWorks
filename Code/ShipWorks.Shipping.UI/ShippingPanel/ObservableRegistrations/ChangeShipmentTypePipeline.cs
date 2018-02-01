@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Collections;
+﻿using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Core.Messaging;
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IMessenger messenger;
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChangeViewModel;
+        private readonly Func<Owned<IInsuranceBehaviorChangeViewModel>> createInsuranceBehaviorChangeViewModel;
 
         /// <summary>
         /// Constructor
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public ChangeShipmentTypePipeline(IShippingManager shippingManager,
             IMessenger messenger,
             ISchedulerProvider schedulerProvider,
-            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChangeViewModel,
+            Func<Owned<IInsuranceBehaviorChangeViewModel>> createInsuranceBehaviorChangeViewModel,
             Func<Type, ILog> logFactory)
         {
             this.createInsuranceBehaviorChangeViewModel = createInsuranceBehaviorChangeViewModel;
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             bool originalInsuranceSelection = viewModel.Shipment.Insurance;
             var shipmentAdapter = shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
             var newInsuranceSelection = shipmentAdapter.GetPackageAdapters().Any(x => x.InsuranceChoice.Insured);
-            createInsuranceBehaviorChangeViewModel().Notify(originalInsuranceSelection, newInsuranceSelection);
+            createInsuranceBehaviorChangeViewModel().Value.Notify(originalInsuranceSelection, newInsuranceSelection);
 
             return shipmentAdapter;
         }
