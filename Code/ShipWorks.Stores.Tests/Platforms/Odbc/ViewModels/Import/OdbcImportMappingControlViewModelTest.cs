@@ -529,12 +529,33 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 {
                     "OrderId",
                     "OrderDate",
-                    "OnlineLastModified"
+                    "OnlineLastModified",
+                    "OrderNumber"
                 };
 
                 var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
 
                 Assert.True(testObject.ValidateRequiredMappingFields());
+            }
+        }
+
+        [Fact]
+        public void ValidateRequiredMappingFields_ReturnsFalse_WhenMultiLine_AndRecordIdentifierNotInColumns()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWhereRecordIdentifierIsNotColumnInDatabase.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
+
+                Assert.False(testObject.ValidateRequiredMappingFields());
             }
         }
 

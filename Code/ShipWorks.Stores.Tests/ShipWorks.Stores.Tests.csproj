@@ -420,6 +420,7 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Platforms\ShopSite\Responses\FetchAccessToken.json" />
     <EmbeddedResource Include="Platforms\ShopSite\Responses\FetchEmptyAccessToken.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWhereRecordIdentifierIsNotColumnInDatabase.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Platforms\LemonStand\Artifacts\CustomerMissingBillingAddress.js" />
