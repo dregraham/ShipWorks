@@ -278,9 +278,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 NumberOfItemsPerOrder = 1;
             }
 
-            // If the record identifier from the map exists in the source columns, we use it.
-            // If it doesn't exist, we select the EmptyColumn. When saving the map and the user hasn't
-            // selected a different RecordIdentifierSource, the user will get a validation error.
+            // This ensures the record identifier saved to the map is a valid column
             RecordIdentifier =
                 columns.Any(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ?
                     new OdbcColumn(storeFieldMap.RecordIdentifierSource) :
