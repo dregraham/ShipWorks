@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Other
         [Fact]
         public void InsuranceChoice_PopulatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.Other, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.Other, shipment.Other, null);
 
             Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
             Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
@@ -148,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Other
         [Fact]
         public void InsuranceChoice_UpdatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.Other, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.Other, shipment.Other, null);
             expected.Insured = !expected.Insured;
             expected.InsuranceValue++;
 
@@ -168,6 +168,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Other
                 Insurance = false,
                 Other = new OtherShipmentEntity()
                 {
+                    Insurance = false,
                     InsuranceValue = 5.5M
                 }
             };

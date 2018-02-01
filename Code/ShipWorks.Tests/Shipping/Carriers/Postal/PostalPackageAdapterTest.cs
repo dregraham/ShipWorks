@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
                 Postal = new PostalShipmentEntity()
             };
 
-            PostalPackageAdapter testObject = new PostalPackageAdapter(shipment)
+            PostalPackageAdapter testObject = new PostalPackageAdapter(shipment, shipment.Postal)
             {
                 PackagingType = 999999,
                 AdditionalWeight = 3.1,
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             shipment.Postal = null;
 
-            Assert.Throws<ArgumentNullException>(nameof(shipment.Postal), () => new PostalPackageAdapter(shipment));
+            Assert.Throws<ArgumentNullException>(nameof(shipment.Postal), () => new PostalPackageAdapter(shipment, shipment.Postal));
         }
 
         [Fact]
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void InsuranceChoice_PopulatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.Postal, shipment.Postal, null);
 
             Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
             Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void InsuranceChoice_UpdatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.Postal, shipment.Postal, null);
             expected.Insured = !expected.Insured;
             expected.InsuranceValue++;
 
@@ -186,11 +186,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
                     DimsWeight = 3,
                     DimsAddWeight = false,
                     DimsProfileID = 1049,
+                    Insurance = false,
                     InsuranceValue = 5.5M
                 }
             };
 
-            testObject = new PostalPackageAdapter(shipment);
+            testObject = new PostalPackageAdapter(shipment, shipment.Postal);
         }
     }
 }

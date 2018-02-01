@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         {
             ShipmentEntity shipment = new ShipmentEntity()
             {
-                OnTrac = new OnTracShipmentEntity()
+                OnTrac = new OnTracShipmentEntity { Insurance = false, InsuranceValue = 0.2M }
             };
 
             OnTracPackageAdapter testObject = new OnTracPackageAdapter(shipment)
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         [Fact]
         public void InsuranceChoice_PopulatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.OnTrac, shipment.OnTrac, shipment.OnTrac);
 
             Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
             Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
@@ -161,7 +161,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         [Fact]
         public void InsuranceChoice_UpdatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.OnTrac, shipment.OnTrac, shipment.OnTrac);
             expected.Insured = !expected.Insured;
             expected.InsurancePennyOne = !expected.InsurancePennyOne;
             expected.InsuranceValue++;
@@ -190,6 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
                     DimsWeight = 3,
                     DimsAddWeight = false,
                     DimsProfileID = 1049,
+                    Insurance = false,
                     InsuranceValue = 5.5M,
                     InsurancePennyOne = false
                 }

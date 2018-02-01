@@ -57,13 +57,13 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Dismiss the dialog
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public ICommand Dismiss { get; }
 
         /// <summary>
         /// Should the dialog be shown again
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public bool DoNotShowAgain
         {
             get { return doNotShowAgain; }

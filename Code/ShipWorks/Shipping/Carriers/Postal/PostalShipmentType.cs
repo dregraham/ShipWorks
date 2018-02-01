@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return new List<IPackageAdapter>()
             {
-                new PostalPackageAdapter(shipment)
+                new PostalPackageAdapter(shipment, shipment.Postal)
             };
         }
 

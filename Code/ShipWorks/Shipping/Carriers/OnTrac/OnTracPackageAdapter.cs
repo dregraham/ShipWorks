@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             MethodConditions.EnsureArgumentIsNotNull(shipment.OnTrac, nameof(shipment.OnTrac));
 
             this.shipment = shipment;
-            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment.OnTrac, shipment.OnTrac, shipment.OnTrac);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 shipment.OnTrac.InsurancePennyOne = shippingSettings.OnTracInsurancePennyOne;
             }
 
-            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+            InsuranceChoice = new InsuranceChoice(shipment, shipment.OnTrac, shipment.OnTrac, shipment.OnTrac);
         }
 
         /// <summary>

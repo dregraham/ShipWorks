@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
 
             this.shipment = shipment;
-            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null);
         }
 
         /// <summary>

@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void InsuranceChoice_PopulatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null);
 
             Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
             Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void InsuranceChoice_UpdatesCorrectly_Test()
         {
-            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);
+            IInsuranceChoice expected = new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null);
             expected.Insured = !expected.Insured;
             expected.InsuranceValue++;
 
@@ -176,6 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                     DimsWeight = 3,
                     DimsAddWeight = false,
                     DimsProfileID = 1049,
+                    Insurance = false,
                     InsuranceValue = 5.5M
                 }
             };
