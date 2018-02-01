@@ -9,6 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
@@ -270,14 +271,35 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                     orderNumberToUse = trimmedOrderNumber;
                 }
             }
-           
+
             OrderEntity orderEntity = orderResultToUse.Value;
+
+            if (reloadEntireOrder)
+            {
+                RemoveOrderItems(orderEntity);
+            }
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder, reloadEntireOrder);
 
             orderEntity.ChangeOrderNumber(orderNumberToUse);
 
             return GenericResult.FromSuccess(orderEntity);
+        }
+
+        /// <summary>
+        /// Removes order items from the order
+        /// </summary>
+        private void RemoveOrderItems(OrderEntity order)
+        {
+            if (order.OrderItems.Any())
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.DeleteEntityCollection(order.OrderItems);
+                    adapter.Commit();
+                }
+                order.OrderItems.Clear();
+            }
         }
     }
 }

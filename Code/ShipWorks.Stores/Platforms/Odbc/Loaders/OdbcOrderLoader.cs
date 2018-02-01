@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         private readonly IOdbcOrderItemLoader orderItemLoader;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IOrderChargeCalculator orderChargeCalculator;
-        private readonly ISqlAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
@@ -25,14 +24,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         public OdbcOrderLoader(IEnumerable<IOdbcOrderDetailLoader> orderDetailLoaders,
             IOdbcOrderItemLoader orderItemLoader,
             IDateTimeProvider dateTimeProvider,
-            IOrderChargeCalculator orderChargeCalculator, 
-            ISqlAdapterFactory adapterFactory)
+            IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderDetailLoaders = orderDetailLoaders;
             this.orderItemLoader = orderItemLoader;
             this.dateTimeProvider = dateTimeProvider;
             this.orderChargeCalculator = orderChargeCalculator;
-            this.adapterFactory = adapterFactory;
         }
 
         /// <summary>
@@ -52,16 +49,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             // If the order is new load all the items
             if (order.IsNew || reloadEntireOrder)
             {
-                if (order.OrderItems.Any())
-                {
-                    using (ISqlAdapter adapter = adapterFactory.Create())
-                    {
-                        adapter.DeleteEntityCollection(order.OrderItems);
-                        adapter.Commit();
-                    }
-                    order.OrderItems.Clear();
-                }
-
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);
 

@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Communication
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
         private readonly IConfigurationEntity config;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        protected readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderUtility orderUtility;
         protected long downloadLogID;
         protected DbConnection connection;

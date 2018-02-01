@@ -206,28 +206,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 orderItemLoader.Verify(l => l.Load(fieldMap.Object, orderEntity, odbcRecords));
             }
         }
-
-        [Fact]
-        public void Load_DeletesItems_WhenOrderIsNotNewAndRefreshEntireOrderIsTrue()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var adapter = mock.Mock<ISqlAdapter>();
-                var adapterFactory = mock.Mock<ISqlAdapterFactory>();
-                adapterFactory.Setup(a => a.Create()).Returns(adapter.Object);
-
-                var fieldMap = mock.Mock<IOdbcFieldMap>();
-                var orderEntity = new OrderEntity() { IsNew = false };
-                var orderItem = new OrderItemEntity();
-                orderEntity.OrderItems.Add(orderItem);
-
-                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
-                var testObject = mock.Create<OdbcOrderLoader>();
-
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, true);
-
-                adapter.Verify(a => a.DeleteEntityCollection(orderEntity.OrderItems));
-            }
-        }
     }
 }
