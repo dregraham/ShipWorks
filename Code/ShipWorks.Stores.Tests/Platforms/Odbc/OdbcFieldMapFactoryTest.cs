@@ -73,17 +73,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             IOdbcFieldMap orderMap = testObject.CreateOrderFieldMap(null);
             ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumberComplete, "Order Number", OdbcFieldValueResolutionStrategy.Default);
-            ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column"));
+            ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column", "unknown"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
 
             var itemMap = testObject.CreateOrderItemFieldMap(null, 0, 0);
             ShipWorksOdbcMappableField shipworksItemMap = new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN", OdbcFieldValueResolutionStrategy.Default);
-            ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcColumn("OrderItemColumn"));
+            ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcColumn("OrderItemColumn", "unknown"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksItemMap, externalItemMap));
 
             var addressMap = testObject.CreateAddressFieldMap(null);
             ShipWorksOdbcMappableField shipworksAddressMap = new ShipWorksOdbcMappableField(OrderFields.BillAddressValidationError, "BillAddressValidationError", OdbcFieldValueResolutionStrategy.Default);
-            ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcColumn("BillAddressValidationError"));
+            ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcColumn("BillAddressValidationError", "unknown"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksAddressMap, externalAddressMap));
 
             var combinedMap = testObject.CreateFieldMapFrom(orderMap.Entries.Concat(addressMap.Entries).Concat(itemMap.Entries));

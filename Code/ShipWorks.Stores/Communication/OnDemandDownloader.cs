@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// If orderNumber is not a valid search term, return true.
+        /// If orderNumber is a valid search term, return true.
         /// </summary>
         private static bool ShouldSearch(string orderNumber)
         {

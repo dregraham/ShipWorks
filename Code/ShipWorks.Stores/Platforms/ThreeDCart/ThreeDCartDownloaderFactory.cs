@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             Func<ThreeDCartStoreEntity, IThreeDCartSoapDownloader> createSoapDownloader,
             Func<ThreeDCartStoreEntity, IThreeDCartRestDownloader> createRestDownloader)
         {
+            Store = store;
             ThreeDCartStoreEntity typedStore = store as ThreeDCartStoreEntity;
             downloader = typedStore.RestUser == true ?
                 (IStoreDownloader) createRestDownloader(typedStore) :
@@ -41,6 +42,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         public int QuantityNew => downloader.QuantityNew;
 
         /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
@@ -53,5 +59,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

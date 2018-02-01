@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-                var column = new OdbcColumn("Column Name");
+                var column = new OdbcColumn("Column Name", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-                var column = new OdbcColumn("Column Name");
+                var column = new OdbcColumn("Column Name", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);
@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-                var column = new OdbcColumn("Column Name");
+                var column = new OdbcColumn("Column Name", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);
@@ -205,7 +205,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-                var column = new OdbcColumn("Column Name");
+                var column = new OdbcColumn("Column Name", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);
@@ -256,7 +256,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-                var column = new OdbcColumn("Column Name");
+                var column = new OdbcColumn("Column Name", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);

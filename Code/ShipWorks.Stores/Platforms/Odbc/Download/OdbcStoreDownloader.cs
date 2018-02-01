@@ -9,6 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -32,6 +33,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
         private readonly bool reloadEntireOrder;
+		
+        // not including decimal, money, numeric, real and float because that would be stupid
+        // included names for integers from sql, mysql, oracle, and db2
+        private readonly string[] numericSqlDataTypes =
+        {
+            "tinyint", "smallint", "mediumint", "int", "bigint", "integer", "shortinteger", "longinteger",
+            "sql_smallint","sql_integer","sql_bigint", "number", "smallserial", "serial", "bigserial", "long",
+            "autonumber", "short", "number"
+        };
+        private readonly string[] numericSystemTypes = { "byte", "int16", "int", "int32", "int64" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
@@ -68,6 +79,39 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 throw new OnDemandDownloadException(IsCastException(ex), ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Return true if orderNumber is of same type as the order number of the external source of this store.
+        /// </summary>
+        public override bool ShouldDownload(string orderNumber)
+        {
+            // if datatype is a primary key it will be called something like "bigint identity"
+            // so, grab the first word.
+            // Also, mySql includes lengths of fields within parenthesis. 
+            string dataType = GetOrderNumberFieldMapEntry().ExternalField?.Column?.DataType?.Split(' ', '(')[0];
+
+            // I don't think this should ever happen...
+            if (string.IsNullOrEmpty(dataType))
+            {
+                throw new DownloadException("OrderNumberComplete needs to be remapped.");
+            }
+
+            bool isNumeric = numericSqlDataTypes.Any(t => dataType.Equals(t, StringComparison.InvariantCultureIgnoreCase)) ||
+                   numericSystemTypes.Any(t => dataType.Equals(t, StringComparison.InvariantCultureIgnoreCase));
+
+            bool shouldDownload = true;
+            if (isNumeric)
+            {
+                shouldDownload = long.TryParse(orderNumber, out _);
+            }
+
+            if (!shouldDownload)
+            {
+                log.Info($"SearchTerm '{orderNumber}' could not be converted to a long. Skipping search for store '{store.StoreName}'");
+            }
+
+            return shouldDownload;
         }
 
         /// <summary>
@@ -228,13 +272,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             fieldMap.ApplyValues(firstRecord);
 
-            // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
-
-            if (odbcFieldMapEntry == null)
-            {
-                throw new DownloadException("Order number not found in map.");
-            }
+            IOdbcFieldMapEntry odbcFieldMapEntry = GetOrderNumberFieldMapEntry();
 
             if (odbcFieldMapEntry.ShipWorksField.Value == null)
             {
@@ -251,7 +289,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             GenericResult<OrderEntity> resultWithTrimmedOrderNumber;
-            
+
             if (orderResultToUse.Value.IsNew)
             {
 
@@ -287,6 +325,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         }
 
         /// <summary>
+        /// Gets the OrderNumberComplete fieldMapEntry
+        /// </summary>
+        /// <remarks>
+        /// Throws DownloadException if cannot find OrderNumberComplete field in the map
+        /// </remarks>
+        private IOdbcFieldMapEntry GetOrderNumberFieldMapEntry()
+        {
+            // Find the OrderNumber Entry
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+
+            if (odbcFieldMapEntry == null)
+            {
+                throw new DownloadException("Order number not found in map.");
+            }
+
+            return odbcFieldMapEntry;
+        }
+		
+		/// <summary>
         /// Removes order items from the order
         /// </summary>
         private void RemoveOrderItems(OrderEntity order)

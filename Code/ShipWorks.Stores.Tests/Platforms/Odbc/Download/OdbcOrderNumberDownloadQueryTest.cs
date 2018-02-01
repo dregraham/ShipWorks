@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("OrderNumber");
+            OdbcColumn column = new OdbcColumn("OrderNumber", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("OrderNumber");
+            OdbcColumn column = new OdbcColumn("OrderNumber", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("OrderNumber");
+            OdbcColumn column = new OdbcColumn("OrderNumber", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -190,7 +190,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("OrderNumber");
+            OdbcColumn column = new OdbcColumn("OrderNumber", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -266,7 +266,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
-            OdbcColumn column = new OdbcColumn("OrderNumber");
+            OdbcColumn column = new OdbcColumn("OrderNumber", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);

@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Func<StoreEntity, IChannelAdvisorSoapDownloader> createSoapDownloader,
             Func<StoreEntity, IChannelAdvisorRestDownloader> createRestDownloader)
         {
+            Store = store;
             ChannelAdvisorStoreEntity typedStore = store as ChannelAdvisorStoreEntity;
             downloader = string.IsNullOrWhiteSpace(typedStore.RefreshToken) ?
                 (IStoreDownloader) createSoapDownloader(store) :
@@ -40,6 +41,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         public int QuantityNew => downloader.QuantityNew;
 
         /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
@@ -52,5 +58,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

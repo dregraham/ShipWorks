@@ -72,6 +72,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             Assert.Equal(Task.CompletedTask, task);
         }
 
+        [Fact]
+        public void ShouldDownload_ReturnsFalse()
+        {
+            StoreEntity store = new ThreeDCartStoreEntity();
+            var shouldDownload = mock.Create<ThreeDCartDownloaderFactory>(TypedParameter.From(store)).ShouldDownload("1");
+            Assert.False(shouldDownload);
+        }
+
         [SuppressMessage("SonarLint", "S1481: Unused local variables should be removed",
             Justification = "We're testing a getter. We don't need the value but cannot call a getter without storing it")]
         [Fact]

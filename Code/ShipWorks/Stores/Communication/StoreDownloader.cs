@@ -1220,6 +1220,11 @@ namespace ShipWorks.Stores.Communication
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public virtual bool ShouldDownload(string orderNumber) => false;
+
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency

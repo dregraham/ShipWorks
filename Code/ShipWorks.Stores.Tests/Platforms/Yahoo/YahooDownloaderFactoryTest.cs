@@ -73,6 +73,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
             Assert.Equal(Task.CompletedTask, task);
         }
 
+        [Fact]
+        public void ShouldDownload_ReturnsFalse()
+        {
+            StoreEntity store = new YahooStoreEntity();
+            var shouldDownload = mock.Create<YahooDownloaderFactory>(TypedParameter.From(store)).ShouldDownload("1");
+            Assert.False(shouldDownload);
+        }
+
         [SuppressMessage("SonarLint", "S1481: Unused local variables should be removed",
             Justification = "We're testing a getter. We don't need the value but cannot call a getter without storing it")]
         [Fact]

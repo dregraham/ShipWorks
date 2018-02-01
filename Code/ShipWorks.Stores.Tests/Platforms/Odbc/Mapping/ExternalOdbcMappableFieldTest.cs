@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void QualifiedName_ReturnsQualifiedName()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void DisplayName_ReturnsTableAndColumnName()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Value_IsNull_WhenRecordDoesNotContainColumn()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("foo", "bar");
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void LoadValue_ThrowsArgumentNullException_WithNullRecord()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void LoadValue_LoadsValueFromOdbcRecord()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void ResetValue_SetsValueToNull()
         {
-            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcColumn column = new OdbcColumn("ColumnName", "unknown");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 

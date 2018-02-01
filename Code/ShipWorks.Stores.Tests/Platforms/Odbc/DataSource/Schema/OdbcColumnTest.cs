@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         [Fact]
         public void Ctor_SetsName()
         {
-            OdbcColumn testObject = new OdbcColumn("SomeName");
+            OdbcColumn testObject = new OdbcColumn("SomeName", "unknown");
             Assert.Equal("SomeName", testObject.Name);
         }
 
@@ -16,8 +16,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         public void Equals_ReturnsTrue_WhenNameIsTheSame()
         {
             const string name = "Odbc Column Name";
-            OdbcColumn odbcColumn = new OdbcColumn(name);
-            OdbcColumn odbcColumnToCompare = new OdbcColumn(name);
+            OdbcColumn odbcColumn = new OdbcColumn(name, "unknown");
+            OdbcColumn odbcColumnToCompare = new OdbcColumn(name, "unknown");
 
             Assert.Equal(odbcColumn, odbcColumnToCompare);
         }
@@ -28,8 +28,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             const string name = "Odbc Column Name";
             const string otherName = "Odbc Other Name";
 
-            OdbcColumn odbcColumn = new OdbcColumn(name);
-            OdbcColumn odbcColumnToCompare = new OdbcColumn(otherName);
+            OdbcColumn odbcColumn = new OdbcColumn(name, "unknown");
+            OdbcColumn odbcColumnToCompare = new OdbcColumn(otherName, "unknown");
 
             Assert.NotEqual(odbcColumn, odbcColumnToCompare);
         }
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         public void GetHashCode_ReturnsHashCodeOfName()
         {
             const string name = "Odbc Column Name";
-            OdbcColumn odbcColumn = new OdbcColumn(name);
+            OdbcColumn odbcColumn = new OdbcColumn(name, "unknown");
 
             Assert.Equal(name.GetHashCode(), odbcColumn.GetHashCode());
         }
