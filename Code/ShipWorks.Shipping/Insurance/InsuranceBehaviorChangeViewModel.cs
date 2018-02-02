@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reflection;
 using System.Windows.Input;
 
@@ -22,19 +21,20 @@ namespace ShipWorks.Shipping.Insurance
     public class InsuranceBehaviorChangeViewModel : IInsuranceBehaviorChangeViewModel
     {
         private const UserConditionalNotificationType notificationType = UserConditionalNotificationType.InsuranceBehaviorChange;
-        private readonly IInsuranceBehaviorChangeDialog dialog;
+        private readonly Func<IInsuranceBehaviorChangeViewModel, IInsuranceBehaviorChangeDialog> createDialog;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly PropertyChangedHandler handler;
 
         private bool doNotShowAgain;
+        private IInsuranceBehaviorChangeDialog dialog;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public InsuranceBehaviorChangeViewModel(
-            IInsuranceBehaviorChangeDialog dialog,
+            Func<IInsuranceBehaviorChangeViewModel, IInsuranceBehaviorChangeDialog> createDialog,
             ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
             ISchedulerProvider schedulerProvider
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Insurance
         {
             this.schedulerProvider = schedulerProvider;
             this.messageHelper = messageHelper;
-            this.dialog = dialog;
+            this.createDialog = createDialog;
             this.currentUserSettings = currentUserSettings;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -114,15 +114,8 @@ namespace ShipWorks.Shipping.Insurance
                 return;
             }
 
-            dialog.DataContext = this;
-
-            // This is being scheduled so that the change carrier process can finish before we actually show the dialog
-            // The 1ms delay is to ensure that the dialog doesn't get shown immediately if we already happen to be on the UI thread
-            schedulerProvider.WindowsFormsEventLoop.Schedule(dialog, TimeSpan.FromMilliseconds(1), (s, d) =>
-            {
-                messageHelper.ShowDialog(d);
-                return Disposable.Empty;
-            });
+            dialog = createDialog(this);
+            messageHelper.ShowDialog(dialog);
         }
 
         /// <summary>
@@ -135,7 +128,7 @@ namespace ShipWorks.Shipping.Insurance
                 currentUserSettings.StopShowingNotification(notificationType);
             }
 
-            dialog.Close();
+            dialog?.Close();
         }
     }
 }

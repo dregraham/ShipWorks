@@ -53,23 +53,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x =>
                 {
-                    viewModel.LoadShipment(x, nameof(viewModel.ShipmentType));
+                    // We need to get a reference to the view model before loading the shipment because loading the shipment
+                    // will dispose the lifetimeScope that owns the createInsuranceBehaviorChangeViewModel func
+                    var insuranceViewModel = createInsuranceBehaviorChangeViewModel().Value;
+
+                    viewModel.LoadShipment(x.adapter, nameof(viewModel.ShipmentType));
                     viewModel.SaveToDatabase();
-                    messenger.Send(new ShipmentChangedMessage(this, x, nameof(viewModel.ShipmentType)));
+
+                    // Show the notification after the view model is fully loaded and saved to avoid race conditions with other pipelines
+                    var newInsuranceSelection = x.adapter.GetPackageAdapters().Any(p => p.InsuranceChoice.Insured);
+                    insuranceViewModel.Notify(x.originalInsuranceSelection, newInsuranceSelection);
+
+                    messenger.Send(new ShipmentChangedMessage(this, x.adapter, nameof(viewModel.ShipmentType)));
                 });
         }
 
         /// <summary>
         /// Get a shipping adapter from the changed shipment type
         /// </summary>
-        private ICarrierShipmentAdapter ChangeShipmentType(ShippingPanelViewModel viewModel)
+        private (ICarrierShipmentAdapter adapter, bool originalInsuranceSelection) ChangeShipmentType(ShippingPanelViewModel viewModel)
         {
             bool originalInsuranceSelection = viewModel.Shipment.Insurance;
             var shipmentAdapter = shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
-            var newInsuranceSelection = shipmentAdapter.GetPackageAdapters().Any(x => x.InsuranceChoice.Insured);
-            createInsuranceBehaviorChangeViewModel().Value.Notify(originalInsuranceSelection, newInsuranceSelection);
-
-            return shipmentAdapter;
+            return (shipmentAdapter, originalInsuranceSelection);
         }
 
         /// <summary>

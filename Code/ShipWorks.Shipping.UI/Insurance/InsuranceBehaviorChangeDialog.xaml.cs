@@ -12,9 +12,20 @@ namespace ShipWorks.Shipping.UI.Insurance
     [Component]
     public partial class InsuranceBehaviorChangeDialog : Window, IInsuranceBehaviorChangeDialog
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public InsuranceBehaviorChangeDialog()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public InsuranceBehaviorChangeDialog(IInsuranceBehaviorChangeViewModel viewModel) : this()
+        {
+            DataContext = viewModel;
         }
 
         /// <summary>
