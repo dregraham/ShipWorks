@@ -438,9 +438,11 @@ namespace ShipWorks.Shipping
                 // Reload the displayed shipments so that they show the new shipment type UI
                 await LoadSelectedShipments(true).ConfigureAwait(true);
 
+                // None uses the NullPackageAdapter which returns a null InsuranceChoice, so we return true for
+                // insured so that the insurance changed pop up doesn't show.
                 IDictionary<long, bool> newInsuranceSelections = uiDisplayedShipments.ToDictionary(
                     x => x.ShipmentID,
-                    x => shipmentTypeManager.Get(x).GetPackageAdapters(x).Any(p => p.InsuranceChoice.Insured));
+                    x => shipmentTypeManager.Get(x).GetPackageAdapters(x).Any(p => p.InsuranceChoice?.Insured ?? true));
 
                 createInsuranceBehaviorChange().Notify(originalInsuranceSelections, newInsuranceSelections);
             }
