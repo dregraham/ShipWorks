@@ -106,6 +106,7 @@ namespace :build do
 		print "Building solution with the Debug (No Analyzers) config...\r\n\r\n"
 
 		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: false
+        msb.verbosity = 'minimal'
 		msb.targets :Build
 	end
 
