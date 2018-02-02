@@ -248,11 +248,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             shipment.BestRate.InsuranceValue = 0;
+            shipment.BestRate.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.RequestedLabelFormat = (int)LabelFormatType.Standard;
-            shipment.BestRate.Insurance = false;
         }
 
         /// <summary>

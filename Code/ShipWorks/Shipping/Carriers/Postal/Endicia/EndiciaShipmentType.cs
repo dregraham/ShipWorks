@@ -101,9 +101,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Postal.Endicia = new EndiciaShipmentEntity(shipment.ShipmentID);
             }
 
-            base.ConfigureNewShipment(shipment);
-
             shipment.Postal.Endicia.Insurance = false;
+
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>

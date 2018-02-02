@@ -58,9 +58,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
             }
 
-            base.ConfigureNewShipment(shipment);
-
             shipment.Postal.Insurance = false;
+
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
