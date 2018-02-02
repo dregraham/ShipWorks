@@ -43,7 +43,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
-
                 Assert.NotEmpty(testObject.Order.Entries);
             }
         }
@@ -89,6 +88,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Assert.Equal(testObject.Order, testObject.SelectedFieldMap);
             }
         }
+
+        [Fact]
+        public void Load_RecordIdentifierSetToNone_WhenRecordNotInColumnsOfExternalDb()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWhereRecordIdentifierIsADifferentCaseThanMappedField.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
+
+                Assert.Equal("(None)", testObject.RecordIdentifier.Name);
+            }
+        }
+
 
         [Fact]
         public void Load_OrderMapDisplayName_IsOrder()
@@ -529,12 +549,53 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 {
                     "OrderId",
                     "OrderDate",
-                    "OnlineLastModified"
+                    "OnlineLastModified",
+                    "OrderNumber"
                 };
 
                 var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
 
                 Assert.True(testObject.ValidateRequiredMappingFields());
+            }
+        }
+
+        [Fact]
+        public void ValidateRequiredMappingFields_ReturnsFalse_WhenMultiLine_AndRecordIdentifierNotInColumns()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWhereRecordIdentifierIsNotColumnInDatabase.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
+
+                Assert.False(testObject.ValidateRequiredMappingFields());
+            }
+        }
+        
+        [Fact]
+        public void ValidateRequiredMappingFields_ReturnsFalse_WhenMultiLine_AndRecordIdentifierDifferentCaseFromColumn()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWhereRecordIdentifierIsADifferentCaseThanMappedField.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
+
+                Assert.False(testObject.ValidateRequiredMappingFields());
             }
         }
 
