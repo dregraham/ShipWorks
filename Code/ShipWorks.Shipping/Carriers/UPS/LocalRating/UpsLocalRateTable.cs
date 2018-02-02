@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Syncfusion.XlsIO;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -55,20 +55,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.importedRateValidator = importedRateValidator;
         }
 
-        /// <summary>
-        /// The supported service types for local rating
-        /// </summary>
-        public static readonly List<UpsServiceType> SupportedServiceTypesForLocalRating = new List<UpsServiceType>
-        {
-            UpsServiceType.UpsGround,
-            UpsServiceType.UpsNextDayAirAM,
-            UpsServiceType.UpsNextDayAir,
-            UpsServiceType.UpsNextDayAirSaver,
-            UpsServiceType.Ups2DayAirAM,
-            UpsServiceType.Ups2DayAir,
-            UpsServiceType.Ups3DaySelect
-        };
-
         #region Import Local Rating Data
 
         /// <summary>
@@ -108,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 throw new UpsLocalRatingException("Error loading Excel file.", ex);
             }
         }
-        
+
         /// <summary>
         /// Loads the latest zone file and rate file associated with the ups account
         /// </summary>
@@ -283,8 +269,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                 ApplyRateSurcharges(shipment, upsLocalServiceRates);
 
-                return upsLocalServiceRates.Any() ? 
-                    GenericResult.FromSuccess(upsLocalServiceRates.AsEnumerable()) : 
+                return upsLocalServiceRates.Any() ?
+                    GenericResult.FromSuccess(upsLocalServiceRates.AsEnumerable()) :
                     GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>("No local rates found.");
             }
             catch (UpsLocalRatingException ex)

@@ -1,20 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Templates.Tokens;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using System.Collections.Generic;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
-using Interapptive.Shared.Collections;
-using System.Linq;
-using System;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -141,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 return;
             }
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading order status since order {0} is manual.", order.OrderID);
                 return;

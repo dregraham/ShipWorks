@@ -12,27 +12,13 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Convert the value
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-            {
-                return parameter;
-            }
-
-            if (value is string)
-            {
-                return string.IsNullOrEmpty((string) value) ? parameter : value;
-            }
-
-            return value;
-        }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            string.IsNullOrEmpty(value as string) ? parameter : value;
 
         /// <summary>
         /// Don't support converting back
         /// </summary>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotImplementedException();
-        }
     }
 }

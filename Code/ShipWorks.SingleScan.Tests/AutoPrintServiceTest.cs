@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages.Filters;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Shipping;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.SingleScan.Tests
 {
@@ -53,7 +54,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
+        public async Task OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -68,7 +69,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_OrderDoesNotPrint_WhenOrderServiceReturnsFalse()
+        public async Task OrderScanned_OrderDoesNotPrint_WhenOrderServiceReturnsFalse()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -86,7 +87,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_DelegatesScanInformationToConfirmationService()
+        public async Task OrderScanned_DelegatesScanInformationToConfirmationService()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -107,7 +108,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatchAndUserCancels()
+        public async Task OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatchAndUserCancels()
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
@@ -128,7 +129,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_ShipmentProcessed_WhenMultipleOrdersMatchAndUserConfirms()
+        public async Task OrderScanned_ShipmentProcessed_WhenMultipleOrdersMatchAndUserConfirms()
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
@@ -150,7 +151,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void MultipleOrdersScanned_SecondScanProcesses_WhenShipmentConfirmationServiceReturnsNoShipmentsTheFirstTime()
+        public async Task MultipleOrdersScanned_SecondScanProcesses_WhenShipmentConfirmationServiceReturnsNoShipmentsTheFirstTime()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -173,7 +174,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_ShipmentNotProcessed_WhenApplyWeightReturnsFalse()
+        public async Task OrderScanned_ShipmentNotProcessed_WhenApplyWeightReturnsFalse()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -187,7 +188,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
+        public async Task OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -207,7 +208,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void MultipleOrdersScanned_SendsMultipleProcessMessage_WhenOrderHasOneUnprocessedShipment()
+        public async Task MultipleOrdersScanned_SendsMultipleProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -222,7 +223,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsShippingProvidersToNA_WhenNoShipmentsProcessed()
+        public async Task AddTelemetryData_SetsShippingProvidersToNA_WhenNoShipmentsProcessed()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -238,7 +239,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsShippingProvidersToCarrier_WhenShipmentProcessed()
+        public async Task AddTelemetryData_SetsShippingProvidersToCarrier_WhenShipmentProcessed()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -255,7 +256,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsShippingProvidersToListOfCarriers_WhenMutlipleShipmentsProcessedWithMutipleCarriers()
+        public async Task AddTelemetryData_SetsShippingProvidersToListOfCarriers_WhenMutlipleShipmentsProcessedWithMutipleCarriers()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -273,7 +274,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsRequiredConfirmationToNo_WhenSingleOrderFoundWithSingleShipment()
+        public async Task AddTelemetryData_SetsRequiredConfirmationToNo_WhenSingleOrderFoundWithSingleShipment()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -290,7 +291,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsRequiredConfirmationToYes_WhenSingleOrderFoundWithMultipleShipments()
+        public async Task AddTelemetryData_SetsRequiredConfirmationToYes_WhenSingleOrderFoundWithMultipleShipments()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -308,7 +309,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsRequiredConfirmationToYes_WhenMultipleOrdersFound()
+        public async Task AddTelemetryData_SetsRequiredConfirmationToYes_WhenMultipleOrdersFound()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -329,7 +330,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsPrintAbortedToNo_WhenUserConfirmsPrint()
+        public async Task AddTelemetryData_SetsPrintAbortedToNo_WhenUserConfirmsPrint()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
@@ -354,7 +355,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughOrderConfirmationService()
+        public async Task AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughOrderConfirmationService()
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
@@ -379,7 +380,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughShipmentConfirmationService()
+        public async Task AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughShipmentConfirmationService()
         {
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);

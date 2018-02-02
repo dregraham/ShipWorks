@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Utility
 {
@@ -127,5 +128,11 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static implicit operator Result(Exception exception) =>
             Result.FromError(exception);
+
+        /// <summary>
+        /// Convert from a Result to Task(Of T)
+        /// </summary>
+        public static implicit operator Task<Unit>(Result result) =>
+            result.Match(() => Task.FromResult(Unit.Default), ex => Task.FromException<Unit>(ex));
     }
 }

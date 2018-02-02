@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineDownloadedLabelData(ShipmentEntity shipment,
+        protected ShipEngineDownloadedLabelData(ShipmentEntity shipment,
             Label label,
             IDataResourceManager resourceManager,
             IShipEngineResourceDownloader resourceDownloader)

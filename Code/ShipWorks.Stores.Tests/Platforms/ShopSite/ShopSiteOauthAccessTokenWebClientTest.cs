@@ -6,7 +6,6 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
@@ -142,10 +141,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetAccessTokenResponse(), store);
 
             int callOrder = 0;
-            submitter.Setup(x => x.Variables.Add("grant_type", "authorization_code")).Callback(() => Assert.Equal(callOrder++, 0));
-            submitter.Setup(x => x.Variables.Add("code", store.OauthAuthorizationCode)).Callback(() => Assert.Equal(callOrder++, 1));
-            submitter.Setup(x => x.Variables.Add("client_credentials", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 2));
-            submitter.Setup(x => x.Variables.Add("signature", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 3));
+            submitter.Setup(x => x.Variables.Add("grant_type", "authorization_code")).Callback(() => Assert.Equal(0, callOrder++));
+            submitter.Setup(x => x.Variables.Add("code", store.OauthAuthorizationCode)).Callback(() => Assert.Equal(1, callOrder++));
+            submitter.Setup(x => x.Variables.Add("client_credentials", It.IsAny<string>())).Callback(() => Assert.Equal(2, callOrder++));
+            submitter.Setup(x => x.Variables.Add("signature", It.IsAny<string>())).Callback(() => Assert.Equal(3, callOrder++));
 
             IShopSiteOauthAccessTokenWebClient webClient = CreateWebClient(submitter, store);
 

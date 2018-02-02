@@ -22,6 +22,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Metrics;
@@ -89,6 +90,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Templates.Distribution;
@@ -158,7 +160,7 @@ namespace ShipWorks
             heartBeat = new UIHeartbeat(this);
 
             // Persist size\position of the window
-            new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
 
             InitializeCustomEnablerComponents();
@@ -173,9 +175,17 @@ namespace ShipWorks
                 SelectionDependentType.AppliesFunction,
                 ShouldCombineOrderBeEnabled);
 
+            selectionDependentEnabler.SetEnabledWhen(buttonSplit,
+                SelectionDependentType.AppliesFunction,
+                ShouldSplitOrderBeEnabled);
+
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
                 SelectionDependentType.AppliesFunction,
                 ShouldCombineOrderBeEnabled);
+
+            selectionDependentEnabler.SetEnabledWhen(contextOrderSplitOrder,
+                SelectionDependentType.AppliesFunction,
+                ShouldSplitOrderBeEnabled);
         }
 
         /// <summary>
@@ -184,7 +194,9 @@ namespace ShipWorks
         private IDisposable DisableCustomEnablerComponents()
         {
             selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.Ignore);
+            selectionDependentEnabler.SetEnabledWhen(buttonSplit, SelectionDependentType.Ignore);
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder, SelectionDependentType.Ignore);
+            selectionDependentEnabler.SetEnabledWhen(contextOrderSplitOrder, SelectionDependentType.Ignore);
 
             return Disposable.Create(InitializeCustomEnablerComponents);
         }
@@ -1429,6 +1441,23 @@ namespace ShipWorks
             {
                 IOrderCombineValidator orderCombineValidator = scope.Resolve<IOrderCombineValidator>();
                 return orderCombineValidator.Validate(keys).Success;
+            }
+        }
+
+        /// <summary>
+        /// Allow the combine button to be enabled
+        /// </summary>
+        private bool ShouldSplitOrderBeEnabled(IEnumerable<long> keys)
+        {
+            if (!keys.IsCountEqualTo(1))
+            {
+                return false;
+            }
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ISplitOrderValidator orderSplitValidator = scope.Resolve<ISplitOrderValidator>();
+                return orderSplitValidator.Validate(keys).Success;
             }
         }
 
@@ -2943,6 +2972,38 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Split an order
+        /// </summary>
+        private async void OnSplitOrder(object sender, EventArgs e)
+        {
+            if (!ShouldSplitOrderBeEnabled(gridControl.Selection.OrderedKeys))
+            {
+                UpdateCommandState();
+                return;
+            }
+
+            await SplitOrder()
+                .Do(LookupOrders, _ => UpdateCommandState(), ContinueOn.CurrentThread)
+                .Recover(ex => Enumerable.Empty<long>())
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Combine the currently selected orders
+        /// </summary>
+        private async Task<IEnumerable<long>> SplitOrder()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (DisableCustomEnablerComponents())
+                {
+                    IOrderSplitOrchestrator orchestrator = lifetimeScope.Resolve<IOrderSplitOrchestrator>();
+                    return await orchestrator.Split(gridControl.Selection.OrderedKeys.FirstOrDefault()).ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
         /// Lookup the specified order by selecting it via Quick Search
         /// </summary>
         private void LookupOrder(long orderID)
@@ -2953,6 +3014,19 @@ namespace ShipWorks
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
+        }
+
+        /// <summary>
+        /// Lookup the specified order by selecting it via Quick Search
+        /// </summary>
+        private void LookupOrders(IEnumerable<long> orderIDs)
+        {
+            dockableWindowOrderFilters.Open(WindowOpenMethod.OnScreenSelect);
+
+            // Ensure the order grid is active
+            orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
+            gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderIDs));
         }
 
         /// <summary>

@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         [SuppressMessage("Microsoft", "RECS0021: Virtual member call in constructor",
             Justification = "This existed before upgrading to .NET 4.6. It should be addressed eventually")]
-        public ShipmentViewModelBase(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
+        protected ShipmentViewModelBase(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory, IMessenger messenger,
             IDimensionsManager dimensionsManager,
             IShippingViewModelFactory shippingViewModelFactory,

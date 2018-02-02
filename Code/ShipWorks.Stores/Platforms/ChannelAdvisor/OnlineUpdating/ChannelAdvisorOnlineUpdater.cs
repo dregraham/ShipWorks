@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             // If the order is manual but also has combined orders, let it through so the updater
             // can check the combined orders manual status.
-            if (!order.IsManual || order.CombineSplitStatus == CombineSplitStatusType.Combined)
+            if (!order.IsManual || order.CombineSplitStatus.IsCombined())
             {
                 string carrierCode = "";
                 string serviceClass = "";

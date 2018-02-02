@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Utility
 {
@@ -110,6 +111,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Bind the value of the result
         /// </summary>
+        /// <param name="func">Func that will be bound with the value of the initial result</param>
         /// <returns>
         /// A result containing the mapped value or its error, or the original error
         /// </returns>
@@ -119,6 +121,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Bind the result
         /// </summary>
+        /// <param name="func">Func that will be bound with the value of the initial result</param>
         /// <returns>
         /// A result containing the original value or an error from the map action, or the original error
         /// </returns>
@@ -129,6 +132,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Map the value of the result
         /// </summary>
+        /// <param name="func">Map the value to another value</param>
         /// <returns>
         /// A result containing the mapped value, or the original error
         /// </returns>
@@ -139,6 +143,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Perform an operation on the value
         /// </summary>
+        /// <param name="action">Action to perform on the value</param>
         /// <returns>
         /// A result containing the original value, or the original error
         /// </returns>
@@ -147,8 +152,20 @@ namespace Interapptive.Shared.Utility
                 ex => GenericResult.FromError<T>(ex));
 
         /// <summary>
+        /// Perform an operation on the value
+        /// </summary>
+        /// <param name="func">Func to perform on the value</param>
+        /// <returns>
+        /// A result containing the original value, or the original error
+        /// </returns>
+        public GenericResult<T> Do(Func<T, Result> func) =>
+            Bind(x => func(x).Match(() => x, ex => GenericResult.FromError<T>(ex)));
+
+        /// <summary>
         /// Match on the result, calling the first method on success and the second on failure
         /// </summary>
+        /// <param name="onSuccess">Map the successful value</param>
+        /// <param name="onError">Map the exception value</param>
         /// <returns>
         /// The result of the called function
         /// </returns>
@@ -174,5 +191,14 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static implicit operator GenericResult<T>(Exception exception) =>
             GenericResult.FromError<T>(exception);
+
+        /// <summary>
+        /// Convert from a GenericResult(Of T) to Task(Of T)
+        /// </summary>
+        /// <returns>
+        /// Returns a successful task if the GenericResult was successful, otherwise a failed task
+        /// </returns>
+        public static implicit operator Task<T>(GenericResult<T> result) =>
+            result.Match(Task.FromResult, Task.FromException<T>);
     }
 }

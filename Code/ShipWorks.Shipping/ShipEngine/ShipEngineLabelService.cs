@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineLabelService(
+        protected ShipEngineLabelService(
             IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData)

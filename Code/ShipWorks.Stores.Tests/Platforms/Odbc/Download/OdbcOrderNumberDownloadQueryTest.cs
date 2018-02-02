@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_CallsSetCommandTextOnCommand()
+        public void PopulateCommandText_CallsSetCommandTextOnCommand()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
@@ -186,7 +186,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
+        public void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
@@ -223,7 +223,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_OpensConnection()
+        public void PopulateCommandText_OpensConnection()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";
@@ -262,7 +262,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_AddsOrderNumberParameter()
+        public void PopulateCommandText_AddsOrderNumberParameter()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             string orderNumber = "OrderNumber";

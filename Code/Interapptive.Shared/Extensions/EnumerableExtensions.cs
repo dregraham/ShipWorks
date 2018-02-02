@@ -81,5 +81,16 @@ namespace Interapptive.Shared.Extensions
         /// </returns>
         public static T Match<T, TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, T> onFound, Func<T> onMissing) =>
             source.ContainsKey(key) ? onFound(source[key]) : onMissing();
+
+        /// <summary>
+        /// Perform a distinct operation on a sequence using the specified property to determine equality
+        /// </summary>
+        /// <typeparam name="T">Type of sequence</typeparam>
+        /// <typeparam name="TProp">Type of property for equality comparison</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <param name="propertyAccessor">Property accessor to use for equality comparison</param>
+        /// <returns>Sequence that contains the distinct results</returns>
+        public static IEnumerable<T> Distinct<T, TProp>(this IEnumerable<T> source, Func<T, TProp> propertyAccessor) where T : class =>
+            source.Distinct(new GenericPropertyEqualityComparer<T, TProp>(propertyAccessor));
     }
 }

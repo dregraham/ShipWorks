@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -75,7 +76,7 @@ namespace ShipWorks.Stores.Content
         /// Calculate the order total of the order.  The FK rows must be present and referenced
         /// by the order object.
         /// </summary>
-        public static decimal CalculateTotal(OrderEntity order)
+        public static decimal CalculateTotal(IOrderEntity order)
         {
             return CalculateTotal(order.OrderItems, order.OrderCharges);
         }
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Content
         /// Calculate the order total given the list of items and charges. Attributes for each item must already be attached
         /// to the item entity.
         /// </summary>
-        public static decimal CalculateTotal(ICollection<OrderItemEntity> items, ICollection<OrderChargeEntity> charges)
+        public static decimal CalculateTotal(IEnumerable<IOrderItemEntity> items, IEnumerable<IOrderChargeEntity> charges)
         {
             decimal totalItems = 0;
             decimal totalCharges = 0;

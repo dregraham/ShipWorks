@@ -1,4 +1,7 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using log4net;
 using Moq;
@@ -9,9 +12,6 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -129,36 +129,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Load_SetsEntries_WhenPassedSerializedMapAndThereAreMultipleEntries()
-        {
-            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
-
-            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
-            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
-            mock.Provide(repo.Object);
-
-            string mapJson = GetStringWithFieldMap();
-            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
-
-            map.Load(mapJson);
-
-            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
-                GetExternalField("SomeColumnName2")));
-
-            IOdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
-            Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
-            Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
-            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
-            Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
-
-            IOdbcFieldMapEntry entry2 = map.Entries.Skip(1).FirstOrDefault();
-            Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
-            Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
-            Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
-            Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
-        }
-
-        [Fact]
         public void CopyToEntity_SetsFieldToEmptyString_WhenExternalFieldValueIsEmptyString()
         {
             var testObject = mock.Create<OdbcFieldMap>();
@@ -174,7 +144,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             testObject.AddEntry(entry.Object);
 
-            OrderEntity order = new OrderEntity {BillFirstName = "bob"};
+            OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
             testObject.CopyToEntity(order);
 
@@ -289,7 +259,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             testObject.AddEntry(entry.Object);
 
             OrderEntity order = new OrderEntity { OrderNumber = 55 };
-            
+
             // sanity check
             Assert.Equal("55", order.OrderNumberComplete);
 
@@ -360,7 +330,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
             testObject.AddEntry(mapEntry.Object);
 
-            IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
+            IEnumerable<IEntity2> entities = new List<IEntity2>() { new ShipmentEntity() };
 
             testObject.ApplyValues(entities, repo.Object);
 
@@ -510,7 +480,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             testObject.Clone();
 
-            fieldMapWriter.Verify(f=>f.Serialize(), Times.Once);
+            fieldMapWriter.Verify(f => f.Serialize(), Times.Once);
         }
 
         [Fact]

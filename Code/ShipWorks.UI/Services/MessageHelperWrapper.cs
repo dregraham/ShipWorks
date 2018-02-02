@@ -2,6 +2,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
@@ -13,6 +14,7 @@ namespace ShipWorks.UI.Services
     /// <summary>
     /// Wraps the static message helper class
     /// </summary>
+    [Component]
     public class MessageHelperWrapper : IMessageHelper
     {
         private readonly Func<Control> ownerFactory;

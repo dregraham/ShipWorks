@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             var viewModel = mock.Build<IShopSiteAccountSettingsViewModel>();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.SaveDataToStoreFromViewModel(null, viewModel));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.SaveDataToStoreFromViewModel(null, viewModel));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             var store = new ShopSiteStoreEntity();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.SaveDataToStoreFromViewModel(store, null));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.SaveDataToStoreFromViewModel(store, null));
         }
 
         [Theory]

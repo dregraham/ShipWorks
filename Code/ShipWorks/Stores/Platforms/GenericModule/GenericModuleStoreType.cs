@@ -21,7 +21,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.GenericModule.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
@@ -572,7 +571,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// Create Order Instance
         /// </summary>
         protected override OrderEntity CreateOrderInstance() =>
-            new GenericModuleOrderEntity()
+            new GenericModuleOrderEntity
             {
                 IsFBA = false,
                 IsPrime = AmazonIsPrime.No,
@@ -584,7 +583,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// Create Order Item Instance
         /// </summary>
         /// <returns></returns>
-        public override OrderItemEntity CreateOrderItemInstance() => 
+        public override OrderItemEntity CreateOrderItemInstance() =>
             new GenericModuleOrderItemEntity
             {
                 AmazonOrderItemCode = string.Empty

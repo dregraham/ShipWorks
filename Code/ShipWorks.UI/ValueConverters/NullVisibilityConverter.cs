@@ -13,8 +13,9 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// If its null return hidden otherwise visible
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => 
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             value == null ? Visibility.Hidden : Visibility.Visible;
+
         /// <summary>
         /// Do not convert back
         /// </summary>

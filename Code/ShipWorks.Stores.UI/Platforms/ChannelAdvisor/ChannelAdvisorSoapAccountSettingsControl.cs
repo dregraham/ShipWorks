@@ -121,15 +121,13 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         {
             try
             {
-                if (e.Argument is string)
+                if (e.Argument is string accountKey)
                 {
-                    string accountKey = (string)e.Argument;
-
                     OnTestAuthorizationComplete(ChannelAdvisorSoapClient.TestConnection(accountKey));
                 }
                 else
                 {
-                    int configuredProfileId = (int)e.Argument;
+                    int configuredProfileId = (int) e.Argument;
 
                     loadedAccountKey = ChannelAdvisorSoapClient.GetAccountKey(configuredProfileId);
                     if (loadedAccountKey == null)

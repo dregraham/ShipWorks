@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data.SqlClient;
 using Interapptive.Shared;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Controls;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content
 {
@@ -49,10 +43,10 @@ namespace ShipWorks.Stores.Content
 
             this.customerID = customerID;
 
-            WindowStateSaver wss = new WindowStateSaver(this);
-            wss.ManageSplitter(splitContainerDetails, "Details");
-            wss.ManageSplitter(splitContainerHistoryTop, "HistoryTop");
-            wss.ManageSplitter(splitContainerHistoryBottom, "HistoryBottom");
+            WindowStateSaver.Manage(this)
+                .ManageSplitter(splitContainerDetails, "Details")
+                .ManageSplitter(splitContainerHistoryTop, "HistoryTop")
+                .ManageSplitter(splitContainerHistoryBottom, "HistoryBottom");
         }
 
         /// <summary>

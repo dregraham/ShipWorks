@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
             }
 
             OrderEntity order = shipment.Order;
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
                 return;

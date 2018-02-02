@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.SingleScan.Tests
 {
@@ -33,7 +34,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void GetShipments_DelegatesToSingleScanShipmentConfirmationService()
+        public async Task GetShipments_DelegatesToSingleScanShipmentConfirmationService()
         {
             var testObject = mock.Create<SingleScanConfirmationService>();
             var shipments = new List<ShipmentEntity>();
