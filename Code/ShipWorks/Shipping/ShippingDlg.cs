@@ -438,7 +438,9 @@ namespace ShipWorks.Shipping
                 // Reload the displayed shipments so that they show the new shipment type UI
                 LoadSelectedShipments(true);
 
-                IDictionary<long, bool> newInsuranceSelections = uiDisplayedShipments.ToDictionary(x => x.ShipmentID, x => x.Insurance);
+                IEnumerable<(long ShipmentID, bool Insured)> packageAdapters = uiDisplayedShipments
+                    .Select(s => (ShipmentID: s.ShipmentID, Insured: shipmentTypeManager.Get(s).GetPackageAdapters(s).Any(p => p.InsuranceChoice.Insured)));
+                IDictionary<long, bool> newInsuranceSelections = packageAdapters.ToDictionary(x => x.ShipmentID, x => x.Insured);
 
                 createInsuranceBehaviorChange().Notify(originalInsuranceSelections, newInsuranceSelections);
             }
