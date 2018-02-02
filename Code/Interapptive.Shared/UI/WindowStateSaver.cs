@@ -126,10 +126,6 @@ namespace Interapptive.Shared.UI
                 Debug.Fail("Failed to read state file: " + ex.Message);
                 log.Error("Failed to read state file: " + ex.Message);
             }
-            catch (Exception ex)
-            {
-                log.Error("Failed to read state file: " + ex.Message);
-            }
         }
 
         /// <summary>
