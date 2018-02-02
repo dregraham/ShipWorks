@@ -42,12 +42,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-
-
             <Border VerticalAlignment="Top"
                     CornerRadius="12"
                     Width="24"
                     Height="24"
+                    Margin="4,0"
                     Background="{StaticResource Blue}">
                 <TextBlock TextBlock.Foreground="White"
                            TextBlock.FontWeight="Bold"
