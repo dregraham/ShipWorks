@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
@@ -60,20 +61,35 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     viewModel.LoadShipment(x.adapter, nameof(viewModel.ShipmentType));
                     viewModel.SaveToDatabase();
 
-                    // Show the notification after the view model is fully loaded and saved to avoid race conditions with other pipelines
-                    var newInsuranceSelection = x.adapter.GetPackageAdapters().Any(p => p.InsuranceChoice.Insured);
-                    insuranceViewModel.Notify(x.originalInsuranceSelection, newInsuranceSelection);
+                    x.originalInsuranceSelection.Do(i => ShowInsuranceNotification(x.adapter, i, insuranceViewModel));
 
                     messenger.Send(new ShipmentChangedMessage(this, x.adapter, nameof(viewModel.ShipmentType)));
                 });
         }
 
         /// <summary>
+        /// Show the insurance notification
+        /// </summary>
+        private static void ShowInsuranceNotification(ICarrierShipmentAdapter adapter, bool originalInsuranceSelection, IInsuranceBehaviorChangeViewModel insuranceViewModel)
+        {
+            if (adapter.ShipmentTypeCode == ShipmentTypeCode.None)
+            {
+                return;
+            }
+
+            // Show the notification after the view model is fully loaded and saved to avoid race conditions with other pipelines
+            var newInsuranceSelection = adapter.GetPackageAdapters().Any(p => p.InsuranceChoice.Insured);
+            insuranceViewModel.Notify(originalInsuranceSelection, newInsuranceSelection);
+        }
+
+        /// <summary>
         /// Get a shipping adapter from the changed shipment type
         /// </summary>
-        private (ICarrierShipmentAdapter adapter, bool originalInsuranceSelection) ChangeShipmentType(ShippingPanelViewModel viewModel)
+        private (ICarrierShipmentAdapter adapter, GenericResult<bool> originalInsuranceSelection) ChangeShipmentType(ShippingPanelViewModel viewModel)
         {
-            bool originalInsuranceSelection = viewModel.Shipment.Insurance;
+            GenericResult<bool> originalInsuranceSelection = viewModel.ShipmentType == ShipmentTypeCode.None ?
+                GenericResult.FromError<bool>("Does not support none") :
+                viewModel.Shipment.Insurance;
             var shipmentAdapter = shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
             return (shipmentAdapter, originalInsuranceSelection);
         }
