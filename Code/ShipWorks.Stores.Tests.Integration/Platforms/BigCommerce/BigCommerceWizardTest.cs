@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
             Assert.IsType<BigCommerceAccountPage>(result.ElementAt(0));
             Assert.IsType<BigCommerceStoreSettingsPage>(result.ElementAt(1));
-            Assert.Equal(result.Count, 2);
+            Assert.Equal(2, result.Count);
         }
 
         public void Dispose() => container.Dispose();

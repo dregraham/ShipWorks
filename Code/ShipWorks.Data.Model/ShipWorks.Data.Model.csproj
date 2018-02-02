@@ -161,6 +161,7 @@
     <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\EbayOrderSearchEntityComparer.cs" />
     <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.Interface.cs" />

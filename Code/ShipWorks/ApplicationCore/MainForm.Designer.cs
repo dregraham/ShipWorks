@@ -74,6 +74,7 @@ namespace ShipWorks
             this.buttonNewOrder = new Divelements.SandRibbon.Button();
             this.buttonDeleteOrders = new Divelements.SandRibbon.Button();
             this.buttonCombine = new Divelements.SandRibbon.Button();
+            this.buttonSplit = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
             this.panelDockingArea = new System.Windows.Forms.Panel();
@@ -120,6 +121,7 @@ namespace ShipWorks
             this.contextMenuOrderGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextOrderEditOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderCombineOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOrderSplitOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderLocalStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.stuffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -743,6 +745,7 @@ namespace ShipWorks
             //
             this.stripLayoutCombineSplitOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
                 this.buttonCombine,
+                this.buttonSplit
                 });
             this.stripLayoutCombineSplitOrders.ItemSpacing = 6;
             this.stripLayoutCombineSplitOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
@@ -775,6 +778,15 @@ namespace ShipWorks
             this.buttonCombine.QuickAccessKey = "OC";
             this.buttonCombine.Text = "Combine";
             this.buttonCombine.Activate += new System.EventHandler(this.OnCombineOrders);
+            //
+            // buttonSplit
+            //
+            this.buttonSplit.Guid = new System.Guid("911AAC51-83D9-4AEC-B1ED-5A3B1F9F51A7");
+            this.buttonSplit.Image = global::ShipWorks.Properties.Resources.split_icon_16x16;
+            this.ribbonSecurityProvider.SetPermission(this.buttonSplit, ShipWorks.Users.Security.PermissionType.OrdersModify);
+            this.buttonSplit.QuickAccessKey = "OS";
+            this.buttonSplit.Text = "Split";
+            this.buttonSplit.Activate += new System.EventHandler(this.OnSplitOrder);
             //
             // buttonEditCustomer
             //
@@ -1286,7 +1298,8 @@ namespace ShipWorks
             this.contextMenuOrderGrid.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenuOrderGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextOrderEditOrder,
-            this.contextOrderCombineOrder,
+                this.contextOrderCombineOrder,
+                this.contextOrderSplitOrder,
 
             this.contextOrderSep1,
             this.contextOrderLocalStatus,
@@ -1334,6 +1347,16 @@ namespace ShipWorks
             this.contextOrderCombineOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderCombineOrder.Text = "Combine Orders";
             this.contextOrderCombineOrder.Click += new System.EventHandler(this.OnCombineOrders);
+            //
+            // contextOrderSplitOrder
+            //
+            this.contextOrderSplitOrder.Image = global::ShipWorks.Properties.Resources.split_icon_16x16;
+            this.contextOrderSplitOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSplitOrder, new System.Guid("69D57A7F-C089-4B43-A0C2-A6AC5F8DABFE"));
+            this.contextOrderSplitOrder.Name = "contextOrderSplitOrder";
+            this.contextOrderSplitOrder.Size = new System.Drawing.Size(169, 22);
+            this.contextOrderSplitOrder.Text = "Split Order";
+            this.contextOrderSplitOrder.Click += new System.EventHandler(this.OnSplitOrder);
 
             //
             // contextOrderSep1
@@ -2857,6 +2880,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonEditOrder;
         private Divelements.SandRibbon.Button buttonDeleteOrders;
         private Divelements.SandRibbon.Button buttonCombine;
+        private Divelements.SandRibbon.Button buttonSplit;
         private Divelements.SandRibbon.Button buttonNewCustomer;
         private Divelements.SandRibbon.Button buttonEditCustomer;
         private Divelements.SandRibbon.Button buttonDeleteCustomer;
@@ -2880,6 +2904,7 @@ namespace ShipWorks
         private System.Windows.Forms.ContextMenuStrip contextMenuOrderGrid;
         private System.Windows.Forms.ToolStripMenuItem contextOrderEditOrder;
         private System.Windows.Forms.ToolStripMenuItem contextOrderCombineOrder;
+        private System.Windows.Forms.ToolStripMenuItem contextOrderSplitOrder;
         private System.Windows.Forms.ToolStripMenuItem contextOrderEditCustomer;
         private System.Windows.Forms.ToolStripMenuItem contextOrderLookupCustomer;
         private System.Windows.Forms.ToolStripSeparator contextOrderSep2;

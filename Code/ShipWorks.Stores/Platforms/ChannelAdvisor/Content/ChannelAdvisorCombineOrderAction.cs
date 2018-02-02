@@ -7,7 +7,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 

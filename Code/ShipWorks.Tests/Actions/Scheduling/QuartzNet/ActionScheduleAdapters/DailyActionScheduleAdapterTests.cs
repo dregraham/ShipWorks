@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
-using System;
-using System.Linq;
+using Xunit;
 
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             target = new DailyActionScheduleAdapter();
         }
-        
+
         [Fact]
         public void FiresAtStartTime()
         {
@@ -95,6 +95,5 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.True(intervals[2] == OneDay);
             Assert.True(intervals[3] == OneDay);
         }
-
     }
 }

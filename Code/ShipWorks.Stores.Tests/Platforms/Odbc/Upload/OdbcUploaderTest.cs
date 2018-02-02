@@ -1,20 +1,20 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Enums;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Stores.Content;
 using Xunit;
-using System.Threading.Tasks;
-using Interapptive.Shared.Enums;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 {
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         {
             mock = AutoMock.GetLoose();
 
-            Mock<ICombineOrderNumberCompleteSearchProvider>  combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
+            Mock<ICombineOrderNumberCompleteSearchProvider> combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
             combinedOrderSearchProvider.Setup(sp => sp.GetOrderIdentifiers(It.IsAny<IOrderEntity>())).Returns(Task.FromResult(new[] { "1" }.AsEnumerable()));
             mock.Provide(combinedOrderSearchProvider.Object);
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             SetupCommand(5);
             shipment.Order.CombineSplitStatus = combineSplitStatusType;
 
-            IEnumerable<string> combinedOrderIDs = combineSplitStatusType == CombineSplitStatusType.None ? new List<string> {"1"} : new List<string> { "1", "2" };
+            IEnumerable<string> combinedOrderIDs = combineSplitStatusType == CombineSplitStatusType.None ? new List<string> { "1" } : new List<string> { "1", "2" };
 
             Mock<ICombineOrderNumberCompleteSearchProvider> combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
             combinedOrderSearchProvider.Setup(sp => sp.GetOrderIdentifiers(It.IsAny<IOrderEntity>())).Returns(Task.FromResult(combinedOrderIDs));

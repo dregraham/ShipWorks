@@ -179,7 +179,8 @@ namespace ShipWorks.Shipping.Services
             {
                 if (lifetimeScope.IsRegisteredWithKey<ICarrierPostProcessingMessage>(shipmentTypeCode))
                 {
-                    lifetimeScope.ResolveKeyed<ICarrierPostProcessingMessage>(shipmentTypeCode).Show(processedShipments);
+                    lifetimeScope.ResolveKeyed<ICarrierPostProcessingMessage>(shipmentTypeCode)
+                        .Show(processedShipments.Where(s => s.ShipmentTypeCode == shipmentTypeCode));
                 }
             }
         }

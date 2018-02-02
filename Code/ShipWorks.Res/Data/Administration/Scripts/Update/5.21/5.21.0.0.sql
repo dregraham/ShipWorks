@@ -14,13 +14,6 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 
 GO
 
-ALTER TABLE [dbo].[GenericModuleOrder]  WITH CHECK ADD  CONSTRAINT [FK_GenericModuleOrder_Order] FOREIGN KEY([OrderID])
-REFERENCES [dbo].[Order] ([OrderID])
-GO
-
-ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
-GO
-
 PRINT N'Creating table GenericModuleOrderItem'
 GO
 CREATE TABLE [dbo].[GenericModuleOrderItem](
@@ -31,6 +24,29 @@ CREATE TABLE [dbo].[GenericModuleOrderItem](
 	[OrderItemID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+PRINT N'Creating GenericModuleOrder rows that correspond to GenericModuleStore orders'
+INSERT INTO GenericModuleOrder 
+SELECT o.OrderId, '',0,0,0
+FROM [order] AS o
+INNER JOIN GenericModuleStore gms ON o.StoreID = gms.StoreID
+GO
+
+PRINT N'Creating GenericModuleOrderItem rows that correspond to GenericModuleStore order items'
+INSERT INTO GenericModuleOrderItem
+SELECT OrderItemId, ''
+FROM OrderItem oi
+INNER JOIN GenericModuleOrder gmo ON oi.OrderID = gmo.OrderID
+GO
+
+PRINT N'Creating GenericModuleOrder and GenericModuleOrderItem constraints'
+ALTER TABLE [dbo].[GenericModuleOrder]  WITH CHECK ADD  CONSTRAINT [FK_GenericModuleOrder_Order] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[Order] ([OrderID])
+GO
+
+ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+
 
 GO
 ALTER TABLE [dbo].[GenericModuleOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_GenericModuleOrderItem_OrderItem] FOREIGN KEY([OrderItemID])

@@ -9,7 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.Volusion.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Volusion

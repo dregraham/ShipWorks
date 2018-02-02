@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             var result = storeType.CreateAddStoreWizardPages(container);
 
             Assert.IsType<WalmartStoreSetupControlHost>(result.ElementAt(0));
-            Assert.Equal(result.Count, 1);
+            Assert.Equal(1, result.Count);
         }
 
         public void Dispose() => container.Dispose();

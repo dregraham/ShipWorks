@@ -9,7 +9,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 

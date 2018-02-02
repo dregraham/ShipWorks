@@ -91,6 +91,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
         {
             var order = Create.Order<EbayOrderEntity>(store, context.Customer)
                 .Set(x => x.EbayOrderID, orderRoot * 10000)
+                .Set(x => x.EbayBuyerID, (orderRoot * 10000).ToString())
+                .Set(x => x.SellingManagerRecord, orderRoot * 10000)
                 .Set(x => x.OrderNumber, orderRoot * 10)
                 .Set(x => x.CombineSplitStatus, CombineSplitStatusType.Combined)
                 .Save();
@@ -116,6 +118,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
                         .Set(x => x.OriginalOrderID, idRoot * -1006)
                         .Set(x => x.EbayOrderID, idRoot * 10000)
                         .Set(x => x.EbayBuyerID, (idRoot * 100000).ToString())
+                        .Set(x => x.SellingManagerRecord, orderRoot * 10000)
                         .Save();
                 }
             }

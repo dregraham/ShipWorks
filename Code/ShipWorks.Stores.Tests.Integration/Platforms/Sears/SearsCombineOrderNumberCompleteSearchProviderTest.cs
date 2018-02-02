@@ -9,7 +9,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -21,6 +20,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Store", "Sears")]
+    [Trait("Category", "CombineSplit")]
     public class SearsCombineOrderNumberCompleteSearchProviderTest : IDisposable
     {
         private readonly DataContext context;
@@ -50,9 +50,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
         [Theory]
         [InlineData(CombineSplitStatusType.None, 0, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 1, 1, "12345")]
-        [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345-OS")]
+        [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 2, 1, "12345")]
-        [InlineData(CombineSplitStatusType.Combined, 2, 2, "12345-OS")]
+        [InlineData(CombineSplitStatusType.Combined, 2, 1, "12345")]
         public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType,
             int numberToCreate, int expectedCount, string expectedFirstResult)
         {
@@ -76,6 +76,32 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
             Assert.Equal(expectedFirstResult, results?.FirstOrDefault().PoNumber);
         }
 
+        [Fact]
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsDistinctValues()
+        {
+            SearsCombineOrderSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<SearsCombineOrderSearchProvider>();
+
+            SearsOrderEntity order = Create.Order<SearsOrderEntity>(context.Store, context.Customer)
+                .WithOrderNumber(12345)
+                .Set(x => x.PoNumber, "12345")
+                .Set(x => x.PoNumberWithDate, "1234520170824")
+                .Set(x => x.LocationID, 1)
+                .Set(x => x.Commission, 1)
+                .Set(x => x.CustomerPickup, false)
+                .Set(x => x.CombineSplitStatus, CombineSplitStatusType.Split)
+                .Save();
+
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+
+            var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+            Assert.Equal(1, results?.Count());
+            Assert.Equal($"{order.OrderNumberComplete}", results?.FirstOrDefault().PoNumber);
+        }
+
         private void CreateOrderSearchEntities(IOrderEntity order, int numberToCreate)
         {
             for (int i = 1; i < numberToCreate + 1; i++)
@@ -86,10 +112,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
                     .Set(os => os.OrderNumberComplete, i.ToString())
                     .Set(os => os.IsManual, false)
                     .Set(os => os.OrderID, order.OrderID)
+                    .Set(os => os.OriginalOrderID, order.OrderID)
                     .Save();
 
                 Create.Entity<SearsOrderSearchEntity>()
-                    .Set(os => os.PoNumber, $"{order.OrderNumberComplete}-OS")
+                    .Set(os => os.PoNumber, $"{order.OrderNumberComplete}")
                     .Set(os => os.OriginalOrderID, order.OrderID)
                     .Set(os => os.OrderID, order.OrderID)
                     .Save();

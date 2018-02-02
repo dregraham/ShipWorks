@@ -9,7 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 
 namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
 {
@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
                 return;
             }
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.WarnFormat("Not uploading shipment details since order {0} is manual.", order.OrderID);
                 return;

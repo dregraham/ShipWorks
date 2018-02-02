@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 using System.Reflection;
 using Interapptive.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Core
 {
@@ -27,6 +25,29 @@ namespace ShipWorks.Tests.Core
         public void ReadAssemblyDateForNullAssembly()
         {
             Assert.Throws<ArgumentNullException>(() => AssemblyDateAttribute.Read(null));
+        }
+
+        [Fact]
+        public void ReadResultAssemblyDate()
+        {
+            // If it can be read, it works.
+            var result = AssemblyDateAttribute.ReadResult(Assembly.GetAssembly(typeof(AssemblyDateAttribute)));
+            Assert.True(result.Success);
+        }
+
+        [Fact]
+        public void ReadResultAssemblyDateNonexistent()
+        {
+            // This will read it off the current assembly, which does not have the date
+            var result = AssemblyDateAttribute.ReadResult(Assembly.GetCallingAssembly());
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void ReadResultAssemblyDateForNullAssembly()
+        {
+            var result = AssemblyDateAttribute.ReadResult(null);
+            Assert.True(result.Failure);
         }
     }
 }

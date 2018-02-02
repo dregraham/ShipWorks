@@ -177,9 +177,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void ManageWindowPositioning()
         {
-            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
-            windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize)
+                .ManageSplitter(splitContainer, "Splitter")
+                .ManageSplitter(ratesSplitContainer, "RateSplitter");
         }
 
         /// <summary>

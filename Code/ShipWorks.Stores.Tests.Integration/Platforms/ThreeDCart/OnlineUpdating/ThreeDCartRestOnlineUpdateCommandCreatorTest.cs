@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -13,15 +12,13 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
-using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 {
@@ -49,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
                 webClientFactory = mock.Override<Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient>>();
                 webClientFactory.Setup(x => x(It.IsAny<ThreeDCartStoreEntity>())).Returns(webClient.Object);
-                
+
                 mock.Override<IMessageHelper>();
             });
 
@@ -91,7 +88,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
             await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
 
-            webClient.Verify(x => x.UpdateOrderStatus(It.IsAny< ThreeDCartShipment>()), Times.Once);
+            webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<ThreeDCartShipment>()), Times.Once);
         }
 
         [Fact]
@@ -107,11 +104,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
             webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<ThreeDCartShipment>()), Times.Once);
         }
-        
+
         [Fact]
         public async Task UpdateOrderStatus_MakesTwoWebRequests_WhenOrderIsCombined()
         {
-            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
+            OrderEntity order = CreateCombinedOrder(1, "track-123", (2, false), (3, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
@@ -124,7 +121,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         [Fact]
         public async Task UpdateOrderStatus_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
         {
-            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+            OrderEntity order = CreateCombinedOrder(1, "track-123", (2, true), (3, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
@@ -138,7 +135,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         public async Task UpdateOrderStatus_MakesThreeWebRequests_WhenBothCombinedAndNonCombinedAreUploaded()
         {
             ThreeDCartOrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
-            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", (5, false), (6, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID });
@@ -159,7 +156,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ThreeDCartShipment>()), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == order.ThreeDCartOrderID && s.ShipmentID == 200L)), Times.Once);
         }
@@ -174,7 +171,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ThreeDCartShipment>()), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == order.ThreeDCartOrderID && s.ShipmentID == 200L)), Times.Once);
         }
@@ -182,13 +179,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         [Fact]
         public async Task UploadDetails_MakesTwoWebRequests_WhenOrderIsCombined()
         {
-            ThreeDCartOrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
+            ThreeDCartOrderEntity order = CreateCombinedOrder(1, "track-123", (2, false), (3, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ThreeDCartShipment>()), Times.Exactly(2));
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == order.ThreeDCartOrderID && s.ShipmentID == 2000L)), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == order.ThreeDCartOrderID && s.ShipmentID == 3000L)), Times.Once);
@@ -197,13 +194,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         [Fact]
         public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
         {
-            ThreeDCartOrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+            ThreeDCartOrderEntity order = CreateCombinedOrder(1, "track-123", (2, true), (3, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ThreeDCartShipment>()), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == order.ThreeDCartOrderID && s.ShipmentID == 3000L)), Times.Once);
         }
@@ -212,16 +209,16 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         public async Task UploadDetails_MakesThreeWebRequests_WhenBothCombinedAndNonCombinedAreUploaded()
         {
             ThreeDCartOrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
-            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", (5, false), (6, false));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ThreeDCartShipment>()), Times.Exactly(3));
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == normalOrder.ThreeDCartOrderID && s.ShipmentID == 200L)), Times.Once);
-            webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == combinedOrder.ThreeDCartOrderID && s.ShipmentID ==5000)), Times.Once);
+            webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == combinedOrder.ThreeDCartOrderID && s.ShipmentID == 5000)), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == combinedOrder.ThreeDCartOrderID && s.ShipmentID == 6000L)), Times.Once);
         }
 
@@ -229,7 +226,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         public async Task SetOnlineStatus_ContinuesUploading_WhenFailuresOccur()
         {
             ThreeDCartOrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
-            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", (5, false), (6, false));
             ThreeDCartOrderEntity normalOrder2 = CreateNormalOrder(7, 8, 9, "track-123", false);
 
             webClient.Setup(x => x.UpdateOrderStatus(It.Is<ThreeDCartShipment>(s => s.OrderID == normalOrder.ThreeDCartOrderID && s.ShipmentID == 200L))).Returns(Result.FromError(new ThreeDCartException()));
@@ -248,7 +245,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         public async Task UploadDetails_ContinuesUploading_WhenFailuresOccur()
         {
             ThreeDCartOrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
-            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            ThreeDCartOrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", (5, false), (6, false));
             ThreeDCartOrderEntity normalOrder2 = CreateNormalOrder(7, 8, 9, "track-123", false);
 
             webClient.Setup(x => x.UploadShipmentDetails(It.Is<ThreeDCartShipment>(s => s.OrderID == normalOrder.ThreeDCartOrderID && s.ShipmentID == 200L))).Returns(Result.FromError(new ThreeDCartException()));
@@ -292,7 +289,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             return order;
         }
 
-        private ThreeDCartOrderEntity CreateCombinedOrder(int orderRoot, string trackingNumber, params Tuple<int, bool>[] combinedOrderDetails)
+        private ThreeDCartOrderEntity CreateCombinedOrder(int orderRoot, string trackingNumber, params (int idRoot, bool manual)[] combinedOrderDetails)
         {
             var order = Create.Order<ThreeDCartOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, orderRoot * 10)
@@ -301,11 +298,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
                 .Set(x => x.ThreeDCartOrderID, orderRoot * 10000)
                 .Save();
 
-            foreach (var details in combinedOrderDetails)
+            foreach ((int idRoot, bool manual) in combinedOrderDetails)
             {
-                int idRoot = details.Item1;
-                bool manual = details.Item2;
-
                 Create.Entity<OrderSearchEntity>()
                     .Set(x => x.OrderID, order.OrderID)
                     .Set(x => x.StoreID, store.StoreID)

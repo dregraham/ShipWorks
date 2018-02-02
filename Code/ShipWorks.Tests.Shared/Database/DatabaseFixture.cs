@@ -254,6 +254,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
+            securityContext.Setup(x => x.RequestPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(Result.FromSuccess());
 
             ShippingManager.InitializeForCurrentDatabase();
 

@@ -278,7 +278,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 NumberOfItemsPerOrder = 1;
             }
 
-            RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
+            // This ensures the record identifier saved to the map is a valid column
+            RecordIdentifier =
+                columns.Any(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ?
+                    new OdbcColumn(storeFieldMap.RecordIdentifierSource) :
+                    columns.Single(c => c.Name == EmptyColumnName);
 
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, true).SingleOrDefault();
@@ -447,7 +451,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 return false;
             }
 
-            if (!IsSingleLineOrder && string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
+            if (!IsSingleLineOrder && (string.IsNullOrWhiteSpace(RecordIdentifier?.Name) || RecordIdentifier.Name == EmptyColumnName))
             {
                 messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
                 return false;

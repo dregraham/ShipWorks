@@ -11,7 +11,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 {
@@ -45,15 +44,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             var testObject = mock.Create<AddressViewModel>();
             testObject.Load(person, new StoreEntity());
 
-            Assert.Equal(testObject.Street, "1 Main");
-            Assert.Equal(testObject.City, "Foo");
-            Assert.Equal(testObject.StateProvCode, "Bar");
-            Assert.Equal(testObject.CountryCode, "Baz");
-            Assert.Equal(testObject.PostalCode, "12345");
-            Assert.Equal(testObject.FullName, "John Doe");
-            Assert.Equal(testObject.Company, "Foo Company");
-            Assert.Equal(testObject.Email, "bar@example.com");
-            Assert.Equal(testObject.Phone, "314-555-1234");
+            Assert.Equal("1 Main", testObject.Street);
+            Assert.Equal("Foo", testObject.City);
+            Assert.Equal("Bar", testObject.StateProvCode);
+            Assert.Equal("Baz", testObject.CountryCode);
+            Assert.Equal("12345", testObject.PostalCode);
+            Assert.Equal("John Doe", testObject.FullName);
+            Assert.Equal("Foo Company", testObject.Company);
+            Assert.Equal("bar@example.com", testObject.Email);
+            Assert.Equal("314-555-1234", testObject.Phone);
         }
 
         [Fact]
@@ -98,9 +97,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 
             testObject.Load(new PersonAdapter(shipment, "Ship"), new StoreEntity());
 
-            Assert.Equal(testObject.SuggestionCount, 3);
-            Assert.Equal(testObject.ValidationStatus, AddressValidationStatusType.HasSuggestions);
-            Assert.Equal(testObject.ValidationMessage, "Foo bar");
+            Assert.Equal(3, testObject.SuggestionCount);
+            Assert.Equal(AddressValidationStatusType.HasSuggestions, testObject.ValidationStatus);
+            Assert.Equal("Foo bar", testObject.ValidationMessage);
         }
 
         [Fact]

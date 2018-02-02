@@ -6,7 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
 {
@@ -16,14 +16,11 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
     [Component]
     public class WalmartCombineOrderSearchProvider : CombineOrderSearchBaseProvider<WalmartCombinedIdentifier>, IWalmartCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public WalmartCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

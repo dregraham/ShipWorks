@@ -44,6 +44,11 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         public static object AnyObject => It.IsAny<object>();
 
         /// <summary>
+        /// Any OrderEntity
+        /// </summary>
+        public static OrderEntity AnyOrder => It.IsAny<OrderEntity>();
+
+        /// <summary>
         /// Checks a parameter for a shipment with given tracking number
         /// </summary>
         public static ShipmentEntity AnyShipment => It.IsAny<ShipmentEntity>();
