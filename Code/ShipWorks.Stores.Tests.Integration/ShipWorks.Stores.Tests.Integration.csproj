@@ -2,15 +2,6 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" />
-  <PropertyGroup>
-    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130</SSDTPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,6 +13,7 @@
     <AssemblyName>ShipWorks.Stores.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -33,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>ShipWorks.Stores.Tests.Integration.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -111,11 +103,15 @@
       <HintPath>..\..\packages\SQL.LocalDB.Test.1.1.2\lib\net40\SQL.LocalDB.Test.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ComponentModel.Primitives.4.3.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ComponentModel.TypeConverter.4.3.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -175,26 +171,36 @@
     <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
+    <Compile Include="Helpers\CombineSplitHelpers.cs" />
     <Compile Include="Helpers\DbHelpers.cs" />
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
+    <Compile Include="Orders\Split\OrderSplitGatewayTest.cs" />
+    <Compile Include="Orders\Split\OrderSplitterTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonMwsDownloaderTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonQuickSearchTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonCombineAndSplitTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDataAccessTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComCombineAndSplitTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceCombineAndSplitTest.cs" />
     <Compile Include="Platforms\BuyDotCom\BuyDotComDataAccessTest.cs" />
     <Compile Include="Platforms\BuyDotCom\BuyDotComOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorQuickSearchTest.cs" />
+    <Compile Include="Platforms\CommerceInterface\CommerceInterfaceCombineAndSplitTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineAndSplitTest.cs" />
     <Compile Include="Platforms\CommerceInterface\CommerceInterfaceQuickSearchTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.LeaveFeedback.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.SendMessage.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
@@ -202,33 +208,43 @@
     <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Ebay\EbayQuickSearchTest.cs" />
     <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleOrderNumberCompleteCombineAndSplitTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleCombineAndSplitTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleMultiCombineTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponQuickSearchTest.cs" />
+    <Compile Include="Platforms\Jet\JetCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandQuickSearchTest.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandCombineAndSplitTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsCombineAndSplitTest.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Miva\MivaOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Newegg\NeweggCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />
+    <Compile Include="Platforms\OrderMotion\OrderMotionCombineAndSplitTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresQuickSearchTest.cs" />
+    <Compile Include="Platforms\Sears\SearsCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Sears\SearsQuickSearchTest.cs" />
     <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />
@@ -243,6 +259,7 @@
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
@@ -251,7 +268,9 @@
     <Compile Include="Platforms\OnlineCommandCreatorRegistrationTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
-    <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />
+    <Compile Include="Platforms\SplitCombineOrderActionRegistrationTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartRestOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartSoapOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Volusion\VolusionOnlineUpdateCommandCreatorTest.cs" />
@@ -260,6 +279,7 @@
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.UploadShipmentDetails.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.cs" />
@@ -269,7 +289,7 @@
     <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+    <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
       <Project>{41528bda-8c69-4ca9-b358-bc4e6a62d6f2}</Project>
       <Name>ShipWorks.Tests.Integration.Shared</Name>
     </ProjectReference>
@@ -338,9 +358,9 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

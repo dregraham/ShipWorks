@@ -102,13 +102,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetTestConnectionXml(), store);
 
             int callOrder = 0;
-            submitter.Setup(x => x.Variables.Add("clientApp", "1")).Callback(() => Assert.Equal(callOrder++, 0));
-            submitter.Setup(x => x.Variables.Add("dbname", "orders")).Callback(() => Assert.Equal(callOrder++, 1));
-            submitter.Setup(x => x.Variables.Add("maxorder", "1")).Callback(() => Assert.Equal(callOrder++, 2));
-            submitter.Setup(x => x.Variables.Add("signature", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 3));
-            submitter.Setup(x => x.Variables.Add("token", accessResponse.access_token)).Callback(() => Assert.Equal(callOrder++, 4));
-            submitter.Setup(x => x.Variables.Add("timestamp", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 5));
-            submitter.Setup(x => x.Variables.Add("nonce", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 6));
+            submitter.Setup(x => x.Variables.Add("clientApp", "1")).Callback(() => Assert.Equal(0, callOrder++));
+            submitter.Setup(x => x.Variables.Add("dbname", "orders")).Callback(() => Assert.Equal(1, callOrder++));
+            submitter.Setup(x => x.Variables.Add("maxorder", "1")).Callback(() => Assert.Equal(2, callOrder++));
+            submitter.Setup(x => x.Variables.Add("signature", It.IsAny<string>())).Callback(() => Assert.Equal(3, callOrder++));
+            submitter.Setup(x => x.Variables.Add("token", accessResponse.access_token)).Callback(() => Assert.Equal(4, callOrder++));
+            submitter.Setup(x => x.Variables.Add("timestamp", It.IsAny<string>())).Callback(() => Assert.Equal(5, callOrder++));
+            submitter.Setup(x => x.Variables.Add("nonce", It.IsAny<string>())).Callback(() => Assert.Equal(6, callOrder++));
 
             IShopSiteWebClient webClient = CreateWebClient(submitter, store);
 

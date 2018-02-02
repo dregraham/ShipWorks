@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Business;
-using Xunit;
-using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
-using ShipWorks.Shipping.ScanForms;
-using log4net;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 {
@@ -26,26 +18,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         public Express1CreditCardPaymentValidatorTest()
         {
             billingAddress = new PersonAdapter
-                {
-                    FirstName = "xxxxxxxxxxxx",
-                    LastName = "xxxxxxxxxxxx",
-                    Company = "xxxxxxxxxxxx",
-                    Street1 = "xxxxxxxxxxxx",
-                    City = "St. Louis",
-                    StateProvCode = "xxxxxxxxxxxx",
-                    PostalCode = "xxxxxxxxxxxx",
-                    CountryCode = "xxxxxxxxxxxx"
-                };
+            {
+                FirstName = "xxxxxxxxxxxx",
+                LastName = "xxxxxxxxxxxx",
+                Company = "xxxxxxxxxxxx",
+                Street1 = "xxxxxxxxxxxx",
+                City = "St. Louis",
+                StateProvCode = "xxxxxxxxxxxx",
+                PostalCode = "xxxxxxxxxxxx",
+                CountryCode = "xxxxxxxxxxxx"
+            };
 
             paymentInfo = new Express1PaymentInfo(Express1PaymentType.CreditCard)
-                {
-                    CreditCardAccountNumber = "41111111111111111",
-                    CreditCardVerificationNumber = 411,
-                    CreditCardExpirationDate = DateTime.Now.AddMonths(5),
-                    CreditCardType = Express1CreditCardType.Visa,
-                    CreditCardBillingAddress = billingAddress,
-                    CreditCardNameOnCard = "John Doe"
-                };
+            {
+                CreditCardAccountNumber = "41111111111111111",
+                CreditCardVerificationNumber = 411,
+                CreditCardExpirationDate = DateTime.Now.AddMonths(5),
+                CreditCardType = Express1CreditCardType.Visa,
+                CreditCardBillingAddress = billingAddress,
+                CreditCardNameOnCard = "John Doe"
+            };
         }
 
         [Fact]
@@ -54,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1CreditCardPaymentValidator();
 
             IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.Equal(errors.Count(), 0);
+            Assert.Empty(errors);
         }
 
         [Fact]
@@ -70,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressFirstNameIsInvalid()
         {
-            IEnumerable<Express1ValidationError> errors; 
+            IEnumerable<Express1ValidationError> errors;
 
             // FirstName is null
             paymentInfo.CreditCardBillingAddress.FirstName = null;

@@ -12,7 +12,7 @@ end
 Albacore.configure do |config|
 	ENV["MSBuildSDKsPath"] = "C:/Program Files/dotnet/sdk/2.1.2/Sdks/"
 	config.msbuild do |msbuild|
-		msbuild.parameters = "/m:3"
+		msbuild.parameters = "/m"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe"
 		unless File.exists? msbuild.command
@@ -46,10 +46,18 @@ namespace :build do
 	desc "no-op"
 	task :analyze
 
-	desc "Cleans the ShipWorks solution"
-	msbuild :clean do |msb|
-		print "Cleaning solution...\r\n\r\n"
+	msbuild :clean_internal do |msb|
 		msb.targets :Clean
+	end
+
+	desc "Cleans the ShipWorks solution"
+	task :clean => ["build:clean_internal"] do |msb|
+		print "Cleaning solution...\r\n\r\n"
+
+		Dir["Code/**/bin", "Code/**/obj"].map do |d|
+			puts "Deleting " + d + "\r\n"
+			FileUtils.rm_rf d
+		end
 	end
 
 	desc "Zip the layout files"
@@ -98,7 +106,6 @@ namespace :build do
 		print "Building solution with the Debug (No Analyzers) config...\r\n\r\n"
 
 		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: false
-		msb.verbosity = 'minimal'
 		msb.targets :Build
 	end
 

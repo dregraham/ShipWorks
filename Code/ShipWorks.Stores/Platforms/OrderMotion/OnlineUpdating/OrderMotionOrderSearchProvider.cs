@@ -7,7 +7,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
 {
@@ -17,14 +17,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
     [Component]
     public class OrderMotionCombineOrderSearchProvider : CombineOrderSearchBaseProvider<OrderDetail>, IOrderMotionCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderMotionCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -45,7 +42,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
                     OrderSearchFields.OrderNumber.ToValue<long>(),
                     OrderMotionOrderSearchFields.OrderMotionShipmentID.ToValue<long>(),
                     OrderSearchFields.IsManual.ToValue<bool>()))
-                .Where(OrderMotionOrderSearchFields.OrderID == order.OrderID);
+                .Distinct()
+                .Where(OrderMotionOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {

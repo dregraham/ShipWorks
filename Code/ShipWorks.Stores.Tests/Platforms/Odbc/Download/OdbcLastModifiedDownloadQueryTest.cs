@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_CallsSetCommandTextOnCommand()
+        public void PopulateCommandText_CallsSetCommandTextOnCommand()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
@@ -218,11 +218,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=> c.ChangeCommandText(testObject.GenerateSql()));
+            command.Verify(c => c.ChangeCommandText(testObject.GenerateSql()));
         }
 
         [Fact]
-        private void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
+        public void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_OpensConnection()
+        public void PopulateCommandText_OpensConnection()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
@@ -298,7 +298,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_AddsOnlineLastModifiedParameter()
+        public void PopulateCommandText_AddsOnlineLastModifiedParameter()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
@@ -333,7 +333,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=> c.AddParameter(It.IsAny<OdbcParameter>()));
+            command.Verify(c => c.AddParameter(It.IsAny<OdbcParameter>()));
         }
 
         public void Dispose()

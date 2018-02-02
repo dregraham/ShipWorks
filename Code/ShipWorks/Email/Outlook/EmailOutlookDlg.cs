@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Grid.Columns;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 
@@ -51,8 +39,7 @@ namespace ShipWorks.Email.Outlook
             this.initialFolder = initialFolder;
 
             // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
-            windowSaver.ManageSplitter(splitContainer);
+            WindowStateSaver.Manage(this).ManageSplitter(splitContainer);
         }
 
         /// <summary>

@@ -34,8 +34,7 @@ namespace ShipWorks.Users.Audit
 
             this.audit = audit;
 
-            WindowStateSaver wss = new WindowStateSaver(this);
-            wss.ManageSplitter(splitContainer);
+            WindowStateSaver.Manage(this).ManageSplitter(splitContainer);
         }
 
         /// <summary>

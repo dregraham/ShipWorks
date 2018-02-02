@@ -36,6 +36,12 @@ namespace ShipWorks.Data.Connection
                         results.Add("Database.SizeInMB.Orders", reader.GetDouble(3).ToString());
                         results.Add("Database.SizeInMB.Orders.Combined", reader.GetDouble(4).ToString());
                         results.Add("Database.SizeInMB.Total", reader.GetDouble(5).ToString());
+                        results.Add("Orders.Quantity.Split", reader.GetInt64(6).ToString());
+                        results.Add("Orders.Quantity.Both", reader.GetInt64(7).ToString());
+                        results.Add("Database.SizeInMB.Orders.Split", reader.GetDouble(8).ToString());
+                        results.Add("Database.SizeInMB.Orders.Both", reader.GetDouble(9).ToString());
+                        results.Add("Profiles.Quantity.Total", reader.GetInt64(10).ToString());
+                        results.Add("Filters.Quantity.Total", reader.GetInt64(11).ToString());
                     }
                 }
             }
@@ -50,9 +56,15 @@ namespace ShipWorks.Data.Connection
         declare @TotalOrderCount bigint
         declare @TotalStandardCombinedOrderCount bigint
         declare @TotalLegacyCombinedOrderCount bigint
+        declare @TotalSplitOrderCount bigint
+        declare @TotalBothOrderCount bigint
+        declare @TotalProfilesCount bigint
+        declare @TotalFiltersCount bigint
         declare @TotalDbSizeInMb float
         declare @OrderTableSizeInMb float
         declare @CombinedOrderSizeInMb float
+        declare @SplitOrderSizeInMb float
+        declare @BothOrderSizeInMb float
         declare @AvgOrderSizeInMb float
 
         CREATE TABLE #DbSizeInfo (TableName NVARCHAR(128),rows CHAR(11),      
@@ -83,9 +95,27 @@ namespace ShipWorks.Data.Connection
         FROM [EbayOrder]
         WHERE CombinedLocally = 1
 
+		SELECT @TotalSplitOrderCount = COUNT(o.OrderID)
+		FROM  [Order] o
+		WHERE o.CombineSplitStatus = 2
+
+		SELECT @TotalBothOrderCount = COUNT(o.OrderID)
+		FROM  [Order] o
+		WHERE o.CombineSplitStatus = 3
+
+		SELECT @TotalProfilesCount = COUNT(sp.ShippingProfileID)
+		FROM ShippingProfile sp
+
+		SELECT @TotalFiltersCount = COUNT(f.FilterID)
+		FROM [Filter] f
+
         SELECT @OrderTableSizeInMb = @TotalOrderCount * 1.0 * @AvgOrderSizeInMb
 
         SELECT @CombinedOrderSizeInMb = (@TotalStandardCombinedOrderCount + @TotalLegacyCombinedOrderCount ) * @AvgOrderSizeInMb
+		
+        SELECT @SplitOrderSizeInMb = @TotalSplitOrderCount * @AvgOrderSizeInMb
+		
+        SELECT @BothOrderSizeInMb = @TotalBothOrderCount * @AvgOrderSizeInMb
 
         DROP TABLE #DbSizeInfo
 
@@ -94,7 +124,13 @@ namespace ShipWorks.Data.Connection
 		        @TotalLegacyCombinedOrderCount as 'TotalLegacyCombinedOrderCount',
 		        @OrderTableSizeInMb AS 'OrderTableSizeInMb',
 		        @CombinedOrderSizeInMb AS 'CombinedOrderSizeInMb',
-				@TotalDbSizeInMb AS 'TotalDatabaseSizeInMb'
+				@TotalDbSizeInMb AS 'TotalDatabaseSizeInMb',
+				@TotalSplitOrderCount as 'TotalSplitOrderCount',
+				@TotalBothOrderCount as 'TotalBothOrderCount',
+				@SplitOrderSizeInMb as 'SplitOrderSizeInMb',
+				@BothOrderSizeInMb as 'BothOrderSizeInMb',
+				@TotalProfilesCount as 'TotalProfilesCount',
+				@TotalFiltersCount as 'TotalFiltersCount'
         ";
     }
 }

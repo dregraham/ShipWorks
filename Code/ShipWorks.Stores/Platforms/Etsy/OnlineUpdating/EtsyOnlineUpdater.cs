@@ -16,7 +16,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
             MethodConditions.EnsureArgumentIsNotNull(unitOfWork, nameof(unitOfWork));
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
                 return;

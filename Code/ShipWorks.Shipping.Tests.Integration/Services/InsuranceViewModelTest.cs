@@ -605,7 +605,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
 
         [Theory]
-        [InlineData(50, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
+        [InlineData(50,     providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(100.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(101.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(201.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]

@@ -1422,22 +1422,19 @@
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Communication\IStoreDownloader.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberSearchProvider.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderSearchBaseProvider.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberCompleteSearchProvider.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberSearchProvider.cs" />
+    <Compile Include="Stores\Orders\Combine\ICombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Stores\Orders\Combine\ICombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
     <Compile Include="Stores\Content\Controls\IOrderCombinationUserInteraction.cs" />
     <Compile Include="Stores\Content\ICombineOrderGateway.cs" />
     <Compile Include="Stores\Content\ICombineOrderOrchestrator.cs" />
     <Compile Include="Stores\Content\ICombineOrder.cs" />
-    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Orders\Combine\ICombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Content\IOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Content\IOrderCombineValidator.cs" />
+    <Compile Include="Stores\Content\ISplitOrderValidator.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\IStoreSpecificCombineOrder.cs" />
-    <Compile Include="Stores\Content\CombineOrderValidator.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
@@ -1455,6 +1452,7 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
+    <Compile Include="Stores\Orders\Split\IOrderSplitOrchestrator.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
@@ -1812,7 +1810,6 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\IAmazonOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceOnlineUpdateCommandCreator.cs" />
@@ -1854,7 +1851,6 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\OnlineUpdating\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayFeedbackDetails.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayMessagingDetails.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayTransactionDetails.cs" />
@@ -1934,7 +1930,6 @@
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\INeweggCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ItemDetails.cs" />
-    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\NeweggCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\OrderUploadDetail.cs" />
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ShipmentUploadDetails.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
@@ -1951,7 +1946,7 @@
     <Compile Include="Stores\Platforms\Sears\ISearsWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsCombineOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
@@ -1965,9 +1960,6 @@
     <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartOnlineUpdatingDataAccess.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdateCommandCreator.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingDataAccess.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingOrderDetail.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
@@ -4310,7 +4302,6 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceStatusCodeProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceStoreType.cs" />
-    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceException.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\CoreExtensions\Actions\AmeriCommerceOrderUpdateTask.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\CoreExtensions\Actions\AmeriCommerceShipmentUploadTask.cs" />
@@ -5681,7 +5672,6 @@
     <Compile Include="Stores\Platforms\Ebay\EbayMessagingDlg.Designer.cs">
       <DependentUpon>EbayMessagingDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -11084,9 +11074,9 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -57,7 +60,18 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Get the first order in the specified predicate
         /// </summary>
-        public async Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths)
+        public async Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, IEnumerable<IPrefetchPathElement2> prefetchPaths)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                return await FetchFirstOrderAsync(predicate, adapter, prefetchPaths).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Get the first order in the specified predicate
+        /// </summary>
+        public async Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths)
         {
             QueryFactory factory = new QueryFactory();
             EntityQuery<OrderEntity> query = factory.Order.Where(predicate);
@@ -67,10 +81,7 @@ namespace ShipWorks.Stores.Content
                 query = query.WithPath(path);
             }
 
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                return await adapter.FetchFirstAsync(query).ConfigureAwait(false);
-            }
+            return await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -81,7 +92,20 @@ namespace ShipWorks.Stores.Content
         /// </remarks>
         public OrderEntity LoadOrder(long orderId, IPrefetchPath2 prefetchPath)
         {
-            return LoadOrders(new[] { orderId }, prefetchPath).FirstOrDefault();
+            return LoadOrders(new[] {orderId}, prefetchPath).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get order with the data specified in the prefetch path loaded
+        /// </summary>
+        /// <remarks>
+        /// This method bypasses the entity cache
+        /// </remarks>
+        public async Task<OrderEntity> LoadOrderAsync(long orderId, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths)
+        {
+            return await FetchFirstOrderAsync(OrderFields.OrderID == orderId,
+                sqlAdapter,
+                prefetchPaths).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -168,7 +192,7 @@ namespace ShipWorks.Stores.Content
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 var shipment = await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
-                
+
                 if (includeOrder && shipment != null)
                 {
                     shipment.Order = await dataProvider.GetEntityAsync<OrderEntity>(orderID).ConfigureAwait(false);

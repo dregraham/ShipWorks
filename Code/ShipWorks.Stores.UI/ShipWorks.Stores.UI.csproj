@@ -88,7 +88,13 @@
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Syncfusion.Shared.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.WPF46.15.4.0.17\lib\net46\Syncfusion.Shared.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -137,12 +143,28 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="Content\CombineOrderDialog.xaml.cs">
+    <Compile Include="Orders\Split\DesignModeOrderSplitChargeViewModel.cs" />
+    <Compile Include="Orders\Split\DesignModeOrderSplitItemViewModel.cs" />
+    <Compile Include="Orders\Split\DesignModeOrderSplitViewModel.cs" />
+    <Compile Include="Orders\Split\OrderSplitCharge.xaml.cs">
+      <DependentUpon>OrderSplitCharge.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\Split\OrderSplitItem.xaml.cs">
+      <DependentUpon>OrderSplitItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\Split\OrderSplitSuccessDialog.xaml.cs">
+      <DependentUpon>OrderSplitSuccessDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\Split\DesignModeOrderSplitSuccessViewModel.cs" />
+    <Compile Include="Orders\Split\OrderSplitDialog.xaml.cs">
+      <DependentUpon>OrderSplitDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\Combine\CombineOrderDialog.xaml.cs">
       <DependentUpon>CombineOrderDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Content\DesignModeCombineOrderViewModel.cs" />
-    <Compile Include="Content\DesignModeCombineOrderSuccessViewModel.cs" />
-    <Compile Include="Content\CombineOrderSuccessDialog.xaml.cs">
+    <Compile Include="Orders\Combine\DesignModeCombineOrderViewModel.cs" />
+    <Compile Include="Orders\Combine\DesignModeCombineOrderSuccessViewModel.cs" />
+    <Compile Include="Orders\Combine\CombineOrderSuccessDialog.xaml.cs">
       <DependentUpon>CombineOrderSuccessDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
@@ -660,11 +682,27 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Content\CombineOrderDialog.xaml">
+    <Page Include="Orders\Split\OrderSplitCharge.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Orders\Split\OrderSplitItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Content\CombineOrderSuccessDialog.xaml">
+    <Page Include="Orders\Split\OrderSplitSuccessDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Orders\Split\OrderSplitDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Orders\Combine\CombineOrderDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Orders\Combine\CombineOrderSuccessDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -751,9 +789,9 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
@@ -762,6 +800,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\" />
     <Folder Include="Platforms\Sears\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

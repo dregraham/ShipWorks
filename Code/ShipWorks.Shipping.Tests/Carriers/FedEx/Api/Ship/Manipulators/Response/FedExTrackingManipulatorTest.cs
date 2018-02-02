@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             shipmentEntity.FedEx.Service = (int) serviceType;
 
             testObject.Manipulate(processShipmentReply, null, shipmentEntity);
-            Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
+            Assert.Equal("MasterTrackingNumber", shipmentEntity.TrackingNumber);
         }
 
         [Theory]
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
 
             testObject.Manipulate(processShipmentReply, null, shipmentEntity);
-            Assert.Equal(shipmentEntity.TrackingNumber, "Package1Tracking");
+            Assert.Equal("Package1Tracking", shipmentEntity.TrackingNumber);
         }
 
         [Fact]

@@ -50,8 +50,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(shipment.FedEx.Packages.Count, 2);
-            Assert.Equal(result.Value.RequestedShipment.PackageCount, "2");
+            Assert.Equal(2, shipment.FedEx.Packages.Count);
+            Assert.Equal("2", result.Value.RequestedShipment.PackageCount);
         }
 
         [Fact]

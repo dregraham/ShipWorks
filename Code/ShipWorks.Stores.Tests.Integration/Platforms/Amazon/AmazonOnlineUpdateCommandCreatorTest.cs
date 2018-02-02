@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public class AmazonOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;

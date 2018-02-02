@@ -24,6 +24,9 @@ namespace ShipWorks.Users.Audit
         ManualDownload = 3,
 
         [Description("Combine Order")]
-        CombineOrder = 4
+        CombineOrder = 4,
+
+        [Description("Split Order")]
+        SplitOrder = 5
     }
 }

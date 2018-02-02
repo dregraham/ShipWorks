@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderDto.orderLines.Single().lineNumber = "2";
             orderDto.orderLines.Single().orderLineQuantity.amount = "1";
             orderDto.orderLines.Single().charges[0] = null;
-            
+
             Assert.Equal(1, orderEntity.OrderItems.Count);
 
             testObject.LoadOrder(orderDto, orderEntity);
@@ -379,7 +379,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Random Charge").Amount, 123.121M);
+            Assert.Equal(123.121M, orderEntity.OrderCharges.Single(c => c.Type == "Random Charge").Amount);
         }
 
         [Theory]
@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Tax").Amount, 4.99M);
+            Assert.Equal(4.99M, orderEntity.OrderCharges.Single(c => c.Type == "Tax").Amount);
         }
 
         [Theory]

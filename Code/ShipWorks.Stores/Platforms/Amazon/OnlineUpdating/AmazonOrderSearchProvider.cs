@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
 {
@@ -28,10 +29,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         /// <param name="order">The order for which to find combined order identifiers</param>
         protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            return await GetCombinedOnlineOrderIdentifiers<AmazonOrderSearchEntity>(
-                    AmazonOrderSearchFields.OrderID == order.OrderID,
-                    AmazonOrderSearchFields.AmazonOrderID)
-                .ConfigureAwait(false);
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.AmazonOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(AmazonOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(() => AmazonOrderSearchFields.AmazonOrderID.ToValue<string>())
+                .Distinct()
+                .Where(AmazonOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

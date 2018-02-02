@@ -5,7 +5,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 
 namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
         {
             var recordCreator = new SearchRecordMerger<IClickCartProOrderEntity>(combinedOrder, orders, sqlAdapter);
 
-            return recordCreator.Perform(ClickCartProOrderFields.OrderID,
+            return recordCreator.Perform(ClickCartProOrderSearchFields.OrderID,
                 x => new ClickCartProOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,

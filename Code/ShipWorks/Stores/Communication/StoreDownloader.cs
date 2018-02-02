@@ -243,6 +243,13 @@ namespace ShipWorks.Stores.Communication
             {
                 log.Debug($"Found existing {orderIdentifier}");
 
+                if (order.CombineSplitStatus != CombineSplitStatusType.None)
+                {
+                    string combineSplitStatus = EnumHelper.GetDescription(order.CombineSplitStatus);
+                    log.InfoFormat($"{ order.OrderNumberComplete } was { combineSplitStatus }, skipping");
+                    return GenericResult.FromError<OrderEntity>(combineSplitStatus);
+                }
+
                 ShippingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
 
@@ -255,7 +262,10 @@ namespace ShipWorks.Stores.Communication
             bool isCombinedOrder = await IsCombinedOrder(orderIdentifier).ConfigureAwait(false);
             if (isCombinedOrder)
             {
-                log.InfoFormat("{0} was combined, skipping", orderIdentifier);
+                OrderEntity orderForLogging = StoreType.CreateOrder();
+                orderIdentifier.ApplyTo(orderForLogging);
+
+                log.InfoFormat($"{ orderForLogging.OrderNumberComplete } was combined, skipping");
 
                 // Increment the quantity saved so we show the user we are moving to the next order.
                 QuantitySaved++;

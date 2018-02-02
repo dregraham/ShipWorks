@@ -31,10 +31,10 @@ namespace ShipWorks.Common.Threading
         // Gets or sets an object that contains data to associate with the item.
         object tag = null;
 
-        // Indicates if the action can be cancelled
+        // Indicates if the action can be canceled
         bool canCancel = true;
 
-        // Indicates if the user has requested cancelation
+        // Indicates if the user has requested cancellation
         bool cancelRequested = false;
         object cancelRequestedLock = new object();
 
@@ -176,7 +176,7 @@ namespace ShipWorks.Common.Threading
 
                     if (canCancel && cancelRequested && status == ProgressItemStatus.Pending)
                     {
-                        // Purposely dont use property, which would raise the change event, since
+                        // Purposely don't use property, which would raise the change event, since
                         // we do it right after this anyway.
                         status = ProgressItemStatus.Canceled;
                     }
@@ -187,7 +187,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Indicates if the user has requested cancelation
+        /// Indicates if the user has requested cancellation
         /// </summary>
         public bool IsCancelRequested
         {
@@ -206,7 +206,7 @@ namespace ShipWorks.Common.Threading
         public void Starting()
         {
             // Its possible to call Starting on a Canceled item, since it could be canceled at any time from
-            // another thread there is really no way to know for sure if its canceld before calling this function.
+            // another thread there is really no way to know for sure if its canceled before calling this function.
             // It would be a race condition.
             if (status != ProgressItemStatus.Pending && status != ProgressItemStatus.Canceled)
             {
@@ -264,7 +264,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Request cancelation of the ProgressItem
+        /// Request cancellation of the ProgressItem
         /// </summary>
         public void Cancel()
         {
@@ -279,7 +279,7 @@ namespace ShipWorks.Common.Threading
             }
             else
             {
-                // Even though our status hasnt changed, our effective state has, and listening UI's would be interested.
+                // Even though our status hasn't changed, our effective state has, and listening UI's would be interested.
                 RaiseChanged();
             }
         }
@@ -291,6 +291,5 @@ namespace ShipWorks.Common.Threading
         {
             Changed?.Invoke(this, EventArgs.Empty);
         }
-
     }
 }

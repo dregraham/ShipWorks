@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_ReturnsSuccess_WhenApiHasNotChangedAndStrategyReturnsFalse()
+        public async Task Verify_ReturnsSuccess_WhenApiHasNotChangedAndStrategyReturnsFalse()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_DoesNotVerifyConnection_WhenApiHasNotChangedAndStrategyReturnsFalse()
+        public async Task Verify_DoesNotVerifyConnection_WhenApiHasNotChangedAndStrategyReturnsFalse()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_VerifiesConnection_WhenOnlyApiHasChanged()
+        public async Task Verify_VerifiesConnection_WhenOnlyApiHasChanged()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
@@ -52,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_VerifiesConnection_WhenStrategyHasChanged()
+        public async Task Verify_VerifiesConnection_WhenStrategyHasChanged()
         {
             var strategy = mock.Mock<IBigCommerceAuthenticationPersistenceStrategy>();
             strategy.Setup(x => x.ConnectionVerificationNeeded(It.IsAny<BigCommerceStoreEntity>()))
@@ -67,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_ReturnsSuccess_WhenConnectionTestSucceeds()
+        public async Task Verify_ReturnsSuccess_WhenConnectionTestSucceeds()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
@@ -77,7 +78,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_ReturnsFailure_WhenConnectionTestFails()
+        public async Task Verify_ReturnsFailure_WhenConnectionTestFails()
         {
             var store = new BigCommerceStoreEntity { ApiUrl = "foo" };
 
@@ -96,7 +97,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_UpdatesFromOnline_WhenConnectionTestSucceeds()
+        public async Task Verify_UpdatesFromOnline_WhenConnectionTestSucceeds()
         {
             mock.Override<IBigCommerceStatusCodeProvider>().Setup(x => x.UpdateFromOnlineStore()).Verifiable();
 
@@ -108,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public async void Verify_ReturnsFailure_WhenOnlineUpdateFails()
+        public async Task Verify_ReturnsFailure_WhenOnlineUpdateFails()
         {
             mock.Override<IBigCommerceStatusCodeProvider>()
                 .Setup(x => x.UpdateFromOnlineStore())

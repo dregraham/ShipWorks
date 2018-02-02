@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
         public async Task<IEnumerable<IResult>> UploadSingleShipmentDetail(ShipmentEntity shipment)
         {
-            if (shipment.Order.IsManual && shipment.Order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (shipment.Order.IsManual && !shipment.Order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading shipment details for shipment {0} because the order is manual.", shipment.ShipmentID);
                 return Enumerable.Empty<IResult>();
