@@ -80,6 +80,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DryIceMedicalPurpose = source.DryIceMedicalPurpose;
             DryIceOption = source.DryIceOption;
             DryIceWeightUnitOfMeasure = source.DryIceWeightUnitOfMeasure;
+            Insurance = source.Insurance;
             
             
             WorldShipShipment = (IWorldShipShipmentEntity) source.WorldShipShipment?.AsReadOnly(objectMap);
@@ -353,6 +354,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String DryIceWeightUnitOfMeasure { get; }
+        /// <summary> The Insurance property of the Entity WorldShipPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WorldShipPackage"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         
         public IWorldShipShipmentEntity WorldShipShipment { get; }

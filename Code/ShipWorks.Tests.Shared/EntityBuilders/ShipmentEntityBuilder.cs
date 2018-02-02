@@ -146,6 +146,28 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             SetShipmentType(builderConfiguration, ShipmentTypeCode.iParcel, x => x.IParcel);
 
         /// <summary>
+        /// Make the shipment an DhlExpress shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsDhlExpress() => AsDhlExpress(null);
+
+        /// <summary>
+        /// Make the shipment an DhlExpress shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsDhlExpress(Action<DhlExpressShipmentEntityBuilder> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.DhlExpress, x => x.DhlExpress);
+
+        /// <summary>
+        /// Make the shipment an Asendia shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsAsendia() => AsAsendia(null);
+
+        /// <summary>
+        /// Make the shipment an Asendia shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsAsendia(Action<EntityBuilder<AsendiaShipmentEntity>> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.Asendia, x => x.Asendia);
+
+        /// <summary>
         /// Add a customs item to the shipment
         /// </summary>
         public ShipmentEntityBuilder WithCustomsItem() => WithCustomsItem(null);

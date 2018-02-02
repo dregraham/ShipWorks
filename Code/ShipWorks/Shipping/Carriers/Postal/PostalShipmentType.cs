@@ -10,7 +10,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -45,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return new List<IPackageAdapter>()
             {
-                new PostalPackageAdapter(shipment)
+                new PostalPackageAdapter(shipment, shipment.Postal)
             };
         }
 
@@ -58,6 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
             }
+
+            shipment.Postal.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -216,6 +217,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo3, postalShipment, PostalShipmentFields.Memo3);
 
             ShippingProfileUtility.ApplyProfileValue(postalProfile.NoPostage, postalShipment, PostalShipmentFields.NoPostage);
+            ShippingProfileUtility.ApplyProfileValue(postalProfile.Profile.Insurance, postalShipment, PostalShipmentFields.Insurance);
 
             UpdateDynamicShipmentData(shipment);
 
@@ -255,6 +257,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 throw new NullReferenceException("overriddenShipment.Postal cannot be null.");
             }
+
+            shipment.Insurance = shipment.Postal.Insurance;
 
             PostalServiceType serviceType = (PostalServiceType) overriddenShipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) overriddenShipment.Postal.PackagingType;
@@ -332,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Postal, null),
+                new InsuranceChoice(shipment, shipment.Postal, shipment.Postal, null),
                 new DimensionsAdapter(shipment.Postal))
             {
                 TotalWeight = shipment.TotalWeight

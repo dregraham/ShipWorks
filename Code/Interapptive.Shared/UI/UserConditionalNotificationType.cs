@@ -17,5 +17,10 @@ namespace Interapptive.Shared.UI
         /// Split orders confirmation dialog
         /// </summary>
         SplitOrders = 2,
+
+        /// <summary>
+        /// Insurance behavior change notification dialog
+        /// </summary>
+        InsuranceBehaviorChange = 3,
     }
 }

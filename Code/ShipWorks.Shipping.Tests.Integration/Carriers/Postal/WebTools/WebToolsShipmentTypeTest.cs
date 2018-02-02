@@ -75,6 +75,51 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.WebTools
             Assert.Empty(dirtyEntities);
         }
 
+        [Fact]
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToPostalShipmentInsurance()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal()
+                .Set(x => x.Insurance, false)
+                .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
+                .Save();
+
+            shipment.Postal.Insurance = true;
+
+            var testObject = context.Mock.Create<PostalWebShipmentType>();
+
+            // Make sure that the values going in are correct.
+            Assert.False(shipment.Insurance);
+            Assert.True(shipment.Postal.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+
+            // Now make sure shipment.Insurance is true and that shipment.Postal.Insurance is still true.
+            Assert.True(shipment.Insurance);
+            Assert.True(shipment.Postal.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UpdateDynamicShipmentData_SetsShipmentInsuranceFromCarrierShipment(bool insured)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal()
+                .Save();
+
+            shipment.Insurance = !insured;
+            shipment.Postal.Insurance = insured;
+
+            PostalWebShipmentType shipmentType = context.Mock.Create<PostalWebShipmentType>();
+            shipmentType.UpdateDynamicShipmentData(shipment);
+
+            Assert.Equal(insured, shipment.Postal.Insurance);
+            Assert.Equal(insured, shipment.Insurance);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }

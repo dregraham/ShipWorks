@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -23,8 +22,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -101,6 +100,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 shipment.Postal.Endicia = new EndiciaShipmentEntity(shipment.ShipmentID);
             }
+
+            shipment.Postal.Endicia.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -229,6 +230,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
+                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.PostalProfile.Profile.Insurance, endiciaShipment, EndiciaShipmentFields.Insurance);
             }
         }
 
@@ -275,6 +277,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Endicia.RequestedLabelFormat;
+
+                shipment.Insurance = shipment.Postal.Endicia.Insurance;
             }
         }
                
@@ -539,6 +543,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // We want to be able to show counter rates to users that don't have
             return new NullShippingBroker();
+        }
+
+        /// <summary>
+        /// Get the parcel data for the shipment
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.Postal.Endicia, shipment.Postal, null),
+                new DimensionsAdapter(shipment.Postal))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Endicia == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            return new List<IPackageAdapter>()
+            {
+                new PostalPackageAdapter(shipment, shipment.Postal.Endicia)
+            };
         }
     }
 }

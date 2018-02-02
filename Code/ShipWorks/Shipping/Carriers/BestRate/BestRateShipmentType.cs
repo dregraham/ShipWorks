@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Autofac;
-using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -18,7 +16,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -85,6 +82,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
 
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ShippingProfile.Insurance, bestRateShipment, BestRateShipmentFields.Insurance);
 
             if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
             {
@@ -167,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.BestRate, null),
+                new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null),
                 new DimensionsAdapter(shipment.BestRate));
         }
 
@@ -250,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             shipment.BestRate.InsuranceValue = 0;
+            shipment.BestRate.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
 
@@ -266,6 +265,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+            shipment.Insurance = shipment.BestRate.Insurance;
 
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
