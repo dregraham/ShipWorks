@@ -280,8 +280,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             // This ensures the record identifier saved to the map is a valid column
             RecordIdentifier =
-                columns.Any(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ?
-                    new OdbcColumn(storeFieldMap.RecordIdentifierSource) :
+                columns.FirstOrDefault(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ??
                     columns.Single(c => c.Name == EmptyColumnName);
 
             IOdbcFieldMapEntry orderNumberEntry =
