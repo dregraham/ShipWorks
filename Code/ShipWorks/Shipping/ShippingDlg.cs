@@ -418,7 +418,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The selected shipment type has changed
         /// </summary>
-        private void OnChangeShipmentType(object sender, EventArgs e)
+        private async void OnChangeShipmentType(object sender, EventArgs e)
         {
             try
             {
@@ -436,7 +436,7 @@ namespace ShipWorks.Shipping
                 SynchronizeWithShipSense();
 
                 // Reload the displayed shipments so that they show the new shipment type UI
-                LoadSelectedShipments(true);
+                await LoadSelectedShipments(true).ConfigureAwait(true);
 
                 IEnumerable<(long ShipmentID, bool Insured)> packageAdapters = uiDisplayedShipments
                     .Select(s => (ShipmentID: s.ShipmentID, Insured: shipmentTypeManager.Get(s).GetPackageAdapters(s).Any(p => p.InsuranceChoice.Insured)));
