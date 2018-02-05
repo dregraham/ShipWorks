@@ -399,6 +399,11 @@ namespace ShipWorks.Stores
         [Description("Jet")]
         [StoreTypeIdentity("JET", "JET")]
         [StoreTypeIcon("jet")]
-        Jet = 79
+        Jet = 79,
+
+        [Description("Manual")]
+        [StoreTypeIdentity("MANUAL", "MAN")]
+        [StoreTypeIcon("manual")]
+        Manual = 80
     }
 }
