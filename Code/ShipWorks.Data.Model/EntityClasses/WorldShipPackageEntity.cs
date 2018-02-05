@@ -434,6 +434,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DryIceOption", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DryIceWeightUnitOfMeasure", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 		}
 		#endregion
 
@@ -970,6 +972,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, true); }
 			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, value); }
+		}
+
+		/// <summary> The Insurance property of the Entity WorldShipPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."Insurance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Insurance
+		{
+			get { return (System.Boolean)GetValue((int)WorldShipPackageFieldIndex.Insurance, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.Insurance, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'WorldShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

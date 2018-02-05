@@ -1391,6 +1391,7 @@
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\ILabelServiceFactory.cs" />
+    <Compile Include="Shipping\Insurance\IInsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
     <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using Xunit;
@@ -186,6 +186,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)
         {
             return new RateResult(description, days, amount, new BestRateResultTag() { ResultKey = tagResultKey });
+        }
+
+        [Theory]
+        [InlineData(true, 9.99)]
+        [InlineData(false, 6.66)]
+        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+        {
+            shipment = new ShipmentEntity
+            {
+                Insurance = !insured,
+                BestRate = new BestRateShipmentEntity {Insurance = insured, InsuranceValue = insuranceValue }
+            };
+
+            BestRateShipmentType bestRateShipmentType = mock.Create<BestRateShipmentType>();
+            ShipmentParcel parcel = bestRateShipmentType.GetParcelDetail(shipment, 0);
+
+            Assert.Equal(insured, parcel.Insurance.Insured);
+            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+        }
+
+        [Fact]
+        public void GetPackageAdapters_ReturnBestRateValues()
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = false,
+                BestRate = new BestRateShipmentEntity()
+                {
+                    Insurance = true,
+                    InsuranceValue = 3
+                }
+            };
+
+            BestRateShipmentType testObject = mock.Create<BestRateShipmentType>();
+            IEnumerable<IPackageAdapter> packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.True(packageAdapters.First().InsuranceChoice.Insured);
+
+            shipment.Insurance = true;
+            shipment.BestRate.Insurance = false;
+            packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.False(packageAdapters.First().InsuranceChoice.Insured);
         }
     }
 }

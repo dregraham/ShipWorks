@@ -180,6 +180,7 @@
     <Compile Include="EntityBuilders\ShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\StoreEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsProfileEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\DhlExpressShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
     <Compile Include="Expressions\ClassHelper.cs" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -217,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
+                new InsuranceChoice(shipment, shipment.OnTrac, shipment.OnTrac, shipment.OnTrac),
                 new DimensionsAdapter(shipment.OnTrac))
             {
                 TotalWeight = shipment.TotalWeight
@@ -246,6 +245,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
+            onTracShipment.Insurance = false;
 
             shipment.OnTrac.RequestedLabelFormat = (int) ThermalLanguage.None;
 
@@ -303,6 +303,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
+            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ShippingProfile.Insurance, onTracShipment, OnTracShipmentFields.Insurance);
 
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);
@@ -341,6 +342,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             shipment.InsuranceProvider = settings.OnTracInsuranceProvider;
             shipment.OnTrac.InsurancePennyOne = settings.OnTracInsurancePennyOne;
+            shipment.Insurance = shipment.OnTrac.Insurance;
 
             // If they are using carrier insurance, send the actual value of the shipment as declared value
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)

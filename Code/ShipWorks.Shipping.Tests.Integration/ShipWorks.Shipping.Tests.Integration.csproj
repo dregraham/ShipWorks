@@ -160,6 +160,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Carriers\PrefetchPathRegistrationTest.cs" />
     <Compile Include="Carriers\ShipDateManipulatorRegistrationTest.cs" />
     <Compile Include="Carriers\LabelServiceRegistrationTest.cs" />

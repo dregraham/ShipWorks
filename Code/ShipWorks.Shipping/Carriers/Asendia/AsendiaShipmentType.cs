@@ -96,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.DimsWeight = 0;
             asendiaShipment.DimsAddWeight = true;
             asendiaShipment.InsuranceValue = 0;
+            asendiaShipment.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -127,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Asendia, null),
+                new InsuranceChoice(shipment, shipment.Asendia, shipment.Asendia, null),
                 new DimensionsAdapter(shipment.Asendia))
             {
                 TotalWeight = shipment.TotalWeight
@@ -161,6 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
+            shipment.Insurance = shipment.Asendia.Insurance;
         }
 
         /// <summary>
@@ -298,6 +300,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
 
             ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
 
             if (asendiaProfile.Weight.HasValue && !asendiaProfile.Weight.Value.IsEquivalentTo(0))
             {
