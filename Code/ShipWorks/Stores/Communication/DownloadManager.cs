@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -9,8 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -41,10 +44,10 @@ namespace ShipWorks.Stores.Communication
         static readonly ILog log = LogManager.GetLogger(typeof(DownloadManager));
 
         // Downloading flag
-        static volatile bool isDownloading = false;
+        static volatile bool isDownloading;
 
         // The progress dlg currently displayed, or null if not displayed.
-        static ProgressDlg progressDlg = null;
+        static ProgressDlg progressDlg;
 
         // The busy token
         static ApplicationBusyToken busyToken;
@@ -54,7 +57,7 @@ namespace ShipWorks.Stores.Communication
 
         // The current queue of items to be downloaded and its locking features
         static List<PendingDownload> downloadQueue;
-        static object downloadQueueLock = new object();
+        static readonly object downloadQueueLock = new object();
 
         #region class PendingDownload
 
@@ -70,16 +73,16 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Raised when a download is about to start
         /// </summary>
-        static public event EventHandler DownloadStarting;
+        public static event EventHandler DownloadStarting;
 
         /// <summary>
         /// Raised after a download completes, regardless of the outcome
         /// </summary>
-        static public event DownloadCompleteEventHandler DownloadComplete;
+        public static event DownloadCompleteEventHandler DownloadComplete;
 
         // Data for controlling auto-download
         static Dictionary<long, DateTime?> lastDownloadTimesCache = null;
-        static object lastDownloadTimesLock = new object();
+        static readonly object lastDownloadTimesLock = new object();
         static DateTime lastAutoDownloadCheck;
 
         /// <summary>
@@ -161,42 +164,108 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Download from all stores by order number
+        /// </summary>
+        public static async Task<IEnumerable<Exception>> Download(string orderNumber)
+        {
+            List<Exception> caughtExceptions = new List<Exception>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                List<IStoreDownloader> storeDownloaders = new List<IStoreDownloader>();
+                try
+                {
+                    storeDownloaders = GetOnDemandStoreDownloaders(orderNumber, lifetimeScope);
+                
+                    if (storeDownloaders.Any())
+                    {
+                        using (DbConnection con = SqlSession.Current.OpenConnection())
+                        {
+                            using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
+                            {
+                                caughtExceptions.AddRange(await Download(orderNumber, storeDownloaders, con).ConfigureAwait(false));
+                            }
+                        }
+                    }
+                }
+                catch (DownloadException ex)
+                {
+                    caughtExceptions.Add(ex);
+                }
+
+                DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(caughtExceptions.Any(), false));
+
+                return caughtExceptions;
+            }
+        }
+        
+        /// <summary>
+        /// Download from all stores by order number
+        /// </summary>
+        private static async Task<IEnumerable<Exception>> Download(string orderNumber, IEnumerable<IStoreDownloader> storeDownloaders, DbConnection con)
+        {
+            List<Exception> caughtExceptions = new List<Exception>();
+            foreach (IStoreDownloader downloader in storeDownloaders)
+            {
+                StoreEntity store = downloader.Store;
+
+                DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
+                try
+                {
+                    CheckLicense(store);
+
+                    await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
+
+                    downloadLog.QuantityTotal = downloader.QuantitySaved;
+                    downloadLog.QuantityNew = downloader.QuantityNew;
+                    downloadLog.Result = (int) DownloadResult.Success;
+                }
+                catch (Exception ex)
+                {
+                    caughtExceptions.Add(ex);
+                    downloadLog.Result = (int) DownloadResult.Error;
+                    downloadLog.ErrorMessage = ex.Message;
+                }
+                await SaveDownloadLog(downloadLog).ConfigureAwait(false);
+            }
+
+            return caughtExceptions;
+        }
+
+        /// <summary>
+        /// Get key value pairs of stores and store downloaders for stores that should download, with on demand enabled.
+        /// </summary>
+        private static List<IStoreDownloader> GetOnDemandStoreDownloaders(string orderNumber, ILifetimeScope lifetimeScope)
+        {
+            List<IStoreDownloader> storeDownloaders = new List<IStoreDownloader>();
+            List<StoreEntity> stores = StoreManager.GetEnabledStores();
+
+            foreach (StoreEntity store in stores)
+            {
+                if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+                {
+                    IStoreDownloader downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                    
+                    if (downloader.ShouldDownload(orderNumber))
+                    {
+                        storeDownloaders.Add(downloader);
+                    }
+                }
+            }
+
+            return storeDownloaders;
+        }
+
+        /// <summary>
         /// Gets the stores that are ready for automatic downloading.
         /// </summary>
         /// <returns>A List of StoreEntity instances.</returns>
         private static List<StoreEntity> GetStoresForAutoDownloading()
         {
-            List<StoreEntity> readyToDownload = new List<StoreEntity>();
-
-            bool wereTimesCached = (lastDownloadTimesCache != null);
+            bool wereTimesCached = lastDownloadTimesCache != null;
 
             // Find each store that is ready for an auto-download
-            foreach (StoreEntity store in StoreManager.GetAllStores())
-            {
-                if (!ComputerDownloadPolicy.Load(store).IsThisComputerAllowed)
-                {
-                    continue;
-                }
-
-                // First see if its enabled in general, and if auto-downloads at all
-                if (!store.Enabled || !store.AutoDownload)
-                {
-                    continue;
-                }
-
-                // If only when a way, make sure we are away
-                if (store.AutoDownloadOnlyAway && !IdleWatcher.IsIdle)
-                {
-                    continue;
-                }
-
-                DateTime? lastDownload = GetLastDownloadTime(store);
-
-                if (lastDownload == null || lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) < DateTime.UtcNow)
-                {
-                    readyToDownload.Add(store);
-                }
-            }
+            List<StoreEntity> readyToDownload = StoreManager.GetAllStores().Where(ShouldDownload).ToList();
 
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
             // could be that they've recently been downloaded since we cached the values.  So check again after refetching
@@ -224,15 +293,58 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Business logic to determine if we should download from the store
+        /// </summary>
+        private static bool ShouldDownload(StoreEntity store)
+        {
+            if (!ComputerDownloadPolicy.Load(store).IsThisComputerAllowed)
+            {
+                return false;
+            }
+
+            // First see if its enabled in general, and if auto-downloads at all
+            if (!store.Enabled || !store.AutoDownload)
+            {
+                return false;
+            }
+
+            // If only when a way, make sure we are away
+            if (store.AutoDownloadOnlyAway && !IdleWatcher.IsIdle)
+            {
+                return false;
+            }
+
+            // Only download if store should AutoDownload
+            if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+            {
+                return false;
+            }
+
+            DateTime? lastDownload = GetLastDownloadTime(store);
+
+            if (lastDownload != null && lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Initiate downloading of the given stores
         /// </summary>
         public static void StartDownload(ICollection<StoreEntity> stores, DownloadInitiatedBy initiatedBy)
         {
             Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
+            bool oneStore = stores.Count == 1;
+
             foreach (StoreEntity store in stores)
             {
-                AddToDownloadedQueue(store, initiatedBy);
+                if (oneStore || !StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+                {
+                    AddToDownloadedQueue(store, initiatedBy);
+                }
             }
         }
 
@@ -315,8 +427,8 @@ namespace ShipWorks.Stores.Communication
             // Keep going until there are no more stores to download for
             while (true)
             {
-                StoreEntity store = null;
-                ProgressItem progressItem = null;
+                StoreEntity store;
+                ProgressItem progressItem;
                 DownloadInitiatedBy initiatedBy;
 
                 bool releaseQueueLock = true;
@@ -520,12 +632,7 @@ namespace ShipWorks.Stores.Communication
                             showDashboardError = true;
                         }
 
-                        // Save the updated log
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            downloadLog.Ended = DateTime.UtcNow;
-                            adapter.SaveAndRefetch(downloadLog);
-                        }
+                        await SaveDownloadLog(downloadLog).ConfigureAwait(false);
 
                         ActionDispatcher.DispatchDownloadFinished(store.StoreID, (DownloadResult) downloadLog.Result, downloadLog.QuantityNew);
                     }
@@ -545,6 +652,19 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Save Download Log
+        /// </summary>
+        private static async Task SaveDownloadLog(DownloadEntity downloadLog)
+        { 
+            // Save the updated log
+            using (ISqlAdapter adapter = new SqlAdapter())
+            {
+                downloadLog.Ended = DateTime.UtcNow;
+                await adapter.SaveAndRefetchAsync(downloadLog);
             }
         }
 

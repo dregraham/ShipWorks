@@ -728,6 +728,7 @@
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
+    <Compile Include="ApplicationCore\IMainGridControl.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\Interaction\AsyncMenuCommand.cs" />
     <Compile Include="ApplicationCore\Interaction\IMenuCommand.cs" />
@@ -1048,6 +1049,7 @@
     <Compile Include="Filters\Search\SearchDefinitionProviderFactory.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\SingleScanSearchCondition.cs" />
     <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\KeyboardShortcutMessage.cs" />
@@ -1421,8 +1423,12 @@
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
-    <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
+    <Compile Include="Stores\Communication\DownloadManagerWrapper.cs" />
+    <Compile Include="Stores\Communication\IDownloadManager.cs" />
+    <Compile Include="Stores\Communication\IOnDemandDownloader.cs" />
+    <Compile Include="Stores\Communication\IOnDemandDownloaderFactory.cs" />
     <Compile Include="Stores\Communication\IStoreDownloader.cs" />
+    <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Orders\Combine\ICombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Stores\Orders\Combine\ICombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
@@ -1450,9 +1456,23 @@
     <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\AddStoreWizardFinishPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\AddStoreWizardFinishPage.Designer.cs">
+      <DependentUpon>AddStoreWizardFinishPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
+    <Compile Include="Stores\Management\DownloadSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\DownloadSettingsControl.Designer.cs">
+      <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
+    <Compile Include="Stores\Management\IDownloadSettingsControl.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
+    <Compile Include="Stores\Management\IStoreWizardFinishPageControlFactory.cs" />
     <Compile Include="Stores\Orders\Split\IOrderSplitOrchestrator.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
@@ -8139,6 +8159,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ActivationErrorWizardPage.resx">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\AddStoreWizardFinishPage.resx">
+      <DependentUpon>AddStoreWizardFinishPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\DownloadSettingsControl.resx">
+      <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.resx">
       <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>

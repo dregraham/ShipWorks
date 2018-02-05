@@ -35,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
         private readonly MagentoStoreEntity magentoStore;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
@@ -59,7 +58,6 @@ namespace ShipWorks.Stores.Platforms.Magento
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
             log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             Func<StoreEntity, IMagentoModuleDownloader> createModuleDownloader,
             Func<StoreEntity, IMagentoTwoRestDownloader> createRestDownloader)
         {
+            Store = store;
             MagentoStoreEntity typedStore = store as MagentoStoreEntity;
             downloader = typedStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST ?
                 (IStoreDownloader) createRestDownloader(store) :
@@ -41,9 +42,27 @@ namespace ShipWorks.Stores.Platforms.Magento
         public int QuantityNew => downloader.QuantityNew;
 
         /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
             downloader.Download(progressItem, downloadID, con);
+
+        /// <summary>
+        /// Does not support downloading OrderNumbers
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

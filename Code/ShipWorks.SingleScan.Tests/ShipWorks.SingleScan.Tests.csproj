@@ -160,6 +160,7 @@
     <Compile Include="AutoWeighServicePipelineTest.cs" />
     <Compile Include="LoggableAutoPrintServiceTest.cs" />
     <Compile Include="AutoWeighServiceTest.cs" />
+    <Compile Include="MainGridControlPipelineTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterScannerControlViewModelTest.cs" />
     <Compile Include="ScannerIdentifierTest.cs" />

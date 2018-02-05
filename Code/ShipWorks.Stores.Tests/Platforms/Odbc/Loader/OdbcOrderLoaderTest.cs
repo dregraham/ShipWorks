@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -25,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 orderUtility.Verify(u => u.CalculateTotal(orderEntity), Times.Once);
             }
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 orderUtility.Verify(u => u.CalculateTotal(orderEntity), Times.Never);
             }
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
-                testObject.Load(map.Object, order, odbcRecords);
+                testObject.Load(map.Object, order, odbcRecords, false);
 
                 map.Verify(m => m.CopyToEntity(order));
             }
@@ -78,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 Assert.Equal(now, orderEntity.OrderDate);
             }
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 Assert.Equal(mappedDate, orderEntity.OrderDate);
             }
@@ -123,7 +124,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(DateTime.Now);
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 Assert.False(orderEntity.Fields[(int) OrderFieldIndex.OrderDate].IsChanged);
             }
@@ -145,7 +146,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 var testObject = mock1.Create<OdbcOrderLoader>();
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 detailLoader1.Verify(d => d.Load(fieldMap.Object, orderEntity));
                 detailLoader2.Verify(d => d.Load(fieldMap.Object, orderEntity));
@@ -164,7 +165,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 orderItemLoader.Verify(l => l.Load(fieldMap.Object, orderEntity, odbcRecords), Times.Once);
             }
@@ -178,13 +179,31 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var orderItemLoader = mock.Mock<IOdbcOrderItemLoader>();
 
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
-                var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
+                var orderEntity = new OrderEntity() { IsNew = false };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
-                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, false);
 
                 orderItemLoader.Verify(l => l.Load(fieldMap.Object, orderEntity, odbcRecords), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void Load_OrderItemLoadCalled_WhenOrderIsNotNewAndReloadEntireOrder()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var orderItemLoader = mock.Mock<IOdbcOrderItemLoader>();
+
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() { IsNew = false };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords, true);
+
+                orderItemLoader.Verify(l => l.Load(fieldMap.Object, orderEntity, odbcRecords));
             }
         }
     }

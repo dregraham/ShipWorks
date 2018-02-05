@@ -40,15 +40,13 @@ namespace ShipWorks.Stores.Management
         private ShipWorksLicense license;
         private TrialDetail trialDetail;
         private ILicenseAccountDetail accountDetail;
-
-        // Download policy
-        private ComputerDownloadPolicy downloadPolicy;
-
+        
         // The account settings control
         private AccountSettingsControlBase accountControl;
 
         // The control for manual order settings
         private ManualOrderSettingsControl manualOrderSettingsControl;
+        private IDownloadSettingsControl downloadSettingsControl;
 
         // the control for store-specific settings
         private StoreSettingsControlBase storeSettingsControl;
@@ -104,15 +102,7 @@ namespace ShipWorks.Stores.Management
         private void OnLoad(object sender, EventArgs e)
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
-
-            // Download policy
-            downloadPolicy = ComputerDownloadPolicy.Load(store);
-
-            // Load the download policy choices and start listening for changes
-            comboAllowDownload.LoadChoices(downloadPolicy.DefaultToYes);
-            comboAllowDownload.SelectedIndex = -1;
-            comboAllowDownload.SelectedIndexChanged += OnChangeAllowDownloading;
-
+            
             // Load title
             titleStoreName.Text = store.StoreName;
             titleStoreType.Text = storeType.StoreTypeName;
@@ -238,33 +228,12 @@ namespace ShipWorks.Stores.Management
                 licenseTabInitialized = true;
                 LoadLicenseTab();
             }
-        }
 
-        /// <summary>
-        /// Change whether downloading is allowed from this computer
-        /// </summary>
-        private void OnChangeAllowDownloading(object sender, EventArgs e)
-        {
-            downloadPolicy.SetComputerAllowed(UserSession.Computer.ComputerID, (ComputerDownloadAllowed) comboAllowDownload.SelectedValue);
-
-            automaticDownloadControl.Enabled = downloadPolicy.IsThisComputerAllowed;
-        }
-
-        /// <summary>
-        /// Open the window to change the download policy for all computers
-        /// </summary>
-        private void OnConfigureDownloadPolicy(object sender, EventArgs e)
-        {
-            using (ComputerDownloadPolicyDlg dlg = new ComputerDownloadPolicyDlg(downloadPolicy, store.StoreName))
+            // Load the download settings when the option page is selected, that way we show
+            // the most up to date version based on the store
+            if (optionControl.SelectedPage == optionPageSettings)
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    comboAllowDownload.LoadChoices(downloadPolicy.DefaultToYes);
-                    comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
-
-                    // If the default changed, and the default is selected, the UI needs updated
-                    OnChangeAllowDownloading(null, EventArgs.Empty);
-                }
+                ConfigureDownloadSettingsControl();
             }
         }
 
@@ -275,6 +244,39 @@ namespace ShipWorks.Stores.Management
         {
             UpdateStoreEnabledDisplay();
         }
+        
+        /// <summary>
+        /// Configure the Download settings control
+        /// </summary>
+        private void ConfigureDownloadSettingsControl()
+        {
+            Control oldDownloadSettingsControl = downloadSettingsControl as Control;
+
+            if (oldDownloadSettingsControl != null &&
+                optionPageSettings.Controls.Contains(oldDownloadSettingsControl))
+            {
+                optionPageSettings.Controls.Remove(oldDownloadSettingsControl);
+            }
+
+            downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+            downloadSettingsControl.LoadStore(store);
+            downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+            downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+            downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            optionPageSettings.Controls.Add(downloadSettingsControl as Control);
+        }
+
+        /// <summary>
+        /// Configure the Manual Order Settings control
+        /// </summary>
+        private void ConfigureManualOrderSettingsControl()
+        {
+            manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+            manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+            manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            optionPageSettings.Controls.Add(manualOrderSettingsControl);
+        }
 
         /// <summary>
         /// Load the content of the settings tab
@@ -284,11 +286,8 @@ namespace ShipWorks.Stores.Management
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(internationalAddressValidationSetting);
 
-            manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
-            manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-            manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            optionPageSettings.Controls.Add(manualOrderSettingsControl);
+            ConfigureDownloadSettingsControl();
+            ConfigureManualOrderSettingsControl();
 
             // store-specific settings control
             storeSettingsControl = storeType.CreateStoreSettingsControl();
@@ -318,12 +317,6 @@ namespace ShipWorks.Stores.Management
 
             panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
 
-            // Download on\off
-            comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
-
-            // Auto download
-            automaticDownloadControl.LoadStore(store);
-
             // Manual orders
             manualOrderSettingsControl.LoadStore(store);
 
@@ -352,9 +345,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool SaveSettingsTab()
         {
-            store.ComputerDownloadPolicy = downloadPolicy.SerializeToXml();
-
-            automaticDownloadControl.SaveToStoreEntity(store);
+            downloadSettingsControl.Save();
             manualOrderSettingsControl.SaveToEntity(store);
 
             bool result = true;

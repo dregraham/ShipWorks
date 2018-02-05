@@ -18,5 +18,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Creates the download command using OnlineLastModified.
         /// </summary>
         IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, DateTime onlineLastModified, IOdbcFieldMap odbcFieldMap);
+
+        /// <summary>
+        /// Create a download command using orderNumber
+        /// </summary>
+        IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, string orderNumber, IOdbcFieldMap odbcFieldMap);
     }
 }
