@@ -76,10 +76,10 @@ namespace Interapptive.Shared.Tests.Net
         {
             requestSubmitter.Variables.Sort(v => v.Name);
 
-            Assert.Equal(requestSubmitter.Variables[0].Name, "1");
-            Assert.Equal(requestSubmitter.Variables[1].Name, "2");
-            Assert.Equal(requestSubmitter.Variables[2].Name, "3");
-            Assert.Equal(requestSubmitter.Variables[3].Name, "4");
+            Assert.Equal("1", requestSubmitter.Variables[0].Name);
+            Assert.Equal("2", requestSubmitter.Variables[1].Name);
+            Assert.Equal("3", requestSubmitter.Variables[2].Name);
+            Assert.Equal("4", requestSubmitter.Variables[3].Name);
         }
     }
 }

@@ -55,20 +55,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.importedRateValidator = importedRateValidator;
         }
 
-        /// <summary>
-        /// The supported service types for local rating
-        /// </summary>
-        public static readonly List<UpsServiceType> SupportedServiceTypesForLocalRating = new List<UpsServiceType>
-        {
-            UpsServiceType.UpsGround,
-            UpsServiceType.UpsNextDayAirAM,
-            UpsServiceType.UpsNextDayAir,
-            UpsServiceType.UpsNextDayAirSaver,
-            UpsServiceType.Ups2DayAirAM,
-            UpsServiceType.Ups2DayAir,
-            UpsServiceType.Ups3DaySelect
-        };
-
         #region Import Local Rating Data
 
         /// <summary>

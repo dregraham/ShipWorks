@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             bucket.Relations.Add(UpsPackageEntity.Relations.UpsShipmentEntityUsingShipmentID);
             bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
             bucket.PredicateExpression.AddWithAnd(UpsShipmentFields.PayorType != UpsPayorType.ThirdParty);
-            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsShipmentFields.Service, null, UpsLocalRateTable.SupportedServiceTypesForLocalRating));
+            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsShipmentFields.Service, null, SupportedServiceTypesForLocalRating));
             bucket.PredicateExpression.AddWithAnd(UpsPackageFields.DryIceEnabled == false);
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
 
@@ -87,5 +87,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             return shipments;
         }
+
+        /// <summary>
+        /// The supported service types for local rating
+        /// </summary>
+        private static readonly List<UpsServiceType> SupportedServiceTypesForLocalRating = new List<UpsServiceType>
+        {
+            UpsServiceType.UpsGround,
+            UpsServiceType.UpsNextDayAirAM,
+            UpsServiceType.UpsNextDayAir,
+            UpsServiceType.UpsNextDayAirSaver,
+            UpsServiceType.Ups2DayAirAM,
+            UpsServiceType.Ups2DayAir,
+            UpsServiceType.Ups3DaySelect
+        };
     }
 }

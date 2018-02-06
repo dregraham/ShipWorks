@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
-        public async void LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
+        public async Task LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
         {
             var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());

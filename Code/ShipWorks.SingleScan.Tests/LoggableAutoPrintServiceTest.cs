@@ -1,11 +1,11 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Threading.Tasks;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
@@ -36,7 +36,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void Print_DelegatesToAutoPrintService_Prit()
+        public async Task Print_DelegatesToAutoPrintService_Prit()
         {
             AutoPrintServiceDto autoprintdto = new AutoPrintServiceDto();
             await testObject.Print(new AutoPrintServiceDto());
@@ -45,11 +45,11 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void Print_LogsError_WhenAutoPrintServiceDoesNotSendProcessShipmentsMessage()
+        public async Task Print_LogsError_WhenAutoPrintServiceDoesNotSendProcessShipmentsMessage()
         {
             string error = "something went wrong";
             SetupAutoPrintService("foo", 42, error, false);
-            
+
             await testObject.Print(new AutoPrintServiceDto());
 
             logger.Verify(l => l.Error(error));

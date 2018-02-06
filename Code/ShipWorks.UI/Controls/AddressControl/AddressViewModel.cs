@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -16,7 +17,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.AddressControl
 {
@@ -201,6 +201,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Validate the currently entered address
         /// </summary>
+        [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as an event handler")]
         private async void ValidateAddress()
         {
             if (!entityId.HasValue)
@@ -243,6 +244,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Select the specified address suggestion
         /// </summary>
+        [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as an event handler")]
         private async void SelectAddressSuggestion(ValidatedAddressEntity addressSuggestion)
         {
             addressValidationSubscriptions?.Dispose();
