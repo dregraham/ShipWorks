@@ -133,8 +133,11 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         {
             CreateSuccessfulPersistenceStrategyFor(authenticationType);
 
-            var store = new BigCommerceStoreEntity();
-            store.BigCommerceAuthentication = authenticationType;
+            mock.Mock<IBigCommerceConnectionVerifier>()
+                .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
+                .ReturnsAsync(Result.FromSuccess());
+
+            var store = new BigCommerceStoreEntity { BigCommerceAuthentication = authenticationType };
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
             testObject.ApiUrl = "https://store-vplh1lw.mybigcommerce.com/api/v2/";
