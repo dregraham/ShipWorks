@@ -22,6 +22,9 @@
     <AssemblyName>ShipWorks.Stores.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -42,7 +45,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>ShipWorks.Stores.Tests.Integration.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
