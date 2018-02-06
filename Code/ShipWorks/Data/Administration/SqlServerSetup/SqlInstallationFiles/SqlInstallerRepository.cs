@@ -114,7 +114,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
                     new SqlInstallerInfo()
                     {
                         Edition = SqlServerEditionType.LocalDb2017,
-                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlserver2016/localdb/SqlLocalDB.msi"),
+                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlserver2017/localdb/SqlLocalDB.msi"),
                         Checksum = "cTIVWe/5IwZnmdf8JrbHrt1B7uE=",
                         FileSize = 48230400,
                         IsLocalDB = true,
