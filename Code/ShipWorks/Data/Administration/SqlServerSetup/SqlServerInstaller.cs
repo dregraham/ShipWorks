@@ -87,7 +87,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Indicates if SQL Server 2016 is supported on the current computer
+        /// Indicates if SQL Server 2017 is supported on the current computer
         /// </summary>
         public bool IsSqlServer2017Supported
         {
@@ -165,7 +165,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (sqlInstallerInfo.IsLocalDB && !(IsSqlServer2017Supported || IsSqlServer2014Supported))
             {
-                throw new InvalidOperationException("Cannot install LocalDB when SQL 2016 is not supported.");
+                throw new InvalidOperationException("Cannot install LocalDB when SQL 2017 is not supported.");
             }
         }
 
