@@ -40,6 +40,8 @@ namespace ShipWorks.Stores.Platforms.Manual
 
             InitializeStoreDefaults(store);
 
+            store.StoreName = "My Manual Store";
+
             return store;
         }
 
