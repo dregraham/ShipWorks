@@ -47,7 +47,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
         private readonly IEbayWebClient webClient;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
@@ -66,7 +65,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.webClient = webClient;
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

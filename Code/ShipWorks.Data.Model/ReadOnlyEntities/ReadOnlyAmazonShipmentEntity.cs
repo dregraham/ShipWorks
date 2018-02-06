@@ -50,6 +50,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeliveryExperience = source.DeliveryExperience;
             DeclaredValue = source.DeclaredValue;
             AmazonUniqueShipmentID = source.AmazonUniqueShipmentID;
+            Insurance = source.Insurance;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -143,6 +144,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String AmazonUniqueShipmentID { get; }
+        /// <summary> The Insurance property of the Entity AmazonShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         public IShipmentEntity Shipment { get; }
         

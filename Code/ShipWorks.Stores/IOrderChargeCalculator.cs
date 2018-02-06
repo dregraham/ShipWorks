@@ -1,4 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores
 {
@@ -10,6 +10,6 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Calculate the order total of the order. 
         /// </summary>
-        decimal CalculateTotal(OrderEntity order);
+        decimal CalculateTotal(IOrderEntity order);
     }
 }

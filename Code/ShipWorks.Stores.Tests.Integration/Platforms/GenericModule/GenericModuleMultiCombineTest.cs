@@ -11,8 +11,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Content.Controls;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public class GenericModuleMultiCombineTest : IDisposable
     {
         private readonly DataContext context;
@@ -48,15 +49,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                 .Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
-            Create.Order(store, context.Customer).Save();
+            Create.Order<GenericModuleOrderEntity>(store, context.Customer).Save();
 
-            order1 = Create.Order(store, context.Customer)
+            order1 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 10)
                 .Save();
-            order2 = Create.Order(store, context.Customer)
+            order2 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 20)
                 .Save();
-            order3 = Create.Order(store, context.Customer)
+            order3 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 30)
                 .Save();
 

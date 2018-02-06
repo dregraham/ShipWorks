@@ -7,7 +7,6 @@ namespace ShipWorks.Filters.Search
     /// <summary>
     /// Provides the search definition used when single scan is enabled
     /// </summary>
-    /// <seealso cref="ShipWorks.Filters.Search.ISearchDefinitionProvider" />
     public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
     {
         private readonly ISingleScanOrderShortcut singleScanShortcut;
@@ -25,7 +24,7 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         public FilterDefinition GetDefinition(string quickSearchString)
         {
-            NumericCondition<long> condition;
+            Condition condition;
             if (singleScanShortcut.AppliesTo(quickSearchString))
             {
                 // The search string contains the OrderId
@@ -37,26 +36,7 @@ namespace ShipWorks.Filters.Search
             }
             else
             {
-                // The search string must be an Order Number
-                long value;
-                if (long.TryParse(quickSearchString, out value))
-                {
-                    condition = new OrderNumberCondition
-                    {
-                        IsNumeric = true,
-                        Operator = NumericOperator.Equal,
-                        Value1 = value
-                    };
-                }
-                else
-                {
-                    condition = new OrderNumberCondition
-                    {
-                        IsNumeric = false,
-                        StringOperator = StringOperator.Equals,
-                        StringValue = quickSearchString,
-                    };
-                }
+                condition = new SingleScanSearchCondition(quickSearchString);
             }
 
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);

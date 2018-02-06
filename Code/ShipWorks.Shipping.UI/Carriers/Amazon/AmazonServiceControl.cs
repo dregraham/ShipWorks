@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public partial class AmazonServiceControl : ServiceControlBase
     {
         private readonly IMessenger messenger;
+        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private List<AmazonServiceTypeEntity> allServices;
 
         /// <summary>
@@ -30,10 +32,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="serviceTypeRepository">Repository of Amazon service types</param>
-        public AmazonServiceControl(RateControl rateControl, IAmazonServiceTypeRepository serviceTypeRepository, IMessenger messenger)
+        /// <param name="carrierShipmentAdapterFactory">Shipment adapter creation factory</param>
+        public AmazonServiceControl(RateControl rateControl, IAmazonServiceTypeRepository serviceTypeRepository, 
+            IMessenger messenger, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory)
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
             this.messenger = messenger;
+            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             InitializeComponent();
             allServices = serviceTypeRepository.Get();
 
@@ -226,6 +231,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = v.ToString());
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+
+                AmazonShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment) as AmazonShipmentAdapter;
+                shipmentAdapter?.SelectServiceFromRate(RateControl.SelectedRate);
 
                 deliveryConfirmation.ReadMultiValue(v => shipment.Amazon.DeliveryExperience = (int) v);
 

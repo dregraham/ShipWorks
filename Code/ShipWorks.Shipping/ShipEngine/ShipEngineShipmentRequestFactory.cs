@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
+        protected ShipEngineShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
             IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;

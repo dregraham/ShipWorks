@@ -8,7 +8,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -103,6 +103,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
                     .Set(os => os.OrderNumberComplete, i.ToString())
                     .Set(os => os.IsManual, false)
                     .Set(os => os.OrderID, orderID)
+                    .Set(os => os.OriginalOrderID, orderID)
                     .Save();
             }
         }

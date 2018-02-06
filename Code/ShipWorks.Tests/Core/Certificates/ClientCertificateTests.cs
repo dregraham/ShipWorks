@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
-using ShipWorks.Common.Net;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.Tests.Shared;
 using System.IO;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
-using Interapptive.Shared.Net;
+using Xunit;
 
 namespace ShipWorks.Tests.Core.Certificates
 {
@@ -51,17 +46,7 @@ namespace ShipWorks.Tests.Core.Certificates
         /// <returns></returns>
         private void UsingTestCertificate(TestBodyDelegate function)
         {
-            string contents = "";
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(ClientCertificateTests), "cert_key_pem.txt"))
-            {
-                Assert.NotNull(stream);
-
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    contents = reader.ReadToEnd();
-                }
-            }
-
+            string contents = typeof(ClientCertificateTests).Assembly.GetEmbeddedResourceString("Core.Certificates.cert_key_pem.txt");
             string fileName = Path.GetTempFileName();
 
             File.WriteAllText(fileName, contents);

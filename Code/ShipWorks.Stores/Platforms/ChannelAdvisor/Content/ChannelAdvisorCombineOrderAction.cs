@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
@@ -25,9 +27,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
             ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) combinedOrder;
 
             order.IsPrime =
-                orders.Where(o => o is ChannelAdvisorOrderEntity).Cast<ChannelAdvisorOrderEntity>().All(o => o.IsPrime == (int) ChannelAdvisorIsAmazonPrime.No) ? 
-                    (int) ChannelAdvisorIsAmazonPrime.No :
-                    (int) ChannelAdvisorIsAmazonPrime.Unknown;
+                orders.Where(o => o is ChannelAdvisorOrderEntity).Cast<ChannelAdvisorOrderEntity>().All(o => o.IsPrime == (int) AmazonIsPrime.No) ? 
+                    (int) AmazonIsPrime.No :
+                    (int) AmazonIsPrime.Unknown;
 
             var recordCreator = new SearchRecordMerger<IChannelAdvisorOrderEntity>(combinedOrder, orders, sqlAdapter);
 

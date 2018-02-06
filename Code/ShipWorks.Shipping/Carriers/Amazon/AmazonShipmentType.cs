@@ -161,11 +161,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
 
-            IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;
-
-            Debug.Assert(amazonCredentials != null);
-
             amazonShipment.DimsWeight = shipment.ContentWeight;
+            amazonShipment.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -250,6 +247,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
 
             if (amazonProfile.Weight.GetValueOrDefault() > 0)
             {

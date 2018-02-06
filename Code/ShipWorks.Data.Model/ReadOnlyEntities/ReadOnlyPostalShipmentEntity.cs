@@ -58,6 +58,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Memo2 = source.Memo2;
             Memo3 = source.Memo3;
             NoPostage = source.NoPostage;
+            Insurance = source.Insurance;
             
             Endicia = (IEndiciaShipmentEntity) source.Endicia?.AsReadOnly(objectMap);
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
@@ -201,6 +202,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean NoPostage { get; }
+        /// <summary> The Insurance property of the Entity PostalShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "PostalShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         public IEndiciaShipmentEntity Endicia { get; }
         

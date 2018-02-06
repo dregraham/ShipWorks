@@ -369,6 +369,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ModuleResponseEncoding", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("SchemaVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AmazonMerchantID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AmazonAuthToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
 		}
 		#endregion
 
@@ -610,6 +616,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.SchemaVersion, true); }
 			set	{ SetValue((int)GenericModuleStoreFieldIndex.SchemaVersion, value); }
+		}
+
+		/// <summary> The AmazonMerchantID property of the Entity GenericModuleStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonMerchantID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonMerchantID
+		{
+			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonMerchantID, true); }
+			set	{ SetValue((int)GenericModuleStoreFieldIndex.AmazonMerchantID, value); }
+		}
+
+		/// <summary> The AmazonAuthToken property of the Entity GenericModuleStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonAuthToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonAuthToken
+		{
+			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonAuthToken, true); }
+			set	{ SetValue((int)GenericModuleStoreFieldIndex.AmazonAuthToken, value); }
+		}
+
+		/// <summary> The AmazonApiRegion property of the Entity GenericModuleStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonApiRegion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonApiRegion
+		{
+			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonApiRegion, true); }
+			set	{ SetValue((int)GenericModuleStoreFieldIndex.AmazonApiRegion, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

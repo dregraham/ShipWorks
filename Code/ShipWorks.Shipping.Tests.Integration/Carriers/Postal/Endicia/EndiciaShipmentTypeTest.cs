@@ -82,6 +82,51 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Endicia
             Assert.Empty(dirtyEntities);
         }
 
+        [Fact]
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToEndiciaShipmentInsurance()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsEndicia())
+                .Set(x => x.Insurance, false)
+                .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
+                .Save();
+
+            shipment.Postal.Endicia.Insurance = true;
+
+            var testObject = context.Mock.Create<EndiciaShipmentType>();
+
+            // Make sure that the values going in are correct.
+            Assert.False(shipment.Insurance);
+            Assert.True(shipment.Postal.Endicia.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+
+            // Now make sure shipment.Insurance is true and that shipment.Postal.Endicia.Insurance is still true.
+            Assert.True(shipment.Insurance);
+            Assert.True(shipment.Postal.Endicia.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UpdateDynamicShipmentData_SetsShipmentInsuranceFromCarrierShipment(bool insured)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsEndicia())
+                .Save();
+
+            shipment.Insurance = !insured;
+            shipment.Postal.Endicia.Insurance = insured;
+
+            EndiciaShipmentType shipmentType = context.Mock.Create<EndiciaShipmentType>();
+            shipmentType.UpdateDynamicShipmentData(shipment);
+
+            Assert.Equal(insured, shipment.Postal.Endicia.Insurance);
+            Assert.Equal(insured, shipment.Insurance);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }

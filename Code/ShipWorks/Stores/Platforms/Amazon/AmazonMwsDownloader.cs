@@ -10,6 +10,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -282,15 +283,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Map the IsPrime string provided by Amazon to our internal representation
         /// </summary>
-        private static AmazonMwsIsPrime TranslateIsPrime(string IsPrime)
+        private static AmazonIsPrime TranslateIsPrime(string IsPrime)
         {
             switch (IsPrime.ToUpperInvariant())
             {
-                case "TRUE": return AmazonMwsIsPrime.Yes;
-                case "FALSE": return AmazonMwsIsPrime.No;
+                case "TRUE": return AmazonIsPrime.Yes;
+                case "FALSE": return AmazonIsPrime.No;
             }
 
-            return AmazonMwsIsPrime.Unknown;
+            return AmazonIsPrime.Unknown;
         }
 
         /// <summary>

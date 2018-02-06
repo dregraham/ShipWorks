@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
 using ShipWorks.Stores.Platforms.osCommerce;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -100,6 +96,5 @@ namespace ShipWorks.Tests.Stores.osCommerce
             DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/", "1.0.0.0");
             DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "1.1.0.0");
         }
-
     }
 }

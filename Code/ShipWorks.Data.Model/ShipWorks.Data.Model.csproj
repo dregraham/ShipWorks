@@ -161,6 +161,7 @@
     <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\EbayOrderSearchEntityComparer.cs" />
     <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.Interface.cs" />
@@ -173,6 +174,9 @@
     <Compile Include="Custom\EntityClasses\BigCommerceOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExShipmentEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\FedExShipmentEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\GrouponOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
@@ -2939,6 +2943,30 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\AsendiaProfileRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\GenericModuleOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\GenericModuleOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IGenericModuleOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IGenericModuleOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyGenericModuleOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyGenericModuleOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\GenericModuleOrderItemRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\GenericModuleOrderRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

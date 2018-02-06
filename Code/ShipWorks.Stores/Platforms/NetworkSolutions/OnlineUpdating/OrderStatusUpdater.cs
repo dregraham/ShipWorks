@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
                 return;
             }
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.WarnFormat("Not uploading order status since order {0} is manual.", order.OrderID);
                 return;

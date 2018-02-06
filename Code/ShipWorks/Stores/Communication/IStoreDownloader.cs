@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
+﻿using System.Data.Common;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
-using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -25,8 +21,23 @@ namespace ShipWorks.Stores.Communication
         int QuantityNew { get; }
 
         /// <summary>
-        /// Download orders from the store
+        /// Downloads a specific order from the store
         /// </summary>
         Task Download(IProgressReporter progressItem, long downloadID, DbConnection con);
+        
+        /// <summary>
+        /// Download the orderNumber from the store
+        /// </summary>
+        Task Download(string orderNumber, long downloadID, DbConnection con);
+
+        /// <summary>
+        /// Whether or not the downloader should download the given order number
+        /// </summary>
+        bool ShouldDownload(string orderNumber);
+		
+        /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        StoreEntity Store { get; }
     }
 }

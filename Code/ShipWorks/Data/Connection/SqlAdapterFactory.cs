@@ -1,4 +1,6 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Data.Connection
@@ -23,6 +25,17 @@ namespace ShipWorks.Data.Connection
         /// Create a SqlAdapter that IS part of a transaction
         /// </summary>
         public ISqlAdapter CreateTransacted() => SqlAdapter.Create(true);
+
+        /// <summary>
+        /// Execute a block of code using a SqlAdapter that is part of a physical transaction
+        /// </summary>
+        public async Task<T> WithPhysicalTransactionAsync<T>(Func<DbTransaction, ISqlAdapter, Task<T>> withAdapter)
+        {
+            using (DbConnection connection = SqlSession.Current.OpenConnection())
+            {
+                return await connection.WithTransactionAsync(withAdapter).ConfigureAwait(false);
+            }
+        }
 
         /// <summary>
         /// Create a SqlAdapter that uses the existing connection

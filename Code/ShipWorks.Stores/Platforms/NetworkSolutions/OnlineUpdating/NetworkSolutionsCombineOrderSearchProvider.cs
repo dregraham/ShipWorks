@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
 {
@@ -29,9 +30,23 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// </summary>
         protected override async Task<IEnumerable<long>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            return await GetCombinedOnlineOrderIdentifiers<NetworkSolutionsOrderSearchEntity>(
-                NetworkSolutionsOrderSearchFields.OrderID == order.OrderID,
-                NetworkSolutionsOrderSearchFields.NetworkSolutionsOrderID).ConfigureAwait(false);
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.NetworkSolutionsOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(NetworkSolutionsOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(() => NetworkSolutionsOrderSearchFields.NetworkSolutionsOrderID.ToValue<long>())
+                .Distinct()
+                .Where(NetworkSolutionsOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

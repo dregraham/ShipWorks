@@ -65,5 +65,6 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         WalmartOrderSearch = 52,
         YahooOrderSearch = 53,
         OrderSearch = 54,
+        GenericModuleOrder = 55
     }
 }

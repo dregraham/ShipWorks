@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
@@ -16,17 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
     {
         private readonly ShipmentEntity shipment;
         private IInsuranceChoice insuranceChoice;
+        private EntityBase2 insuranceFieldEntity;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PostalPackageAdapter"/> class.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        public PostalPackageAdapter(ShipmentEntity shipment)
+        public PostalPackageAdapter(ShipmentEntity shipment, EntityBase2 insuranceFieldEntity)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
 
+            this.insuranceFieldEntity = insuranceFieldEntity;
+            
             this.shipment = shipment;
-            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+            this.insuranceChoice = new InsuranceChoice(shipment, insuranceFieldEntity, shipment.Postal, null);
         }
 
         /// <summary>
@@ -146,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
             shipment.InsuranceProvider = shippingSettings.UspsInsuranceProvider;
-            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+            InsuranceChoice = new InsuranceChoice(shipment, insuranceFieldEntity, shipment.Postal, null);
         }
 
         /// <summary>

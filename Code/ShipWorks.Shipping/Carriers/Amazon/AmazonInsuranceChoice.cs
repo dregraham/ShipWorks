@@ -60,8 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         [Obfuscation(Exclude = true)]
         public bool Insured
         {
-            get { return Shipment.Insurance; }
-            set { Shipment.Insurance = value; }
+            get { return Shipment.Amazon.Insurance; }
+            set { Shipment.Amazon.Insurance = value; }
         }
 
         /// <summary>

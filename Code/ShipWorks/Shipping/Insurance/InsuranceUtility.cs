@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public static string OnlineCustomerAgreementFile
         {
-            get { return "http://www.interapptive.com/insurance/insuranceCustomerAgreement.txt"; }
+            get { return "https://www.insureship.com/policies/shipworks.txt"; }
         }
 
         /// <summary>

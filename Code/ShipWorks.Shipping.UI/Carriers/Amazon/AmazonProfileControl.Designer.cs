@@ -383,7 +383,7 @@
         private System.Windows.Forms.GroupBox groupShipment;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.GroupBox groupInsurance;
-        private Insurance.InsuranceProfileControl insuranceControl;
+        private ShipWorks.Shipping.Insurance.InsuranceProfileControl insuranceControl;
         private System.Windows.Forms.CheckBox insuranceState;
         private System.Windows.Forms.CheckBox weightState;
         private ShipWorks.UI.Controls.WeightControl weight;

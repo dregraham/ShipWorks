@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores
 {
@@ -13,6 +15,9 @@ namespace ShipWorks.Stores
     /// </summary>
     public static class StoreTypeManager
     {
+        private static Lazy<ImmutableHashSet<StoreTypeCode>> genericModuleStoreTypeMap =
+            new Lazy<ImmutableHashSet<StoreTypeCode>>(LoadGenericModuleStoreTypeDictionary);
+
         /// <summary>
         /// Returns all store types in ShipWorks
         /// </summary>
@@ -81,5 +86,23 @@ namespace ShipWorks.Stores
 
             return !disabledTypes.Contains(typeCode);
         }
+
+        /// <summary>
+        /// Load the hashset of StoreTypeCodes that are GenericModule based
+        /// </summary>
+        /// <returns></returns>
+        private static ImmutableHashSet<StoreTypeCode> LoadGenericModuleStoreTypeDictionary()
+        {
+            return EnumHelper.GetEnumList<StoreTypeCode>()
+                .Select(x => x.Value)
+                .Where(x => x != StoreTypeCode.Invalid && GetType(x) is GenericModuleStoreType)
+                .ToImmutableHashSet();
+        }
+
+        /// <summary>
+        /// Check to see if the given StoreTypeCode is GenericModule based
+        /// </summary>
+        public static bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode) =>
+            genericModuleStoreTypeMap.Value.Contains(storeTypeCode);
     }
 }

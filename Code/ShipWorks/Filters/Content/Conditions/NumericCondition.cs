@@ -34,14 +34,14 @@ namespace ShipWorks.Filters.Content.Conditions
                 string parm1 = context.RegisterParameter(value1);
                 string parm2 = context.RegisterParameter(value2);
 
-                return string.Format("{0} {1}BETWEEN {2} AND {3}", valueExpression, not, parm1, parm2);
+                return $"{valueExpression} {not}BETWEEN {parm1} AND {parm2}";
             }
             else
             {
                 // Register the parameter
                 string parm = context.RegisterParameter(value1);
 
-                return string.Format("{0} {1} {2}", valueExpression, GetSqlOperator(), parm);
+                return $"{valueExpression} {GetSqlOperator()} {parm}";
             }
         }
 

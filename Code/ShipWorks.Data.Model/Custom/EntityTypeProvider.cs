@@ -98,6 +98,8 @@ namespace ShipWorks.Data.Model.Custom
 				case "FilterSequenceEntity": return EntityType.FilterSequenceEntity;
 				case "FtpAccountEntity": return EntityType.FtpAccountEntity;
 				case "GenericFileStoreEntity": return EntityType.GenericFileStoreEntity;
+				case "GenericModuleOrderEntity": return EntityType.GenericModuleOrderEntity;
+				case "GenericModuleOrderItemEntity": return EntityType.GenericModuleOrderItemEntity;
 				case "GenericModuleStoreEntity": return EntityType.GenericModuleStoreEntity;
 				case "GridColumnFormatEntity": return EntityType.GridColumnFormatEntity;
 				case "GridColumnLayoutEntity": return EntityType.GridColumnLayoutEntity;
@@ -306,6 +308,8 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.EtsyOrderItemEntity: return new EtsyOrderItemRelations();
 				case EntityType.EtsyStoreEntity: return new EtsyStoreRelations();
 				case EntityType.GenericFileStoreEntity: return new GenericFileStoreRelations();
+				case EntityType.GenericModuleOrderEntity: return new GenericModuleOrderRelations();
+				case EntityType.GenericModuleOrderItemEntity: return new GenericModuleOrderItemRelations();
 				case EntityType.GenericModuleStoreEntity: return new GenericModuleStoreRelations();
 				case EntityType.GrouponOrderEntity: return new GrouponOrderRelations();
 				case EntityType.GrouponOrderItemEntity: return new GrouponOrderItemRelations();

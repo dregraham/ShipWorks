@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Data.Import.Xml
 {
@@ -215,6 +212,9 @@ namespace ShipWorks.Data.Import.Xml
             {
                 observer.OnItemLoadComplete(item, xpath);
             }
+
+            // Load Amazon Order Item ID
+           ((GenericModuleOrderItemEntity) item).AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderItemCode", string.Empty);
         }
 
         /// <summary>

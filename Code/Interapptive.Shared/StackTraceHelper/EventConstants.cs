@@ -48,7 +48,7 @@ namespace Interapptive.Shared.StackTraceHelper
             /// <summary>
             /// Task event types
             /// </summary>
-            public static class Tasks
+            public static class EventTasks
             {
                 public const EventTask Loop1 = (EventTask) 1;
                 public const EventTask Invoke = (EventTask) 2;

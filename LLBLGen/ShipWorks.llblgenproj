@@ -85,6 +85,7 @@
   </Properties>
   <TypeShortcuts>
     <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AmazonIsPrime" Type="Interapptive.Shared.Enums.AmazonIsPrime, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -305,6 +306,7 @@
           <Field Name="DimsProfileID" Type="long" FieldIndex="5" />
           <Field Name="DimsWeight" Type="double" FieldIndex="9" />
           <Field Name="DimsWidth" Type="double" FieldIndex="7" />
+          <Field Name="Insurance" Type="bool" FieldIndex="14" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" MaxLength="50" FieldIndex="3" />
@@ -389,6 +391,7 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="12" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="9" />
+          <Field Name="Insurance" Type="bool" FieldIndex="15" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="13" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="14" />
@@ -456,6 +459,7 @@
           <Field Name="DimsProfileID" Type="long" FieldIndex="1" />
           <Field Name="DimsWeight" Type="double" FieldIndex="5" />
           <Field Name="DimsWidth" Type="double" FieldIndex="3" />
+          <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="8" />
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="9" />
           <Field Name="ServiceLevel" Type="int" FieldIndex="7" />
@@ -966,6 +970,7 @@
       <EntityDefinition Name="EndiciaShipment" ObjectID="15beb8bc-2590-445f-8cf7-e31b1efb4553">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" FieldIndex="1" />
+          <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="OriginalEndiciaAccountID" Type="long" IsOptional="true" FieldIndex="2" />
           <Field Name="ReferenceID" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="RefundFormID" Type="int" IsOptional="true" FieldIndex="6" />
@@ -1448,8 +1453,24 @@
           <Field Name="XmlXsltFileName" Type="string" IsOptional="true" MaxLength="355" FieldIndex="16" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="GenericModuleOrder" ObjectID="7fac8cc7-084c-43fa-8529-52b0ccae879a" InheritanceType="2">
+        <Fields>
+          <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+          <Field Name="IsFBA" Type="bool" FieldIndex="1" />
+          <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
+          <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="GenericModuleOrderItem" ObjectID="3f76a303-a9a3-4ede-a743-3d09e2c7e4ca" InheritanceType="2">
+        <Fields>
+          <Field Name="AmazonOrderItemCode" Type="string" MaxLength="64" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="GenericModuleStore" ObjectID="d4c52d5b-4dee-4ff1-81a0-2e148ef17414" InheritanceType="2">
         <Fields>
+          <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="21" />
+          <Field Name="AmazonAuthToken" Type="string" MaxLength="100" FieldIndex="20" />
+          <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="19" />
           <Field Name="ModuleDeveloper" Type="string" MaxLength="50" FieldIndex="5" />
           <Field Name="ModuleDownloadPageSize" Type="int" FieldIndex="8" />
           <Field Name="ModuleDownloadStrategy" Type="int" FieldIndex="10" />
@@ -1910,6 +1931,7 @@
           <Field Name="DimsWeight" Type="double" FieldIndex="14" />
           <Field Name="DimsWidth" Type="double" FieldIndex="12" />
           <Field Name="Instructions" Type="string" MaxLength="300" FieldIndex="9" />
+          <Field Name="Insurance" Type="bool" FieldIndex="22" />
           <Field Name="InsurancePennyOne" Type="bool" FieldIndex="19" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
           <Field Name="IsCod" Type="bool" FieldIndex="3" />
@@ -2099,6 +2121,7 @@
       <EntityDefinition Name="OtherShipment" ObjectID="d48e07d3-afe3-4024-af70-6e85664af979">
         <Fields>
           <Field Name="Carrier" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Insurance" Type="bool" FieldIndex="4" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="3" />
           <Field Name="Service" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -2178,6 +2201,7 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="6" />
           <Field Name="EntryFacility" Type="int" FieldIndex="17" />
           <Field Name="ExpressSignatureWaiver" Type="bool" FieldIndex="15" />
+          <Field Name="Insurance" Type="bool" FieldIndex="22" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
           <Field Name="Memo1" Type="string" MaxLength="300" FieldIndex="18" />
           <Field Name="Memo2" Type="string" MaxLength="300" FieldIndex="19" />
@@ -3150,6 +3174,7 @@
       <EntityDefinition Name="UspsShipment" ObjectID="84bb4950-8a6d-4a16-b033-2c235e4fd264">
         <Fields>
           <Field Name="HidePostage" Type="bool" FieldIndex="2" />
+          <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="IntegratorTransactionID" Type="guid" FieldIndex="4" />
           <Field Name="OriginalUspsAccountID" Type="long" IsOptional="true" FieldIndex="6" />
           <Field Name="RateShop" Type="bool" FieldIndex="9" />
@@ -3266,6 +3291,7 @@
           <Field Name="DryIceWeight" Type="double" IsOptional="true" FieldIndex="40" />
           <Field Name="DryIceWeightUnitOfMeasure" Type="string" IsOptional="true" MaxLength="10" FieldIndex="43" />
           <Field Name="Height" Type="int" FieldIndex="14" />
+          <Field Name="Insurance" Type="bool" FieldIndex="44" />
           <Field Name="Length" Type="int" FieldIndex="12" />
           <Field Name="MIDeliveryConfirmation" Type="string" IsOptional="true" MaxLength="1" FieldIndex="20" />
           <Field Name="PackageType" Type="string" MaxLength="35" FieldIndex="2" />
@@ -4166,6 +4192,8 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":EtsyOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EtsyStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericFileStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":GenericModuleOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":GenericModuleOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericModuleStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":GrouponOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":GrouponOrderItem" />
@@ -4251,7 +4279,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-02T21:53:08.2078573Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T20:39:02.9975331Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4459,6 +4487,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="AmazonUniqueShipmentID" Ordinal="14" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="Insurance" Ordinal="15" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonStore">
@@ -4561,6 +4590,7 @@
                     <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="Insurance" Ordinal="16" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -4630,6 +4660,7 @@
                     <Field Name="ServiceLevel" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="InsuranceValue" Ordinal="9" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
+                    <Field Name="Insurance" Ordinal="11" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceOrderItem">
@@ -5325,6 +5356,7 @@
                     <Field Name="ScanFormBatchID" Ordinal="8" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="ScanBasedReturn" Ordinal="9" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
+                    <Field Name="Insurance" Ordinal="11" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyOrder">
@@ -6452,6 +6484,23 @@
                     <Field Name="FlatImportMap" Ordinal="20" DbType="11" Length="1073741823" />
                   </Fields>
                 </Table>
+                <Table Name="GenericModuleOrder">
+                  <PkConstraintName Name="PK_GenericModuleOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonOrderID" Ordinal="2" DbType="24" Length="32" />
+                    <Field Name="IsFBA" Ordinal="3" DbType="2" />
+                    <Field Name="IsPrime" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="IsSameDay" Ordinal="5" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="GenericModuleOrderItem">
+                  <PkConstraintName Name="PK_GenericModuleOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonOrderItemCode" Ordinal="2" DbType="12" Length="64" />
+                  </Fields>
+                </Table>
                 <Table Name="GenericModuleStore">
                   <PkConstraintName Name="PK_GenericModuleStore" />
                   <Fields>
@@ -6475,6 +6524,9 @@
                     <Field Name="ModuleHttpExpect100Continue" Ordinal="18" DbType="2" />
                     <Field Name="ModuleResponseEncoding" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="SchemaVersion" Ordinal="20" DbType="24" Length="20" />
+                    <Field Name="AmazonMerchantID" Ordinal="21" DbType="12" Length="50" />
+                    <Field Name="AmazonAuthToken" Ordinal="22" DbType="12" Length="100" />
+                    <Field Name="AmazonApiRegion" Ordinal="23" DbType="3" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="GridColumnFormat">
@@ -7025,6 +7077,7 @@
                     <Field Name="InsurancePennyOne" Ordinal="20" DbType="2" />
                     <Field Name="DeclaredValue" Ordinal="21" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="22" DbType="8" Precision="10" />
+                    <Field Name="Insurance" Ordinal="23" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Order">
@@ -7301,6 +7354,7 @@
                         <CustomProperty Name="AuditFormat" Value="2" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="Insurance" Ordinal="5" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="PayPalOrder">
@@ -7428,6 +7482,7 @@
                     <Field Name="Memo2" Ordinal="20" DbType="12" Length="300" />
                     <Field Name="Memo3" Ordinal="21" DbType="12" Length="300" />
                     <Field Name="NoPostage" Ordinal="22" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="Insurance" Ordinal="23" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="PrintResult">
@@ -8837,6 +8892,7 @@
                     <Field Name="ScanFormBatchID" Ordinal="8" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="RequestedLabelFormat" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="RateShop" Ordinal="10" DbType="2" />
+                    <Field Name="Insurance" Ordinal="11" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ValidatedAddress">
@@ -8984,6 +9040,7 @@
                     <Field Name="DryIceMedicalPurpose" Ordinal="42" IsOptional="true" DbType="3" Length="1" />
                     <Field Name="DryIceOption" Ordinal="43" IsOptional="true" DbType="3" Length="1" />
                     <Field Name="DryIceWeightUnitOfMeasure" Ordinal="44" IsOptional="true" DbType="12" Length="10" />
+                    <Field Name="Insurance" Ordinal="45" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipProcessed">
@@ -9547,6 +9604,16 @@
             <ForeignKeyConstraint Name="dbo:GenericFileStore:FK_GenericFileStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:GenericFileStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:GenericModuleOrder:FK_GenericModuleOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:GenericModuleOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:GenericModuleOrderItem:FK_GenericModuleOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:GenericModuleOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:GenericModuleStore:FK_GenericModuleStore_Store">
@@ -10382,6 +10449,7 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
@@ -10468,6 +10536,7 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
@@ -10535,6 +10604,7 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ServiceLevel" TargetFieldName="ServiceLevel" />
@@ -11052,6 +11122,7 @@
         <EntityMapping EntityName=":EndiciaShipment" TargetName="ShipWorksLocal:dbo:EndiciaShipment">
           <FieldMappings>
             <FieldMapping FieldName="EndiciaAccountID" TargetFieldName="EndiciaAccountID" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="OriginalEndiciaAccountID" TargetFieldName="OriginalEndiciaAccountID" />
             <FieldMapping FieldName="ReferenceID" TargetFieldName="ReferenceID" />
             <FieldMapping FieldName="RefundFormID" TargetFieldName="RefundFormID" />
@@ -11538,8 +11609,26 @@
             <FieldMapping FieldName="XmlXsltFileName" TargetFieldName="XmlXsltFileName" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":GenericModuleOrder" TargetName="ShipWorksLocal:dbo:GenericModuleOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonOrderID" TargetFieldName="AmazonOrderID" />
+            <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
+            <FieldMapping FieldName="IsPrime" TargetFieldName="IsPrime" />
+            <FieldMapping FieldName="IsSameDay" TargetFieldName="IsSameDay" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":GenericModuleOrderItem" TargetName="ShipWorksLocal:dbo:GenericModuleOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonOrderItemCode" TargetFieldName="AmazonOrderItemCode" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":GenericModuleStore" TargetName="ShipWorksLocal:dbo:GenericModuleStore">
           <FieldMappings>
+            <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
+            <FieldMapping FieldName="AmazonAuthToken" TargetFieldName="AmazonAuthToken" />
+            <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
             <FieldMapping FieldName="ModuleDeveloper" TargetFieldName="ModuleDeveloper" />
             <FieldMapping FieldName="ModuleDownloadPageSize" TargetFieldName="ModuleDownloadPageSize" />
             <FieldMapping FieldName="ModuleDownloadStrategy" TargetFieldName="ModuleDownloadStrategy" />
@@ -12024,6 +12113,7 @@
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="Instructions" TargetFieldName="Instructions" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsurancePennyOne" TargetFieldName="InsurancePennyOne" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="IsCod" TargetFieldName="IsCod" />
@@ -12215,6 +12305,7 @@
         <EntityMapping EntityName=":OtherShipment" TargetName="ShipWorksLocal:dbo:OtherShipment">
           <FieldMappings>
             <FieldMapping FieldName="Carrier" TargetFieldName="Carrier" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
@@ -12296,6 +12387,7 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="EntryFacility" TargetFieldName="EntryFacility" />
             <FieldMapping FieldName="ExpressSignatureWaiver" TargetFieldName="ExpressSignatureWaiver" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="Memo1" TargetFieldName="Memo1" />
             <FieldMapping FieldName="Memo2" TargetFieldName="Memo2" />
@@ -13275,6 +13367,7 @@
         <EntityMapping EntityName=":UspsShipment" TargetName="ShipWorksLocal:dbo:UspsShipment">
           <FieldMappings>
             <FieldMapping FieldName="HidePostage" TargetFieldName="HidePostage" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />
             <FieldMapping FieldName="OriginalUspsAccountID" TargetFieldName="OriginalUspsAccountID" />
             <FieldMapping FieldName="RateShop" TargetFieldName="RateShop" />
@@ -13395,6 +13488,7 @@
             <FieldMapping FieldName="DryIceWeight" TargetFieldName="DryIceWeight" />
             <FieldMapping FieldName="DryIceWeightUnitOfMeasure" TargetFieldName="DryIceWeightUnitOfMeasure" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="Length" TargetFieldName="Length" />
             <FieldMapping FieldName="MIDeliveryConfirmation" TargetFieldName="MIDeliveryConfirmation" />
             <FieldMapping FieldName="PackageType" TargetFieldName="PackageType" />

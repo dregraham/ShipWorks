@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
                     return null;
                 }
 
-                if (baseOrder.Item2 != CombineSplitStatusType.Combined)
+                if (baseOrder.Item2 == CombineSplitStatusType.None)
                 {
                     return new BigCommerceOnlineOrder(baseOrder.Item1);
                 }

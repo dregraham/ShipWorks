@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
-        public async void LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
+        public async Task LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
         {
             var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
@@ -100,15 +100,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
 
             Assert.Equal("Free Shipping", orderEntity.RequestedShipping);
-        }
-
-        [Fact]
-        public async Task LoadOrder_LoadsNotes()
-        {
-            var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            Assert.Equal("Chris", orderEntity.ShipFirstName);
         }
 
         [Fact]

@@ -5,12 +5,13 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 
 namespace ShipWorks.Stores.Platforms.PayPal.Content
-{/// <summary>
- /// Combination action that is specific to PayPal
- /// </summary>
+{
+    /// <summary>
+    /// Combination action that is specific to PayPal
+    /// </summary>
     [KeyedComponent(typeof(IStoreSpecificCombineOrderAction), StoreTypeCode.PayPal)]
     public class PayPalCombineOrderAction : IStoreSpecificCombineOrderAction
     {

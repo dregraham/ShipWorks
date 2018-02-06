@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
 {
@@ -29,12 +29,26 @@ namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
         /// <param name="order">The order for which to find combined order identifiers</param>
         protected override async Task<IEnumerable<OrderUploadDetails>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            return await GetCombinedOnlineOrderIdentifiers<OrderSearchEntity>(
-                    OrderSearchFields.OrderID == order.OrderID,
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.ProStoresOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(ProStoresOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(
                     () => new OrderUploadDetails(
                         OrderSearchFields.OrderNumber.ToValue<long>(),
                         OrderSearchFields.IsManual.ToValue<bool>()))
-                .ConfigureAwait(false);
+                .Distinct()
+                .Where(ProStoresOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

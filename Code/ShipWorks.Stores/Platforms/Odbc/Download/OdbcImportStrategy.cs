@@ -22,6 +22,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         [ApiValue("ByModifiedTime")]
         [Description("Download orders from the ODBC data source based on last modified date of the order")]
-        ByModifiedTime = 1
+        ByModifiedTime = 1,
+
+        /// <summary>
+        /// Download orders from the ODBC data source on demand based on search conditions
+        /// </summary>
+        [ApiValue("OnDemand")]
+        [Description("Download orders from the ODBC data source on demand based on search conditions")]
+        OnDemand = 2,
     }
 }

@@ -242,7 +242,8 @@ CREATE TABLE [dbo].[WorldShipPackage]
 [DryIceWeight] [float] NULL,
 [DryIceMedicalPurpose] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DryIceOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceWeightUnitOfMeasure] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[DryIceWeightUnitOfMeasure] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
@@ -1294,7 +1295,8 @@ CREATE TABLE [dbo].[BestRateShipment]
 [DimsAddWeight] [bit] NOT NULL,
 [ServiceLevel] [int] NOT NULL,
 [InsuranceValue] [money] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
@@ -1792,7 +1794,8 @@ CREATE TABLE [dbo].[PostalShipment]
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0))
+[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0)),
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1824,7 +1827,8 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [RefundFormID] [int] NULL,
 [ScanFormBatchID] [bigint] NULL,
 [ScanBasedReturn] [bit] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
@@ -1881,7 +1885,8 @@ CREATE TABLE [dbo].[AmazonShipment]
 [DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
 [DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((2)),
 [DeclaredValue] [money] NULL,
-[AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
@@ -2378,7 +2383,10 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [ModuleOnlineShipmentDetails] [bit] NOT NULL,
 [ModuleHttpExpect100Continue] [bit] NOT NULL,
 [ModuleResponseEncoding] [int] NOT NULL,
-[SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
@@ -2820,7 +2828,8 @@ CREATE TABLE [dbo].[OnTracShipment]
 [InsuranceValue] [money] NOT NULL,
 [InsurancePennyOne] [bit] NOT NULL,
 [DeclaredValue] [money] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OnTracShipment] on [dbo].[OnTracShipment]'
@@ -2980,6 +2989,7 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsAddWeight] [bit] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
+	[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'
@@ -3203,7 +3213,8 @@ CREATE TABLE [dbo].[OtherShipment]
 [ShipmentID] [bigint] NOT NULL,
 [Carrier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Service] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsuranceValue] [money] NOT NULL
+[InsuranceValue] [money] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OtherShipment] on [dbo].[OtherShipment]'
@@ -3785,7 +3796,8 @@ CREATE TABLE [dbo].[UspsShipment]
 [OriginalUspsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,
-[RateShop] [bit] NOT NULL
+[RateShop] [bit] NOT NULL,
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UspsShipment] on [dbo].[UspsShipment]'
@@ -6225,6 +6237,48 @@ PRINT N'Creating primary key [PK_WalmartOrder] on [dbo].[WalmartOrder]'
 GO
 ALTER TABLE [dbo].[WalmartOrder] ADD CONSTRAINT [PK_WalmartOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating table GenericModuleOrder'
+GO
+CREATE TABLE [dbo].[GenericModuleOrder](
+	[OrderID] [bigint] NOT NULL,
+	[AmazonOrderID] [varchar](32) NOT NULL,
+	[IsFBA] [bit] NOT NULL,
+	[IsPrime] [int] NOT NULL,
+	[IsSameDay] bit NOT NULL
+ CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED 
+(
+	[OrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[GenericModuleOrder]  WITH CHECK ADD  CONSTRAINT [FK_GenericModuleOrder_Order] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[Order] ([OrderID])
+GO
+
+ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+GO
+
+PRINT N'Creating table GenericModuleOrderItem'
+GO
+CREATE TABLE [dbo].[GenericModuleOrderItem](
+	[OrderItemID] [bigint] NOT NULL,
+	[AmazonOrderItemCode] [nvarchar](64) NOT NULL
+ CONSTRAINT [PK_GenericModuleOrderItem] PRIMARY KEY CLUSTERED 
+(
+	[OrderItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[GenericModuleOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_GenericModuleOrderItem_OrderItem] FOREIGN KEY([OrderItemID])
+REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[GenericModuleOrderItem] CHECK CONSTRAINT [FK_GenericModuleOrderItem_OrderItem]
+GO
+
 PRINT N'Creating index [IX_Auto_PurchaseOrderId] on [dbo].[WalmartOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_PurchaseOrderId] ON [dbo].[WalmartOrder] ([PurchaseOrderID])

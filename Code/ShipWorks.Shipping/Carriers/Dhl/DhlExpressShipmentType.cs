@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -301,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             // There has to be at least one package.  Really the only way there would not already be a package is if this is a new shipment,
             // and the default profile set included no package stuff.
-            if (dhlExpressShipmentEntity.Packages.Count == 0)
+            if (dhlExpressShipmentEntity.Packages.None())
             {
                 // This was changed to an exception instead of creating the package when the creation was moved to ConfigureNewShipment
                 throw new NotFoundException("Primary package not found.");
@@ -322,10 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override int GetParcelCount(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return shipment.DhlExpress.Packages.Count;
         }
@@ -335,10 +333,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (parcelIndex >= 0 && parcelIndex < shipment.DhlExpress.Packages.Count)
             {

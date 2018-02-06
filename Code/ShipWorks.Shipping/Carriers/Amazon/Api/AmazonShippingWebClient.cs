@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             // add a User Agent header
             request.Headers.Add("x-amazon-user-agent",
-                $"ShipWorks/{Assembly.GetExecutingAssembly().GetName().Version} (Language=.NET)");
+                $"ShipWorks/{GetType().Assembly.GetName().Version} (Language=.NET)");
 
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Forbidden);

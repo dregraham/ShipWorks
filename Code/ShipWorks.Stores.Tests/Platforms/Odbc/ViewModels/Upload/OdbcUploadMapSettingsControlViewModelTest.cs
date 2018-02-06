@@ -1,5 +1,7 @@
-﻿using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
+﻿using System;
+using System.IO;
+using System.Windows.Forms;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -9,9 +11,6 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
-using System;
-using System.IO;
-using System.Windows.Forms;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -62,7 +61,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 
             OdbcStoreEntity store = new OdbcStoreEntity
             {
-                UploadColumnSourceType = (int)OdbcColumnSourceType.Table
+                UploadColumnSourceType = (int) OdbcColumnSourceType.Table
             };
 
             OdbcUploadMapSettingsControlViewModel testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
@@ -83,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 
             OdbcStoreEntity store = new OdbcStoreEntity()
             {
-                UploadColumnSourceType = (int)OdbcColumnSourceType.Table
+                UploadColumnSourceType = (int) OdbcColumnSourceType.Table
             };
 
             OdbcUploadMapSettingsControlViewModel testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
@@ -92,29 +91,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             testObject.ColumnSourceIsTable = false;
             testObject.SaveMapSettings(store);
 
-            Assert.Equal((int)OdbcColumnSourceType.CustomQuery, store.UploadColumnSourceType);
-        }
-
-        [Fact]
-        public void SaveMapSettings_SetsStoreUploadColumnSourceType()
-        {
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
-            columnSource.Setup(c => c.Name).Returns("Orders");
-
-            OdbcStoreEntity store = new OdbcStoreEntity()
-            {
-                UploadColumnSourceType = (int)OdbcColumnSourceType.Table
-            };
-
-            OdbcUploadMapSettingsControlViewModel testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
-
-            testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
-            testObject.ColumnSourceIsTable = false;
-            testObject.SaveMapSettings(store);
-
-            Assert.Equal((int)OdbcColumnSourceType.CustomQuery, store.UploadColumnSourceType);
+            Assert.Equal((int) OdbcColumnSourceType.CustomQuery, store.UploadColumnSourceType);
         }
 
         [Fact]
@@ -388,7 +365,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
-                fieldMapMock.Verify(f=>f.UpgradeToAlphanumericOrderNumbers(), Times.Once);
+                fieldMapMock.Verify(f => f.UpgradeToAlphanumericOrderNumbers(), Times.Once);
             }
         }
 

@@ -22,6 +22,7 @@ using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -45,9 +46,9 @@ namespace ShipWorks.Stores.Communication
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
         private static readonly HashSet<EntityType> defaultOrderPreloads = new HashSet<EntityType> { EntityType.OrderItemEntity, EntityType.OrderChargeEntity };
         private readonly IConfigurationEntity config;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        protected readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderUtility orderUtility;
-        private long downloadLogID;
+        protected long downloadLogID;
         protected DbConnection connection;
         private string orderStatusText = string.Empty;
         private string itemStatusText = string.Empty;
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.
         /// </summary>
-        public IProgressReporter Progress { get; private set; }
+        public IProgressReporter Progress { get; protected set; }
 
         /// <summary>
         /// How many orders have been saved so far.  Utility function intended for progress calculation convenience.
@@ -161,10 +162,18 @@ namespace ShipWorks.Stores.Communication
             {
                 await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
-                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
-                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+                CollectDownloadTelemetry(trackedDurationEvent);
             }
+        }
+
+        /// <summary>
+        /// Collect the download telemetry
+        /// </summary>
+        private void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
+        {
+            trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+            trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+            trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
         }
 
         /// <summary>
@@ -246,6 +255,13 @@ namespace ShipWorks.Stores.Communication
             {
                 log.Debug($"Found existing {orderIdentifier}");
 
+                if (order.CombineSplitStatus != CombineSplitStatusType.None)
+                {
+                    string combineSplitStatus = EnumHelper.GetDescription(order.CombineSplitStatus);
+                    log.InfoFormat($"{ order.OrderNumberComplete } was { combineSplitStatus }, skipping");
+                    return GenericResult.FromError<OrderEntity>(combineSplitStatus);
+                }
+
                 ShippingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
 
@@ -258,7 +274,10 @@ namespace ShipWorks.Stores.Communication
             bool isCombinedOrder = await IsCombinedOrder(orderIdentifier).ConfigureAwait(false);
             if (isCombinedOrder)
             {
-                log.InfoFormat("{0} was combined, skipping", orderIdentifier);
+                OrderEntity orderForLogging = StoreType.CreateOrder();
+                orderIdentifier.ApplyTo(orderForLogging);
+
+                log.InfoFormat($"{ orderForLogging.OrderNumberComplete } was combined, skipping");
 
                 // Increment the quantity saved so we show the user we are moving to the next order.
                 QuantitySaved++;
@@ -1239,6 +1258,36 @@ namespace ShipWorks.Stores.Communication
             return adapter.SaveEntityAsync(history);
         }
 
+        /// <summary>
+        /// Download the order with matching order number for the store
+        /// </summary>
+        public async virtual Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            Progress = new ProgressItem("Download single order");
+            downloadLogID = downloadID;
+            connection = con;
+
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                await Download(orderNumber, trackedDurationEvent).ConfigureAwait(false);
+
+                CollectDownloadTelemetry(trackedDurationEvent);
+            }
+        }
+
+        /// <summary>
+        /// store specific download by order number
+        /// </summary>
+        protected virtual Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public virtual bool ShouldDownload(string orderNumber) => false;
+
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
@@ -1289,7 +1338,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
-
         #endregion
     }
 }

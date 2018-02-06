@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             Func<YahooStoreEntity, IYahooEmailDownloader> createEmailDownloader,
             Func<YahooStoreEntity, IYahooApiDownloader> createApiDownloader)
         {
+            Store = store;
             YahooStoreEntity typedStore = store as YahooStoreEntity;
             downloader = typedStore.YahooStoreID.IsNullOrWhiteSpace() ?
                 (IStoreDownloader) createEmailDownloader(typedStore) :
@@ -43,9 +44,27 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public int QuantityNew => downloader.QuantityNew;
 
         /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
             downloader.Download(progressItem, downloadID, con);
+
+        /// <summary>
+        /// Does not support downloading OrderNumbers
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

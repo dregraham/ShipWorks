@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         private IOdbcFieldMapEntry GetFieldMapEntry(string externalColumnName)
         {
             var externalField = mock.MockRepository.Create<IExternalOdbcMappableField>();
-            externalField.Setup(e => e.Column).Returns(new OdbcColumn(externalColumnName));
+            externalField.Setup(e => e.Column).Returns(new OdbcColumn(externalColumnName, "unknown"));
 
             var entry = mock.MockRepository.Create<IOdbcFieldMapEntry>();
             entry.Setup(e => e.ExternalField).Returns(externalField.Object);
