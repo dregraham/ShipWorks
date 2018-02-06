@@ -1130,7 +1130,6 @@
 	<Rule Id="S2688" Action="None" />
 	<Rule Id="S2692" Action="None" />
 	<Rule Id="S2696" Action="None" />
-	<Rule Id="S2696" Action="None" />
 	<Rule Id="S2699" Action="None" />
 	<Rule Id="S2701" Action="None" />
 	<Rule Id="S2737" Action="None" />
