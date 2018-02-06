@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -52,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
         /// If the throttler detects that the number of calls has been reached, the throttler will wait the
-        /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
+        /// desired amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
         /// <typeparam name="TWebClientRequestType">Type of the request</typeparam>
@@ -62,13 +60,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <returns></returns>
         public override TWebClientReturnType ExecuteRequest<TWebClientRequestType, TWebClientReturnType>(RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, TWebClientReturnType> webClientMethod)
         {
-            // Find the quota for the api call, and update the the request throttle params
-            RequestThrottleQuotaDefinition<ShopifyWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((ShopifyWebClientApiCall)requestThrottleParams.ApiCall));
+            // Find the quota for the api call, and update the request throttle params
+            RequestThrottleQuotaDefinition<ShopifyWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((ShopifyWebClientApiCall) requestThrottleParams.ApiCall));
             requestThrottleParams.RetryInterval = definition.RetryInterval;
 
             // Get a logger for this request, serialize the JSON request, and log it.
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Shopify, EnumHelper.GetDescription(requestThrottleParams.ApiCall));
-            string requestText = JsonConvert.SerializeObject((TWebClientRequestType)requestThrottleParams.Request);
+            string requestText = JsonConvert.SerializeObject((TWebClientRequestType) requestThrottleParams.Request);
             logger.LogRequest(requestText, "txt");
 
             // Ask the base throttler to start making the call
