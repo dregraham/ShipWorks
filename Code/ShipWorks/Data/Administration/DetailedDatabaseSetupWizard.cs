@@ -281,7 +281,7 @@ namespace ShipWorks.Data.Administration
                 SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
                 // Setup which first page the user will see
-                if (sqlServerInstaller.IsSqlServer2016Supported || sqlServerInstaller.IsSqlServer2014Supported)
+                if (sqlServerInstaller.IsSqlServer2017Supported || sqlServerInstaller.IsSqlServer2014Supported)
                 {
                     Pages.Remove(wizardPageChooseWisely2008);
 

@@ -89,11 +89,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Indicates if SQL Server 2016 is supported on the current computer
         /// </summary>
-        public bool IsSqlServer2016Supported
+        public bool IsSqlServer2017Supported
         {
             get
             {
-                return sqlInstallerInfos.Any(si => si.Edition == SqlServerEditionType.Express2016 || si.Edition == SqlServerEditionType.LocalDb2016);
+                return sqlInstallerInfos.Any(si => si.Edition == SqlServerEditionType.Express2017 || si.Edition == SqlServerEditionType.LocalDb2017);
             }
         }
 
@@ -163,7 +163,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 throw new InvalidOperationException("The SqlServerInstaller has not been initialized.");
             }
 
-            if (sqlInstallerInfo.IsLocalDB && !(IsSqlServer2016Supported || IsSqlServer2014Supported))
+            if (sqlInstallerInfo.IsLocalDB && !(IsSqlServer2017Supported || IsSqlServer2014Supported))
             {
                 throw new InvalidOperationException("Cannot install LocalDB when SQL 2016 is not supported.");
             }
@@ -192,12 +192,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (purpose == SqlServerInstallerPurpose.LocalDb)
             {
-                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.LocalDb2016 ||
+                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.LocalDb2017 ||
                                                              si.Edition == SqlServerEditionType.LocalDb2014);
             }
             else
             {
-                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.Express2016 ||
+                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.Express2017 ||
                                                              si.Edition == SqlServerEditionType.Express2014);
             }
 
