@@ -311,6 +311,7 @@
     <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyFraudDownloaderTest.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\ShopSite\Responses\ShopSiteResponseHelper.cs" />

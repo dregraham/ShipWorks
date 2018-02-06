@@ -615,10 +615,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Parse the fraud risks
         /// </summary>
         /// <param name="risks">Fraud risks text that should be parsed</param>
-        /// <returns></returns>
-        private static IEnumerable<JToken> ParseFraudRisks(string risks) =>
-            JObject.Parse(risks)?
+        public static IEnumerable<JToken> ParseFraudRisks(string risks)
+        {
+            if (risks.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<JToken>();
+            }
+
+            return JObject.Parse(risks)?
                 .SelectToken("risks")
                 .Where(x => x != null);
+        }
     }
 }
