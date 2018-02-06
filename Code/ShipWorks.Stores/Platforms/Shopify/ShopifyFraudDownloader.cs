@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// <summary>
     /// Fraud risk downloader for Shopify
     /// </summary>
+    [Component]
     public class ShopifyFraudDownloader : IShopifyFraudDownloader
     {
         private readonly TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -31,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             var orderPaymentDetails = risks?
                 .Where(r => r["message"] != null || r["recommendation"] != null)
-                .Select(r => 
+                .Select(r =>
                     new OrderPaymentDetailEntity
                     {
                         Label = GetJsonValue(r["recommendation"]?.Value<string>()),
@@ -70,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             else
             {
                 paymentDetailsToCreate = fraudRisks
-                    .Except(order.OrderPaymentDetails, (opd1, opd2) => opd1.Label == opd2.Label && 
+                    .Except(order.OrderPaymentDetails, (opd1, opd2) => opd1.Label == opd2.Label &&
                                                                        opd1.Value == opd2.Value);
             }
 
