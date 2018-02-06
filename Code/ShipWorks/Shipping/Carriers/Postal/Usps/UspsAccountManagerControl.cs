@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -92,6 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Refresh GlobalPost settings for all UspsAccounts
         /// </summary>
+        [SuppressMessage("SonarQube", "S3168:Async methods should not return void",
+            Justification = "Need to fix and test this in the future.")]
         private async void AsyncRefreshGlobalPostStatus()
         {
             await Task.Run(() =>

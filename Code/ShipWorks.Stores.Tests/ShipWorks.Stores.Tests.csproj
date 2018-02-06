@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
    <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
@@ -85,7 +84,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="RestSharpSigned" Version="105.2.3" />
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.7.1.4347" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
     <PackageReference Include="System.Reactive.Core" Version="3.1.1" />

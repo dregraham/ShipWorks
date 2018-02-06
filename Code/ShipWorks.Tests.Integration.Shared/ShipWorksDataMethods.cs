@@ -58,8 +58,6 @@ namespace ShipWorks.Tests.Integration.Shared
             EntityType entityType = EntityUtility.GetEntityType(entityID);
             IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
 
-            Stopwatch sw = Stopwatch.StartNew();
-
             EntityBase2 entity = (EntityBase2) SqlAdapter.Default.FetchNewEntity(
                 GeneralEntityFactory.Create(entityType).GetEntityFactory(),
                 new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, entityID)),

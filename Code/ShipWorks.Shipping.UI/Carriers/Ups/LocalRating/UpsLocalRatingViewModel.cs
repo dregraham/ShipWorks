@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,10 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using log4net;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Net;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
@@ -60,14 +60,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, 
-            IFileDialogFactory fileDialogFactory, 
-            IMessageHelper messageHelper, 
-            Func<Type, ILog> logFactory, 
+        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable,
+            IFileDialogFactory fileDialogFactory,
+            IMessageHelper messageHelper,
+            Func<Type, ILog> logFactory,
             IUpsLocalRateValidator rateValidator)
         {
             this.rateTable = rateTable;
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.messageHelper = messageHelper;
             this.rateValidator = rateValidator;
             log = logFactory(GetType());
-            
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             get { return uploadMessageMoreInfoLink; }
             set { handler.Set(nameof(UploadMessageMoreInfoLink), ref uploadMessageMoreInfoLink, value); }
         }
-        
+
         /// <summary>
         /// Command to download the sample rate file
         /// </summary>
@@ -309,6 +309,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// The reason we don't call this directly is because we need to be able to test UploadRatingFile().
         /// ICommand can't take a method that returns Task and we can't await a void method.
         /// </remarks>
+        [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as an event handler")]
         private async void CallUploadRatingFile()
         {
             await UploadRatingFile();
@@ -374,6 +375,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// The reason we don't call this directly is because we need to be able to test UploadZoneFile().
         /// ICommand can't take a method that returns Task and we can't await a void method.
         /// </remarks>
+        [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as an event handler")]
         private async void CallUploadZoneFile()
         {
             await UploadZoneFile();
@@ -465,7 +467,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}" :
                 NoRatesUploadedMessage;
 
-            ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ? 
+            ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ?
                 $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" :
                 NoZonesUploadedMessage;
         }
