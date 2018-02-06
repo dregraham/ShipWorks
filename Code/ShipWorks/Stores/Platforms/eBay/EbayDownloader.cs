@@ -1294,7 +1294,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Locate an order with an OrderIdentifier
         /// </summary>
-        protected override async Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier)
+        protected override async Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier, IEnumerable<EntityType> orderPreloads)
         {
             EbayOrderIdentifier identifier = orderIdentifier as EbayOrderIdentifier;
             if (identifier == null)
@@ -1302,7 +1302,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return await FindOrder(identifier).ConfigureAwait(false);
+            return await FindOrder(identifier, orderPreloads).ConfigureAwait(false);
         }
 
         /// <summary>

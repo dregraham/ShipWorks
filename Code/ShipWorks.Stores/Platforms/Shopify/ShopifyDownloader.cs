@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -32,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
         private readonly IShopifyWebClient webClient = null;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly IShopifyFraudDownloader fraudDownloader;
 
         /// <summary>
         /// Constructor
@@ -39,9 +41,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public ShopifyDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
             Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> webClientFactory,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            IShopifyFraudDownloader fraudDownloader)
             : base(store, storeTypeManager.GetType(store))
         {
+            this.fraudDownloader = fraudDownloader;
             this.dateTimeProvider = dateTimeProvider;
             requestedShippingField = (ShopifyRequestedShippingField) ((ShopifyStoreEntity) store).ShopifyRequestedShippingOption;
             OrdersPerPage = ShopifyConstants.ShopifyOrdersPerPage;
@@ -256,9 +260,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 //Parse id
                 long shopifyOrderId = jsonOrder.GetValue<long>("id");
+                var fraudRisksTask = fraudDownloader.Download(webClient, shopifyOrderId);
 
                 //Get the order instance.
-                GenericResult<OrderEntity> result = await InstantiateOrder(new ShopifyOrderIdentifier(shopifyOrderId)).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(
+                        new ShopifyOrderIdentifier(shopifyOrderId),
+                        new[] { EntityType.OrderPaymentDetailEntity })
+                    .ConfigureAwait(false);
                 if (result.Failure)
                 {
                     log.InfoFormat("Skipping order '{0}': {1}.", shopifyOrderId, result.Message);
@@ -305,6 +313,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     LoadOrderDetailsWhenNew(jsonOrder, order);
                 }
 
+                await LoadFraudRisks(order, fraudRisksTask);
+
                 // Save the downloaded order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopifyDownloader.LoadOrder");
                 await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
@@ -313,6 +323,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 log.Error(jsonEx);
                 throw new DownloadException("Shopify returned an invalid response while downloading orders.", jsonEx);
+            }
+        }
+
+        /// <summary>
+        /// Load fraud risks into order
+        /// </summary>
+        /// <param name="order">Order into which the fraud risks should be merged</param>
+        /// <param name="fraudRisksTask">Task that will return fraud risks</param>
+        /// <returns></returns>
+        private async Task LoadFraudRisks(ShopifyOrderEntity order, Task<IEnumerable<OrderPaymentDetailEntity>> fraudRisksTask)
+        {
+            var fraudRisks = await fraudRisksTask.ConfigureAwait(false);
+            if (fraudRisks.Any())
+            {
+                fraudDownloader.Merge(order, fraudRisks);
             }
         }
 

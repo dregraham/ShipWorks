@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using SD.Tools.BCLExtensions.CollectionsRelated;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -32,7 +33,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -43,6 +43,7 @@ namespace ShipWorks.Stores.Communication
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
+        private static readonly HashSet<EntityType> defaultOrderPreloads = new HashSet<EntityType> { EntityType.OrderItemEntity, EntityType.OrderChargeEntity };
         private readonly IConfigurationEntity config;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderUtility orderUtility;
@@ -112,12 +113,6 @@ namespace ShipWorks.Stores.Communication
         /// The StoreType instance for the store
         /// </summary>
         protected StoreType StoreType { get; }
-
-        /// <summary>
-        /// Gets the address validation setting.
-        /// </summary>
-        private AddressValidationStoreSettingType AddressValidationSetting =>
-            (AddressValidationStoreSettingType) Store.DomesticAddressValidationSetting;
 
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.
@@ -231,13 +226,21 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
+        protected virtual Task<GenericResult<OrderEntity>> InstantiateOrder(OrderIdentifier orderIdentifier) =>
+            InstantiateOrder(orderIdentifier, Enumerable.Empty<EntityType>());
+
+        /// <summary>
+        /// Instantiates the order identified by the given identifier.  If no order exists in the database,
+        /// a new one is initialized, created, and returned.  If the order does exist in the database,
+        /// that order is returned.
+        /// </summary>
         [SuppressMessage("ShipWorks", "SW0002")]
-        protected virtual async Task<GenericResult<OrderEntity>> InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected virtual async Task<GenericResult<OrderEntity>> InstantiateOrder(OrderIdentifier orderIdentifier, IEnumerable<EntityType> orderPreloads)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderIdentifier, nameof(orderIdentifier));
 
             // Try to find an existing order
-            OrderEntity order = await FindOrder(orderIdentifier).ConfigureAwait(false);
+            OrderEntity order = await FindOrder(orderIdentifier, orderPreloads).ConfigureAwait(false);
 
             if (order != null)
             {
@@ -323,7 +326,13 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Find the order with the configured OrderNumber.  If no order exists, null is returned.
         /// </summary>
-        protected virtual async Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier)
+        protected virtual Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier) =>
+            FindOrder(orderIdentifier, Enumerable.Empty<EntityType>());
+
+        /// <summary>
+        /// Find the order with the configured OrderNumber.  If no order exists, null is returned.
+        /// </summary>
+        protected virtual async Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier, IEnumerable<EntityType> orderPreloads)
         {
             // We use a prototype approach to determine what to search for
             OrderEntity prototype = StoreType.CreateOrder();
@@ -352,26 +361,76 @@ namespace ShipWorks.Stores.Communication
 
                     CancellationTokenSource token = new CancellationTokenSource();
 
-                    await adapter.FetchEntityCollectionAsync(new QueryParameters
-                    {
-                        CollectionToFetch = order.OrderCharges,
-                        FilterToUse = OrderChargeFields.OrderID == order.OrderID
-                    }, token.Token);
-
-                    PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
-                    prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
-
-                    await adapter.FetchEntityCollectionAsync(new QueryParameters
-                    {
-                        CollectionToFetch = order.OrderItems,
-                        FilterToUse = OrderItemFields.OrderID == order.OrderID,
-                        PrefetchPathToUse = prefetch
-                    }, token.Token);
+                    var preloads = defaultOrderPreloads.Concat(orderPreloads).Distinct().ToHashSet();
+                    await PreloadItems(preloads, adapter, order, token).ConfigureAwait(false);
+                    await PreloadCharges(preloads, adapter, order, token).ConfigureAwait(false);
+                    await PreloadPaymentDetails(preloads, adapter, order, token).ConfigureAwait(false);
 
                     return order;
                 }
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Pre-load order items
+        /// </summary>
+        /// <param name="orderPreloads">Entities that should be pre-loaded on the order</param>
+        /// <param name="adapter">Adapter that will be used for the query</param>
+        /// <param name="order">Order that will have its data pre-loaded</param>
+        /// <param name="token">Cancellation token</param>
+        private static async Task PreloadItems(IEnumerable<EntityType> orderPreloads, ISqlAdapter adapter, OrderEntity order, CancellationTokenSource token)
+        {
+            if (orderPreloads.Contains(EntityType.OrderItemEntity))
+            {
+                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
+                prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+
+                await adapter.FetchEntityCollectionAsync(new QueryParameters
+                {
+                    CollectionToFetch = order.OrderItems,
+                    FilterToUse = OrderItemFields.OrderID == order.OrderID,
+                    PrefetchPathToUse = prefetch
+                }, token.Token).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Pre-load order charges
+        /// </summary>
+        /// <param name="orderPreloads">Entities that should be pre-loaded on the order</param>
+        /// <param name="adapter">Adapter that will be used for the query</param>
+        /// <param name="order">Order that will have its data pre-loaded</param>
+        /// <param name="token">Cancellation token</param>
+        private static async Task PreloadCharges(IEnumerable<EntityType> orderPreloads, ISqlAdapter adapter, OrderEntity order, CancellationTokenSource token)
+        {
+            if (orderPreloads.Contains(EntityType.OrderChargeEntity))
+            {
+                await adapter.FetchEntityCollectionAsync(new QueryParameters
+                {
+                    CollectionToFetch = order.OrderCharges,
+                    FilterToUse = OrderChargeFields.OrderID == order.OrderID
+                }, token.Token).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Pre-load order payment details
+        /// </summary>
+        /// <param name="orderPreloads">Entities that should be pre-loaded on the order</param>
+        /// <param name="adapter">Adapter that will be used for the query</param>
+        /// <param name="order">Order that will have its data pre-loaded</param>
+        /// <param name="token">Cancellation token</param>
+        private static async Task PreloadPaymentDetails(IEnumerable<EntityType> orderPreloads, ISqlAdapter adapter, OrderEntity order, CancellationTokenSource token)
+        {
+            if (orderPreloads.Contains(EntityType.OrderPaymentDetailEntity))
+            {
+                await adapter.FetchEntityCollectionAsync(new QueryParameters
+                {
+                    CollectionToFetch = order.OrderPaymentDetails,
+                    FilterToUse = OrderPaymentDetailFields.OrderID == order.OrderID
+                }, token.Token).ConfigureAwait(false);
             }
         }
 
@@ -539,7 +598,7 @@ namespace ShipWorks.Stores.Communication
             // so do that now.
             using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection))
             {
-                await UpdateOrderStatusesAfterSave(order, adapter);
+                await UpdateOrderStatusesAfterSave(order, adapter).ConfigureAwait(false);
             }
         }
 
