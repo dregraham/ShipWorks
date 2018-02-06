@@ -48,6 +48,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         JToken GetProduct(long shopifyProductId);
 
         /// <summary>
+        /// Get fraud risks for an order
+        /// </summary>
+        /// <param name="shopifyOrderId">Shopify Order Id</param>
+        /// <returns>Collection of fraud risks</returns>
+        IEnumerable<JToken> GetFraudRisks(long shopifyOrderId);
+
+        /// <summary>
         /// Update the online status of the given orders
         /// </summary>
         void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl);

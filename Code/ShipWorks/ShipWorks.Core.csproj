@@ -1953,6 +1953,7 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
@@ -4055,7 +4056,6 @@
     <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyException.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreType.cs" />

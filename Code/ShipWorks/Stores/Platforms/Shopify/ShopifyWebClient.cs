@@ -386,6 +386,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
+        /// Get fraud risks for an order
+        /// </summary>
+        /// <param name="shopifyOrderId">Shopify Order Id</param>
+        /// <returns>Collection of fraud risks</returns>
+        public IEnumerable<JToken> GetFraudRisks(long shopifyOrderId)
+        {
+            throw new NotImplementedException("Not yet implemented");
+        }
+
+        /// <summary>
         /// Upload the shipment details for an order
         /// </summary>
         public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl)

@@ -552,6 +552,7 @@
     <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Shopify\Content\ShopifyCombineOrderAction.cs" />
     <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyDownloader.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />

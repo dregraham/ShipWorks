@@ -1,14 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using System.ComponentModel;
-using System.Xml.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
