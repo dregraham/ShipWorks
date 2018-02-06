@@ -523,6 +523,7 @@
     <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdaterFactory.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\UserInteraction.cs" />
+    <Compile Include="Platforms\Manual\ManualStoreType.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\Content\MarketplaceAdvisorCombineOrderAction.cs" />
     <Compile Include="Platforms\NetworkSolutions\Content\NetworkSolutionsSplitOrderAction.cs" />
