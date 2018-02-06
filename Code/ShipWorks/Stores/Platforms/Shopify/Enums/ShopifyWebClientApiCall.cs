@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Shopify.Enums
 {
@@ -30,6 +26,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.Enums
         [Description("GetServerCurrentDateTime")]
         GetServerCurrentDateTime = 7,
         [Description("AddFulfillment")]
-        AddFulfillment = 8
+        AddFulfillment = 8,
+        [Description("GetFraud")]
+        GetFraud = 9
     }
 }

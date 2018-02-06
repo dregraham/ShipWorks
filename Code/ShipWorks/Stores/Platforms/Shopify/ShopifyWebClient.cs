@@ -42,10 +42,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public ShopifyWebClient(ShopifyStoreEntity store, IProgressReporter progress)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
             this.progress = progress;
@@ -379,9 +376,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             catch (JsonException ex)
             {
                 string message = string.Format("An error occurred in GetProduct for Url: '{0}'){1}     ", url, Environment.NewLine);
-                log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex.ToString());
+                log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex);
 
-                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting the order count.", ex);
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting a product.", ex);
             }
         }
 
@@ -392,7 +389,22 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <returns>Collection of fraud risks</returns>
         public IEnumerable<JToken> GetFraudRisks(long shopifyOrderId)
         {
-            throw new NotImplementedException("Not yet implemented");
+            string url = Endpoints.ApiFraudUrl(shopifyOrderId);
+
+            try
+            {
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get, Uri = new Uri(url) };
+                string fraudRisksAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetFraud, progress);
+
+                return ParseFraudRisks(fraudRisksAsString) ?? Enumerable.Empty<JToken>();
+            }
+            catch (JsonException ex)
+            {
+                string message = string.Format("An error occurred in GetFraudRisks for Url: '{0}'){1}     ", url, Environment.NewLine);
+                log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex.ToString());
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting fraud risks.", ex);
+            }
         }
 
         /// <summary>
@@ -485,10 +497,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <returns>The response from the http call</returns>
         private static IHttpResponseReader ProcessRequestReader(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
             try
             {
@@ -532,10 +541,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private static IHttpResponseReader MakeRequest<THttpRequestSubmitter>(THttpRequestSubmitter request)
             where THttpRequestSubmitter : HttpRequestSubmitter
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
             try
             {
@@ -595,7 +601,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
 
             // Now get the value of the request token param
-            if (queryStringParams != null && queryStringParams[ShopifyConstants.RequestTokenParamName] != null && !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]))
+            if (queryStringParams != null &&
+                queryStringParams[ShopifyConstants.RequestTokenParamName] != null &&
+                !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]))
             {
                 return true;
             }
@@ -603,5 +611,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return false;
         }
 
+        /// <summary>
+        /// Parse the fraud risks
+        /// </summary>
+        /// <param name="risks">Fraud risks text that should be parsed</param>
+        /// <returns></returns>
+        private static IEnumerable<JToken> ParseFraudRisks(string risks) =>
+            JObject.Parse(risks)?
+                .SelectToken("risks")
+                .Where(x => x != null);
     }
 }
