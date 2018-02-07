@@ -6,5 +6,4 @@ namespace ShipWorks.Stores.UI.Platforms.Manual
 {
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Manual, ExternallyOwned = false)]
     public class ManualStoreSetupControlHost : AddStoreWizardPage {}
-
 }
