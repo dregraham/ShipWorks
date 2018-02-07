@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
@@ -8,6 +5,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
 {
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                 .Aggregate(
                     new ProcessShipmentRequest(),
                     (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber))
-                .Bind(x => serviceGatewayFactory.Create(settingsRepository).Ship(x).Map(r => new { Reply = r, Request = x }))
+                .Bind(x => serviceGatewayFactory.Create(shipment, settingsRepository).Ship(x).Map(r => new { Reply = r, Request = x }))
                 .Map(x => new { Response = createShipResponse(shipment, x.Reply), x.Request })
                 .Bind(x => x.Response.ApplyManipulators(x.Request));
         }
