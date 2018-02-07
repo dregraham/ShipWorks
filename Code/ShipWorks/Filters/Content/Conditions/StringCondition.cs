@@ -1,10 +1,12 @@
-using System;
-using System.Collections.Generic;
+using Interapptive.Shared.Collections;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Filters.Content.Conditions
 {
@@ -195,6 +197,25 @@ namespace ShipWorks.Filters.Content.Conditions
         public virtual ICollection<string> GetStandardValues()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Get a collection of items represented by the given string
+        /// </summary>
+        public static IEnumerable<string> ValueAsItems(string value)
+        {
+            return value
+                .Replace(@"\,", "\a")
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim().Replace("\a", ","));
+        }
+
+        /// <summary>
+        /// Gets a value that represents the collection of items
+        /// </summary>
+        public static string ItemsAsValue(IEnumerable<string> items)
+        {
+            return items.Select(x => x.Trim().Replace(",", @"\,")).Combine(",");
         }
     }
 }

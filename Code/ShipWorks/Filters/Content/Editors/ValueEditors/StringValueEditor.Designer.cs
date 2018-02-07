@@ -31,6 +31,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             this.targetValueBox = new System.Windows.Forms.TextBox();
             this.labelOperator = new ShipWorks.Filters.Content.Editors.ChoiceLabel();
             this.targetValueList = new System.Windows.Forms.ComboBox();
+            this.editButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // targetValueBox
@@ -46,7 +47,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             // 
             this.labelOperator.AutoSize = true;
             this.labelOperator.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelOperator.ForeColor = System.Drawing.Color.Green;
             this.labelOperator.Location = new System.Drawing.Point(3, 6);
             this.labelOperator.Name = "labelOperator";
@@ -64,10 +65,21 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             this.targetValueList.TabIndex = 2;
             this.targetValueList.Validating += new System.ComponentModel.CancelEventHandler(this.OnValidating);
             // 
+            // editButton
+            // 
+            this.editButton.Image = global::ShipWorks.Properties.Resources.edit16;
+            this.editButton.Location = new System.Drawing.Point(543, 2);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(24, 23);
+            this.editButton.TabIndex = 3;
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.OnEditButtonClick);
+            // 
             // StringValueEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.editButton);
             this.Controls.Add(this.targetValueList);
             this.Controls.Add(this.labelOperator);
             this.Controls.Add(this.targetValueBox);
@@ -83,5 +95,6 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         private System.Windows.Forms.TextBox targetValueBox;
         private ChoiceLabel labelOperator;
         private System.Windows.Forms.ComboBox targetValueList;
+        private System.Windows.Forms.Button editButton;
     }
 }
