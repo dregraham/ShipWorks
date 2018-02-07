@@ -10,6 +10,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using log4net;
+using Newtonsoft.Json.Linq;
 using Rebex.Mail;
 using ShipWorks.ApplicationCore.Crashes;
 
@@ -90,11 +91,18 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         public void LogRequest(IHttpRequestSubmitter request)
         {
+            HttpJsonVariableRequestSubmitter json = request as HttpJsonVariableRequestSubmitter;
+            if (json != null)
+            {
+                LogHttpVariableRequest(json, EncryptJsonPassword(json.RequestBody));
+                return;
+            }
+
             // Look for specific derived instance
             HttpVariableRequestSubmitter variable = request as HttpVariableRequestSubmitter;
             if (variable != null)
             {
-                LogHttpVariableRequest(variable);
+                LogHttpVariableRequest(variable, string.Empty);
                 return;
             }
 
@@ -106,6 +114,31 @@ namespace ShipWorks.ApplicationCore.Logging
             }
 
             throw new InvalidOperationException("Unhandled HttpRequestSubmitter derivative.");
+        }
+
+        /// <summary>
+        /// Given a JsonRequest, look for a password element and encrypt the value
+        /// </summary>
+        private string EncryptJsonPassword(string jsonRequestBody)
+        {
+            if (!string.IsNullOrEmpty(jsonRequestBody))
+            {
+                try
+                {
+                    JObject json = JObject.Parse(jsonRequestBody);
+                    if (json["password"] != null)
+                    {
+                        json["password"] = SecureText.Encrypt((string) json["password"], "password");
+                    }
+                    return json.ToString();
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Error parsing jsonRequestBody for ApiLog: {jsonRequestBody}", ex);
+                }
+            }
+
+            return jsonRequestBody;
         }
 
         /// <summary>
@@ -151,7 +184,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Log the specified post request
         /// </summary>
-        private void LogHttpVariableRequest(HttpVariableRequestSubmitter request)
+        private void LogHttpVariableRequest(HttpVariableRequestSubmitter request, string body)
         {
             using (StringWriter writer = new StringWriter())
             {
@@ -174,6 +207,11 @@ namespace ShipWorks.ApplicationCore.Logging
                     xmlWriter.WriteElementString("Name", variable.Name);
                     xmlWriter.WriteElementString("Value", value);
                     xmlWriter.WriteEndElement();
+                }
+
+                if (!string.IsNullOrEmpty(body))
+                {
+                    xmlWriter.WriteElementString("Body", body);
                 }
 
                 xmlWriter.WriteEndElement();
