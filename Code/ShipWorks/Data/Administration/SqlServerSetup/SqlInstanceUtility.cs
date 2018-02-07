@@ -19,6 +19,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
     public static class SqlInstanceUtility
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlInstanceUtility));
+        private const string LocalDBInstalledRegistryKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions";
 
         /// <summary>
         /// The name given to the special default instance of sql server
@@ -43,14 +44,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             get
             {
-                // First, see if 2016 LocalDB exists
-                if (RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, @"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions\13.0"))
-                {
-                    return @"(LocalDB)\MSSQLLocalDB";
-                }
-
-                // Now try 2014
-                if (RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, @"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions\12.0"))
+                //See if 2017, 2016 or 2014 LocalDB exists
+                if (RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, $"{LocalDBInstalledRegistryKey}\\14.0") ||
+                    RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, $"{LocalDBInstalledRegistryKey}\\13.0") ||
+                    RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, $"{LocalDBInstalledRegistryKey}\\12.0"))
                 {
                     return @"(LocalDB)\MSSQLLocalDB";
                 }
