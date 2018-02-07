@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -9,7 +11,7 @@ namespace ShipWorks.Filters.Content.Conditions
     /// <summary>
     /// Base class for conditions that compare against a text value
     /// </summary>
-    abstract public class StringCondition : Condition
+    public abstract class StringCondition : Condition
     {
         // String to compare against
         string targetValue = "";
@@ -30,6 +32,11 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         public static string GenerateSql(string targetValue, StringOperator stringOp, string valueExpression, SqlGenerationContext context)
         {
+            if (IsInListOperator(stringOp))
+            {
+                return GenerateInListSql(targetValue, stringOp, valueExpression, context);
+            }
+
             // We're limiting to 3998 since 4k is the largest number of characters we can use without SQL Server
             // throwing an exception. 3998 allows wildcards to fit in the max while being consistent. If this limit
             // is a problem, we should find out what the customer's use case is.
@@ -63,8 +70,43 @@ namespace ShipWorks.Filters.Content.Conditions
                 }
             }
 
-            throw new InvalidOperationException("Unhandled operator defined for StringCondition.");
+            throw new InvalidOperationException("Unhanded operator defined for StringCondition.");
         }
+
+        /// <summary>
+        /// Generate sql need for in/not in list operations
+        /// </summary>
+        private static string GenerateInListSql(string targetValue, StringOperator stringOp, string valueExpression, SqlGenerationContext context)
+        {
+            if (IsInListOperator(stringOp))
+            {
+                var listOfValues = targetValue
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim().Truncate(3998))
+                    .Distinct();
+
+                if (listOfValues?.None() == true)
+                {
+                    // If there are no values in the list, nothing should match what is in the list
+                    // so add a where clause that is always false so no results will be found.
+                    return "-1 = 1";
+                }
+
+                string not = stringOp == StringOperator.NotIsInList ? "not" : string.Empty;
+
+                string param = string.Join(",", listOfValues.Select(context.RegisterParameter));
+
+                return $"{valueExpression} {not} in ({param})";
+            }
+
+            throw new InvalidOperationException($"GenerateInListSql was called with StringOperator value of { EnumHelper.GetDescription(stringOp) }.");
+        }
+
+        /// <summary>
+        /// Indicates if our current operator utilizes the in list clause
+        /// </summary>
+        private static bool IsInListOperator(StringOperator op) =>
+            op == StringOperator.IsInList || op == StringOperator.NotIsInList;
 
         /// <summary>
         /// Indicates if our current operator utilizes the LIKE clause
@@ -148,7 +190,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// Provide a list of standard values for the user to choose from.  The user can still
         /// type in whatever they want, in addition to selecting a value. Return null to provide
         /// no standard values.  Returning a non-null collection will result in the editor
-        /// displaying a dropdown instead of an edit box.
+        /// displaying a drop down instead of an edit box.
         /// </summary>
         public virtual ICollection<string> GetStandardValues()
         {
