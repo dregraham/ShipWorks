@@ -1,12 +1,10 @@
-using Interapptive.Shared.Collections;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Filters.Content.Conditions
 {
@@ -82,10 +80,7 @@ namespace ShipWorks.Filters.Content.Conditions
         {
             if (IsInListOperator(stringOp))
             {
-                var listOfValues = targetValue
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim().Truncate(3998))
-                    .Distinct();
+                var listOfValues = ValueAsItems(targetValue);
 
                 if (listOfValues?.None() == true)
                 {
@@ -207,7 +202,8 @@ namespace ShipWorks.Filters.Content.Conditions
             return value
                 .Replace(@"\,", "\a")
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x.Trim().Replace("\a", ","));
+                .Select(x => x.Trim().Replace("\a", ",").Truncate(3998))
+                .Distinct();
         }
 
         /// <summary>
@@ -215,7 +211,10 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         public static string ItemsAsValue(IEnumerable<string> items)
         {
-            return items.Select(x => x.Trim().Replace(",", @"\,")).Combine(",");
+            return items
+                .Select(x => x.Trim().Replace(",", @"\,"))
+                .Distinct()
+                .Combine(",");
         }
     }
 }

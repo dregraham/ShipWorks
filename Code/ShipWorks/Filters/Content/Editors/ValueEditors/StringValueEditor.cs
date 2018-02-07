@@ -60,13 +60,13 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         {
             targetValue.Visible = condition.Operator != StringOperator.IsEmpty;
             editButton.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
-            editButton.Left = targetValue.Right + 8;
 
             targetValue.Left = labelOperator.Right + 3;
+            editButton.Left = targetValue.Right + 5;
 
             if (condition.Operator != StringOperator.IsEmpty)
             {
-                Width = targetValue.Right + errorSpace;
+                Width = targetValue.Right + errorSpace + editButton.Width;
             }
             else
             {
@@ -79,9 +79,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void OnChangeOperator(object sender, EventArgs e)
         {
-            StringOperator op = (StringOperator) labelOperator.SelectedValue;
-
-            condition.Operator = op;
+            condition.Operator = (StringOperator) labelOperator.SelectedValue;
 
             UpdateValueVisibility();
 
