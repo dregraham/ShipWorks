@@ -1921,7 +1921,6 @@
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdaterFactory.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\ShipmentDetails.cs" />
-    <Compile Include="Stores\Platforms\Manual\IManualStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorOmsDownloader.cs" />
     <Compile Include="Stores\Platforms\NetworkSolutions\INetworkSolutionsWebClient.cs" />
@@ -11058,6 +11057,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Stores\Platforms\Manual\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
