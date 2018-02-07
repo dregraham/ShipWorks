@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Manual
 {
