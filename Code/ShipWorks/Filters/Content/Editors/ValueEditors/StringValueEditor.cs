@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Filters.Content.Conditions;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
@@ -57,12 +59,14 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         private void UpdateValueVisibility()
         {
             targetValue.Visible = condition.Operator != StringOperator.IsEmpty;
+            valueEditorPanel.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
 
             targetValue.Left = labelOperator.Right + 3;
+            valueEditorPanel.Left = targetValue.Right;
 
             if (condition.Operator != StringOperator.IsEmpty)
             {
-                Width = targetValue.Right + errorSpace;
+                Width = targetValue.Right + errorSpace + valueEditorPanel.Width;
             }
             else
             {
@@ -75,13 +79,11 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void OnChangeOperator(object sender, EventArgs e)
         {
-            StringOperator op = (StringOperator) labelOperator.SelectedValue;
-
-            condition.Operator = op;
+            condition.Operator = (StringOperator) labelOperator.SelectedValue;
 
             UpdateValueVisibility();
 
-            // Changint the operator can affect validity
+            // Changing the operator can affect validity
             ValidateChildren(ValidationConstraints.Visible);
 
             RaiseContentChanged();
@@ -118,6 +120,22 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             ClearError(targetValue);
             condition.TargetValue = targetValue.Text;
+        }
+
+        /// <summary>
+        /// Use the editor to edit the list of items
+        /// </summary>
+        private void OnEditButtonClick(object sender, EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var editor = lifetimeScope.Resolve<IStringValueListEditorViewModel>();
+                targetValue.Text = editor
+                    .EditList(this.ParentForm, StringCondition.ValueAsItems(targetValue.Text))
+                    .Match(
+                        StringCondition.ItemsAsValue,
+                        ex => targetValue.Text);
+            }
         }
     }
 }

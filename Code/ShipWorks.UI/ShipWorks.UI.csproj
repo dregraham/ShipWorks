@@ -138,6 +138,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
+    <Compile Include="AttachedProperties\Focus.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
     <Compile Include="AttachedProperties\ListSelection.cs" />
@@ -241,6 +242,9 @@
     </Compile>
     <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotificationViewModel.cs" />
     <Compile Include="AsyncMessageHelper.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\StringValueListEditorDialog.xaml.cs">
+      <DependentUpon>StringValueListEditorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -357,6 +361,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\UserConditionalNotification\UserConditionalNotificationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Filters\Content\Editors\ValueEditors\StringValueListEditorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

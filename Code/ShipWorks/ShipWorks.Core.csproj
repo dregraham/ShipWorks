@@ -1041,6 +1041,9 @@
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\QuickSearch\QuickSearchCondition.cs" />
     <Compile Include="Filters\Content\Conditions\QuickSearch\IQuickSearchStoreSql.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorDialog.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorViewModel.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\StringValueListEditorViewModel.cs" />
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
     <Compile Include="Filters\Content\SqlGeneration\ISqlGenerationBuilder.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
