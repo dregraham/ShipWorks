@@ -51,8 +51,10 @@ namespace ShipWorks.Stores.Platforms.Manual
             return null;
         }
 
+        /// <summary>
+        /// This is a string that uniquely identifies the store.
+        /// </summary>
         protected override string InternalLicenseIdentifier => manualStore.StoreName;
-
 
         /// <summary>
         /// Creates an instance of AddStoreWizardPages
