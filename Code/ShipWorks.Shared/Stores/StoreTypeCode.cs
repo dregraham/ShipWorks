@@ -402,7 +402,7 @@ namespace ShipWorks.Stores
         Jet = 79,
 
         [Description("Manual")]
-        [StoreTypeIdentity("WISH", "MAN")]
+        [StoreTypeIdentity("MANUAL", "MAN")]
         [StoreTypeIcon("shipworks")]
         Manual = 80
     }
