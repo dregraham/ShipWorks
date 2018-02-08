@@ -323,9 +323,6 @@
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControlViewModel.cs" />
-    <Compile Include="Platforms\Manual\ManualStoreSetupControlHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
       <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
     </Compile>
