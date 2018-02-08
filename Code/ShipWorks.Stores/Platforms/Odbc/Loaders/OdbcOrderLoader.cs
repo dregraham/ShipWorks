@@ -1,8 +1,10 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -36,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <remarks>
         /// It is assumed that the map is loaded with the initial record.
         /// </remarks>
-        public void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> records)
+        public void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> records, bool reloadEntireOrder)
         {
             MethodConditions.EnsureArgumentIsNotNull(map, nameof(map));
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
@@ -45,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             map.CopyToEntity(order);
 
             // If the order is new load all the items
-            if (order.IsNew)
+            if (order.IsNew || reloadEntireOrder)
             {
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);

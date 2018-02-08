@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -183,11 +183,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_CallsSetCommandTextOnCommand()
+        public void PopulateCommandText_CallsSetCommandTextOnCommand()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -218,15 +218,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=> c.ChangeCommandText(testObject.GenerateSql()));
+            command.Verify(c => c.ChangeCommandText(testObject.GenerateSql()));
         }
 
         [Fact]
-        private void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
+        public void PopulateCommandText_ThrowsShipWorksOdbcException_WhenOdbcColumnIsBlank()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -259,11 +259,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_OpensConnection()
+        public void PopulateCommandText_OpensConnection()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -298,11 +298,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        private void PopulateCommandText_AddsOnlineLastModifiedParameter()
+        public void PopulateCommandText_AddsOnlineLastModifiedParameter()
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -333,7 +333,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=> c.AddParameter(It.IsAny<OdbcParameter>()));
+            command.Verify(c => c.AddParameter(It.IsAny<OdbcParameter>()));
         }
 
         public void Dispose()

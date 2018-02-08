@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
@@ -24,13 +26,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
     [Component(RegistrationType.Self)]
     public class OdbcStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
+        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory;
+        private readonly OdbcStoreEntity odbcStore;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store)
+        public OdbcStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory,
+            IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory)
             : base(store)
         {
-
+            this.downloadSettingsFactory = downloadSettingsFactory;
+            this.storeWizardFinishPageControlFactory = storeWizardFinishPageControlFactory;
+            odbcStore = (OdbcStoreEntity) store;
         }
 
         /// <summary>
@@ -45,7 +55,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             get
             {
-                OdbcStoreEntity odbcStore = (OdbcStoreEntity) Store;
                 StringHash stringHash = new StringHash();
 
                 return $"{stringHash.Hash(odbcStore.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
@@ -131,6 +140,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public override bool IsOnDemandDownloadEnabled => odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+
+        /// <summary>
         /// Creates the add store wizard online update action control.
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -140,19 +154,30 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Create the download settings control
+        /// </summary>
+        public override IDownloadSettingsControl CreateDownloadSettingsControl()
+        {
+            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                return downloadSettingsFactory[StoreTypeCode.Odbc];
+            }
+
+            return base.CreateDownloadSettingsControl();
+        }
+
+        /// <summary>
         /// Show the settings wizard page only if the store has a download strategy or upload strategy
         /// </summary>
         /// <returns></returns>
         public override bool ShowTaskWizardPage()
         {
-            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-
             if (odbcStore == null)
             {
                 return false;
             }
 
-            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.All ||
+            return odbcStore.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime ||
                    odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
         }
 
@@ -160,5 +185,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the online store's order identifier
         /// </summary>
         public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
+
+        /// <summary>
+        /// Returns messaging to display on the AddStoreWizard finish page
+        /// </summary>
+        public override Control CreateWizardFinishPageControl()
+        {
+            return storeWizardFinishPageControlFactory[StoreTypeCode.Odbc].Create(odbcStore);
+        }
     }
 }

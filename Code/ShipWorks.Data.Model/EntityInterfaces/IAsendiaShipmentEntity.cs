@@ -111,6 +111,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean NonMachinable { get; }
+        /// <summary> The Insurance property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean Insurance { get; }
         
         IShipmentEntity Shipment { get; }
         

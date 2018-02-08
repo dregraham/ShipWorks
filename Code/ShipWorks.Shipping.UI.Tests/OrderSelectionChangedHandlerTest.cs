@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
@@ -83,6 +84,8 @@ namespace ShipWorks.Shipping.UI.Tests
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S4158: Empty collections should not be accessed or iterated",
+            Justification = "This is a false positive. The collection is modified in a callback")]
         public void ShipmentLoadedStream_SendsTwoChangedMessages_WhenTwoSetsOfCorrespondingMessagesAreReceived()
         {
             var calledMessages = new List<OrderSelectionChangedMessage>();

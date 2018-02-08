@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             MethodConditions.EnsureArgumentIsNotNull(shipment.Other, nameof(shipment.Other));
 
             this.shipment = shipment;
-            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);
+            InsuranceChoice = new InsuranceChoice(shipment, shipment.Other, shipment.Other, null);
         }
 
         /// <summary>

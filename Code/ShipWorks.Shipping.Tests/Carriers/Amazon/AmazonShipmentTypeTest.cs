@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Enums;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -7,6 +8,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
 
@@ -61,10 +63,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Theory]
-        [InlineData(AmazonMwsIsPrime.Yes, true)]
-        [InlineData(AmazonMwsIsPrime.No, false)]
-        [InlineData(AmazonMwsIsPrime.Unknown, false)]
-        public void IsAllowedFor_AmazonStoreAndOrders_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonMwsIsPrime isPrime, bool expected)
+        [InlineData(AmazonIsPrime.Yes, true)]
+        [InlineData(AmazonIsPrime.No, false)]
+        [InlineData(AmazonIsPrime.Unknown, false)]
+        public void IsAllowedFor_AmazonStoreAndOrders_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonIsPrime isPrime, bool expected)
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
@@ -84,10 +86,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Theory]
-        [InlineData(AmazonMwsIsPrime.Yes, true)]
-        [InlineData(AmazonMwsIsPrime.No, false)]
-        [InlineData(AmazonMwsIsPrime.Unknown, false)]
-        public void IsAllowedFor_ChannelAdvisorStoreAndOrders_ReturnsExpectedValue_BasedOnAmazonOrderIsPrime(AmazonMwsIsPrime isPrime, bool expected)
+        [InlineData(AmazonIsPrime.Yes, true)]
+        [InlineData(AmazonIsPrime.No, false)]
+        [InlineData(AmazonIsPrime.Unknown, false)]
+        public void IsAllowedFor_ChannelAdvisorStoreAndOrders_ReturnsExpectedValue_BasedOnAmazonOrderIsPrime(AmazonIsPrime isPrime, bool expected)
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
@@ -113,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) AmazonMwsIsPrime.Yes }
+                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) AmazonIsPrime.Yes }
             };
 
             var store = new ChannelAdvisorStoreEntity { TypeCode = (int) StoreTypeCode.ChannelAdvisor };

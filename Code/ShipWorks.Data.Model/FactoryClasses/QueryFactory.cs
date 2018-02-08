@@ -574,6 +574,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<GenericFileStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the GenericModuleOrder entity</summary>
+		public EntityQuery<GenericModuleOrderEntity> GenericModuleOrder
+		{
+			get { return Create<GenericModuleOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the GenericModuleOrderItem entity</summary>
+		public EntityQuery<GenericModuleOrderItemEntity> GenericModuleOrderItem
+		{
+			get { return Create<GenericModuleOrderItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the GenericModuleStore entity</summary>
 		public EntityQuery<GenericModuleStoreEntity> GenericModuleStore
 		{

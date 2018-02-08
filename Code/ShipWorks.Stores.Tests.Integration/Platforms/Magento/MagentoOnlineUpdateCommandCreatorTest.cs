@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             var webOrder = new Order
             {
                 Items = roots
-                    .Select(x => new Item { ItemId = x * 10000, QtyOrdered = x })
+                    .Select(x => new Item { ItemId = x * 1000000, QtyOrdered = x })
                     .ToList()
             };
 

@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn("(None)"));
+            Columns.Insert(0, new OdbcColumn(EmptyColumnName, "unknown"));
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                         c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
                     {
                         columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
-                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
+                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName, "unknown");
                     }
                 }
                 if (columnsNotFound.Any())

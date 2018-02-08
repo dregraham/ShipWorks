@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Dhl;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             base.LoadProfile(profile);
 
             DhlExpressProfileEntity DhlExpressProfile = profile.DhlExpress;
-            
+
             LoadDhlExpressAccounts();
 
             EnumHelper.BindComboBox<DhlExpressServiceType>(service);
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
-            
+
             //Options
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DeliveryDutyPaid, dutyDeliveryPaidState, dutyDeliveryPaid, labelDuty);
@@ -194,6 +195,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Load the UI for editing all the package profile controls
         /// </summary>
+        [SuppressMessage("SonarQube", "S1698:Consider using 'Equals' if value comparison was intended",
+            Justification = "This is used in an Assert.Debug and is existing code")]
         private void LoadPackageEditingUI()
         {
             // Get all the not marked for deleted packages

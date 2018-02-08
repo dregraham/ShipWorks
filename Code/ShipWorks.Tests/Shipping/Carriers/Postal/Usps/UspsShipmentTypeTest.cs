@@ -4,11 +4,13 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
@@ -143,6 +145,52 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
 
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
+        }
+
+        [Theory]
+        [InlineData(true, 9.99)]
+        [InlineData(false, 6.66)]
+        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = !insured,
+                Postal = new PostalShipmentEntity
+                {
+                    Insurance = !insured,
+                    InsuranceValue = insuranceValue,
+                    Usps = new UspsShipmentEntity { Insurance = insured }
+                }
+            };
+
+            ShipmentParcel parcel = new UspsShipmentType().GetParcelDetail(shipment, 0);
+
+            Assert.Equal(insured, parcel.Insurance.Insured);
+            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+        }
+
+        [Fact]
+        public void GetPackageAdapters_ReturnUspsValues()
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Insurance = false,
+                Postal = new PostalShipmentEntity
+                {
+                    Insurance = false,
+                    InsuranceValue = 3,
+                    Usps = new UspsShipmentEntity { Insurance = true }
+                }
+            };
+
+            IEnumerable<IPackageAdapter> packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.True(packageAdapters.First().InsuranceChoice.Insured);
+
+            shipment.Insurance = true;
+            shipment.Postal.Insurance = true;
+            shipment.Postal.Usps.Insurance = false;
+            packageAdapters = testObject.GetPackageAdapters(shipment);
+            Assert.False(packageAdapters.First().InsuranceChoice.Insured);
         }
     }
 }

@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Filters;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Grid;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Controls
 {
@@ -33,8 +24,7 @@ namespace ShipWorks.Data.Controls
         {
             InitializeComponent();
 
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
-            windowSaver.ManageSplitter(splitContainer);
+            WindowStateSaver.Manage(this).ManageSplitter(splitContainer);
 
             this.filterTarget = filterTarget;
         }
@@ -91,7 +81,7 @@ namespace ShipWorks.Data.Controls
             labelSelected.Text = string.Format("Selected: {0}", gridControl.Selection.Count);
 
             labelStatusEtch.Left = labelTotal.Right + 2;
-            labelSelected.Left = labelStatusEtch.Right + 3; 
+            labelSelected.Left = labelStatusEtch.Right + 3;
         }
 
         /// <summary>

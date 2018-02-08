@@ -341,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Create the shipment and setup the repository to return a null account for this test
             settingsRepository.Setup(r => r.GetAccount(AnyShipment)).Returns<FedExAccountEntity>(null);
 
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -402,7 +402,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new SoapException("Catch me!", XmlQualifiedName.Empty));
             requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
 
-            Assert.Throws<FedExSoapCarrierException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExSoapCarrierException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -412,7 +412,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new CarrierException());
             requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
 
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -422,7 +422,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new TimeoutException("This is slow"));
             requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
 
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -432,7 +432,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new ArgumentNullException());
             requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
 
-            Assert.Throws<ArgumentNullException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -442,7 +442,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity.OriginStreet2 = "street 2";
             shipmentEntity.OriginStreet3 = "street 3";
 
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]
@@ -475,7 +475,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity.ShipStreet2 = "street 2";
             shipmentEntity.ShipStreet3 = "street 3";
 
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
         }
 
         [Fact]

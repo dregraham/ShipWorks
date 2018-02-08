@@ -77,12 +77,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
             if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipment))
             {
                 Assert.Equal(result.RequestedShipment.Recipient.Address.Residential, shipment.ResidentialResult);
-                Assert.Equal(result.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
+                Assert.True(result.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
             else
             {
-                Assert.Equal(result.RequestedShipment.Recipient.Address.Residential, false);
-                Assert.Equal(result.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
+                Assert.False(result.RequestedShipment.Recipient.Address.Residential);
+                Assert.False(result.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
         }
 

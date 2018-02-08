@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Carrier = source.Carrier;
             Service = source.Service;
             InsuranceValue = source.InsuranceValue;
+            Insurance = source.Insurance;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -73,6 +74,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal InsuranceValue { get; }
+        /// <summary> The Insurance property of the Entity OtherShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OtherShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Insurance { get; }
         
         public IShipmentEntity Shipment { get; }
         

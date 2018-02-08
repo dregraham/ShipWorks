@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -27,6 +26,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -222,6 +222,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;
+                shipment.Insurance = shipment.Postal.Usps.Insurance;
             }
 
             shipment.InsuranceProvider = (int) (UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);
@@ -258,6 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.Postal.Usps.UspsTransactionID = Guid.Empty;
                 shipment.Postal.Usps.RequestedLabelFormat = (int) ThermalLanguage.None;
                 shipment.Postal.Usps.RateShop = false;
+                shipment.Postal.Usps.Insurance = false;
             }
 
             // We need to call the base after setting up the USPS specific information because LLBLgen was
@@ -327,6 +329,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.PostalProfile.Profile.Insurance, uspsShipment, UspsShipmentFields.Insurance);
             }
         }
 
@@ -513,6 +516,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 default:
                     return base.GetServiceDescription(shipment);
             }
+        }
+
+        /// <summary>
+        /// Get the parcel data for the shipment
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.Postal.Usps, shipment.Postal, null),
+                new DimensionsAdapter(shipment.Postal))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Usps == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            return new List<IPackageAdapter>()
+            {
+                new PostalPackageAdapter(shipment, shipment.Postal.Usps)
+            };
         }
     }
 }

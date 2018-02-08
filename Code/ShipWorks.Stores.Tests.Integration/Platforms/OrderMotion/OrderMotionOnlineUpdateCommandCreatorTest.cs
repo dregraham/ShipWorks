@@ -17,7 +17,8 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using System.Windows.Forms;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
 {
@@ -144,6 +145,46 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
 
             webClient.Verify(x => x.UploadShipmentDetails(store, ShipmentWithTrackingNumber("track-456"), DetailsWithID(60)));
             webClient.Verify(x => x.UploadShipmentDetails(store, ShipmentWithTrackingNumber("track-789"), DetailsWithID(70)));
+        }
+
+        [Fact]
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsDistinctValues()
+        {
+            IOrderMotionCombineOrderSearchProvider searchProvider = new OrderMotionCombineOrderSearchProvider(new SqlAdapterFactory());
+
+            OrderEntity order = CreateNormalOrder(1, "track-123", false, 2, 3);
+            order.CombineSplitStatus = CombineSplitStatusType.Combined;
+
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+            CreateOrderSearchEntities(order, 1);
+
+            var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+            Assert.Equal(1, results?.Count());
+            Assert.Equal(1, results?.FirstOrDefault().OrderMotionShipmentID);
+        }
+
+        private void CreateOrderSearchEntities(IOrderEntity order, int numberToCreate)
+        {
+            for (int i = 1; i < numberToCreate + 1; i++)
+            {
+                Create.Entity<OrderSearchEntity>()
+                    .Set(os => os.Store, store)
+                    .Set(os => os.OrderNumber, i)
+                    .Set(os => os.OrderNumberComplete, i.ToString())
+                    .Set(os => os.IsManual, false)
+                    .Set(os => os.OrderID, order.OrderID)
+                    .Set(os => os.OriginalOrderID, order.OrderID)
+                    .Save();
+
+                Create.Entity<OrderMotionOrderSearchEntity>()
+                    .Set(os => os.OrderMotionShipmentID, i)
+                    .Set(os => os.OriginalOrderID, order.OrderID)
+                    .Set(os => os.OrderID, order.OrderID)
+                    .Save();
+            }
         }
 
         /// <summary>

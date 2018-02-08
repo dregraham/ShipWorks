@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
@@ -55,6 +56,8 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        [SuppressMessage("SonarQube", "S2952:Move this 'Dispose' call into the class' 'Dispose' method",
+            Justification = "We're actually testing the 'Dispose' method")]
         public void Dispose_StopsScannerRegistrationListener()
         {
             testObject.Dispose();

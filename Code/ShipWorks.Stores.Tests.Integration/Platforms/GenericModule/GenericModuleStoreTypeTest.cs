@@ -9,7 +9,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -86,6 +86,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                     .Set(os => os.OrderNumberComplete, i.ToString())
                     .Set(os => os.IsManual, false)
                     .Set(os => os.OrderID, orderID)
+                    .Set(os => os.OriginalOrderID, orderID)
                     .Save();
             }
         }

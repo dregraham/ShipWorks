@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             Func<MarketplaceAdvisorStoreEntity, IMarketplaceAdvisorLegacyDownloader> createLegacyDownloader,
             Func<MarketplaceAdvisorStoreEntity, IMarketplaceAdvisorOmsDownloader> createOmsDownloader)
         {
+            Store = store;
             MarketplaceAdvisorStoreEntity typedStore = store as MarketplaceAdvisorStoreEntity;
             downloader = typedStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS ?
                 (IStoreDownloader) createOmsDownloader(typedStore) :
@@ -40,9 +41,27 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         public int QuantityNew => downloader.QuantityNew;
 
         /// <summary>
+        /// The store the downloader downloads from
+        /// </summary>
+        public StoreEntity Store { get; }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
             downloader.Download(progressItem, downloadID, con);
+
+        /// <summary>
+        /// Does not support downloading OrderNumbers
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Should not download
+        /// </summary>
+        public bool ShouldDownload(string orderNumber) => false;
     }
 }

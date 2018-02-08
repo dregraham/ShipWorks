@@ -25,6 +25,7 @@ using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Integration.Shared;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Tests.Shared.ExtensionMethods;
@@ -638,7 +639,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
             Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLocalRatingViewModel));
 
-            var table = context.Mock.Create<IUpsLocalRateTable>();
+            var table = context.Mock.Build<IUpsLocalRateTable>();
 
             using (Stream zoneStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleZoneFileResourceName))
             {

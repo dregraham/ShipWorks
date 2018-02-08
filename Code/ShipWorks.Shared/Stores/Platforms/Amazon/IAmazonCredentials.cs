@@ -8,16 +8,16 @@
         /// <summary>
         /// Amazon merchant ID
         /// </summary>
-        string MerchantID { get; }
+        string MerchantID { get; set; }
 
         /// <summary>
         /// Amazon auth token
         /// </summary>
-        string AuthToken { get; }
+        string AuthToken { get; set; }
 
         /// <summary>
         /// Amazon store region
         /// </summary>
-        string Region { get; }
+        string Region { get; set; }
     }
 }

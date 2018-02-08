@@ -53,17 +53,13 @@ namespace ShipWorks.Stores.Management
             this.domesticAddressValidationSetting = new System.Windows.Forms.ComboBox();
             this.labelAddressValidationSetting = new System.Windows.Forms.Label();
             this.sectionAddressValidation = new ShipWorks.UI.Controls.SectionTitle();
-            this.labelAllowDownload = new System.Windows.Forms.Label();
-            this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
             this.panelStoreStatus = new System.Windows.Forms.Panel();
             this.infotipStoreEnabled = new ShipWorks.UI.Controls.InfoTip();
             this.sectionStatus = new ShipWorks.UI.Controls.SectionTitle();
             this.label4 = new System.Windows.Forms.Label();
             this.storeDisabled = new System.Windows.Forms.CheckBox();
-            this.configureDownloadComputers = new ShipWorks.UI.Controls.LinkControl();
             this.sectionAutoDownloads = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionTitleManualOrders = new ShipWorks.UI.Controls.SectionTitle();
-            this.automaticDownloadControl = new ShipWorks.Stores.Management.AutomaticDownloadControl();
             this.optionPageOnlineAccount = new ShipWorks.UI.Controls.OptionPage();
             this.optionPageStatusPreset = new ShipWorks.UI.Controls.OptionPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -205,13 +201,9 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.optionPageSettings.Controls.Add(this.panelDefaultFilters);
             this.optionPageSettings.Controls.Add(this.panelAddressValidation);
-            this.optionPageSettings.Controls.Add(this.labelAllowDownload);
-            this.optionPageSettings.Controls.Add(this.comboAllowDownload);
             this.optionPageSettings.Controls.Add(this.panelStoreStatus);
-            this.optionPageSettings.Controls.Add(this.configureDownloadComputers);
             this.optionPageSettings.Controls.Add(this.sectionAutoDownloads);
             this.optionPageSettings.Controls.Add(this.sectionTitleManualOrders);
-            this.optionPageSettings.Controls.Add(this.automaticDownloadControl);
             this.optionPageSettings.Location = new System.Drawing.Point(153, 0);
             this.optionPageSettings.Name = "optionPageSettings";
             this.optionPageSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -369,24 +361,6 @@ namespace ShipWorks.Stores.Management
             this.sectionAddressValidation.TabIndex = 3;
             this.sectionAddressValidation.Text = "Address Validation";
             // 
-            // labelAllowDownload
-            // 
-            this.labelAllowDownload.AutoSize = true;
-            this.labelAllowDownload.Location = new System.Drawing.Point(32, 50);
-            this.labelAllowDownload.Name = "labelAllowDownload";
-            this.labelAllowDownload.Size = new System.Drawing.Size(231, 13);
-            this.labelAllowDownload.TabIndex = 0;
-            this.labelAllowDownload.Text = "Allow this computer to download for this store:";
-            // 
-            // comboAllowDownload
-            // 
-            this.comboAllowDownload.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboAllowDownload.FormattingEnabled = true;
-            this.comboAllowDownload.Location = new System.Drawing.Point(266, 47);
-            this.comboAllowDownload.Name = "comboAllowDownload";
-            this.comboAllowDownload.Size = new System.Drawing.Size(121, 21);
-            this.comboAllowDownload.TabIndex = 1;
-            // 
             // panelStoreStatus
             // 
             this.panelStoreStatus.Controls.Add(this.infotipStoreEnabled);
@@ -439,19 +413,6 @@ namespace ShipWorks.Stores.Management
             this.storeDisabled.UseVisualStyleBackColor = true;
             this.storeDisabled.CheckedChanged += new System.EventHandler(this.OnChangeEnabledState);
             // 
-            // configureDownloadComputers
-            // 
-            this.configureDownloadComputers.AutoSize = true;
-            this.configureDownloadComputers.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.configureDownloadComputers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.configureDownloadComputers.ForeColor = System.Drawing.Color.Blue;
-            this.configureDownloadComputers.Location = new System.Drawing.Point(394, 50);
-            this.configureDownloadComputers.Name = "configureDownloadComputers";
-            this.configureDownloadComputers.Size = new System.Drawing.Size(148, 13);
-            this.configureDownloadComputers.TabIndex = 0;
-            this.configureDownloadComputers.Text = "Configure other computers...";
-            this.configureDownloadComputers.Click += new System.EventHandler(this.OnConfigureDownloadPolicy);
-            // 
             // sectionAutoDownloads
             // 
             this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
@@ -467,14 +428,6 @@ namespace ShipWorks.Stores.Management
             this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
             this.sectionTitleManualOrders.TabIndex = 2;
             this.sectionTitleManualOrders.Text = "Manual Orders";
-            // 
-            // automaticDownloadControl
-            // 
-            this.automaticDownloadControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.automaticDownloadControl.Location = new System.Drawing.Point(32, 74);
-            this.automaticDownloadControl.Name = "automaticDownloadControl";
-            this.automaticDownloadControl.Size = new System.Drawing.Size(292, 51);
-            this.automaticDownloadControl.TabIndex = 2;
             // 
             // optionPageOnlineAccount
             // 
@@ -714,7 +667,6 @@ namespace ShipWorks.Stores.Management
             this.optionControl.ResumeLayout(false);
             this.optionPageStoreDetails.ResumeLayout(false);
             this.optionPageSettings.ResumeLayout(false);
-            this.optionPageSettings.PerformLayout();
             this.panelDefaultFilters.ResumeLayout(false);
             this.panelDefaultFilters.PerformLayout();
             this.panelAddressValidation.ResumeLayout(false);
@@ -766,7 +718,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label licenseStatus;
         private ShipWorks.UI.Controls.OptionPage optionPageSettings;
-        private ShipWorks.Stores.Management.AutomaticDownloadControl automaticDownloadControl;
         private ShipWorks.UI.Controls.SectionTitle sectionTitleManualOrders;
         private UI.Controls.SectionTitle sectionAutoDownloads;
         private UI.Controls.SectionTitle sectionStatus;
@@ -774,10 +725,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label4;
         private UI.Controls.InfoTip infotipStoreEnabled;
         private System.Windows.Forms.CheckBox storeDisabled;
-        private UI.Controls.LinkControl configureDownloadComputers;
         private System.Windows.Forms.Panel panelStoreStatus;
-        private System.Windows.Forms.Label labelAllowDownload;
-        private ComputerDownloadAllowedComboBox comboAllowDownload;
         private StoreAddressControl storeAddressControl;
         private System.Windows.Forms.Panel panelAddressValidation;
         private System.Windows.Forms.ComboBox domesticAddressValidationSetting;

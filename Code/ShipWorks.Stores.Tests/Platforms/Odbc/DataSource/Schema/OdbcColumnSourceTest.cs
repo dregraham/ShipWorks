@@ -157,6 +157,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataTable.Columns.Add("bar", typeof(string));
             dataTable.Columns.Add("baz", typeof(string));
             dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("blah", typeof(string));
+            dataTable.Columns.Add("DataType", typeof(string));
             dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
             dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
 
@@ -252,8 +254,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("ColumnName", typeof(string));
-            dataTable.Rows.Add("ColumnName1");
-            dataTable.Rows.Add("ColumnName2");
+            dataTable.Columns.Add("DataType", typeof(string));
+            dataTable.Rows.Add("ColumnName1", "System.String");
+            dataTable.Rows.Add("ColumnName2", "System.Int");
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
@@ -275,8 +278,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             dataTable.Dispose();
 
-            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1") == 1);
-            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1" && c.DataType == "string") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2" && c.DataType == "int") == 1);
         }
 
         [Fact]
@@ -295,6 +298,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataTable.Columns.Add("bar", typeof(string));
             dataTable.Columns.Add("baz", typeof(string));
             dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("blah", typeof(string));
+            dataTable.Columns.Add("DataType", typeof(string));
             dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
             dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
 
@@ -321,8 +326,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataTable.Columns.Add("bar", typeof(string));
             dataTable.Columns.Add("baz", typeof(string));
             dataTable.Columns.Add("Name", typeof(string));
-            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
-            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
+            dataTable.Columns.Add("blah", typeof(string));
+            dataTable.Columns.Add("DataType", typeof(string));
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1", string.Empty, "lOnG");
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2", string.Empty, "biGiNt");
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
@@ -337,8 +344,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             dataTable.Dispose();
 
-            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1") == 1);
-            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1" && c.DataType == "long") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2" && c.DataType == "bigint") == 1);
         }
 
         public void Dispose()

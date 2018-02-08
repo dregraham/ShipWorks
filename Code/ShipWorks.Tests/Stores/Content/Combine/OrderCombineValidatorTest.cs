@@ -4,6 +4,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
 using Xunit;

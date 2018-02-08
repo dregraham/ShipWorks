@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {

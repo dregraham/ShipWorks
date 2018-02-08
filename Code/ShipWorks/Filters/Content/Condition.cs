@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using System.Xml;
 using System.Xml.Serialization;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content
 {
@@ -69,6 +73,5 @@ namespace ShipWorks.Filters.Content
                 }
             }
         }
-
     }
 }

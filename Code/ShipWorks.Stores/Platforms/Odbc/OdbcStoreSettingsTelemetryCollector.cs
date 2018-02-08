@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using System;
@@ -45,6 +46,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStore));
                     trackedDurationEvent.AddProperty("Import.QueryType", GetImportColumnSourceTypeName(odbcStore));
                     trackedDurationEvent.AddProperty("Import.OrderItemDataStructure", OrderItemDataStructure(odbcStore));
+                    trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStore.ImportStrategy));
                     trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStore));
                     trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
                     trackedDurationEvent.AddProperty("Upload.QueryType", GetUploadColumnSourceTypeName(odbcStore));

@@ -2,9 +2,11 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
+using ShipWorks.UI.Dialogs;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Services
@@ -12,22 +14,24 @@ namespace ShipWorks.UI.Services
     /// <summary>
     /// Wraps the static message helper class
     /// </summary>
+    [Component]
     public class MessageHelperWrapper : IMessageHelper
     {
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
-        private readonly ICurrentUserSettings currentUserSettings;
+        private readonly Func<IPopupViewModel> popupViewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider,
-            ICurrentUserSettings currentUserSettings,
-            Func<IUserConditionalNotification> createUserConditionalNotification)
+        public MessageHelperWrapper(Func<Control> ownerFactory,
+            ISchedulerProvider schedulerProvider,
+            Func<IUserConditionalNotification> createUserConditionalNotification,
+            Func<IPopupViewModel> popupViewModelFactory)
         {
-            this.currentUserSettings = currentUserSettings;
             this.createUserConditionalNotification = createUserConditionalNotification;
+            this.popupViewModelFactory = popupViewModelFactory;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -64,6 +68,23 @@ namespace ShipWorks.UI.Services
         public DialogResult ShowQuestion(string message)
         {
             return MessageHelper.ShowQuestion(ownerFactory(), message);
+        }
+
+        /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string>) ShowPopup, message);
+            }
+            else
+            {
+               popupViewModelFactory().Show(message, owner);
+            }
         }
 
         /// <summary>

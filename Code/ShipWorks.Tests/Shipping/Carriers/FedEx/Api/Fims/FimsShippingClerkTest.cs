@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         [Fact]
         public void Ship_ThrowsFedExException_WhenFimsUsernameIsBlank()
         {
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
             Assert.Contains("FedEX FIMS Username is missing", ex.Message);
         }
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
                 .Setup(r => r.GetShippingSettings())
                 .Returns(new ShippingSettingsEntity { FedExFimsUsername = "foo" });
 
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
 
             Assert.Contains("FedEX FIMS Password is missing", ex.Message);
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         {
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
 
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
 
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments require selecting a FIMS service type".ToUpperInvariant()));
         }
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         {
             shipmentEntity.ShipCountryCode = "US";
 
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments cannot be shipped domestically".ToUpperInvariant()));
         }
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         public void Ship_ThrowsFedExException_WhenCustomsItemsIsEmpty()
         {
             shipmentEntity.CustomsItems.Clear();
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments require customs information to be entered".ToUpperInvariant()));
         }
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
 
-            Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
+            Exception ex = Assert.Throws<FedExException>(() => (object) testObject.Ship(shipmentEntity));
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments allow only 1 package".ToUpperInvariant()));
         }
 

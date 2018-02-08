@@ -117,6 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             base.UpdateDynamicShipmentData(shipment);
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            shipment.Insurance = shipment.Postal.Usps.Insurance;
         }
 
         /// <summary>

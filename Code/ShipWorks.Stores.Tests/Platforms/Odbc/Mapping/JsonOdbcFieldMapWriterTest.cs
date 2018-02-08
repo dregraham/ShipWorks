@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void Write_WritesSerializedMapToStream()
         {
             string expectedResult =
-                "{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderNumberColumn\"}}}]}";
+                "{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderNumberColumn\",\"DataType\":\"unknown\"}}}]}";
 
             Mock <IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
             OdbcFieldMap map = mock.Create<OdbcFieldMap>();
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             JsonOdbcFieldMapSerializer testObject = new JsonOdbcFieldMapSerializer(map);
             ioFactory.Setup(f => f.CreateWriter(map)).Returns(testObject);
 
-            OdbcColumn column = new OdbcColumn("OrderNumberColumn");
+            OdbcColumn column = new OdbcColumn("OrderNumberColumn", "unknown");
 
             ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(column);
             ShipWorksOdbcMappableField shipworksOdbcMappableField =

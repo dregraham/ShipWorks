@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {

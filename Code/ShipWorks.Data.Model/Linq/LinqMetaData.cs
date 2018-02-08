@@ -296,6 +296,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.GenericFileStoreEntity:
 					toReturn = this.GenericFileStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.GenericModuleOrderEntity:
+					toReturn = this.GenericModuleOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.GenericModuleOrderItemEntity:
+					toReturn = this.GenericModuleOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.GenericModuleStoreEntity:
 					toReturn = this.GenericModuleStore;
 					break;
@@ -1204,6 +1210,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<GenericFileStoreEntity> GenericFileStore
 		{
 			get { return new DataSource2<GenericFileStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting GenericModuleOrderEntity instances in the database.</summary>
+		public DataSource2<GenericModuleOrderEntity> GenericModuleOrder
+		{
+			get { return new DataSource2<GenericModuleOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting GenericModuleOrderItemEntity instances in the database.</summary>
+		public DataSource2<GenericModuleOrderItemEntity> GenericModuleOrderItem
+		{
+			get { return new DataSource2<GenericModuleOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting GenericModuleStoreEntity instances in the database.</summary>

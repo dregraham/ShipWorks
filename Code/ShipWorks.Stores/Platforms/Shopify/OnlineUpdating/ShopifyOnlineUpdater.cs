@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             var webClient = createWebClient(store, null);
 
             orderSearchEntities
-                .Select(x => PerformUpload(webClient, x.ShopifyOrderID, carrier, trackingNumber, carrierTrackingUrl))
+                .Select(x => PerformUpload(webClient, x, carrier, trackingNumber, carrierTrackingUrl))
                 .ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
         }
 

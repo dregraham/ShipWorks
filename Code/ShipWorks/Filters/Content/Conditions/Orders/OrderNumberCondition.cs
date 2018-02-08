@@ -25,8 +25,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         {
             string orderNumberSql = string.Empty;
             string orderSearchSql = string.Empty;
-            string storeCombinedOrderSearchSql = string.Empty;
-
+            
             if (IsNumeric)
             {
                 orderNumberSql = $"{GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context)} AND OrderNumber != {long.MinValue}";

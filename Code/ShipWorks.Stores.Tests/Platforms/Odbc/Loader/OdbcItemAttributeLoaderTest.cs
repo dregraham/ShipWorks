@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderItemAttribute.Name");
                 shipworksField.Setup(e => e.Value).Returns("Large");
 
-                OdbcColumn column = new OdbcColumn("Size");
+                OdbcColumn column = new OdbcColumn("Size", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderItemAttribute.Name");
                 shipworksField.Setup(e => e.Value).Returns("Large");
 
-                OdbcColumn column = new OdbcColumn("Size");
+                OdbcColumn column = new OdbcColumn("Size", "unknown");
 
                 var externalField = mock.Mock<IExternalOdbcMappableField>();
                 externalField.Setup(f => f.Column).Returns(column);

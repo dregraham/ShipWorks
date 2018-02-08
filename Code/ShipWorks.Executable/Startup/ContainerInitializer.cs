@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.SingleScan;
@@ -93,7 +94,9 @@ namespace ShipWorks.Startup
             // ShipWorks.UI
             typeof(EnumImageConverter).Assembly,
             // ShipWorks.SingleScan
-            typeof(ScannerService).Assembly
+            typeof(ScannerService).Assembly,
+            // ShipWorks.Data.Model
+            typeof(CommonEntityBase).Assembly
         };
     }
 }

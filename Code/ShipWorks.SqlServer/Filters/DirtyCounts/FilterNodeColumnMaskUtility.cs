@@ -41,7 +41,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 22;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 23;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 51;
             tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 163;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;
@@ -76,6 +76,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ThreeDCartOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 5;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

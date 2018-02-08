@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Business;
-using Xunit;
-using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
-using ShipWorks.Shipping.ScanForms;
-using log4net;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 {
@@ -25,15 +15,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         public Express1AchPaymentValidatorTest()
         {
             paymentInfo = new Express1PaymentInfo(Express1PaymentType.Ach)
-                {
-                    AchAccountHolderName = "Test User",
-                    AchAccountType = Express1AchType.Checking,
-                    AchAccountNumber = "1234680",
-                    AchBankName = "USBank",
-                    AchRoutingId = "000000000",
-                    PaymentType = Express1PaymentType.Ach,
-                    AchAccountName = "John Doe"
-                };
+            {
+                AchAccountHolderName = "Test User",
+                AchAccountType = Express1AchType.Checking,
+                AchAccountNumber = "1234680",
+                AchBankName = "USBank",
+                AchRoutingId = "000000000",
+                PaymentType = Express1PaymentType.Ach,
+                AchAccountName = "John Doe"
+            };
         }
 
         [Fact]
@@ -42,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.Equal(errors.Count(), 0);
+            Assert.Equal(0, errors.Count());
         }
 
         [Fact]
@@ -57,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             errors = testObject.ValidatePaymentInfo(paymentInfo);
             Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidPaymentTypeCreditCard));
         }
-        
+
         [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenAchAccountHolderNameIsInvalid()
         {

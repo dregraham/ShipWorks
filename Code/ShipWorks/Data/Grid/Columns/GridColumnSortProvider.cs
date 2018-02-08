@@ -46,6 +46,15 @@ namespace ShipWorks.Data.Grid.Columns
         }
 
         /// <summary>
+        /// Constructor that provides a function to be used to calculate the local sort value
+        /// </summary>
+        public GridColumnSortProvider(Func<EntityBase2, object> sortValueFunction, params EntityField2[] sortFields)
+        {
+            this.sortValueFunction = sortValueFunction;
+            this.sortFields = sortFields.ToList();
+        }
+
+        /// <summary>
         /// The field that is used to sort on.  Can be null if a sorting function is used instead.
         /// </summary>
         public List<EntityField2> SortFields

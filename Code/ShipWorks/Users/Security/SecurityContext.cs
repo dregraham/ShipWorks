@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -139,6 +140,18 @@ namespace ShipWorks.Users.Security
                 throw new PermissionException(UserSession.User, type);
             }
         }
+
+        /// <summary>
+        /// Determines if the current user has the specified permission
+        /// </summary>
+        /// <remarks>
+        /// If the PermissionType is related to orders, then the ObjectID will be automatically translated to a StoreID, 
+        /// such as an OrderItemID would be translated to its order's StoreID.
+        /// </remarks>
+        public Result RequestPermission(PermissionType type, long? objectID) =>
+            HasPermission(type, objectID) ?
+                Result.FromSuccess() :
+                Result.FromError("User does not have permission");
 
         /// <summary>
         /// Determines if the user has the specified permission.  This takes into consideration
