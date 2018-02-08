@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         protected override string InternalLicenseIdentifier => manualStore.StoreName;
 
         /// <summary>
-        /// Creates an instance of AddStoreWizardPages
+        /// Creates the add store wizard pages.
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
