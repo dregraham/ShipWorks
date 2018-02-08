@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private const string ApiGetProductFormat = "{0}products/{1}.json";
         private const string ViewProductFormat = "{0}products/{1}";
 
+        // Fraud URL formats
+        private const string ApiFraudUrlFormat = "{0}orders/{1}/risks.json";
+
         // Shipment URL formats
         private const string ApiFulfillmentsUrlFormat = "{0}orders/{1}/fulfillments.json";
 
@@ -35,12 +38,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Constructor 
         /// </summary>
-        /// <param name="shopifyShopName">The name of the shopify shop, based on the shop's url.  It's the section after http:// and before myshopify.com</param>
+        /// <param name="shopUrlName">The name of the shopify shop, based on the shop's url.  It's the section after http:// and before myshopify.com</param>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public ShopifyEndpoints(string shopUrlName)
         {
             if (string.IsNullOrWhiteSpace(shopUrlName))
             {
-                throw new ArgumentException("shopName must be specified", "shopUrlName");
+                throw new ArgumentException("shopName must be specified", nameof(shopUrlName));
             }
 
             this.shopUrlName = shopUrlName;
@@ -137,6 +142,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             return string.Format(ViewProductFormat, ApiBaseUrl, shopifyProductId);
         }
+
+        /// <summary>
+        /// The url to retrieve all shopify fraud risks for a shopify order
+        /// </summary>
+        /// <param name="shopifyOrderId">The shopify order id</param>
+        /// <returns>The url to retrieve all shopify fraud risks for a shopify order</returns>
+        public string ApiFraudUrl(long shopifyOrderId) =>
+            string.Format(ApiFraudUrlFormat, ApiBaseUrl, shopifyOrderId);
 
         /// <summary>
         /// The url to retrieve all shopify fulfillments for a shopify order
