@@ -1,7 +1,10 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Manual
 {
@@ -48,6 +51,12 @@ namespace ShipWorks.Stores.Platforms.Manual
             return null;
         }
 
-        protected override string InternalLicenseIdentifier => manualStore.License;
+        protected override string InternalLicenseIdentifier => manualStore.StoreName;
+
+        
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        {
+            return new List<WizardPage>();
+        }
     }
 }
