@@ -167,6 +167,13 @@
     <Compile Include="Orders\Combine\CombineOrderSuccessDialog.xaml.cs">
       <DependentUpon>CombineOrderSuccessDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControl.Designer.cs">
+      <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControlFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -344,6 +351,12 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.Designer.cs">
+      <DependentUpon>OdbcOnDemandDownloadSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -353,6 +366,13 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml.cs">
       <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.Designer.cs">
+      <DependentUpon>OdbcWizardFinishPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControlFactory.cs" />
     <Compile Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml.cs">
       <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -516,6 +536,9 @@
     <Compile Include="StoreModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\StoreWizardFinishPageControl.resx">
+      <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.resx">
       <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -582,8 +605,14 @@
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcDataSourceControl.resx">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.resx">
+      <DependentUpon>OdbcOnDemandDownloadSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcSettingsWizard.resx">
       <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.resx">
+      <DependentUpon>OdbcWizardFinishPageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.resx">
       <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
@@ -789,9 +818,9 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

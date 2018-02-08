@@ -280,8 +280,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             // This ensures the record identifier saved to the map is a valid column
             RecordIdentifier =
-                columns.Any(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ?
-                    new OdbcColumn(storeFieldMap.RecordIdentifierSource) :
+                columns.FirstOrDefault(c => c.Name.Equals(storeFieldMap.RecordIdentifierSource, StringComparison.InvariantCulture)) ??
                     columns.Single(c => c.Name == EmptyColumnName);
 
             IOdbcFieldMapEntry orderNumberEntry =
@@ -353,7 +352,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                         c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
                     {
                         columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
-                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
+                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName, "unknown");
+                    }
+                    else
+                    {
+                        OdbcColumn entryColumn = Columns.FirstOrDefault(c => c.Name == entry.ExternalField.Column.Name);
+                        if (entryColumn != null)
+                        {
+                            entry.ExternalField.Column = entryColumn;
+                        }
                     }
                 }
                 if (columnsNotFound.Any())
@@ -382,7 +389,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn(EmptyColumnName));
+            Columns.Insert(0, new OdbcColumn(EmptyColumnName, "unknown"));
         }
 
         /// <summary>
@@ -410,7 +417,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Save(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
+            
             IOdbcFieldMap map = CreateMap();
             try
             {

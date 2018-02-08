@@ -608,10 +608,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             dataTable.Columns.Add("bar", typeof(string));
             dataTable.Columns.Add("baz", typeof(string));
             dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("blah", typeof(string));
+            dataTable.Columns.Add("DataType", typeof(string));
 
             foreach (string columnName in columnNames)
             {
-                dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, columnName);
+                dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, columnName, string.Empty, "string");
             }
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();

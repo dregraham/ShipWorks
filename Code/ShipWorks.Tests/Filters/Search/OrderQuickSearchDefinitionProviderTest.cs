@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Filters.Search
         }
 
         [Fact]
-        public void GetDefinition_DefinitionIncludesOrderNumberCondition()
+        public void GetDefinition_DefinitionIncludesOrderNumberCompleteCondition()
         {
             var definition = testObject.GetDefinition(testNumericQuery);
 
@@ -52,7 +52,28 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
+            Assert.Equal(2, context.Parameters.Count);
+        }
+
+        [Fact]
+        public void GetDefinition_DefinitionIncludesOrderNumberCondition_WhenTextIsNumeric()
+        {
+            var definition = testObject.GetDefinition(testNumericQuery);
+
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
+
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
+
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumber =".ToLowerInvariant()));
+            Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumber =".ToLowerInvariant()));
+
+            Assert.Equal(42L, context.Parameters.ElementAt(1).Value);
+            Assert.Equal(2, context.Parameters.Count);
         }
 
         [Fact]
@@ -72,7 +93,8 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.False(sql.Contains("LastName".ToLowerInvariant()));
             Assert.False(sql.Contains("Email".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
+            Assert.Equal(2, context.Parameters.Count);
         }
 
         [Fact]
@@ -149,7 +171,8 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
+            Assert.Equal(2, context.Parameters.Count);
         }
 
         public void Dispose()

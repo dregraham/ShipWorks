@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <summary>
         /// Loads the order information from the given Odbc records into the given order entity.
         /// </summary>
-        void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> odbcRecords);
+        void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> odbcRecords, bool reloadEntireOrder);
     }
 }

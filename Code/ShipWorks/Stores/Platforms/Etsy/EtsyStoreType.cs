@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -19,6 +15,10 @@ using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -174,15 +174,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
-            OrderItemEntity item = entity as OrderItemEntity;
-            if (entity == null || owner == null || item == null)
+            EtsyOrderItemEntity item = entity as EtsyOrderItemEntity;
+            if (owner == null || item == null)
             {
                 MessageHelper.ShowError(owner, "Unable to open link");
             }
-
-            if (item != null)
+            else
             {
-                Uri uri = EtsyEndpoints.GetItemUrl(item.Code);
+                Uri uri = EtsyEndpoints.GetItemUrl(item.TransactionID);
                 WebHelper.OpenUrl(uri, owner);
             }
         }

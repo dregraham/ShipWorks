@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
@@ -11,6 +12,7 @@ using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
@@ -27,6 +29,8 @@ namespace ShipWorks.ApplicationCore
         private readonly IMessenger messenger;
         private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IOnDemandDownloader singleScanOnDemandDownloader;
+        private readonly IOnDemandDownloader onDemandDownloader;
 
         // Debouncing observables for searching
         private readonly IConnectableObservable<ScanMessage> scanMessages;
@@ -35,11 +39,18 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainGridControlPipeline(IMessenger messenger, IUserSession userSession, IMainForm mainForm, ISchedulerProvider schedulerProvider)
+        public MainGridControlPipeline(
+            IMessenger messenger, 
+            IUserSession userSession, 
+            IMainForm mainForm, 
+            ISchedulerProvider schedulerProvider,
+            IOnDemandDownloaderFactory onDemandDownloaderFactory)
         {
             this.messenger = messenger;
             this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
+            singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
+            onDemandDownloader = onDemandDownloaderFactory.CreateOnDemandDownloader();
             this.mainForm = mainForm;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
@@ -49,7 +60,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Register the pipeline with the main grid control
         /// </summary>
-        public IDisposable Register(MainGridControl gridControl)
+        public IDisposable Register(IMainGridControl gridControl)
         {
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
@@ -57,6 +68,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
+                    .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
@@ -72,6 +84,7 @@ namespace ShipWorks.ApplicationCore
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
+                    .SelectMany(scanMsg => Observable.FromAsync(() => PerformBarcodeDownloadOnDemand(scanMsg.ScannedText)).Select(_ => scanMsg))
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
@@ -95,13 +108,29 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
+        /// Download order from quicksearch
+        /// </summary>
+        private Task PerformDownloadOnDemand(string searchText)
+        {
+            return onDemandDownloader.Download(searchText);
+        }
+
+        /// <summary>
+        /// Download order from scan
+        /// </summary>
+        private Task PerformBarcodeDownloadOnDemand(string searchString)
+        {
+            return singleScanOnDemandDownloader.Download(searchString.Trim());
+        }
+
+        /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
         /// <remarks>
         /// We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately,
         /// otherwise we could miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout.
         /// </remarks>
-        public void PerformBarcodeSearchAsync(MainGridControl gridControl, string scannedBarcode)
+        public void PerformBarcodeSearchAsync(IMainGridControl gridControl, string scannedBarcode)
         {
             gridControl.BeginInvoke((Action<string>) gridControl.PerformBarcodeSearch, scannedBarcode);
         }
@@ -137,7 +166,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Determines if the barcode search message should be sent
         /// </summary>
-        private bool AllowBarcodeSearch(MainGridControl gridControl, string barcode)
+        private bool AllowBarcodeSearch(IMainGridControl gridControl, string barcode)
         {
             return !barcode.IsNullOrWhiteSpace() &&
                    gridControl.Visible &&

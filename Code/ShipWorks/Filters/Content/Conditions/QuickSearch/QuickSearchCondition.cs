@@ -25,7 +25,7 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
         {
             this.storeSqls = storeSqls;
             isNumeric = searchText.IsNumeric();
-            this.searchText = $"{searchText}%";
+            this.searchText = searchText;
         }
 
         /// <summary>
@@ -35,15 +35,17 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
         {
             sqlGenerationContext = context;
 
-            string paramName = context.RegisterParameter(OrderFields.OrderNumberComplete, searchText);
+            string textParamName = context.RegisterParameter(OrderFields.OrderNumberComplete, $"{searchText}%");
 
             List<string> selectStatements = new List<string>()
             {
-                $"SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE {paramName}",
-                $"SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE {paramName}"
+                $"SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE {textParamName}",
+                $"SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE {textParamName}"
             };
 
-            // If the search text isn't numeric, don't add name/email fields.
+            AddOrderNumberSearch(context, selectStatements);
+
+            // If the search text isn't numeric, add name/email fields.
             if (!isNumeric)
             {
                 // If there's a space in the search text, we assume they are wanting a to do a 
@@ -53,21 +55,21 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
                     PersonName name = PersonName.Parse(searchText);
 
                     string firstNameParamName = context.RegisterParameter(OrderFields.ShipFirstName, $"{name.First}%");
-                    string lastNameParamName = context.RegisterParameter(OrderFields.ShipLastName, name.Last);
+                    string lastNameParamName = context.RegisterParameter(OrderFields.ShipLastName, $"{name.Last}%");
 
                     selectStatements.Add($"SELECT OrderId FROM [Order] WHERE (BillFirstName LIKE {firstNameParamName} OR ShipFirstName LIKE {firstNameParamName}) AND (BillLastName LIKE {lastNameParamName} OR ShipLastName LIKE {lastNameParamName})");
                 }
                 else
                 {
                     // No space means it could be anything, OR each field.
-                    selectStatements.Add($"SELECT OrderId FROM [Order] WHERE BillFirstName LIKE {paramName} OR ShipFirstName LIKE {paramName} OR BillLastName LIKE {paramName} OR ShipLastName LIKE {paramName} OR BillEmail LIKE {paramName} OR ShipEmail LIKE {paramName}");
+                    selectStatements.Add($"SELECT OrderId FROM [Order] WHERE BillFirstName LIKE {textParamName} OR ShipFirstName LIKE {textParamName} OR BillLastName LIKE {textParamName} OR ShipLastName LIKE {textParamName} OR BillEmail LIKE {textParamName} OR ShipEmail LIKE {textParamName}");
                 }
             }
 
             // Get each store's quick search SQL
             foreach (IQuickSearchStoreSql quickSearchStoreSql in storeSqls)
             {
-                selectStatements.AddRange(quickSearchStoreSql.GenerateSql(sqlGenerationContext, searchText));
+                selectStatements.AddRange(quickSearchStoreSql.GenerateSql(sqlGenerationContext, $"{searchText}%"));
             }
 
             // Now create the SQL
@@ -80,7 +82,22 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
 
             return searchSql;
         }
-        
+
+        /// <summary>
+        /// If searchText is numeric and starts with 0, search orders for the numeric value of the order number.
+        /// </summary>
+        private void AddOrderNumberSearch(SqlGenerationContext context, List<string> selectStatements)
+        {
+            if (isNumeric && long.Parse(searchText) > 0)
+            {
+                long numericSearchText = long.Parse(searchText);
+                string numericParamName = context.RegisterParameter(OrderFields.OrderNumber, numericSearchText);
+                
+                selectStatements.Add($"SELECT OrderId FROM [Order] WHERE OrderNumber = {numericParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [OrderSearch] WHERE OrderNumber = {numericParamName}");
+            }
+        }
+
         /// <summary>
         /// No editor!
         /// </summary>

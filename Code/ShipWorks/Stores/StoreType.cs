@@ -36,7 +36,7 @@ namespace ShipWorks.Stores
     public abstract class StoreType
     {
         // Store this instance is wrapping
-        private StoreEntity store;
+        private readonly StoreEntity store;
 
         /// <summary>
         /// Construction
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public override string ToString()
         {
-            return this.StoreTypeName;
+            return StoreTypeName;
         }
 
         /// <summary>
@@ -130,6 +130,11 @@ namespace ShipWorks.Stores
         {
             get { return StoreTypeIdentity.FromCode(TypeCode).Name; }
         }
+
+        /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public virtual bool IsOnDemandDownloadEnabled => false;
 
         /// <summary>
         /// Creates a store-specific instance of a StoreEntity
@@ -349,6 +354,14 @@ namespace ShipWorks.Stores
         public virtual ManualOrderSettingsControl CreateManualOrderSettingsControl()
         {
             return new ManualOrderSettingsControl();
+        }
+
+        /// <summary>
+        /// Create the control used to edit the manual order number settings for the store
+        /// </summary>
+        public virtual IDownloadSettingsControl CreateDownloadSettingsControl()
+        {
+            return new DownloadSettingsControl();
         }
 
         /// <summary>
@@ -623,6 +636,17 @@ namespace ShipWorks.Stores
         public virtual bool ShowTaskWizardPage()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Returns messaging to display on the AddStoreWizard finish page
+        /// </summary>
+        public virtual Control CreateWizardFinishPageControl()
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
+            }
         }
     }
 }

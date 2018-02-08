@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
@@ -230,6 +231,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             trackedDurationEventMock.Verify(e => e.AddProperty("Upload.QueryType", expectedResult));
         }
 
+        [Theory]
+        [InlineData(OdbcImportStrategy.All)]
+        [InlineData(OdbcImportStrategy.ByModifiedTime)]
+        [InlineData(OdbcImportStrategy.OnDemand)]
+        public void CollectTelemetry_ImportStrategyTypeSetFromOdbcStore(OdbcImportStrategy sourceType)
+        {
+            odbcStore.ImportStrategy = (int) sourceType;
+
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.Strategy", EnumHelper.GetApiValue(sourceType)));
+        }
+
         private void MockDataSourceService()
         {
             var uploadDataSource = mock.MockRepository.Create<IOdbcDataSource>();
@@ -246,7 +261,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         private void MockFieldMap()
         {
             var orderNumberExternalFieldMock = mock.MockRepository.Create<IExternalOdbcMappableField>();
-            orderNumberExternalFieldMock.Setup(e => e.Column).Returns(() => new OdbcColumn(orderNumberExternalColumnName));
+            orderNumberExternalFieldMock.Setup(e => e.Column).Returns(() => new OdbcColumn(orderNumberExternalColumnName, "unknown"));
 
             var orderNumberFieldMapEntryMock = mock.MockRepository.Create<IOdbcFieldMapEntry>();
             orderNumberFieldMapEntryMock.Setup(e => e.ExternalField).Returns(() => orderNumberExternalFieldMock.Object);

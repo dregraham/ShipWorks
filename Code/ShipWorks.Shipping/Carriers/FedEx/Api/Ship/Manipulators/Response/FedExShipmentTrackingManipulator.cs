@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
                     shipment.FedEx.SmartPostUspsApplicationId = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId;
                 }
 
-                string trackingNumber = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber; ;
+                string trackingNumber = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber;
                 shipment.TrackingNumber = FedExUtility.BuildTrackingNumber(trackingNumber, shipment.FedEx);
 
                 shipment.FedEx.MasterFormID = "";

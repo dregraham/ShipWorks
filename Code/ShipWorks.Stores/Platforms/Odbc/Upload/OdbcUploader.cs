@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
             foreach (long shipmentId in shipmentIds)
             {
                 ICarrierShipmentAdapter carrierShipmentAdapter = shippingManager.GetShipment(shipmentId);
-                await Upload(store, carrierShipmentAdapter.Shipment).ConfigureAwait(false); ;
+                await Upload(store, carrierShipmentAdapter.Shipment).ConfigureAwait(false);
             }
         }
 

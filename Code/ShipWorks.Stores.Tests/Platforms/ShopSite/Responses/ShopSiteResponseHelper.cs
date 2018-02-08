@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ShopSite.Dto;
 
@@ -19,7 +13,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.Responses
         {
             string ordersXml = string.Empty;
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.GetOrders.xml"))
+            using (Stream stream = typeof(ShopSiteResponseHelper).Assembly.GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.GetOrders.xml"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -33,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.Responses
         {
             string ordersXml = string.Empty;
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.TestConnection.xml"))
+            using (Stream stream = typeof(ShopSiteResponseHelper).Assembly.GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.TestConnection.xml"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -47,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.Responses
         {
             string accessTokenJson = string.Empty;
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.FetchAccessToken.json"))
+            using (Stream stream = typeof(ShopSiteResponseHelper).Assembly.GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.FetchAccessToken.json"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -66,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.Responses
         {
             string accessTokenJson = string.Empty;
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.FetchEmptyAccessToken.json"))
+            using (Stream stream = typeof(ShopSiteResponseHelper).Assembly.GetManifestResourceStream("ShipWorks.Stores.Tests.Platforms.ShopSite.Responses.FetchEmptyAccessToken.json"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {

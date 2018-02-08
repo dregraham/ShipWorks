@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -187,7 +187,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -226,7 +226,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("");
+            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -263,7 +263,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
@@ -302,7 +302,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified");
+            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);

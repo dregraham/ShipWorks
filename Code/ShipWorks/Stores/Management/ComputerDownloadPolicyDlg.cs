@@ -46,15 +46,16 @@ namespace ShipWorks.Stores.Management
                 panel.Tag = computer;
 
                 Label label = new Label();
-                label.Location = new Point(3, 7);
+                label.Location = new Point(0, 7);
                 label.Text = computer.Name + ":";
                 label.AutoSize = true;
                 panel.Controls.Add(label);
 
                 ComputerDownloadAllowedComboBox combo = new ComputerDownloadAllowedComboBox();
                 combo.DropDownStyle = ComboBoxStyle.DropDownList;
-                combo.Location = new Point(100, 4);
+                combo.Location = new Point(202, 4);
                 combo.LoadChoices(downloadPolicy.DefaultToYes);
+                combo.Width = 100;
                 panel.Controls.Add(combo);
 
                 panelComputers.Controls.Add(panel);

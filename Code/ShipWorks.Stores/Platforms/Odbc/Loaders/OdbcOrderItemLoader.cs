@@ -40,7 +40,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 {
                     int itemIndex = i;
 
-                    OrderItemEntity item = new OrderItemEntity(order);
+                    OrderItemEntity item = new OrderItemEntity();
+                    item.InitializeNullsToDefault();
                     clonedMap.CopyToEntity(item, itemIndex);
 
                     SetCost(clonedMap, item, itemIndex);
@@ -49,9 +50,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 
                     attributeLoader.Load(clonedMap, item, itemIndex);
 
-                    if (!item.IsDirty)
+                    if (item.IsDirty)
                     {
-                        order.OrderItems.Remove(item);
+                        item.Order = order;
                     }
                 }
             }

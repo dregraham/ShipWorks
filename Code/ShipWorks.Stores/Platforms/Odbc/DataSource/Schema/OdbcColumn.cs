@@ -11,15 +11,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Constructor
         /// </summary>
-	    public OdbcColumn(string name)
+	    public OdbcColumn(string name, string dataType)
 	    {
 	        Name = name;
-	    }
+            DataType = dataType;
+        }
 
         /// <summary>
         /// The column name
         /// </summary>
 	    public string Name { get; }
+
+        /// <summary>
+        /// The column datatype
+        /// </summary>
+        public string DataType { get; }
 
         /// <summary>
         /// Determines whether the specified Object is equal to this instance.
