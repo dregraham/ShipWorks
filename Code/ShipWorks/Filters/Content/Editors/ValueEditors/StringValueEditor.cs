@@ -59,14 +59,14 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         private void UpdateValueVisibility()
         {
             targetValue.Visible = condition.Operator != StringOperator.IsEmpty;
-            editButton.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
+            valueEditorPanel.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
 
             targetValue.Left = labelOperator.Right + 3;
-            editButton.Left = targetValue.Right + 5;
+            valueEditorPanel.Left = targetValue.Right;
 
             if (condition.Operator != StringOperator.IsEmpty)
             {
-                Width = targetValue.Right + errorSpace + editButton.Width;
+                Width = targetValue.Right + errorSpace + valueEditorPanel.Width;
             }
             else
             {

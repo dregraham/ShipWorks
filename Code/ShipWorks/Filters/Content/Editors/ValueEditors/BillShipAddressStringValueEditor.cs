@@ -51,11 +51,11 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             stringOperator.Visible = !IsBillShipComparison(addressOp);
             targetValue.Visible = !IsBillShipComparison(addressOp) && op != StringOperator.IsEmpty;
-            editButton.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
+            valueEditorPanel.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
 
             stringOperator.Left = addressOperator.Right + 3;
             targetValue.Left = stringOperator.Right + 3;
-            editButton.Left = targetValue.Right + 5;
+            valueEditorPanel.Left = targetValue.Right;
 
             if (!stringOperator.Visible)
             {
@@ -65,7 +65,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             {
                 if (targetValue.Visible)
                 {
-                    Width = targetValue.Right + errorSpace + editButton.Width;
+                    Width = targetValue.Right + errorSpace + valueEditorPanel.Width;
                 }
                 else
                 {
