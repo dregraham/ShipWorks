@@ -512,7 +512,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 }
 
                 // New upgraded session
-                SqlSession newSession = new SqlSession(SqlInstanceUtility.DetermineCredentials(serverInstance));
+                SqlSessionConfiguration newServerInfo = SqlInstanceUtility.DetermineCredentials(serverInstance);
+                SqlSession newSession = new SqlSession(newServerInfo);
 
                 // Detatch the database from LocalDb
                 log.InfoFormat("Detaching mdf-ldf from LocalDB");
@@ -559,6 +560,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                     ON (FILENAME = '{1}'),
                                        (FILENAME = '{2}')
                                     FOR ATTACH", databaseName, targetMdf, targetLdf));
+
+                    // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
+                    string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
+                    if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(newServerInfo.Username))
+                    {
+                        DbCommandProvider.ExecuteNonQuery(con, $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON");
+                        DbCommandProvider.ExecuteNonQuery(con, $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {newServerInfo.Username}");
+                    }
                 }
             }
             catch (Win32Exception ex)
