@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
@@ -11,6 +10,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using System;
+using System.Collections.Generic;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -67,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         public void Submit_DelegatesToFedExService()
         {
             var service = mock.FromFactory<IFedExServiceGatewayFactory>()
-                .Mock(x => x.Create(It.IsAny<IFedExSettingsRepository>()));
+                .Mock(x => x.Create(It.IsAny<IShipmentEntity>(), It.IsAny<IFedExSettingsRepository>()));
 
             var testObject = mock.Create<FedExShipRequest>();
             testObject.Submit(shipmentEntity, 0);
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
                 .Returns(GenericResult.FromSuccess(response.Object));
 
             mock.FromFactory<IFedExServiceGatewayFactory>()
-                .Mock(x => x.Create(It.IsAny<IFedExSettingsRepository>()))
+                .Mock(x => x.Create(It.IsAny<IShipmentEntity>(), It.IsAny<IFedExSettingsRepository>()))
                 .Setup(x => x.Ship(It.IsAny<ProcessShipmentRequest>()))
                 .Returns(shipmentReply);
 
