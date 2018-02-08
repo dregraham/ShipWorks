@@ -403,7 +403,7 @@ namespace ShipWorks.Stores
 
         [Description("Manual")]
         [StoreTypeIdentity("MANUAL", "MAN")]
-        [StoreTypeIcon("manual")]
+        [StoreTypeIcon("shipworks")]
         Manual = 80
     }
 }
