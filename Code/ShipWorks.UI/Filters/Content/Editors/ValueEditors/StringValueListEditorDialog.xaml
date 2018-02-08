@@ -38,6 +38,8 @@
                  Text="{Binding Items}"
                  Margin="8,8,8,0"
                  AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"
                  ap:Focus.Startup="{Binding RelativeSource={RelativeSource Self}}" />
 
         <StackPanel Grid.Row="2" 

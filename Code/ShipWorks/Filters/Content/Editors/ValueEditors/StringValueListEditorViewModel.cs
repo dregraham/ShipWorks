@@ -7,6 +7,7 @@ using ShipWorks.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -68,7 +69,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         public GenericResult<IEnumerable<string>> EditList(IWin32Window owner, IEnumerable<string> values)
         {
-            Items = values.Combine(Environment.NewLine);
+            Items = values.Any() ? values.Append(string.Empty).Combine(Environment.NewLine) : string.Empty;
 
             dialog = createDialog(this);
             dialog.LoadOwner(owner);
