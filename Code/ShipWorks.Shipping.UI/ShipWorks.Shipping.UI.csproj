@@ -277,6 +277,12 @@
     </Compile>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
+    <Compile Include="Profiles\GlobalProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Profiles\GlobalProfileControl.Designer.cs">
+      <DependentUpon>GlobalProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
@@ -547,6 +553,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressCustomsControl.resx">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Profiles\GlobalProfileControl.resx">
+      <DependentUpon>GlobalProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
