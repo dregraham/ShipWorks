@@ -39,7 +39,6 @@ namespace ShipWorks.Stores.Platforms.Manual
             InitializeStoreDefaults(store);
 
             store.StoreName = "My Manual Store";
-            store.AutoDownload = false;
 
             return store;
         }
