@@ -362,7 +362,7 @@ namespace ShipWorks.Stores
             }
 
             // Make sure all stores are represented
-            foreach (StoreEntity store in GetAllStores())
+            foreach (StoreEntity store in GetAllStores().Where(s => s.StoreTypeCode != StoreTypeCode.Manual))
             {
                 if (!lastDownloadTimes.ContainsKey(store.StoreID))
                 {
