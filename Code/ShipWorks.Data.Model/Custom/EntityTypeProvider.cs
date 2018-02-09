@@ -193,6 +193,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ShopifyOrderSearchEntity": return EntityType.ShopifyOrderSearchEntity;
 				case "ShopifyStoreEntity": return EntityType.ShopifyStoreEntity;
 				case "ShopSiteStoreEntity": return EntityType.ShopSiteStoreEntity;
+				case "ShortcutEntity": return EntityType.ShortcutEntity;
 				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
 				case "StatusPresetEntity": return EntityType.StatusPresetEntity;
 				case "StoreEntity": return EntityType.StoreEntity;

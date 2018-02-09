@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(222);
+			this.InitClass(223);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -220,6 +220,7 @@ namespace ShipWorks.Data.Model
 			InitShopifyOrderSearchEntityMappings();
 			InitShopifyStoreEntityMappings();
 			InitShopSiteStoreEntityMappings();
+			InitShortcutEntityMappings();
 			InitSparkPayStoreEntityMappings();
 			InitStatusPresetEntityMappings();
 			InitStoreEntityMappings();
@@ -3186,6 +3187,17 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthSecretKey", "OauthSecretKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "Identifier", "Identifier", false, "NVarChar", 350, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthAuthorizationCode", "OauthAuthorizationCode", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
+		}
+
+		/// <summary>Inits ShortcutEntity's mappings</summary>
+		private void InitShortcutEntityMappings()
+		{
+			this.AddElementMapping("ShortcutEntity", @"ShipWorksLocal", @"dbo", "Shortcut", 5, 0);
+			this.AddElementFieldMapping("ShortcutEntity", "ShortcutID", "ShortcutID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ShortcutEntity", "Barcode", "Barcode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("ShortcutEntity", "Hotkey", "Hotkey", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("ShortcutEntity", "Action", "Action", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("ShortcutEntity", "ObjectID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 4);
 		}
 
 		/// <summary>Inits SparkPayStoreEntity's mappings</summary>

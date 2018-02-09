@@ -581,6 +581,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					toReturn = this.ShopSiteStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.ShortcutEntity:
+					toReturn = this.Shortcut;
+					break;
 				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
 					toReturn = this.SparkPayStore;
 					break;
@@ -1780,6 +1783,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ShopSiteStoreEntity> ShopSiteStore
 		{
 			get { return new DataSource2<ShopSiteStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShortcutEntity instances in the database.</summary>
+		public DataSource2<ShortcutEntity> Shortcut
+		{
+			get { return new DataSource2<ShortcutEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting SparkPayStoreEntity instances in the database.</summary>

@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (222 + 0));
+			this.InitClass( (223 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -223,6 +223,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderSearchEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
+			InitShortcutEntityInfos();
 			InitSparkPayStoreEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
@@ -3019,6 +3020,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthSecretKey", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthSecretKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Identifier, 350, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthAuthorizationCode", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, 100, 0, 0);
+		}
+		/// <summary>Inits ShortcutEntity's FieldInfo objects</summary>
+		private void InitShortcutEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShortcutFieldIndex), "ShortcutEntity");
+			this.AddElementFieldInfo("ShortcutEntity", "ShortcutID", typeof(System.Int64), true, false, false, false,  (int)ShortcutFieldIndex.ShortcutID, 0, 0, 19);
+			this.AddElementFieldInfo("ShortcutEntity", "Barcode", typeof(System.String), false, false, false, false,  (int)ShortcutFieldIndex.Barcode, 50, 0, 0);
+			this.AddElementFieldInfo("ShortcutEntity", "Hotkey", typeof(System.Int32), false, false, false, false,  (int)ShortcutFieldIndex.Hotkey, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "Action", typeof(System.Int32), false, false, false, false,  (int)ShortcutFieldIndex.Action, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.ObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()

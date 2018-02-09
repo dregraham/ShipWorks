@@ -22939,6 +22939,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ShortcutEntity</summary>
+	public partial class ShortcutFields
+	{
+		/// <summary>Creates a new ShortcutEntity.ShortcutID field instance</summary>
+		public static EntityField2 ShortcutID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.ShortcutID);}
+		}
+		/// <summary>Creates a new ShortcutEntity.Barcode field instance</summary>
+		public static EntityField2 Barcode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Barcode);}
+		}
+		/// <summary>Creates a new ShortcutEntity.Hotkey field instance</summary>
+		public static EntityField2 Hotkey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Hotkey);}
+		}
+		/// <summary>Creates a new ShortcutEntity.Action field instance</summary>
+		public static EntityField2 Action
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Action);}
+		}
+		/// <summary>Creates a new ShortcutEntity.ObjectID field instance</summary>
+		public static EntityField2 ObjectID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.ObjectID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity SparkPayStoreEntity</summary>
 	public partial class SparkPayStoreFields
 	{

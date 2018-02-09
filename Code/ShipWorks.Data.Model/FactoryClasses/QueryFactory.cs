@@ -1144,6 +1144,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ShopSiteStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the Shortcut entity</summary>
+		public EntityQuery<ShortcutEntity> Shortcut
+		{
+			get { return Create<ShortcutEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the SparkPayStore entity</summary>
 		public EntityQuery<SparkPayStoreEntity> SparkPayStore
 		{

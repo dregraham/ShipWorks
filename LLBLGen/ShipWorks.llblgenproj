@@ -2674,6 +2674,15 @@
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="Shortcut" ObjectID="db397769-930f-4968-8d9b-77d1cbb2ecd6">
+        <Fields>
+          <Field Name="Action" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Hotkey" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="ObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
+          <Field Name="ShortcutID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="SparkPayStore" ObjectID="b4f859d7-ac86-41b0-a433-d34493f23012" InheritanceType="2">
         <Fields>
           <Field Name="StatusCodes" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="2" />
@@ -4279,7 +4288,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T20:39:02.9975331Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-09T17:04:34.763628Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8209,6 +8218,16 @@
                     <Field Name="OauthSecretKey" Ordinal="10" DbType="12" Length="100" />
                     <Field Name="OauthAuthorizationCode" Ordinal="11" DbType="12" Length="100" />
                     <Field Name="Identifier" Ordinal="12" DbType="12" Length="350" />
+                  </Fields>
+                </Table>
+                <Table Name="Shortcut">
+                  <PkConstraintName Name="PK_Shortcut" />
+                  <Fields>
+                    <Field Name="ShortcutID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="Barcode" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="Hotkey" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="Action" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ObjectID" Ordinal="5" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="SparkPayStore">
@@ -12861,6 +12880,15 @@
             <FieldMapping FieldName="ShopSiteAuthentication" TargetFieldName="ShopSiteAuthentication" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":Shortcut" TargetName="ShipWorksLocal:dbo:Shortcut">
+          <FieldMappings>
+            <FieldMapping FieldName="Action" TargetFieldName="Action" />
+            <FieldMapping FieldName="Barcode" TargetFieldName="Barcode" />
+            <FieldMapping FieldName="Hotkey" TargetFieldName="Hotkey" />
+            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":SparkPayStore" TargetName="ShipWorksLocal:dbo:SparkPayStore">

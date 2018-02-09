@@ -9873,6 +9873,22 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shortcut.</summary>
+	public enum ShortcutFieldIndex
+	{
+		///<summary>ShortcutID. </summary>
+		ShortcutID,
+		///<summary>Barcode. </summary>
+		Barcode,
+		///<summary>Hotkey. </summary>
+		Hotkey,
+		///<summary>Action. </summary>
+		Action,
+		///<summary>ObjectID. </summary>
+		ObjectID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.</summary>
 	public enum SparkPayStoreFieldIndex
 	{
@@ -12575,6 +12591,8 @@ namespace ShipWorks.Data.Model
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
 		ShopSiteStoreEntity,
+		///<summary>Shortcut</summary>
+		ShortcutEntity,
 		///<summary>SparkPayStore</summary>
 		SparkPayStoreEntity,
 		///<summary>StatusPreset</summary>

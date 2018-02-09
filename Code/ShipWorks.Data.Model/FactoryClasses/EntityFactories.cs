@@ -3559,6 +3559,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ShortcutEntity objects.</summary>
+	[Serializable]
+	public partial class ShortcutEntityFactory : EntityFactoryBase2<ShortcutEntity> {
+		/// <summary>CTor</summary>
+		public ShortcutEntityFactory() : base("ShortcutEntity", ShipWorks.Data.Model.EntityType.ShortcutEntity, false) { }
+		
+		/// <summary>Creates a new ShortcutEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ShortcutEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShortcutUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty SparkPayStoreEntity objects.</summary>
 	[Serializable]
 	public partial class SparkPayStoreEntityFactory : EntityFactoryBase2<SparkPayStoreEntity> {
@@ -5069,6 +5090,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					factoryToUse = new ShopSiteStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ShortcutEntity:
+					factoryToUse = new ShortcutEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
 					factoryToUse = new SparkPayStoreEntityFactory();
