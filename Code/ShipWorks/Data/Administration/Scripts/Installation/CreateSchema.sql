@@ -6531,7 +6531,21 @@ GO
 ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
 ON DELETE CASCADE
 GO
+PRINT N'Creating [dbo].[Shortcut]'
+GO
+CREATE TABLE [dbo].[Shortcut](
+	[ShortcutID] [bigint] NOT NULL,
+	[Barcode] [nvarchar](50) NOT NULL,
+	[Hotkey] [int] NOT NULL,
+	[Action] [int] NOT NULL,
+	[ObjectID] [bigint] NULL,
+ CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED 
+(
+	[ShortcutID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 
+GO
 PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 CREATE NONCLUSTERED INDEX [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])
