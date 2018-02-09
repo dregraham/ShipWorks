@@ -469,41 +469,19 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// The actual installation that occurs in a seperate elevated process
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void UpgradeLocalDbInternal(string instanceName)
         {
-            string serverInstance = Environment.MachineName + "\\" + instanceName;
-
             int exitCode = 0;
 
             try
             {
                 // If this instance is already installed, then we are reusing an existing instance.  If it's not, we need to install it now
-                if (!SqlInstanceUtility.IsSqlInstanceInstalled(instanceName))
-                {
-                    // Go ahead and do the full install
-                    InstallSqlServerInternal(instanceName, SqlInstanceUtility.ShipWorksSaPassword);
-
-                    // Record this as our upgraded SQL Server.  It may not have even worked - that's ok. B\c when we come back through again, we won't be able to connect,
-                    // and we'll use another name.
-                    using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
-                    {
-                        key.SetValue("Automatic", instanceName);
-                    }
-
-                    // If that wasn't succesfull, go ahead and punt now
-                    if (Environment.ExitCode != 0)
-                    {
-                        return;
-                    }
-                }
+                EnsureSqlInstanceInstalled(instanceName);
 
                 //
                 // At this point, SQL Server should be succesfully installed and running.  Now we need to move the mdf\ldf
                 //
-
-                DatabaseFileInfo fileInfo;
-
+                
                 // Old LocalDb session
                 SqlSession localDbSession = SqlSession.Current;
                 if (localDbSession.Configuration.ServerInstance != SqlInstanceUtility.LocalDbServerInstance)
@@ -512,24 +490,13 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 }
 
                 // New upgraded session
+                string serverInstance = Environment.MachineName + "\\" + instanceName;
                 SqlSessionConfiguration newServerInfo = SqlInstanceUtility.DetermineCredentials(serverInstance);
                 SqlSession newSession = new SqlSession(newServerInfo);
 
                 // Detatch the database from LocalDb
                 log.InfoFormat("Detaching mdf-ldf from LocalDB");
-                using (DbConnection con = localDbSession.OpenConnection())
-                {
-                    fileInfo = ShipWorksDatabaseUtility.DetachDatabase(localDbSession.Configuration.DatabaseName, con);
-                }
-
-                // Path where the db files are moving
-                string newFilePath;
-
-                // Figure out the path where they are going to go
-                using (DbConnection con = newSession.OpenConnection())
-                {
-                    newFilePath = SqlUtility.GetMasterDataFilePath(con);
-                }
+                DatabaseFileInfo fileInfo = DetachDatabase(localDbSession);
 
                 // Get the next available database name to use
                 string databaseName = AssignAutomaticDatabaseNameInternal();
@@ -540,35 +507,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     return;
                 }
 
-                // Determine what filename is available in the new folder.  Most likely there won't be a conflict, but this ensures it
-                string dataFileBase = ShipWorksDatabaseUtility.DetermineAvailableFileName(newFilePath, databaseName);
-
-                string targetMdf = Path.Combine(newFilePath, dataFileBase + ".mdf");
-                string targetLdf = Path.Combine(newFilePath, dataFileBase + "_log.ldf");
-
-                // Physically move the files
-                File.Move(fileInfo.DataFile, targetMdf);
-                File.Move(fileInfo.LogFile, targetLdf);
+                (string targetMdf, string targetLdf) = MoveLocalDbDataFiles(newSession, databaseName, fileInfo);
 
                 log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
 
                 // Now we attach the db files into the full instance
-                using (DbConnection con = newSession.OpenConnection())
-                {
-                    DbCommandProvider.ExecuteNonQuery(con, string.Format(
-                                    @"CREATE DATABASE {0}
-                                    ON (FILENAME = '{1}'),
-                                       (FILENAME = '{2}')
-                                    FOR ATTACH", databaseName, targetMdf, targetLdf));
-
-                    // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
-                    string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
-                    if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(newServerInfo.Username))
-                    {
-                        DbCommandProvider.ExecuteNonQuery(con, $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON");
-                        DbCommandProvider.ExecuteNonQuery(con, $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {newServerInfo.Username}");
-                    }
-                }
+                AttachDatabase(newSession, databaseName, targetLdf, targetLdf, newServerInfo.Username);
             }
             catch (Win32Exception ex)
             {
@@ -582,6 +526,105 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             Environment.ExitCode = exitCode;
+        }
+
+        /// <summary>
+        /// Check to see if the instance exists, if not install it
+        /// </summary>
+        /// <param name="instanceName">The Sql Instance to use</param>
+        private void EnsureSqlInstanceInstalled(string instanceName)
+        {
+            // If this instance is already installed, then we are reusing an existing instance.  If it's not, we need to install it now
+            if (!SqlInstanceUtility.IsSqlInstanceInstalled(instanceName))
+            {
+                // Go ahead and do the full install
+                InstallSqlServerInternal(instanceName, SqlInstanceUtility.ShipWorksSaPassword);
+
+                // Record this as our upgraded SQL Server.  It may not have even worked - that's ok. B\c when we come back through again, we won't be able to connect,
+                // and we'll use another name.
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
+                {
+                    key.SetValue("Automatic", instanceName);
+                }
+
+                // If that wasn't succesfull, go ahead and punt now
+                if (Environment.ExitCode != 0)
+                {
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Detach the dtabase and return its data file info
+        /// </summary>
+        /// <param name="sqlSession">The sql session whos database to detach</param>
+        /// <returns>Database file info</returns>
+        private DatabaseFileInfo DetachDatabase(SqlSession sqlSession)
+        {
+            using (DbConnection con = sqlSession.OpenConnection())
+            {
+                return ShipWorksDatabaseUtility.DetachDatabase(sqlSession.Configuration.DatabaseName, con);
+            }
+        }
+
+        /// <summary>
+        /// Move the database files to the SqlSession
+        /// </summary>
+        /// <param name="sqlSession">The SqlSession to move the files to</param>
+        /// <param name="databaseName">The name to use for the new database</param>
+        /// <param name="fileInfo">The files to move</param>
+        private (string newMdf, string newLdf) MoveLocalDbDataFiles(SqlSession sqlSession, string databaseName, DatabaseFileInfo fileInfo)
+        {
+            // Path where the db files are moving
+            string newFilePath;
+
+            // Figure out the path where they are going to go
+            using (DbConnection con = sqlSession.OpenConnection())
+            {
+                newFilePath = SqlUtility.GetMasterDataFilePath(con);
+            }
+
+            // Determine what filename is available in the new folder.  Most likely there won't be a conflict, but this ensures it
+            string dataFileBase = ShipWorksDatabaseUtility.DetermineAvailableFileName(newFilePath, databaseName);
+
+            string targetMdf = Path.Combine(newFilePath, dataFileBase + ".mdf");
+            string targetLdf = Path.Combine(newFilePath, dataFileBase + "_log.ldf");
+
+            // Physically move the files
+            File.Move(fileInfo.DataFile, targetMdf);
+            File.Move(fileInfo.LogFile, targetLdf);
+
+            return (targetMdf, targetLdf);
+        }
+
+        /// <summary>
+        /// Attach the MDF and LDF as a database
+        /// </summary>
+        /// <param name="sqlSession">The SQL Session to use</param>
+        /// <param name="databaseName">The name to give the database</param>
+        /// <param name="targetMdf">The data file to attach</param>
+        /// <param name="targetLdf">The log file to attach</param>
+        /// <param name="databaseOwner">The username of the database owenr</param>
+        private void AttachDatabase(SqlSession sqlSession, string databaseName, string targetMdf, string targetLdf, string databaseOwner)
+        {
+            using (DbConnection con = sqlSession.OpenConnection())
+            {
+                // attach the db files into the full instance
+                DbCommandProvider.ExecuteNonQuery(con, string.Format(
+                                @"CREATE DATABASE {0}
+                                ON (FILENAME = '{1}'),
+                                    (FILENAME = '{2}')
+                                FOR ATTACH", databaseName, targetMdf, targetLdf));
+
+                // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
+                string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
+                if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
+                {
+                    DbCommandProvider.ExecuteNonQuery(con, $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON");
+                    DbCommandProvider.ExecuteNonQuery(con, $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {databaseOwner}");
+                }
+            }
         }
 
         /// <summary>
