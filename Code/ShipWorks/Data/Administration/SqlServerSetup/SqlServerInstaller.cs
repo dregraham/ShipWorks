@@ -512,7 +512,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
 
                 // Now we attach the db files into the full instance
-                AttachDatabase(newSession, databaseName, targetLdf, targetLdf, newServerInfo.Username);
+                AttachDatabase(newSession, databaseName, targetMdf, targetLdf, newServerInfo.Username);
             }
             catch (Win32Exception ex)
             {
@@ -610,20 +610,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             using (DbConnection con = sqlSession.OpenConnection())
             {
+                string attachSql = $@"CREATE DATABASE {databaseName} ON (FILENAME ='{targetMdf}'), (FILENAME ='{targetLdf}') FOR ATTACH";
+                log.Info($"Executing attach statement: {attachSql}");
                 // attach the db files into the full instance
-                DbCommandProvider.ExecuteNonQuery(con, string.Format(
-                                @"CREATE DATABASE {0}
-                                ON (FILENAME = '{1}'),
-                                    (FILENAME = '{2}')
-                                FOR ATTACH", databaseName, targetMdf, targetLdf));
+                DbCommandProvider.ExecuteNonQuery(con, attachSql);
 
-                // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
-                string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
-                if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
-                {
-                    DbCommandProvider.ExecuteNonQuery(con, $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON");
-                    DbCommandProvider.ExecuteNonQuery(con, $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {databaseOwner}");
-                }
+                SqlUtility.ConfigureSql2017ForClr(con, databaseName, databaseOwner);
             }
         }
 

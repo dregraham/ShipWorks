@@ -668,6 +668,7 @@ namespace ShipWorks.Data.Administration
             {
                 try
                 {
+                    SqlUtility.ConfigureSql2017ForClr(con, databaseName, SqlUtility.GetUsername(con));
                     con.ChangeDatabase(databaseName);
 
                     // Allow multiple connections again
