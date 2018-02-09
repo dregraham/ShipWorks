@@ -39,6 +39,7 @@ namespace ShipWorks.Stores.Platforms.Manual
             InitializeStoreDefaults(store);
 
             store.StoreName = "My Manual Store";
+            store.AutoDownload = false;
 
             return store;
         }
@@ -63,5 +64,10 @@ namespace ShipWorks.Stores.Platforms.Manual
         {
             return new List<WizardPage>();
         }
+
+        /// <summary> 
+        /// ManualStore does not support uploading or downloading so we return false to skip this page
+        /// </summary> 
+        public override bool ShowTaskWizardPage() => false;
     }
 }
