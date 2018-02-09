@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.Common.IO.KeyboardShortcuts
+namespace ShipWorks.IO.KeyboardShortcuts
 {
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum ShortcutHotkey
