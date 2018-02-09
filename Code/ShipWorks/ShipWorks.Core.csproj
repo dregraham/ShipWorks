@@ -957,6 +957,7 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutHotkey.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Net\IJsonRequest.cs" />
     <Compile Include="Common\Net\JsonRequest.cs" />
