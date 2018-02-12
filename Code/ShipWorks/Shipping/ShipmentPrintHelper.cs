@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings.Printing;
-using ShipWorks.Templates;
-using ShipWorks.Filters;
-using log4net;
-using System.Drawing;
-using ShipWorks.ApplicationCore;
-using System.IO;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Data;
-using System.Drawing.Imaging;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Administration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Management;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address;
+using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Carriers.UPS.CoreExtensions.Filters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Settings.Printing;
+using ShipWorks.Templates;
 
 namespace ShipWorks.Shipping
 {
@@ -151,7 +142,7 @@ namespace ShipWorks.Shipping
                     {
                         ShippingPrintOutputEntity labelsGroup = new ShippingPrintOutputEntity();
                         labelsGroup.Name = "Labels";
-                        labelsGroup.ShipmentType = (int)shipmentType;
+                        labelsGroup.ShipmentType = (int) shipmentType;
                         adapter.SaveAndRefetch(labelsGroup);
 
                         // This is for the "Labels" output group
@@ -172,7 +163,7 @@ namespace ShipWorks.Shipping
                         {
                             ShippingPrintOutputEntity invoiceGroup = new ShippingPrintOutputEntity();
                             invoiceGroup.Name = "Commercial Invoice";
-                            invoiceGroup.ShipmentType = (int)shipmentType;
+                            invoiceGroup.ShipmentType = (int) shipmentType;
                             adapter.SaveAndRefetch(invoiceGroup);
 
                             CreateCommercialInvoiceRules(invoiceGroup, owner);
@@ -330,7 +321,7 @@ namespace ShipWorks.Shipping
         private static FilterDefinition CreateFilterDefinitionThermal()
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
-            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = LabelFormatType.Thermal, Operator = EqualityOperator.Equals });
+            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = LabelFormatType.Thermal, Operator = EnumEqualityOperator.Equals });
 
             return definition;
         }
@@ -342,7 +333,7 @@ namespace ShipWorks.Shipping
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
             definition.RootContainer.FirstGroup.Conditions.Add(new UpsReturnServiceCondition() { Value = UpsReturnServiceType.PrintReturnLabel, Operator = EnumEqualityOperator.Equals });
-            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = (thermal ? LabelFormatType.Thermal : LabelFormatType.Standard), Operator = EqualityOperator.Equals });
+            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = (thermal ? LabelFormatType.Thermal : LabelFormatType.Standard), Operator = EnumEqualityOperator.Equals });
 
             return definition;
         }

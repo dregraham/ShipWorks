@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using System.Xml.Serialization;
 using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -31,6 +32,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Get the value choices the user will be provided with
         /// </summary>
+		[XmlIgnore]
         public virtual ICollection<ValueChoice<T>> ValueChoices
         {
             get

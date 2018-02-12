@@ -18,10 +18,8 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters.Orders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 

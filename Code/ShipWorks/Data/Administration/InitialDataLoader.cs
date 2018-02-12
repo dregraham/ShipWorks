@@ -129,7 +129,7 @@ namespace ShipWorks.Data.Administration
             // For any shipment, Processed = true
             ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
             ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
-            processedCondition.Operator = EqualityOperator.Equals;
+            processedCondition.Operator = EnumEqualityOperator.Equals;
             processedCondition.Value = ShipmentStatusType.Processed;
             anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
             definition.RootContainer.SecondGroup.FirstGroup.Conditions.Add(anyShipment);
@@ -160,7 +160,7 @@ namespace ShipWorks.Data.Administration
             // For any shipment, Processed = true
             ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
             ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
-            processedCondition.Operator = EqualityOperator.Equals;
+            processedCondition.Operator = EnumEqualityOperator.Equals;
             processedCondition.Value = ShipmentStatusType.Processed;
             anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
             definition.RootContainer.SecondGroup.FirstGroup.Conditions.Add(anyShipment);

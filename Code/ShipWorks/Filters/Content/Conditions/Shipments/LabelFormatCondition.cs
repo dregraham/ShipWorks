@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
@@ -38,7 +37,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             List<LabelFormatType> effectiveFormats = new List<LabelFormatType>();
 
-            if (Operator == EqualityOperator.Equals)
+            if (Operator == EnumEqualityOperator.Equals)
             {
                 effectiveFormats.Add(Value);
             }
@@ -91,10 +90,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             switch (format)
             {
                 case LabelFormatType.Standard:
-                    return string.Format("{0} IS NULL OR {0} = {1}", thermalColumn, (int)ThermalLanguage.None);
+                    return string.Format("{0} IS NULL OR {0} = {1}", thermalColumn, (int) ThermalLanguage.None);
 
                 case LabelFormatType.Thermal:
-                    return string.Format("{0} IS NOT NULL AND {0} <> {1}", thermalColumn, (int)ThermalLanguage.None);
+                    return string.Format("{0} IS NOT NULL AND {0} <> {1}", thermalColumn, (int) ThermalLanguage.None);
 
                 case LabelFormatType.EPL:
                     return string.Format("{0} = {1}", thermalColumn, (int) ThermalLanguage.EPL);

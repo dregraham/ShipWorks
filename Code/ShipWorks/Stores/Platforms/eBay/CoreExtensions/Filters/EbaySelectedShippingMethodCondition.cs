@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Stores.Platforms.Ebay.Enums;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                 // on the Operator that the user defined for this condition/filter
                 return scope.Adorn(string.Format(formattedExpression,
                                                     context.GetColumnReference(EbayOrderFields.SelectedShippingMethod), (int) EbayShippingMethod.GlobalShippingProgram,
-                                                    (Operator == EqualityOperator.Equals) ? "" : "NOT "));
+                                                    (Operator == EnumEqualityOperator.Equals) ? "" : "NOT "));
             }
         }
     }
