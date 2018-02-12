@@ -23,32 +23,16 @@ ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [FK_PackageProfile_ShippingPro
 GO
 
 -- AMAZON
-PRINT N'Inserting from [AmazonProfile]'
+PRINT N'Transfer Amazon profile Dimensions and Weight to PackageProfile'
 GO
-INSERT INTO [PackageProfile] (ShippingProfileID, Weight, DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight) 
-SELECT ShippingProfileID, Weight, DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+INSERT INTO [PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight) 
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 FROM [AmazonProfile]
-PRINT N'Dropping Weight [AmazonProfile]'
+
+PRINT N'Drop AmazonProfile dimension and weight columns'
 GO
-ALTER TABLE [AmazonProfile] DROP COLUMN Weight
-PRINT N'Dropping DimsProfileID [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsProfileID
-PRINT N'Dropping DimsLength [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsLength
-PRINT N'Dropping DimsWidth [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsWidth
-PRINT N'Dropping DimsHeight [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsHeight
-PRINT N'Dropping DimsWeight [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsWeight
-PRINT N'Dropping DimsAddWeight [AmazonProfile]'
-GO
-ALTER TABLE [AmazonProfile] DROP COLUMN DimsAddWeight
+ALTER TABLE AmazonProfile
+DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 GO
 -- AMAZON
 
