@@ -1146,13 +1146,6 @@ GO
 CREATE TABLE [dbo].[BestRateProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[Weight] [float] NULL,
 [ServiceLevel] [int] NULL
 )
 GO

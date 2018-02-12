@@ -21,3 +21,18 @@ PRINT N'Adding foreign keys to [dbo].[PackageProfile]'
 GO
 ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [FK_PackageProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
+
+-- Best Rate
+PRINT N'Transfer BestRate profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM BestRateProfile
+GO
+
+PRINT N'Drop BestRateProfile dimension and weight columns'
+GO
+ALTER TABLE BestRateProfile
+DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+GO
+--Best Rate
