@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (222 + 0));
+			this.InitClass( (223 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -187,6 +187,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitOrderSearchEntityInfos();
 			InitOtherProfileEntityInfos();
 			InitOtherShipmentEntityInfos();
+			InitPackageProfileEntityInfos();
 			InitPayPalOrderEntityInfos();
 			InitPayPalOrderSearchEntityInfos();
 			InitPayPalStoreEntityInfos();
@@ -2431,6 +2432,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OtherShipmentEntity", "Service", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Service, 50, 0, 0);
 			this.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("OtherShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)OtherShipmentFieldIndex.Insurance, 0, 0, 0);
+		}
+		/// <summary>Inits PackageProfileEntity's FieldInfo objects</summary>
+		private void InitPackageProfileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(PackageProfileFieldIndex), "PackageProfileEntity");
+			this.AddElementFieldInfo("PackageProfileEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)PackageProfileFieldIndex.PackageProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)PackageProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits PayPalOrderEntity's FieldInfo objects</summary>
 		private void InitPayPalOrderEntityInfos()

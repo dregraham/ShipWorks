@@ -928,6 +928,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<OtherShipmentEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the PackageProfile entity</summary>
+		public EntityQuery<PackageProfileEntity> PackageProfile
+		{
+			get { return Create<PackageProfileEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the PayPalOrder entity</summary>
 		public EntityQuery<PayPalOrderEntity> PayPalOrder
 		{

@@ -473,6 +473,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.OtherShipmentEntity:
 					toReturn = this.OtherShipment;
 					break;
+				case ShipWorks.Data.Model.EntityType.PackageProfileEntity:
+					toReturn = this.PackageProfile;
+					break;
 				case ShipWorks.Data.Model.EntityType.PayPalOrderEntity:
 					toReturn = this.PayPalOrder;
 					break;
@@ -1564,6 +1567,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<OtherShipmentEntity> OtherShipment
 		{
 			get { return new DataSource2<OtherShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting PackageProfileEntity instances in the database.</summary>
+		public DataSource2<PackageProfileEntity> PackageProfile
+		{
+			get { return new DataSource2<PackageProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting PayPalOrderEntity instances in the database.</summary>

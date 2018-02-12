@@ -18244,6 +18244,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity PackageProfileEntity</summary>
+	public partial class PackageProfileFields
+	{
+		/// <summary>Creates a new PackageProfileEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.PackageProfileID);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new PackageProfileEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PackageProfileFieldIndex.DimsAddWeight);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity PayPalOrderEntity</summary>
 	public partial class PayPalOrderFields
 	{

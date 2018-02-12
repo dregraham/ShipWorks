@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(222);
+			this.InitClass(223);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -184,6 +184,7 @@ namespace ShipWorks.Data.Model
 			InitOrderSearchEntityMappings();
 			InitOtherProfileEntityMappings();
 			InitOtherShipmentEntityMappings();
+			InitPackageProfileEntityMappings();
 			InitPayPalOrderEntityMappings();
 			InitPayPalOrderSearchEntityMappings();
 			InitPayPalStoreEntityMappings();
@@ -2562,6 +2563,21 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OtherShipmentEntity", "Service", "Service", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("OtherShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("OtherShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+		}
+
+		/// <summary>Inits PackageProfileEntity's mappings</summary>
+		private void InitPackageProfileEntityMappings()
+		{
+			this.AddElementMapping("PackageProfileEntity", @"ShipWorksLocal", @"dbo", "PackageProfile", 9, 0);
+			this.AddElementFieldMapping("PackageProfileEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("PackageProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("PackageProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("PackageProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 		}
 
 		/// <summary>Inits PayPalOrderEntity's mappings</summary>

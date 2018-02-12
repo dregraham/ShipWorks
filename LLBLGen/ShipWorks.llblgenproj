@@ -2127,6 +2127,19 @@
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="PackageProfile" ObjectID="c25efa99-0738-45a5-9df8-b13ba4c43852">
+        <Fields>
+          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
+          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
+          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="4" />
+          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="3" />
+          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="7" />
+          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="5" />
+          <Field Name="PackageProfileID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ShippingProfileID" Type="long" FieldIndex="1" />
+          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="PayPalOrder" ObjectID="f18fd8fd-8edb-4ea3-9136-c8f80def7ab7" InheritanceType="2">
         <Fields>
           <Field Name="AddressStatus" Type="int" FieldIndex="1" />
@@ -3859,6 +3872,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="PackageProfile.ShippingProfile-ShippingProfile.PackageProfile" Start=":PackageProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="PackageProfile" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="PayPalOrderSearch.PayPalOrder-PayPalOrder.PayPalOrderSearch" Start=":PayPalOrderSearch" End=":PayPalOrder" StartNavigator="PayPalOrder" EndNavigator="PayPalOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
@@ -4279,7 +4297,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T20:39:02.9975331Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-12T19:13:23.8705558Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7357,6 +7375,20 @@
                     <Field Name="Insurance" Ordinal="5" DbType="2" />
                   </Fields>
                 </Table>
+                <Table Name="PackageProfile">
+                  <PkConstraintName Name="PK_PackageProfile" />
+                  <Fields>
+                    <Field Name="PackageProfileID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ShippingProfileID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="Weight" Ordinal="3" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="5" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="6" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="8" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="9" IsOptional="true" DbType="2" />
+                  </Fields>
+                </Table>
                 <Table Name="PayPalOrder">
                   <PkConstraintName Name="PK_PayPalOrder" />
                   <Fields>
@@ -9881,6 +9913,11 @@
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:OtherShipment:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:PackageProfile:FK_PackageProfile_ShippingProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:PackageProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:PayPalOrder:FK_PayPalOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:PayPalOrder:OrderID" />
@@ -12309,6 +12346,19 @@
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":PackageProfile" TargetName="ShipWorksLocal:dbo:PackageProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="PackageProfileID" TargetFieldName="PackageProfileID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":PayPalOrder" TargetName="ShipWorksLocal:dbo:PayPalOrder">
