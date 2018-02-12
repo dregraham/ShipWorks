@@ -28,6 +28,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.statusPanel.Size = new Size(130, 306);
             this.statusPanel.TabIndex = 7;
             this.statusPanel.Visible = false;
+            this.statusPanel.AutoScroll = true;
             //
             // selectAllLink
             //
