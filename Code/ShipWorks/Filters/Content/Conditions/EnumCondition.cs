@@ -14,11 +14,6 @@ namespace ShipWorks.Filters.Content.Conditions
     /// </summary>
     public abstract class EnumCondition<T> : Condition where T : struct
     {
-        public EnumCondition()
-        {
-            SelectedValues = new List<T> { Value };
-        }
-
         /// <summary>
         /// The operator to use when evaluating the condition
         /// </summary>

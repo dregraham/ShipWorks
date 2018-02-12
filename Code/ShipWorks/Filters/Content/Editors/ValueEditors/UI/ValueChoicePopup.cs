@@ -122,7 +122,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             statusPanel.Controls.AddRange(valueList.Select(x => x.checkbox).ToArray());
             statusPanel.Width = valueList.Max(x => x.checkbox.Width);
 
-            int panelHeight = valueList.Last().checkbox.Bottom + 5;
+            int panelHeight = valueList.Last().checkbox.Bottom + 10;
             statusPanel.Height = panelHeight;
             DropDownMinimumHeight = panelHeight - 12;
             DropDownHeight = panelHeight - 12;
