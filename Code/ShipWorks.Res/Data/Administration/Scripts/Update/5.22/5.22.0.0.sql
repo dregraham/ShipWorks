@@ -78,3 +78,17 @@ GO
 DROP TABLE DhlExpressProfilePackage
 GO
 -- DHL Express
+
+-- iParcelProfilePackage
+PRINT N'Transfer iParcel profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM iParcelProfilePackage
+GO
+
+PRINT N'Drop iParcelProfilePackage'
+GO
+DROP TABLE iParcelProfilePackage
+GO
+-- iParcelProfilePackage
