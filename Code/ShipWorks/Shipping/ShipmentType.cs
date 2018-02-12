@@ -715,6 +715,21 @@ namespace ShipWorks.Shipping
             profile.ReturnShipment = false;
 
             profile.RequestedLabelFormat = (int) ThermalLanguage.None;
+
+            //Single package carriers only have one package profile, initialize it now
+            if (!SupportsMultiplePackages)
+            {
+                profile.PackageProfile.Add(new PackageProfileEntity()
+                {
+                    Weight = 0,
+                    DimsProfileID = 0,
+                    DimsLength = 0,
+                    DimsWidth = 0,
+                    DimsHeight = 0,
+                    DimsWeight = 0,
+                    DimsAddWeight = true
+                });
+            }
         }
 
         /// <summary>

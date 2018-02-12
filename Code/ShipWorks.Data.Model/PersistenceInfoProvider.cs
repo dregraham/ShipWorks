@@ -419,17 +419,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonProfileEntity's mappings</summary>
 		private void InitAmazonProfileEntityMappings()
 		{
-			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 10, 0);
+			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 3, 0);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
-			this.AddElementFieldMapping("AmazonProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>

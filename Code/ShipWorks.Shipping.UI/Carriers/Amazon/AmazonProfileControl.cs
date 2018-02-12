@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryExperience);
 
             AmazonProfileEntity amazonProfile = profile.Amazon;
+            PackageProfileEntity packageProfile = profile.PackageProfile.First();
 
             // Origin
             AddValueMapping(profile, ShippingProfileFields.OriginID, originState, originCombo, labelSender);
@@ -48,8 +49,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             // Shipment
             AddValueMapping(amazonProfile, AmazonProfileFields.ShippingServiceID, serviceState, service, labelService);
             AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
-            AddValueMapping(amazonProfile, AmazonProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(amazonProfile, AmazonProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

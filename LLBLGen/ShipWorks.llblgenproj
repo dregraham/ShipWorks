@@ -275,16 +275,9 @@
       </EntityDefinition>
       <EntityDefinition Name="AmazonProfile" ObjectID="2b74a416-5d2b-4e35-9bdc-09330904a10f">
         <Fields>
-          <Field Name="DeliveryExperience" Type="int" IsOptional="true" FieldIndex="7" />
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="6" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" FieldIndex="4" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" FieldIndex="2" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" FieldIndex="1" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" FieldIndex="5" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" FieldIndex="3" />
+          <Field Name="DeliveryExperience" Type="int" IsOptional="true" FieldIndex="1" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
-          <Field Name="ShippingServiceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
-          <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="8" />
+          <Field Name="ShippingServiceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonServiceType" ObjectID="46c2dbbc-35a6-4057-8998-6be9b1e2385e">
@@ -10456,15 +10449,8 @@
         <EntityMapping EntityName=":AmazonProfile" TargetName="ShipWorksLocal:dbo:AmazonProfile">
           <FieldMappings>
             <FieldMapping FieldName="DeliveryExperience" TargetFieldName="DeliveryExperience" />
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonServiceType" TargetName="ShipWorksLocal:dbo:AmazonServiceType">

@@ -967,45 +967,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingProfileID);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsAddWeight);}
-		}
 		/// <summary>Creates a new AmazonProfileEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DeliveryExperience);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Weight);}
 		}
 		/// <summary>Creates a new AmazonProfileEntity.ShippingServiceID field instance</summary>
 		public static EntityField2 ShippingServiceID

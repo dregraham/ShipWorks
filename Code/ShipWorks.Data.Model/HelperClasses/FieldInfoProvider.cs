@@ -416,14 +416,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(AmazonProfileFieldIndex), "AmazonProfileEntity");
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>

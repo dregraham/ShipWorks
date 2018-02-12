@@ -22,6 +22,36 @@ GO
 ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [FK_PackageProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 
+-- AMAZON
+PRINT N'Inserting from [AmazonProfile]'
+GO
+INSERT INTO [PackageProfile] (ShippingProfileID, Weight, DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight) 
+SELECT ShippingProfileID, Weight, DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM [AmazonProfile]
+PRINT N'Dropping Weight [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN Weight
+PRINT N'Dropping DimsProfileID [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsProfileID
+PRINT N'Dropping DimsLength [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsLength
+PRINT N'Dropping DimsWidth [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsWidth
+PRINT N'Dropping DimsHeight [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsHeight
+PRINT N'Dropping DimsWeight [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsWeight
+PRINT N'Dropping DimsAddWeight [AmazonProfile]'
+GO
+ALTER TABLE [AmazonProfile] DROP COLUMN DimsAddWeight
+GO
+-- AMAZON
+
 -- Best Rate
 PRINT N'Transfer BestRate profile Dimensions and Weight to PackageProfile'
 GO
