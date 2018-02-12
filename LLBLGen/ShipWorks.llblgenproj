@@ -426,15 +426,8 @@
       </EntityDefinition>
       <EntityDefinition Name="BestRateProfile" ObjectID="78df09d7-4c41-4415-9288-1ca0a9399767">
         <Fields>
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="6" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" FieldIndex="4" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" FieldIndex="2" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" FieldIndex="1" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" FieldIndex="5" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" FieldIndex="3" />
-          <Field Name="ServiceLevel" Type="int" IsOptional="true" FieldIndex="8" />
+          <Field Name="ServiceLevel" Type="int" IsOptional="true" FieldIndex="1" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
-          <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="BestRateShipment" ObjectID="8329da77-acca-4ee6-99c6-f4fd59c938c5">
@@ -10558,15 +10551,8 @@
         </EntityMapping>
         <EntityMapping EntityName=":BestRateProfile" TargetName="ShipWorksLocal:dbo:BestRateProfile">
           <FieldMappings>
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="ServiceLevel" TargetFieldName="ServiceLevel" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":BestRateShipment" TargetName="ShipWorksLocal:dbo:BestRateShipment">

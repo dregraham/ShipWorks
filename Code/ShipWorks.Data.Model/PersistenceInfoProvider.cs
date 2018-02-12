@@ -592,16 +592,9 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits BestRateProfileEntity's mappings</summary>
 		private void InitBestRateProfileEntityMappings()
 		{
-			this.AddElementMapping("BestRateProfileEntity", @"ShipWorksLocal", @"dbo", "BestRateProfile", 9, 0);
+			this.AddElementMapping("BestRateProfileEntity", @"ShipWorksLocal", @"dbo", "BestRateProfile", 2, 0);
 			this.AddElementFieldMapping("BestRateProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("BestRateProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
-			this.AddElementFieldMapping("BestRateProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("BestRateProfileEntity", "ServiceLevel", "ServiceLevel", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("BestRateProfileEntity", "ServiceLevel", "ServiceLevel", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 		}
 
 		/// <summary>Inits BestRateShipmentEntity's mappings</summary>

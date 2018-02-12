@@ -578,13 +578,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(BestRateProfileFieldIndex), "BestRateProfileEntity");
 			this.AddElementFieldInfo("BestRateProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)BestRateProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsAddWeight, 0, 0, 0);
-			this.AddElementFieldInfo("BestRateProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("BestRateProfileEntity", "ServiceLevel", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.ServiceLevel, 0, 0, 10);
 		}
 		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -19,6 +20,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -690,7 +692,17 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
+            // If this is the first time loading it, or we are supposed to refresh, do it now
+            if (profile.IsNew || refreshIfPresent)
+            {
+                profile.PackageProfile.Clear();
 
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(profile.PackageProfile, new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
+                    profile.PackageProfile.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
+                }
+            }
         }
 
         /// <summary>

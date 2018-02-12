@@ -27,48 +27,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 ShippingProfileID { get; }
-        /// <summary> The DimsProfileID property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsLength"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsWidth"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsHeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."DimsAddWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Boolean> DimsAddWeight { get; }
-        /// <summary> The Weight property of the Entity BestRateProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "BestRateProfile"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> Weight { get; }
         /// <summary> The ServiceLevel property of the Entity BestRateProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "BestRateProfile"."ServiceLevel"<br/>

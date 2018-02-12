@@ -842,20 +842,6 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>Weight. </summary>
-		Weight,
 		///<summary>ServiceLevel. </summary>
 		ServiceLevel,
 		/// <summary></summary>
