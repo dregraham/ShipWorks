@@ -1918,14 +1918,7 @@ GO
 CREATE TABLE [dbo].[AmazonProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [DeliveryExperience] [int] NULL,
-[Weight] [float] NULL,
 [ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
