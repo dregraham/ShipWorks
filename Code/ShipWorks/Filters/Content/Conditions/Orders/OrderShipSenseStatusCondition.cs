@@ -1,7 +1,5 @@
 ﻿using System;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping.ShipSense;
 
@@ -19,7 +17,6 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         public OrderShipSenseStatusCondition()
         {
             Value = ShipSenseOrderRecognitionStatus.Recognized;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

@@ -321,7 +321,7 @@ namespace ShipWorks.Shipping
         private static FilterDefinition CreateFilterDefinitionThermal()
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
-            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = LabelFormatType.Thermal, Operator = EnumEqualityOperator.Equals });
+            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = LabelFormatType.Thermal, Operator = EqualityOperator.Equals });
 
             return definition;
         }
@@ -333,7 +333,7 @@ namespace ShipWorks.Shipping
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
             definition.RootContainer.FirstGroup.Conditions.Add(new UpsReturnServiceCondition() { Value = UpsReturnServiceType.PrintReturnLabel, Operator = EnumEqualityOperator.Equals });
-            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = (thermal ? LabelFormatType.Thermal : LabelFormatType.Standard), Operator = EnumEqualityOperator.Equals });
+            definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = (thermal ? LabelFormatType.Thermal : LabelFormatType.Standard), Operator = EqualityOperator.Equals });
 
             return definition;
         }

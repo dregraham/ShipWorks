@@ -1,8 +1,8 @@
-﻿using ShipWorks.Filters.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+﻿using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
 {
@@ -19,7 +19,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
         public AmazonFulfillmentChannelCondition()
         {
             Value = AmazonMwsFulfillmentChannel.MFN;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

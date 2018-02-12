@@ -1,5 +1,4 @@
-﻿using ShipWorks.AddressValidation;
-using ShipWorks.AddressValidation.Enums;
+﻿using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 
@@ -17,7 +16,6 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
         public USTerritoryCondition()
         {
             Value = ValidationDetailStatusType.Unknown;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

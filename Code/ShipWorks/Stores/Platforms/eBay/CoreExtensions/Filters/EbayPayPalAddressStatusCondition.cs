@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.PayPal;
-using ShipWorks.Filters.Content.Conditions;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.PayPal;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
@@ -20,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayPayPalAddressStatusCondition()
         {
             Value = PayPalAddressStatus.Confirmed;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

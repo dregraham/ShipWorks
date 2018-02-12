@@ -221,12 +221,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
 
             EbayFeedbackCondition buyerLeft = new EbayFeedbackCondition();
-            buyerLeft.Operator = EnumEqualityOperator.Equals;
+            buyerLeft.Operator = EqualityOperator.Equals;
             buyerLeft.Value = EbayFeedbackConditionStatusType.BuyerLeftPositive;
             everyItem.Container.FirstGroup.Conditions.Add(buyerLeft);
 
             EbayFeedbackCondition sellerNot = new EbayFeedbackCondition();
-            sellerNot.Operator = EnumEqualityOperator.Equals;
+            sellerNot.Operator = EqualityOperator.Equals;
             sellerNot.Value = EbayFeedbackConditionStatusType.SellerNotLeftForBuyer;
             everyItem.Container.FirstGroup.Conditions.Add(sellerNot);
 

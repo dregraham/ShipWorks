@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Collections;
 using System.Xml.Serialization;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -14,6 +14,11 @@ namespace ShipWorks.Filters.Content.Conditions
     /// </summary>
     public abstract class EnumCondition<T> : Condition where T : struct
     {
+        public EnumCondition()
+        {
+            SelectedValues = new List<T> { Value };
+        }
+
         /// <summary>
         /// The operator to use when evaluating the condition
         /// </summary>
@@ -27,12 +32,12 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// When in list mode, the list of selected values.
         /// </summary>
-        public IEnumerable<T> SelectedValues = new List<T>();
+        public List<T> SelectedValues { get; set; } = new List<T>();
 
         /// <summary>
         /// Get the value choices the user will be provided with
         /// </summary>
-		[XmlIgnore]
+        [XmlIgnore]
         public virtual ICollection<ValueChoice<T>> ValueChoices
         {
             get
@@ -106,11 +111,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Create the editor used for KeyValue conditions
         /// </summary>
-        public override ValueEditor CreateEditor()
-        {
-            //return new ValueChoiceEditor<T>(this);
-            return null;
-        }
-
+        public override ValueEditor CreateEditor() =>
+            new EnumValueEditor<T>(this);
     }
 }

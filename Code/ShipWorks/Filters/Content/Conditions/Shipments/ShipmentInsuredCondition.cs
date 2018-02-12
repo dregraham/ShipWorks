@@ -1,5 +1,7 @@
-﻿using ShipWorks.Data.Model.HelperClasses;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping.Insurance;
 
@@ -36,14 +38,14 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             {
                 return string.Format("{2}({0} = {1})",
                     context.GetColumnReference(ShipmentFields.Insurance), 0,
-                    (Operator == EnumEqualityOperator.Equals) ? "" : "NOT ");
+                    (Operator == EqualityOperator.Equals) ? "" : "NOT ");
             }
             else
             {
                 return string.Format("{4}({0} = {1} AND {2} = {3})",
                     context.GetColumnReference(ShipmentFields.Insurance), "1",
                     context.GetColumnReference(ShipmentFields.InsuranceProvider), (Value == ShipmentInsuredType.ShipWorks) ? (int) InsuranceProvider.ShipWorks : (int) (InsuranceProvider.Carrier),
-                    (Operator == EnumEqualityOperator.Equals) ? "" : "NOT ");
+                    (Operator == EqualityOperator.Equals) ? "" : "NOT ");
             }
         }
     }

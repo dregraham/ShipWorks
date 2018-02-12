@@ -17,7 +17,6 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         public OrderCombinedCondition()
         {
             Value = CombineSplitStatusType.None;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

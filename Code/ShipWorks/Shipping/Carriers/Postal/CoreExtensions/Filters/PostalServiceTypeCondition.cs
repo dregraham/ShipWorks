@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.CoreExtensions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.CoreExtensions.Filters
@@ -22,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.CoreExtensions.Filters
         public PostalServiceTypeCondition()
         {
             Value = PostalServiceType.PriorityMail;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

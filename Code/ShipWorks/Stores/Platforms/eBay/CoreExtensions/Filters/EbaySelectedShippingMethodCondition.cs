@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                 // on the Operator that the user defined for this condition/filter
                 return scope.Adorn(string.Format(formattedExpression,
                                                     context.GetColumnReference(EbayOrderFields.SelectedShippingMethod), (int) EbayShippingMethod.GlobalShippingProgram,
-                                                    (Operator == EnumEqualityOperator.Equals) ? "" : "NOT "));
+                                                    (Operator == EqualityOperator.Equals) ? "" : "NOT "));
             }
         }
     }

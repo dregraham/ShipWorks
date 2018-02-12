@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Filters.Content.Conditions.Emails
 {
@@ -17,7 +13,6 @@ namespace ShipWorks.Filters.Content.Conditions.Emails
         public EmailStatusCondition()
         {
             Value = EmailOutboundStatus.Sent;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

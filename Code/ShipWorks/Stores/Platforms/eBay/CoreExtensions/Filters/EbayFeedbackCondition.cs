@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -46,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                     case EbayFeedbackConditionStatusType.SellerLeftForBuyer:
                         sql = string.Format("{0} {1} {2}",
                             context.GetColumnReference(EbayOrderItemFields.FeedbackLeftType),
-                            (Operator == EnumEqualityOperator.Equals) ? "!=" : "=",
+                            (Operator == EqualityOperator.Equals) ? "!=" : "=",
                             (int) EbayFeedbackType.None);
                         break;
 

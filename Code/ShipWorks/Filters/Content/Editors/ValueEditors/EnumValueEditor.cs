@@ -34,14 +34,13 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             targetValue.SelectedValue = condition.Value;
 
             targetValueList.InitializeValuesList(condition.ValueChoices);
-            targetValueList.SelectStatuses(condition.ValueList ?? Enumerable.Empty<T>());
+            targetValueList.SelectStatuses(condition.SelectedValues ?? Enumerable.Empty<T>());
 
             // If the value the condition wanted as it's default isn't in the list, select the first available
             if (targetValue.SelectedValue == null && targetValue.Items.Count > 0)
             {
                 targetValue.SelectedIndex = 0;
             }
-
 
             UpdateComboBoxSize();
             UpdateValueVisibility(condition.Operator);
@@ -131,6 +130,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             {
                 condition.Value = (T) targetValue.SelectedValue;
             }
+
+            condition.SelectedValues = targetValueList.GetSelectedStatuses();
         }
     }
 }

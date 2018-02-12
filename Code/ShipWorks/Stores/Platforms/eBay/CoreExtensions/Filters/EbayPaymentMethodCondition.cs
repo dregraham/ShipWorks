@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Ebay.Enums;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Stores.Platforms.Ebay.Enums;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
@@ -21,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayPaymentMethodCondition()
         {
             Value = EbayEffectivePaymentMethod.PayPal;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

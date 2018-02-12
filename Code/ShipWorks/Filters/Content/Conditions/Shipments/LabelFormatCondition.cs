@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -37,7 +38,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             List<LabelFormatType> effectiveFormats = new List<LabelFormatType>();
 
-            if (Operator == EnumEqualityOperator.Equals)
+            if (Operator == EqualityOperator.Equals)
             {
                 effectiveFormats.Add(Value);
             }

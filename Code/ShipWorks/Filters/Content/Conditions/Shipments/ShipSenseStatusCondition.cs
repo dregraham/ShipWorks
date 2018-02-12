@@ -13,7 +13,6 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         public ShipSenseStatusCondition()
         {
             Value = ShipSenseStatus.NotApplied;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>

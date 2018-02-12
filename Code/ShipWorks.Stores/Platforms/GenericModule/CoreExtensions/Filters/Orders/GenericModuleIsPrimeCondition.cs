@@ -22,7 +22,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
         public GenericModuleIsPrimeCondition()
         {
             Value = AmazonIsPrime.Yes;
-            SelectedValues = new[] { Value };
         }
 
         /// <summary>
