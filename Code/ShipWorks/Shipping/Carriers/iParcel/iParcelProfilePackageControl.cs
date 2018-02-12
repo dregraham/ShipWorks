@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     public partial class iParcelProfilePackageControl : ShippingProfileControlCore
     {
-        IParcelProfilePackageEntity package;
+        PackageProfileEntity package;
 
         /// <summary>
         /// Constructor
@@ -22,21 +22,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Load the data from the given profile package into the control
         /// </summary>
-        public void LoadProfilePackage(IParcelProfilePackageEntity parcelPackageProfileEntity)
+        public void LoadProfilePackage(PackageProfileEntity parcelPackageProfileEntity)
         {
             this.package = parcelPackageProfileEntity;
             groupBox.Text = string.Format(groupBox.Text, Parent.Controls.IndexOf(this) + 1);
 
             dimensionsControl.Initialize();
 
-            AddValueMapping(package, IParcelProfilePackageFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(package, IParcelProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(package, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(package, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
         }
 
         /// <summary>
         /// The profile package data loaded into the control
         /// </summary>
-        public IParcelProfilePackageEntity ProfilePackage
+        public PackageProfileEntity ProfilePackage
         {
             get { return package; }
         }

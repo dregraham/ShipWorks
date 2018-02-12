@@ -341,9 +341,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.IParcelProfileEntity:
 					toReturn = this.IParcelProfile;
 					break;
-				case ShipWorks.Data.Model.EntityType.IParcelProfilePackageEntity:
-					toReturn = this.IParcelProfilePackage;
-					break;
 				case ShipWorks.Data.Model.EntityType.IParcelShipmentEntity:
 					toReturn = this.IParcelShipment;
 					break;
@@ -1300,12 +1297,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<IParcelProfileEntity> IParcelProfile
 		{
 			get { return new DataSource2<IParcelProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting IParcelProfilePackageEntity instances in the database.</summary>
-		public DataSource2<IParcelProfilePackageEntity> IParcelProfilePackage
-		{
-			get { return new DataSource2<IParcelProfilePackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting IParcelShipmentEntity instances in the database.</summary>

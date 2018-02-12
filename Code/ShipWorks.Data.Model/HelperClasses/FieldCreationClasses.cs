@@ -11604,56 +11604,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity IParcelProfilePackageEntity</summary>
-	public partial class IParcelProfilePackageFields
-	{
-		/// <summary>Creates a new IParcelProfilePackageEntity.IParcelProfilePackageID field instance</summary>
-		public static EntityField2 IParcelProfilePackageID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.IParcelProfilePackageID);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.ShippingProfileID field instance</summary>
-		public static EntityField2 ShippingProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.ShippingProfileID);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new IParcelProfilePackageEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(IParcelProfilePackageFieldIndex.DimsAddWeight);}
-		}
-	}
-
 	/// <summary>Field Creation Class for entity IParcelShipmentEntity</summary>
 	public partial class IParcelShipmentFields
 	{

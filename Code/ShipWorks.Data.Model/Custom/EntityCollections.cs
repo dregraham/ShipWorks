@@ -5307,63 +5307,6 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of IParcelProfilePackageEntity
-	/// </summary>
-	public class IParcelProfilePackageCollection : EntityCollection<IParcelProfilePackageEntity>
-	{
-        /// <summary>
-        /// Gets the count of all IParcelProfilePackageEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all IParcelProfilePackageEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new IParcelProfilePackageEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static IParcelProfilePackageCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static IParcelProfilePackageCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            IParcelProfilePackageCollection collection = new IParcelProfilePackageCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of IParcelShipmentEntity
 	/// </summary>
 	public class IParcelShipmentCollection : EntityCollection<IParcelShipmentEntity>

@@ -133,14 +133,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             {
                 var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
                 var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathIParcel);
-                profilePatch.SubPath.Add(IParcelProfileEntity.PrefetchPathPackages);
 
                 var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
 
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.IParcel);
-                Assert.Empty(loadedProfile.IParcel.Packages);
+                Assert.Empty(loadedProfile.PackageProfile);
             }
         }
 

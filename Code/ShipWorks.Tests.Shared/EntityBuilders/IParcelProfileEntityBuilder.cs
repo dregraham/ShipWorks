@@ -16,12 +16,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Add a package to the Profile
         /// </summary>
-        public IParcelProfileEntityBuilder WithPackage(Action<EntityBuilder<IParcelProfilePackageEntity>> builderConfiguration)
+        public IParcelProfileEntityBuilder WithPackage(Action<EntityBuilder<PackageProfileEntity>> builderConfiguration)
         {
-            EntityBuilder<IParcelProfilePackageEntity> builder = new EntityBuilder<IParcelProfilePackageEntity>();
+            EntityBuilder<PackageProfileEntity> builder = new EntityBuilder<PackageProfileEntity>();
             builderConfiguration?.Invoke(builder);
 
-            Set(x => x.Packages.Add(builder.Build()));
+            Set(x => x.ShippingProfile.PackageProfile.Add(builder.Build()));
 
             return this;
         }

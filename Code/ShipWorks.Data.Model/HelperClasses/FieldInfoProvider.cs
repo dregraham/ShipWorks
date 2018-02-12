@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (222 + 0));
+			this.InitClass( (221 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -143,7 +143,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelAccountEntityInfos();
 			InitIParcelPackageEntityInfos();
 			InitIParcelProfileEntityInfos();
-			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
 			InitJetOrderEntityInfos();
 			InitJetOrderItemEntityInfos();
@@ -1844,20 +1843,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelProfileEntity", "TrackBySMS", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)IParcelProfileFieldIndex.TrackBySMS, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelProfileEntity", "IsDeliveryDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)IParcelProfileFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelProfileEntity", "SkuAndQuantities", typeof(System.String), false, false, false, true,  (int)IParcelProfileFieldIndex.SkuAndQuantities, 500, 0, 0);
-		}
-		/// <summary>Inits IParcelProfilePackageEntity's FieldInfo objects</summary>
-		private void InitIParcelProfilePackageEntityInfos()
-		{
-			this.AddFieldIndexEnumForElementName(typeof(IParcelProfilePackageFieldIndex), "IParcelProfilePackageEntity");
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "IParcelProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)IParcelProfilePackageFieldIndex.IParcelProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)IParcelProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits IParcelShipmentEntity's FieldInfo objects</summary>
 		private void InitIParcelShipmentEntityInfos()

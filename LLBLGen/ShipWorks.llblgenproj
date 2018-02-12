@@ -1604,19 +1604,6 @@
           <Field Name="TrackBySMS" Type="bool" IsOptional="true" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="IParcelProfilePackage" ObjectID="f579b1ec-64ef-4160-8d1d-05fd64f3ae43">
-        <Fields>
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" FieldIndex="6" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" FieldIndex="4" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" FieldIndex="3" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" FieldIndex="7" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" FieldIndex="5" />
-          <Field Name="IParcelProfilePackageID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ShippingProfileID" Type="long" IsAutoCreated="true" FieldIndex="1" />
-          <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="2" />
-        </Fields>
-      </EntityDefinition>
       <EntityDefinition Name="IParcelShipment" ObjectID="38889c0d-1a2b-4f36-8eb2-34772346de4a">
         <Fields>
           <Field Name="IParcelAccountID" Type="long" FieldIndex="1" />
@@ -3721,11 +3708,6 @@
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="IParcelProfile.ShippingProfile-ShippingProfile.IParcel" Start=":IParcelProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="IParcel" Type="1" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="IParcelProfilePackage.IParcelProfile-IParcelProfile.Packages" Start=":IParcelProfilePackage" End=":IParcelProfile" StartNavigator="IParcelProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
@@ -11771,19 +11753,6 @@
             <FieldMapping FieldName="SkuAndQuantities" TargetFieldName="SkuAndQuantities" />
             <FieldMapping FieldName="TrackByEmail" TargetFieldName="TrackByEmail" />
             <FieldMapping FieldName="TrackBySMS" TargetFieldName="TrackBySMS" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":IParcelProfilePackage" TargetName="ShipWorksLocal:dbo:iParcelProfilePackage">
-          <FieldMappings>
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
-            <FieldMapping FieldName="IParcelProfilePackageID" TargetFieldName="iParcelProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":IParcelShipment" TargetName="ShipWorksLocal:dbo:iParcelShipment">

@@ -198,21 +198,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             bool changes = base.SaveProfileData(profile, adapter);
 
             // First delete out anything that needs deleted
-            foreach (IParcelProfilePackageEntity package in profile.IParcel.Packages.ToList())
+            foreach (PackageProfileEntity package in profile.PackageProfile.ToList())
             {
                 // If its new but deleted, just get rid of it
                 if (package.Fields.State == EntityState.Deleted)
                 {
                     if (package.IsNew)
                     {
-                        profile.IParcel.Packages.Remove(package);
+                        profile.PackageProfile.Remove(package);
                     }
 
                     // If its deleted, delete it
                     else
                     {
                         package.Fields.State = EntityState.Fetched;
-                        profile.IParcel.Packages.Remove(package);
+                        profile.PackageProfile.Remove(package);
 
                         adapter.DeleteEntity(package);
 
@@ -255,13 +255,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             IIParcelProfileEntity source = profile.IParcel;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.IParcel.Packages.Count();
+            int profilePackageCount = profile.PackageProfile.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IIParcelProfilePackageEntity packageProfile = profile.IParcel.Packages.ElementAt(i);
+                IPackageProfileEntity packageProfile = profile.PackageProfile.ElementAt(i);
 
                 IParcelPackageEntity package;
 
@@ -351,20 +351,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             bool existed = profile.IParcel != null;
 
             ShipmentTypeDataService.LoadProfileData(profile, "IParcel", typeof(IParcelProfileEntity), refreshIfPresent);
-
-            IParcelProfileEntity iParcelProfileEntityParcel = profile.IParcel;
-
+            
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!existed || refreshIfPresent)
             {
-                iParcelProfileEntityParcel.Packages.Clear();
+                profile.PackageProfile.Clear();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(iParcelProfileEntityParcel.Packages,
-                                                  new RelationPredicateBucket(IParcelProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
+                    adapter.FetchEntityCollection(profile.PackageProfile,
+                                                  new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
 
-                    iParcelProfileEntityParcel.Packages.Sort((int) IParcelProfilePackageFieldIndex.IParcelProfilePackageID, ListSortDirection.Ascending);
+                    profile.PackageProfile.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
         }

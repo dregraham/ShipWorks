@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(222);
+			this.InitClass(221);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -140,7 +140,6 @@ namespace ShipWorks.Data.Model
 			InitIParcelAccountEntityMappings();
 			InitIParcelPackageEntityMappings();
 			InitIParcelProfileEntityMappings();
-			InitIParcelProfilePackageEntityMappings();
 			InitIParcelShipmentEntityMappings();
 			InitJetOrderEntityMappings();
 			InitJetOrderItemEntityMappings();
@@ -1931,21 +1930,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("IParcelProfileEntity", "TrackBySMS", "TrackBySMS", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 			this.AddElementFieldMapping("IParcelProfileEntity", "IsDeliveryDutyPaid", "IsDeliveryDutyPaid", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 			this.AddElementFieldMapping("IParcelProfileEntity", "SkuAndQuantities", "SkuAndQuantities", true, "NVarChar", 500, 0, 0, false, "", null, typeof(System.String), 7);
-		}
-
-		/// <summary>Inits IParcelProfilePackageEntity's mappings</summary>
-		private void InitIParcelProfilePackageEntityMappings()
-		{
-			this.AddElementMapping("IParcelProfilePackageEntity", @"ShipWorksLocal", @"dbo", "iParcelProfilePackage", 9, 0);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "IParcelProfilePackageID", "iParcelProfilePackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("IParcelProfilePackageEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 		}
 
 		/// <summary>Inits IParcelShipmentEntity's mappings</summary>

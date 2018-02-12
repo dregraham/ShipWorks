@@ -664,12 +664,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<IParcelProfileEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the IParcelProfilePackage entity</summary>
-		public EntityQuery<IParcelProfilePackageEntity> IParcelProfilePackage
-		{
-			get { return Create<IParcelProfilePackageEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the IParcelShipment entity</summary>
 		public EntityQuery<IParcelShipmentEntity> IParcelShipment
 		{

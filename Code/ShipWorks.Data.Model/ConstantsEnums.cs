@@ -5019,30 +5019,6 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfilePackage.</summary>
-	public enum IParcelProfilePackageFieldIndex
-	{
-		///<summary>IParcelProfilePackageID. </summary>
-		IParcelProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		/// <summary></summary>
-		AmountOfFields
-	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelShipment.</summary>
 	public enum IParcelShipmentFieldIndex
 	{
@@ -12387,8 +12363,6 @@ namespace ShipWorks.Data.Model
 		IParcelPackageEntity,
 		///<summary>IParcelProfile</summary>
 		IParcelProfileEntity,
-		///<summary>IParcelProfilePackage</summary>
-		IParcelProfilePackageEntity,
 		///<summary>IParcelShipment</summary>
 		IParcelShipmentEntity,
 		///<summary>JetOrder</summary>
