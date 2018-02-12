@@ -361,17 +361,10 @@
         <Fields>
           <Field Name="AsendiaAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="12" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="10" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="8" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="7" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="11" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="9" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
           <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" IsOptional="true" FieldIndex="2" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AsendiaShipment" ObjectID="fbbc5278-1284-409b-ba77-c07c9b69fbb9">
@@ -10536,17 +10529,10 @@
           <FieldMappings>
             <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AsendiaShipment" TargetName="ShipWorksLocal:dbo:AsendiaShipment">

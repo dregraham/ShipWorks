@@ -517,20 +517,13 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AsendiaProfileEntity's mappings</summary>
 		private void InitAsendiaProfileEntityMappings()
 		{
-			this.AddElementMapping("AsendiaProfileEntity", @"ShipWorksLocal", @"dbo", "AsendiaProfile", 13, 0);
+			this.AddElementMapping("AsendiaProfileEntity", @"ShipWorksLocal", @"dbo", "AsendiaProfile", 6, 0);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "AsendiaAccountID", "AsendiaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "Contents", "Contents", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "NonDelivery", "NonDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 7);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 11);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
 		}
 
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>

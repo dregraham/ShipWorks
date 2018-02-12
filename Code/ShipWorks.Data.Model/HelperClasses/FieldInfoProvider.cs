@@ -513,13 +513,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonDelivery, 0, 0, 10);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
 		private void InitAsendiaShipmentEntityInfos()

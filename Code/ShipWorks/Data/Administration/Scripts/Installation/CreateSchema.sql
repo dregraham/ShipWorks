@@ -2962,21 +2962,14 @@ CREATE TABLE [dbo].[AsendiaProfile](
 	[Service] [int] NULL,
 	[NonMachinable] [bit] NULL,
 	[Contents] [int] NULL,
-	[NonDelivery] [int] NULL,
-	[Weight] [float] NULL,
-	[DimsProfileID] [bigint] NULL,
-	[DimsLength] [float] NULL,
-	[DimsWidth] [float] NULL,
-	[DimsHeight] [float] NULL,
-	[DimsWeight] [float] NULL,
-	[DimsAddWeight] [bit] NULL,
+	[NonDelivery] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaProfile] on [dbo].[AsendiaProfile]'
 GO
 ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [PK_AsendiaProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
-PRINT N'Adding foreign keys to [dbo].[AsemdoaProfile]'
+PRINT N'Adding foreign keys to [dbo].[AsendiaProfile]'
 GO
 ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [FK_AsendiaProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO

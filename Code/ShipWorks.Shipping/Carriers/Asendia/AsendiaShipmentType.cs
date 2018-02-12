@@ -266,22 +266,14 @@ namespace ShipWorks.Shipping.Carriers.Asendia
 
             AsendiaProfileEntity asendia = profile.Asendia;
 
-            asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any()
-                ? accountRepository.AccountsReadOnly.First().AsendiaAccountID
-                : 0;
+            asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any() ?
+                accountRepository.AccountsReadOnly.First().AsendiaAccountID : 
+                0;
 
             asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            asendia.NonMachinable = false;
-
-            asendia.Weight = 0;
-            asendia.DimsProfileID = 0;
-            asendia.DimsLength = 0;
-            asendia.DimsWidth = 0;
-            asendia.DimsHeight = 0;
-            asendia.DimsWeight = 0;
-            asendia.DimsAddWeight = true;
+            asendia.NonMachinable = false;           
         }
 
         /// <summary>
@@ -302,21 +294,23 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
 
-            if (asendiaProfile.Weight.HasValue && !asendiaProfile.Weight.Value.IsEquivalentTo(0))
-            {
-                ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
+            
 
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
 
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
+            IPackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
+            if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))
+            {
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
+            }
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
 
             UpdateTotalWeight(shipment);
 

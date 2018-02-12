@@ -36,6 +36,20 @@ DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeig
 GO
 -- AMAZON
 
+-- ASENDIA
+PRINT N'Inserting from [AsendiaProfile] into [PackageProfile]'
+GO
+INSERT INTO [PackageProfile] ([ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]) 
+SELECT [ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
+FROM [AsendiaProfile]
+
+PRINT N'Dropping Weight and Dimensions columns for [AsendiaProfile]'
+GO
+ALTER TABLE [AsendiaProfile] 
+DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
+GO
+-- ASENDIA
+
 -- Best Rate
 PRINT N'Transfer BestRate profile Dimensions and Weight to PackageProfile'
 GO

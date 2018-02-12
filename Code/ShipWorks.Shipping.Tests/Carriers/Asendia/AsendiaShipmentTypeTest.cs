@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -44,9 +45,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             ShippingProfileEntity profile = new ShippingProfileEntity()
             {
-                Asendia = new AsendiaProfileEntity()
+                Asendia = new AsendiaProfileEntity(),
             };
-
+            PackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
             testObject.ConfigurePrimaryProfile(profile);
 
             Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
@@ -54,13 +55,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             Assert.Equal((int) ShipEngineContentsType.Merchandise, profile.Asendia.Contents);
             Assert.Equal((int) ShipEngineNonDeliveryType.ReturnToSender, profile.Asendia.NonDelivery);
             Assert.False(profile.Asendia.NonMachinable);
-            Assert.Equal(0, profile.Asendia.Weight);
-            Assert.Equal(0, profile.Asendia.DimsProfileID);
-            Assert.Equal(0, profile.Asendia.DimsLength);
-            Assert.Equal(0, profile.Asendia.DimsWidth);
-            Assert.Equal(0, profile.Asendia.DimsHeight);
-            Assert.Equal(0, profile.Asendia.DimsWeight);
-            Assert.True(profile.Asendia.DimsAddWeight);
+            Assert.Equal(0, packageProfile.Weight);
+            Assert.Equal(0, packageProfile.DimsProfileID);
+            Assert.Equal(0, packageProfile.DimsLength);
+            Assert.Equal(0, packageProfile.DimsWidth);
+            Assert.Equal(0, packageProfile.DimsHeight);
+            Assert.Equal(0, packageProfile.DimsWeight);
+            Assert.True(packageProfile.DimsAddWeight);
         }
 
         [Fact]

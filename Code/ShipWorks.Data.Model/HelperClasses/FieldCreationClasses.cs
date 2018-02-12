@@ -1642,41 +1642,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.NonDelivery);}
 		}
-		/// <summary>Creates a new AsendiaProfileEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new AsendiaProfileEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsAddWeight);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity AsendiaShipmentEntity</summary>
