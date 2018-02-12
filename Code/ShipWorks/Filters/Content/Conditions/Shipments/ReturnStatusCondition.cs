@@ -16,6 +16,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         public ReturnStatusCondition()
         {
             Value = ReturnStatusType.ReturnShipment;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

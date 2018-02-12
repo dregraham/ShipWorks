@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.CoreExtensions.Filters
         public UpsServiceTypeCondition()
         {
             Value = UpsServiceType.UpsGround;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

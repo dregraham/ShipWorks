@@ -17,6 +17,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
         public USTerritoryCondition()
         {
             Value = ValidationDetailStatusType.Unknown;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

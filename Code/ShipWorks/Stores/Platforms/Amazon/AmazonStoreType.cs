@@ -150,13 +150,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // Order is Amazon Prime
             AmazonIsPrimeCondition primeCondition = new AmazonIsPrimeCondition();
-            primeCondition.Operator = EqualityOperator.Equals;
+            primeCondition.Operator = EnumEqualityOperator.Equals;
             primeCondition.Value = AmazonIsPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
             // Order is fulfilled by seller
             AmazonFulfillmentChannelCondition fulfillmentCondition = new AmazonFulfillmentChannelCondition();
-            fulfillmentCondition.Operator = EqualityOperator.Equals;
+            fulfillmentCondition.Operator = EnumEqualityOperator.Equals;
             fulfillmentCondition.Value = AmazonMwsFulfillmentChannel.MFN;
             definition.RootContainer.FirstGroup.Conditions.Add(fulfillmentCondition);
 
@@ -185,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // All the order items are not FBA
             AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
-            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Operator = EnumEqualityOperator.Equals;
             fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.AFN;
             definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
 
@@ -254,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // All the order items are not FBA
             AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
-            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Operator = EnumEqualityOperator.Equals;
             fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.MFN;
             definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
 

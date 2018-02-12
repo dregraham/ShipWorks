@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -13,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
     [ConditionElement("eBay Feedback", "EbayOrderItem.Feedback")]
     [ConditionStoreType(StoreTypeCode.Ebay)]
-    public class EbayFeedbackCondition : EnumCondition<EbayFeedbackConditionStatusType>
+    public class EbayFeedbackCondition : ValueChoiceCondition<EbayFeedbackConditionStatusType>
     {
         /// <summary>
         /// Constructor
@@ -21,6 +19,17 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayFeedbackCondition()
         {
             Value = EbayFeedbackConditionStatusType.SellerNotLeftForBuyer;
+        }
+
+        /// <summary>
+        /// Get the value choices the user will be provided with
+        /// </summary>
+        public override ICollection<ValueChoice<EbayFeedbackConditionStatusType>> ValueChoices
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<EbayFeedbackConditionStatusType>().Select(e => new ValueChoice<EbayFeedbackConditionStatusType>(e.Description, e.Value)).ToList();
+            }
         }
 
         /// <summary>

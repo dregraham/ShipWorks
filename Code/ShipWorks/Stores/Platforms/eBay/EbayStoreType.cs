@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             definition.RootContainer.FirstGroup.Conditions.Add(anyItem);
 
             EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
-            checkoutStatus.Operator = EqualityOperator.NotEqual;
+            checkoutStatus.Operator = EnumEqualityOperator.NotEqual;
             checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             anyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
 
             EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
-            checkoutStatus.Operator = EqualityOperator.Equals;
+            checkoutStatus.Operator = EnumEqualityOperator.Equals;
             checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             everyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 

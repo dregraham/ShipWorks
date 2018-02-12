@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayPayPalAddressStatusCondition()
         {
             Value = PayPalAddressStatus.Confirmed;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

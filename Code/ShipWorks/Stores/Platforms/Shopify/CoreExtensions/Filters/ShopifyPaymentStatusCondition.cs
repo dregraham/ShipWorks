@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Filters
         public ShopifyPaymentStatusCondition()
         {
             Value = ShopifyPaymentStatus.Authorized;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

@@ -21,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayPaymentMethodCondition()
         {
             Value = EbayEffectivePaymentMethod.PayPal;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

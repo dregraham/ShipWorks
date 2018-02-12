@@ -17,6 +17,7 @@ namespace ShipWorks.Filters.Content.Conditions.Notes
         public NoteVisibilityCondition()
         {
             Value = NoteVisibility.Internal;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

@@ -123,7 +123,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void OnChangeOperator(object sender, EventArgs e)
         {
-            EqualityOperator op = (EqualityOperator)equalityOperator.SelectedValue;
+            EnumEqualityOperator op = (EnumEqualityOperator) equalityOperator.SelectedValue;
             condition.Operator = op;
 
             BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;

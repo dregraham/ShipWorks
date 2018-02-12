@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
         public ChannelAdvisorShippingStatusCondition()
         {
             Value = ChannelAdvisorShippingStatus.Shipped;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

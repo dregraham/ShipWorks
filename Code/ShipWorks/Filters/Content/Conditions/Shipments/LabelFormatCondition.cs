@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
     [ConditionElement("Actual Label Format", "Shipment.LabelFormat")]
-    public class LabelFormatCondition : EnumCondition<LabelFormatType>
+    public class LabelFormatCondition : ValueChoiceCondition<LabelFormatType>
     {
         /// <summary>
         /// Constructor
@@ -22,7 +21,18 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         }
 
         /// <summary>
-        /// Generate the sql
+        /// Get the value choices the user will be provided with
+        /// </summary>
+        public override ICollection<ValueChoice<LabelFormatType>> ValueChoices
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<LabelFormatType>().Select(e => new ValueChoice<LabelFormatType>(e.Description, e.Value)).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Generate the SQL
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
@@ -99,12 +109,6 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         /// <summary>
         /// Field that will be used for filtering
         /// </summary>
-        protected virtual EntityField2 FilterField
-        {
-            get
-            {
-                return ShipmentFields.ActualLabelFormat;
-            }
-        }
+        protected virtual EntityField2 FilterField { get; } = ShipmentFields.ActualLabelFormat;
     }
 }

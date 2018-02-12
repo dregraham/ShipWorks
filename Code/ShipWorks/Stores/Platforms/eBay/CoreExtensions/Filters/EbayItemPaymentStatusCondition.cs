@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayItemPaymentStatusCondition()
         {
             Value = EbayEffectivePaymentStatus.Paid;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

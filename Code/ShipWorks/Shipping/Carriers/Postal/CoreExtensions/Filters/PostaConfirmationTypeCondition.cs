@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.CoreExtensions.Filters
         public PostalConfirmationTypeCondition()
         {
             Value = PostalConfirmationType.Delivery;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

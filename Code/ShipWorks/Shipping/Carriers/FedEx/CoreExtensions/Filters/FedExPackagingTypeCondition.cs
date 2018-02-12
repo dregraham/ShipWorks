@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.CoreExtensions.Filters
         public FedExPackagingTypeCondition()
         {
             Value = FedExPackagingType.Custom;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

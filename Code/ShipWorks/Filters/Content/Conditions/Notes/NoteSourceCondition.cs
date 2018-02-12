@@ -17,6 +17,7 @@ namespace ShipWorks.Filters.Content.Conditions.Notes
         public NoteSourceCondition()
         {
             Value = NoteSource.ShipWorksUser;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

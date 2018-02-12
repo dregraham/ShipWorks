@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Order is Amazon Prime
             ChannelAdvisorIsPrimeCondition primeCondition = new ChannelAdvisorIsPrimeCondition();
-            primeCondition.Operator = EqualityOperator.Equals;
+            primeCondition.Operator = EnumEqualityOperator.Equals;
             primeCondition.Value = AmazonIsPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // ChannelAdvisor Shipping Status == Shipped
             ChannelAdvisorShippingStatusCondition shippingStatus = new ChannelAdvisorShippingStatusCondition();
-            shippingStatus.Operator = EqualityOperator.Equals;
+            shippingStatus.Operator = EnumEqualityOperator.Equals;
             shippingStatus.Value = ChannelAdvisorShippingStatus.Shipped;
             shippedDefinition.FirstGroup.Conditions.Add(shippingStatus);
 
@@ -273,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Channel advisor says it has to be unshipped
             ChannelAdvisorShippingStatusCondition channelAdvisorShippingStatusCondition = new ChannelAdvisorShippingStatusCondition();
-            channelAdvisorShippingStatusCondition.Operator = EqualityOperator.Equals;
+            channelAdvisorShippingStatusCondition.Operator = EnumEqualityOperator.Equals;
             channelAdvisorShippingStatusCondition.Value = ChannelAdvisorShippingStatus.Unshipped;
             definition.RootContainer.FirstGroup.Conditions.Add(channelAdvisorShippingStatusCondition);
 
@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             everyItem.Container.FirstGroup.Conditions.Add(notFba);
 
             ChannelAdvisorPaymentStatusCondition channelAdvisorPaymentStatus = new ChannelAdvisorPaymentStatusCondition();
-            channelAdvisorPaymentStatus.Operator = EqualityOperator.Equals;
+            channelAdvisorPaymentStatus.Operator = EnumEqualityOperator.Equals;
             channelAdvisorPaymentStatus.Value = ChannelAdvisorPaymentStatus.Cleared;
             definition.RootContainer.FirstGroup.Conditions.Add(channelAdvisorPaymentStatus);
 

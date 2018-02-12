@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.CoreExtensions.Filters
         public PostalServiceTypeCondition()
         {
             Value = PostalServiceType.PriorityMail;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

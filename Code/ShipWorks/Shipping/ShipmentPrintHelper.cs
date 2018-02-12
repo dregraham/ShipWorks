@@ -341,7 +341,7 @@ namespace ShipWorks.Shipping
         private static FilterDefinition CreateFilterDefinitionUPSPrintableReturn(bool thermal)
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
-            definition.RootContainer.FirstGroup.Conditions.Add(new UpsReturnServiceCondition() { Value = UpsReturnServiceType.PrintReturnLabel, Operator = EqualityOperator.Equals });
+            definition.RootContainer.FirstGroup.Conditions.Add(new UpsReturnServiceCondition() { Value = UpsReturnServiceType.PrintReturnLabel, Operator = EnumEqualityOperator.Equals });
             definition.RootContainer.FirstGroup.Conditions.Add(new LabelFormatCondition() { Value = (thermal ? LabelFormatType.Thermal : LabelFormatType.Standard), Operator = EqualityOperator.Equals });
 
             return definition;

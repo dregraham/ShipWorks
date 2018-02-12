@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
     [ConditionElement("Processed Status", "Shipment.Status")]
-    public class ShipmentStatusCondition : EnumCondition<ShipmentStatusType>
+    public class ShipmentStatusCondition : ValueChoiceCondition<ShipmentStatusType>
     {
         /// <summary>
         /// Constructor
@@ -20,7 +19,18 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         }
 
         /// <summary>
-        /// Generate the sql
+        /// Get the value choices the user will be provided with
+        /// </summary>
+        public override ICollection<ValueChoice<ShipmentStatusType>> ValueChoices
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<ShipmentStatusType>().Select(e => new ValueChoice<ShipmentStatusType>(e.Description, e.Value)).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Generate the SQL
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {

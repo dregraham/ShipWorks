@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
     [ConditionElement("Insured By", "Shipment.Insurance")]
-    public class ShipmentInsuredCondition : EnumCondition<ShipmentInsuredType>
+    public class ShipmentInsuredCondition : ValueChoiceCondition<ShipmentInsuredType>
     {
         /// <summary>
         /// Constructor
@@ -18,6 +16,17 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         public ShipmentInsuredCondition()
         {
             Value = ShipmentInsuredType.None;
+        }
+
+        /// <summary>
+        /// Get the value choices the user will be provided with
+        /// </summary>
+        public override ICollection<ValueChoice<ShipmentInsuredType>> ValueChoices
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<ShipmentInsuredType>().Select(e => new ValueChoice<ShipmentInsuredType>(e.Description, e.Value)).ToList();
+            }
         }
 
         /// <summary>

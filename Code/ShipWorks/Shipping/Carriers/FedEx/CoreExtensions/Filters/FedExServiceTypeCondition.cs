@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.CoreExtensions.Filters
         public FedExServiceTypeCondition()
         {
             Value = FedExServiceType.FedExGround;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

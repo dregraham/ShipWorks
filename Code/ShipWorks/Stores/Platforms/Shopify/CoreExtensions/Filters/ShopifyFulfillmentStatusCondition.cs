@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Filters
         public ShopifyFulfillmentStatusCondition()
         {
             Value = ShopifyFulfillmentStatus.Unshipped;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

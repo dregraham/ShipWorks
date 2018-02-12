@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.CoreExtensions.Filters
         public PostalPackagingTypeCondition()
         {
             Value = PostalPackagingType.Package;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

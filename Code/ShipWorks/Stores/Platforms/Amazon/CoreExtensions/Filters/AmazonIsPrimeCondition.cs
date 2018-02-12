@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
         public AmazonIsPrimeCondition()
         {
             Value = AmazonIsPrime.Yes;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

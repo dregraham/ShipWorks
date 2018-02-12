@@ -17,10 +17,11 @@ namespace ShipWorks.Filters.Content.Conditions.Emails
         public EmailStatusCondition()
         {
             Value = EmailOutboundStatus.Sent;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>
-        /// Generate the sql
+        /// Generate the SQL
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {

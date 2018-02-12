@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
         public AmazonFulfillmentChannelCondition()
         {
             Value = AmazonMwsFulfillmentChannel.MFN;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

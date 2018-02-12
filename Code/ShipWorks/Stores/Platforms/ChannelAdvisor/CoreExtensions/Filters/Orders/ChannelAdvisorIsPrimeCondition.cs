@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
         public ChannelAdvisorIsPrimeCondition()
         {
             Value = AmazonIsPrime.Yes;
+            SelectedValues = new[] { Value };
         }
 
         public override string GenerateSql(SqlGenerationContext context)

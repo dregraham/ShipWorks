@@ -19,6 +19,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         public OrderShipSenseStatusCondition()
         {
             Value = ShipSenseOrderRecognitionStatus.Recognized;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>

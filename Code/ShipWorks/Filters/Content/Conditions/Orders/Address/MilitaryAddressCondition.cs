@@ -18,6 +18,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         public MilitaryAddressCondition()
         {
             Value = ValidationDetailStatusType.Unknown;
+            SelectedValues = new[] { Value };
             AddressOperator = BillShipAddressOperator.ShipOrBill;
         }
 

@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.CoreExtensions.Filters
         public UpsReturnServiceCondition()
         {
             Value = UpsReturnServiceType.PrintReturnLabel;
+            SelectedValues = new[] { Value };
         }
 
         /// <summary>
