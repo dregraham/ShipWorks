@@ -685,19 +685,6 @@
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="DhlExpressProfilePackage" ObjectID="ee79dd76-ab08-4681-b775-af3fa62fc45f">
-        <Fields>
-          <Field Name="DhlExpressProfilePackageID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="4" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="3" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="7" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="5" />
-          <Field Name="ShippingProfileID" Type="long" FieldIndex="1" />
-          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="2" />
-        </Fields>
-      </EntityDefinition>
       <EntityDefinition Name="DhlExpressShipment" ObjectID="75fabbb6-2e0f-4566-b510-e8b363732b79">
         <Fields>
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
@@ -3559,11 +3546,6 @@
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="DhlExpressProfile.ShippingProfile-ShippingProfile.DhlExpress" Start=":DhlExpressProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="DhlExpressProfilePackage.DhlExpressProfile-DhlExpressProfile.Packages" Start=":DhlExpressProfilePackage" End=":DhlExpressProfile" StartNavigator="DhlExpressProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
@@ -10855,19 +10837,6 @@
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":DhlExpressProfilePackage" TargetName="ShipWorksLocal:dbo:DhlExpressProfilePackage">
-          <FieldMappings>
-            <FieldMapping FieldName="DhlExpressProfilePackageID" TargetFieldName="DhlExpressProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
-            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressShipment" TargetName="ShipWorksLocal:dbo:DhlExpressShipment">

@@ -64,3 +64,17 @@ ALTER TABLE BestRateProfile
 DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 GO
 --Best Rate
+
+-- DHL Express
+PRINT N'Transfer DhlExpress profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM DhlExpressProfilePackage
+GO
+
+PRINT N'Drop DhlExpressProfilePackage'
+GO
+DROP TABLE DhlExpressProfilePackage
+GO
+-- DHL Express

@@ -185,9 +185,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity:
 					toReturn = this.DhlExpressProfile;
 					break;
-				case ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity:
-					toReturn = this.DhlExpressProfilePackage;
-					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity:
 					toReturn = this.DhlExpressShipment;
 					break;
@@ -991,12 +988,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<DhlExpressProfileEntity> DhlExpressProfile
 		{
 			get { return new DataSource2<DhlExpressProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressProfilePackageEntity instances in the database.</summary>
-		public DataSource2<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
-		{
-			get { return new DataSource2<DhlExpressProfilePackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressShipmentEntity instances in the database.</summary>

@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(223);
+			this.InitClass(222);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -88,7 +88,6 @@ namespace ShipWorks.Data.Model
 			InitDhlExpressAccountEntityMappings();
 			InitDhlExpressPackageEntityMappings();
 			InitDhlExpressProfileEntityMappings();
-			InitDhlExpressProfilePackageEntityMappings();
 			InitDhlExpressShipmentEntityMappings();
 			InitDimensionsProfileEntityMappings();
 			InitDownloadEntityMappings();
@@ -894,21 +893,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "SaturdayDelivery", "SaturdayDelivery", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "Contents", "Contents", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "NonDelivery", "NonDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
-		}
-
-		/// <summary>Inits DhlExpressProfilePackageEntity's mappings</summary>
-		private void InitDhlExpressProfilePackageEntityMappings()
-		{
-			this.AddElementMapping("DhlExpressProfilePackageEntity", @"ShipWorksLocal", @"dbo", "DhlExpressProfilePackage", 9, 0);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DhlExpressProfilePackageID", "DhlExpressProfilePackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("DhlExpressProfilePackageEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 		}
 
 		/// <summary>Inits DhlExpressShipmentEntity's mappings</summary>
