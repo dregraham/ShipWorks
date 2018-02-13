@@ -18697,45 +18697,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Confirmation);}
 		}
-		/// <summary>Creates a new PostalProfileEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Weight);}
-		}
 		/// <summary>Creates a new PostalProfileEntity.PackagingType field instance</summary>
 		public static EntityField2 PackagingType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.PackagingType);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new PostalProfileEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.DimsAddWeight);}
 		}
 		/// <summary>Creates a new PostalProfileEntity.NonRectangular field instance</summary>
 		public static EntityField2 NonRectangular

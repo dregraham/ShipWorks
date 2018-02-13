@@ -2431,14 +2431,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)PostalProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("PostalProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("PostalProfileEntity", "Confirmation", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.Confirmation, 0, 0, 10);
-			this.AddElementFieldInfo("PostalProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("PostalProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NonRectangular", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NonRectangular, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "CustomsContentType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsContentType, 0, 0, 10);

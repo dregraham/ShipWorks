@@ -2562,29 +2562,22 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits PostalProfileEntity's mappings</summary>
 		private void InitPostalProfileEntityMappings()
 		{
-			this.AddElementMapping("PostalProfileEntity", @"ShipWorksLocal", @"dbo", "PostalProfile", 22, 0);
+			this.AddElementMapping("PostalProfileEntity", @"ShipWorksLocal", @"dbo", "PostalProfile", 15, 0);
 			this.AddElementFieldMapping("PostalProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("PostalProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("PostalProfileEntity", "Confirmation", "Confirmation", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("PostalProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("PostalProfileEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("PostalProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("PostalProfileEntity", "NonRectangular", "NonRectangular", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
-			this.AddElementFieldMapping("PostalProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
-			this.AddElementFieldMapping("PostalProfileEntity", "CustomsContentType", "CustomsContentType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
-			this.AddElementFieldMapping("PostalProfileEntity", "CustomsContentDescription", "CustomsContentDescription", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("PostalProfileEntity", "ExpressSignatureWaiver", "ExpressSignatureWaiver", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
-			this.AddElementFieldMapping("PostalProfileEntity", "SortType", "SortType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
-			this.AddElementFieldMapping("PostalProfileEntity", "EntryFacility", "EntryFacility", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
-			this.AddElementFieldMapping("PostalProfileEntity", "Memo1", "Memo1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 18);
-			this.AddElementFieldMapping("PostalProfileEntity", "Memo2", "Memo2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 19);
-			this.AddElementFieldMapping("PostalProfileEntity", "Memo3", "Memo3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 20);
-			this.AddElementFieldMapping("PostalProfileEntity", "NoPostage", "NoPostage", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
+			this.AddElementFieldMapping("PostalProfileEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("PostalProfileEntity", "NonRectangular", "NonRectangular", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("PostalProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("PostalProfileEntity", "CustomsContentType", "CustomsContentType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+			this.AddElementFieldMapping("PostalProfileEntity", "CustomsContentDescription", "CustomsContentDescription", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("PostalProfileEntity", "ExpressSignatureWaiver", "ExpressSignatureWaiver", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
+			this.AddElementFieldMapping("PostalProfileEntity", "SortType", "SortType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
+			this.AddElementFieldMapping("PostalProfileEntity", "EntryFacility", "EntryFacility", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
+			this.AddElementFieldMapping("PostalProfileEntity", "Memo1", "Memo1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("PostalProfileEntity", "Memo2", "Memo2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("PostalProfileEntity", "Memo3", "Memo3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("PostalProfileEntity", "NoPostage", "NoPostage", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
 		}
 
 		/// <summary>Inits PostalShipmentEntity's mappings</summary>

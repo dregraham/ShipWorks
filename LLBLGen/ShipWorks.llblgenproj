@@ -2118,27 +2118,20 @@
       <EntityDefinition Name="PostalProfile" ObjectID="9a3253aa-3a35-438a-9773-a14bb7c7a0c0">
         <Fields>
           <Field Name="Confirmation" Type="int" IsOptional="true" FieldIndex="2" />
-          <Field Name="CustomsContentDescription" Type="string" IsOptional="true" MaxLength="50" FieldIndex="14" />
-          <Field Name="CustomsContentType" Type="int" IsOptional="true" FieldIndex="13" />
-          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="10" />
-          <Field Name="DimsHeight" Type="double" IsOptional="true" FieldIndex="8" />
-          <Field Name="DimsLength" Type="double" IsOptional="true" FieldIndex="6" />
-          <Field Name="DimsProfileID" Type="long" IsOptional="true" FieldIndex="5" />
-          <Field Name="DimsWeight" Type="double" IsOptional="true" FieldIndex="9" />
-          <Field Name="DimsWidth" Type="double" IsOptional="true" FieldIndex="7" />
-          <Field Name="EntryFacility" Type="int" IsOptional="true" FieldIndex="17" />
-          <Field Name="ExpressSignatureWaiver" Type="bool" IsOptional="true" FieldIndex="15" />
-          <Field Name="Memo1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="18" />
-          <Field Name="Memo2" Type="string" IsOptional="true" MaxLength="300" FieldIndex="19" />
-          <Field Name="Memo3" Type="string" IsOptional="true" MaxLength="300" FieldIndex="20" />
-          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="12" />
-          <Field Name="NonRectangular" Type="bool" IsOptional="true" FieldIndex="11" />
-          <Field Name="NoPostage" Type="bool" IsOptional="true" FieldIndex="21" />
-          <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="4" />
+          <Field Name="CustomsContentDescription" Type="string" IsOptional="true" MaxLength="50" FieldIndex="7" />
+          <Field Name="CustomsContentType" Type="int" IsOptional="true" FieldIndex="6" />
+          <Field Name="EntryFacility" Type="int" IsOptional="true" FieldIndex="10" />
+          <Field Name="ExpressSignatureWaiver" Type="bool" IsOptional="true" FieldIndex="8" />
+          <Field Name="Memo1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="11" />
+          <Field Name="Memo2" Type="string" IsOptional="true" MaxLength="300" FieldIndex="12" />
+          <Field Name="Memo3" Type="string" IsOptional="true" MaxLength="300" FieldIndex="13" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="5" />
+          <Field Name="NonRectangular" Type="bool" IsOptional="true" FieldIndex="4" />
+          <Field Name="NoPostage" Type="bool" IsOptional="true" FieldIndex="14" />
+          <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="3" />
           <Field Name="Service" Type="int" IsOptional="true" FieldIndex="1" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
-          <Field Name="SortType" Type="int" IsOptional="true" FieldIndex="16" />
-          <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="3" />
+          <Field Name="SortType" Type="int" IsOptional="true" FieldIndex="9" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="PostalShipment" ObjectID="f02eff23-4dab-4379-8815-daa4c9a60e93">
@@ -12199,12 +12192,6 @@
             <FieldMapping FieldName="Confirmation" TargetFieldName="Confirmation" />
             <FieldMapping FieldName="CustomsContentDescription" TargetFieldName="CustomsContentDescription" />
             <FieldMapping FieldName="CustomsContentType" TargetFieldName="CustomsContentType" />
-            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
-            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
-            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
-            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
-            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
-            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="EntryFacility" TargetFieldName="EntryFacility" />
             <FieldMapping FieldName="ExpressSignatureWaiver" TargetFieldName="ExpressSignatureWaiver" />
             <FieldMapping FieldName="Memo1" TargetFieldName="Memo1" />
@@ -12217,7 +12204,6 @@
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="SortType" TargetFieldName="SortType" />
-            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":PostalShipment" TargetName="ShipWorksLocal:dbo:PostalShipment">

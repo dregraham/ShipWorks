@@ -8046,22 +8046,8 @@ namespace ShipWorks.Data.Model
 		Service,
 		///<summary>Confirmation. </summary>
 		Confirmation,
-		///<summary>Weight. </summary>
-		Weight,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>NonRectangular. </summary>
 		NonRectangular,
 		///<summary>NonMachinable. </summary>

@@ -149,7 +149,21 @@ GO
 ALTER TABLE OnTracProfile
 DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 GO
---OnTrac
+-- OnTrac
+
+-- Postal
+PRINT N'Transfer Postal profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM PostalProfile
+GO
+PRINT N'Drop PostalProfile dimension and weight columns'
+GO
+ALTER TABLE PostalProfile
+DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+GO
+-- Postal
 
 -- UPS
 PRINT N'Adding [PackageProfileID] to [dbo].[PackageProfile]' 
