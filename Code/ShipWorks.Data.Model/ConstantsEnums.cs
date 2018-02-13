@@ -10704,20 +10704,6 @@ namespace ShipWorks.Data.Model
 		ShippingProfileID,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>AdditionalHandlingEnabled. </summary>
 		AdditionalHandlingEnabled,
 		///<summary>VerbalConfirmationEnabled. </summary>
@@ -10736,6 +10722,8 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}

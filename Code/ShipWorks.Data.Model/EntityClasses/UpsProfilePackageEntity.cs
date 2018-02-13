@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private PackageProfileEntity _packageProfile;
 		private UpsProfileEntity _upsProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -45,6 +46,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name PackageProfile</summary>
+			public static readonly string PackageProfile = "PackageProfile";
 			/// <summary>Member name UpsProfile</summary>
 			public static readonly string UpsProfile = "UpsProfile";
 		}
@@ -104,6 +107,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_packageProfile = (PackageProfileEntity)info.GetValue("_packageProfile", typeof(PackageProfileEntity));
+				if(_packageProfile!=null)
+				{
+					_packageProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				_upsProfile = (UpsProfileEntity)info.GetValue("_upsProfile", typeof(UpsProfileEntity));
 				if(_upsProfile!=null)
 				{
@@ -125,6 +133,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case UpsProfilePackageFieldIndex.ShippingProfileID:
 					DesetupSyncUpsProfile(true, false);
 					break;
+				case UpsProfilePackageFieldIndex.PackageProfileID:
+					DesetupSyncPackageProfile(true, false);
+					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -139,6 +150,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "PackageProfile":
+					this.PackageProfile = (PackageProfileEntity)entity;
+					break;
 				case "UpsProfile":
 					this.UpsProfile = (UpsProfileEntity)entity;
 					break;
@@ -164,6 +178,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "PackageProfile":
+					toReturn.Add(Relations.PackageProfileEntityUsingPackageProfileID);
+					break;
 				case "UpsProfile":
 					toReturn.Add(Relations.UpsProfileEntityUsingShippingProfileID);
 					break;
@@ -195,6 +212,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "PackageProfile":
+					SetupSyncPackageProfile(relatedEntity);
+					break;
 				case "UpsProfile":
 					SetupSyncUpsProfile(relatedEntity);
 					break;
@@ -211,6 +231,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "PackageProfile":
+					DesetupSyncPackageProfile(false, true);
+					break;
 				case "UpsProfile":
 					DesetupSyncUpsProfile(false, true);
 					break;
@@ -233,6 +256,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_packageProfile!=null)
+			{
+				toReturn.Add(_packageProfile);
+			}
 			if(_upsProfile!=null)
 			{
 				toReturn.Add(_upsProfile);
@@ -256,6 +283,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_packageProfile", (!this.MarkedForDeletion?_packageProfile:null));
 				info.AddValue("_upsProfile", (!this.MarkedForDeletion?_upsProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -270,6 +298,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new UpsProfilePackageRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'PackageProfile' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoPackageProfile()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(PackageProfileFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UpsProfile' to this entity.</summary>
@@ -324,6 +361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("PackageProfile", _packageProfile);
 			toReturn.Add("UpsProfile", _upsProfile);
 			return toReturn;
 		}
@@ -353,20 +391,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AdditionalHandlingEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("VerbalConfirmationEnabled", fieldHashtable);
@@ -384,8 +408,43 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DryIceWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DryIceIsForMedicalUse", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackageProfileID", fieldHashtable);
 		}
 		#endregion
+
+		/// <summary> Removes the sync logic for member _packageProfile</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncPackageProfile(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _packageProfile, new PropertyChangedEventHandler( OnPackageProfilePropertyChanged ), "PackageProfile", ShipWorks.Data.Model.RelationClasses.StaticUpsProfilePackageRelations.PackageProfileEntityUsingPackageProfileIDStatic, true, signalRelatedEntity, "Ups", resetFKFields, new int[] { (int)UpsProfilePackageFieldIndex.PackageProfileID } );
+			_packageProfile = null;
+		}
+
+		/// <summary> setups the sync logic for member _packageProfile</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncPackageProfile(IEntityCore relatedEntity)
+		{
+			if(_packageProfile!=relatedEntity)
+			{
+				DesetupSyncPackageProfile(true, true);
+				_packageProfile = (PackageProfileEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _packageProfile, new PropertyChangedEventHandler( OnPackageProfilePropertyChanged ), "PackageProfile", ShipWorks.Data.Model.RelationClasses.StaticUpsProfilePackageRelations.PackageProfileEntityUsingPackageProfileIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnPackageProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Removes the sync logic for member _upsProfile</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -451,6 +510,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PackageProfile' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathPackageProfile
+		{
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(PackageProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("PackageProfile")[0], (int)ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, 0, null, null, null, null, "PackageProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+		}
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathUpsProfile
@@ -510,76 +576,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfilePackageFieldIndex.PackagingType, false); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.PackagingType, value); }
-		}
-
-		/// <summary> The Weight property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.Weight, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)UpsProfilePackageFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity UpsProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsAddWeight, value); }
 		}
 
 		/// <summary> The AdditionalHandlingEnabled property of the Entity UpsProfilePackage<br/><br/></summary>
@@ -670,6 +666,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, false); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, value); }
+		}
+
+		/// <summary> The PackageProfileID property of the Entity UpsProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."PackageProfileID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 PackageProfileID
+		{
+			get { return (System.Int64)GetValue((int)UpsProfilePackageFieldIndex.PackageProfileID, true); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.PackageProfileID, value); }
+		}
+
+		/// <summary> Gets / sets related entity of type 'PackageProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual PackageProfileEntity PackageProfile
+		{
+			get	{ return _packageProfile; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncPackageProfile(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "Ups", "PackageProfile", _packageProfile, true); 
+				}
+			}
 		}
 
 		/// <summary> Gets / sets related entity of type 'UpsProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

@@ -10,7 +10,8 @@ CREATE TABLE [dbo].[PackageProfile]
 [DimsWidth] [float] NULL,
 [DimsHeight] [float] NULL,
 [DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL
+[DimsAddWeight] [bit] NULL,
+[UpsProfilePackageID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_PackageProfile] on [dbo].[PackageProfile]'
@@ -106,3 +107,38 @@ ALTER TABLE OnTracProfile
 DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 GO
 --OnTrac
+
+-- UPS
+PRINT N'Adding [PackageProfileID] to [dbo].[PackageProfile]' 
+GO 
+ALTER TABLE [UpsProfilePackage] ADD [PackageProfileID] [bigint] NULL
+GO
+-- Copy package data to the PackageProfile table
+PRINT N'Transfer Ups profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO [PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight, UpsProfilePackageID) 
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight, UpsProfilePackageID
+FROM [UpsProfilePackage]
+GO
+UPDATE upp
+SET upp.PackageProfileID = pp.PackageProfileID
+FROM [UpsProfilePackage] AS upp
+INNER JOIN [PackageProfile] AS pp
+    ON upp.UpsProfilePackageID = pp.UpsProfilePackageID
+GO
+PRINT N'Dropping [UpsProfilePackageID] from [ProfilePackage]' 
+GO 
+ALTER TABLE [PackageProfile] DROP COLUMN [UpsProfilePackageID]
+GO
+PRINT N'Dropping Weight and Dimensions columns for [UpsProfilePackage]' 
+GO 
+ALTER TABLE [UpsProfilePackage] 
+DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
+GO
+ALTER TABLE [UpsProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL
+GO
+PRINT N'Adding foreign key to [UpsProfilePackage]' 
+ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+GO
+-- UPS

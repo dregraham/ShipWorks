@@ -2415,7 +2415,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "Quantity", "Quantity", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 15);
 			this.AddElementFieldMapping("OrderItemEntity", "LocalStatus", "LocalStatus", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("OrderItemEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
-			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
+			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
 			this.AddElementFieldMapping("OrderItemEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 19);
 		}
 
@@ -2912,7 +2912,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "UnitValue", "UnitValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "CountryOfOrigin", "CountryOfOrigin", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "HarmonizedCode", "HarmonizedCode", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "NumberOfPieces", "NumberOfPieces", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "UnitPriceAmount", "UnitPriceAmount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
 		}
@@ -3507,26 +3507,20 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UpsProfilePackageEntity's mappings</summary>
 		private void InitUpsProfilePackageEntityMappings()
 		{
-			this.AddElementMapping("UpsProfilePackageEntity", @"ShipWorksLocal", @"dbo", "UpsProfilePackage", 19, 0);
+			this.AddElementMapping("UpsProfilePackageEntity", @"ShipWorksLocal", @"dbo", "UpsProfilePackage", 13, 0);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "UpsProfilePackageID", "UpsProfilePackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 4);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, "NVarChar", 4, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 17);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, "NVarChar", 4, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 12);
 		}
 
 		/// <summary>Inits UpsRateSurchargeEntity's mappings</summary>

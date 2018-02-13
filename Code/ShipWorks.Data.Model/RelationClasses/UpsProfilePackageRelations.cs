@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.PackageProfileEntityUsingPackageProfileID);
 			toReturn.Add(this.UpsProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
@@ -38,6 +39,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
+		/// <summary>Returns a new IEntityRelation object, between UpsProfilePackageEntity and PackageProfileEntity over the m:1 relation they have, using the relation between the fields:
+		/// UpsProfilePackage.PackageProfileID - PackageProfile.PackageProfileID
+		/// </summary>
+		public virtual IEntityRelation PackageProfileEntityUsingPackageProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "PackageProfile", false);
+				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, UpsProfilePackageFields.PackageProfileID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfilePackageEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between UpsProfilePackageEntity and UpsProfileEntity over the m:1 relation they have, using the relation between the fields:
 		/// UpsProfilePackage.ShippingProfileID - UpsProfile.ShippingProfileID
 		/// </summary>
@@ -66,6 +81,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticUpsProfilePackageRelations
 	{
+		internal static readonly IEntityRelation PackageProfileEntityUsingPackageProfileIDStatic = new UpsProfilePackageRelations().PackageProfileEntityUsingPackageProfileID;
 		internal static readonly IEntityRelation UpsProfileEntityUsingShippingProfileIDStatic = new UpsProfilePackageRelations().UpsProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>

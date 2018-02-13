@@ -41,8 +41,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             dimensionsControl.Initialize();
 
             AddValueMapping(package, UpsProfilePackageFields.PackagingType, packagingState, packagingType, labelPackaging);
-            AddValueMapping(package, UpsProfilePackageFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(package, UpsProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(package.PackageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(package.PackageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
             AddValueMapping(package, UpsProfilePackageFields.AdditionalHandlingEnabled, additionalHandlingState, additionalHandling, labelAdditionalHandling);
             AddValueMapping(package, UpsProfilePackageFields.DryIceEnabled, dryIceState, dryIceControl);
             AddValueMapping(package, UpsProfilePackageFields.VerbalConfirmationEnabled, verbalConfirmationState, verbalConfirmationDetails);

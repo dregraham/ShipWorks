@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<UpsProfilePackageEntity> _ups;
 		private ShippingProfileEntity _shippingProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -47,6 +48,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
+			/// <summary>Member name Ups</summary>
+			public static readonly string Ups = "Ups";
 		}
 		#endregion
 		
@@ -104,6 +107,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_ups = (EntityCollection<UpsProfilePackageEntity>)info.GetValue("_ups", typeof(EntityCollection<UpsProfilePackageEntity>));
 				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
 				if(_shippingProfile!=null)
 				{
@@ -142,6 +146,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					this.ShippingProfile = (ShippingProfileEntity)entity;
 					break;
+				case "Ups":
+					this.Ups.Add((UpsProfilePackageEntity)entity);
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -166,6 +173,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					toReturn.Add(Relations.ShippingProfileEntityUsingShippingProfileID);
+					break;
+				case "Ups":
+					toReturn.Add(Relations.UpsProfilePackageEntityUsingPackageProfileID);
 					break;
 				default:
 					break;				
@@ -198,6 +208,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					SetupSyncShippingProfile(relatedEntity);
 					break;
+				case "Ups":
+					this.Ups.Add((UpsProfilePackageEntity)relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -213,6 +226,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					DesetupSyncShippingProfile(false, true);
+					break;
+				case "Ups":
+					this.PerformRelatedEntityRemoval(this.Ups, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				default:
 					break;
@@ -245,6 +261,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.Ups);
 			return toReturn;
 		}
 
@@ -256,6 +273,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_ups", ((_ups!=null) && (_ups.Count>0) && !this.MarkedForDeletion)?_ups:null);
 				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -270,6 +288,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new PackageProfileRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsProfilePackage' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoUps()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsProfilePackageFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ShippingProfile' to this entity.</summary>
@@ -293,6 +320,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._ups);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -300,6 +328,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._ups = (EntityCollection<UpsProfilePackageEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -308,6 +337,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._ups != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -317,6 +347,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -325,6 +356,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("ShippingProfile", _shippingProfile);
+			toReturn.Add("Ups", _ups);
 			return toReturn;
 		}
 
@@ -429,6 +461,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfilePackage' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathUps
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("Ups")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, 0, null, null, null, null, "Ups", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
@@ -550,6 +589,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)PackageProfileFieldIndex.DimsAddWeight, false); }
 			set	{ SetValue((int)PackageProfileFieldIndex.DimsAddWeight, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'UpsProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(UpsProfilePackageEntity))]
+		public virtual EntityCollection<UpsProfilePackageEntity> Ups
+		{
+			get { return GetOrCreateEntityCollection<UpsProfilePackageEntity, UpsProfilePackageEntityFactory>("PackageProfile", true, false, ref _ups);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

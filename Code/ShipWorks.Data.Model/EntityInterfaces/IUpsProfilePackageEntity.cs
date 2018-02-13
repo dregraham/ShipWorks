@@ -39,48 +39,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int32> PackagingType { get; }
-        /// <summary> The Weight property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsLength"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsWidth"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsHeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."DimsAddWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Boolean> DimsAddWeight { get; }
         /// <summary> The AdditionalHandlingEnabled property of the Entity UpsProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsProfilePackage"."AdditionalHandlingEnabled"<br/>
@@ -135,8 +93,15 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> DryIceIsForMedicalUse { get; }
+        /// <summary> The PackageProfileID property of the Entity UpsProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsProfilePackage"."PackageProfileID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 PackageProfileID { get; }
         
         
+        IPackageProfileEntity PackageProfile { get; }
         IUpsProfileEntity UpsProfile { get; }
         
 
@@ -166,6 +131,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsProfilePackageEntity : IUpsProfilePackageEntity
     {
         
+        IPackageProfileEntity IUpsProfilePackageEntity.PackageProfile => PackageProfile;
         IUpsProfileEntity IUpsProfilePackageEntity.UpsProfile => UpsProfile;
         
 

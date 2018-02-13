@@ -24802,41 +24802,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.PackagingType);}
 		}
-		/// <summary>Creates a new UpsProfilePackageEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsAddWeight);}
-		}
 		/// <summary>Creates a new UpsProfilePackageEntity.AdditionalHandlingEnabled field instance</summary>
 		public static EntityField2 AdditionalHandlingEnabled
 		{
@@ -24881,6 +24846,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceIsForMedicalUse
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.PackageProfileID);}
 		}
 	}
 

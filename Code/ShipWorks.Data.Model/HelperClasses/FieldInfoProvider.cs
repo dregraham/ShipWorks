@@ -2294,7 +2294,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 0, 38);
 			this.AddElementFieldInfo("OrderItemEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.LocalStatus, 255, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
-			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)OrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
@@ -2760,7 +2760,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "Weight", typeof(System.Double), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "UnitValue", typeof(System.Decimal), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.UnitValue, 0, 4, 19);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "CountryOfOrigin", typeof(System.String), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.CountryOfOrigin, 50, 0, 0);
-			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.HarmonizedCode, 20, 0, 0);
+			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)ShipmentCustomsItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "NumberOfPieces", typeof(System.Int32), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.NumberOfPieces, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "UnitPriceAmount", typeof(System.Decimal), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, 0, 4, 19);
 		}
@@ -3322,13 +3322,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "UpsProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)UpsProfilePackageFieldIndex.UpsProfilePackageID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)UpsProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "AdditionalHandlingEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
@@ -3338,6 +3331,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceWeight, 0, 0, 38);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
+			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackageProfileID", typeof(System.Int64), false, true, false, false,  (int)UpsProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 		}
 		/// <summary>Inits UpsRateSurchargeEntity's FieldInfo objects</summary>
 		private void InitUpsRateSurchargeEntityInfos()
