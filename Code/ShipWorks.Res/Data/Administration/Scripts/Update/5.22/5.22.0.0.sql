@@ -92,3 +92,17 @@ GO
 DROP TABLE iParcelProfilePackage
 GO
 -- iParcelProfilePackage
+
+-- OnTrac
+PRINT N'Transfer OnTrac profile Dimensions and Weight to PackageProfile'
+GO
+INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+FROM OnTracProfile
+GO
+PRINT N'Drop OnTracProfile dimension and weight columns'
+GO
+ALTER TABLE OnTracProfile
+DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
+GO
+--OnTrac

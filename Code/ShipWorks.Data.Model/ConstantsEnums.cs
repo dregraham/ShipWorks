@@ -7130,20 +7130,6 @@ namespace ShipWorks.Data.Model
 		SignatureRequired,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>Reference1. </summary>
 		Reference1,
 		///<summary>Reference2. </summary>

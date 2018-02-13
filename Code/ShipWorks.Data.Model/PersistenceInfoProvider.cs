@@ -2258,7 +2258,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OnTracProfileEntity's mappings</summary>
 		private void InitOnTracProfileEntityMappings()
 		{
-			this.AddElementMapping("OnTracProfileEntity", @"ShipWorksLocal", @"dbo", "OnTracProfile", 17, 0);
+			this.AddElementMapping("OnTracProfileEntity", @"ShipWorksLocal", @"dbo", "OnTracProfile", 10, 0);
 			this.AddElementFieldMapping("OnTracProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OnTracProfileEntity", "OnTracAccountID", "OnTracAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("OnTracProfileEntity", "ResidentialDetermination", "ResidentialDetermination", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -2266,16 +2266,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OnTracProfileEntity", "SaturdayDelivery", "SaturdayDelivery", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("OnTracProfileEntity", "SignatureRequired", "SignatureRequired", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 			this.AddElementFieldMapping("OnTracProfileEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
-			this.AddElementFieldMapping("OnTracProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 8);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 11);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 12);
-			this.AddElementFieldMapping("OnTracProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
-			this.AddElementFieldMapping("OnTracProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("OnTracProfileEntity", "Reference2", "Reference2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("OnTracProfileEntity", "Instructions", "Instructions", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("OnTracProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("OnTracProfileEntity", "Reference2", "Reference2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("OnTracProfileEntity", "Instructions", "Instructions", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 9);
 		}
 
 		/// <summary>Inits OnTracShipmentEntity's mappings</summary>

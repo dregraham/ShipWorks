@@ -364,20 +364,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Reference2", fieldHashtable);
@@ -549,76 +535,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)OnTracProfileFieldIndex.PackagingType, false); }
 			set	{ SetValue((int)OnTracProfileFieldIndex.PackagingType, value); }
-		}
-
-		/// <summary> The Weight property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)OnTracProfileFieldIndex.Weight, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)OnTracProfileFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)OnTracProfileFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)OnTracProfileFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)OnTracProfileFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)OnTracProfileFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity OnTracProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OnTracProfile"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)OnTracProfileFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)OnTracProfileFieldIndex.DimsAddWeight, value); }
 		}
 
 		/// <summary> The Reference1 property of the Entity OnTracProfile<br/><br/></summary>

@@ -16587,41 +16587,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.PackagingType);}
 		}
-		/// <summary>Creates a new OnTracProfileEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new OnTracProfileEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OnTracProfileFieldIndex.DimsAddWeight);}
-		}
 		/// <summary>Creates a new OnTracProfileEntity.Reference1 field instance</summary>
 		public static EntityField2 Reference1
 		{

@@ -2149,13 +2149,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OnTracProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "SignatureRequired", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.SignatureRequired, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)OnTracProfileFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("OnTracProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Reference1, 300, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Reference2", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Reference2, 300, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Instructions", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Instructions, 300, 0, 0);

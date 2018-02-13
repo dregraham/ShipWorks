@@ -710,7 +710,32 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
         {
-            return false;
+            bool changes = false;
+
+            // First delete out anything that needs deleted
+            foreach (PackageProfileEntity package in profile.PackageProfile.ToList())
+            {
+                // If its new but deleted, just get rid of it
+                if (package.Fields.State == EntityState.Deleted)
+                {
+                    if (package.IsNew)
+                    {
+                        profile.PackageProfile.Remove(package);
+                    }
+
+                    // If its deleted, delete it
+                    else
+                    {
+                        package.Fields.State = EntityState.Fetched;
+                        profile.PackageProfile.Remove(package);
+
+                        adapter.DeleteEntity(package);
+
+                        changes = true;
+                    }
+                }
+            }
+            return changes;
         }
 
         /// <summary>

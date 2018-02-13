@@ -2796,13 +2796,6 @@ CREATE TABLE [dbo].[OnTracProfile]
 [SaturdayDelivery] [bit] NULL,
 [SignatureRequired] [bit] NULL,
 [PackagingType] [int] NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Reference2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Instructions] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL

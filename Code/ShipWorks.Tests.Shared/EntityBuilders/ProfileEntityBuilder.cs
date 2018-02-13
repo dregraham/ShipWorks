@@ -131,7 +131,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// Make the shipment an OnTrac shipment
         /// </summary>
         public ProfileEntityBuilder AsOnTrac(Action<EntityBuilder<OnTracProfileEntity>> builderConfiguration) =>
-            SetShipmentType(builderConfiguration, ShipmentTypeCode.OnTrac, x => x.OnTrac);
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.OnTrac, x => x.OnTrac)
+                .SetupSinglePackage();
 
         /// <summary>
         /// Make the shipment an iParcel shipment
@@ -175,6 +176,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             ShippingProfileManager.CheckForChangesNeeded();
 
             return value;
+        }
+
+        /// <summary>
+        /// Add a package to the Profile
+        /// </summary>
+        public ProfileEntityBuilder SetupSinglePackage()
+        {
+            EntityBuilder<PackageProfileEntity> builder = new EntityBuilder<PackageProfileEntity>();
+            
+            Set(x => x.PackageProfile.Add(builder.Build()));
+
+            return this;
         }
     }
 }

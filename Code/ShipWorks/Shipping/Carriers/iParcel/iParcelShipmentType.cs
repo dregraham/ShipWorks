@@ -189,41 +189,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return adapters;
         }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (PackageProfileEntity package in profile.PackageProfile.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.PackageProfile.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.PackageProfile.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-
-            return changes;
-        }
-
+        
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
