@@ -45,10 +45,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             ShippingProfileEntity profile = new ShippingProfileEntity()
             {
-                Asendia = new AsendiaProfileEntity(),
+                Asendia = new AsendiaProfileEntity()                
             };
-            PackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
+
             testObject.ConfigurePrimaryProfile(profile);
+            PackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
 
             Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
             Assert.Equal(AsendiaServiceType.AsendiaPriorityTracked, profile.Asendia.Service);

@@ -293,9 +293,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
-
-            
-
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
