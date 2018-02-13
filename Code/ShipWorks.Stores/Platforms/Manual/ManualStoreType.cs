@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
@@ -39,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Manual
             InitializeStoreDefaults(store);
 
             store.StoreName = "My Manual Store";
+            store.AutoDownload = false;
 
             return store;
         }
@@ -54,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => manualStore.StoreName;
+        protected override string InternalLicenseIdentifier => SystemData.Fetch().DatabaseID.ToString();
 
         /// <summary>
         /// Creates the add store wizard pages.
