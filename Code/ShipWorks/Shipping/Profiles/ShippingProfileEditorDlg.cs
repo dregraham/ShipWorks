@@ -104,6 +104,8 @@ namespace ShipWorks.Shipping.Profiles
                 MessageHelper.ShowError(this, "Enter a name for the profile.");
                 return;
             }
+            
+            profile.Name = name;
 
             if (ShippingProfileManager.DoesNameExist(profile))
             {
@@ -113,8 +115,6 @@ namespace ShipWorks.Shipping.Profiles
 
             try
             {
-                profile.Name = name;
-
                 // Have the profile control save itself
                 ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
                 if (profileControl != null)
