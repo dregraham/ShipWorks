@@ -2188,7 +2188,7 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [BatteryMaterial] [int] NULL,
 [BatteryPacking] [int] NULL,
 [BatteryRegulatorySubtype] [int] NULL,
-[PackageProfileID] [bigint] NOT NULL,
+[PackageProfileID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
@@ -4141,7 +4141,6 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 (
 [UpsProfilePackageID] [bigint] NOT NULL IDENTITY(1064, 1000),
 [ShippingProfileID] [bigint] NOT NULL,
-[PackageProfileID] [bigint] NOT NULL,
 [PackagingType] [int] NULL,
 [AdditionalHandlingEnabled] [bit] NULL,
 [VerbalConfirmationEnabled] [bit] NULL,
@@ -4151,12 +4150,17 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 [DryIceEnabled] [bit] NULL,
 [DryIceRegulationSet] [int] NULL,
 [DryIceWeight] [float] NULL,
-[DryIceIsForMedicalUse] [bit] NULL
+[DryIceIsForMedicalUse] [bit] NULL,
+[PackageProfileID] [bigint] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]'
 GO
 ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [PK_UpsProfilePackage] PRIMARY KEY CLUSTERED  ([UpsProfilePackageID])
+GO
+PRINT N'Adding foreign key to [UpsProfilePackage]' 
+ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
 GO
 PRINT N'Creating [dbo].[UserColumnSettings]'
 GO

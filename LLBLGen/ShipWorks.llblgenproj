@@ -3986,7 +3986,7 @@
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UpsProfilePackage.PackageProfile-PackageProfile.Ups" Start=":UpsProfilePackage" End=":PackageProfile" StartNavigator="PackageProfile" EndNavigator="Ups" Type="4">
+      <NormalRelationship Name="UpsProfilePackage.PackageProfile-PackageProfile.UpsProfilePackage" Start=":UpsProfilePackage" End=":PackageProfile" StartNavigator="PackageProfile" EndNavigator="UpsProfilePackage" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="PackageProfileID" PkField="PackageProfileID" />
         </FieldRelationships>
@@ -4231,7 +4231,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-12T19:13:23.8705558Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-13T21:32:33.3419363Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6937,16 +6937,9 @@
                     <Field Name="SaturdayDelivery" Ordinal="5" IsOptional="true" DbType="2" />
                     <Field Name="SignatureRequired" Ordinal="6" IsOptional="true" DbType="2" />
                     <Field Name="PackagingType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="Weight" Ordinal="8" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsProfileID" Ordinal="9" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="DimsLength" Ordinal="10" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsWidth" Ordinal="11" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsHeight" Ordinal="12" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsWeight" Ordinal="13" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsAddWeight" Ordinal="14" IsOptional="true" DbType="2" />
-                    <Field Name="Reference1" Ordinal="15" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="Reference2" Ordinal="16" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="Instructions" Ordinal="17" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Reference1" Ordinal="8" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Reference2" Ordinal="9" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Instructions" Ordinal="10" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracShipment">

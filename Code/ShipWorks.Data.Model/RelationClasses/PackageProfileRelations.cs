@@ -30,28 +30,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.UpsProfilePackageEntityUsingPackageProfileID);
 			toReturn.Add(this.FedExProfilePackageEntityUsingPackageProfileID);
+			toReturn.Add(this.UpsProfilePackageEntityUsingPackageProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between PackageProfileEntity and UpsProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
-		/// PackageProfile.PackageProfileID - UpsProfilePackage.PackageProfileID
-		/// </summary>
-		public virtual IEntityRelation UpsProfilePackageEntityUsingPackageProfileID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Ups" , true);
-				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, UpsProfilePackageFields.PackageProfileID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfilePackageEntity", false);
-				return relation;
-			}
-		}
 		/// <summary>Returns a new IEntityRelation object, between PackageProfileEntity and FedExProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
 		/// PackageProfile.PackageProfileID - FedExProfilePackage.PackageProfileID
 		/// </summary>
@@ -63,6 +49,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, FedExProfilePackageFields.PackageProfileID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExProfilePackageEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between PackageProfileEntity and UpsProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
+		/// PackageProfile.PackageProfileID - UpsProfilePackage.PackageProfileID
+		/// </summary>
+		public virtual IEntityRelation UpsProfilePackageEntityUsingPackageProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsProfilePackage" , true);
+				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, UpsProfilePackageFields.PackageProfileID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfilePackageEntity", false);
 				return relation;
 			}
 		}
@@ -96,8 +97,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticPackageProfileRelations
 	{
-		internal static readonly IEntityRelation UpsProfilePackageEntityUsingPackageProfileIDStatic = new PackageProfileRelations().UpsProfilePackageEntityUsingPackageProfileID;
 		internal static readonly IEntityRelation FedExProfilePackageEntityUsingPackageProfileIDStatic = new PackageProfileRelations().FedExProfilePackageEntityUsingPackageProfileID;
+		internal static readonly IEntityRelation UpsProfilePackageEntityUsingPackageProfileIDStatic = new PackageProfileRelations().UpsProfilePackageEntityUsingPackageProfileID;
 		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new PackageProfileRelations().ShippingProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>
