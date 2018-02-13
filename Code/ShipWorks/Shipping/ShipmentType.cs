@@ -762,6 +762,9 @@ namespace ShipWorks.Shipping
             //Single package carriers only have one package profile, initialize it now
             if (!SupportsMultiplePackages)
             {
+                // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                profile.PackageProfile.Clear();
                 profile.PackageProfile.Add(new PackageProfileEntity()
                 {
                     Weight = 0,
