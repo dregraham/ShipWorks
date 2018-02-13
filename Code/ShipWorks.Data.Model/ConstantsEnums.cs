@@ -3398,20 +3398,6 @@ namespace ShipWorks.Data.Model
 		FedExProfilePackageID,
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>PriorityAlert. </summary>
 		PriorityAlert,
 		///<summary>PriorityAlertEnhancementType. </summary>
@@ -3468,6 +3454,8 @@ namespace ShipWorks.Data.Model
 		BatteryPacking,
 		///<summary>BatteryRegulatorySubtype. </summary>
 		BatteryRegulatorySubtype,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}

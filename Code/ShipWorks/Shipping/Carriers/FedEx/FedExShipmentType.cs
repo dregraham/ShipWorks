@@ -482,6 +482,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
+            base.LoadProfileData(profile, refreshIfPresent);
+
             bool existed = profile.FedEx != null;
 
             // Load the profile data
@@ -498,6 +500,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     adapter.FetchEntityCollection(fedex.Packages, new RelationPredicateBucket(FedExProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
                     fedex.Packages.Sort((int) FedExProfilePackageFieldIndex.FedExProfilePackageID, ListSortDirection.Ascending);
+                }
+
+                foreach (FedExProfilePackageEntity fedexPackageProfile in fedex.Packages)
+                {
+                    fedexPackageProfile.PackageProfile = profile.PackageProfile.First(p => fedexPackageProfile.PackageProfileID == p.PackageProfileID);
                 }
             }
         }
@@ -530,6 +537,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                         changes = true;
                     }
+                }
+
+                if (package.IsNew)
+                {
+                    profile.PackageProfile.Add(package.PackageProfile);
+                    adapter.SaveAndRefetch(package.FedExProfile);
                 }
             }
 
@@ -608,8 +621,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IFedExProfilePackageEntity packageProfile = profile.FedEx.Packages.ElementAt(i);
-
+                IFedExProfilePackageEntity fedexPackageProfile = profile.FedEx.Packages.ElementAt(i);                
                 FedExPackageEntity package;
 
                 // Get the existing, or create a new package
@@ -622,6 +634,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     package = FedExUtility.CreateDefaultPackage();
                     fedex.Packages.Add(package);
                 }
+
+                IPackageProfileEntity packageProfile = fedexPackageProfile.PackageProfile;
 
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, FedExPackageFields.Weight);
                 changedPackageWeights |= (packageProfile.Weight != null);
@@ -636,45 +650,45 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, FedExPackageFields.DimsAddWeight);
                 }
 
-                if (packageProfile.DryIceWeight > 0)
+                if (fedexPackageProfile.DryIceWeight > 0)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceWeight, package, FedExPackageFields.DryIceWeight);
+                    ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DryIceWeight, package, FedExPackageFields.DryIceWeight);
                 }
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainsAlcohol, package, FedExPackageFields.ContainsAlcohol);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.ContainsAlcohol, package, FedExPackageFields.ContainsAlcohol);
 
-                if (packageProfile.PriorityAlert.HasValue && packageProfile.PriorityAlert.Value)
+                if (fedexPackageProfile.PriorityAlert.HasValue && fedexPackageProfile.PriorityAlert.Value)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertDetailContent, package, FedExPackageFields.PriorityAlertDetailContent);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertEnhancementType, package, FedExPackageFields.PriorityAlertEnhancementType);
+                    ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.PriorityAlertDetailContent, package, FedExPackageFields.PriorityAlertDetailContent);
+                    ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.PriorityAlertEnhancementType, package, FedExPackageFields.PriorityAlertEnhancementType);
                 }
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsEnabled, package, FedExPackageFields.DangerousGoodsEnabled);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsType, package, FedExPackageFields.DangerousGoodsType);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsAccessibilityType, package, FedExPackageFields.DangerousGoodsAccessibilityType);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsCargoAircraftOnly, package, FedExPackageFields.DangerousGoodsCargoAircraftOnly);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsEmergencyContactPhone, package, FedExPackageFields.DangerousGoodsEmergencyContactPhone);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsOfferor, package, FedExPackageFields.DangerousGoodsOfferor);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainerType, package, FedExPackageFields.ContainerType);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsEnabled, package, FedExPackageFields.DangerousGoodsEnabled);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsType, package, FedExPackageFields.DangerousGoodsType);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsAccessibilityType, package, FedExPackageFields.DangerousGoodsAccessibilityType);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsCargoAircraftOnly, package, FedExPackageFields.DangerousGoodsCargoAircraftOnly);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsEmergencyContactPhone, package, FedExPackageFields.DangerousGoodsEmergencyContactPhone);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsOfferor, package, FedExPackageFields.DangerousGoodsOfferor);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.ContainerType, package, FedExPackageFields.ContainerType);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialNumber, package, FedExPackageFields.HazardousMaterialNumber);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialClass, package, FedExPackageFields.HazardousMaterialClass);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialProperName, package, FedExPackageFields.HazardousMaterialProperName);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialPackingGroup, package, FedExPackageFields.HazardousMaterialPackingGroup);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuantityValue, package, FedExPackageFields.HazardousMaterialQuantityValue);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialNumber, package, FedExPackageFields.HazardousMaterialNumber);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialClass, package, FedExPackageFields.HazardousMaterialClass);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialProperName, package, FedExPackageFields.HazardousMaterialProperName);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialPackingGroup, package, FedExPackageFields.HazardousMaterialPackingGroup);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialQuantityValue, package, FedExPackageFields.HazardousMaterialQuantityValue);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryMaterial, package, FedExPackageFields.BatteryMaterial);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryPacking, package, FedExPackageFields.BatteryPacking);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryRegulatorySubtype, package, FedExPackageFields.BatteryRegulatorySubtype);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.BatteryMaterial, package, FedExPackageFields.BatteryMaterial);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.BatteryPacking, package, FedExPackageFields.BatteryPacking);
+                ShippingProfileUtility.ApplyProfileValue(fedexPackageProfile.BatteryRegulatorySubtype, package, FedExPackageFields.BatteryRegulatorySubtype);
             }
 
             // Remove any packages that are too many for the profile

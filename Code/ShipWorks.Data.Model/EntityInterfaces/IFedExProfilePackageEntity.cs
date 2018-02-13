@@ -33,48 +33,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ShippingProfileID { get; }
-        /// <summary> The Weight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsLength"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsWidth"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsHeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsAddWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Boolean> DimsAddWeight { get; }
         /// <summary> The PriorityAlert property of the Entity FedExProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FedExProfilePackage"."PriorityAlert"<br/>
@@ -243,9 +201,16 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
+        /// <summary> The PackageProfileID property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."PackageProfileID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 PackageProfileID { get; }
         
         
         IFedExProfileEntity FedExProfile { get; }
+        IPackageProfileEntity PackageProfile { get; }
         
 
         
@@ -275,6 +240,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         IFedExProfileEntity IFedExProfilePackageEntity.FedExProfile => FedExProfile;
+        IPackageProfileEntity IFedExProfilePackageEntity.PackageProfile => PackageProfile;
         
 
         /// <summary>

@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[PackageProfile]
 [DimsHeight] [float] NULL,
 [DimsWeight] [float] NULL,
 [DimsAddWeight] [bit] NULL,
+[FedExProfilePackageID] [bigint] NULL,
 [UpsProfilePackageID] [bigint] NULL
 )
 GO
@@ -79,6 +80,48 @@ GO
 DROP TABLE DhlExpressProfilePackage
 GO
 -- DHL Express
+
+-- FEDEX
+PRINT N'Adding [dbo].[PackageProfileID]'
+GO
+ALTER TABLE [FedExProfilePackage] 
+ADD [PackageProfileID] [bigint] NULL
+GO
+PRINT N'Inserting from [FedExProfilePackage] into [PackageProfile]'
+GO
+INSERT INTO [PackageProfile] ([ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID]) 
+SELECT [ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID]
+FROM [FedExProfilePackage]
+GO
+PRINT N'Mapping [FedExProfilePackage] to [PackageProfile]'
+GO
+UPDATE
+    fedex
+SET
+    fedex.[PackageProfileID] = package.[PackageProfileID]
+FROM
+    [FedExProfilePackage] AS fedex
+    INNER JOIN [PackageProfile] AS package
+        ON fedex.[FedExProfilePackageID] = package.[FedExProfilePackageID]
+GO
+PRINT N'Dropping [FedExProfilePackageID] from [ProfilePackage]'
+GO
+ALTER TABLE [PackageProfile] 
+DROP COLUMN [FedExProfilePackageID]
+GO
+PRINT N'Make [FedExProfilePackage].[PackageProfileID] NOT NULL'
+ALTER TABLE [FedExProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL 
+GO
+PRINT N'Dropping Weight and Dimensions columns for [FedExProfilePackage]'
+GO
+ALTER TABLE [FedExProfilePackage] 
+DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
+GO
+PRINT N'Adding foreign key to [FedExProfilePackage]'
+ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
+GO
+-- FEDEX
 
 -- iParcelProfilePackage
 PRINT N'Transfer iParcel profile Dimensions and Weight to PackageProfile'

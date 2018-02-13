@@ -7817,41 +7817,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.ShippingProfileID);}
 		}
-		/// <summary>Creates a new FedExProfilePackageEntity.Weight field instance</summary>
-		public static EntityField2 Weight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsProfileID field instance</summary>
-		public static EntityField2 DimsProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsProfileID);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsLength field instance</summary>
-		public static EntityField2 DimsLength
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsLength);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsWidth field instance</summary>
-		public static EntityField2 DimsWidth
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsWidth);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsHeight field instance</summary>
-		public static EntityField2 DimsHeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsHeight);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsWeight field instance</summary>
-		public static EntityField2 DimsWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsWeight);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.DimsAddWeight field instance</summary>
-		public static EntityField2 DimsAddWeight
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsAddWeight);}
-		}
 		/// <summary>Creates a new FedExProfilePackageEntity.PriorityAlert field instance</summary>
 		public static EntityField2 PriorityAlert
 		{
@@ -7991,6 +7956,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 BatteryRegulatorySubtype
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryRegulatorySubtype);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackageProfileID);}
 		}
 	}
 

@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<FedExProfilePackageEntity> _fedExProfilePackage;
 		private EntityCollection<UpsProfilePackageEntity> _ups;
 		private ShippingProfileEntity _shippingProfile;
 
@@ -48,6 +49,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
+			/// <summary>Member name FedExProfilePackage</summary>
+			public static readonly string FedExProfilePackage = "FedExProfilePackage";
 			/// <summary>Member name Ups</summary>
 			public static readonly string Ups = "Ups";
 		}
@@ -107,6 +110,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_fedExProfilePackage = (EntityCollection<FedExProfilePackageEntity>)info.GetValue("_fedExProfilePackage", typeof(EntityCollection<FedExProfilePackageEntity>));
 				_ups = (EntityCollection<UpsProfilePackageEntity>)info.GetValue("_ups", typeof(EntityCollection<UpsProfilePackageEntity>));
 				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
 				if(_shippingProfile!=null)
@@ -146,6 +150,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					this.ShippingProfile = (ShippingProfileEntity)entity;
 					break;
+				case "FedExProfilePackage":
+					this.FedExProfilePackage.Add((FedExProfilePackageEntity)entity);
+					break;
 				case "Ups":
 					this.Ups.Add((UpsProfilePackageEntity)entity);
 					break;
@@ -173,6 +180,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					toReturn.Add(Relations.ShippingProfileEntityUsingShippingProfileID);
+					break;
+				case "FedExProfilePackage":
+					toReturn.Add(Relations.FedExProfilePackageEntityUsingPackageProfileID);
 					break;
 				case "Ups":
 					toReturn.Add(Relations.UpsProfilePackageEntityUsingPackageProfileID);
@@ -208,6 +218,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					SetupSyncShippingProfile(relatedEntity);
 					break;
+				case "FedExProfilePackage":
+					this.FedExProfilePackage.Add((FedExProfilePackageEntity)relatedEntity);
+					break;
 				case "Ups":
 					this.Ups.Add((UpsProfilePackageEntity)relatedEntity);
 					break;
@@ -226,6 +239,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					DesetupSyncShippingProfile(false, true);
+					break;
+				case "FedExProfilePackage":
+					this.PerformRelatedEntityRemoval(this.FedExProfilePackage, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "Ups":
 					this.PerformRelatedEntityRemoval(this.Ups, relatedEntity, signalRelatedEntityManyToOne);
@@ -261,6 +277,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.FedExProfilePackage);
 			toReturn.Add(this.Ups);
 			return toReturn;
 		}
@@ -273,6 +290,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_fedExProfilePackage", ((_fedExProfilePackage!=null) && (_fedExProfilePackage.Count>0) && !this.MarkedForDeletion)?_fedExProfilePackage:null);
 				info.AddValue("_ups", ((_ups!=null) && (_ups.Count>0) && !this.MarkedForDeletion)?_ups:null);
 				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
@@ -290,6 +308,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return new PackageProfileRelations().GetAllRelations();
 		}
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'FedExProfilePackage' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoFedExProfilePackage()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExProfilePackageFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
+			return bucket;
+		}
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsProfilePackage' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoUps()
@@ -320,6 +346,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._fedExProfilePackage);
 			collectionsQueue.Enqueue(this._ups);
 		}
 		
@@ -328,6 +355,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._fedExProfilePackage = (EntityCollection<FedExProfilePackageEntity>) collectionsQueue.Dequeue();
 			this._ups = (EntityCollection<UpsProfilePackageEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -337,6 +365,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._fedExProfilePackage != null);
 			toReturn |=(this._ups != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
@@ -347,6 +376,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<FedExProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfilePackageEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))) : null);
 		}
 #endif
@@ -357,6 +387,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("ShippingProfile", _shippingProfile);
 			toReturn.Add("Ups", _ups);
+			toReturn.Add("FedExProfilePackage", _fedExProfilePackage);
 			return toReturn;
 		}
 
@@ -468,6 +499,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathUps
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("Ups")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, 0, null, null, null, null, "Ups", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfilePackage' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathFedExProfilePackage
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<FedExProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("FedExProfilePackage")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, 0, null, null, null, null, "FedExProfilePackage", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
@@ -596,6 +633,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<UpsProfilePackageEntity> Ups
 		{
 			get { return GetOrCreateEntityCollection<UpsProfilePackageEntity, UpsProfilePackageEntityFactory>("PackageProfile", true, false, ref _ups);	}
+		}
+		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(FedExProfilePackageEntity))]
+		public virtual EntityCollection<FedExProfilePackageEntity> FedExProfilePackage
+		{
+			get { return GetOrCreateEntityCollection<FedExProfilePackageEntity, FedExProfilePackageEntityFactory>("PackageProfile", true, false, ref _fedExProfilePackage);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

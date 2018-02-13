@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.UpsProfilePackageEntityUsingPackageProfileID);
+			toReturn.Add(this.FedExProfilePackageEntityUsingPackageProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
@@ -48,6 +49,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, UpsProfilePackageFields.PackageProfileID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfilePackageEntity", false);
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between PackageProfileEntity and FedExProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
+		/// PackageProfile.PackageProfileID - FedExProfilePackage.PackageProfileID
+		/// </summary>
+		public virtual IEntityRelation FedExProfilePackageEntityUsingPackageProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "FedExProfilePackage" , true);
+				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, FedExProfilePackageFields.PackageProfileID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExProfilePackageEntity", false);
 				return relation;
 			}
 		}
@@ -82,6 +97,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticPackageProfileRelations
 	{
 		internal static readonly IEntityRelation UpsProfilePackageEntityUsingPackageProfileIDStatic = new PackageProfileRelations().UpsProfilePackageEntityUsingPackageProfileID;
+		internal static readonly IEntityRelation FedExProfilePackageEntityUsingPackageProfileIDStatic = new PackageProfileRelations().FedExProfilePackageEntityUsingPackageProfileID;
 		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new PackageProfileRelations().ShippingProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>

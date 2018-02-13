@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private FedExProfileEntity _fedExProfile;
+		private PackageProfileEntity _packageProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -47,6 +48,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name FedExProfile</summary>
 			public static readonly string FedExProfile = "FedExProfile";
+			/// <summary>Member name PackageProfile</summary>
+			public static readonly string PackageProfile = "PackageProfile";
 		}
 		#endregion
 		
@@ -109,6 +112,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_fedExProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
+				_packageProfile = (PackageProfileEntity)info.GetValue("_packageProfile", typeof(PackageProfileEntity));
+				if(_packageProfile!=null)
+				{
+					_packageProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -124,6 +132,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case FedExProfilePackageFieldIndex.ShippingProfileID:
 					DesetupSyncFedExProfile(true, false);
+					break;
+				case FedExProfilePackageFieldIndex.PackageProfileID:
+					DesetupSyncPackageProfile(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -141,6 +152,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "FedExProfile":
 					this.FedExProfile = (FedExProfileEntity)entity;
+					break;
+				case "PackageProfile":
+					this.PackageProfile = (PackageProfileEntity)entity;
 					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
@@ -166,6 +180,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "FedExProfile":
 					toReturn.Add(Relations.FedExProfileEntityUsingShippingProfileID);
+					break;
+				case "PackageProfile":
+					toReturn.Add(Relations.PackageProfileEntityUsingPackageProfileID);
 					break;
 				default:
 					break;				
@@ -198,6 +215,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "FedExProfile":
 					SetupSyncFedExProfile(relatedEntity);
 					break;
+				case "PackageProfile":
+					SetupSyncPackageProfile(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -213,6 +233,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "FedExProfile":
 					DesetupSyncFedExProfile(false, true);
+					break;
+				case "PackageProfile":
+					DesetupSyncPackageProfile(false, true);
 					break;
 				default:
 					break;
@@ -237,6 +260,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				toReturn.Add(_fedExProfile);
 			}
+			if(_packageProfile!=null)
+			{
+				toReturn.Add(_packageProfile);
+			}
 			return toReturn;
 		}
 		
@@ -257,6 +284,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_fedExProfile", (!this.MarkedForDeletion?_fedExProfile:null));
+				info.AddValue("_packageProfile", (!this.MarkedForDeletion?_packageProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -278,6 +306,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'PackageProfile' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoPackageProfile()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(PackageProfileFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
 			return bucket;
 		}
 		
@@ -325,6 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("FedExProfile", _fedExProfile);
+			toReturn.Add("PackageProfile", _packageProfile);
 			return toReturn;
 		}
 
@@ -350,20 +388,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FedExProfilePackageID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PriorityAlert", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -420,6 +444,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BatteryPacking", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("BatteryRegulatorySubtype", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackageProfileID", fieldHashtable);
 		}
 		#endregion
 
@@ -448,6 +474,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnFedExProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Removes the sync logic for member _packageProfile</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncPackageProfile(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _packageProfile, new PropertyChangedEventHandler( OnPackageProfilePropertyChanged ), "PackageProfile", ShipWorks.Data.Model.RelationClasses.StaticFedExProfilePackageRelations.PackageProfileEntityUsingPackageProfileIDStatic, true, signalRelatedEntity, "FedExProfilePackage", resetFKFields, new int[] { (int)FedExProfilePackageFieldIndex.PackageProfileID } );
+			_packageProfile = null;
+		}
+
+		/// <summary> setups the sync logic for member _packageProfile</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncPackageProfile(IEntityCore relatedEntity)
+		{
+			if(_packageProfile!=relatedEntity)
+			{
+				DesetupSyncPackageProfile(true, true);
+				_packageProfile = (PackageProfileEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _packageProfile, new PropertyChangedEventHandler( OnPackageProfilePropertyChanged ), "PackageProfile", ShipWorks.Data.Model.RelationClasses.StaticFedExProfilePackageRelations.PackageProfileEntityUsingPackageProfileIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnPackageProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -494,6 +553,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("FedExProfile")[0], (int)ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfileEntity, 0, null, null, null, null, "FedExProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PackageProfile' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathPackageProfile
+		{
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(PackageProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("PackageProfile")[0], (int)ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, 0, null, null, null, null, "PackageProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+		}
+
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -536,76 +602,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)FedExProfilePackageFieldIndex.ShippingProfileID, true); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.ShippingProfileID, value); }
-		}
-
-		/// <summary> The Weight property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)FedExProfilePackageFieldIndex.Weight, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)FedExProfilePackageFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)FedExProfilePackageFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)FedExProfilePackageFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)FedExProfilePackageFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)FedExProfilePackageFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity FedExProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfilePackageFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)FedExProfilePackageFieldIndex.DimsAddWeight, value); }
 		}
 
 		/// <summary> The PriorityAlert property of the Entity FedExProfilePackage<br/><br/></summary>
@@ -888,6 +884,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, value); }
 		}
 
+		/// <summary> The PackageProfileID property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."PackageProfileID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 PackageProfileID
+		{
+			get { return (System.Int64)GetValue((int)FedExProfilePackageFieldIndex.PackageProfileID, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.PackageProfileID, value); }
+		}
+
 		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
 		public virtual FedExProfileEntity FedExProfile
@@ -902,6 +908,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 				else
 				{
 					SetSingleRelatedEntityNavigator(value, "Packages", "FedExProfile", _fedExProfile, true); 
+				}
+			}
+		}
+
+		/// <summary> Gets / sets related entity of type 'PackageProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual PackageProfileEntity PackageProfile
+		{
+			get	{ return _packageProfile; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncPackageProfile(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "FedExProfilePackage", "PackageProfile", _packageProfile, true); 
 				}
 			}
 		}

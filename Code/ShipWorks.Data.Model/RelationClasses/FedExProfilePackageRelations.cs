@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.FedExProfileEntityUsingShippingProfileID);
+			toReturn.Add(this.PackageProfileEntityUsingPackageProfileID);
 			return toReturn;
 		}
 
@@ -52,6 +53,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between FedExProfilePackageEntity and PackageProfileEntity over the m:1 relation they have, using the relation between the fields:
+		/// FedExProfilePackage.PackageProfileID - PackageProfile.PackageProfileID
+		/// </summary>
+		public virtual IEntityRelation PackageProfileEntityUsingPackageProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "PackageProfile", false);
+				relation.AddEntityFieldPair(PackageProfileFields.PackageProfileID, FedExProfilePackageFields.PackageProfileID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExProfilePackageEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -67,6 +82,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticFedExProfilePackageRelations
 	{
 		internal static readonly IEntityRelation FedExProfileEntityUsingShippingProfileIDStatic = new FedExProfilePackageRelations().FedExProfileEntityUsingShippingProfileID;
+		internal static readonly IEntityRelation PackageProfileEntityUsingPackageProfileIDStatic = new FedExProfilePackageRelations().PackageProfileEntityUsingPackageProfileID;
 
 		/// <summary>CTor</summary>
 		static StaticFedExProfilePackageRelations()

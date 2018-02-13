@@ -38,13 +38,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             FedExProfilePackageID = source.FedExProfilePackageID;
             ShippingProfileID = source.ShippingProfileID;
-            Weight = source.Weight;
-            DimsProfileID = source.DimsProfileID;
-            DimsLength = source.DimsLength;
-            DimsWidth = source.DimsWidth;
-            DimsHeight = source.DimsHeight;
-            DimsWeight = source.DimsWeight;
-            DimsAddWeight = source.DimsAddWeight;
             PriorityAlert = source.PriorityAlert;
             PriorityAlertEnhancementType = source.PriorityAlertEnhancementType;
             PriorityAlertDetailContent = source.PriorityAlertDetailContent;
@@ -73,9 +66,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BatteryMaterial = source.BatteryMaterial;
             BatteryPacking = source.BatteryPacking;
             BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
+            PackageProfileID = source.PackageProfileID;
             
             
             FedExProfile = (IFedExProfileEntity) source.FedExProfile?.AsReadOnly(objectMap);
+            PackageProfile = (IPackageProfileEntity) source.PackageProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomFedExProfilePackageData(source);
@@ -94,48 +89,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ShippingProfileID { get; }
-        /// <summary> The Weight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsLength"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsWidth"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsHeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."DimsAddWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Boolean> DimsAddWeight { get; }
         /// <summary> The PriorityAlert property of the Entity FedExProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FedExProfilePackage"."PriorityAlert"<br/>
@@ -304,9 +257,17 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
+        /// <summary> The PackageProfileID property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."PackageProfileID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 PackageProfileID { get; }
         
         
         public IFedExProfileEntity FedExProfile { get; }
+        
+        public IPackageProfileEntity PackageProfile { get; }
         
         
         /// <summary>

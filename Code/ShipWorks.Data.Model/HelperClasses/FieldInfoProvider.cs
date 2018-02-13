@@ -1316,13 +1316,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(FedExProfilePackageFieldIndex), "FedExProfilePackageEntity");
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "FedExProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)FedExProfilePackageFieldIndex.FedExProfilePackageID, 0, 0, 19);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)FedExProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlert", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlert, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertEnhancementType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertEnhancementType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertDetailContent", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertDetailContent, 1024, 0, 0);
@@ -1351,6 +1344,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryMaterial", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryMaterial, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryPacking", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryPacking, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryRegulatorySubtype", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackageProfileID", typeof(System.Int64), false, true, false, false,  (int)FedExProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()

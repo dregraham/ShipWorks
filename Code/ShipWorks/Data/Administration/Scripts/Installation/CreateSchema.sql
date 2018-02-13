@@ -2160,13 +2160,6 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 (
 [FedExProfilePackageID] [bigint] NOT NULL IDENTITY(1062, 1000),
 [ShippingProfileID] [bigint] NOT NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [PriorityAlert] [bit] NULL,
 [PriorityAlertEnhancementType] [int] NULL,
 [PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -2194,12 +2187,17 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [BatteryMaterial] [int] NULL,
 [BatteryPacking] [int] NULL,
-[BatteryRegulatorySubtype] [int] NULL
+[BatteryRegulatorySubtype] [int] NULL,
+[PackageProfileID] [bigint] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
 GO
 ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage] PRIMARY KEY CLUSTERED  ([FedExProfilePackageID])
+GO
+PRINT N'Adding foreign key to [FedExProfilePackage]'
+ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
 GO
 PRINT N'Creating [dbo].[FilterNode]'
 GO
