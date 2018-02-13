@@ -693,15 +693,21 @@ namespace ShipWorks.Shipping
         public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
             // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (profile.IsNew || refreshIfPresent)
+            if (!profile.IsNew && refreshIfPresent)
             {
                 profile.PackageProfile.Clear();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(profile.PackageProfile, new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
+                    adapter.FetchEntityCollection(profile.PackageProfile,
+                        new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
                     profile.PackageProfile.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
+            }
+
+            if (profile.IsNew && !SupportsMultiplePackages)
+            {
+                profile.PackageProfile.Add(new PackageProfileEntity());
             }
         }
 
