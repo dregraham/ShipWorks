@@ -256,6 +256,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
+            base.LoadProfileData(profile, refreshIfPresent);
+
             bool existed = profile.Ups != null;
 
             // Load the profile data
@@ -271,7 +273,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);
+                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);                    
+                }
+
+                foreach (UpsProfilePackageEntity upsProfilePackage in ups.Packages)
+                {
+                    upsProfilePackage.PackageProfile = profile.PackageProfile.First(p => upsProfilePackage.PackageProfileID == p.PackageProfileID);
                 }
             }
         }
@@ -304,6 +311,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         changes = true;
                     }
+                }
+
+                if (package.IsNew)
+                {
+                    profile.PackageProfile.Add(package.PackageProfile);
+                    adapter.SaveAndRefetch(package.UpsProfile);
                 }
             }
 
