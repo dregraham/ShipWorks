@@ -108,7 +108,7 @@
 	"billing_address": {
 		"address_type": "billing",
 		"city": "Wildwood",
-		"country_id": "US",
+		"country_id": null,
 		"email": "support@shipworks.com",
 		"entity_id": 2,
 		"firstname": "Mirza",
