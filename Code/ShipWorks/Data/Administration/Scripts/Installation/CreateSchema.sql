@@ -2554,25 +2554,6 @@ PRINT N'Creating index [IX_iParcelPackage_ShipmentID] on [dbo].[iParcelPackage]'
 GO
 CREATE NONCLUSTERED INDEX [IX_iParcelPackage_ShipmentID] ON [dbo].[iParcelPackage] ([ShipmentID])
 GO
-PRINT N'Creating [dbo].[iParcelProfilePackage]'
-GO
-CREATE TABLE [dbo].[iParcelProfilePackage]
-(
-[iParcelProfilePackageID] [bigint] NOT NULL IDENTITY(1094, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL
-)
-GO
-PRINT N'Creating primary key [PK_iParcelPackageProfile] on [dbo].[iParcelProfilePackage]'
-GO
-ALTER TABLE [dbo].[iParcelProfilePackage] ADD CONSTRAINT [PK_iParcelPackageProfile] PRIMARY KEY CLUSTERED  ([iParcelProfilePackageID])
-GO
 PRINT N'Creating [dbo].[MagentoOrder]'
 GO
 CREATE TABLE [dbo].[MagentoOrder]
