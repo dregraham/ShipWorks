@@ -213,6 +213,9 @@ INSERT INTO [dbo].[BestRateProfile] ([ShippingProfileID], [ServiceLevel])
 SELECT TOP 1 ShippingProfileID, 0  FROM ShippingProfile WHERE ShipmentType = 14
 GO
 
+INSERT INTO [dbo].[PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT TOP 1 ShippingProfileID, 0, 0, 0, 0, 0, 0, 0 FROM ShippingProfile WHERE ShipmentType = 14
+
 -- Cleanup functions
 DROP FUNCTION [dbo].[GetTicksFromDateTime]
 DROP FUNCTION [dbo].[DateToTicks]
