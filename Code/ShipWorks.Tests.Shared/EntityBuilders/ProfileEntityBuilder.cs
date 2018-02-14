@@ -75,6 +75,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public ProfileEntityBuilder AsPostal(Action<PostalProfileEntityBuilder> builderConfiguration)
         {
             Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
+            SetupSinglePackage();
 
             PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this, isPrimaryProfile);
             builderConfiguration?.Invoke(builder);
@@ -181,10 +182,16 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Add a package to the Profile
         /// </summary>
+        /// <param name="b"></param>
         public ProfileEntityBuilder SetupSinglePackage()
         {
             EntityBuilder<PackageProfileEntity> builder = new EntityBuilder<PackageProfileEntity>();
-            
+
+            if (isPrimaryProfile)
+            {
+                builder.SetDefaultsOnNullableFields();
+            }
+
             Set(x => x.PackageProfile.Add(builder.Build()));
 
             return this;
