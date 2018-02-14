@@ -22,7 +22,8 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// <summary>
         /// Initializes a new instance of the ManualStoreType class. 
         /// </summary>
-        public ManualStoreType(StoreEntity store) : base(store)
+        public ManualStoreType(StoreEntity store)
+            : base(store)
         {
             manualStore = store;
         }
