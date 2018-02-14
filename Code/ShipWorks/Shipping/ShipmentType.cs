@@ -719,7 +719,10 @@ namespace ShipWorks.Shipping
             bool changes = false;
 
             // First delete out anything that needs deleted
-            foreach (PackageProfileEntity package in profile.PackageProfile.ToList())
+            // Introducing new variable as we will be removing items from PackageProfile
+            // and if we used the same colleciton, we would get an exception.
+            List<PackageProfileEntity> allPackageProfiles = profile.PackageProfile.ToList();
+            foreach (PackageProfileEntity package in allPackageProfiles)
             {
                 // If its new but deleted, just get rid of it
                 if (package.Fields.State == EntityState.Deleted)
