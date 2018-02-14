@@ -1001,15 +1001,6 @@ namespace ShipWorks.Stores.Management
 
                     AdjustShipmentType();
 
-                    // By default we auto-download every 15 minutes when the storetype is not manual
-                    if (store.StoreTypeCode != StoreTypeCode.Manual)
-                    {
-                        store.AutoDownload = true;
-                    }
-                    
-                    store.AutoDownloadMinutes = 15;
-                    store.AutoDownloadOnlyAway = false;
-
                     // Mark that this store is now ready
                     store.SetupComplete = true;
                     StoreManager.SaveStore(store, adapter);
