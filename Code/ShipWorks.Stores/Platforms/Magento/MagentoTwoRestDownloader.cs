@@ -291,7 +291,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderEntity.BillCity = billingAddress.City;
                 orderEntity.BillStateProvCode = Geography.GetStateProvCode(billingAddress.RegionCode);
                 orderEntity.BillPostalCode = billingAddress.Postcode;
-                orderEntity.BillCountryCode = Geography.GetCountryCode(billingAddress.CountryId);
+                orderEntity.BillCountryCode = billingAddress.CountryId == null ? string.Empty : Geography.GetCountryCode(billingAddress.CountryId);
             }
         }
 
