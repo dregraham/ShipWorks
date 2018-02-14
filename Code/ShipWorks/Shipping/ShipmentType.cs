@@ -697,7 +697,7 @@ namespace ShipWorks.Shipping
             {
                 profile.PackageProfile.Clear();
 
-                using (SqlAdapter adapter = new SqlAdapter())
+                using (ISqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(profile.PackageProfile,
                         new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));

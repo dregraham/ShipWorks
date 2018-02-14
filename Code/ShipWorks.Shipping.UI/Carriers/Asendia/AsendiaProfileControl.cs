@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             dimensionsControl.Initialize();
 
             AsendiaProfileEntity asendiaProfile = profile.Asendia;
-            PackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
+            PackageProfileEntity packageProfile = profile.PackageProfile.Single();
             
             LoadAsendiaAccounts();
 
