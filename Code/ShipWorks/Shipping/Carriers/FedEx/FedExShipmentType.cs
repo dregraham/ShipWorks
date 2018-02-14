@@ -499,12 +499,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(fedex.Packages, new RelationPredicateBucket(FedExProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    fedex.Packages.Sort((int) FedExProfilePackageFieldIndex.FedExProfilePackageID, ListSortDirection.Ascending);
-                }
-
-                foreach (FedExProfilePackageEntity fedexPackageProfile in fedex.Packages)
-                {
-                    fedexPackageProfile.PackageProfile = profile.PackageProfile.First(p => fedexPackageProfile.PackageProfileID == p.PackageProfileID);
+                    fedex.Packages.Sort((int) FedExProfilePackageFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
         }
@@ -541,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 if (package.IsNew)
                 {
-                    profile.PackageProfile.Add(package.PackageProfile);
+                    profile.PackageProfile.Add(package);
                     changes = true;
                 }
             }
@@ -635,7 +630,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     fedex.Packages.Add(package);
                 }
 
-                IPackageProfileEntity packageProfile = fedexPackageProfile.PackageProfile;
+                IPackageProfileEntity packageProfile = fedexPackageProfile;
 
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, FedExPackageFields.Weight);
                 changedPackageWeights |= (packageProfile.Weight != null);

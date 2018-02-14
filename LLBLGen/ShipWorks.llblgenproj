@@ -1106,39 +1106,36 @@
           <Field Name="ThirdPartyConsignee" Type="bool" IsOptional="true" FieldIndex="36" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885">
+      <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885" InheritanceType="2">
         <Fields>
-          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" IsOptional="true" FieldIndex="27" />
-          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" IsOptional="true" FieldIndex="28" />
-          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" IsOptional="true" FieldIndex="29" />
-          <Field Name="ContainerType" Type="string" IsOptional="true" MaxLength="100" FieldIndex="23" />
-          <Field Name="ContainsAlcohol" Type="bool" IsOptional="true" FieldIndex="6" />
-          <Field Name="DangerousGoodsAccessibilityType" Type="int" IsOptional="true" FieldIndex="9" />
-          <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" IsOptional="true" FieldIndex="10" />
-          <Field Name="DangerousGoodsEmergencyContactPhone" Type="string" IsOptional="true" MaxLength="16" FieldIndex="11" />
-          <Field Name="DangerousGoodsEnabled" Type="bool" IsOptional="true" FieldIndex="7" />
-          <Field Name="DangerousGoodsOfferor" Type="string" IsOptional="true" MaxLength="128" FieldIndex="12" />
-          <Field Name="DangerousGoodsPackagingCount" Type="int" IsOptional="true" FieldIndex="13" />
-          <Field Name="DangerousGoodsType" Type="int" IsOptional="true" FieldIndex="8" />
-          <Field Name="DryIceWeight" Type="double" IsOptional="true" FieldIndex="5" />
-          <Field Name="FedExProfilePackageID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="HazardousMaterialClass" Type="string" IsOptional="true" MaxLength="8" FieldIndex="15" />
-          <Field Name="HazardousMaterialNumber" Type="string" IsOptional="true" MaxLength="16" FieldIndex="14" />
-          <Field Name="HazardousMaterialPackingGroup" Type="int" IsOptional="true" FieldIndex="17" />
-          <Field Name="HazardousMaterialProperName" Type="string" IsOptional="true" MaxLength="64" FieldIndex="16" />
-          <Field Name="HazardousMaterialQuanityUnits" Type="int" IsOptional="true" FieldIndex="19" />
-          <Field Name="HazardousMaterialQuantityValue" Type="double" IsOptional="true" FieldIndex="18" />
-          <Field Name="NumberOfContainers" Type="int" IsOptional="true" Precision="10" FieldIndex="24" />
-          <Field Name="PackageProfileID" Type="long" Precision="19" IsAutoCreated="true" FieldIndex="30" />
-          <Field Name="PackingDetailsCargoAircraftOnly" Type="bool" IsOptional="true" FieldIndex="25" />
-          <Field Name="PackingDetailsPackingInstructions" Type="string" IsOptional="true" MaxLength="50" FieldIndex="26" />
-          <Field Name="PriorityAlert" Type="bool" IsOptional="true" FieldIndex="2" />
-          <Field Name="PriorityAlertDetailContent" Type="string" IsOptional="true" MaxLength="1024" FieldIndex="4" />
-          <Field Name="PriorityAlertEnhancementType" Type="int" IsOptional="true" FieldIndex="3" />
-          <Field Name="ShippingProfileID" Type="long" IsAutoCreated="true" FieldIndex="1" />
-          <Field Name="SignatoryContactName" Type="string" IsOptional="true" MaxLength="100" FieldIndex="20" />
-          <Field Name="SignatoryPlace" Type="string" IsOptional="true" MaxLength="100" FieldIndex="22" />
-          <Field Name="SignatoryTitle" Type="string" IsOptional="true" MaxLength="100" FieldIndex="21" />
+          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" IsOptional="true" FieldIndex="25" />
+          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" IsOptional="true" FieldIndex="26" />
+          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" IsOptional="true" FieldIndex="27" />
+          <Field Name="ContainerType" Type="string" IsOptional="true" MaxLength="100" FieldIndex="21" />
+          <Field Name="ContainsAlcohol" Type="bool" IsOptional="true" FieldIndex="4" />
+          <Field Name="DangerousGoodsAccessibilityType" Type="int" IsOptional="true" FieldIndex="7" />
+          <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" IsOptional="true" FieldIndex="8" />
+          <Field Name="DangerousGoodsEmergencyContactPhone" Type="string" IsOptional="true" MaxLength="16" FieldIndex="9" />
+          <Field Name="DangerousGoodsEnabled" Type="bool" IsOptional="true" FieldIndex="5" />
+          <Field Name="DangerousGoodsOfferor" Type="string" IsOptional="true" MaxLength="128" FieldIndex="10" />
+          <Field Name="DangerousGoodsPackagingCount" Type="int" IsOptional="true" FieldIndex="11" />
+          <Field Name="DangerousGoodsType" Type="int" IsOptional="true" FieldIndex="6" />
+          <Field Name="DryIceWeight" Type="double" IsOptional="true" FieldIndex="3" />
+          <Field Name="HazardousMaterialClass" Type="string" IsOptional="true" MaxLength="8" FieldIndex="13" />
+          <Field Name="HazardousMaterialNumber" Type="string" IsOptional="true" MaxLength="16" FieldIndex="12" />
+          <Field Name="HazardousMaterialPackingGroup" Type="int" IsOptional="true" FieldIndex="15" />
+          <Field Name="HazardousMaterialProperName" Type="string" IsOptional="true" MaxLength="64" FieldIndex="14" />
+          <Field Name="HazardousMaterialQuanityUnits" Type="int" IsOptional="true" FieldIndex="17" />
+          <Field Name="HazardousMaterialQuantityValue" Type="double" IsOptional="true" FieldIndex="16" />
+          <Field Name="NumberOfContainers" Type="int" IsOptional="true" Precision="10" FieldIndex="22" />
+          <Field Name="PackingDetailsCargoAircraftOnly" Type="bool" IsOptional="true" FieldIndex="23" />
+          <Field Name="PackingDetailsPackingInstructions" Type="string" IsOptional="true" MaxLength="50" FieldIndex="24" />
+          <Field Name="PriorityAlert" Type="bool" IsOptional="true" FieldIndex="0" />
+          <Field Name="PriorityAlertDetailContent" Type="string" IsOptional="true" MaxLength="1024" FieldIndex="2" />
+          <Field Name="PriorityAlertEnhancementType" Type="int" IsOptional="true" FieldIndex="1" />
+          <Field Name="SignatoryContactName" Type="string" IsOptional="true" MaxLength="100" FieldIndex="18" />
+          <Field Name="SignatoryPlace" Type="string" IsOptional="true" MaxLength="100" FieldIndex="20" />
+          <Field Name="SignatoryTitle" Type="string" IsOptional="true" MaxLength="100" FieldIndex="19" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FedExShipment" ObjectID="c5f601f2-31f1-4580-b714-f1e2797886fd">
@@ -2067,7 +2064,7 @@
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="PackageProfile" ObjectID="c25efa99-0738-45a5-9df8-b13ba4c43852">
+      <EntityDefinition Name="PackageProfile" ObjectID="c25efa99-0738-45a5-9df8-b13ba4c43852" InheritanceType="2">
         <Fields>
           <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
@@ -2932,21 +2929,18 @@
           <Field Name="UspsPackageID" Type="string" IsOptional="true" MaxLength="100" FieldIndex="35" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsProfilePackage" ObjectID="96d9cdec-ebf7-4a09-aebf-fc55d4627a5a">
+      <EntityDefinition Name="UpsProfilePackage" ObjectID="96d9cdec-ebf7-4a09-aebf-fc55d4627a5a" InheritanceType="2">
         <Fields>
-          <Field Name="AdditionalHandlingEnabled" Type="bool" IsOptional="true" FieldIndex="3" />
-          <Field Name="DryIceEnabled" Type="bool" IsOptional="true" FieldIndex="8" />
-          <Field Name="DryIceIsForMedicalUse" Type="bool" IsOptional="true" FieldIndex="11" />
-          <Field Name="DryIceRegulationSet" Type="int" IsOptional="true" FieldIndex="9" />
-          <Field Name="DryIceWeight" Type="double" IsOptional="true" FieldIndex="10" />
-          <Field Name="PackageProfileID" Type="long" Precision="19" IsAutoCreated="true" FieldIndex="12" />
-          <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="2" />
-          <Field Name="ShippingProfileID" Type="long" IsAutoCreated="true" FieldIndex="1" />
-          <Field Name="UpsProfilePackageID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="VerbalConfirmationEnabled" Type="bool" IsOptional="true" FieldIndex="4" />
-          <Field Name="VerbalConfirmationName" Type="string" IsOptional="true" MaxLength="35" FieldIndex="5" />
-          <Field Name="VerbalConfirmationPhone" Type="string" IsOptional="true" MaxLength="15" FieldIndex="6" />
-          <Field Name="VerbalConfirmationPhoneExtension" Type="string" IsOptional="true" MaxLength="4" FieldIndex="7" />
+          <Field Name="AdditionalHandlingEnabled" Type="bool" IsOptional="true" FieldIndex="1" />
+          <Field Name="DryIceEnabled" Type="bool" IsOptional="true" FieldIndex="6" />
+          <Field Name="DryIceIsForMedicalUse" Type="bool" IsOptional="true" FieldIndex="9" />
+          <Field Name="DryIceRegulationSet" Type="int" IsOptional="true" FieldIndex="7" />
+          <Field Name="DryIceWeight" Type="double" IsOptional="true" FieldIndex="8" />
+          <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="0" />
+          <Field Name="VerbalConfirmationEnabled" Type="bool" IsOptional="true" FieldIndex="2" />
+          <Field Name="VerbalConfirmationName" Type="string" IsOptional="true" MaxLength="35" FieldIndex="3" />
+          <Field Name="VerbalConfirmationPhone" Type="string" IsOptional="true" MaxLength="15" FieldIndex="4" />
+          <Field Name="VerbalConfirmationPhoneExtension" Type="string" IsOptional="true" MaxLength="4" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="UpsRateSurcharge" ObjectID="a86fcf08-2823-4597-b3d2-294164bdb0d1">
@@ -3589,11 +3583,6 @@
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="FedExProfilePackage.PackageProfile-PackageProfile.FedExProfilePackage" Start=":FedExProfilePackage" End=":PackageProfile" StartNavigator="PackageProfile" EndNavigator="FedExProfilePackage" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="PackageProfileID" PkField="PackageProfileID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="FedExShipment.Shipment-Shipment.FedEx" Start=":FedExShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="FedEx" Type="1" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -3979,11 +3968,6 @@
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UpsProfilePackage.PackageProfile-PackageProfile.UpsProfilePackage" Start=":UpsProfilePackage" End=":PackageProfile" StartNavigator="PackageProfile" EndNavigator="UpsProfilePackage" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="PackageProfileID" PkField="PackageProfileID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="UpsProfilePackage.UpsProfile-UpsProfile.Packages" Start=":UpsProfilePackage" End=":UpsProfile" StartNavigator="UpsProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -4136,6 +4120,7 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":EtsyOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":EtsyOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EtsyStore" />
+      <InheritanceHierarchy SuperType=":PackageProfile" SubType=":FedExProfilePackage" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericFileStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":GenericModuleOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":GenericModuleOrderItem" />
@@ -4180,6 +4165,7 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":ThreeDCartOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":ThreeDCartOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ThreeDCartStore" />
+      <InheritanceHierarchy SuperType=":PackageProfile" SubType=":UpsProfilePackage" />
       <InheritanceHierarchy SuperType=":Store" SubType=":VolusionStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":WalmartOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":WalmartOrderItem" />
@@ -11172,7 +11158,6 @@
             <FieldMapping FieldName="DangerousGoodsPackagingCount" TargetFieldName="DangerousGoodsPackagingCount" />
             <FieldMapping FieldName="DangerousGoodsType" TargetFieldName="DangerousGoodsType" />
             <FieldMapping FieldName="DryIceWeight" TargetFieldName="DryIceWeight" />
-            <FieldMapping FieldName="FedExProfilePackageID" TargetFieldName="FedExProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="HazardousMaterialClass" TargetFieldName="HazardousMaterialClass" />
             <FieldMapping FieldName="HazardousMaterialNumber" TargetFieldName="HazardousMaterialNumber" />
             <FieldMapping FieldName="HazardousMaterialPackingGroup" TargetFieldName="HazardousMaterialPackingGroup" />
@@ -11180,13 +11165,12 @@
             <FieldMapping FieldName="HazardousMaterialQuanityUnits" TargetFieldName="HazardousMaterialQuanityUnits" />
             <FieldMapping FieldName="HazardousMaterialQuantityValue" TargetFieldName="HazardousMaterialQuantityValue" />
             <FieldMapping FieldName="NumberOfContainers" TargetFieldName="NumberOfContainers" />
-            <FieldMapping FieldName="PackageProfileID" TargetFieldName="PackageProfileID" />
+            <FieldMapping FieldName="PackageProfileID" TargetFieldName="PackageProfileID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="PackingDetailsCargoAircraftOnly" TargetFieldName="PackingDetailsCargoAircraftOnly" />
             <FieldMapping FieldName="PackingDetailsPackingInstructions" TargetFieldName="PackingDetailsPackingInstructions" />
             <FieldMapping FieldName="PriorityAlert" TargetFieldName="PriorityAlert" />
             <FieldMapping FieldName="PriorityAlertDetailContent" TargetFieldName="PriorityAlertDetailContent" />
             <FieldMapping FieldName="PriorityAlertEnhancementType" TargetFieldName="PriorityAlertEnhancementType" />
-            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="SignatoryContactName" TargetFieldName="SignatoryContactName" />
             <FieldMapping FieldName="SignatoryPlace" TargetFieldName="SignatoryPlace" />
             <FieldMapping FieldName="SignatoryTitle" TargetFieldName="SignatoryTitle" />
@@ -13028,10 +13012,8 @@
             <FieldMapping FieldName="DryIceIsForMedicalUse" TargetFieldName="DryIceIsForMedicalUse" />
             <FieldMapping FieldName="DryIceRegulationSet" TargetFieldName="DryIceRegulationSet" />
             <FieldMapping FieldName="DryIceWeight" TargetFieldName="DryIceWeight" />
-            <FieldMapping FieldName="PackageProfileID" TargetFieldName="PackageProfileID" />
+            <FieldMapping FieldName="PackageProfileID" TargetFieldName="PackageProfileID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
-            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
-            <FieldMapping FieldName="UpsProfilePackageID" TargetFieldName="UpsProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="VerbalConfirmationEnabled" TargetFieldName="VerbalConfirmationEnabled" />
             <FieldMapping FieldName="VerbalConfirmationName" TargetFieldName="VerbalConfirmationName" />
             <FieldMapping FieldName="VerbalConfirmationPhone" TargetFieldName="VerbalConfirmationPhone" />

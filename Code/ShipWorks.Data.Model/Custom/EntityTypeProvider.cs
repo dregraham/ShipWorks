@@ -306,6 +306,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.EtsyOrderEntity: return new EtsyOrderRelations();
 				case EntityType.EtsyOrderItemEntity: return new EtsyOrderItemRelations();
 				case EntityType.EtsyStoreEntity: return new EtsyStoreRelations();
+				case EntityType.FedExProfilePackageEntity: return new FedExProfilePackageRelations();
 				case EntityType.GenericFileStoreEntity: return new GenericFileStoreRelations();
 				case EntityType.GenericModuleOrderEntity: return new GenericModuleOrderRelations();
 				case EntityType.GenericModuleOrderItemEntity: return new GenericModuleOrderItemRelations();
@@ -338,6 +339,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.OrderItemAttributeEntity: return new OrderItemAttributeRelations();
 				case EntityType.OrderMotionOrderEntity: return new OrderMotionOrderRelations();
 				case EntityType.OrderMotionStoreEntity: return new OrderMotionStoreRelations();
+				case EntityType.PackageProfileEntity: return new PackageProfileRelations();
 				case EntityType.PayPalOrderEntity: return new PayPalOrderRelations();
 				case EntityType.PayPalStoreEntity: return new PayPalStoreRelations();
 				case EntityType.ProStoresOrderEntity: return new ProStoresOrderRelations();
@@ -354,6 +356,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.ThreeDCartOrderEntity: return new ThreeDCartOrderRelations();
 				case EntityType.ThreeDCartOrderItemEntity: return new ThreeDCartOrderItemRelations();
 				case EntityType.ThreeDCartStoreEntity: return new ThreeDCartStoreRelations();
+				case EntityType.UpsProfilePackageEntity: return new UpsProfilePackageRelations();
 				case EntityType.VolusionStoreEntity: return new VolusionStoreRelations();
 				case EntityType.WalmartOrderEntity: return new WalmartOrderRelations();
 				case EntityType.WalmartOrderItemEntity: return new WalmartOrderItemRelations();

@@ -3394,10 +3394,26 @@ namespace ShipWorks.Data.Model
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfilePackage.</summary>
 	public enum FedExProfilePackageFieldIndex
 	{
-		///<summary>FedExProfilePackageID. </summary>
-		FedExProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
+		///<summary>PackageProfileID. Inherited from PackageProfile</summary>
+		PackageProfileID_PackageProfile,
+		///<summary>ShippingProfileID. Inherited from PackageProfile</summary>
 		ShippingProfileID,
+		///<summary>Weight. Inherited from PackageProfile</summary>
+		Weight,
+		///<summary>DimsProfileID. Inherited from PackageProfile</summary>
+		DimsProfileID,
+		///<summary>DimsLength. Inherited from PackageProfile</summary>
+		DimsLength,
+		///<summary>DimsWidth. Inherited from PackageProfile</summary>
+		DimsWidth,
+		///<summary>DimsHeight. Inherited from PackageProfile</summary>
+		DimsHeight,
+		///<summary>DimsWeight. Inherited from PackageProfile</summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. Inherited from PackageProfile</summary>
+		DimsAddWeight,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		///<summary>PriorityAlert. </summary>
 		PriorityAlert,
 		///<summary>PriorityAlertEnhancementType. </summary>
@@ -3454,8 +3470,6 @@ namespace ShipWorks.Data.Model
 		BatteryPacking,
 		///<summary>BatteryRegulatorySubtype. </summary>
 		BatteryRegulatorySubtype,
-		///<summary>PackageProfileID. </summary>
-		PackageProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10672,10 +10686,26 @@ namespace ShipWorks.Data.Model
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfilePackage.</summary>
 	public enum UpsProfilePackageFieldIndex
 	{
-		///<summary>UpsProfilePackageID. </summary>
-		UpsProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
+		///<summary>PackageProfileID. Inherited from PackageProfile</summary>
+		PackageProfileID_PackageProfile,
+		///<summary>ShippingProfileID. Inherited from PackageProfile</summary>
 		ShippingProfileID,
+		///<summary>Weight. Inherited from PackageProfile</summary>
+		Weight,
+		///<summary>DimsProfileID. Inherited from PackageProfile</summary>
+		DimsProfileID,
+		///<summary>DimsLength. Inherited from PackageProfile</summary>
+		DimsLength,
+		///<summary>DimsWidth. Inherited from PackageProfile</summary>
+		DimsWidth,
+		///<summary>DimsHeight. Inherited from PackageProfile</summary>
+		DimsHeight,
+		///<summary>DimsWeight. Inherited from PackageProfile</summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. Inherited from PackageProfile</summary>
+		DimsAddWeight,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		///<summary>PackagingType. </summary>
 		PackagingType,
 		///<summary>AdditionalHandlingEnabled. </summary>
@@ -10696,8 +10726,6 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
-		///<summary>PackageProfileID. </summary>
-		PackageProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -67,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void FedExValueMapping(FedExProfilePackageEntity fedexPackageProfile)
         {
-            AddValueMapping(fedexPackageProfile.PackageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(fedexPackageProfile.PackageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.DryIceWeight, dryIceState, dryIceWeight, labelDryIceWeight);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.ContainsAlcohol, alcoholState, containsAlcohol, labelAlcohol);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.PriorityAlert, priorityAlertState, priorityAlertControl);

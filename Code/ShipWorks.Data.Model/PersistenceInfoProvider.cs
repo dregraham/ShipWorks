@@ -1374,38 +1374,36 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>
 		private void InitFedExProfilePackageEntityMappings()
 		{
-			this.AddElementMapping("FedExProfilePackageEntity", @"ShipWorksLocal", @"dbo", "FedExProfilePackage", 31, 0);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "FedExProfilePackageID", "FedExProfilePackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlert", "PriorityAlert", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertEnhancementType", "PriorityAlertEnhancementType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertDetailContent", "PriorityAlertDetailContent", true, "NVarChar", 1024, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "ContainsAlcohol", "ContainsAlcohol", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsEnabled", "DangerousGoodsEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsType", "DangerousGoodsType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsAccessibilityType", "DangerousGoodsAccessibilityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsCargoAircraftOnly", "DangerousGoodsCargoAircraftOnly", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsEmergencyContactPhone", "DangerousGoodsEmergencyContactPhone", true, "NVarChar", 16, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsOfferor", "DangerousGoodsOfferor", true, "NVarChar", 128, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsPackagingCount", "DangerousGoodsPackagingCount", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialNumber", "HazardousMaterialNumber", true, "NVarChar", 16, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialClass", "HazardousMaterialClass", true, "NVarChar", 8, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialProperName", "HazardousMaterialProperName", true, "NVarChar", 64, 0, 0, false, "", null, typeof(System.String), 16);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialPackingGroup", "HazardousMaterialPackingGroup", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialQuantityValue", "HazardousMaterialQuantityValue", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 18);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialQuanityUnits", "HazardousMaterialQuanityUnits", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 19);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryContactName", "SignatoryContactName", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 20);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryTitle", "SignatoryTitle", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 21);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryPlace", "SignatoryPlace", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 22);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "ContainerType", "ContainerType", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 23);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "NumberOfContainers", "NumberOfContainers", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 24);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackingDetailsCargoAircraftOnly", "PackingDetailsCargoAircraftOnly", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 25);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackingDetailsPackingInstructions", "PackingDetailsPackingInstructions", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 26);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryMaterial", "BatteryMaterial", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryPacking", "BatteryPacking", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 28);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryRegulatorySubtype", "BatteryRegulatorySubtype", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 29);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 30);
+			this.AddElementMapping("FedExProfilePackageEntity", @"ShipWorksLocal", @"dbo", "FedExProfilePackage", 29, 0);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlert", "PriorityAlert", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertEnhancementType", "PriorityAlertEnhancementType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertDetailContent", "PriorityAlertDetailContent", true, "NVarChar", 1024, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "ContainsAlcohol", "ContainsAlcohol", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsEnabled", "DangerousGoodsEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsType", "DangerousGoodsType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsAccessibilityType", "DangerousGoodsAccessibilityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsCargoAircraftOnly", "DangerousGoodsCargoAircraftOnly", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsEmergencyContactPhone", "DangerousGoodsEmergencyContactPhone", true, "NVarChar", 16, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsOfferor", "DangerousGoodsOfferor", true, "NVarChar", 128, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsPackagingCount", "DangerousGoodsPackagingCount", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 12);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialNumber", "HazardousMaterialNumber", true, "NVarChar", 16, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialClass", "HazardousMaterialClass", true, "NVarChar", 8, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialProperName", "HazardousMaterialProperName", true, "NVarChar", 64, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialPackingGroup", "HazardousMaterialPackingGroup", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialQuantityValue", "HazardousMaterialQuantityValue", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 17);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "HazardousMaterialQuanityUnits", "HazardousMaterialQuanityUnits", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryContactName", "SignatoryContactName", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 19);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryTitle", "SignatoryTitle", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "SignatoryPlace", "SignatoryPlace", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 21);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "ContainerType", "ContainerType", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 22);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "NumberOfContainers", "NumberOfContainers", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackingDetailsCargoAircraftOnly", "PackingDetailsCargoAircraftOnly", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 24);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackingDetailsPackingInstructions", "PackingDetailsPackingInstructions", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryMaterial", "BatteryMaterial", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 26);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryPacking", "BatteryPacking", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryRegulatorySubtype", "BatteryRegulatorySubtype", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 28);
 		}
 
 		/// <summary>Inits FedExShipmentEntity's mappings</summary>
@@ -3494,20 +3492,18 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UpsProfilePackageEntity's mappings</summary>
 		private void InitUpsProfilePackageEntityMappings()
 		{
-			this.AddElementMapping("UpsProfilePackageEntity", @"ShipWorksLocal", @"dbo", "UpsProfilePackage", 13, 0);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "UpsProfilePackageID", "UpsProfilePackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, "NVarChar", 4, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 12);
+			this.AddElementMapping("UpsProfilePackageEntity", @"ShipWorksLocal", @"dbo", "UpsProfilePackage", 11, 0);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, "NVarChar", 4, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 		}
 
 		/// <summary>Inits UpsRateSurchargeEntity's mappings</summary>

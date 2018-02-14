@@ -18,21 +18,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     /// Entity interface which represents the entity 'FedExProfilePackage'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IFedExProfilePackageEntity
+    public partial interface IFedExProfilePackageEntity: IPackageProfileEntity
     {
         
-        /// <summary> The FedExProfilePackageID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."FedExProfilePackageID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        System.Int64 FedExProfilePackageID { get; }
-        /// <summary> The ShippingProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."ShippingProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 ShippingProfileID { get; }
         /// <summary> The PriorityAlert property of the Entity FedExProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FedExProfilePackage"."PriorityAlert"<br/>
@@ -201,29 +189,22 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
-        /// <summary> The PackageProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."PackageProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 PackageProfileID { get; }
         
         
         IFedExProfileEntity FedExProfile { get; }
-        IPackageProfileEntity PackageProfile { get; }
         
 
         
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IFedExProfilePackageEntity AsReadOnly();
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        IFedExProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -240,19 +221,18 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         IFedExProfileEntity IFedExProfilePackageEntity.FedExProfile => FedExProfile;
-        IPackageProfileEntity IFedExProfilePackageEntity.PackageProfile => PackageProfile;
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IFedExProfilePackageEntity AsReadOnly() =>
+        public override IPackageProfileEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IFedExProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -264,6 +244,18 @@ namespace ShipWorks.Data.Model.EntityClasses
             return new ReadOnlyFedExProfilePackageEntity(this, objectMap);
         }
 
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage() =>
+            (IFedExProfilePackageEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage(IDictionary<object, object> objectMap) =>
+            (IFedExProfilePackageEntity) AsReadOnly(objectMap);
         
     }
 }

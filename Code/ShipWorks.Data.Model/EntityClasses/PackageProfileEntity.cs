@@ -32,8 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<FedExProfilePackageEntity> _fedExProfilePackage;
-		private EntityCollection<UpsProfilePackageEntity> _upsProfilePackage;
 		private ShippingProfileEntity _shippingProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -49,10 +47,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
-			/// <summary>Member name FedExProfilePackage</summary>
-			public static readonly string FedExProfilePackage = "FedExProfilePackage";
-			/// <summary>Member name UpsProfilePackage</summary>
-			public static readonly string UpsProfilePackage = "UpsProfilePackage";
 		}
 		#endregion
 		
@@ -110,8 +104,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_fedExProfilePackage = (EntityCollection<FedExProfilePackageEntity>)info.GetValue("_fedExProfilePackage", typeof(EntityCollection<FedExProfilePackageEntity>));
-				_upsProfilePackage = (EntityCollection<UpsProfilePackageEntity>)info.GetValue("_upsProfilePackage", typeof(EntityCollection<UpsProfilePackageEntity>));
 				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
 				if(_shippingProfile!=null)
 				{
@@ -150,12 +142,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					this.ShippingProfile = (ShippingProfileEntity)entity;
 					break;
-				case "FedExProfilePackage":
-					this.FedExProfilePackage.Add((FedExProfilePackageEntity)entity);
-					break;
-				case "UpsProfilePackage":
-					this.UpsProfilePackage.Add((UpsProfilePackageEntity)entity);
-					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -180,12 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					toReturn.Add(Relations.ShippingProfileEntityUsingShippingProfileID);
-					break;
-				case "FedExProfilePackage":
-					toReturn.Add(Relations.FedExProfilePackageEntityUsingPackageProfileID);
-					break;
-				case "UpsProfilePackage":
-					toReturn.Add(Relations.UpsProfilePackageEntityUsingPackageProfileID);
 					break;
 				default:
 					break;				
@@ -218,12 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ShippingProfile":
 					SetupSyncShippingProfile(relatedEntity);
 					break;
-				case "FedExProfilePackage":
-					this.FedExProfilePackage.Add((FedExProfilePackageEntity)relatedEntity);
-					break;
-				case "UpsProfilePackage":
-					this.UpsProfilePackage.Add((UpsProfilePackageEntity)relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -239,12 +213,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ShippingProfile":
 					DesetupSyncShippingProfile(false, true);
-					break;
-				case "FedExProfilePackage":
-					this.PerformRelatedEntityRemoval(this.FedExProfilePackage, relatedEntity, signalRelatedEntityManyToOne);
-					break;
-				case "UpsProfilePackage":
-					this.PerformRelatedEntityRemoval(this.UpsProfilePackage, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				default:
 					break;
@@ -277,9 +245,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.FedExProfilePackage);
-			toReturn.Add(this.UpsProfilePackage);
 			return toReturn;
+		}
+
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public  static IPredicateExpression GetEntityTypeFilter()
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PackageProfileEntity", false);
+		}
+		
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <param name="negate">Flag to produce a NOT filter, (true), or a normal filter (false). </param>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public  static IPredicateExpression GetEntityTypeFilter(bool negate)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PackageProfileEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -290,8 +273,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_fedExProfilePackage", ((_fedExProfilePackage!=null) && (_fedExProfilePackage.Count>0) && !this.MarkedForDeletion)?_fedExProfilePackage:null);
-				info.AddValue("_upsProfilePackage", ((_upsProfilePackage!=null) && (_upsProfilePackage.Count>0) && !this.MarkedForDeletion)?_upsProfilePackage:null);
 				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -299,31 +280,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			base.GetObjectData(info, context);
 		}
 
-
+		
+		/// <summary>Determines whether this entity is a subType of the entity represented by the passed in enum value, which represents a value in the ShipWorks.Data.Model.EntityType enum</summary>
+		/// <param name="typeOfEntity">Type of entity.</param>
+		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
+		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("PackageProfileEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new PackageProfileRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'FedExProfilePackage' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoFedExProfilePackage()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExProfilePackageFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
-			return bucket;
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsProfilePackage' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoUpsProfilePackage()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsProfilePackageFields.PackageProfileID, null, ComparisonOperator.Equal, this.PackageProfileID));
-			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ShippingProfile' to this entity.</summary>
@@ -347,8 +317,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._fedExProfilePackage);
-			collectionsQueue.Enqueue(this._upsProfilePackage);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -356,8 +324,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._fedExProfilePackage = (EntityCollection<FedExProfilePackageEntity>) collectionsQueue.Dequeue();
-			this._upsProfilePackage = (EntityCollection<UpsProfilePackageEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -366,8 +332,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._fedExProfilePackage != null);
-			toReturn |=(this._upsProfilePackage != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -377,8 +341,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<FedExProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfilePackageEntityFactory))) : null);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -387,8 +349,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("ShippingProfile", _shippingProfile);
-			toReturn.Add("FedExProfilePackage", _fedExProfilePackage);
-			toReturn.Add("UpsProfilePackage", _upsProfilePackage);
 			return toReturn;
 		}
 
@@ -493,20 +453,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfilePackage' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathFedExProfilePackage
-		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<FedExProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("FedExProfilePackage")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, 0, null, null, null, null, "FedExProfilePackage", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfilePackage' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathUpsProfilePackage
-		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<UpsProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("UpsProfilePackage")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, 0, null, null, null, null, "UpsProfilePackage", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
@@ -630,20 +576,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)PackageProfileFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(FedExProfilePackageEntity))]
-		public virtual EntityCollection<FedExProfilePackageEntity> FedExProfilePackage
-		{
-			get { return GetOrCreateEntityCollection<FedExProfilePackageEntity, FedExProfilePackageEntityFactory>("PackageProfile", true, false, ref _fedExProfilePackage);	}
-		}
-
-		/// <summary> Gets the EntityCollection with the related entities of type 'UpsProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(UpsProfilePackageEntity))]
-		public virtual EntityCollection<UpsProfilePackageEntity> UpsProfilePackage
-		{
-			get { return GetOrCreateEntityCollection<UpsProfilePackageEntity, UpsProfilePackageEntityFactory>("PackageProfile", true, false, ref _upsProfilePackage);	}
-		}
-
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
 		public virtual ShippingProfileEntity ShippingProfile
@@ -665,7 +597,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
-			get { return InheritanceHierarchyType.None;}
+			get { return InheritanceHierarchyType.TargetPerEntity;}
 		}
 		
 		/// <summary> Gets or sets a value indicating whether this entity is a subtype</summary>

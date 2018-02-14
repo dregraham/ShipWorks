@@ -21,12 +21,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyFedExProfilePackageEntity : IFedExProfilePackageEntity
+    public partial class ReadOnlyFedExProfilePackageEntity : ReadOnlyPackageProfileEntity, IFedExProfilePackageEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyFedExProfilePackageEntity(IFedExProfilePackageEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyFedExProfilePackageEntity(IFedExProfilePackageEntity source, IDictionary<object, object> objectMap) : base(source, objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,8 +36,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            FedExProfilePackageID = source.FedExProfilePackageID;
-            ShippingProfileID = source.ShippingProfileID;
             PriorityAlert = source.PriorityAlert;
             PriorityAlertEnhancementType = source.PriorityAlertEnhancementType;
             PriorityAlertDetailContent = source.PriorityAlertDetailContent;
@@ -66,29 +64,15 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BatteryMaterial = source.BatteryMaterial;
             BatteryPacking = source.BatteryPacking;
             BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
-            PackageProfileID = source.PackageProfileID;
             
             
             FedExProfile = (IFedExProfileEntity) source.FedExProfile?.AsReadOnly(objectMap);
-            PackageProfile = (IPackageProfileEntity) source.PackageProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomFedExProfilePackageData(source);
         }
 
         
-        /// <summary> The FedExProfilePackageID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."FedExProfilePackageID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        public System.Int64 FedExProfilePackageID { get; }
-        /// <summary> The ShippingProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."ShippingProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 ShippingProfileID { get; }
         /// <summary> The PriorityAlert property of the Entity FedExProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FedExProfilePackage"."PriorityAlert"<br/>
@@ -257,29 +241,31 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
-        /// <summary> The PackageProfileID property of the Entity FedExProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfilePackage"."PackageProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 PackageProfileID { get; }
         
         
         public IFedExProfileEntity FedExProfile { get; }
         
-        public IPackageProfileEntity PackageProfile { get; }
-        
         
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IFedExProfilePackageEntity AsReadOnly() => this;
+        public override IPackageProfileEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IFedExProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IFedExProfilePackageEntity AsReadOnlyFedExProfilePackage(IDictionary<object, object> objectMap) => this;
         
 
         /// <summary>

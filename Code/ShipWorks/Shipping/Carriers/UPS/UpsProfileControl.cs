@@ -396,7 +396,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 UpsProfilePackageEntity package = new UpsProfilePackageEntity()
                 {
-                    PackageProfile = new PackageProfileEntity()
+                    ShippingProfile = Profile
                 };
 
                 Profile.Ups.Packages.Add(package);

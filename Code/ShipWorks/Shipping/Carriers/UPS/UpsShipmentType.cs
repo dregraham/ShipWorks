@@ -273,13 +273,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);                    
+                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.PackageProfileID, ListSortDirection.Ascending);                    
                 }
 
-                foreach (UpsProfilePackageEntity upsProfilePackage in ups.Packages)
-                {
-                    upsProfilePackage.PackageProfile = profile.PackageProfile.First(p => upsProfilePackage.PackageProfileID == p.PackageProfileID);
-                }
             }
         }
 
@@ -311,12 +307,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         changes = true;
                     }
-                }
-
-                if (package.IsNew)
-                {
-                    profile.PackageProfile.Add(package.PackageProfile);
-                    changes = true;
                 }
             }
             
@@ -476,17 +466,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.PackagingType, package, UpsPackageFields.PackagingType);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.Weight, package, UpsPackageFields.Weight);
-                changedPackageWeights |= (packageProfile.PackageProfile.Weight != null);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, UpsPackageFields.Weight);
+                changedPackageWeights |= (packageProfile.Weight != null);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsProfileID, package, UpsPackageFields.DimsProfileID);
-                if (packageProfile.PackageProfile.DimsProfileID != null)
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, UpsPackageFields.DimsProfileID);
+                if (packageProfile.DimsProfileID != null)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsLength, package, UpsPackageFields.DimsLength);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PackageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, UpsPackageFields.DimsLength);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
                 }
 
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.AdditionalHandlingEnabled, package, UpsPackageFields.AdditionalHandlingEnabled);

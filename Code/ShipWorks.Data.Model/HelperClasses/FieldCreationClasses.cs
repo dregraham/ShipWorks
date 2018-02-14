@@ -7807,15 +7807,55 @@ namespace ShipWorks.Data.Model.HelperClasses
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
 	public partial class FedExProfilePackageFields
 	{
-		/// <summary>Creates a new FedExProfilePackageEntity.FedExProfilePackageID field instance</summary>
-		public static EntityField2 FedExProfilePackageID
+		/// <summary>Creates a new FedExProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID_PackageProfile
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.FedExProfilePackageID);}
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackageProfileID_PackageProfile);}
 		}
 		/// <summary>Creates a new FedExProfilePackageEntity.ShippingProfileID field instance</summary>
 		public static EntityField2 ShippingProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackageProfileID);}
 		}
 		/// <summary>Creates a new FedExProfilePackageEntity.PriorityAlert field instance</summary>
 		public static EntityField2 PriorityAlert
@@ -7956,11 +7996,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 BatteryRegulatorySubtype
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryRegulatorySubtype);}
-		}
-		/// <summary>Creates a new FedExProfilePackageEntity.PackageProfileID field instance</summary>
-		public static EntityField2 PackageProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackageProfileID);}
 		}
 	}
 
@@ -24722,15 +24757,55 @@ namespace ShipWorks.Data.Model.HelperClasses
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
 	public partial class UpsProfilePackageFields
 	{
-		/// <summary>Creates a new UpsProfilePackageEntity.UpsProfilePackageID field instance</summary>
-		public static EntityField2 UpsProfilePackageID
+		/// <summary>Creates a new UpsProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID_PackageProfile
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.UpsProfilePackageID);}
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.PackageProfileID_PackageProfile);}
 		}
 		/// <summary>Creates a new UpsProfilePackageEntity.ShippingProfileID field instance</summary>
 		public static EntityField2 ShippingProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.PackageProfileID field instance</summary>
+		public static EntityField2 PackageProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.PackageProfileID);}
 		}
 		/// <summary>Creates a new UpsProfilePackageEntity.PackagingType field instance</summary>
 		public static EntityField2 PackagingType
@@ -24781,11 +24856,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceIsForMedicalUse
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.PackageProfileID field instance</summary>
-		public static EntityField2 PackageProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.PackageProfileID);}
 		}
 	}
 

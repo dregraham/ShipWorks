@@ -1314,8 +1314,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitFedExProfilePackageEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(FedExProfilePackageFieldIndex), "FedExProfilePackageEntity");
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "FedExProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)FedExProfilePackageFieldIndex.FedExProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)FedExProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)FedExProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlert", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlert, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertEnhancementType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertEnhancementType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertDetailContent", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertDetailContent, 1024, 0, 0);
@@ -1344,7 +1343,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryMaterial", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryMaterial, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryPacking", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryPacking, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryRegulatorySubtype", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackageProfileID", typeof(System.Int64), false, true, false, false,  (int)FedExProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()
@@ -3306,8 +3304,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsProfilePackageEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsProfilePackageFieldIndex), "UpsProfilePackageEntity");
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "UpsProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)UpsProfilePackageFieldIndex.UpsProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)UpsProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)UpsProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.PackagingType, 0, 0, 10);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "AdditionalHandlingEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
@@ -3318,7 +3315,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceWeight, 0, 0, 38);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackageProfileID", typeof(System.Int64), false, true, false, false,  (int)UpsProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 		}
 		/// <summary>Inits UpsRateSurchargeEntity's FieldInfo objects</summary>
 		private void InitUpsRateSurchargeEntityInfos()

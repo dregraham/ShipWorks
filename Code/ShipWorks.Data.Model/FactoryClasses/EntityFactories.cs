@@ -1423,7 +1423,7 @@ namespace ShipWorks.Data.Model.FactoryClasses
 	[Serializable]
 	public partial class FedExProfilePackageEntityFactory : EntityFactoryBase2<FedExProfilePackageEntity> {
 		/// <summary>CTor</summary>
-		public FedExProfilePackageEntityFactory() : base("FedExProfilePackageEntity", ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, false) { }
+		public FedExProfilePackageEntityFactory() : base("FedExProfilePackageEntity", ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, true) { }
 		
 		/// <summary>Creates a new FedExProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
@@ -2803,7 +2803,7 @@ namespace ShipWorks.Data.Model.FactoryClasses
 	[Serializable]
 	public partial class PackageProfileEntityFactory : EntityFactoryBase2<PackageProfileEntity> {
 		/// <summary>CTor</summary>
-		public PackageProfileEntityFactory() : base("PackageProfileEntity", ShipWorks.Data.Model.EntityType.PackageProfileEntity, false) { }
+		public PackageProfileEntityFactory() : base("PackageProfileEntity", ShipWorks.Data.Model.EntityType.PackageProfileEntity, true) { }
 		
 		/// <summary>Creates a new PackageProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
@@ -3983,7 +3983,7 @@ namespace ShipWorks.Data.Model.FactoryClasses
 	[Serializable]
 	public partial class UpsProfilePackageEntityFactory : EntityFactoryBase2<UpsProfilePackageEntity> {
 		/// <summary>CTor</summary>
-		public UpsProfilePackageEntityFactory() : base("UpsProfilePackageEntity", ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, false) { }
+		public UpsProfilePackageEntityFactory() : base("UpsProfilePackageEntity", ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, true) { }
 		
 		/// <summary>Creates a new UpsProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>

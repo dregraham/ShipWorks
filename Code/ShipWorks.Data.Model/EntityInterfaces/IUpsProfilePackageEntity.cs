@@ -18,21 +18,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     /// Entity interface which represents the entity 'UpsProfilePackage'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IUpsProfilePackageEntity
+    public partial interface IUpsProfilePackageEntity: IPackageProfileEntity
     {
         
-        /// <summary> The UpsProfilePackageID property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."UpsProfilePackageID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        System.Int64 UpsProfilePackageID { get; }
-        /// <summary> The ShippingProfileID property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."ShippingProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 ShippingProfileID { get; }
         /// <summary> The PackagingType property of the Entity UpsProfilePackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsProfilePackage"."PackagingType"<br/>
@@ -93,29 +81,22 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> DryIceIsForMedicalUse { get; }
-        /// <summary> The PackageProfileID property of the Entity UpsProfilePackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsProfilePackage"."PackageProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 PackageProfileID { get; }
         
         
-        IPackageProfileEntity PackageProfile { get; }
         IUpsProfileEntity UpsProfile { get; }
         
 
         
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        IUpsProfilePackageEntity AsReadOnlyUpsProfilePackage();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IUpsProfilePackageEntity AsReadOnly();
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        IUpsProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IUpsProfilePackageEntity AsReadOnlyUpsProfilePackage(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -131,20 +112,19 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsProfilePackageEntity : IUpsProfilePackageEntity
     {
         
-        IPackageProfileEntity IUpsProfilePackageEntity.PackageProfile => PackageProfile;
         IUpsProfileEntity IUpsProfilePackageEntity.UpsProfile => UpsProfile;
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsProfilePackageEntity AsReadOnly() =>
+        public override IPackageProfileEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IUpsProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -156,6 +136,18 @@ namespace ShipWorks.Data.Model.EntityClasses
             return new ReadOnlyUpsProfilePackageEntity(this, objectMap);
         }
 
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IUpsProfilePackageEntity AsReadOnlyUpsProfilePackage() =>
+            (IUpsProfilePackageEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IUpsProfilePackageEntity AsReadOnlyUpsProfilePackage(IDictionary<object, object> objectMap) =>
+            (IUpsProfilePackageEntity) AsReadOnly(objectMap);
         
     }
 }
