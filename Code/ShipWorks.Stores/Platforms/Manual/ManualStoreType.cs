@@ -7,6 +7,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Manual
@@ -73,5 +74,15 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// ManualStore does not support uploading or downloading so we return false to skip this page
         /// </summary> 
         public override bool ShowTaskWizardPage() => false;
+
+        /// <summary>
+        /// Create the control that is used for editing the account settings in the Store Settings window.
+        /// </summary>
+        public override AccountSettingsControlBase CreateAccountSettingsControl()
+        {
+            var control = new ManualAccountSettingsControl();
+
+            return control;
+        }
     }
 }
