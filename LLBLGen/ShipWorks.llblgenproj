@@ -1979,7 +1979,7 @@
         <Fields>
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
-          <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="18" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -2414,7 +2414,7 @@
         <Fields>
           <Field Name="CountryOfOrigin" Type="string" MaxLength="50" FieldIndex="7" />
           <Field Name="Description" Type="string" MaxLength="150" FieldIndex="3" />
-          <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="8" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="8" />
           <Field Name="NumberOfPieces" Type="int" FieldIndex="9" />
           <Field Name="Quantity" Type="double" FieldIndex="4" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -4224,7 +4224,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-13T21:32:33.3419363Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-14T15:25:16.8559564Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4782,8 +4782,8 @@
                     <Field Name="AuditNewOrders" Ordinal="11" DbType="2" />
                     <Field Name="AuditDeletedOrders" Ordinal="12" DbType="2" />
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
-                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -6470,7 +6470,7 @@
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderItem">
@@ -6490,8 +6490,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7098,7 +7098,7 @@
                     <Field Name="ShipSenseHashKey" Ordinal="72" DbType="12" Length="64" />
                     <Field Name="ShipSenseRecognitionStatus" Ordinal="73" DbType="8" Precision="10" />
                     <Field Name="ShipAddressType" Ordinal="74" DbType="8" Precision="10" />
-                    <Field Name="CombineSplitStatus" Ordinal="75" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="CombineSplitStatus" Ordinal="75" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7150,7 +7150,7 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
-                    <Field Name="HarmonizedCode" Ordinal="20" IsOptional="true" DbType="12" Length="20" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
                     <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
@@ -7652,7 +7652,7 @@
                     <Field Name="SearsEmail" Ordinal="2" DbType="12" Length="75" />
                     <Field Name="Password" Ordinal="3" DbType="12" Length="75" />
                     <Field Name="SecretKey" Ordinal="4" DbType="12" Length="255" />
-                    <Field Name="SellerID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="15" />
+                    <Field Name="SellerID" Ordinal="5" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="ServerMessage">
@@ -7870,7 +7870,7 @@
                     <Field Name="Weight" Ordinal="6" DbType="6" Precision="38" />
                     <Field Name="UnitValue" Ordinal="7" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="8" DbType="12" Length="50" />
-                    <Field Name="HarmonizedCode" Ordinal="9" IsOptional="true" DbType="12" Length="20" />
+                    <Field Name="HarmonizedCode" Ordinal="9" DbType="12" Length="20" />
                     <Field Name="NumberOfPieces" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UnitPriceAmount" Ordinal="11" DbType="9" Precision="19" Scale="4" />
                   </Fields>
@@ -8022,7 +8022,7 @@
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" DbType="12" Length="1000" />
+                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                   </Fields>
                 </Table>
@@ -8274,8 +8274,18 @@
                   <PkConstraintName Name="PK_ThreeDCartStore" />
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110" />
-                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65" />
+                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="Store URL" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="User Key" />
+                      </CustomProperties>
+                    </Field>
                     <Field Name="TimeZoneID" Ordinal="4" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="StatusCodes" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="6" DbType="8" Precision="10" />

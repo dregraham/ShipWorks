@@ -73,7 +73,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "ShipmentCustomsItem"."HarmonizedCode"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String HarmonizedCode { get; }
         /// <summary> The NumberOfPieces property of the Entity ShipmentCustomsItem<br/><br/>
         /// </summary>
