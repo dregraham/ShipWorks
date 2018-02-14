@@ -162,6 +162,8 @@
     <Compile Include="Database\DataContext.cs" />
     <Compile Include="Database\DummyLegacyLicense.cs" />
     <Compile Include="Database\FedExDatabaseFixture.cs" />
+    <Compile Include="Database\IntegrationDB\IntegrationDB.cs" />
+    <Compile Include="Database\IntegrationDB\TempIntegrationDB.cs" />
     <Compile Include="EmbeddedResourceHelper.cs" />
     <Compile Include="EntityBuilders\CarrierAccountEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Create.cs" />
