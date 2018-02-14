@@ -5708,10 +5708,6 @@ PRINT N'Adding foreign keys to [dbo].[iParcelPackage]'
 GO
 ALTER TABLE [dbo].[iParcelPackage] ADD CONSTRAINT [FK_iParcelPackage_iParcelShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[iParcelShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[iParcelProfilePackage]'
-GO
-ALTER TABLE [dbo].[iParcelProfilePackage] ADD CONSTRAINT [FK_iParcelPackageProfile_iParcelProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[iParcelProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[iParcelProfile]'
 GO
 ALTER TABLE [dbo].[iParcelProfile] ADD CONSTRAINT [FK_iParcelProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
