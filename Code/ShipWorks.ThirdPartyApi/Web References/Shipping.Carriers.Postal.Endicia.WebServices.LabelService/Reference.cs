@@ -18765,6 +18765,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
                 this.valueField = value;
             }
         }
+        
+        /// <remarks/>
+        public string Description
+        {
+            get
+            {
+                return this.descriptionField;
+            }
+            set
+            {
+                this.descriptionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string IntegratedFormType
+        {
+            get
+            {
+                return this.integratedFormTypeField;
+            }
+            set
+            {
+                this.integratedFormTypeField = value;
+            }
+        }
 
         /// <remarks/>
         public string ReferenceID
@@ -18867,6 +18893,45 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             set
             {
                 this.shipDateField = value;
+            }
+        }
+
+        /// <remarks/>
+        public CustomsInfo CustomsInfo
+        {
+            get
+            {
+                return this.customsInfoField;
+            }
+            set
+            {
+                this.customsInfoField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsCertify
+        {
+            get
+            {
+                return this.customsCertifyField;
+            }
+            set
+            {
+                this.customsCertifyField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsSigner
+        {
+            get
+            {
+                return this.customsSignerField;
+            }
+            set
+            {
+                this.customsSignerField = value;
             }
         }
 
@@ -19302,32 +19367,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
         }
 
         /// <remarks/>
-        public string Description
-        {
-            get
-            {
-                return this.descriptionField;
-            }
-            set
-            {
-                this.descriptionField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string IntegratedFormType
-        {
-            get
-            {
-                return this.integratedFormTypeField;
-            }
-            set
-            {
-                this.integratedFormTypeField = value;
-            }
-        }
-
-        /// <remarks/>
         public string CustomsFormType
         {
             get
@@ -19493,45 +19532,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             set
             {
                 this.shipTimeField = value;
-            }
-        }
-
-        /// <remarks/>
-        public CustomsInfo CustomsInfo
-        {
-            get
-            {
-                return this.customsInfoField;
-            }
-            set
-            {
-                this.customsInfoField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string CustomsCertify
-        {
-            get
-            {
-                return this.customsCertifyField;
-            }
-            set
-            {
-                this.customsCertifyField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string CustomsSigner
-        {
-            get
-            {
-                return this.customsSignerField;
-            }
-            set
-            {
-                this.customsSignerField = value;
             }
         }
 
