@@ -542,7 +542,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (package.IsNew)
                 {
                     profile.PackageProfile.Add(package.PackageProfile);
-                    adapter.SaveAndRefetch(package.FedExProfile);
+                    changes = true;
                 }
             }
 

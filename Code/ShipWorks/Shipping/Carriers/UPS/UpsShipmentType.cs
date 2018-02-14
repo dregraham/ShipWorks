@@ -316,10 +316,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (package.IsNew)
                 {
                     profile.PackageProfile.Add(package.PackageProfile);
-                    adapter.SaveAndRefetch(package.UpsProfile);
+                    changes = true;
                 }
             }
-
+            
             return changes;
         }
 
