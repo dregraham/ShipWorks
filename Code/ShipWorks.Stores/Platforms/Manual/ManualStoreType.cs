@@ -18,15 +18,13 @@ namespace ShipWorks.Stores.Platforms.Manual
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Manual, ExternallyOwned = false)]
     public class ManualStoreType : StoreType
     {
-        private readonly StoreEntity manualStore;
-
         /// <summary>
-        /// Initializes a new instance of the ManualStoreType class. 
+        /// Constructor
         /// </summary>
         public ManualStoreType(StoreEntity store)
             : base(store)
         {
-            manualStore = store;
+           
         }
 
         /// <summary>
