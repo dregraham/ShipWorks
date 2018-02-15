@@ -20,7 +20,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// Manage shortcuts
     /// </summary>
     [Component(SingleInstance = true)]
-    [Order(typeof(IInitializeForCurrentSession), 1)]
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     public class ShortcutManager : IInitializeForCurrentSession, ICheckForChangesNeeded, IShortcutManager
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
