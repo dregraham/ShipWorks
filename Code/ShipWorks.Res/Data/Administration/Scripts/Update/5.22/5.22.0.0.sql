@@ -84,8 +84,7 @@ GO
 -- FEDEX
 PRINT N'Adding [dbo].[PackageProfileID]'
 GO
-ALTER TABLE [FedExProfilePackage] 
-ADD [PackageProfileID] [bigint] NULL
+ALTER TABLE [FedExProfilePackage] ADD [PackageProfileID] [bigint] NULL
 GO
 PRINT N'Inserting from [FedExProfilePackage] into [PackageProfile]'
 GO
@@ -95,19 +94,19 @@ FROM [FedExProfilePackage]
 GO
 PRINT N'Mapping [FedExProfilePackage] to [PackageProfile]'
 GO
-UPDATE
-    fedex
-SET
-    fedex.[PackageProfileID] = package.[PackageProfileID]
-FROM
-    [FedExProfilePackage] AS fedex
-    INNER JOIN [PackageProfile] AS package
-        ON fedex.[FedExProfilePackageID] = package.[FedExProfilePackageID]
+UPDATE fpp
+SET fpp.[PackageProfileID] = pp.[PackageProfileID]
+FROM [FedExProfilePackage] AS fpp
+    INNER JOIN [PackageProfile] AS pp ON fpp.[FedExProfilePackageID] = pp.[FedExProfilePackageID]
 GO
 PRINT N'Dropping [FedExProfilePackageID] from [ProfilePackage]'
 GO
-ALTER TABLE [PackageProfile] 
-DROP COLUMN [FedExProfilePackageID]
+ALTER TABLE [PackageProfile] DROP COLUMN [FedExProfilePackageID]
+GO
+PRINT N'Dropping constraints from [UpsProfilePackage]' 
+ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [PK_FedExProfilePackage]
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [FK_FedExProfilePackage_FedExProfile]
 GO
 PRINT N'Make [FedExProfilePackage].[PackageProfileID] NOT NULL'
 ALTER TABLE [FedExProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL 
@@ -115,13 +114,18 @@ GO
 PRINT N'Dropping Weight and Dimensions columns for [FedExProfilePackage]'
 GO
 ALTER TABLE [FedExProfilePackage] 
-DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
+DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID], [ShippingProfileID]
 GO
 PRINT N'Adding foreign key to [FedExProfilePackage]'
 ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
 REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
 GO
+PRINT N'Adding primary key to [FedExProfilePackage]' 
+ALTER TABLE [dbo].[FedExProfilePackage] 
+ADD CONSTRAINT PK_FedExProfilePackage_PackageProfileID PRIMARY KEY CLUSTERED (PackageProfileID)
+GO
 -- FEDEX
+
 
 -- iParcelProfilePackage
 PRINT N'Transfer iParcel profile Dimensions and Weight to PackageProfile'
@@ -170,7 +174,6 @@ PRINT N'Adding [PackageProfileID] to [dbo].[PackageProfile]'
 GO 
 ALTER TABLE [UpsProfilePackage] ADD [PackageProfileID] [bigint] NULL
 GO
--- Copy package data to the PackageProfile table
 PRINT N'Transfer Ups profile Dimensions and Weight to PackageProfile'
 GO
 INSERT INTO [PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight, UpsProfilePackageID) 
@@ -180,22 +183,33 @@ GO
 UPDATE upp
 SET upp.PackageProfileID = pp.PackageProfileID
 FROM [UpsProfilePackage] AS upp
-INNER JOIN [PackageProfile] AS pp
-    ON upp.UpsProfilePackageID = pp.UpsProfilePackageID
+	INNER JOIN [PackageProfile] AS pp ON upp.UpsProfilePackageID = pp.UpsProfilePackageID
 GO
 PRINT N'Dropping [UpsProfilePackageID] from [ProfilePackage]' 
 GO 
 ALTER TABLE [PackageProfile] DROP COLUMN [UpsProfilePackageID]
 GO
+PRINT N'Dropping constraints from [UpsProfilePackage]' 
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [PK_UpsProfilePackage]
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [FK_UpsProfilePackage_UpsProfile]
+GO
+PRINT N'Make [UpsProfilePackage].[PackageProfileID] NOT NULL'
+GO
+ALTER TABLE [UpsProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL
+GO
 PRINT N'Dropping Weight and Dimensions columns for [UpsProfilePackage]' 
 GO 
 ALTER TABLE [UpsProfilePackage] 
-DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight]
-GO
-ALTER TABLE [UpsProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL
+DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [UpsProfilePackageID], [ShippingProfileID]
 GO
 PRINT N'Adding foreign key to [UpsProfilePackage]' 
 ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
 REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+GO
+PRINT N'Adding primary key to [UpsProfilePackage]' 
+ALTER TABLE [dbo].[UpsProfilePackage] 
+ADD CONSTRAINT PK_UpsProfilePackage_PackageProfileID PRIMARY KEY CLUSTERED (PackageProfileID)
 GO
 -- UPS

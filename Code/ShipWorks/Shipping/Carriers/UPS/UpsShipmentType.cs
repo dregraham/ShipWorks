@@ -262,55 +262,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Load the profile data
             ShipmentTypeDataService.LoadProfileData(profile, "Ups", typeof(UpsProfileEntity), refreshIfPresent);
-
-            UpsProfileEntity ups = profile.Ups;
-
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!existed || refreshIfPresent)
-            {
-                ups.Packages.Clear();
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.PackageProfileID, ListSortDirection.Ascending);                    
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Save UPS specific profile data
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (UpsProfilePackageEntity package in profile.Ups.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.Ups.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Ups.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-            
-            return changes;
         }
 
         /// <summary>
@@ -433,14 +384,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             IUpsProfileEntity source = profile.Ups;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.Ups.Packages.Count();
+            int profilePackageCount = profile.PackageProfile.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IUpsProfilePackageEntity packageProfile = profile.Ups.Packages.ElementAt(i);
-
+                IUpsProfilePackageEntity packageProfile = profile.PackageProfile.ElementAt(i) as IUpsProfilePackageEntity;
+                
                 UpsPackageEntity package;
 
                 // Get the existing, or create a new package

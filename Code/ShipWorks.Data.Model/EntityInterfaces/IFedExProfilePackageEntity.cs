@@ -191,7 +191,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
         
         
-        IFedExProfileEntity FedExProfile { get; }
         
 
         
@@ -220,7 +219,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class FedExProfilePackageEntity : IFedExProfilePackageEntity
     {
         
-        IFedExProfileEntity IFedExProfilePackageEntity.FedExProfile => FedExProfile;
         
 
         /// <summary>

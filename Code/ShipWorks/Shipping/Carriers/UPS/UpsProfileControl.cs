@@ -180,8 +180,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Returns
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
 
-            packagesState.Checked = ups.Packages.Count > 0;
-            packagesCount.SelectedIndex = packagesState.Checked ? ups.Packages.Count - 1 : -1;
+            packagesState.Checked = profile.PackageProfile.Count > 0;
+            packagesCount.SelectedIndex = packagesState.Checked ? profile.PackageProfile.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;
 
             LoadPackageEditingUI();
@@ -291,12 +291,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.CancelChanges();
 
             // Go through the list of packages
-            foreach (UpsProfilePackageEntity package in Profile.Ups.Packages.ToList())
+            foreach (UpsProfilePackageEntity package in Profile.PackageProfile.ToList())
             {
                 // If its new, then we created it, and we gots to get rid of it
                 if (package.IsNew)
                 {
-                    Profile.Ups.Packages.Remove(package);
+                    Profile.PackageProfile.Remove(package);
                 }
                 // If its marked as deleted, we have to restore it
                 else if (package.Fields.State == EntityState.Deleted)
@@ -372,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // Go through each package that already exists
-            foreach (UpsProfilePackageEntity package in Profile.Ups.Packages)
+            foreach (PackageProfileEntity package in Profile.PackageProfile)
             {
                 // If we need more live packages, mark this one as alive
                 if (count > 0)
@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     ShippingProfile = Profile
                 };
 
-                Profile.Ups.Packages.Add(package);
+                Profile.PackageProfile.Add(package);
             }
 
             LoadPackageEditingUI();
@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void LoadPackageEditingUI()
         {
             // Get all the not marked for deleted packages
-            List<UpsProfilePackageEntity> packages = Profile.Ups.Packages.Where(p => p.Fields.State != EntityState.Deleted).ToList();
+            List<PackageProfileEntity> packages = Profile.PackageProfile.Where(p => p.Fields.State != EntityState.Deleted).ToList();
 
             int index = 0;
             Control lastControl = null;

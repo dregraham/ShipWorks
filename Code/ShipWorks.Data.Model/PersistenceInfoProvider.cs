@@ -1375,7 +1375,7 @@ namespace ShipWorks.Data.Model
 		private void InitFedExProfilePackageEntityMappings()
 		{
 			this.AddElementMapping("FedExProfilePackageEntity", @"ShipWorksLocal", @"dbo", "FedExProfilePackage", 29, 0);
-			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlert", "PriorityAlert", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertEnhancementType", "PriorityAlertEnhancementType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertDetailContent", "PriorityAlertDetailContent", true, "NVarChar", 1024, 0, 0, false, "", null, typeof(System.String), 3);
@@ -3493,7 +3493,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsProfilePackageEntityMappings()
 		{
 			this.AddElementMapping("UpsProfilePackageEntity", @"ShipWorksLocal", @"dbo", "UpsProfilePackage", 11, 0);
-			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "PackagingType", "PackagingType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);

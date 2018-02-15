@@ -488,60 +488,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Load the profile data
             ShipmentTypeDataService.LoadProfileData(profile, "FedEx", typeof(FedExProfileEntity), refreshIfPresent);
-
-            FedExProfileEntity fedex = profile.FedEx;
-
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!existed || refreshIfPresent)
-            {
-                fedex.Packages.Clear();
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(fedex.Packages, new RelationPredicateBucket(FedExProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    fedex.Packages.Sort((int) FedExProfilePackageFieldIndex.PackageProfileID, ListSortDirection.Ascending);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save FedEx specific profile data
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (FedExProfilePackageEntity package in profile.FedEx.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.FedEx.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.FedEx.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-
-                if (package.IsNew)
-                {
-                    profile.PackageProfile.Add(package);
-                    changes = true;
-                }
-            }
-
-            return changes;
         }
 
         /// <summary>
@@ -610,13 +556,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             IFedExProfileEntity source = profile.FedEx;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.FedEx.Packages.Count();
+            int profilePackageCount = profile.PackageProfile.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IFedExProfilePackageEntity fedexPackageProfile = profile.FedEx.Packages.ElementAt(i);                
+                IFedExProfilePackageEntity fedexPackageProfile = profile.PackageProfile.ElementAt(i) as IFedExProfilePackageEntity;                
                 FedExPackageEntity package;
 
                 // Get the existing, or create a new package

@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private FedExProfileEntity _fedExProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -45,8 +44,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
-			/// <summary>Member name FedExProfile</summary>
-			public static readonly string FedExProfile = "FedExProfile";
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
 		}
@@ -111,11 +108,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_fedExProfile = (FedExProfileEntity)info.GetValue("_fedExProfile", typeof(FedExProfileEntity));
-				if(_fedExProfile!=null)
-				{
-					_fedExProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -131,9 +123,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "FedExProfile":
-					this.FedExProfile = (FedExProfileEntity)entity;
-					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -156,9 +145,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "FedExProfile":
-					toReturn.Add(Relations.FedExProfileEntityUsingShippingProfileID);
-					break;
 				default:
 					toReturn = PackageProfileEntity.GetRelationsForField(fieldName);
 					break;				
@@ -188,9 +174,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "FedExProfile":
-					SetupSyncFedExProfile(relatedEntity);
-					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -205,9 +188,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "FedExProfile":
-					DesetupSyncFedExProfile(false, true);
-					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -229,10 +209,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_fedExProfile!=null)
-			{
-				toReturn.Add(_fedExProfile);
-			}
 			toReturn.AddRange(base.GetDependentRelatedEntities());
 			return toReturn;
 		}
@@ -271,7 +247,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_fedExProfile", (!this.MarkedForDeletion?_fedExProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -292,15 +267,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new FedExProfilePackageRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'FedExProfile' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoFedExProfile()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
-			return bucket;
 		}
 		
 
@@ -346,7 +312,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
-			toReturn.Add("FedExProfile", _fedExProfile);
 			return toReturn;
 		}
 
@@ -425,39 +390,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _fedExProfile</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncFedExProfile(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _fedExProfile, new PropertyChangedEventHandler( OnFedExProfilePropertyChanged ), "FedExProfile", ShipWorks.Data.Model.RelationClasses.StaticFedExProfilePackageRelations.FedExProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)FedExProfilePackageFieldIndex.ShippingProfileID } );
-			_fedExProfile = null;
-		}
-
-		/// <summary> setups the sync logic for member _fedExProfile</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncFedExProfile(IEntityCore relatedEntity)
-		{
-			if(_fedExProfile!=relatedEntity)
-			{
-				DesetupSyncFedExProfile(true, true);
-				_fedExProfile = (FedExProfileEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _fedExProfile, new PropertyChangedEventHandler( OnFedExProfilePropertyChanged ), "FedExProfile", ShipWorks.Data.Model.RelationClasses.StaticFedExProfilePackageRelations.FedExProfileEntityUsingShippingProfileIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnFedExProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this FedExProfilePackageEntity</param>
 		private void InitClassEmpty()
@@ -482,13 +414,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public new static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfile' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathFedExProfile
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("FedExProfile")[0], (int)ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfileEntity, 0, null, null, null, null, "FedExProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -793,24 +718,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>)GetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, false); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, value); }
-		}
-
-		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual FedExProfileEntity FedExProfile
-		{
-			get	{ return _fedExProfile; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncFedExProfile(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "Packages", "FedExProfile", _fedExProfile, true); 
-				}
-			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

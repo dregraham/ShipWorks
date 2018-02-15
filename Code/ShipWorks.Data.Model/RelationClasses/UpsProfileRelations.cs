@@ -30,27 +30,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.UpsProfilePackageEntityUsingShippingProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between UpsProfileEntity and UpsProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
-		/// UpsProfile.ShippingProfileID - UpsProfilePackage.ShippingProfileID
-		/// </summary>
-		public virtual IEntityRelation UpsProfilePackageEntityUsingShippingProfileID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Packages" , true);
-				relation.AddEntityFieldPair(UpsProfileFields.ShippingProfileID, UpsProfilePackageFields.ShippingProfileID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsProfilePackageEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between UpsProfileEntity and ShippingProfileEntity over the 1:1 relation they have, using the relation between the fields:
 		/// UpsProfile.ShippingProfileID - ShippingProfile.ShippingProfileID
@@ -85,7 +70,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticUpsProfileRelations
 	{
-		internal static readonly IEntityRelation UpsProfilePackageEntityUsingShippingProfileIDStatic = new UpsProfileRelations().UpsProfilePackageEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new UpsProfileRelations().ShippingProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>

@@ -83,7 +83,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<System.Boolean> DryIceIsForMedicalUse { get; }
         
         
-        IUpsProfileEntity UpsProfile { get; }
         
 
         
@@ -112,7 +111,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsProfilePackageEntity : IUpsProfilePackageEntity
     {
         
-        IUpsProfileEntity IUpsProfilePackageEntity.UpsProfile => UpsProfile;
         
 
         /// <summary>

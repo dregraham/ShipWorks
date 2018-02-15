@@ -2158,42 +2158,40 @@ PRINT N'Creating [dbo].[FedExProfilePackage]'
 GO
 CREATE TABLE [dbo].[FedExProfilePackage]
 (
-[FedExProfilePackageID] [bigint] NOT NULL IDENTITY(1062, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[PriorityAlert] [bit] NULL,
-[PriorityAlertEnhancementType] [int] NULL,
-[PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceWeight] [float] NULL,
-[ContainsAlcohol] [bit] NULL,
-[DangerousGoodsEnabled] [bit] NULL,
-[DangerousGoodsType] [int] NULL,
-[DangerousGoodsAccessibilityType] [int] NULL,
-[DangerousGoodsCargoAircraftOnly] [bit] NULL,
-[DangerousGoodsEmergencyContactPhone] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DangerousGoodsOfferor] [nvarchar] (128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DangerousGoodsPackagingCount] [int] NULL,
-[HazardousMaterialNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialClass] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialPackingGroup] [int] NULL,
-[HazardousMaterialQuantityValue] [float] NULL,
-[HazardousMaterialQuanityUnits] [int] NULL,
-[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[NumberOfContainers] [int] NULL,
-[PackingDetailsCargoAircraftOnly] [bit] NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[BatteryMaterial] [int] NULL,
-[BatteryPacking] [int] NULL,
-[BatteryRegulatorySubtype] [int] NULL,
-[PackageProfileID] [bigint] NOT NULL
+	[PriorityAlert] [bit] NULL,
+	[PriorityAlertEnhancementType] [int] NULL,
+	[PriorityAlertDetailContent] [nvarchar](1024) NULL,
+	[DryIceWeight] [float] NULL,
+	[ContainsAlcohol] [bit] NULL,
+	[DangerousGoodsEnabled] [bit] NULL,
+	[DangerousGoodsType] [int] NULL,
+	[DangerousGoodsAccessibilityType] [int] NULL,
+	[DangerousGoodsCargoAircraftOnly] [bit] NULL,
+	[DangerousGoodsEmergencyContactPhone] [nvarchar](16) NULL,
+	[DangerousGoodsOfferor] [nvarchar](128) NULL,
+	[DangerousGoodsPackagingCount] [int] NULL,
+	[HazardousMaterialNumber] [nvarchar](16) NULL,
+	[HazardousMaterialClass] [nvarchar](8) NULL,
+	[HazardousMaterialProperName] [nvarchar](64) NULL,
+	[HazardousMaterialPackingGroup] [int] NULL,
+	[HazardousMaterialQuantityValue] [float] NULL,
+	[HazardousMaterialQuanityUnits] [int] NULL,
+	[SignatoryContactName] [nvarchar](100) NULL,
+	[SignatoryTitle] [nvarchar](100) NULL,
+	[SignatoryPlace] [nvarchar](100) NULL,
+	[ContainerType] [nvarchar](100) NULL,
+	[NumberOfContainers] [int] NULL,
+	[PackingDetailsCargoAircraftOnly] [bit] NULL,
+	[PackingDetailsPackingInstructions] [nvarchar](50) NULL,
+	[BatteryMaterial] [int] NULL,
+	[BatteryPacking] [int] NULL,
+	[BatteryRegulatorySubtype] [int] NULL,
+	[PackageProfileID] [bigint] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
 GO
-ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage] PRIMARY KEY CLUSTERED  ([FedExProfilePackageID])
+ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
 GO
 PRINT N'Adding foreign key to [FedExProfilePackage]'
 ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
@@ -4120,24 +4118,22 @@ PRINT N'Creating [dbo].[UpsProfilePackage]'
 GO
 CREATE TABLE [dbo].[UpsProfilePackage]
 (
-[UpsProfilePackageID] [bigint] NOT NULL IDENTITY(1064, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[PackagingType] [int] NULL,
-[AdditionalHandlingEnabled] [bit] NULL,
-[VerbalConfirmationEnabled] [bit] NULL,
-[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceEnabled] [bit] NULL,
-[DryIceRegulationSet] [int] NULL,
-[DryIceWeight] [float] NULL,
-[DryIceIsForMedicalUse] [bit] NULL,
-[PackageProfileID] [bigint] NOT NULL,
+	[PackagingType] [int] NULL,
+	[AdditionalHandlingEnabled] [bit] NULL,
+	[VerbalConfirmationEnabled] [bit] NULL,
+	[VerbalConfirmationName] [nvarchar](35) NULL,
+	[VerbalConfirmationPhone] [nvarchar](15) NULL,
+	[VerbalConfirmationPhoneExtension] [nvarchar](4) NULL,
+	[DryIceEnabled] [bit] NULL,
+	[DryIceRegulationSet] [int] NULL,
+	[DryIceWeight] [float] NULL,
+	[DryIceIsForMedicalUse] [bit] NULL,
+	[PackageProfileID] [bigint] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]'
 GO
-ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [PK_UpsProfilePackage] PRIMARY KEY CLUSTERED  ([UpsProfilePackageID])
+ALTER TABLE [dbo].[UpsProfilePackage]ADD CONSTRAINT [PK_UpsProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
 GO
 PRINT N'Adding foreign key to [UpsProfilePackage]' 
 ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
@@ -5621,10 +5617,6 @@ PRINT N'Adding foreign keys to [dbo].[FedExProfile]'
 GO
 ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [FK_FedExProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[FedExProfilePackage]'
-GO
-ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [FK_FedExProfilePackage_FedExProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[FedExProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
@@ -5945,10 +5937,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[UpsPackage]'
 GO
 ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [FK_UpsPackage_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UpsProfilePackage]'
-GO
-ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [FK_UpsProfilePackage_UpsProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[UpsProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[WorldShipShipment]'
 GO

@@ -48,7 +48,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DryIceIsForMedicalUse = source.DryIceIsForMedicalUse;
             
             
-            UpsProfile = (IUpsProfileEntity) source.UpsProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomUpsProfilePackageData(source);
@@ -116,8 +115,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> DryIceIsForMedicalUse { get; }
         
-        
-        public IUpsProfileEntity UpsProfile { get; }
         
         
         /// <summary>

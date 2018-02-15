@@ -66,7 +66,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
             
             
-            FedExProfile = (IFedExProfileEntity) source.FedExProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomFedExProfilePackageData(source);
@@ -242,8 +241,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
         
-        
-        public IFedExProfileEntity FedExProfile { get; }
         
         
         /// <summary>

@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private UpsProfileEntity _upsProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -47,8 +46,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
-			/// <summary>Member name UpsProfile</summary>
-			public static readonly string UpsProfile = "UpsProfile";
 		}
 		#endregion
 		
@@ -111,11 +108,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_upsProfile = (UpsProfileEntity)info.GetValue("_upsProfile", typeof(UpsProfileEntity));
-				if(_upsProfile!=null)
-				{
-					_upsProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -131,9 +123,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "UpsProfile":
-					this.UpsProfile = (UpsProfileEntity)entity;
-					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -156,9 +145,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "UpsProfile":
-					toReturn.Add(Relations.UpsProfileEntityUsingShippingProfileID);
-					break;
 				default:
 					toReturn = PackageProfileEntity.GetRelationsForField(fieldName);
 					break;				
@@ -188,9 +174,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "UpsProfile":
-					SetupSyncUpsProfile(relatedEntity);
-					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -205,9 +188,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "UpsProfile":
-					DesetupSyncUpsProfile(false, true);
-					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -229,10 +209,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_upsProfile!=null)
-			{
-				toReturn.Add(_upsProfile);
-			}
 			toReturn.AddRange(base.GetDependentRelatedEntities());
 			return toReturn;
 		}
@@ -271,7 +247,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_upsProfile", (!this.MarkedForDeletion?_upsProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -292,15 +267,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new UpsProfilePackageRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UpsProfile' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoUpsProfile()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
-			return bucket;
 		}
 		
 
@@ -346,7 +312,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
-			toReturn.Add("UpsProfile", _upsProfile);
 			return toReturn;
 		}
 
@@ -389,39 +354,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _upsProfile</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncUpsProfile(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _upsProfile, new PropertyChangedEventHandler( OnUpsProfilePropertyChanged ), "UpsProfile", ShipWorks.Data.Model.RelationClasses.StaticUpsProfilePackageRelations.UpsProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)UpsProfilePackageFieldIndex.ShippingProfileID } );
-			_upsProfile = null;
-		}
-
-		/// <summary> setups the sync logic for member _upsProfile</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncUpsProfile(IEntityCore relatedEntity)
-		{
-			if(_upsProfile!=relatedEntity)
-			{
-				DesetupSyncUpsProfile(true, true);
-				_upsProfile = (UpsProfileEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _upsProfile, new PropertyChangedEventHandler( OnUpsProfilePropertyChanged ), "UpsProfile", ShipWorks.Data.Model.RelationClasses.StaticUpsProfilePackageRelations.UpsProfileEntityUsingShippingProfileIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnUpsProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this UpsProfilePackageEntity</param>
 		private void InitClassEmpty()
@@ -446,13 +378,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public new static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfile' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathUpsProfile
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("UpsProfile")[0], (int)ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfileEntity, 0, null, null, null, null, "UpsProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -577,24 +502,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, false); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, value); }
-		}
-
-		/// <summary> Gets / sets related entity of type 'UpsProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual UpsProfileEntity UpsProfile
-		{
-			get	{ return _upsProfile; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncUpsProfile(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "Packages", "UpsProfile", _upsProfile, true); 
-				}
-			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
