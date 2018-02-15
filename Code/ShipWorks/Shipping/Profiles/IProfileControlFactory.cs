@@ -8,6 +8,11 @@
         /// <summary>
         /// Creates a profile control
         /// </summary>
+        ShippingProfileControlBase Create();
+
+        /// <summary>
+        /// Creates a profile control for the given shipment type
+        /// </summary>
         ShippingProfileControlBase Create(ShipmentTypeCode shipmentType);
     }
 }

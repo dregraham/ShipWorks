@@ -15,6 +15,14 @@ namespace ShipWorks.Shipping.UI.Profiles
         }
 
         /// <summary>
+        /// Creats a GlobalProfileControl
+        /// </summary>
+        public ShippingProfileControlBase Create()
+        {
+            return new GlobalProfileControl();
+        }
+
+        /// <summary>
         /// Creates a ShippingProfileControl for the specified shipmentType
         /// </summary>
         public ShippingProfileControlBase Create(ShipmentTypeCode shipmentTypeCode) => 
