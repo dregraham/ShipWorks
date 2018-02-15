@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -32,12 +33,14 @@ namespace ShipWorks.Shipping.UI.Profiles
             LoadOrigins();
             dimensionsControl.Initialize();
 
+            PackageProfileEntity packageProfile = profile.Packages.Single();
+
             //From
             AddValueMapping(profile, ShippingProfileFields.OriginID, originState, origin, labelOrigin);
 
             //Shipment
-            //AddValueMapping(profile, ShippingProfileFields.Weight, weightState, weight, labelWeight);
-            //AddValueMapping(profile, ShippingProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             //Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
