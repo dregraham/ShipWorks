@@ -104,14 +104,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Create the UPS specific profile control
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UpsProfileControl();
-        }
-
-        /// <summary>
         /// Create the UPS specific customs control
         /// </summary>
         public override CustomsControlBase CreateCustomsControl()

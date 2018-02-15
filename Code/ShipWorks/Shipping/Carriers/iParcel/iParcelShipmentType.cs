@@ -128,14 +128,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new iParcelProfileControl();
-        }
-
-        /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
         /// multiple package shipments, allowing the shipment type a chance to add new packages
         /// to coincide with the ShipSense knowledge base entry.

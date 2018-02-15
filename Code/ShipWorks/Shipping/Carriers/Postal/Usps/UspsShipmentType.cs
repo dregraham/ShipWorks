@@ -121,14 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsServiceControl(ShipmentTypeCode, rateControl);
         }
-
-        /// <summary>
-        /// Create the UserControl used to handle USPS profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UspsProfileControl();
-        }
                 
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information

@@ -1,22 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
     /// UserControl for editing Endicia profiles
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Endicia)]
     public partial class EndiciaProfileControl : PostalProfileControlBase
     {
         // the reseller sub-type this profile configures
-        EndiciaReseller endiciaReseller = EndiciaReseller.None;
+        readonly EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
         /// <summary>
         /// Constructor

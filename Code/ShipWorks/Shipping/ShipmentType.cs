@@ -348,24 +348,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected virtual ShippingProfileControlBase CreateProfileControl()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
-                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
-                CreateProfileControl();
-        }
-
-        /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
         /// been excluded for this shipment type. The integer values are intended to correspond to
         /// the appropriate enumeration values of the specific shipment type (i.e. the integer values

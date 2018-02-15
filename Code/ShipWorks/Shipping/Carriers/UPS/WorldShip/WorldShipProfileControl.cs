@@ -2,12 +2,15 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
     /// <summary>
     /// WorldShip specific version of the UpsProfile control
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.UpsWorldShip)]
     public class WorldShipProfileControl : UpsProfileControl
     {
         /// <summary>

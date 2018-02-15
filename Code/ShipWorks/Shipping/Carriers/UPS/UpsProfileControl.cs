@@ -14,6 +14,7 @@ using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Insurance;
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// UserControl for editing ups specific profile settings
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.UpsOnLineTools)]
     public partial class UpsProfileControl : ShippingProfileControlBase
     {
         /// <summary>

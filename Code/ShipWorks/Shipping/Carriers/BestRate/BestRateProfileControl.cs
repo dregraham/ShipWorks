@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// BestRate profile control
+    /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.BestRate)]
     public partial class BestRateProfileControl : ShippingProfileControlBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BestRateProfileControl()
         {
             InitializeComponent();

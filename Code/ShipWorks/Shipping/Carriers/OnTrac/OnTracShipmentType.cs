@@ -87,14 +87,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Create the UserControl used to edit OnTrac profiles.
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new OnTracProfileControl();
-        }
-
-        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)

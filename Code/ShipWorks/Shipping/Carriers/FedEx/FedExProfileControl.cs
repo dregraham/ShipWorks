@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Control for editing fedex profiles
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.FedEx)]
     public partial class FedExProfileControl : ShippingProfileControlBase
     {
         /// <summary>

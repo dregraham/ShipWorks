@@ -1410,6 +1410,7 @@
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
+    <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />

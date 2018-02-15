@@ -102,14 +102,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new BestRateProfileControl();
-        }
-
-        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)

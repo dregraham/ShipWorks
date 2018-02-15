@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -18,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// <summary>
     /// UserControl base for editing postal profiles
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.PostalWebTools)]
     public partial class PostalProfileControlBase : ShippingProfileControlBase
     {
         /// <summary>

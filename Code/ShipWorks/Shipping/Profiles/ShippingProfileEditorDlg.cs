@@ -15,17 +15,19 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public partial class ShippingProfileEditorDlg : Form
     {
-        ShippingProfileEntity profile;
+        readonly ShippingProfileEntity profile;
         private readonly ILifetimeScope lifetimeScope;
+        private readonly IProfileControlFactory profileControlFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope)
+        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope, IProfileControlFactory profileControlFactory)
         {
             InitializeComponent();
 
             this.lifetimeScope = lifetimeScope;
+            this.profileControlFactory = profileControlFactory;
             this.profile = profile;
 
             WindowStateSaver.Manage(this);
@@ -63,7 +65,7 @@ namespace ShipWorks.Shipping.Profiles
             // Create the new profile control
             if (shipmentType.ShipmentTypeCode != ShipmentTypeCode.None)
             {
-                newControl = shipmentType.CreateProfileControl(lifetimeScope);
+                newControl = profileControlFactory.Create(shipmentType.ShipmentTypeCode);
 
                 if (newControl != null)
                 {

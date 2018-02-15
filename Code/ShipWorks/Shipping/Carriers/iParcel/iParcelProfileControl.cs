@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -26,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// i-parcel Profile Control
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.iParcel)]
     public partial class iParcelProfileControl : ShippingProfileControlBase
     {
         /// <summary>

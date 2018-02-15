@@ -212,14 +212,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Create the UserControl used to edit FedEx profiles.
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new FedExProfileControl();
-        }
-
-        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
