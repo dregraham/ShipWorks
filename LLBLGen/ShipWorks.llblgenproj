@@ -4210,7 +4210,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-30T20:39:02.9975331Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-15T20:38:11.2825999Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5434,37 +5434,37 @@
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
-                  <PkConstraintName Name="PK_FedExProfilePackage" />
+                  <PkConstraintName Name="PK_FedExProfilePackage_PackageProfileID" />
                   <Fields>
-                    <Field Name="PriorityAlert" Ordinal="1" IsOptional="true" DbType="2" />
-                    <Field Name="PriorityAlertEnhancementType" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PriorityAlertDetailContent" Ordinal="3" IsOptional="true" DbType="12" Length="1024" />
-                    <Field Name="DryIceWeight" Ordinal="4" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="ContainsAlcohol" Ordinal="5" IsOptional="true" DbType="2" />
-                    <Field Name="DangerousGoodsEnabled" Ordinal="6" IsOptional="true" DbType="2" />
-                    <Field Name="DangerousGoodsType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="DangerousGoodsAccessibilityType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="DangerousGoodsCargoAircraftOnly" Ordinal="9" IsOptional="true" DbType="2" />
-                    <Field Name="DangerousGoodsEmergencyContactPhone" Ordinal="10" IsOptional="true" DbType="12" Length="16" />
-                    <Field Name="DangerousGoodsOfferor" Ordinal="11" IsOptional="true" DbType="12" Length="128" />
-                    <Field Name="DangerousGoodsPackagingCount" Ordinal="12" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="HazardousMaterialNumber" Ordinal="13" IsOptional="true" DbType="12" Length="16" />
-                    <Field Name="HazardousMaterialClass" Ordinal="14" IsOptional="true" DbType="12" Length="8" />
-                    <Field Name="HazardousMaterialProperName" Ordinal="15" IsOptional="true" DbType="12" Length="64" />
-                    <Field Name="HazardousMaterialPackingGroup" Ordinal="16" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="HazardousMaterialQuantityValue" Ordinal="17" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="HazardousMaterialQuanityUnits" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="SignatoryContactName" Ordinal="19" IsOptional="true" DbType="12" Length="100" />
-                    <Field Name="SignatoryTitle" Ordinal="20" IsOptional="true" DbType="12" Length="100" />
-                    <Field Name="SignatoryPlace" Ordinal="21" IsOptional="true" DbType="12" Length="100" />
-                    <Field Name="ContainerType" Ordinal="22" IsOptional="true" DbType="12" Length="100" />
-                    <Field Name="NumberOfContainers" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="24" IsOptional="true" DbType="2" />
-                    <Field Name="PackingDetailsPackingInstructions" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="BatteryMaterial" Ordinal="26" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="BatteryPacking" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="BatteryRegulatorySubtype" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PackageProfileID" Ordinal="29" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PackageProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PriorityAlert" Ordinal="2" IsOptional="true" DbType="2" />
+                    <Field Name="PriorityAlertEnhancementType" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PriorityAlertDetailContent" Ordinal="4" IsOptional="true" DbType="12" Length="1024" />
+                    <Field Name="DryIceWeight" Ordinal="5" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="ContainsAlcohol" Ordinal="6" IsOptional="true" DbType="2" />
+                    <Field Name="DangerousGoodsEnabled" Ordinal="7" IsOptional="true" DbType="2" />
+                    <Field Name="DangerousGoodsType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsAccessibilityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsCargoAircraftOnly" Ordinal="10" IsOptional="true" DbType="2" />
+                    <Field Name="DangerousGoodsEmergencyContactPhone" Ordinal="11" IsOptional="true" DbType="12" Length="16" />
+                    <Field Name="DangerousGoodsOfferor" Ordinal="12" IsOptional="true" DbType="12" Length="128" />
+                    <Field Name="DangerousGoodsPackagingCount" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HazardousMaterialNumber" Ordinal="14" IsOptional="true" DbType="12" Length="16" />
+                    <Field Name="HazardousMaterialClass" Ordinal="15" IsOptional="true" DbType="12" Length="8" />
+                    <Field Name="HazardousMaterialProperName" Ordinal="16" IsOptional="true" DbType="12" Length="64" />
+                    <Field Name="HazardousMaterialPackingGroup" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HazardousMaterialQuantityValue" Ordinal="18" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="HazardousMaterialQuanityUnits" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SignatoryContactName" Ordinal="20" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryTitle" Ordinal="21" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryPlace" Ordinal="22" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="ContainerType" Ordinal="23" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="NumberOfContainers" Ordinal="24" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="25" IsOptional="true" DbType="2" />
+                    <Field Name="PackingDetailsPackingInstructions" Ordinal="26" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="BatteryMaterial" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryPacking" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryRegulatorySubtype" Ordinal="29" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExShipment">
@@ -8451,19 +8451,19 @@
                   </Fields>
                 </Table>
                 <Table Name="UpsProfilePackage">
-                  <PkConstraintName Name="PK_UpsProfilePackage" />
+                  <PkConstraintName Name="PK_UpsProfilePackage_PackageProfileID" />
                   <Fields>
-                    <Field Name="PackagingType" Ordinal="1" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="AdditionalHandlingEnabled" Ordinal="2" IsOptional="true" DbType="2" />
-                    <Field Name="VerbalConfirmationEnabled" Ordinal="3" IsOptional="true" DbType="2" />
-                    <Field Name="VerbalConfirmationName" Ordinal="4" IsOptional="true" DbType="12" Length="35" />
-                    <Field Name="VerbalConfirmationPhone" Ordinal="5" IsOptional="true" DbType="12" Length="15" />
-                    <Field Name="VerbalConfirmationPhoneExtension" Ordinal="6" IsOptional="true" DbType="12" Length="4" />
-                    <Field Name="DryIceEnabled" Ordinal="7" IsOptional="true" DbType="2" />
-                    <Field Name="DryIceRegulationSet" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="DryIceWeight" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DryIceIsForMedicalUse" Ordinal="10" IsOptional="true" DbType="2" />
-                    <Field Name="PackageProfileID" Ordinal="11" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PackageProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PackagingType" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="AdditionalHandlingEnabled" Ordinal="3" IsOptional="true" DbType="2" />
+                    <Field Name="VerbalConfirmationEnabled" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="VerbalConfirmationName" Ordinal="5" IsOptional="true" DbType="12" Length="35" />
+                    <Field Name="VerbalConfirmationPhone" Ordinal="6" IsOptional="true" DbType="12" Length="15" />
+                    <Field Name="VerbalConfirmationPhoneExtension" Ordinal="7" IsOptional="true" DbType="12" Length="4" />
+                    <Field Name="DryIceEnabled" Ordinal="8" IsOptional="true" DbType="2" />
+                    <Field Name="DryIceRegulationSet" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DryIceWeight" Ordinal="10" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DryIceIsForMedicalUse" Ordinal="11" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UpsRateSurcharge">
