@@ -24,6 +24,41 @@ GO
 ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [FK_PackageProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 
+PRINT N'Dropping foreign keys from [dbo].[DhlExpressProfilePackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfilePackage] DROP CONSTRAINT [FK_DhlExpressPackageProfile_DhlExpressProfile]
+GO
+PRINT N'Dropping foreign keys from [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [FK_FedExProfilePackage_FedExProfile]
+GO
+PRINT N'Dropping foreign keys from [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [FK_UpsProfilePackage_UpsProfile]
+GO
+
+PRINT N'Dropping constraints from [dbo].[DhlExpressProfilePackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfilePackage] DROP CONSTRAINT [PK_DhlExpressPackageProfile]
+GO
+PRINT N'Dropping constraints from [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [PK_FedExProfilePackage]
+GO
+PRINT N'Dropping constraints from [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [PK_UpsProfilePackage]
+GO
+
+PRINT N'Creating [dbo].[PackageProfile]'
+GO
+
+
+PRINT N'Dropping [dbo].[DhlExpressProfilePackage]'
+GO
+DROP TABLE [dbo].[DhlExpressProfilePackage]
+GO
+
 -- AMAZON
 PRINT N'Transfer Amazon profile Dimensions and Weight to PackageProfile'
 GO
@@ -67,65 +102,66 @@ DROP COLUMN [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeig
 GO
 --Best Rate
 
--- DHL Express
-PRINT N'Transfer DhlExpress profile Dimensions and Weight to PackageProfile'
-GO
-INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
-SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
-FROM DhlExpressProfilePackage
-GO
-
-PRINT N'Drop DhlExpressProfilePackage'
-GO
-DROP TABLE DhlExpressProfilePackage
-GO
--- DHL Express
-
 -- FEDEX
-PRINT N'Adding [dbo].[PackageProfileID]'
-GO
-ALTER TABLE [FedExProfilePackage] ADD [PackageProfileID] [bigint] NULL
-GO
 PRINT N'Inserting from [FedExProfilePackage] into [PackageProfile]'
 GO
 INSERT INTO [PackageProfile] ([ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID]) 
 SELECT [ShippingProfileID], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID]
 FROM [FedExProfilePackage]
 GO
-PRINT N'Mapping [FedExProfilePackage] to [PackageProfile]'
+PRINT N'Rebuilding [dbo].[FedExProfilePackage]'
 GO
-UPDATE fpp
-SET fpp.[PackageProfileID] = pp.[PackageProfileID]
-FROM [FedExProfilePackage] AS fpp
-    INNER JOIN [PackageProfile] AS pp ON fpp.[FedExProfilePackageID] = pp.[FedExProfilePackageID]
+CREATE TABLE [dbo].[RG_Recovery_1_FedExProfilePackage]
+(
+[PackageProfileID] [bigint] NOT NULL,
+[PriorityAlert] [bit] NULL,
+[PriorityAlertEnhancementType] [int] NULL,
+[PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceWeight] [float] NULL,
+[ContainsAlcohol] [bit] NULL,
+[DangerousGoodsEnabled] [bit] NULL,
+[DangerousGoodsType] [int] NULL,
+[DangerousGoodsAccessibilityType] [int] NULL,
+[DangerousGoodsCargoAircraftOnly] [bit] NULL,
+[DangerousGoodsEmergencyContactPhone] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DangerousGoodsOfferor] [nvarchar] (128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DangerousGoodsPackagingCount] [int] NULL,
+[HazardousMaterialNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HazardousMaterialClass] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HazardousMaterialPackingGroup] [int] NULL,
+[HazardousMaterialQuantityValue] [float] NULL,
+[HazardousMaterialQuanityUnits] [int] NULL,
+[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NumberOfContainers] [int] NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BatteryMaterial] [int] NULL,
+[BatteryPacking] [int] NULL,
+[BatteryRegulatorySubtype] [int] NULL
+)
+GO
+INSERT INTO [dbo].[RG_Recovery_1_FedExProfilePackage]([PackageProfileID], [PriorityAlert], [PriorityAlertEnhancementType], [PriorityAlertDetailContent], [DryIceWeight], [ContainsAlcohol], [DangerousGoodsEnabled], [DangerousGoodsType], [DangerousGoodsAccessibilityType], [DangerousGoodsCargoAircraftOnly], [DangerousGoodsEmergencyContactPhone], [DangerousGoodsOfferor], [DangerousGoodsPackagingCount], [HazardousMaterialNumber], [HazardousMaterialClass], [HazardousMaterialProperName], [HazardousMaterialPackingGroup], [HazardousMaterialQuantityValue], [HazardousMaterialQuanityUnits], [SignatoryContactName], [SignatoryTitle], [SignatoryPlace], [ContainerType], [NumberOfContainers], [PackingDetailsCargoAircraftOnly], [PackingDetailsPackingInstructions], [BatteryMaterial], [BatteryPacking], [BatteryRegulatorySubtype]) 
+SELECT [PackageProfileID], [PriorityAlert], [PriorityAlertEnhancementType], [PriorityAlertDetailContent], [DryIceWeight], [ContainsAlcohol], [DangerousGoodsEnabled], [DangerousGoodsType], [DangerousGoodsAccessibilityType], [DangerousGoodsCargoAircraftOnly], [DangerousGoodsEmergencyContactPhone], [DangerousGoodsOfferor], [DangerousGoodsPackagingCount], [HazardousMaterialNumber], [HazardousMaterialClass], [HazardousMaterialProperName], [HazardousMaterialPackingGroup], [HazardousMaterialQuantityValue], [HazardousMaterialQuanityUnits], [SignatoryContactName], [SignatoryTitle], [SignatoryPlace], [ContainerType], [NumberOfContainers], [PackingDetailsCargoAircraftOnly], [PackingDetailsPackingInstructions], [BatteryMaterial], [BatteryPacking], [BatteryRegulatorySubtype] 
+	FROM [dbo].[FedExProfilePackage] fpp
+	INNER JOIN PackageProfile as pp  ON fpp.[FedExProfilePackageID] = pp.[FedExProfilePackageID]
+GO
+DROP TABLE [dbo].[FedExProfilePackage]
+GO
+EXEC sp_rename N'[dbo].[RG_Recovery_1_FedExProfilePackage]', N'FedExProfilePackage', N'OBJECT'
+GO
+PRINT N'Creating primary key [PK_FedExProfilePackage_PackageProfileID] on [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED  ([PackageProfileID])
 GO
 PRINT N'Dropping [FedExProfilePackageID] from [ProfilePackage]'
 GO
 ALTER TABLE [PackageProfile] DROP COLUMN [FedExProfilePackageID]
 GO
-PRINT N'Dropping constraints from [UpsProfilePackage]' 
-ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [PK_FedExProfilePackage]
-GO
-ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT [FK_FedExProfilePackage_FedExProfile]
-GO
-PRINT N'Make [FedExProfilePackage].[PackageProfileID] NOT NULL'
-ALTER TABLE [FedExProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL 
-GO
-PRINT N'Dropping Weight and Dimensions columns for [FedExProfilePackage]'
-GO
-ALTER TABLE [FedExProfilePackage] 
-DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [FedExProfilePackageID], [ShippingProfileID]
-GO
-PRINT N'Adding foreign key to [FedExProfilePackage]'
-ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
-REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
-GO
-PRINT N'Adding primary key to [FedExProfilePackage]' 
-ALTER TABLE [dbo].[FedExProfilePackage] 
-ADD CONSTRAINT PK_FedExProfilePackage_PackageProfileID PRIMARY KEY CLUSTERED (PackageProfileID)
-GO
 -- FEDEX
-
 
 -- iParcelProfilePackage
 PRINT N'Transfer iParcel profile Dimensions and Weight to PackageProfile'
@@ -134,7 +170,14 @@ INSERT INTO PackageProfile (ShippingProfileID, [Weight], DimsProfileID, DimsLeng
 SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight
 FROM iParcelProfilePackage
 GO
-
+PRINT N'Dropping foreign keys from [dbo].[iParcelProfilePackage]'
+GO
+ALTER TABLE [dbo].[iParcelProfilePackage] DROP CONSTRAINT [FK_iParcelPackageProfile_iParcelProfile]
+GO
+PRINT N'Dropping constraints from [dbo].[iParcelProfilePackage]'
+GO
+ALTER TABLE [dbo].[iParcelProfilePackage] DROP CONSTRAINT [PK_iParcelPackageProfile]
+GO
 PRINT N'Drop iParcelProfilePackage'
 GO
 DROP TABLE iParcelProfilePackage
@@ -170,46 +213,54 @@ GO
 -- Postal
 
 -- UPS
-PRINT N'Adding [PackageProfileID] to [dbo].[PackageProfile]' 
-GO 
-ALTER TABLE [UpsProfilePackage] ADD [PackageProfileID] [bigint] NULL
-GO
 PRINT N'Transfer Ups profile Dimensions and Weight to PackageProfile'
 GO
 INSERT INTO [PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight, UpsProfilePackageID) 
 SELECT ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight, UpsProfilePackageID
 FROM [UpsProfilePackage]
 GO
-UPDATE upp
-SET upp.PackageProfileID = pp.PackageProfileID
+
+PRINT N'Rebuilding [dbo].[UpsProfilePackage]'
+GO
+CREATE TABLE [dbo].[RG_Recovery_2_UpsProfilePackage]
+(
+[PackageProfileID] [bigint] NOT NULL,
+[PackagingType] [int] NULL,
+[AdditionalHandlingEnabled] [bit] NULL,
+[VerbalConfirmationEnabled] [bit] NULL,
+[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceEnabled] [bit] NULL,
+[DryIceRegulationSet] [int] NULL,
+[DryIceWeight] [float] NULL,
+[DryIceIsForMedicalUse] [bit] NULL
+)
+GO
+INSERT INTO [dbo].[RG_Recovery_2_UpsProfilePackage]([PackageProfileID], [PackagingType], [AdditionalHandlingEnabled], [VerbalConfirmationEnabled], [VerbalConfirmationName], [VerbalConfirmationPhone], [VerbalConfirmationPhoneExtension], [DryIceEnabled], [DryIceRegulationSet], [DryIceWeight], [DryIceIsForMedicalUse]) 
+SELECT [PackageProfileID], [PackagingType], [AdditionalHandlingEnabled], [VerbalConfirmationEnabled], [VerbalConfirmationName], [VerbalConfirmationPhone], [VerbalConfirmationPhoneExtension], [DryIceEnabled], [DryIceRegulationSet], [DryIceWeight], [DryIceIsForMedicalUse] 
 FROM [UpsProfilePackage] AS upp
 	INNER JOIN [PackageProfile] AS pp ON upp.UpsProfilePackageID = pp.UpsProfilePackageID
+GO
+DROP TABLE [dbo].[UpsProfilePackage]
+GO
+EXEC sp_rename N'[dbo].[RG_Recovery_2_UpsProfilePackage]', N'UpsProfilePackage', N'OBJECT'
+GO
+PRINT N'Creating primary key [PK_UpsProfilePackage_PackageProfileID] on [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [PK_UpsProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED  ([PackageProfileID])
 GO
 PRINT N'Dropping [UpsProfilePackageID] from [ProfilePackage]' 
 GO 
 ALTER TABLE [PackageProfile] DROP COLUMN [UpsProfilePackageID]
 GO
-PRINT N'Dropping constraints from [UpsProfilePackage]' 
-GO
-ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [PK_UpsProfilePackage]
-GO
-ALTER TABLE [dbo].[UpsProfilePackage] DROP CONSTRAINT [FK_UpsProfilePackage_UpsProfile]
-GO
-PRINT N'Make [UpsProfilePackage].[PackageProfileID] NOT NULL'
-GO
-ALTER TABLE [UpsProfilePackage] ALTER COLUMN [PackageProfileID] [bigint] NOT NULL
-GO
-PRINT N'Dropping Weight and Dimensions columns for [UpsProfilePackage]' 
-GO 
-ALTER TABLE [UpsProfilePackage] 
-DROP COLUMN [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [UpsProfilePackageID], [ShippingProfileID]
-GO
-PRINT N'Adding foreign key to [UpsProfilePackage]' 
-ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
-REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
-GO
-PRINT N'Adding primary key to [UpsProfilePackage]' 
-ALTER TABLE [dbo].[UpsProfilePackage] 
-ADD CONSTRAINT PK_UpsProfilePackage_PackageProfileID PRIMARY KEY CLUSTERED (PackageProfileID)
-GO
 -- UPS
+
+PRINT N'Adding foreign keys to [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY ([PackageProfileID]) REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY ([PackageProfileID]) REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+GO
