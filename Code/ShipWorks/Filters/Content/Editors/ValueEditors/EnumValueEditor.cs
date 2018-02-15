@@ -8,32 +8,22 @@ using ShipWorks.Filters.Content.Conditions;
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {
     /// <summary>
-    /// A value editor that is for address based conditions
+    /// A value editor that is for EnumValueEditor based conditions
     /// </summary>
-    public partial class BillShipAddressEnumValueEditor<T> : ValueEditor where T : struct
+    public partial class EnumValueEditor<T> : ValueEditor where T : struct
     {
         EnumCondition<T> condition;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BillShipAddressEnumValueEditor(EnumCondition<T> condition)
+        public EnumValueEditor(EnumCondition<T> condition)
         {
             InitializeComponent();
 
-            IBillShipAddressCondition billShipCondition = condition as IBillShipAddressCondition;
-            if (billShipCondition == null)
-            {
-                throw new InvalidOperationException("Cannot create a BillShipAddressEnumValueEditor with a condition that does not implement IBillShipAddressCondition");
-            }
-
             this.condition = condition;
 
-            // Fill the address type combo
-            addressOperator.InitializeFromEnumType(typeof(BillShipAddressOperator));
-            addressOperator.SelectedValue = billShipCondition.AddressOperator;
-
-            // Fill the value combo
+            // Load the equality operator
             equalityOperator.InitializeFromEnumType(typeof(EnumEqualityOperator));
             equalityOperator.SelectedValue = condition.Operator;
 
@@ -45,6 +35,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             targetValueList.InitializeValuesList(condition.ValueChoices);
             targetValueList.SelectStatuses(condition.SelectedValues ?? Enumerable.Empty<T>());
+
             // If the value the condition wanted as it's default isn't in the list, select the first available
             if (targetValue.SelectedValue == null && targetValue.Items.Count > 0)
             {
@@ -54,10 +45,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             UpdateComboBoxSize();
             UpdateValueVisibility(condition.Operator);
 
-            // Start listening for changes
-            equalityOperator.SelectedValueChanged += OnChangeOperator;
-            addressOperator.SelectedValueChanged += OnChangeOperator;
-            targetValue.SelectedValueChanged += OnTargetValueChanged;
+            targetValue.SelectedValueChanged += new EventHandler(OnTargetValueChanged);
         }
 
         /// <summary>
@@ -89,37 +77,14 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void UpdateValueVisibility(EnumEqualityOperator op)
         {
-            BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;
-
-            equalityOperator.Visible = !IsBillShipComparison(addressOp);
-            equalityOperator.Left = addressOperator.Right + 3;
-
-            if (!equalityOperator.Visible)
+            if (op == EnumEqualityOperator.Equals || op == EnumEqualityOperator.NotEqual)
             {
-                Width = equalityOperator.Left;
-
-                targetValue.Visible = false;
-                targetValueList.Visible = false;
+                SwitchVisibleDropdown(targetValue, targetValueList);
             }
             else
             {
-                if (op == EnumEqualityOperator.Equals || op == EnumEqualityOperator.NotEqual)
-                {
-                    SwitchVisibleDropdown(targetValue, targetValueList);
-                }
-                else
-                {
-                    SwitchVisibleDropdown(targetValueList, targetValue);
-                }
+                SwitchVisibleDropdown(targetValueList, targetValue);
             }
-        }
-
-        /// <summary>
-        /// Indicates if the operator is a comparison between the billing and shipping and not an external value
-        /// </summary>
-        private static bool IsBillShipComparison(BillShipAddressOperator addressOp)
-        {
-            return (addressOp == BillShipAddressOperator.ShipBillEqual || addressOp == BillShipAddressOperator.ShipBillNotEqual);
         }
 
         /// <summary>
@@ -143,13 +108,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             EnumEqualityOperator op = (EnumEqualityOperator) equalityOperator.SelectedValue;
             condition.Operator = op;
 
-            BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;
-            ((IBillShipAddressCondition) condition).AddressOperator = addressOp;
-
             UpdateValueVisibility(op);
-
-            // Changing the operator can affect validity
-            ValidateChildren(ValidationConstraints.Visible);
 
             RaiseContentChanged();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
@@ -10,7 +9,7 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
     [ConditionElement("Provider", "Shipment.ShipmentType")]
-    public class CarrierCondition : ValueChoiceCondition<ShipmentTypeCode>
+    public class CarrierCondition : EnumCondition<ShipmentTypeCode>
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingManager shippingManager;
@@ -44,7 +43,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             get
             {
-                ValueChoice<ShipmentTypeCode>[] result =  shipmentTypeManager.ShipmentTypes
+                ValueChoice<ShipmentTypeCode>[] result = shipmentTypeManager.ShipmentTypes
                     .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
                     .Where(
                         t =>

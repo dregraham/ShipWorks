@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Filters.Content.Conditions.Notes

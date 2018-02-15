@@ -1,8 +1,8 @@
 ﻿using Interapptive.Shared.Enums;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
 {

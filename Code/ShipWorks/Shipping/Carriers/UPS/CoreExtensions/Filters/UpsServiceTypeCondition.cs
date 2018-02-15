@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.CoreExtensions;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.CoreExtensions;
 
 namespace ShipWorks.Shipping.Carriers.UPS.CoreExtensions.Filters
 {

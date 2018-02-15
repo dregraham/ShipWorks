@@ -11,7 +11,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Data;
@@ -24,7 +23,6 @@ using ShipWorks.Editions.Freemium;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.OrderItems;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
@@ -168,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             definition.RootContainer.FirstGroup.Conditions.Add(anyItem);
 
             EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
-            checkoutStatus.Operator = EqualityOperator.NotEqual;
+            checkoutStatus.Operator = EnumEqualityOperator.NotEqual;
             checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             anyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
@@ -195,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
 
             EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
-            checkoutStatus.Operator = EqualityOperator.Equals;
+            checkoutStatus.Operator = EnumEqualityOperator.Equals;
             checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             everyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 

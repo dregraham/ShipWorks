@@ -210,7 +210,7 @@ namespace ShipWorks.Data.Administration
             ResidentialStatusCondition residentialCondition = new ResidentialStatusCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = Residential ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No
             };
 
@@ -221,7 +221,7 @@ namespace ShipWorks.Data.Administration
             POBoxCondition poCondition = new POBoxCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.No,
             };
 
@@ -232,7 +232,7 @@ namespace ShipWorks.Data.Administration
             USTerritoryCondition territoryCondition = new USTerritoryCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.No
             };
 
@@ -243,7 +243,7 @@ namespace ShipWorks.Data.Administration
             MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.No
             };
 
@@ -263,7 +263,7 @@ namespace ShipWorks.Data.Administration
             POBoxCondition poCondition = new POBoxCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.Yes
             };
 
@@ -282,7 +282,7 @@ namespace ShipWorks.Data.Administration
             USTerritoryCondition territoryCondition = new USTerritoryCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.Yes
             };
 
@@ -301,7 +301,7 @@ namespace ShipWorks.Data.Administration
             MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
             {
                 AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
+                Operator = EnumEqualityOperator.Equals,
                 Value = ValidationDetailStatusType.Yes
             };
 

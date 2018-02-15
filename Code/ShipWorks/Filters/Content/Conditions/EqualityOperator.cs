@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.ComponentModel;
 
@@ -9,7 +6,7 @@ namespace ShipWorks.Filters.Content.Conditions
     /// <summary>
     /// Provides simple equals\not equals comparison
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum EqualityOperator
     {
         [Description("Equals")]
