@@ -93,14 +93,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             {
                 var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
                 var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathFedEx);
-                profilePatch.SubPath.Add(FedExProfileEntity.PrefetchPathPackages);
 
                 var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
 
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.FedEx);
-                Assert.Empty(loadedProfile.FedEx.Packages);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 
@@ -113,14 +112,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             {
                 var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
                 var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathUps);
-                profilePatch.SubPath.Add(UpsProfileEntity.PrefetchPathPackages);
 
                 var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
 
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.Ups);
-                Assert.Empty(loadedProfile.Ups.Packages);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 
@@ -133,14 +131,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             {
                 var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
                 var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathIParcel);
-                profilePatch.SubPath.Add(IParcelProfileEntity.PrefetchPathPackages);
 
                 var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
 
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.IParcel);
-                Assert.Empty(loadedProfile.IParcel.Packages);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 

@@ -352,12 +352,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<DhlExpressProfileEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the DhlExpressProfilePackage entity</summary>
-		public EntityQuery<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
-		{
-			get { return Create<DhlExpressProfilePackageEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the DhlExpressShipment entity</summary>
 		public EntityQuery<DhlExpressShipmentEntity> DhlExpressShipment
 		{
@@ -670,12 +664,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<IParcelProfileEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the IParcelProfilePackage entity</summary>
-		public EntityQuery<IParcelProfilePackageEntity> IParcelProfilePackage
-		{
-			get { return Create<IParcelProfilePackageEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the IParcelShipment entity</summary>
 		public EntityQuery<IParcelShipmentEntity> IParcelShipment
 		{
@@ -926,6 +914,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<OtherShipmentEntity> OtherShipment
 		{
 			get { return Create<OtherShipmentEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the PackageProfile entity</summary>
+		public EntityQuery<PackageProfileEntity> PackageProfile
+		{
+			get { return Create<PackageProfileEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the PayPalOrder entity</summary>

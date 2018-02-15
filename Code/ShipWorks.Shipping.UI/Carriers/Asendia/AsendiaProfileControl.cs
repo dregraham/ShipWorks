@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             dimensionsControl.Initialize();
 
             AsendiaProfileEntity asendiaProfile = profile.Asendia;
+            PackageProfileEntity packageProfile = profile.Packages.Single();
             
             LoadAsendiaAccounts();
 
@@ -55,8 +56,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             // Service
             AddValueMapping(asendiaProfile, AsendiaProfileFields.Service, serviceState, service, labelService);
-            AddValueMapping(asendiaProfile, AsendiaProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(asendiaProfile, AsendiaProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+
+            // Weight and dimensions
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat, labelThermalNote);

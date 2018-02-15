@@ -104,18 +104,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void ChangeShipmentType_AppliesDefaultProfile_WhenChangedToNewShipmentType()
         {
-            OnTracProfileEntity onTracProfile = Create.Entity<OnTracProfileEntity>()
+            Create.Profile()
+                .AsPrimary()
+                .AsOnTrac(o => o.Set(x => x.Reference2, "FOO"))
                 .SetDefaultsOnNullableFields()
-                .Set(x => x.Reference2, "FOO")
-                .Build();
-
-            Create.Entity<ShippingProfileEntity>()
-                .SetDefaultsOnNullableFields()
-                .Set(x => x.ShipmentTypePrimary, true)
-                .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.OnTrac)
-                .Set(x => x.OnTrac, onTracProfile)
                 .Save();
-
+               
             ShippingProfileManager.CheckForChangesNeeded();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();

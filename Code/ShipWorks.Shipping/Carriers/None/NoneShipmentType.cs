@@ -54,5 +54,26 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
+
+        /// <summary>
+        /// Apply default settings to the None profile
+        /// </summary>
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+
+            // The base configures dimensions for all shipment types. None is an exception and
+            // doesn't need it.
+            profile.Packages.Clear();
+        }
+
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            base.LoadProfileData(profile, refreshIfPresent);
+
+            // The base configures dimensions for all shipment types. None is an exception and
+            // doesn't need it.
+            profile.Packages.Clear();
+        }
     }
 }

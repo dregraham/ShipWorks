@@ -60,8 +60,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             AddValueMapping(onTracProfile, OnTracProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(onTracProfile, OnTracProfileFields.SignatureRequired, signatureState, signatureRequired, labelSignature);
             AddValueMapping(onTracProfile, OnTracProfileFields.PackagingType, packagingState, packaging, labelPackaging);
-            AddValueMapping(onTracProfile, OnTracProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(onTracProfile, OnTracProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(onTracProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(onTracProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             //Options
             AddValueMapping(onTracProfile, OnTracProfileFields.Reference1, referenceState, referenceNumber, labelReference);

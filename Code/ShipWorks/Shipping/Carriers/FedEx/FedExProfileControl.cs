@@ -151,8 +151,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
-            packagesState.Checked = fedex.Packages.Count > 0;
-            packagesCount.SelectedIndex = packagesState.Checked ? fedex.Packages.Count - 1 : -1;
+            packagesState.Checked = profile.Packages.Count > 0;
+            packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;
 
             LoadPackageEditingUI();
@@ -239,12 +239,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             base.CancelChanges();
 
             // Go through the list of packages
-            foreach (FedExProfilePackageEntity package in Profile.FedEx.Packages.ToList())
+            foreach (PackageProfileEntity package in Profile.Packages.ToList())
             {
                 // If its new, then we created it, and we gots to get rid of it
                 if (package.IsNew)
                 {
-                    Profile.FedEx.Packages.Remove(package);
+                    Profile.Packages.Remove(package);
                 }
                 // If its marked as deleted, we have to restore it
                 else if (package.Fields.State == EntityState.Deleted)
@@ -426,7 +426,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // Go through each package that already exists
-            foreach (FedExProfilePackageEntity package in Profile.FedEx.Packages)
+            foreach (PackageProfileEntity package in Profile.Packages)
             {
                 // If we need more live packages, mark this one as alive
                 if (count > 0)
@@ -449,7 +449,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             for (int i = 0; i < count; i++)
             {
                 FedExProfilePackageEntity package = new FedExProfilePackageEntity();
-                Profile.FedEx.Packages.Add(package);
+                Profile.Packages.Add(package);
             }
 
             LoadPackageEditingUI();
@@ -461,7 +461,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void LoadPackageEditingUI()
         {
             // Get all the not marked for deleted packages
-            List<FedExProfilePackageEntity> packages = Profile.FedEx.Packages.Where(p => p.Fields.State != EntityState.Deleted).ToList();
+            List<PackageProfileEntity> packages = Profile.Packages.Where(p => p.Fields.State != EntityState.Deleted).ToList();
 
             int index = 0;
             Control lastControl = null;

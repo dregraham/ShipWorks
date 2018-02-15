@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             base.LoadProfile(profile);
 
             PostalProfileEntity postal = profile.Postal;
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             List<KeyValuePair<string, long>> origins = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).GetOrigins();
 
@@ -59,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(postal, PostalProfileFields.Service, serviceState, service, labelService);
 
             AddValueMapping(postal, PostalProfileFields.Confirmation, confirmationState, confirmation, labelConfirmation);
-            AddValueMapping(postal, PostalProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
 
             AddValueMapping(postal, PostalProfileFields.PackagingType, packagingState, packagingType, labelPackaging);
             AddValueMapping(postal, PostalProfileFields.NonMachinable, machinableState, nonMachinable);
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(postal, PostalProfileFields.CustomsContentType, customsContentState, contentType);
             AddValueMapping(postal, PostalProfileFields.CustomsContentDescription, customsContentState, contentDescription);
 
-            AddValueMapping(postal, PostalProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             dimensionsControl.Initialize();
 
             BestRateProfileEntity bestRateProfile = profile.BestRate;
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             //TODO: Implement insurance wording correctly in story SHIP-156: Specifying insurance/declared value with best rate
             //if (ShippingSettings.Fetch().OnTracInsuranceProvider == (int)InsuranceProvider.Carrier)
@@ -48,8 +50,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             //Shipment
             AddValueMapping(bestRateProfile, BestRateProfileFields.ServiceLevel, transitTimeState, transitTime, labelTransitTime);
-            AddValueMapping(bestRateProfile, BestRateProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(bestRateProfile, BestRateProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             //Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

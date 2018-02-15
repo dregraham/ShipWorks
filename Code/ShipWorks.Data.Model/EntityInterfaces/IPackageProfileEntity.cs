@@ -15,69 +15,69 @@ using System.Linq;
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
-    /// Entity interface which represents the entity 'IParcelProfilePackage'. <br/><br/>
+    /// Entity interface which represents the entity 'PackageProfile'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IIParcelProfilePackageEntity
+    public partial interface IPackageProfileEntity
     {
         
-        /// <summary> The IParcelProfilePackageID property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The PackageProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."iParcelProfilePackageID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."PackageProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        System.Int64 IParcelProfilePackageID { get; }
-        /// <summary> The ShippingProfileID property of the Entity IParcelProfilePackage<br/><br/>
+        System.Int64 PackageProfileID { get; }
+        /// <summary> The ShippingProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."ShippingProfileID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."ShippingProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ShippingProfileID { get; }
-        /// <summary> The Weight property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The Weight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."Weight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."Weight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsProfileID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsLength property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsLength"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsLength"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsWidth property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsWidth"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsWidth"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsHeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsHeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsHeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsWeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsWeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsWeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity IParcelProfilePackage<br/><br/>
+        /// <summary> The DimsAddWeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "iParcelProfilePackage"."DimsAddWeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsAddWeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> DimsAddWeight { get; }
         
         
-        IIParcelProfileEntity IParcelProfile { get; }
+        IShippingProfileEntity ShippingProfile { get; }
         
 
         
@@ -85,12 +85,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IIParcelProfilePackageEntity AsReadOnly();
+        IPackageProfileEntity AsReadOnly();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IIParcelProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 
@@ -100,34 +100,34 @@ namespace ShipWorks.Data.Model.EntityClasses
     using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 
     /// <summary>
-    /// Entity interface which represents the entity 'IParcelProfilePackage'. <br/><br/>
+    /// Entity interface which represents the entity 'PackageProfile'. <br/><br/>
     /// 
     /// </summary>
-    public partial class IParcelProfilePackageEntity : IIParcelProfilePackageEntity
+    public partial class PackageProfileEntity : IPackageProfileEntity
     {
         
-        IIParcelProfileEntity IIParcelProfilePackageEntity.IParcelProfile => IParcelProfile;
+        IShippingProfileEntity IPackageProfileEntity.ShippingProfile => ShippingProfile;
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IIParcelProfilePackageEntity AsReadOnly() =>
+        public virtual IPackageProfileEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IIParcelProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public virtual IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
-                return (IIParcelProfilePackageEntity) objectMap[this];
+                return (IPackageProfileEntity) objectMap[this];
             }
 
             objectMap.Add(this, null);
 
-            return new ReadOnlyIParcelProfilePackageEntity(this, objectMap);
+            return new ReadOnlyPackageProfileEntity(this, objectMap);
         }
 
         

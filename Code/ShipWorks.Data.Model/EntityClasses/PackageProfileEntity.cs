@@ -25,14 +25,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'DhlExpressProfilePackage'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'PackageProfile'.<br/><br/></summary>
 	[Serializable]
-	public partial class DhlExpressProfilePackageEntity : CommonEntityBase
+	public partial class PackageProfileEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private DhlExpressProfileEntity _dhlExpressProfile;
+		private ShippingProfileEntity _shippingProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -45,19 +45,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name DhlExpressProfile</summary>
-			public static readonly string DhlExpressProfile = "DhlExpressProfile";
+			/// <summary>Member name ShippingProfile</summary>
+			public static readonly string ShippingProfile = "ShippingProfile";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static DhlExpressProfilePackageEntity()
+		static PackageProfileEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public DhlExpressProfilePackageEntity():base("DhlExpressProfilePackageEntity")
+		public PackageProfileEntity():base("PackageProfileEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -65,49 +65,49 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public DhlExpressProfilePackageEntity(IEntityFields2 fields):base("DhlExpressProfilePackageEntity")
+		public PackageProfileEntity(IEntityFields2 fields):base("PackageProfileEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this DhlExpressProfilePackageEntity</param>
-		public DhlExpressProfilePackageEntity(IValidator validator):base("DhlExpressProfilePackageEntity")
+		/// <param name="validator">The custom validator object for this PackageProfileEntity</param>
+		public PackageProfileEntity(IValidator validator):base("PackageProfileEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="dhlExpressProfilePackageID">PK value for DhlExpressProfilePackage which data should be fetched into this DhlExpressProfilePackage object</param>
+		/// <param name="packageProfileID">PK value for PackageProfile which data should be fetched into this PackageProfile object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlExpressProfilePackageEntity(System.Int64 dhlExpressProfilePackageID):base("DhlExpressProfilePackageEntity")
+		public PackageProfileEntity(System.Int64 packageProfileID):base("PackageProfileEntity")
 		{
 			InitClassEmpty(null, null);
-			this.DhlExpressProfilePackageID = dhlExpressProfilePackageID;
+			this.PackageProfileID = packageProfileID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="dhlExpressProfilePackageID">PK value for DhlExpressProfilePackage which data should be fetched into this DhlExpressProfilePackage object</param>
-		/// <param name="validator">The custom validator object for this DhlExpressProfilePackageEntity</param>
+		/// <param name="packageProfileID">PK value for PackageProfile which data should be fetched into this PackageProfile object</param>
+		/// <param name="validator">The custom validator object for this PackageProfileEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlExpressProfilePackageEntity(System.Int64 dhlExpressProfilePackageID, IValidator validator):base("DhlExpressProfilePackageEntity")
+		public PackageProfileEntity(System.Int64 packageProfileID, IValidator validator):base("PackageProfileEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.DhlExpressProfilePackageID = dhlExpressProfilePackageID;
+			this.PackageProfileID = packageProfileID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected DhlExpressProfilePackageEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected PackageProfileEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_dhlExpressProfile = (DhlExpressProfileEntity)info.GetValue("_dhlExpressProfile", typeof(DhlExpressProfileEntity));
-				if(_dhlExpressProfile!=null)
+				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
+				if(_shippingProfile!=null)
 				{
-					_dhlExpressProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_shippingProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -120,10 +120,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((DhlExpressProfilePackageFieldIndex)fieldIndex)
+			switch((PackageProfileFieldIndex)fieldIndex)
 			{
-				case DhlExpressProfilePackageFieldIndex.ShippingProfileID:
-					DesetupSyncDhlExpressProfile(true, false);
+				case PackageProfileFieldIndex.ShippingProfileID:
+					DesetupSyncShippingProfile(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -139,8 +139,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "DhlExpressProfile":
-					this.DhlExpressProfile = (DhlExpressProfileEntity)entity;
+				case "ShippingProfile":
+					this.ShippingProfile = (ShippingProfileEntity)entity;
 					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
@@ -164,8 +164,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "DhlExpressProfile":
-					toReturn.Add(Relations.DhlExpressProfileEntityUsingShippingProfileID);
+				case "ShippingProfile":
+					toReturn.Add(Relations.ShippingProfileEntityUsingShippingProfileID);
 					break;
 				default:
 					break;				
@@ -195,8 +195,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressProfile":
-					SetupSyncDhlExpressProfile(relatedEntity);
+				case "ShippingProfile":
+					SetupSyncShippingProfile(relatedEntity);
 					break;
 				default:
 					break;
@@ -211,8 +211,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressProfile":
-					DesetupSyncDhlExpressProfile(false, true);
+				case "ShippingProfile":
+					DesetupSyncShippingProfile(false, true);
 					break;
 				default:
 					break;
@@ -233,9 +233,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_dhlExpressProfile!=null)
+			if(_shippingProfile!=null)
 			{
-				toReturn.Add(_dhlExpressProfile);
+				toReturn.Add(_shippingProfile);
 			}
 			return toReturn;
 		}
@@ -248,6 +248,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return toReturn;
 		}
 
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public  static IPredicateExpression GetEntityTypeFilter()
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PackageProfileEntity", false);
+		}
+		
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <param name="negate">Flag to produce a NOT filter, (true), or a normal filter (false). </param>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public  static IPredicateExpression GetEntityTypeFilter(bool negate)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PackageProfileEntity", negate);
+		}
+
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
@@ -256,28 +273,35 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_dhlExpressProfile", (!this.MarkedForDeletion?_dhlExpressProfile:null));
+				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-
+		
+		/// <summary>Determines whether this entity is a subType of the entity represented by the passed in enum value, which represents a value in the ShipWorks.Data.Model.EntityType enum</summary>
+		/// <param name="typeOfEntity">Type of entity.</param>
+		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
+		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("PackageProfileEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new DhlExpressProfilePackageRelations().GetAllRelations();
+			return new PackageProfileRelations().GetAllRelations();
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'DhlExpressProfile' to this entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ShippingProfile' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDhlExpressProfile()
+		public virtual IRelationPredicateBucket GetRelationInfoShippingProfile()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlExpressProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShippingProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
 			return bucket;
 		}
 		
@@ -285,7 +309,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfilePackageEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(PackageProfileEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -324,7 +348,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("DhlExpressProfile", _dhlExpressProfile);
+			toReturn.Add("ShippingProfile", _shippingProfile);
 			return toReturn;
 		}
 
@@ -347,7 +371,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DhlExpressProfilePackageID", fieldHashtable);
+			_fieldsCustomProperties.Add("PackageProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -367,31 +391,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _dhlExpressProfile</summary>
+		/// <summary> Removes the sync logic for member _shippingProfile</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncDhlExpressProfile(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncShippingProfile(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfilePackageRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)DhlExpressProfilePackageFieldIndex.ShippingProfileID } );
-			_dhlExpressProfile = null;
+			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticPackageProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)PackageProfileFieldIndex.ShippingProfileID } );
+			_shippingProfile = null;
 		}
 
-		/// <summary> setups the sync logic for member _dhlExpressProfile</summary>
+		/// <summary> setups the sync logic for member _shippingProfile</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncDhlExpressProfile(IEntityCore relatedEntity)
+		private void SetupSyncShippingProfile(IEntityCore relatedEntity)
 		{
-			if(_dhlExpressProfile!=relatedEntity)
+			if(_shippingProfile!=relatedEntity)
 			{
-				DesetupSyncDhlExpressProfile(true, true);
-				_dhlExpressProfile = (DhlExpressProfileEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfilePackageRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, true, new string[] {  } );
+				DesetupSyncShippingProfile(true, true);
+				_shippingProfile = (ShippingProfileEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticPackageProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnDhlExpressProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnShippingProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -401,7 +425,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this DhlExpressProfilePackageEntity</param>
+		/// <param name="validator">The validator object for this PackageProfileEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -419,9 +443,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static DhlExpressProfilePackageRelations Relations
+		public  static PackageProfileRelations Relations
 		{
-			get	{ return new DhlExpressProfilePackageRelations(); }
+			get	{ return new PackageProfileRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -431,11 +455,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlExpressProfile' for this entity.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDhlExpressProfile
+		public static IPrefetchPathElement2 PrefetchPathShippingProfile
 		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("DhlExpressProfile")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, 0, null, null, null, null, "DhlExpressProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShippingProfileEntityFactory))),	(IEntityRelation)GetRelationsForField("ShippingProfile")[0], (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, 0, null, null, null, null, "ShippingProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -462,110 +486,110 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The DhlExpressProfilePackageID property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DhlExpressProfilePackageID"<br/>
+		/// <summary> The PackageProfileID property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."PackageProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-		public virtual System.Int64 DhlExpressProfilePackageID
+		public virtual System.Int64 PackageProfileID
 		{
-			get { return (System.Int64)GetValue((int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, true); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, value); }
+			get { return (System.Int64)GetValue((int)PackageProfileFieldIndex.PackageProfileID, true); }
+			set	{ SetValue((int)PackageProfileFieldIndex.PackageProfileID, value); }
 		}
 
-		/// <summary> The ShippingProfileID property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."ShippingProfileID"<br/>
+		/// <summary> The ShippingProfileID property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 ShippingProfileID
 		{
-			get { return (System.Int64)GetValue((int)DhlExpressProfilePackageFieldIndex.ShippingProfileID, true); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.ShippingProfileID, value); }
+			get { return (System.Int64)GetValue((int)PackageProfileFieldIndex.ShippingProfileID, true); }
+			set	{ SetValue((int)PackageProfileFieldIndex.ShippingProfileID, value); }
 		}
 
-		/// <summary> The Weight property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."Weight"<br/>
+		/// <summary> The Weight property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Weight
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DhlExpressProfilePackageFieldIndex.Weight, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.Weight, value); }
+			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.Weight, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.Weight, value); }
 		}
 
-		/// <summary> The DimsProfileID property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsProfileID"<br/>
+		/// <summary> The DimsProfileID property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int64> DimsProfileID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsProfileID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)PackageProfileFieldIndex.DimsProfileID, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsProfileID, value); }
 		}
 
-		/// <summary> The DimsLength property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsLength"<br/>
+		/// <summary> The DimsLength property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> DimsLength
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsLength, value); }
+			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsLength, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsLength, value); }
 		}
 
-		/// <summary> The DimsWidth property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsWidth"<br/>
+		/// <summary> The DimsWidth property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> DimsWidth
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsWidth, value); }
+			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsWidth, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsWidth, value); }
 		}
 
-		/// <summary> The DimsHeight property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsHeight"<br/>
+		/// <summary> The DimsHeight property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> DimsHeight
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsHeight, value); }
+			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsHeight, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsHeight, value); }
 		}
 
-		/// <summary> The DimsWeight property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsWeight"<br/>
+		/// <summary> The DimsWeight property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> DimsWeight
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsWeight, value); }
+			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsWeight, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsWeight, value); }
 		}
 
-		/// <summary> The DimsAddWeight property of the Entity DhlExpressProfilePackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfilePackage"."DimsAddWeight"<br/>
+		/// <summary> The DimsAddWeight property of the Entity PackageProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PackageProfile"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Boolean> DimsAddWeight
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)DhlExpressProfilePackageFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)DhlExpressProfilePackageFieldIndex.DimsAddWeight, value); }
+			get { return (Nullable<System.Boolean>)GetValue((int)PackageProfileFieldIndex.DimsAddWeight, false); }
+			set	{ SetValue((int)PackageProfileFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> Gets / sets related entity of type 'DhlExpressProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
-		public virtual DhlExpressProfileEntity DhlExpressProfile
+		public virtual ShippingProfileEntity ShippingProfile
 		{
-			get	{ return _dhlExpressProfile; }
+			get	{ return _shippingProfile; }
 			set
 			{
 				if(this.IsDeserializing)
 				{
-					SetupSyncDhlExpressProfile(value);
+					SetupSyncShippingProfile(value);
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "Packages", "DhlExpressProfile", _dhlExpressProfile, true); 
+					SetSingleRelatedEntityNavigator(value, "Packages", "ShippingProfile", _shippingProfile, true); 
 				}
 			}
 		}
@@ -573,7 +597,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
-			get { return InheritanceHierarchyType.None;}
+			get { return InheritanceHierarchyType.TargetPerEntity;}
 		}
 		
 		/// <summary> Gets or sets a value indicating whether this entity is a subtype</summary>
@@ -586,7 +610,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity; }
 		}
 
 		#endregion

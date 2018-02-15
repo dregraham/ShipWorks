@@ -189,41 +189,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return adapters;
         }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (IParcelProfilePackageEntity package in profile.IParcel.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.IParcel.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.IParcel.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-
-            return changes;
-        }
-
+        
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -255,13 +221,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             IIParcelProfileEntity source = profile.IParcel;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.IParcel.Packages.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IIParcelProfilePackageEntity packageProfile = profile.IParcel.Packages.ElementAt(i);
+                IPackageProfileEntity packageProfile = profile.Packages.ElementAt(i);
 
                 IParcelPackageEntity package;
 
@@ -351,20 +317,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             bool existed = profile.IParcel != null;
 
             ShipmentTypeDataService.LoadProfileData(profile, "IParcel", typeof(IParcelProfileEntity), refreshIfPresent);
-
-            IParcelProfileEntity iParcelProfileEntityParcel = profile.IParcel;
-
+            
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!existed || refreshIfPresent)
             {
-                iParcelProfileEntityParcel.Packages.Clear();
+                profile.Packages.Clear();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(iParcelProfileEntityParcel.Packages,
-                                                  new RelationPredicateBucket(IParcelProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
+                    adapter.FetchEntityCollection(profile.Packages,
+                                                  new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
 
-                    iParcelProfileEntityParcel.Packages.Sort((int) IParcelProfilePackageFieldIndex.IParcelProfilePackageID, ListSortDirection.Ascending);
+                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
         }

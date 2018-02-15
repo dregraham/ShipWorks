@@ -358,20 +358,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             bool existed = profile.DhlExpress != null;
 
             ShipmentTypeDataService.LoadProfileData(profile, "DhlExpress", typeof(DhlExpressProfileEntity), refreshIfPresent);
-
-            DhlExpressProfileEntity dhlExpressProfileEntityParcel = profile.DhlExpress;
-
+            
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!existed || refreshIfPresent)
             {
-                dhlExpressProfileEntityParcel.Packages.Clear();
+                profile.Packages.Clear();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(dhlExpressProfileEntityParcel.Packages,
-                                                  new RelationPredicateBucket(DhlExpressProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-
-                    dhlExpressProfileEntityParcel.Packages.Sort((int) DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, ListSortDirection.Ascending);
+                    adapter.FetchEntityCollection(profile.Packages,
+                                                  new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
+                    
+                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
         }
@@ -384,21 +382,21 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             bool changes = base.SaveProfileData(profile, adapter);
 
             // First delete out anything that needs deleted
-            foreach (DhlExpressProfilePackageEntity package in profile.DhlExpress.Packages.ToList())
+            foreach (PackageProfileEntity package in profile.Packages.ToList())
             {
                 // If its new but deleted, just get rid of it
                 if (package.Fields.State == EntityState.Deleted)
                 {
                     if (package.IsNew)
                     {
-                        profile.DhlExpress.Packages.Remove(package);
+                        profile.Packages.Remove(package);
                     }
 
                     // If its deleted, delete it
                     else
                     {
                         package.Fields.State = EntityState.Fetched;
-                        profile.DhlExpress.Packages.Remove(package);
+                        profile.Packages.Remove(package);
 
                         adapter.DeleteEntity(package);
 
@@ -438,7 +436,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             DhlExpressShipmentEntity dhlShipment = shipment.DhlExpress;
 
             bool changedPackageWeights = ApplyDhlExpressPackageProfile(dhlShipment, profile);
-            int profilePackageCount = profile.DhlExpress.Packages.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Remove any packages that are too many for the profile
             if (profilePackageCount > 0)
@@ -485,13 +483,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             bool changedPackageWeights = false;
 
-            int profilePackageCount = profile.DhlExpress.Packages.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IDhlExpressProfilePackageEntity packageProfile = profile.DhlExpress.Packages.ElementAt(i);
+                IPackageProfileEntity packageProfile = profile.Packages.ElementAt(i);
 
                 DhlExpressPackageEntity package;
 

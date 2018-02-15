@@ -71,6 +71,10 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             base.ConfigurePrimaryProfile(profile);
 
+            // The base configures dimensions for all shipment types. Other is an exception and
+            // doesn't need it.
+            profile.Packages.Clear();
+
             long originID = ShippingOriginManager.Origins.Count > 0 ? ShippingOriginManager.Origins[0].ShippingOriginID : (long) ShipmentOriginSource.Store;
             profile.OriginID = originID;
 

@@ -77,8 +77,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
-            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IFedExProfilePackageEntity>().ToReadOnly() ??
-                Enumerable.Empty<IFedExProfilePackageEntity>();
 
             CopyCustomFedExProfileData(source);
         }
@@ -310,8 +308,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IShippingProfileEntity ShippingProfile { get; }
         
         
-        
-        public IEnumerable<IFedExProfilePackageEntity> Packages { get; }
         
         /// <summary>
         /// Get a read only version of the entity
