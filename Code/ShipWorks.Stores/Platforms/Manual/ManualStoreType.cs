@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
