@@ -2,8 +2,8 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Manual;
-using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -45,6 +45,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Manual
 
             Assert.Equal("My Manual Store", store.StoreName);
             Assert.Equal(false, store.AutoDownload);
+        }
+
+        [Fact]
+        public void CreateOrderIdentifier_ReturnOrderIdentifier()
+        {
+            OrderEntity order = new OrderEntity();
+
+            OrderIdentifier orderIdentifier = testObject.CreateOrderIdentifier(order);
+
+            Assert.IsType<AlphaNumericOrderIdentifier>(orderIdentifier);
         }
 
         public void Dispose()
