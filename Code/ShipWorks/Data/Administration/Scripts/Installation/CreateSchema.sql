@@ -2158,6 +2158,7 @@ PRINT N'Creating [dbo].[FedExProfilePackage]'
 GO
 CREATE TABLE [dbo].[FedExProfilePackage]
 (
+	[PackageProfileID] [bigint] NOT NULL,
 	[PriorityAlert] [bit] NULL,
 	[PriorityAlertEnhancementType] [int] NULL,
 	[PriorityAlertDetailContent] [nvarchar](1024) NULL,
@@ -2185,8 +2186,7 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 	[PackingDetailsPackingInstructions] [nvarchar](50) NULL,
 	[BatteryMaterial] [int] NULL,
 	[BatteryPacking] [int] NULL,
-	[BatteryRegulatorySubtype] [int] NULL,
-	[PackageProfileID] [bigint] NOT NULL,
+	[BatteryRegulatorySubtype] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
@@ -4118,6 +4118,7 @@ PRINT N'Creating [dbo].[UpsProfilePackage]'
 GO
 CREATE TABLE [dbo].[UpsProfilePackage]
 (
+	[PackageProfileID] [bigint] NOT NULL,
 	[PackagingType] [int] NULL,
 	[AdditionalHandlingEnabled] [bit] NULL,
 	[VerbalConfirmationEnabled] [bit] NULL,
@@ -4128,7 +4129,6 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 	[DryIceRegulationSet] [int] NULL,
 	[DryIceWeight] [float] NULL,
 	[DryIceIsForMedicalUse] [bit] NULL,
-	[PackageProfileID] [bigint] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]'
