@@ -695,19 +695,19 @@ namespace ShipWorks.Shipping
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!profile.IsNew && refreshIfPresent)
             {
-                profile.PackageProfile.Clear();
+                profile.Packages.Clear();
 
                 using (ISqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(profile.PackageProfile,
+                    adapter.FetchEntityCollection(profile.Packages,
                         new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
-                    profile.PackageProfile.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
+                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
 
             if (profile.IsNew && !SupportsMultiplePackages)
             {
-                profile.PackageProfile.Add(new PackageProfileEntity());
+                profile.Packages.Add(new PackageProfileEntity());
             }
         }
 
@@ -721,7 +721,7 @@ namespace ShipWorks.Shipping
             // First delete out anything that needs deleted
             // Introducing new variable as we will be removing items from PackageProfile
             // and if we used the same colleciton, we would get an exception.
-            List<PackageProfileEntity> allPackageProfiles = profile.PackageProfile.ToList();
+            List<PackageProfileEntity> allPackageProfiles = profile.Packages.ToList();
             foreach (PackageProfileEntity package in allPackageProfiles)
             {
                 // If its new but deleted, just get rid of it
@@ -729,14 +729,14 @@ namespace ShipWorks.Shipping
                 {
                     if (package.IsNew)
                     {
-                        profile.PackageProfile.Remove(package);
+                        profile.Packages.Remove(package);
                     }
 
                     // If its deleted, delete it
                     else
                     {
                         package.Fields.State = EntityState.Fetched;
-                        profile.PackageProfile.Remove(package);
+                        profile.Packages.Remove(package);
 
                         adapter.DeleteEntity(package);
 
@@ -767,8 +767,8 @@ namespace ShipWorks.Shipping
             {
                 // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
                 // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
-                profile.PackageProfile.Clear();
-                profile.PackageProfile.Add(new PackageProfileEntity()
+                profile.Packages.Clear();
+                profile.Packages.Add(new PackageProfileEntity()
                 {
                     Weight = 0,
                     DimsProfileID = 0,

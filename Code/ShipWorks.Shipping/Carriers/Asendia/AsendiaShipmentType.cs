@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
 
-            IPackageProfileEntity packageProfile = profile.PackageProfile.FirstOrDefault();
+            IPackageProfileEntity packageProfile = profile.Packages.FirstOrDefault();
             if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))
             {
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);

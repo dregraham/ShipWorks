@@ -384,13 +384,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             IUpsProfileEntity source = profile.Ups;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.PackageProfile.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IUpsProfilePackageEntity packageProfile = profile.PackageProfile.ElementAt(i) as IUpsProfilePackageEntity;
+                IUpsProfilePackageEntity packageProfile = profile.Packages.ElementAt(i) as IUpsProfilePackageEntity;
                 
                 UpsPackageEntity package;
 

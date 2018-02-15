@@ -221,13 +221,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             IIParcelProfileEntity source = profile.IParcel;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.PackageProfile.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IPackageProfileEntity packageProfile = profile.PackageProfile.ElementAt(i);
+                IPackageProfileEntity packageProfile = profile.Packages.ElementAt(i);
 
                 IParcelPackageEntity package;
 
@@ -321,14 +321,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!existed || refreshIfPresent)
             {
-                profile.PackageProfile.Clear();
+                profile.Packages.Clear();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(profile.PackageProfile,
+                    adapter.FetchEntityCollection(profile.Packages,
                                                   new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
 
-                    profile.PackageProfile.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
+                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
                 }
             }
         }

@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 builder.SetDefaultsOnNullableFields();
             }
 
-            Set(x => x.PackageProfile.Add(builder.Build()));
+            Set(x => x.Packages.Add(builder.Build()));
 
             return this;
         }

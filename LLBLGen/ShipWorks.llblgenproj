@@ -3778,7 +3778,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="PackageProfile.ShippingProfile-ShippingProfile.PackageProfile" Start=":PackageProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="PackageProfile" Type="4" DeleteRuleAction="1">
+      <NormalRelationship Name="PackageProfile.ShippingProfile-ShippingProfile.Packages" Start=":PackageProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>

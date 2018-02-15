@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             base.LoadProfile(profile);
 
             PostalProfileEntity postal = profile.Postal;
-            PackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             List<KeyValuePair<string, long>> origins = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).GetOrigins();
 

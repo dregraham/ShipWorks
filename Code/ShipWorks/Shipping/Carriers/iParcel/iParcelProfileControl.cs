@@ -95,8 +95,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             AddValueMapping(iParcelProfile, IParcelProfileFields.SkuAndQuantities, skuAndQuantityState, skuAndQuantity, labelSkuAndQuantity);
 
 
-            packagesState.Checked = profile.PackageProfile.Count > 0;
-            packagesCount.SelectedIndex = packagesState.Checked ? profile.PackageProfile.Count - 1 : -1;
+            packagesState.Checked = profile.Packages.Count > 0;
+            packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;
 
             LoadPackageEditingUI();
@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             // Go through each package that already exists
-            foreach (PackageProfileEntity package in Profile.PackageProfile)
+            foreach (PackageProfileEntity package in Profile.Packages)
             {
                 // If we need more live packages, mark this one as alive
                 if (count > 0)
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             for (int i = 0; i < count; i++)
             {
                 PackageProfileEntity package = new PackageProfileEntity();
-                Profile.PackageProfile.Add(package);
+                Profile.Packages.Add(package);
             }
 
             LoadPackageEditingUI();
@@ -211,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private void LoadPackageEditingUI()
         {
             // Get all the not marked for deleted packages
-            List<PackageProfileEntity> packages = Profile.PackageProfile.Where(p => p.Fields.State != EntityState.Deleted).ToList();
+            List<PackageProfileEntity> packages = Profile.Packages.Where(p => p.Fields.State != EntityState.Deleted).ToList();
 
             int index = 0;
             Control lastControl = null;
@@ -268,12 +268,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             base.CancelChanges();
 
             // Go through the list of packages
-            foreach (PackageProfileEntity package in Profile.PackageProfile.ToList())
+            foreach (PackageProfileEntity package in Profile.Packages.ToList())
             {
                 // If its new, then we created it, and we gots to get rid of it
                 if (package.IsNew)
                 {
-                    Profile.PackageProfile.Remove(package);
+                    Profile.Packages.Remove(package);
                 }
                 // If its marked as deleted, we have to restore it
                 else if (package.Fields.State == EntityState.Deleted)

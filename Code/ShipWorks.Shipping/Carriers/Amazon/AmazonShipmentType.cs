@@ -241,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
             
-            IPackageProfileEntity packageProfile = profile.PackageProfile.First();
+            IPackageProfileEntity packageProfile = profile.Packages.First();
             if (packageProfile.Weight.GetValueOrDefault() > 0)
             {
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);

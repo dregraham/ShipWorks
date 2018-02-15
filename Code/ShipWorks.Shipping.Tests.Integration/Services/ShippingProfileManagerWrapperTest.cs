@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.FedEx);
-                Assert.Empty(loadedProfile.PackageProfile);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.Ups);
-                Assert.Empty(loadedProfile.PackageProfile);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
                 Assert.NotNull(loadedProfile.IParcel);
-                Assert.Empty(loadedProfile.PackageProfile);
+                Assert.Empty(loadedProfile.Packages);
             }
         }
 

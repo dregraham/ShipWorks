@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             dimensionsControl.Initialize();
 
             BestRateProfileEntity bestRateProfile = profile.BestRate;
-            PackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             //TODO: Implement insurance wording correctly in story SHIP-156: Specifying insurance/declared value with best rate
             //if (ShippingSettings.Fetch().OnTracInsuranceProvider == (int)InsuranceProvider.Carrier)

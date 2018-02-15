@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             EntityBuilder<PackageProfileEntity> builder = new EntityBuilder<PackageProfileEntity>();
             builderConfiguration?.Invoke(builder);
 
-            Set(x => x.ShippingProfile.PackageProfile.Add(builder.Build()));
+            Set(x => x.ShippingProfile.Packages.Add(builder.Build()));
 
             return this;
         }

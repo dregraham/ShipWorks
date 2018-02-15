@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             BestRateShipmentEntity bestRateShipment = shipment.BestRate;
             IBestRateProfileEntity bestRateProfile = profile.BestRate;
-            IPackageProfileEntity packageProfileEntity = profile.PackageProfile.Single();
+            IPackageProfileEntity packageProfileEntity = profile.Packages.Single();
 
             ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
             ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);

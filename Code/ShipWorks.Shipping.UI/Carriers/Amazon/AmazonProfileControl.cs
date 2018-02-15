@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryExperience);
 
             AmazonProfileEntity amazonProfile = profile.Amazon;
-            PackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             // Origin
             AddValueMapping(profile, ShippingProfileFields.OriginID, originState, originCombo, labelSender);

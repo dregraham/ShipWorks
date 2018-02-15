@@ -556,13 +556,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             IFedExProfileEntity source = profile.FedEx;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.PackageProfile.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IFedExProfilePackageEntity fedexPackageProfile = profile.PackageProfile.ElementAt(i) as IFedExProfilePackageEntity;                
+                IFedExProfilePackageEntity fedexPackageProfile = profile.Packages.ElementAt(i) as IFedExProfilePackageEntity;                
                 FedExPackageEntity package;
 
                 // Get the existing, or create a new package

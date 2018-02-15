@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             PostalShipmentEntity postalShipment = shipment.Postal;
             IPostalProfileEntity postalProfile = profile.Postal;
-            IPackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            IPackageProfileEntity packageProfile = profile.Packages.Single();
             
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Service, postalShipment, PostalShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Confirmation, postalShipment, PostalShipmentFields.Confirmation);

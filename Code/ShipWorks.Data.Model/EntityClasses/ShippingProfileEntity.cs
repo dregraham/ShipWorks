@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<PackageProfileEntity> _packageProfile;
+		private EntityCollection<PackageProfileEntity> _packages;
 		private AmazonProfileEntity _amazon;
 		private AsendiaProfileEntity _asendia;
 		private BestRateProfileEntity _bestRate;
@@ -55,8 +55,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name PackageProfile</summary>
-			public static readonly string PackageProfile = "PackageProfile";
+			/// <summary>Member name Packages</summary>
+			public static readonly string Packages = "Packages";
 			/// <summary>Member name Amazon</summary>
 			public static readonly string Amazon = "Amazon";
 			/// <summary>Member name Asendia</summary>
@@ -134,7 +134,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_packageProfile = (EntityCollection<PackageProfileEntity>)info.GetValue("_packageProfile", typeof(EntityCollection<PackageProfileEntity>));
+				_packages = (EntityCollection<PackageProfileEntity>)info.GetValue("_packages", typeof(EntityCollection<PackageProfileEntity>));
 				_amazon = (AmazonProfileEntity)info.GetValue("_amazon", typeof(AmazonProfileEntity));
 				if(_amazon!=null)
 				{
@@ -200,8 +200,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "PackageProfile":
-					this.PackageProfile.Add((PackageProfileEntity)entity);
+				case "Packages":
+					this.Packages.Add((PackageProfileEntity)entity);
 					break;
 				case "Amazon":
 					this.Amazon = (AmazonProfileEntity)entity;
@@ -255,7 +255,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "PackageProfile":
+				case "Packages":
 					toReturn.Add(Relations.PackageProfileEntityUsingShippingProfileID);
 					break;
 				case "Amazon":
@@ -316,8 +316,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "PackageProfile":
-					this.PackageProfile.Add((PackageProfileEntity)relatedEntity);
+				case "Packages":
+					this.Packages.Add((PackageProfileEntity)relatedEntity);
 					break;
 				case "Amazon":
 					SetupSyncAmazon(relatedEntity);
@@ -362,8 +362,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "PackageProfile":
-					this.PerformRelatedEntityRemoval(this.PackageProfile, relatedEntity, signalRelatedEntityManyToOne);
+				case "Packages":
+					this.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "Amazon":
 					DesetupSyncAmazon(false, true);
@@ -492,7 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.PackageProfile);
+			toReturn.Add(this.Packages);
 			return toReturn;
 		}
 
@@ -504,7 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_packageProfile", ((_packageProfile!=null) && (_packageProfile.Count>0) && !this.MarkedForDeletion)?_packageProfile:null);
+				info.AddValue("_packages", ((_packages!=null) && (_packages.Count>0) && !this.MarkedForDeletion)?_packages:null);
 				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
 				info.AddValue("_asendia", (!this.MarkedForDeletion?_asendia:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
@@ -532,7 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'PackageProfile' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoPackageProfile()
+		public virtual IRelationPredicateBucket GetRelationInfoPackages()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(PackageProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
@@ -641,7 +641,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._packageProfile);
+			collectionsQueue.Enqueue(this._packages);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -649,7 +649,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._packageProfile = (EntityCollection<PackageProfileEntity>) collectionsQueue.Dequeue();
+			this._packages = (EntityCollection<PackageProfileEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -658,7 +658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._packageProfile != null);
+			toReturn |=(this._packages != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -676,7 +676,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("PackageProfile", _packageProfile);
+			toReturn.Add("Packages", _packages);
 			toReturn.Add("Amazon", _amazon);
 			toReturn.Add("Asendia", _asendia);
 			toReturn.Add("BestRate", _bestRate);
@@ -1096,9 +1096,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PackageProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathPackageProfile
+		public static IPrefetchPathElement2 PrefetchPathPackages
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<PackageProfileEntity>(EntityFactoryCache2.GetEntityFactory(typeof(PackageProfileEntityFactory))), (IEntityRelation)GetRelationsForField("PackageProfile")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, 0, null, null, null, null, "PackageProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<PackageProfileEntity>(EntityFactoryCache2.GetEntityFactory(typeof(PackageProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.PackageProfileEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonProfile' for this entity.</summary>
@@ -1307,9 +1307,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PackageProfileEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(PackageProfileEntity))]
-		public virtual EntityCollection<PackageProfileEntity> PackageProfile
+		public virtual EntityCollection<PackageProfileEntity> Packages
 		{
-			get { return GetOrCreateEntityCollection<PackageProfileEntity, PackageProfileEntityFactory>("ShippingProfile", true, false, ref _packageProfile);	}
+			get { return GetOrCreateEntityCollection<PackageProfileEntity, PackageProfileEntityFactory>("ShippingProfile", true, false, ref _packages);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'AmazonProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

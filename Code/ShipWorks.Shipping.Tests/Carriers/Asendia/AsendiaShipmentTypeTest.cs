@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             };
 
             testObject.ConfigurePrimaryProfile(profile);
-            PackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
             Assert.Equal(AsendiaServiceType.AsendiaPriorityTracked, profile.Asendia.Service);

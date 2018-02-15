@@ -289,7 +289,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             OnTracShipmentEntity onTracShipment = shipment.OnTrac;
             IOnTracProfileEntity onTracProfile = profile.OnTrac;
-            IPackageProfileEntity packageProfile = profile.PackageProfile.Single();
+            IPackageProfileEntity packageProfile = profile.Packages.Single();
 
             long? accountID = (onTracProfile.OnTracAccountID == 0 && OnTracAccountManager.Accounts.Count > 0) ?
                 OnTracAccountManager.Accounts[0].OnTracAccountID :
