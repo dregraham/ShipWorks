@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Manual
             StoreEntity store = testObject.CreateStoreInstance();
 
             Assert.Equal("My Manual Store", store.StoreName);
+            Assert.Equal(false, store.AutoDownload);
         }
 
         public void Dispose()
