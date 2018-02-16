@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Profiles
                 }
             }
             
-            if (profile.ShipmentType != null || profile.ShipmentTypeCode != ShipmentTypeCode.None)
+            if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
             {
                 if (profile.IsNew && !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages)
                 {
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Profiles
                 case ShipmentTypeCode.Asendia:
                     return ("Asendia", typeof(AsendiaProfileEntity));
                 default:
-                    throw new InvalidOperationException("Unknown child property for ShipmentTypeCode");
+                    throw new InvalidOperationException($"Unknown child property for ShipmentTypeCode {shipmentTypeCode}");
             }
         }
 
@@ -141,7 +141,10 @@ namespace ShipWorks.Shipping.Profiles
                 if (parent.Fields.State != EntityState.New)
                 {
                     childEntity = (EntityBase2) Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
-                    SqlAdapter.Default.FetchEntity(childEntity);
+                    using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                    {
+                        adapter.FetchEntity(childEntity);
+                    }
                 }
                 // If the parent is new, just create a new child.
                 else
