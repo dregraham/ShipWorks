@@ -5,11 +5,17 @@ using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
+using System.Collections.Generic;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -22,24 +28,29 @@ namespace ShipWorks.Shipping.Profiles
         private readonly ShippingProfileEntity profile;
         private readonly IProfileControlFactory profileControlFactory;
         private readonly IShippingProfileLoader shippingProfileLoader;
+        private readonly IShippingSettings shippingSettings;
         private readonly IShortcutManager shortcutManager;
-
+        private const int NoChangeValue = -1;
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileEditorDlg(
+        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope, IProfileControlFactory profileControlFactory)
             ShippingProfileEntity profile, 
             IShippingProfileLoader shippingProfileLoader,
             IShortcutManager shortcutManager,
-            IProfileControlFactory profileControlFactory)
+            IProfileControlFactory profileControlFactory,
+			IShippingSettings shippingSettings)
         {
             InitializeComponent();
 
+            this.lifetimeScope = lifetimeScope;
+            this.shortcutManager = shortcutManager;
             this.profileControlFactory = profileControlFactory;
-            this.profile = profile;
+            this.shippingSettings = shippingSettings;
             this.shortcutManager = shortcutManager;
             this.shippingProfileLoader = shippingProfileLoader;
-            
+
             WindowStateSaver.Manage(this);
         }
 
@@ -51,7 +62,7 @@ namespace ShipWorks.Shipping.Profiles
             profileName.Text = profile.Name;
             provider.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
 
-            EnumHelper.BindComboBox<ShortcutHotkey>(keyboardShortcut, k => shortcutManager.GetAvailableHotkeys().Contains(k));
+            LoadShortcuts();
             LoadProviders();
             LoadProfileEditor();
 
@@ -78,7 +89,14 @@ namespace ShipWorks.Shipping.Profiles
             // Create the new profile control
             if (shipmentTypeCode != ShipmentTypeCode.None)
             {
+                if(profile.ShipmentType == null)
+                {
+                    newControl = profileControlFactory.Create();
+                }
+                else
+                {
                 newControl = profileControlFactory.Create(shipmentTypeCode);
+                }
 
                 if (newControl != null)
                 {
@@ -175,6 +193,24 @@ namespace ShipWorks.Shipping.Profiles
             }
         }
 
+        private void LoadShortcuts()
+        {
+            keyboardShortcut.Items.Clear();
+
+            List<ShortcutHotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
+
+            List<KeyValuePair<string, int>> dataSource = new List<KeyValuePair<string, int>>();
+            dataSource.Add(new KeyValuePair<string, int>("None", NoChangeValue));
+            foreach (ShortcutHotkey hotkey in availableHotkeys)
+            {                
+                dataSource.Add(new KeyValuePair<string, int>(EnumHelper.GetDescription(hotkey), (int) hotkey));
+            }
+
+            keyboardShortcut.DisplayMember = "Key";
+            keyboardShortcut.ValueMember = "Value";
+            keyboardShortcut.DataSource = dataSource;
+        }
+
         /// <summary>
         /// Load configured providers into the provider combobox
         /// </summary>
@@ -182,18 +218,20 @@ namespace ShipWorks.Shipping.Profiles
         {
             this.provider.SelectedValueChanged -= OnChangeProvider;
 
-            provider.Items.Clear();            
-            EnumHelper.BindComboBox<ShipmentTypeCode>(provider, t => ShippingManager.IsShipmentTypeConfigured(t));
+            provider.Items.Clear();
+            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
 
-            if(profile.ShipmentTypeCode == ShipmentTypeCode.None)
+            List<KeyValuePair<string, int>> dataSource = new List<KeyValuePair<string, int>>();
+            dataSource.Add(new KeyValuePair<string, int>("No Change", NoChangeValue));
+            foreach(ShipmentTypeCode shipmentType in configuredShipmentTypes)
             {
-                provider.SelectedValue = null;
-            }
-            else
-            {
-                provider.SelectedValue = (ShipmentTypeCode) profile.ShipmentType;
+                dataSource.Add(new KeyValuePair<string, int>(EnumHelper.GetDescription(shipmentType), (int) shipmentType));
             }
 
+            provider.DisplayMember = "Key";
+            provider.ValueMember = "Value";
+            provider.DataSource = dataSource;
+            
             this.provider.SelectedValueChanged += OnChangeProvider;
         }
 
@@ -202,13 +240,14 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnChangeProvider(object sender, EventArgs e)
         {
-            if(provider.SelectedValue != null)
+            if((int) provider.SelectedValue != NoChangeValue)
             {
                 profile.Packages.Clear();
                 profile.ShipmentType = (int) provider.SelectedValue;
-                LoadProfileEditor();
             }
-        }        
+
+            LoadProfileEditor();
+        }
 
         /// <summary>
         /// Save the 
