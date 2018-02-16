@@ -6,12 +6,15 @@ GEM
       rake (~> 10.0)
       rubyzip (~> 1.0)
     mini_portile2 (2.3.0)
+    nokogiri (1.8.1-x64-mingw32)
+      mini_portile2 (~> 2.3.0)
     nokogiri (1.8.1-x86-mingw32)
       mini_portile2 (~> 2.3.0)
     rake (10.4.2)
     rubyzip (1.1.7)
 
 PLATFORMS
+  x64-mingw32
   x86-mingw32
 
 DEPENDENCIES
@@ -20,4 +23,4 @@ DEPENDENCIES
   rake (~> 10.4)
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

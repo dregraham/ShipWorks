@@ -213,8 +213,11 @@ namespace ShipWorks.Data.Import.Xml
                 observer.OnItemLoadComplete(item, xpath);
             }
 
-            // Load Amazon Order Item ID
-           ((GenericModuleOrderItemEntity) item).AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderItemCode", string.Empty);
+            if (item is GenericModuleOrderItemEntity)
+            {
+                // Load Amazon Order Item ID
+                ((GenericModuleOrderItemEntity) item).AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderItemCode", string.Empty);
+            }
         }
 
         /// <summary>

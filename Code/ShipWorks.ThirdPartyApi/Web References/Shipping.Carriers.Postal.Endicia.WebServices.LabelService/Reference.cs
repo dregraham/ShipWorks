@@ -13,2189 +13,2564 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
-    using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
+{
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="EwsLabelServiceSoap", Namespace="www.envmgr.com/LabelService")]
+    [System.Web.Services.WebServiceBindingAttribute(Name = "EwsLabelServiceSoap", Namespace = "www.envmgr.com/LabelService")]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DataValidator1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DataValidator))]
-    public partial class EwsLabelService : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+    public partial class EwsLabelService : System.Web.Services.Protocols.SoapHttpClientProtocol
+    {
+
         private System.Threading.SendOrPostCallback ResetSuspendedAccountOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ResetSuspendedAccountXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetChallengeQuestionOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetChallengeQuestionXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetAccountStatusOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetAccountStatusXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPostageLabelOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPostageLabelXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetVersionOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetVersionXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback VoideVSLabelOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback VoideVSLabelXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BuyPostageOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback BuyPostageXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculateDdpRateOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculateDdpRateXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculatePostageRateOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculatePostageRateXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetExtraServiceRatesOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetExtraServiceRatesXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPicNumberOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPicNumberXmlOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback SetAccountFeatureOptInOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback SetAccountFeatureOptInXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback UpdatePaymentInformationOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback UpdatePaymentInformationXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ChangePassPhraseOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback ChangePassPhraseXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculatePostageRatesOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CalculatePostageRatesXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CloseAccountOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CloseAccountXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CreateDhlgmManifestOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback CreateDhlgmManifestXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback HandleDHLeCManifestOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback HandleDHLeCManifestXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback StatusRequestOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback StatusRequestXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetRetailAccountsOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetRetailAccountsXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetUserSignUpOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetUserSignUpXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetTransactionsListingOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetTransactionsListingXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupChangeOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupChangeXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupAvailabilityOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupAvailabilityXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupCancelOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPackagePickupCancelXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPostageRateTableOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetPostageRateTableXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetSCANOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetSCANXMLOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetRefundOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback GetRefundXMLOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
-        public EwsLabelService() {
+        public EwsLabelService()
+        {
             this.Url = "https://elstestserver.endicia.com/LabelService/EwsLabelService.asmx";
-            if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
+            if ((this.IsLocalFileSystemWebService(this.Url) == true))
+            {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
             }
-            else {
+            else
+            {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
-        public new string Url {
-            get {
+
+        public new string Url
+        {
+            get
+            {
                 return base.Url;
             }
-            set {
-                if ((((this.IsLocalFileSystemWebService(base.Url) == true) 
-                            && (this.useDefaultCredentialsSetExplicitly == false)) 
-                            && (this.IsLocalFileSystemWebService(value) == false))) {
+            set
+            {
+                if ((((this.IsLocalFileSystemWebService(base.Url) == true)
+                            && (this.useDefaultCredentialsSetExplicitly == false))
+                            && (this.IsLocalFileSystemWebService(value) == false)))
+                {
                     base.UseDefaultCredentials = false;
                 }
                 base.Url = value;
             }
         }
-        
-        public new bool UseDefaultCredentials {
-            get {
+
+        public new bool UseDefaultCredentials
+        {
+            get
+            {
                 return base.UseDefaultCredentials;
             }
-            set {
+            set
+            {
                 base.UseDefaultCredentials = value;
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event ResetSuspendedAccountCompletedEventHandler ResetSuspendedAccountCompleted;
-        
+
         /// <remarks/>
         public event ResetSuspendedAccountXMLCompletedEventHandler ResetSuspendedAccountXMLCompleted;
-        
+
         /// <remarks/>
         public event GetChallengeQuestionCompletedEventHandler GetChallengeQuestionCompleted;
-        
+
         /// <remarks/>
         public event GetChallengeQuestionXMLCompletedEventHandler GetChallengeQuestionXMLCompleted;
-        
+
         /// <remarks/>
         public event GetAccountStatusCompletedEventHandler GetAccountStatusCompleted;
-        
+
         /// <remarks/>
         public event GetAccountStatusXMLCompletedEventHandler GetAccountStatusXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPostageLabelCompletedEventHandler GetPostageLabelCompleted;
-        
+
         /// <remarks/>
         public event GetPostageLabelXMLCompletedEventHandler GetPostageLabelXMLCompleted;
-        
+
         /// <remarks/>
         public event GetVersionCompletedEventHandler GetVersionCompleted;
-        
+
         /// <remarks/>
         public event GetVersionXMLCompletedEventHandler GetVersionXMLCompleted;
-        
+
         /// <remarks/>
         public event VoideVSLabelCompletedEventHandler VoideVSLabelCompleted;
-        
+
         /// <remarks/>
         public event VoideVSLabelXMLCompletedEventHandler VoideVSLabelXMLCompleted;
-        
+
         /// <remarks/>
         public event BuyPostageCompletedEventHandler BuyPostageCompleted;
-        
+
         /// <remarks/>
         public event BuyPostageXMLCompletedEventHandler BuyPostageXMLCompleted;
-        
+
         /// <remarks/>
         public event CalculateDdpRateCompletedEventHandler CalculateDdpRateCompleted;
-        
+
         /// <remarks/>
         public event CalculateDdpRateXMLCompletedEventHandler CalculateDdpRateXMLCompleted;
-        
+
         /// <remarks/>
         public event CalculatePostageRateCompletedEventHandler CalculatePostageRateCompleted;
-        
+
         /// <remarks/>
         public event CalculatePostageRateXMLCompletedEventHandler CalculatePostageRateXMLCompleted;
-        
+
         /// <remarks/>
         public event GetExtraServiceRatesCompletedEventHandler GetExtraServiceRatesCompleted;
-        
+
         /// <remarks/>
         public event GetExtraServiceRatesXMLCompletedEventHandler GetExtraServiceRatesXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPicNumberCompletedEventHandler GetPicNumberCompleted;
-        
+
         /// <remarks/>
         public event GetPicNumberXmlCompletedEventHandler GetPicNumberXmlCompleted;
-        
+
         /// <remarks/>
         public event SetAccountFeatureOptInCompletedEventHandler SetAccountFeatureOptInCompleted;
-        
+
         /// <remarks/>
         public event SetAccountFeatureOptInXMLCompletedEventHandler SetAccountFeatureOptInXMLCompleted;
-        
+
         /// <remarks/>
         public event UpdatePaymentInformationCompletedEventHandler UpdatePaymentInformationCompleted;
-        
+
         /// <remarks/>
         public event UpdatePaymentInformationXMLCompletedEventHandler UpdatePaymentInformationXMLCompleted;
-        
+
         /// <remarks/>
         public event ChangePassPhraseCompletedEventHandler ChangePassPhraseCompleted;
-        
+
         /// <remarks/>
         public event ChangePassPhraseXMLCompletedEventHandler ChangePassPhraseXMLCompleted;
-        
+
         /// <remarks/>
         public event CalculatePostageRatesCompletedEventHandler CalculatePostageRatesCompleted;
-        
+
         /// <remarks/>
         public event CalculatePostageRatesXMLCompletedEventHandler CalculatePostageRatesXMLCompleted;
-        
+
         /// <remarks/>
         public event CloseAccountCompletedEventHandler CloseAccountCompleted;
-        
+
         /// <remarks/>
         public event CloseAccountXMLCompletedEventHandler CloseAccountXMLCompleted;
-        
+
         /// <remarks/>
         public event CreateDhlgmManifestCompletedEventHandler CreateDhlgmManifestCompleted;
-        
+
         /// <remarks/>
         public event CreateDhlgmManifestXMLCompletedEventHandler CreateDhlgmManifestXMLCompleted;
-        
+
         /// <remarks/>
         public event HandleDHLeCManifestCompletedEventHandler HandleDHLeCManifestCompleted;
-        
+
         /// <remarks/>
         public event HandleDHLeCManifestXMLCompletedEventHandler HandleDHLeCManifestXMLCompleted;
-        
+
         /// <remarks/>
         public event StatusRequestCompletedEventHandler StatusRequestCompleted;
-        
+
         /// <remarks/>
         public event StatusRequestXMLCompletedEventHandler StatusRequestXMLCompleted;
-        
+
         /// <remarks/>
         public event GetRetailAccountsCompletedEventHandler GetRetailAccountsCompleted;
-        
+
         /// <remarks/>
         public event GetRetailAccountsXMLCompletedEventHandler GetRetailAccountsXMLCompleted;
-        
+
         /// <remarks/>
         public event GetUserSignUpCompletedEventHandler GetUserSignUpCompleted;
-        
+
         /// <remarks/>
         public event GetUserSignUpXMLCompletedEventHandler GetUserSignUpXMLCompleted;
-        
+
         /// <remarks/>
         public event GetTransactionsListingCompletedEventHandler GetTransactionsListingCompleted;
-        
+
         /// <remarks/>
         public event GetTransactionsListingXMLCompletedEventHandler GetTransactionsListingXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupChangeCompletedEventHandler GetPackagePickupChangeCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupChangeXMLCompletedEventHandler GetPackagePickupChangeXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupAvailabilityCompletedEventHandler GetPackagePickupAvailabilityCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupAvailabilityXMLCompletedEventHandler GetPackagePickupAvailabilityXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupCompletedEventHandler GetPackagePickupCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupXMLCompletedEventHandler GetPackagePickupXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupCancelCompletedEventHandler GetPackagePickupCancelCompleted;
-        
+
         /// <remarks/>
         public event GetPackagePickupCancelXMLCompletedEventHandler GetPackagePickupCancelXMLCompleted;
-        
+
         /// <remarks/>
         public event GetPostageRateTableCompletedEventHandler GetPostageRateTableCompleted;
-        
+
         /// <remarks/>
         public event GetPostageRateTableXMLCompletedEventHandler GetPostageRateTableXMLCompleted;
-        
+
         /// <remarks/>
         public event GetSCANCompletedEventHandler GetSCANCompleted;
-        
+
         /// <remarks/>
         public event GetSCANXMLCompletedEventHandler GetSCANXMLCompleted;
-        
+
         /// <remarks/>
         public event GetRefundCompletedEventHandler GetRefundCompleted;
-        
+
         /// <remarks/>
         public event GetRefundXMLCompletedEventHandler GetRefundXMLCompleted;
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ResetSuspendedAccount", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ResetSuspendedAccount", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ResetSuspendedAccountRequestResponse")]
-        public ResetSuspendedAccountRequestResponse ResetSuspendedAccount(ResetSuspendedAccountRequest ResetSuspendedAccountRequest) {
+        public ResetSuspendedAccountRequestResponse ResetSuspendedAccount(ResetSuspendedAccountRequest ResetSuspendedAccountRequest)
+        {
             object[] results = this.Invoke("ResetSuspendedAccount", new object[] {
                         ResetSuspendedAccountRequest});
-            return ((ResetSuspendedAccountRequestResponse)(results[0]));
+            return ((ResetSuspendedAccountRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void ResetSuspendedAccountAsync(ResetSuspendedAccountRequest ResetSuspendedAccountRequest) {
+        public void ResetSuspendedAccountAsync(ResetSuspendedAccountRequest ResetSuspendedAccountRequest)
+        {
             this.ResetSuspendedAccountAsync(ResetSuspendedAccountRequest, null);
         }
-        
+
         /// <remarks/>
-        public void ResetSuspendedAccountAsync(ResetSuspendedAccountRequest ResetSuspendedAccountRequest, object userState) {
-            if ((this.ResetSuspendedAccountOperationCompleted == null)) {
+        public void ResetSuspendedAccountAsync(ResetSuspendedAccountRequest ResetSuspendedAccountRequest, object userState)
+        {
+            if ((this.ResetSuspendedAccountOperationCompleted == null))
+            {
                 this.ResetSuspendedAccountOperationCompleted = new System.Threading.SendOrPostCallback(this.OnResetSuspendedAccountOperationCompleted);
             }
             this.InvokeAsync("ResetSuspendedAccount", new object[] {
                         ResetSuspendedAccountRequest}, this.ResetSuspendedAccountOperationCompleted, userState);
         }
-        
-        private void OnResetSuspendedAccountOperationCompleted(object arg) {
-            if ((this.ResetSuspendedAccountCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnResetSuspendedAccountOperationCompleted(object arg)
+        {
+            if ((this.ResetSuspendedAccountCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.ResetSuspendedAccountCompleted(this, new ResetSuspendedAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ResetSuspendedAccountXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ResetSuspendedAccountXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ResetSuspendedAccountRequestResponse")]
-        public ResetSuspendedAccountRequestResponse ResetSuspendedAccountXML(string ResetSuspendedAccountRequestXML) {
+        public ResetSuspendedAccountRequestResponse ResetSuspendedAccountXML(string ResetSuspendedAccountRequestXML)
+        {
             object[] results = this.Invoke("ResetSuspendedAccountXML", new object[] {
                         ResetSuspendedAccountRequestXML});
-            return ((ResetSuspendedAccountRequestResponse)(results[0]));
+            return ((ResetSuspendedAccountRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void ResetSuspendedAccountXMLAsync(string ResetSuspendedAccountRequestXML) {
+        public void ResetSuspendedAccountXMLAsync(string ResetSuspendedAccountRequestXML)
+        {
             this.ResetSuspendedAccountXMLAsync(ResetSuspendedAccountRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void ResetSuspendedAccountXMLAsync(string ResetSuspendedAccountRequestXML, object userState) {
-            if ((this.ResetSuspendedAccountXMLOperationCompleted == null)) {
+        public void ResetSuspendedAccountXMLAsync(string ResetSuspendedAccountRequestXML, object userState)
+        {
+            if ((this.ResetSuspendedAccountXMLOperationCompleted == null))
+            {
                 this.ResetSuspendedAccountXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnResetSuspendedAccountXMLOperationCompleted);
             }
             this.InvokeAsync("ResetSuspendedAccountXML", new object[] {
                         ResetSuspendedAccountRequestXML}, this.ResetSuspendedAccountXMLOperationCompleted, userState);
         }
-        
-        private void OnResetSuspendedAccountXMLOperationCompleted(object arg) {
-            if ((this.ResetSuspendedAccountXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnResetSuspendedAccountXMLOperationCompleted(object arg)
+        {
+            if ((this.ResetSuspendedAccountXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.ResetSuspendedAccountXMLCompleted(this, new ResetSuspendedAccountXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetChallengeQuestion", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetChallengeQuestion", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ChallengeQuestionResponse")]
-        public ChallengeQuestionResponse GetChallengeQuestion(ChallengeQuestionRequest ChallengeQuestionRequest) {
+        public ChallengeQuestionResponse GetChallengeQuestion(ChallengeQuestionRequest ChallengeQuestionRequest)
+        {
             object[] results = this.Invoke("GetChallengeQuestion", new object[] {
                         ChallengeQuestionRequest});
-            return ((ChallengeQuestionResponse)(results[0]));
+            return ((ChallengeQuestionResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetChallengeQuestionAsync(ChallengeQuestionRequest ChallengeQuestionRequest) {
+        public void GetChallengeQuestionAsync(ChallengeQuestionRequest ChallengeQuestionRequest)
+        {
             this.GetChallengeQuestionAsync(ChallengeQuestionRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetChallengeQuestionAsync(ChallengeQuestionRequest ChallengeQuestionRequest, object userState) {
-            if ((this.GetChallengeQuestionOperationCompleted == null)) {
+        public void GetChallengeQuestionAsync(ChallengeQuestionRequest ChallengeQuestionRequest, object userState)
+        {
+            if ((this.GetChallengeQuestionOperationCompleted == null))
+            {
                 this.GetChallengeQuestionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetChallengeQuestionOperationCompleted);
             }
             this.InvokeAsync("GetChallengeQuestion", new object[] {
                         ChallengeQuestionRequest}, this.GetChallengeQuestionOperationCompleted, userState);
         }
-        
-        private void OnGetChallengeQuestionOperationCompleted(object arg) {
-            if ((this.GetChallengeQuestionCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetChallengeQuestionOperationCompleted(object arg)
+        {
+            if ((this.GetChallengeQuestionCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetChallengeQuestionCompleted(this, new GetChallengeQuestionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetChallengeQuestionXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetChallengeQuestionXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ChallengeQuestionResponse")]
-        public ChallengeQuestionResponse GetChallengeQuestionXML(string ChallengeQuestionRequestXML) {
+        public ChallengeQuestionResponse GetChallengeQuestionXML(string ChallengeQuestionRequestXML)
+        {
             object[] results = this.Invoke("GetChallengeQuestionXML", new object[] {
                         ChallengeQuestionRequestXML});
-            return ((ChallengeQuestionResponse)(results[0]));
+            return ((ChallengeQuestionResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetChallengeQuestionXMLAsync(string ChallengeQuestionRequestXML) {
+        public void GetChallengeQuestionXMLAsync(string ChallengeQuestionRequestXML)
+        {
             this.GetChallengeQuestionXMLAsync(ChallengeQuestionRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetChallengeQuestionXMLAsync(string ChallengeQuestionRequestXML, object userState) {
-            if ((this.GetChallengeQuestionXMLOperationCompleted == null)) {
+        public void GetChallengeQuestionXMLAsync(string ChallengeQuestionRequestXML, object userState)
+        {
+            if ((this.GetChallengeQuestionXMLOperationCompleted == null))
+            {
                 this.GetChallengeQuestionXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetChallengeQuestionXMLOperationCompleted);
             }
             this.InvokeAsync("GetChallengeQuestionXML", new object[] {
                         ChallengeQuestionRequestXML}, this.GetChallengeQuestionXMLOperationCompleted, userState);
         }
-        
-        private void OnGetChallengeQuestionXMLOperationCompleted(object arg) {
-            if ((this.GetChallengeQuestionXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetChallengeQuestionXMLOperationCompleted(object arg)
+        {
+            if ((this.GetChallengeQuestionXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetChallengeQuestionXMLCompleted(this, new GetChallengeQuestionXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetAccountStatus", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetAccountStatus", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("AccountStatusResponse")]
-        public AccountStatusResponse GetAccountStatus(AccountStatusRequest AccountStatusRequest) {
+        public AccountStatusResponse GetAccountStatus(AccountStatusRequest AccountStatusRequest)
+        {
             object[] results = this.Invoke("GetAccountStatus", new object[] {
                         AccountStatusRequest});
-            return ((AccountStatusResponse)(results[0]));
+            return ((AccountStatusResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetAccountStatusAsync(AccountStatusRequest AccountStatusRequest) {
+        public void GetAccountStatusAsync(AccountStatusRequest AccountStatusRequest)
+        {
             this.GetAccountStatusAsync(AccountStatusRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetAccountStatusAsync(AccountStatusRequest AccountStatusRequest, object userState) {
-            if ((this.GetAccountStatusOperationCompleted == null)) {
+        public void GetAccountStatusAsync(AccountStatusRequest AccountStatusRequest, object userState)
+        {
+            if ((this.GetAccountStatusOperationCompleted == null))
+            {
                 this.GetAccountStatusOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAccountStatusOperationCompleted);
             }
             this.InvokeAsync("GetAccountStatus", new object[] {
                         AccountStatusRequest}, this.GetAccountStatusOperationCompleted, userState);
         }
-        
-        private void OnGetAccountStatusOperationCompleted(object arg) {
-            if ((this.GetAccountStatusCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetAccountStatusOperationCompleted(object arg)
+        {
+            if ((this.GetAccountStatusCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetAccountStatusCompleted(this, new GetAccountStatusCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetAccountStatusXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetAccountStatusXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("AccountStatusResponse")]
-        public AccountStatusResponse GetAccountStatusXML(string AccountStatusRequestXML) {
+        public AccountStatusResponse GetAccountStatusXML(string AccountStatusRequestXML)
+        {
             object[] results = this.Invoke("GetAccountStatusXML", new object[] {
                         AccountStatusRequestXML});
-            return ((AccountStatusResponse)(results[0]));
+            return ((AccountStatusResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetAccountStatusXMLAsync(string AccountStatusRequestXML) {
+        public void GetAccountStatusXMLAsync(string AccountStatusRequestXML)
+        {
             this.GetAccountStatusXMLAsync(AccountStatusRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetAccountStatusXMLAsync(string AccountStatusRequestXML, object userState) {
-            if ((this.GetAccountStatusXMLOperationCompleted == null)) {
+        public void GetAccountStatusXMLAsync(string AccountStatusRequestXML, object userState)
+        {
+            if ((this.GetAccountStatusXMLOperationCompleted == null))
+            {
                 this.GetAccountStatusXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAccountStatusXMLOperationCompleted);
             }
             this.InvokeAsync("GetAccountStatusXML", new object[] {
                         AccountStatusRequestXML}, this.GetAccountStatusXMLOperationCompleted, userState);
         }
-        
-        private void OnGetAccountStatusXMLOperationCompleted(object arg) {
-            if ((this.GetAccountStatusXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetAccountStatusXMLOperationCompleted(object arg)
+        {
+            if ((this.GetAccountStatusXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetAccountStatusXMLCompleted(this, new GetAccountStatusXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageLabel", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageLabel", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("LabelRequestResponse")]
-        public LabelRequestResponse GetPostageLabel(LabelRequest LabelRequest) {
+        public LabelRequestResponse GetPostageLabel(LabelRequest LabelRequest)
+        {
             object[] results = this.Invoke("GetPostageLabel", new object[] {
                         LabelRequest});
-            return ((LabelRequestResponse)(results[0]));
+            return ((LabelRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPostageLabelAsync(LabelRequest LabelRequest) {
+        public void GetPostageLabelAsync(LabelRequest LabelRequest)
+        {
             this.GetPostageLabelAsync(LabelRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPostageLabelAsync(LabelRequest LabelRequest, object userState) {
-            if ((this.GetPostageLabelOperationCompleted == null)) {
+        public void GetPostageLabelAsync(LabelRequest LabelRequest, object userState)
+        {
+            if ((this.GetPostageLabelOperationCompleted == null))
+            {
                 this.GetPostageLabelOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostageLabelOperationCompleted);
             }
             this.InvokeAsync("GetPostageLabel", new object[] {
                         LabelRequest}, this.GetPostageLabelOperationCompleted, userState);
         }
-        
-        private void OnGetPostageLabelOperationCompleted(object arg) {
-            if ((this.GetPostageLabelCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPostageLabelOperationCompleted(object arg)
+        {
+            if ((this.GetPostageLabelCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPostageLabelCompleted(this, new GetPostageLabelCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageLabelXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageLabelXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("LabelRequestResponse")]
-        public LabelRequestResponse GetPostageLabelXML(string LabelRequestXML) {
+        public LabelRequestResponse GetPostageLabelXML(string LabelRequestXML)
+        {
             object[] results = this.Invoke("GetPostageLabelXML", new object[] {
                         LabelRequestXML});
-            return ((LabelRequestResponse)(results[0]));
+            return ((LabelRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPostageLabelXMLAsync(string LabelRequestXML) {
+        public void GetPostageLabelXMLAsync(string LabelRequestXML)
+        {
             this.GetPostageLabelXMLAsync(LabelRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPostageLabelXMLAsync(string LabelRequestXML, object userState) {
-            if ((this.GetPostageLabelXMLOperationCompleted == null)) {
+        public void GetPostageLabelXMLAsync(string LabelRequestXML, object userState)
+        {
+            if ((this.GetPostageLabelXMLOperationCompleted == null))
+            {
                 this.GetPostageLabelXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostageLabelXMLOperationCompleted);
             }
             this.InvokeAsync("GetPostageLabelXML", new object[] {
                         LabelRequestXML}, this.GetPostageLabelXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPostageLabelXMLOperationCompleted(object arg) {
-            if ((this.GetPostageLabelXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPostageLabelXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPostageLabelXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPostageLabelXMLCompleted(this, new GetPostageLabelXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetVersion", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetVersion", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetVersionResults")]
-        public GetVersionResults GetVersion() {
+        public GetVersionResults GetVersion()
+        {
             object[] results = this.Invoke("GetVersion", new object[0]);
-            return ((GetVersionResults)(results[0]));
+            return ((GetVersionResults) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetVersionAsync() {
+        public void GetVersionAsync()
+        {
             this.GetVersionAsync(null);
         }
-        
+
         /// <remarks/>
-        public void GetVersionAsync(object userState) {
-            if ((this.GetVersionOperationCompleted == null)) {
+        public void GetVersionAsync(object userState)
+        {
+            if ((this.GetVersionOperationCompleted == null))
+            {
                 this.GetVersionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetVersionOperationCompleted);
             }
             this.InvokeAsync("GetVersion", new object[0], this.GetVersionOperationCompleted, userState);
         }
-        
-        private void OnGetVersionOperationCompleted(object arg) {
-            if ((this.GetVersionCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetVersionOperationCompleted(object arg)
+        {
+            if ((this.GetVersionCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetVersionCompleted(this, new GetVersionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetVersionXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetVersionXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetVersionResults")]
-        public GetVersionResults GetVersionXML() {
+        public GetVersionResults GetVersionXML()
+        {
             object[] results = this.Invoke("GetVersionXML", new object[0]);
-            return ((GetVersionResults)(results[0]));
+            return ((GetVersionResults) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetVersionXMLAsync() {
+        public void GetVersionXMLAsync()
+        {
             this.GetVersionXMLAsync(null);
         }
-        
+
         /// <remarks/>
-        public void GetVersionXMLAsync(object userState) {
-            if ((this.GetVersionXMLOperationCompleted == null)) {
+        public void GetVersionXMLAsync(object userState)
+        {
+            if ((this.GetVersionXMLOperationCompleted == null))
+            {
                 this.GetVersionXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetVersionXMLOperationCompleted);
             }
             this.InvokeAsync("GetVersionXML", new object[0], this.GetVersionXMLOperationCompleted, userState);
         }
-        
-        private void OnGetVersionXMLOperationCompleted(object arg) {
-            if ((this.GetVersionXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetVersionXMLOperationCompleted(object arg)
+        {
+            if ((this.GetVersionXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetVersionXMLCompleted(this, new GetVersionXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/VoideVSLabel", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/VoideVSLabel", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("VoidLabelResponse")]
-        public VoidLabelResponse VoideVSLabel(VoidLabelRequest VoidLabelRequest) {
+        public VoidLabelResponse VoideVSLabel(VoidLabelRequest VoidLabelRequest)
+        {
             object[] results = this.Invoke("VoideVSLabel", new object[] {
                         VoidLabelRequest});
-            return ((VoidLabelResponse)(results[0]));
+            return ((VoidLabelResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void VoideVSLabelAsync(VoidLabelRequest VoidLabelRequest) {
+        public void VoideVSLabelAsync(VoidLabelRequest VoidLabelRequest)
+        {
             this.VoideVSLabelAsync(VoidLabelRequest, null);
         }
-        
+
         /// <remarks/>
-        public void VoideVSLabelAsync(VoidLabelRequest VoidLabelRequest, object userState) {
-            if ((this.VoideVSLabelOperationCompleted == null)) {
+        public void VoideVSLabelAsync(VoidLabelRequest VoidLabelRequest, object userState)
+        {
+            if ((this.VoideVSLabelOperationCompleted == null))
+            {
                 this.VoideVSLabelOperationCompleted = new System.Threading.SendOrPostCallback(this.OnVoideVSLabelOperationCompleted);
             }
             this.InvokeAsync("VoideVSLabel", new object[] {
                         VoidLabelRequest}, this.VoideVSLabelOperationCompleted, userState);
         }
-        
-        private void OnVoideVSLabelOperationCompleted(object arg) {
-            if ((this.VoideVSLabelCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnVoideVSLabelOperationCompleted(object arg)
+        {
+            if ((this.VoideVSLabelCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.VoideVSLabelCompleted(this, new VoideVSLabelCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/VoideVSLabelXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/VoideVSLabelXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("VoidLabelResponse")]
-        public VoidLabelResponse VoideVSLabelXML(string VoidLabelRequestXML) {
+        public VoidLabelResponse VoideVSLabelXML(string VoidLabelRequestXML)
+        {
             object[] results = this.Invoke("VoideVSLabelXML", new object[] {
                         VoidLabelRequestXML});
-            return ((VoidLabelResponse)(results[0]));
+            return ((VoidLabelResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void VoideVSLabelXMLAsync(string VoidLabelRequestXML) {
+        public void VoideVSLabelXMLAsync(string VoidLabelRequestXML)
+        {
             this.VoideVSLabelXMLAsync(VoidLabelRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void VoideVSLabelXMLAsync(string VoidLabelRequestXML, object userState) {
-            if ((this.VoideVSLabelXMLOperationCompleted == null)) {
+        public void VoideVSLabelXMLAsync(string VoidLabelRequestXML, object userState)
+        {
+            if ((this.VoideVSLabelXMLOperationCompleted == null))
+            {
                 this.VoideVSLabelXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnVoideVSLabelXMLOperationCompleted);
             }
             this.InvokeAsync("VoideVSLabelXML", new object[] {
                         VoidLabelRequestXML}, this.VoideVSLabelXMLOperationCompleted, userState);
         }
-        
-        private void OnVoideVSLabelXMLOperationCompleted(object arg) {
-            if ((this.VoideVSLabelXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnVoideVSLabelXMLOperationCompleted(object arg)
+        {
+            if ((this.VoideVSLabelXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.VoideVSLabelXMLCompleted(this, new VoideVSLabelXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/BuyPostage", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/BuyPostage", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RecreditRequestResponse")]
-        public RecreditRequestResponse BuyPostage(RecreditRequest RecreditRequest) {
+        public RecreditRequestResponse BuyPostage(RecreditRequest RecreditRequest)
+        {
             object[] results = this.Invoke("BuyPostage", new object[] {
                         RecreditRequest});
-            return ((RecreditRequestResponse)(results[0]));
+            return ((RecreditRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void BuyPostageAsync(RecreditRequest RecreditRequest) {
+        public void BuyPostageAsync(RecreditRequest RecreditRequest)
+        {
             this.BuyPostageAsync(RecreditRequest, null);
         }
-        
+
         /// <remarks/>
-        public void BuyPostageAsync(RecreditRequest RecreditRequest, object userState) {
-            if ((this.BuyPostageOperationCompleted == null)) {
+        public void BuyPostageAsync(RecreditRequest RecreditRequest, object userState)
+        {
+            if ((this.BuyPostageOperationCompleted == null))
+            {
                 this.BuyPostageOperationCompleted = new System.Threading.SendOrPostCallback(this.OnBuyPostageOperationCompleted);
             }
             this.InvokeAsync("BuyPostage", new object[] {
                         RecreditRequest}, this.BuyPostageOperationCompleted, userState);
         }
-        
-        private void OnBuyPostageOperationCompleted(object arg) {
-            if ((this.BuyPostageCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnBuyPostageOperationCompleted(object arg)
+        {
+            if ((this.BuyPostageCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.BuyPostageCompleted(this, new BuyPostageCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/BuyPostageXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/BuyPostageXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RecreditRequestResponse")]
-        public RecreditRequestResponse BuyPostageXML(string RecreditRequestXML) {
+        public RecreditRequestResponse BuyPostageXML(string RecreditRequestXML)
+        {
             object[] results = this.Invoke("BuyPostageXML", new object[] {
                         RecreditRequestXML});
-            return ((RecreditRequestResponse)(results[0]));
+            return ((RecreditRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void BuyPostageXMLAsync(string RecreditRequestXML) {
+        public void BuyPostageXMLAsync(string RecreditRequestXML)
+        {
             this.BuyPostageXMLAsync(RecreditRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void BuyPostageXMLAsync(string RecreditRequestXML, object userState) {
-            if ((this.BuyPostageXMLOperationCompleted == null)) {
+        public void BuyPostageXMLAsync(string RecreditRequestXML, object userState)
+        {
+            if ((this.BuyPostageXMLOperationCompleted == null))
+            {
                 this.BuyPostageXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnBuyPostageXMLOperationCompleted);
             }
             this.InvokeAsync("BuyPostageXML", new object[] {
                         RecreditRequestXML}, this.BuyPostageXMLOperationCompleted, userState);
         }
-        
-        private void OnBuyPostageXMLOperationCompleted(object arg) {
-            if ((this.BuyPostageXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnBuyPostageXMLOperationCompleted(object arg)
+        {
+            if ((this.BuyPostageXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.BuyPostageXMLCompleted(this, new BuyPostageXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculateDdpRate", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculateDdpRate", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("DdpRateResponse")]
-        public DdpRateResponse CalculateDdpRate(DdpRateRequest DdpRateRequest) {
+        public DdpRateResponse CalculateDdpRate(DdpRateRequest DdpRateRequest)
+        {
             object[] results = this.Invoke("CalculateDdpRate", new object[] {
                         DdpRateRequest});
-            return ((DdpRateResponse)(results[0]));
+            return ((DdpRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculateDdpRateAsync(DdpRateRequest DdpRateRequest) {
+        public void CalculateDdpRateAsync(DdpRateRequest DdpRateRequest)
+        {
             this.CalculateDdpRateAsync(DdpRateRequest, null);
         }
-        
+
         /// <remarks/>
-        public void CalculateDdpRateAsync(DdpRateRequest DdpRateRequest, object userState) {
-            if ((this.CalculateDdpRateOperationCompleted == null)) {
+        public void CalculateDdpRateAsync(DdpRateRequest DdpRateRequest, object userState)
+        {
+            if ((this.CalculateDdpRateOperationCompleted == null))
+            {
                 this.CalculateDdpRateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculateDdpRateOperationCompleted);
             }
             this.InvokeAsync("CalculateDdpRate", new object[] {
                         DdpRateRequest}, this.CalculateDdpRateOperationCompleted, userState);
         }
-        
-        private void OnCalculateDdpRateOperationCompleted(object arg) {
-            if ((this.CalculateDdpRateCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculateDdpRateOperationCompleted(object arg)
+        {
+            if ((this.CalculateDdpRateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculateDdpRateCompleted(this, new CalculateDdpRateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculateDdpRateXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculateDdpRateXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("DdpRateResponse")]
-        public DdpRateResponse CalculateDdpRateXML(string DdpRateRequestXML) {
+        public DdpRateResponse CalculateDdpRateXML(string DdpRateRequestXML)
+        {
             object[] results = this.Invoke("CalculateDdpRateXML", new object[] {
                         DdpRateRequestXML});
-            return ((DdpRateResponse)(results[0]));
+            return ((DdpRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculateDdpRateXMLAsync(string DdpRateRequestXML) {
+        public void CalculateDdpRateXMLAsync(string DdpRateRequestXML)
+        {
             this.CalculateDdpRateXMLAsync(DdpRateRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void CalculateDdpRateXMLAsync(string DdpRateRequestXML, object userState) {
-            if ((this.CalculateDdpRateXMLOperationCompleted == null)) {
+        public void CalculateDdpRateXMLAsync(string DdpRateRequestXML, object userState)
+        {
+            if ((this.CalculateDdpRateXMLOperationCompleted == null))
+            {
                 this.CalculateDdpRateXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculateDdpRateXMLOperationCompleted);
             }
             this.InvokeAsync("CalculateDdpRateXML", new object[] {
                         DdpRateRequestXML}, this.CalculateDdpRateXMLOperationCompleted, userState);
         }
-        
-        private void OnCalculateDdpRateXMLOperationCompleted(object arg) {
-            if ((this.CalculateDdpRateXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculateDdpRateXMLOperationCompleted(object arg)
+        {
+            if ((this.CalculateDdpRateXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculateDdpRateXMLCompleted(this, new CalculateDdpRateXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRate", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRate", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRateResponse")]
-        public PostageRateResponse CalculatePostageRate(PostageRateRequest PostageRateRequest) {
+        public PostageRateResponse CalculatePostageRate(PostageRateRequest PostageRateRequest)
+        {
             object[] results = this.Invoke("CalculatePostageRate", new object[] {
                         PostageRateRequest});
-            return ((PostageRateResponse)(results[0]));
+            return ((PostageRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRateAsync(PostageRateRequest PostageRateRequest) {
+        public void CalculatePostageRateAsync(PostageRateRequest PostageRateRequest)
+        {
             this.CalculatePostageRateAsync(PostageRateRequest, null);
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRateAsync(PostageRateRequest PostageRateRequest, object userState) {
-            if ((this.CalculatePostageRateOperationCompleted == null)) {
+        public void CalculatePostageRateAsync(PostageRateRequest PostageRateRequest, object userState)
+        {
+            if ((this.CalculatePostageRateOperationCompleted == null))
+            {
                 this.CalculatePostageRateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculatePostageRateOperationCompleted);
             }
             this.InvokeAsync("CalculatePostageRate", new object[] {
                         PostageRateRequest}, this.CalculatePostageRateOperationCompleted, userState);
         }
-        
-        private void OnCalculatePostageRateOperationCompleted(object arg) {
-            if ((this.CalculatePostageRateCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculatePostageRateOperationCompleted(object arg)
+        {
+            if ((this.CalculatePostageRateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculatePostageRateCompleted(this, new CalculatePostageRateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRateXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRateXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRateResponse")]
-        public PostageRateResponse CalculatePostageRateXML(string PostageRateRequestXML) {
+        public PostageRateResponse CalculatePostageRateXML(string PostageRateRequestXML)
+        {
             object[] results = this.Invoke("CalculatePostageRateXML", new object[] {
                         PostageRateRequestXML});
-            return ((PostageRateResponse)(results[0]));
+            return ((PostageRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRateXMLAsync(string PostageRateRequestXML) {
+        public void CalculatePostageRateXMLAsync(string PostageRateRequestXML)
+        {
             this.CalculatePostageRateXMLAsync(PostageRateRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRateXMLAsync(string PostageRateRequestXML, object userState) {
-            if ((this.CalculatePostageRateXMLOperationCompleted == null)) {
+        public void CalculatePostageRateXMLAsync(string PostageRateRequestXML, object userState)
+        {
+            if ((this.CalculatePostageRateXMLOperationCompleted == null))
+            {
                 this.CalculatePostageRateXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculatePostageRateXMLOperationCompleted);
             }
             this.InvokeAsync("CalculatePostageRateXML", new object[] {
                         PostageRateRequestXML}, this.CalculatePostageRateXMLOperationCompleted, userState);
         }
-        
-        private void OnCalculatePostageRateXMLOperationCompleted(object arg) {
-            if ((this.CalculatePostageRateXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculatePostageRateXMLOperationCompleted(object arg)
+        {
+            if ((this.CalculatePostageRateXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculatePostageRateXMLCompleted(this, new CalculatePostageRateXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetExtraServiceRates", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetExtraServiceRates", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetExtraServiceRatesResponse")]
-        public GetExtraServiceRateResponse GetExtraServiceRates(GetExtraServiceRatesRequest GetExtraServiceRatesRequest) {
+        public GetExtraServiceRateResponse GetExtraServiceRates(GetExtraServiceRatesRequest GetExtraServiceRatesRequest)
+        {
             object[] results = this.Invoke("GetExtraServiceRates", new object[] {
                         GetExtraServiceRatesRequest});
-            return ((GetExtraServiceRateResponse)(results[0]));
+            return ((GetExtraServiceRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetExtraServiceRatesAsync(GetExtraServiceRatesRequest GetExtraServiceRatesRequest) {
+        public void GetExtraServiceRatesAsync(GetExtraServiceRatesRequest GetExtraServiceRatesRequest)
+        {
             this.GetExtraServiceRatesAsync(GetExtraServiceRatesRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetExtraServiceRatesAsync(GetExtraServiceRatesRequest GetExtraServiceRatesRequest, object userState) {
-            if ((this.GetExtraServiceRatesOperationCompleted == null)) {
+        public void GetExtraServiceRatesAsync(GetExtraServiceRatesRequest GetExtraServiceRatesRequest, object userState)
+        {
+            if ((this.GetExtraServiceRatesOperationCompleted == null))
+            {
                 this.GetExtraServiceRatesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetExtraServiceRatesOperationCompleted);
             }
             this.InvokeAsync("GetExtraServiceRates", new object[] {
                         GetExtraServiceRatesRequest}, this.GetExtraServiceRatesOperationCompleted, userState);
         }
-        
-        private void OnGetExtraServiceRatesOperationCompleted(object arg) {
-            if ((this.GetExtraServiceRatesCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetExtraServiceRatesOperationCompleted(object arg)
+        {
+            if ((this.GetExtraServiceRatesCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetExtraServiceRatesCompleted(this, new GetExtraServiceRatesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetExtraServiceRatesXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetExtraServiceRatesXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetExtraServiceRatesResponse")]
-        public GetExtraServiceRateResponse GetExtraServiceRatesXML(string GetExtraServiceRatesRequestXML) {
+        public GetExtraServiceRateResponse GetExtraServiceRatesXML(string GetExtraServiceRatesRequestXML)
+        {
             object[] results = this.Invoke("GetExtraServiceRatesXML", new object[] {
                         GetExtraServiceRatesRequestXML});
-            return ((GetExtraServiceRateResponse)(results[0]));
+            return ((GetExtraServiceRateResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetExtraServiceRatesXMLAsync(string GetExtraServiceRatesRequestXML) {
+        public void GetExtraServiceRatesXMLAsync(string GetExtraServiceRatesRequestXML)
+        {
             this.GetExtraServiceRatesXMLAsync(GetExtraServiceRatesRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetExtraServiceRatesXMLAsync(string GetExtraServiceRatesRequestXML, object userState) {
-            if ((this.GetExtraServiceRatesXMLOperationCompleted == null)) {
+        public void GetExtraServiceRatesXMLAsync(string GetExtraServiceRatesRequestXML, object userState)
+        {
+            if ((this.GetExtraServiceRatesXMLOperationCompleted == null))
+            {
                 this.GetExtraServiceRatesXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetExtraServiceRatesXMLOperationCompleted);
             }
             this.InvokeAsync("GetExtraServiceRatesXML", new object[] {
                         GetExtraServiceRatesRequestXML}, this.GetExtraServiceRatesXMLOperationCompleted, userState);
         }
-        
-        private void OnGetExtraServiceRatesXMLOperationCompleted(object arg) {
-            if ((this.GetExtraServiceRatesXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetExtraServiceRatesXMLOperationCompleted(object arg)
+        {
+            if ((this.GetExtraServiceRatesXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetExtraServiceRatesXMLCompleted(this, new GetExtraServiceRatesXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPicNumber", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPicNumber", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("LabelNumberResponse")]
-        public LabelNumberResponse GetPicNumber(PicNumberRequest PicNumberRequest) {
+        public LabelNumberResponse GetPicNumber(PicNumberRequest PicNumberRequest)
+        {
             object[] results = this.Invoke("GetPicNumber", new object[] {
                         PicNumberRequest});
-            return ((LabelNumberResponse)(results[0]));
+            return ((LabelNumberResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPicNumberAsync(PicNumberRequest PicNumberRequest) {
+        public void GetPicNumberAsync(PicNumberRequest PicNumberRequest)
+        {
             this.GetPicNumberAsync(PicNumberRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPicNumberAsync(PicNumberRequest PicNumberRequest, object userState) {
-            if ((this.GetPicNumberOperationCompleted == null)) {
+        public void GetPicNumberAsync(PicNumberRequest PicNumberRequest, object userState)
+        {
+            if ((this.GetPicNumberOperationCompleted == null))
+            {
                 this.GetPicNumberOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPicNumberOperationCompleted);
             }
             this.InvokeAsync("GetPicNumber", new object[] {
                         PicNumberRequest}, this.GetPicNumberOperationCompleted, userState);
         }
-        
-        private void OnGetPicNumberOperationCompleted(object arg) {
-            if ((this.GetPicNumberCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPicNumberOperationCompleted(object arg)
+        {
+            if ((this.GetPicNumberCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPicNumberCompleted(this, new GetPicNumberCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPicNumberXml", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPicNumberXml", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("LabelNumberResponse")]
-        public LabelNumberResponse GetPicNumberXml(string PicNumberRequestXml) {
+        public LabelNumberResponse GetPicNumberXml(string PicNumberRequestXml)
+        {
             object[] results = this.Invoke("GetPicNumberXml", new object[] {
                         PicNumberRequestXml});
-            return ((LabelNumberResponse)(results[0]));
+            return ((LabelNumberResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPicNumberXmlAsync(string PicNumberRequestXml) {
+        public void GetPicNumberXmlAsync(string PicNumberRequestXml)
+        {
             this.GetPicNumberXmlAsync(PicNumberRequestXml, null);
         }
-        
+
         /// <remarks/>
-        public void GetPicNumberXmlAsync(string PicNumberRequestXml, object userState) {
-            if ((this.GetPicNumberXmlOperationCompleted == null)) {
+        public void GetPicNumberXmlAsync(string PicNumberRequestXml, object userState)
+        {
+            if ((this.GetPicNumberXmlOperationCompleted == null))
+            {
                 this.GetPicNumberXmlOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPicNumberXmlOperationCompleted);
             }
             this.InvokeAsync("GetPicNumberXml", new object[] {
                         PicNumberRequestXml}, this.GetPicNumberXmlOperationCompleted, userState);
         }
-        
-        private void OnGetPicNumberXmlOperationCompleted(object arg) {
-            if ((this.GetPicNumberXmlCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPicNumberXmlOperationCompleted(object arg)
+        {
+            if ((this.GetPicNumberXmlCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPicNumberXmlCompleted(this, new GetPicNumberXmlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/SetAccountFeatureOptIn", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/SetAccountFeatureOptIn", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("SetAccountFeatureOptInResponse")]
-        public SetAccountFeatureOptInResult SetAccountFeatureOptIn(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest) {
+        public SetAccountFeatureOptInResult SetAccountFeatureOptIn(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest)
+        {
             object[] results = this.Invoke("SetAccountFeatureOptIn", new object[] {
                         SetAccountFeatureOptInRequest});
-            return ((SetAccountFeatureOptInResult)(results[0]));
+            return ((SetAccountFeatureOptInResult) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void SetAccountFeatureOptInAsync(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest) {
+        public void SetAccountFeatureOptInAsync(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest)
+        {
             this.SetAccountFeatureOptInAsync(SetAccountFeatureOptInRequest, null);
         }
-        
+
         /// <remarks/>
-        public void SetAccountFeatureOptInAsync(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest, object userState) {
-            if ((this.SetAccountFeatureOptInOperationCompleted == null)) {
+        public void SetAccountFeatureOptInAsync(SetAccountFeatureOptInRequest SetAccountFeatureOptInRequest, object userState)
+        {
+            if ((this.SetAccountFeatureOptInOperationCompleted == null))
+            {
                 this.SetAccountFeatureOptInOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetAccountFeatureOptInOperationCompleted);
             }
             this.InvokeAsync("SetAccountFeatureOptIn", new object[] {
                         SetAccountFeatureOptInRequest}, this.SetAccountFeatureOptInOperationCompleted, userState);
         }
-        
-        private void OnSetAccountFeatureOptInOperationCompleted(object arg) {
-            if ((this.SetAccountFeatureOptInCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnSetAccountFeatureOptInOperationCompleted(object arg)
+        {
+            if ((this.SetAccountFeatureOptInCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.SetAccountFeatureOptInCompleted(this, new SetAccountFeatureOptInCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/SetAccountFeatureOptInXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/SetAccountFeatureOptInXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("SetAccountFeatureOptInResponse")]
-        public SetAccountFeatureOptInResult SetAccountFeatureOptInXML(string SetAccountFeatureOptInRequestXML) {
+        public SetAccountFeatureOptInResult SetAccountFeatureOptInXML(string SetAccountFeatureOptInRequestXML)
+        {
             object[] results = this.Invoke("SetAccountFeatureOptInXML", new object[] {
                         SetAccountFeatureOptInRequestXML});
-            return ((SetAccountFeatureOptInResult)(results[0]));
+            return ((SetAccountFeatureOptInResult) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void SetAccountFeatureOptInXMLAsync(string SetAccountFeatureOptInRequestXML) {
+        public void SetAccountFeatureOptInXMLAsync(string SetAccountFeatureOptInRequestXML)
+        {
             this.SetAccountFeatureOptInXMLAsync(SetAccountFeatureOptInRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void SetAccountFeatureOptInXMLAsync(string SetAccountFeatureOptInRequestXML, object userState) {
-            if ((this.SetAccountFeatureOptInXMLOperationCompleted == null)) {
+        public void SetAccountFeatureOptInXMLAsync(string SetAccountFeatureOptInRequestXML, object userState)
+        {
+            if ((this.SetAccountFeatureOptInXMLOperationCompleted == null))
+            {
                 this.SetAccountFeatureOptInXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetAccountFeatureOptInXMLOperationCompleted);
             }
             this.InvokeAsync("SetAccountFeatureOptInXML", new object[] {
                         SetAccountFeatureOptInRequestXML}, this.SetAccountFeatureOptInXMLOperationCompleted, userState);
         }
-        
-        private void OnSetAccountFeatureOptInXMLOperationCompleted(object arg) {
-            if ((this.SetAccountFeatureOptInXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnSetAccountFeatureOptInXMLOperationCompleted(object arg)
+        {
+            if ((this.SetAccountFeatureOptInXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.SetAccountFeatureOptInXMLCompleted(this, new SetAccountFeatureOptInXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/UpdatePaymentInformation", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/UpdatePaymentInformation", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("UpdatePaymentInfoResponse")]
-        public UpdatePaymentInfoResponse UpdatePaymentInformation(UpdatePaymentInfoRequest UpdatePaymentInfoRequest) {
+        public UpdatePaymentInfoResponse UpdatePaymentInformation(UpdatePaymentInfoRequest UpdatePaymentInfoRequest)
+        {
             object[] results = this.Invoke("UpdatePaymentInformation", new object[] {
                         UpdatePaymentInfoRequest});
-            return ((UpdatePaymentInfoResponse)(results[0]));
+            return ((UpdatePaymentInfoResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void UpdatePaymentInformationAsync(UpdatePaymentInfoRequest UpdatePaymentInfoRequest) {
+        public void UpdatePaymentInformationAsync(UpdatePaymentInfoRequest UpdatePaymentInfoRequest)
+        {
             this.UpdatePaymentInformationAsync(UpdatePaymentInfoRequest, null);
         }
-        
+
         /// <remarks/>
-        public void UpdatePaymentInformationAsync(UpdatePaymentInfoRequest UpdatePaymentInfoRequest, object userState) {
-            if ((this.UpdatePaymentInformationOperationCompleted == null)) {
+        public void UpdatePaymentInformationAsync(UpdatePaymentInfoRequest UpdatePaymentInfoRequest, object userState)
+        {
+            if ((this.UpdatePaymentInformationOperationCompleted == null))
+            {
                 this.UpdatePaymentInformationOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdatePaymentInformationOperationCompleted);
             }
             this.InvokeAsync("UpdatePaymentInformation", new object[] {
                         UpdatePaymentInfoRequest}, this.UpdatePaymentInformationOperationCompleted, userState);
         }
-        
-        private void OnUpdatePaymentInformationOperationCompleted(object arg) {
-            if ((this.UpdatePaymentInformationCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnUpdatePaymentInformationOperationCompleted(object arg)
+        {
+            if ((this.UpdatePaymentInformationCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.UpdatePaymentInformationCompleted(this, new UpdatePaymentInformationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/UpdatePaymentInformationXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/UpdatePaymentInformationXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("UpdatePaymentInfoResponse")]
-        public UpdatePaymentInfoResponse UpdatePaymentInformationXML(string UpdatePaymentInfoRequestXML) {
+        public UpdatePaymentInfoResponse UpdatePaymentInformationXML(string UpdatePaymentInfoRequestXML)
+        {
             object[] results = this.Invoke("UpdatePaymentInformationXML", new object[] {
                         UpdatePaymentInfoRequestXML});
-            return ((UpdatePaymentInfoResponse)(results[0]));
+            return ((UpdatePaymentInfoResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void UpdatePaymentInformationXMLAsync(string UpdatePaymentInfoRequestXML) {
+        public void UpdatePaymentInformationXMLAsync(string UpdatePaymentInfoRequestXML)
+        {
             this.UpdatePaymentInformationXMLAsync(UpdatePaymentInfoRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void UpdatePaymentInformationXMLAsync(string UpdatePaymentInfoRequestXML, object userState) {
-            if ((this.UpdatePaymentInformationXMLOperationCompleted == null)) {
+        public void UpdatePaymentInformationXMLAsync(string UpdatePaymentInfoRequestXML, object userState)
+        {
+            if ((this.UpdatePaymentInformationXMLOperationCompleted == null))
+            {
                 this.UpdatePaymentInformationXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdatePaymentInformationXMLOperationCompleted);
             }
             this.InvokeAsync("UpdatePaymentInformationXML", new object[] {
                         UpdatePaymentInfoRequestXML}, this.UpdatePaymentInformationXMLOperationCompleted, userState);
         }
-        
-        private void OnUpdatePaymentInformationXMLOperationCompleted(object arg) {
-            if ((this.UpdatePaymentInformationXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnUpdatePaymentInformationXMLOperationCompleted(object arg)
+        {
+            if ((this.UpdatePaymentInformationXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.UpdatePaymentInformationXMLCompleted(this, new UpdatePaymentInformationXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ChangePassPhrase", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ChangePassPhrase", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ChangePassPhraseRequestResponse")]
-        public ChangePassPhraseRequestResponse ChangePassPhrase(ChangePassPhraseRequest ChangePassPhraseRequest) {
+        public ChangePassPhraseRequestResponse ChangePassPhrase(ChangePassPhraseRequest ChangePassPhraseRequest)
+        {
             object[] results = this.Invoke("ChangePassPhrase", new object[] {
                         ChangePassPhraseRequest});
-            return ((ChangePassPhraseRequestResponse)(results[0]));
+            return ((ChangePassPhraseRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void ChangePassPhraseAsync(ChangePassPhraseRequest ChangePassPhraseRequest) {
+        public void ChangePassPhraseAsync(ChangePassPhraseRequest ChangePassPhraseRequest)
+        {
             this.ChangePassPhraseAsync(ChangePassPhraseRequest, null);
         }
-        
+
         /// <remarks/>
-        public void ChangePassPhraseAsync(ChangePassPhraseRequest ChangePassPhraseRequest, object userState) {
-            if ((this.ChangePassPhraseOperationCompleted == null)) {
+        public void ChangePassPhraseAsync(ChangePassPhraseRequest ChangePassPhraseRequest, object userState)
+        {
+            if ((this.ChangePassPhraseOperationCompleted == null))
+            {
                 this.ChangePassPhraseOperationCompleted = new System.Threading.SendOrPostCallback(this.OnChangePassPhraseOperationCompleted);
             }
             this.InvokeAsync("ChangePassPhrase", new object[] {
                         ChangePassPhraseRequest}, this.ChangePassPhraseOperationCompleted, userState);
         }
-        
-        private void OnChangePassPhraseOperationCompleted(object arg) {
-            if ((this.ChangePassPhraseCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnChangePassPhraseOperationCompleted(object arg)
+        {
+            if ((this.ChangePassPhraseCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.ChangePassPhraseCompleted(this, new ChangePassPhraseCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ChangePassPhraseXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/ChangePassPhraseXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("ChangePassPhraseRequestResponse")]
-        public ChangePassPhraseRequestResponse ChangePassPhraseXML(string ChangePassPhraseRequestXML) {
+        public ChangePassPhraseRequestResponse ChangePassPhraseXML(string ChangePassPhraseRequestXML)
+        {
             object[] results = this.Invoke("ChangePassPhraseXML", new object[] {
                         ChangePassPhraseRequestXML});
-            return ((ChangePassPhraseRequestResponse)(results[0]));
+            return ((ChangePassPhraseRequestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void ChangePassPhraseXMLAsync(string ChangePassPhraseRequestXML) {
+        public void ChangePassPhraseXMLAsync(string ChangePassPhraseRequestXML)
+        {
             this.ChangePassPhraseXMLAsync(ChangePassPhraseRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void ChangePassPhraseXMLAsync(string ChangePassPhraseRequestXML, object userState) {
-            if ((this.ChangePassPhraseXMLOperationCompleted == null)) {
+        public void ChangePassPhraseXMLAsync(string ChangePassPhraseRequestXML, object userState)
+        {
+            if ((this.ChangePassPhraseXMLOperationCompleted == null))
+            {
                 this.ChangePassPhraseXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnChangePassPhraseXMLOperationCompleted);
             }
             this.InvokeAsync("ChangePassPhraseXML", new object[] {
                         ChangePassPhraseRequestXML}, this.ChangePassPhraseXMLOperationCompleted, userState);
         }
-        
-        private void OnChangePassPhraseXMLOperationCompleted(object arg) {
-            if ((this.ChangePassPhraseXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnChangePassPhraseXMLOperationCompleted(object arg)
+        {
+            if ((this.ChangePassPhraseXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.ChangePassPhraseXMLCompleted(this, new ChangePassPhraseXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRates", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRates", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRatesResponse")]
-        public PostageRatesResponse CalculatePostageRates(PostageRatesRequest PostageRatesRequest) {
+        public PostageRatesResponse CalculatePostageRates(PostageRatesRequest PostageRatesRequest)
+        {
             object[] results = this.Invoke("CalculatePostageRates", new object[] {
                         PostageRatesRequest});
-            return ((PostageRatesResponse)(results[0]));
+            return ((PostageRatesResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRatesAsync(PostageRatesRequest PostageRatesRequest) {
+        public void CalculatePostageRatesAsync(PostageRatesRequest PostageRatesRequest)
+        {
             this.CalculatePostageRatesAsync(PostageRatesRequest, null);
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRatesAsync(PostageRatesRequest PostageRatesRequest, object userState) {
-            if ((this.CalculatePostageRatesOperationCompleted == null)) {
+        public void CalculatePostageRatesAsync(PostageRatesRequest PostageRatesRequest, object userState)
+        {
+            if ((this.CalculatePostageRatesOperationCompleted == null))
+            {
                 this.CalculatePostageRatesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculatePostageRatesOperationCompleted);
             }
             this.InvokeAsync("CalculatePostageRates", new object[] {
                         PostageRatesRequest}, this.CalculatePostageRatesOperationCompleted, userState);
         }
-        
-        private void OnCalculatePostageRatesOperationCompleted(object arg) {
-            if ((this.CalculatePostageRatesCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculatePostageRatesOperationCompleted(object arg)
+        {
+            if ((this.CalculatePostageRatesCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculatePostageRatesCompleted(this, new CalculatePostageRatesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRatesXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CalculatePostageRatesXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRatesResponse")]
-        public PostageRatesResponse CalculatePostageRatesXML(string PostageRatesRequestXML) {
+        public PostageRatesResponse CalculatePostageRatesXML(string PostageRatesRequestXML)
+        {
             object[] results = this.Invoke("CalculatePostageRatesXML", new object[] {
                         PostageRatesRequestXML});
-            return ((PostageRatesResponse)(results[0]));
+            return ((PostageRatesResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRatesXMLAsync(string PostageRatesRequestXML) {
+        public void CalculatePostageRatesXMLAsync(string PostageRatesRequestXML)
+        {
             this.CalculatePostageRatesXMLAsync(PostageRatesRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void CalculatePostageRatesXMLAsync(string PostageRatesRequestXML, object userState) {
-            if ((this.CalculatePostageRatesXMLOperationCompleted == null)) {
+        public void CalculatePostageRatesXMLAsync(string PostageRatesRequestXML, object userState)
+        {
+            if ((this.CalculatePostageRatesXMLOperationCompleted == null))
+            {
                 this.CalculatePostageRatesXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCalculatePostageRatesXMLOperationCompleted);
             }
             this.InvokeAsync("CalculatePostageRatesXML", new object[] {
                         PostageRatesRequestXML}, this.CalculatePostageRatesXMLOperationCompleted, userState);
         }
-        
-        private void OnCalculatePostageRatesXMLOperationCompleted(object arg) {
-            if ((this.CalculatePostageRatesXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCalculatePostageRatesXMLOperationCompleted(object arg)
+        {
+            if ((this.CalculatePostageRatesXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CalculatePostageRatesXMLCompleted(this, new CalculatePostageRatesXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CloseAccount", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CloseAccount", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("CloseAccountResponse")]
-        public SetPendingCloseAccountResponse CloseAccount(CloseAccountRequest CloseAccountRequest) {
+        public SetPendingCloseAccountResponse CloseAccount(CloseAccountRequest CloseAccountRequest)
+        {
             object[] results = this.Invoke("CloseAccount", new object[] {
                         CloseAccountRequest});
-            return ((SetPendingCloseAccountResponse)(results[0]));
+            return ((SetPendingCloseAccountResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CloseAccountAsync(CloseAccountRequest CloseAccountRequest) {
+        public void CloseAccountAsync(CloseAccountRequest CloseAccountRequest)
+        {
             this.CloseAccountAsync(CloseAccountRequest, null);
         }
-        
+
         /// <remarks/>
-        public void CloseAccountAsync(CloseAccountRequest CloseAccountRequest, object userState) {
-            if ((this.CloseAccountOperationCompleted == null)) {
+        public void CloseAccountAsync(CloseAccountRequest CloseAccountRequest, object userState)
+        {
+            if ((this.CloseAccountOperationCompleted == null))
+            {
                 this.CloseAccountOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCloseAccountOperationCompleted);
             }
             this.InvokeAsync("CloseAccount", new object[] {
                         CloseAccountRequest}, this.CloseAccountOperationCompleted, userState);
         }
-        
-        private void OnCloseAccountOperationCompleted(object arg) {
-            if ((this.CloseAccountCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCloseAccountOperationCompleted(object arg)
+        {
+            if ((this.CloseAccountCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CloseAccountCompleted(this, new CloseAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CloseAccountXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CloseAccountXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("CloseAccountResponse")]
-        public SetPendingCloseAccountResponse CloseAccountXML(string CloseAccountRequestXML) {
+        public SetPendingCloseAccountResponse CloseAccountXML(string CloseAccountRequestXML)
+        {
             object[] results = this.Invoke("CloseAccountXML", new object[] {
                         CloseAccountRequestXML});
-            return ((SetPendingCloseAccountResponse)(results[0]));
+            return ((SetPendingCloseAccountResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CloseAccountXMLAsync(string CloseAccountRequestXML) {
+        public void CloseAccountXMLAsync(string CloseAccountRequestXML)
+        {
             this.CloseAccountXMLAsync(CloseAccountRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void CloseAccountXMLAsync(string CloseAccountRequestXML, object userState) {
-            if ((this.CloseAccountXMLOperationCompleted == null)) {
+        public void CloseAccountXMLAsync(string CloseAccountRequestXML, object userState)
+        {
+            if ((this.CloseAccountXMLOperationCompleted == null))
+            {
                 this.CloseAccountXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCloseAccountXMLOperationCompleted);
             }
             this.InvokeAsync("CloseAccountXML", new object[] {
                         CloseAccountRequestXML}, this.CloseAccountXMLOperationCompleted, userState);
         }
-        
-        private void OnCloseAccountXMLOperationCompleted(object arg) {
-            if ((this.CloseAccountXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCloseAccountXMLOperationCompleted(object arg)
+        {
+            if ((this.CloseAccountXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CloseAccountXMLCompleted(this, new CloseAccountXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CreateDhlgmManifest", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CreateDhlgmManifest", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("CreateDhlgmManifestResponse")]
-        public DhlgmManifestResponse CreateDhlgmManifest(CreateDhlgmManifestRequest CreateDhlgmManifestRequest) {
+        public DhlgmManifestResponse CreateDhlgmManifest(CreateDhlgmManifestRequest CreateDhlgmManifestRequest)
+        {
             object[] results = this.Invoke("CreateDhlgmManifest", new object[] {
                         CreateDhlgmManifestRequest});
-            return ((DhlgmManifestResponse)(results[0]));
+            return ((DhlgmManifestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CreateDhlgmManifestAsync(CreateDhlgmManifestRequest CreateDhlgmManifestRequest) {
+        public void CreateDhlgmManifestAsync(CreateDhlgmManifestRequest CreateDhlgmManifestRequest)
+        {
             this.CreateDhlgmManifestAsync(CreateDhlgmManifestRequest, null);
         }
-        
+
         /// <remarks/>
-        public void CreateDhlgmManifestAsync(CreateDhlgmManifestRequest CreateDhlgmManifestRequest, object userState) {
-            if ((this.CreateDhlgmManifestOperationCompleted == null)) {
+        public void CreateDhlgmManifestAsync(CreateDhlgmManifestRequest CreateDhlgmManifestRequest, object userState)
+        {
+            if ((this.CreateDhlgmManifestOperationCompleted == null))
+            {
                 this.CreateDhlgmManifestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateDhlgmManifestOperationCompleted);
             }
             this.InvokeAsync("CreateDhlgmManifest", new object[] {
                         CreateDhlgmManifestRequest}, this.CreateDhlgmManifestOperationCompleted, userState);
         }
-        
-        private void OnCreateDhlgmManifestOperationCompleted(object arg) {
-            if ((this.CreateDhlgmManifestCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCreateDhlgmManifestOperationCompleted(object arg)
+        {
+            if ((this.CreateDhlgmManifestCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CreateDhlgmManifestCompleted(this, new CreateDhlgmManifestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CreateDhlgmManifestXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/CreateDhlgmManifestXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("CreateDhlgmManifestResponse")]
-        public DhlgmManifestResponse CreateDhlgmManifestXML(string CreateDhlgmManifestRequestXML) {
+        public DhlgmManifestResponse CreateDhlgmManifestXML(string CreateDhlgmManifestRequestXML)
+        {
             object[] results = this.Invoke("CreateDhlgmManifestXML", new object[] {
                         CreateDhlgmManifestRequestXML});
-            return ((DhlgmManifestResponse)(results[0]));
+            return ((DhlgmManifestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void CreateDhlgmManifestXMLAsync(string CreateDhlgmManifestRequestXML) {
+        public void CreateDhlgmManifestXMLAsync(string CreateDhlgmManifestRequestXML)
+        {
             this.CreateDhlgmManifestXMLAsync(CreateDhlgmManifestRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void CreateDhlgmManifestXMLAsync(string CreateDhlgmManifestRequestXML, object userState) {
-            if ((this.CreateDhlgmManifestXMLOperationCompleted == null)) {
+        public void CreateDhlgmManifestXMLAsync(string CreateDhlgmManifestRequestXML, object userState)
+        {
+            if ((this.CreateDhlgmManifestXMLOperationCompleted == null))
+            {
                 this.CreateDhlgmManifestXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateDhlgmManifestXMLOperationCompleted);
             }
             this.InvokeAsync("CreateDhlgmManifestXML", new object[] {
                         CreateDhlgmManifestRequestXML}, this.CreateDhlgmManifestXMLOperationCompleted, userState);
         }
-        
-        private void OnCreateDhlgmManifestXMLOperationCompleted(object arg) {
-            if ((this.CreateDhlgmManifestXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnCreateDhlgmManifestXMLOperationCompleted(object arg)
+        {
+            if ((this.CreateDhlgmManifestXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.CreateDhlgmManifestXMLCompleted(this, new CreateDhlgmManifestXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/HandleDHLeCManifest", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/HandleDHLeCManifest", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("DHLeCManifestResponse")]
-        public DHLeCManifestResponse HandleDHLeCManifest(DHLeCManifestRequest DHLeCManifestRequest) {
+        public DHLeCManifestResponse HandleDHLeCManifest(DHLeCManifestRequest DHLeCManifestRequest)
+        {
             object[] results = this.Invoke("HandleDHLeCManifest", new object[] {
                         DHLeCManifestRequest});
-            return ((DHLeCManifestResponse)(results[0]));
+            return ((DHLeCManifestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void HandleDHLeCManifestAsync(DHLeCManifestRequest DHLeCManifestRequest) {
+        public void HandleDHLeCManifestAsync(DHLeCManifestRequest DHLeCManifestRequest)
+        {
             this.HandleDHLeCManifestAsync(DHLeCManifestRequest, null);
         }
-        
+
         /// <remarks/>
-        public void HandleDHLeCManifestAsync(DHLeCManifestRequest DHLeCManifestRequest, object userState) {
-            if ((this.HandleDHLeCManifestOperationCompleted == null)) {
+        public void HandleDHLeCManifestAsync(DHLeCManifestRequest DHLeCManifestRequest, object userState)
+        {
+            if ((this.HandleDHLeCManifestOperationCompleted == null))
+            {
                 this.HandleDHLeCManifestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnHandleDHLeCManifestOperationCompleted);
             }
             this.InvokeAsync("HandleDHLeCManifest", new object[] {
                         DHLeCManifestRequest}, this.HandleDHLeCManifestOperationCompleted, userState);
         }
-        
-        private void OnHandleDHLeCManifestOperationCompleted(object arg) {
-            if ((this.HandleDHLeCManifestCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnHandleDHLeCManifestOperationCompleted(object arg)
+        {
+            if ((this.HandleDHLeCManifestCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.HandleDHLeCManifestCompleted(this, new HandleDHLeCManifestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/HandleDHLeCManifestXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/HandleDHLeCManifestXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("DHLeCManifestResponse")]
-        public DHLeCManifestResponse HandleDHLeCManifestXML(string DHLeCManifestRequestXML) {
+        public DHLeCManifestResponse HandleDHLeCManifestXML(string DHLeCManifestRequestXML)
+        {
             object[] results = this.Invoke("HandleDHLeCManifestXML", new object[] {
                         DHLeCManifestRequestXML});
-            return ((DHLeCManifestResponse)(results[0]));
+            return ((DHLeCManifestResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void HandleDHLeCManifestXMLAsync(string DHLeCManifestRequestXML) {
+        public void HandleDHLeCManifestXMLAsync(string DHLeCManifestRequestXML)
+        {
             this.HandleDHLeCManifestXMLAsync(DHLeCManifestRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void HandleDHLeCManifestXMLAsync(string DHLeCManifestRequestXML, object userState) {
-            if ((this.HandleDHLeCManifestXMLOperationCompleted == null)) {
+        public void HandleDHLeCManifestXMLAsync(string DHLeCManifestRequestXML, object userState)
+        {
+            if ((this.HandleDHLeCManifestXMLOperationCompleted == null))
+            {
                 this.HandleDHLeCManifestXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnHandleDHLeCManifestXMLOperationCompleted);
             }
             this.InvokeAsync("HandleDHLeCManifestXML", new object[] {
                         DHLeCManifestRequestXML}, this.HandleDHLeCManifestXMLOperationCompleted, userState);
         }
-        
-        private void OnHandleDHLeCManifestXMLOperationCompleted(object arg) {
-            if ((this.HandleDHLeCManifestXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnHandleDHLeCManifestXMLOperationCompleted(object arg)
+        {
+            if ((this.HandleDHLeCManifestXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.HandleDHLeCManifestXMLCompleted(this, new HandleDHLeCManifestXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/StatusRequest", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/StatusRequest", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackageStatusResponse")]
-        public PackageStatusResponse StatusRequest(PackageStatusRequest PackageStatusRequest) {
+        public PackageStatusResponse StatusRequest(PackageStatusRequest PackageStatusRequest)
+        {
             object[] results = this.Invoke("StatusRequest", new object[] {
                         PackageStatusRequest});
-            return ((PackageStatusResponse)(results[0]));
+            return ((PackageStatusResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void StatusRequestAsync(PackageStatusRequest PackageStatusRequest) {
+        public void StatusRequestAsync(PackageStatusRequest PackageStatusRequest)
+        {
             this.StatusRequestAsync(PackageStatusRequest, null);
         }
-        
+
         /// <remarks/>
-        public void StatusRequestAsync(PackageStatusRequest PackageStatusRequest, object userState) {
-            if ((this.StatusRequestOperationCompleted == null)) {
+        public void StatusRequestAsync(PackageStatusRequest PackageStatusRequest, object userState)
+        {
+            if ((this.StatusRequestOperationCompleted == null))
+            {
                 this.StatusRequestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnStatusRequestOperationCompleted);
             }
             this.InvokeAsync("StatusRequest", new object[] {
                         PackageStatusRequest}, this.StatusRequestOperationCompleted, userState);
         }
-        
-        private void OnStatusRequestOperationCompleted(object arg) {
-            if ((this.StatusRequestCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnStatusRequestOperationCompleted(object arg)
+        {
+            if ((this.StatusRequestCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.StatusRequestCompleted(this, new StatusRequestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/StatusRequestXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/StatusRequestXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackageStatusResponse")]
-        public PackageStatusResponse StatusRequestXML(string PackageStatusRequestXML) {
+        public PackageStatusResponse StatusRequestXML(string PackageStatusRequestXML)
+        {
             object[] results = this.Invoke("StatusRequestXML", new object[] {
                         PackageStatusRequestXML});
-            return ((PackageStatusResponse)(results[0]));
+            return ((PackageStatusResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void StatusRequestXMLAsync(string PackageStatusRequestXML) {
+        public void StatusRequestXMLAsync(string PackageStatusRequestXML)
+        {
             this.StatusRequestXMLAsync(PackageStatusRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void StatusRequestXMLAsync(string PackageStatusRequestXML, object userState) {
-            if ((this.StatusRequestXMLOperationCompleted == null)) {
+        public void StatusRequestXMLAsync(string PackageStatusRequestXML, object userState)
+        {
+            if ((this.StatusRequestXMLOperationCompleted == null))
+            {
                 this.StatusRequestXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnStatusRequestXMLOperationCompleted);
             }
             this.InvokeAsync("StatusRequestXML", new object[] {
                         PackageStatusRequestXML}, this.StatusRequestXMLOperationCompleted, userState);
         }
-        
-        private void OnStatusRequestXMLOperationCompleted(object arg) {
-            if ((this.StatusRequestXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnStatusRequestXMLOperationCompleted(object arg)
+        {
+            if ((this.StatusRequestXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.StatusRequestXMLCompleted(this, new StatusRequestXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRetailAccounts", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRetailAccounts", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RetailAccountsResponse")]
-        public RetailAccountsResponse GetRetailAccounts(RetailAccountsRequest RetailAccountsRequest) {
+        public RetailAccountsResponse GetRetailAccounts(RetailAccountsRequest RetailAccountsRequest)
+        {
             object[] results = this.Invoke("GetRetailAccounts", new object[] {
                         RetailAccountsRequest});
-            return ((RetailAccountsResponse)(results[0]));
+            return ((RetailAccountsResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetRetailAccountsAsync(RetailAccountsRequest RetailAccountsRequest) {
+        public void GetRetailAccountsAsync(RetailAccountsRequest RetailAccountsRequest)
+        {
             this.GetRetailAccountsAsync(RetailAccountsRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetRetailAccountsAsync(RetailAccountsRequest RetailAccountsRequest, object userState) {
-            if ((this.GetRetailAccountsOperationCompleted == null)) {
+        public void GetRetailAccountsAsync(RetailAccountsRequest RetailAccountsRequest, object userState)
+        {
+            if ((this.GetRetailAccountsOperationCompleted == null))
+            {
                 this.GetRetailAccountsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRetailAccountsOperationCompleted);
             }
             this.InvokeAsync("GetRetailAccounts", new object[] {
                         RetailAccountsRequest}, this.GetRetailAccountsOperationCompleted, userState);
         }
-        
-        private void OnGetRetailAccountsOperationCompleted(object arg) {
-            if ((this.GetRetailAccountsCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetRetailAccountsOperationCompleted(object arg)
+        {
+            if ((this.GetRetailAccountsCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetRetailAccountsCompleted(this, new GetRetailAccountsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRetailAccountsXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRetailAccountsXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RetailAccountsResponse")]
-        public RetailAccountsResponse GetRetailAccountsXML(string RetailAccountsRequestXML) {
+        public RetailAccountsResponse GetRetailAccountsXML(string RetailAccountsRequestXML)
+        {
             object[] results = this.Invoke("GetRetailAccountsXML", new object[] {
                         RetailAccountsRequestXML});
-            return ((RetailAccountsResponse)(results[0]));
+            return ((RetailAccountsResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetRetailAccountsXMLAsync(string RetailAccountsRequestXML) {
+        public void GetRetailAccountsXMLAsync(string RetailAccountsRequestXML)
+        {
             this.GetRetailAccountsXMLAsync(RetailAccountsRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetRetailAccountsXMLAsync(string RetailAccountsRequestXML, object userState) {
-            if ((this.GetRetailAccountsXMLOperationCompleted == null)) {
+        public void GetRetailAccountsXMLAsync(string RetailAccountsRequestXML, object userState)
+        {
+            if ((this.GetRetailAccountsXMLOperationCompleted == null))
+            {
                 this.GetRetailAccountsXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRetailAccountsXMLOperationCompleted);
             }
             this.InvokeAsync("GetRetailAccountsXML", new object[] {
                         RetailAccountsRequestXML}, this.GetRetailAccountsXMLOperationCompleted, userState);
         }
-        
-        private void OnGetRetailAccountsXMLOperationCompleted(object arg) {
-            if ((this.GetRetailAccountsXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetRetailAccountsXMLOperationCompleted(object arg)
+        {
+            if ((this.GetRetailAccountsXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetRetailAccountsXMLCompleted(this, new GetRetailAccountsXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetUserSignUp", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetUserSignUp", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("UserSignUpResponse")]
-        public UserSignUpResponse GetUserSignUp(UserSignUpRequest UserSignUpRequest) {
+        public UserSignUpResponse GetUserSignUp(UserSignUpRequest UserSignUpRequest)
+        {
             object[] results = this.Invoke("GetUserSignUp", new object[] {
                         UserSignUpRequest});
-            return ((UserSignUpResponse)(results[0]));
+            return ((UserSignUpResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetUserSignUpAsync(UserSignUpRequest UserSignUpRequest) {
+        public void GetUserSignUpAsync(UserSignUpRequest UserSignUpRequest)
+        {
             this.GetUserSignUpAsync(UserSignUpRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetUserSignUpAsync(UserSignUpRequest UserSignUpRequest, object userState) {
-            if ((this.GetUserSignUpOperationCompleted == null)) {
+        public void GetUserSignUpAsync(UserSignUpRequest UserSignUpRequest, object userState)
+        {
+            if ((this.GetUserSignUpOperationCompleted == null))
+            {
                 this.GetUserSignUpOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetUserSignUpOperationCompleted);
             }
             this.InvokeAsync("GetUserSignUp", new object[] {
                         UserSignUpRequest}, this.GetUserSignUpOperationCompleted, userState);
         }
-        
-        private void OnGetUserSignUpOperationCompleted(object arg) {
-            if ((this.GetUserSignUpCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetUserSignUpOperationCompleted(object arg)
+        {
+            if ((this.GetUserSignUpCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetUserSignUpCompleted(this, new GetUserSignUpCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetUserSignUpXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetUserSignUpXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("UserSignUpResponse")]
-        public UserSignUpResponse GetUserSignUpXML(string UserSignUpRequestXML) {
+        public UserSignUpResponse GetUserSignUpXML(string UserSignUpRequestXML)
+        {
             object[] results = this.Invoke("GetUserSignUpXML", new object[] {
                         UserSignUpRequestXML});
-            return ((UserSignUpResponse)(results[0]));
+            return ((UserSignUpResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetUserSignUpXMLAsync(string UserSignUpRequestXML) {
+        public void GetUserSignUpXMLAsync(string UserSignUpRequestXML)
+        {
             this.GetUserSignUpXMLAsync(UserSignUpRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetUserSignUpXMLAsync(string UserSignUpRequestXML, object userState) {
-            if ((this.GetUserSignUpXMLOperationCompleted == null)) {
+        public void GetUserSignUpXMLAsync(string UserSignUpRequestXML, object userState)
+        {
+            if ((this.GetUserSignUpXMLOperationCompleted == null))
+            {
                 this.GetUserSignUpXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetUserSignUpXMLOperationCompleted);
             }
             this.InvokeAsync("GetUserSignUpXML", new object[] {
                         UserSignUpRequestXML}, this.GetUserSignUpXMLOperationCompleted, userState);
         }
-        
-        private void OnGetUserSignUpXMLOperationCompleted(object arg) {
-            if ((this.GetUserSignUpXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetUserSignUpXMLOperationCompleted(object arg)
+        {
+            if ((this.GetUserSignUpXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetUserSignUpXMLCompleted(this, new GetUserSignUpXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetTransactionsListing", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetTransactionsListing", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("TransactionsListingResponse")]
-        public TransactionsListingResponse GetTransactionsListing(GetTransactionsListingRequest GetTransactionsListingRequest) {
+        public TransactionsListingResponse GetTransactionsListing(GetTransactionsListingRequest GetTransactionsListingRequest)
+        {
             object[] results = this.Invoke("GetTransactionsListing", new object[] {
                         GetTransactionsListingRequest});
-            return ((TransactionsListingResponse)(results[0]));
+            return ((TransactionsListingResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetTransactionsListingAsync(GetTransactionsListingRequest GetTransactionsListingRequest) {
+        public void GetTransactionsListingAsync(GetTransactionsListingRequest GetTransactionsListingRequest)
+        {
             this.GetTransactionsListingAsync(GetTransactionsListingRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetTransactionsListingAsync(GetTransactionsListingRequest GetTransactionsListingRequest, object userState) {
-            if ((this.GetTransactionsListingOperationCompleted == null)) {
+        public void GetTransactionsListingAsync(GetTransactionsListingRequest GetTransactionsListingRequest, object userState)
+        {
+            if ((this.GetTransactionsListingOperationCompleted == null))
+            {
                 this.GetTransactionsListingOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetTransactionsListingOperationCompleted);
             }
             this.InvokeAsync("GetTransactionsListing", new object[] {
                         GetTransactionsListingRequest}, this.GetTransactionsListingOperationCompleted, userState);
         }
-        
-        private void OnGetTransactionsListingOperationCompleted(object arg) {
-            if ((this.GetTransactionsListingCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetTransactionsListingOperationCompleted(object arg)
+        {
+            if ((this.GetTransactionsListingCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetTransactionsListingCompleted(this, new GetTransactionsListingCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetTransactionsListingXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetTransactionsListingXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("TransactionsListingResponse")]
-        public TransactionsListingResponse GetTransactionsListingXML(string GetTransactionsListingRequestXML) {
+        public TransactionsListingResponse GetTransactionsListingXML(string GetTransactionsListingRequestXML)
+        {
             object[] results = this.Invoke("GetTransactionsListingXML", new object[] {
                         GetTransactionsListingRequestXML});
-            return ((TransactionsListingResponse)(results[0]));
+            return ((TransactionsListingResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetTransactionsListingXMLAsync(string GetTransactionsListingRequestXML) {
+        public void GetTransactionsListingXMLAsync(string GetTransactionsListingRequestXML)
+        {
             this.GetTransactionsListingXMLAsync(GetTransactionsListingRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetTransactionsListingXMLAsync(string GetTransactionsListingRequestXML, object userState) {
-            if ((this.GetTransactionsListingXMLOperationCompleted == null)) {
+        public void GetTransactionsListingXMLAsync(string GetTransactionsListingRequestXML, object userState)
+        {
+            if ((this.GetTransactionsListingXMLOperationCompleted == null))
+            {
                 this.GetTransactionsListingXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetTransactionsListingXMLOperationCompleted);
             }
             this.InvokeAsync("GetTransactionsListingXML", new object[] {
                         GetTransactionsListingRequestXML}, this.GetTransactionsListingXMLOperationCompleted, userState);
         }
-        
-        private void OnGetTransactionsListingXMLOperationCompleted(object arg) {
-            if ((this.GetTransactionsListingXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetTransactionsListingXMLOperationCompleted(object arg)
+        {
+            if ((this.GetTransactionsListingXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetTransactionsListingXMLCompleted(this, new GetTransactionsListingXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupChange", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupChange", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupChangeResponse")]
-        public PackagePickupChangeResponse GetPackagePickupChange(PackagePickupChangeRequest PackagePickupChangeRequest) {
+        public PackagePickupChangeResponse GetPackagePickupChange(PackagePickupChangeRequest PackagePickupChangeRequest)
+        {
             object[] results = this.Invoke("GetPackagePickupChange", new object[] {
                         PackagePickupChangeRequest});
-            return ((PackagePickupChangeResponse)(results[0]));
+            return ((PackagePickupChangeResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupChangeAsync(PackagePickupChangeRequest PackagePickupChangeRequest) {
+        public void GetPackagePickupChangeAsync(PackagePickupChangeRequest PackagePickupChangeRequest)
+        {
             this.GetPackagePickupChangeAsync(PackagePickupChangeRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupChangeAsync(PackagePickupChangeRequest PackagePickupChangeRequest, object userState) {
-            if ((this.GetPackagePickupChangeOperationCompleted == null)) {
+        public void GetPackagePickupChangeAsync(PackagePickupChangeRequest PackagePickupChangeRequest, object userState)
+        {
+            if ((this.GetPackagePickupChangeOperationCompleted == null))
+            {
                 this.GetPackagePickupChangeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupChangeOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupChange", new object[] {
                         PackagePickupChangeRequest}, this.GetPackagePickupChangeOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupChangeOperationCompleted(object arg) {
-            if ((this.GetPackagePickupChangeCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupChangeOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupChangeCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupChangeCompleted(this, new GetPackagePickupChangeCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupChangeXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupChangeXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupChangeResponse")]
-        public PackagePickupChangeResponse GetPackagePickupChangeXML(string PackagePickupChangeRequestXML) {
+        public PackagePickupChangeResponse GetPackagePickupChangeXML(string PackagePickupChangeRequestXML)
+        {
             object[] results = this.Invoke("GetPackagePickupChangeXML", new object[] {
                         PackagePickupChangeRequestXML});
-            return ((PackagePickupChangeResponse)(results[0]));
+            return ((PackagePickupChangeResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupChangeXMLAsync(string PackagePickupChangeRequestXML) {
+        public void GetPackagePickupChangeXMLAsync(string PackagePickupChangeRequestXML)
+        {
             this.GetPackagePickupChangeXMLAsync(PackagePickupChangeRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupChangeXMLAsync(string PackagePickupChangeRequestXML, object userState) {
-            if ((this.GetPackagePickupChangeXMLOperationCompleted == null)) {
+        public void GetPackagePickupChangeXMLAsync(string PackagePickupChangeRequestXML, object userState)
+        {
+            if ((this.GetPackagePickupChangeXMLOperationCompleted == null))
+            {
                 this.GetPackagePickupChangeXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupChangeXMLOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupChangeXML", new object[] {
                         PackagePickupChangeRequestXML}, this.GetPackagePickupChangeXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupChangeXMLOperationCompleted(object arg) {
-            if ((this.GetPackagePickupChangeXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupChangeXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupChangeXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupChangeXMLCompleted(this, new GetPackagePickupChangeXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupAvailability", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupAvailability", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupAvailabilityResponse")]
-        public PackagePickupAvailabilityResponse GetPackagePickupAvailability(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest) {
+        public PackagePickupAvailabilityResponse GetPackagePickupAvailability(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest)
+        {
             object[] results = this.Invoke("GetPackagePickupAvailability", new object[] {
                         PackagePickupAvailabilityRequest});
-            return ((PackagePickupAvailabilityResponse)(results[0]));
+            return ((PackagePickupAvailabilityResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAvailabilityAsync(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest) {
+        public void GetPackagePickupAvailabilityAsync(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest)
+        {
             this.GetPackagePickupAvailabilityAsync(PackagePickupAvailabilityRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAvailabilityAsync(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest, object userState) {
-            if ((this.GetPackagePickupAvailabilityOperationCompleted == null)) {
+        public void GetPackagePickupAvailabilityAsync(PackagePickupAvailabilityRequest PackagePickupAvailabilityRequest, object userState)
+        {
+            if ((this.GetPackagePickupAvailabilityOperationCompleted == null))
+            {
                 this.GetPackagePickupAvailabilityOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupAvailabilityOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupAvailability", new object[] {
                         PackagePickupAvailabilityRequest}, this.GetPackagePickupAvailabilityOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupAvailabilityOperationCompleted(object arg) {
-            if ((this.GetPackagePickupAvailabilityCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupAvailabilityOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupAvailabilityCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupAvailabilityCompleted(this, new GetPackagePickupAvailabilityCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupAvailabilityXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupAvailabilityXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupAvailabilityResponse")]
-        public PackagePickupAvailabilityResponse GetPackagePickupAvailabilityXML(string PackagePickupAvailabilityRequestXML) {
+        public PackagePickupAvailabilityResponse GetPackagePickupAvailabilityXML(string PackagePickupAvailabilityRequestXML)
+        {
             object[] results = this.Invoke("GetPackagePickupAvailabilityXML", new object[] {
                         PackagePickupAvailabilityRequestXML});
-            return ((PackagePickupAvailabilityResponse)(results[0]));
+            return ((PackagePickupAvailabilityResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAvailabilityXMLAsync(string PackagePickupAvailabilityRequestXML) {
+        public void GetPackagePickupAvailabilityXMLAsync(string PackagePickupAvailabilityRequestXML)
+        {
             this.GetPackagePickupAvailabilityXMLAsync(PackagePickupAvailabilityRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAvailabilityXMLAsync(string PackagePickupAvailabilityRequestXML, object userState) {
-            if ((this.GetPackagePickupAvailabilityXMLOperationCompleted == null)) {
+        public void GetPackagePickupAvailabilityXMLAsync(string PackagePickupAvailabilityRequestXML, object userState)
+        {
+            if ((this.GetPackagePickupAvailabilityXMLOperationCompleted == null))
+            {
                 this.GetPackagePickupAvailabilityXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupAvailabilityXMLOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupAvailabilityXML", new object[] {
                         PackagePickupAvailabilityRequestXML}, this.GetPackagePickupAvailabilityXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupAvailabilityXMLOperationCompleted(object arg) {
-            if ((this.GetPackagePickupAvailabilityXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupAvailabilityXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupAvailabilityXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupAvailabilityXMLCompleted(this, new GetPackagePickupAvailabilityXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickup", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickup", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupResponse")]
-        public PackagePickupResponse GetPackagePickup(PackagePickupRequest PackagePickupRequest) {
+        public PackagePickupResponse GetPackagePickup(PackagePickupRequest PackagePickupRequest)
+        {
             object[] results = this.Invoke("GetPackagePickup", new object[] {
                         PackagePickupRequest});
-            return ((PackagePickupResponse)(results[0]));
+            return ((PackagePickupResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAsync(PackagePickupRequest PackagePickupRequest) {
+        public void GetPackagePickupAsync(PackagePickupRequest PackagePickupRequest)
+        {
             this.GetPackagePickupAsync(PackagePickupRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupAsync(PackagePickupRequest PackagePickupRequest, object userState) {
-            if ((this.GetPackagePickupOperationCompleted == null)) {
+        public void GetPackagePickupAsync(PackagePickupRequest PackagePickupRequest, object userState)
+        {
+            if ((this.GetPackagePickupOperationCompleted == null))
+            {
                 this.GetPackagePickupOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickup", new object[] {
                         PackagePickupRequest}, this.GetPackagePickupOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupOperationCompleted(object arg) {
-            if ((this.GetPackagePickupCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupCompleted(this, new GetPackagePickupCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupResponse")]
-        public PackagePickupResponse GetPackagePickupXML(string PackagePickupRequestXML) {
+        public PackagePickupResponse GetPackagePickupXML(string PackagePickupRequestXML)
+        {
             object[] results = this.Invoke("GetPackagePickupXML", new object[] {
                         PackagePickupRequestXML});
-            return ((PackagePickupResponse)(results[0]));
+            return ((PackagePickupResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupXMLAsync(string PackagePickupRequestXML) {
+        public void GetPackagePickupXMLAsync(string PackagePickupRequestXML)
+        {
             this.GetPackagePickupXMLAsync(PackagePickupRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupXMLAsync(string PackagePickupRequestXML, object userState) {
-            if ((this.GetPackagePickupXMLOperationCompleted == null)) {
+        public void GetPackagePickupXMLAsync(string PackagePickupRequestXML, object userState)
+        {
+            if ((this.GetPackagePickupXMLOperationCompleted == null))
+            {
                 this.GetPackagePickupXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupXMLOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupXML", new object[] {
                         PackagePickupRequestXML}, this.GetPackagePickupXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupXMLOperationCompleted(object arg) {
-            if ((this.GetPackagePickupXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupXMLCompleted(this, new GetPackagePickupXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupCancel", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupCancel", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupCancelResponse")]
-        public PackagePickupCancelResponse GetPackagePickupCancel(PackagePickupCancelRequest PackagePickupCancelRequest) {
+        public PackagePickupCancelResponse GetPackagePickupCancel(PackagePickupCancelRequest PackagePickupCancelRequest)
+        {
             object[] results = this.Invoke("GetPackagePickupCancel", new object[] {
                         PackagePickupCancelRequest});
-            return ((PackagePickupCancelResponse)(results[0]));
+            return ((PackagePickupCancelResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupCancelAsync(PackagePickupCancelRequest PackagePickupCancelRequest) {
+        public void GetPackagePickupCancelAsync(PackagePickupCancelRequest PackagePickupCancelRequest)
+        {
             this.GetPackagePickupCancelAsync(PackagePickupCancelRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupCancelAsync(PackagePickupCancelRequest PackagePickupCancelRequest, object userState) {
-            if ((this.GetPackagePickupCancelOperationCompleted == null)) {
+        public void GetPackagePickupCancelAsync(PackagePickupCancelRequest PackagePickupCancelRequest, object userState)
+        {
+            if ((this.GetPackagePickupCancelOperationCompleted == null))
+            {
                 this.GetPackagePickupCancelOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupCancelOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupCancel", new object[] {
                         PackagePickupCancelRequest}, this.GetPackagePickupCancelOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupCancelOperationCompleted(object arg) {
-            if ((this.GetPackagePickupCancelCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupCancelOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupCancelCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupCancelCompleted(this, new GetPackagePickupCancelCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupCancelXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPackagePickupCancelXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PackagePickupCancelResponse")]
-        public PackagePickupCancelResponse GetPackagePickupCancelXML(string PackagePickupCancelRequestXML) {
+        public PackagePickupCancelResponse GetPackagePickupCancelXML(string PackagePickupCancelRequestXML)
+        {
             object[] results = this.Invoke("GetPackagePickupCancelXML", new object[] {
                         PackagePickupCancelRequestXML});
-            return ((PackagePickupCancelResponse)(results[0]));
+            return ((PackagePickupCancelResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupCancelXMLAsync(string PackagePickupCancelRequestXML) {
+        public void GetPackagePickupCancelXMLAsync(string PackagePickupCancelRequestXML)
+        {
             this.GetPackagePickupCancelXMLAsync(PackagePickupCancelRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPackagePickupCancelXMLAsync(string PackagePickupCancelRequestXML, object userState) {
-            if ((this.GetPackagePickupCancelXMLOperationCompleted == null)) {
+        public void GetPackagePickupCancelXMLAsync(string PackagePickupCancelRequestXML, object userState)
+        {
+            if ((this.GetPackagePickupCancelXMLOperationCompleted == null))
+            {
                 this.GetPackagePickupCancelXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPackagePickupCancelXMLOperationCompleted);
             }
             this.InvokeAsync("GetPackagePickupCancelXML", new object[] {
                         PackagePickupCancelRequestXML}, this.GetPackagePickupCancelXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPackagePickupCancelXMLOperationCompleted(object arg) {
-            if ((this.GetPackagePickupCancelXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPackagePickupCancelXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPackagePickupCancelXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPackagePickupCancelXMLCompleted(this, new GetPackagePickupCancelXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageRateTable", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageRateTable", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRateResponse")]
-        public PostageRateTableResponse GetPostageRateTable(PostageRateRequest PostageRateRequest) {
+        public PostageRateTableResponse GetPostageRateTable(PostageRateRequest PostageRateRequest)
+        {
             object[] results = this.Invoke("GetPostageRateTable", new object[] {
                         PostageRateRequest});
-            return ((PostageRateTableResponse)(results[0]));
+            return ((PostageRateTableResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPostageRateTableAsync(PostageRateRequest PostageRateRequest) {
+        public void GetPostageRateTableAsync(PostageRateRequest PostageRateRequest)
+        {
             this.GetPostageRateTableAsync(PostageRateRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetPostageRateTableAsync(PostageRateRequest PostageRateRequest, object userState) {
-            if ((this.GetPostageRateTableOperationCompleted == null)) {
+        public void GetPostageRateTableAsync(PostageRateRequest PostageRateRequest, object userState)
+        {
+            if ((this.GetPostageRateTableOperationCompleted == null))
+            {
                 this.GetPostageRateTableOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostageRateTableOperationCompleted);
             }
             this.InvokeAsync("GetPostageRateTable", new object[] {
                         PostageRateRequest}, this.GetPostageRateTableOperationCompleted, userState);
         }
-        
-        private void OnGetPostageRateTableOperationCompleted(object arg) {
-            if ((this.GetPostageRateTableCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPostageRateTableOperationCompleted(object arg)
+        {
+            if ((this.GetPostageRateTableCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPostageRateTableCompleted(this, new GetPostageRateTableCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageRateTableXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetPostageRateTableXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("PostageRateResponse")]
-        public PostageRateTableResponse GetPostageRateTableXML(string PostageRateRequestXML) {
+        public PostageRateTableResponse GetPostageRateTableXML(string PostageRateRequestXML)
+        {
             object[] results = this.Invoke("GetPostageRateTableXML", new object[] {
                         PostageRateRequestXML});
-            return ((PostageRateTableResponse)(results[0]));
+            return ((PostageRateTableResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetPostageRateTableXMLAsync(string PostageRateRequestXML) {
+        public void GetPostageRateTableXMLAsync(string PostageRateRequestXML)
+        {
             this.GetPostageRateTableXMLAsync(PostageRateRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetPostageRateTableXMLAsync(string PostageRateRequestXML, object userState) {
-            if ((this.GetPostageRateTableXMLOperationCompleted == null)) {
+        public void GetPostageRateTableXMLAsync(string PostageRateRequestXML, object userState)
+        {
+            if ((this.GetPostageRateTableXMLOperationCompleted == null))
+            {
                 this.GetPostageRateTableXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostageRateTableXMLOperationCompleted);
             }
             this.InvokeAsync("GetPostageRateTableXML", new object[] {
                         PostageRateRequestXML}, this.GetPostageRateTableXMLOperationCompleted, userState);
         }
-        
-        private void OnGetPostageRateTableXMLOperationCompleted(object arg) {
-            if ((this.GetPostageRateTableXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetPostageRateTableXMLOperationCompleted(object arg)
+        {
+            if ((this.GetPostageRateTableXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetPostageRateTableXMLCompleted(this, new GetPostageRateTableXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetSCAN", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetSCAN", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("GetSCANResponse")]
-        public SCANResponse GetSCAN(SCANRequest GetSCANRequest) {
+        public SCANResponse GetSCAN(SCANRequest GetSCANRequest)
+        {
             object[] results = this.Invoke("GetSCAN", new object[] {
                         GetSCANRequest});
-            return ((SCANResponse)(results[0]));
+            return ((SCANResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetSCANAsync(SCANRequest GetSCANRequest) {
+        public void GetSCANAsync(SCANRequest GetSCANRequest)
+        {
             this.GetSCANAsync(GetSCANRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetSCANAsync(SCANRequest GetSCANRequest, object userState) {
-            if ((this.GetSCANOperationCompleted == null)) {
+        public void GetSCANAsync(SCANRequest GetSCANRequest, object userState)
+        {
+            if ((this.GetSCANOperationCompleted == null))
+            {
                 this.GetSCANOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSCANOperationCompleted);
             }
             this.InvokeAsync("GetSCAN", new object[] {
                         GetSCANRequest}, this.GetSCANOperationCompleted, userState);
         }
-        
-        private void OnGetSCANOperationCompleted(object arg) {
-            if ((this.GetSCANCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetSCANOperationCompleted(object arg)
+        {
+            if ((this.GetSCANCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetSCANCompleted(this, new GetSCANCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetSCANXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetSCANXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("SCANResponse")]
-        public SCANResponse GetSCANXML(string GetSCANRequestXML) {
+        public SCANResponse GetSCANXML(string GetSCANRequestXML)
+        {
             object[] results = this.Invoke("GetSCANXML", new object[] {
                         GetSCANRequestXML});
-            return ((SCANResponse)(results[0]));
+            return ((SCANResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetSCANXMLAsync(string GetSCANRequestXML) {
+        public void GetSCANXMLAsync(string GetSCANRequestXML)
+        {
             this.GetSCANXMLAsync(GetSCANRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetSCANXMLAsync(string GetSCANRequestXML, object userState) {
-            if ((this.GetSCANXMLOperationCompleted == null)) {
+        public void GetSCANXMLAsync(string GetSCANRequestXML, object userState)
+        {
+            if ((this.GetSCANXMLOperationCompleted == null))
+            {
                 this.GetSCANXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSCANXMLOperationCompleted);
             }
             this.InvokeAsync("GetSCANXML", new object[] {
                         GetSCANRequestXML}, this.GetSCANXMLOperationCompleted, userState);
         }
-        
-        private void OnGetSCANXMLOperationCompleted(object arg) {
-            if ((this.GetSCANXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetSCANXMLOperationCompleted(object arg)
+        {
+            if ((this.GetSCANXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetSCANXMLCompleted(this, new GetSCANXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRefund", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRefund", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RefundResponse")]
-        public RefundResponse GetRefund(RefundRequest RefundRequest) {
+        public RefundResponse GetRefund(RefundRequest RefundRequest)
+        {
             object[] results = this.Invoke("GetRefund", new object[] {
                         RefundRequest});
-            return ((RefundResponse)(results[0]));
+            return ((RefundResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetRefundAsync(RefundRequest RefundRequest) {
+        public void GetRefundAsync(RefundRequest RefundRequest)
+        {
             this.GetRefundAsync(RefundRequest, null);
         }
-        
+
         /// <remarks/>
-        public void GetRefundAsync(RefundRequest RefundRequest, object userState) {
-            if ((this.GetRefundOperationCompleted == null)) {
+        public void GetRefundAsync(RefundRequest RefundRequest, object userState)
+        {
+            if ((this.GetRefundOperationCompleted == null))
+            {
                 this.GetRefundOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRefundOperationCompleted);
             }
             this.InvokeAsync("GetRefund", new object[] {
                         RefundRequest}, this.GetRefundOperationCompleted, userState);
         }
-        
-        private void OnGetRefundOperationCompleted(object arg) {
-            if ((this.GetRefundCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetRefundOperationCompleted(object arg)
+        {
+            if ((this.GetRefundCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetRefundCompleted(this, new GetRefundCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRefundXML", RequestNamespace="www.envmgr.com/LabelService", ResponseNamespace="www.envmgr.com/LabelService", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("www.envmgr.com/LabelService/GetRefundXML", RequestNamespace = "www.envmgr.com/LabelService", ResponseNamespace = "www.envmgr.com/LabelService", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("RefundResponse")]
-        public RefundResponse GetRefundXML(string RefundRequestXML) {
+        public RefundResponse GetRefundXML(string RefundRequestXML)
+        {
             object[] results = this.Invoke("GetRefundXML", new object[] {
                         RefundRequestXML});
-            return ((RefundResponse)(results[0]));
+            return ((RefundResponse) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void GetRefundXMLAsync(string RefundRequestXML) {
+        public void GetRefundXMLAsync(string RefundRequestXML)
+        {
             this.GetRefundXMLAsync(RefundRequestXML, null);
         }
-        
+
         /// <remarks/>
-        public void GetRefundXMLAsync(string RefundRequestXML, object userState) {
-            if ((this.GetRefundXMLOperationCompleted == null)) {
+        public void GetRefundXMLAsync(string RefundRequestXML, object userState)
+        {
+            if ((this.GetRefundXMLOperationCompleted == null))
+            {
                 this.GetRefundXMLOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRefundXMLOperationCompleted);
             }
             this.InvokeAsync("GetRefundXML", new object[] {
                         RefundRequestXML}, this.GetRefundXMLOperationCompleted, userState);
         }
-        
-        private void OnGetRefundXMLOperationCompleted(object arg) {
-            if ((this.GetRefundXMLCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnGetRefundXMLOperationCompleted(object arg)
+        {
+            if ((this.GetRefundXMLCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.GetRefundXMLCompleted(this, new GetRefundXMLCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        public new void CancelAsync(object userState) {
+        public new void CancelAsync(object userState)
+        {
             base.CancelAsync(userState);
         }
-        
-        private bool IsLocalFileSystemWebService(string url) {
-            if (((url == null) 
-                        || (url == string.Empty))) {
+
+        private bool IsLocalFileSystemWebService(string url)
+        {
+            if (((url == null)
+                        || (url == string.Empty)))
+            {
                 return false;
             }
             System.Uri wsUri = new System.Uri(url);
-            if (((wsUri.Port >= 1024) 
-                        && (string.Compare(wsUri.Host, "localHost", System.StringComparison.OrdinalIgnoreCase) == 0))) {
+            if (((wsUri.Port >= 1024)
+                        && (string.Compare(wsUri.Host, "localHost", System.StringComparison.OrdinalIgnoreCase) == 0)))
+            {
                 return true;
             }
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ResetSuspendedAccountRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ResetSuspendedAccountRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string accountIDField;
-        
+
         private string challengeAnswerField;
-        
+
         private string newPassPhraseField;
-        
+
         private bool tokenRequestedField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ChallengeAnswer {
-            get {
+        public string ChallengeAnswer
+        {
+            get
+            {
                 return this.challengeAnswerField;
             }
-            set {
+            set
+            {
                 this.challengeAnswerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NewPassPhrase {
-            get {
+        public string NewPassPhrase
+        {
+            get
+            {
                 return this.newPassPhraseField;
             }
-            set {
+            set
+            {
                 this.newPassPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool TokenRequested {
-            get {
+        public bool TokenRequested
+        {
+            get
+            {
                 return this.tokenRequestedField;
             }
-            set {
+            set
+            {
                 this.tokenRequestedField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RefundRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SCANRequest))]
@@ -2226,7 +2601,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(VoidLabelRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsItem))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsInfo))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CommonLabelRequestAndPostageRateRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PostageRateRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LabelRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Address))]
@@ -2237,6832 +2611,8370 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DataValidator {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DataValidator
+    {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class LabelResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class LabelResponse
+    {
+
         private RefundStatus refundStatusField;
-        
+
         private string refundStatusMessageField;
-        
+
         private string picNumberField;
-        
+
         private long transactionIdField;
-        
+
         private int pieceNumberField;
-        
+
         /// <remarks/>
-        public RefundStatus RefundStatus {
-            get {
+        public RefundStatus RefundStatus
+        {
+            get
+            {
                 return this.refundStatusField;
             }
-            set {
+            set
+            {
                 this.refundStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RefundStatusMessage {
-            get {
+        public string RefundStatusMessage
+        {
+            get
+            {
                 return this.refundStatusMessageField;
             }
-            set {
+            set
+            {
                 this.refundStatusMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PicNumber {
-            get {
+        public string PicNumber
+        {
+            get
+            {
                 return this.picNumberField;
             }
-            set {
+            set
+            {
                 this.picNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public long TransactionId {
-            get {
+        public long TransactionId
+        {
+            get
+            {
                 return this.transactionIdField;
             }
-            set {
+            set
+            {
                 this.transactionIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int PieceNumber {
-            get {
+        public int PieceNumber
+        {
+            get
+            {
                 return this.pieceNumberField;
             }
-            set {
+            set
+            {
                 this.pieceNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum RefundStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum RefundStatus
+    {
+
         /// <remarks/>
         Approved,
-        
+
         /// <remarks/>
         DeniedInvalid,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RefundResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RefundResponse
+    {
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private LabelResponse[] refundField;
-        
+
         private string formIdField;
-        
+
         private string batchIdField;
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Refund")]
-        public LabelResponse[] Refund {
-            get {
+        public LabelResponse[] Refund
+        {
+            get
+            {
                 return this.refundField;
             }
-            set {
+            set
+            {
                 this.refundField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FormId {
-            get {
+        public string FormId
+        {
+            get
+            {
                 return this.formIdField;
             }
-            set {
+            set
+            {
                 this.formIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BatchId {
-            get {
+        public string BatchId
+        {
+            get
+            {
                 return this.batchIdField;
             }
-            set {
+            set
+            {
                 this.batchIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ContainerLabel {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ContainerLabel
+    {
+
         private string containerTrackingNumberField;
-        
+
         private string containerLabelImageField;
-        
+
         /// <remarks/>
-        public string ContainerTrackingNumber {
-            get {
+        public string ContainerTrackingNumber
+        {
+            get
+            {
                 return this.containerTrackingNumberField;
             }
-            set {
+            set
+            {
                 this.containerTrackingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContainerLabelImage {
-            get {
+        public string ContainerLabelImage
+        {
+            get
+            {
                 return this.containerLabelImageField;
             }
-            set {
+            set
+            {
                 this.containerLabelImageField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class EndOfDayManifest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class EndOfDayManifest
+    {
+
         private ManifestType manifestTypeField;
-        
+
         private string pickUpCarrierField;
-        
+
         private int manifestIDField;
-        
+
         private string manifestUrlField;
-        
+
         private ContainerLabel[] containerLabelsField;
-        
+
         /// <remarks/>
-        public ManifestType ManifestType {
-            get {
+        public ManifestType ManifestType
+        {
+            get
+            {
                 return this.manifestTypeField;
             }
-            set {
+            set
+            {
                 this.manifestTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PickUpCarrier {
-            get {
+        public string PickUpCarrier
+        {
+            get
+            {
                 return this.pickUpCarrierField;
             }
-            set {
+            set
+            {
                 this.pickUpCarrierField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ManifestID {
-            get {
+        public int ManifestID
+        {
+            get
+            {
                 return this.manifestIDField;
             }
-            set {
+            set
+            {
                 this.manifestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ManifestUrl {
-            get {
+        public string ManifestUrl
+        {
+            get
+            {
                 return this.manifestUrlField;
             }
-            set {
+            set
+            {
                 this.manifestUrlField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContainerLabel[] ContainerLabels {
-            get {
+        public ContainerLabel[] ContainerLabels
+        {
+            get
+            {
                 return this.containerLabelsField;
             }
-            set {
+            set
+            {
                 this.containerLabelsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum ManifestType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum ManifestType
+    {
+
         /// <remarks/>
         All,
-        
+
         /// <remarks/>
         GlobalPost,
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         USPS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SCANResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SCANResponse
+    {
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string submissionIDField;
-        
+
         private string sCANFormField;
-        
+
         private string submissionIdOldField;
-        
+
         private string scanFormOldField;
-        
+
         private string[] excludedItemsField;
-        
+
         private EndOfDayManifest endOfDayManifestField;
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SubmissionID {
-            get {
+        public string SubmissionID
+        {
+            get
+            {
                 return this.submissionIDField;
             }
-            set {
+            set
+            {
                 this.submissionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SCANForm {
-            get {
+        public string SCANForm
+        {
+            get
+            {
                 return this.sCANFormField;
             }
-            set {
+            set
+            {
                 this.sCANFormField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SubmissionIdOld {
-            get {
+        public string SubmissionIdOld
+        {
+            get
+            {
                 return this.submissionIdOldField;
             }
-            set {
+            set
+            {
                 this.submissionIdOldField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ScanFormOld {
-            get {
+        public string ScanFormOld
+        {
+            get
+            {
                 return this.scanFormOldField;
             }
-            set {
+            set
+            {
                 this.scanFormOldField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Item")]
-        public string[] ExcludedItems {
-            get {
+        public string[] ExcludedItems
+        {
+            get
+            {
                 return this.excludedItemsField;
             }
-            set {
+            set
+            {
                 this.excludedItemsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public EndOfDayManifest EndOfDayManifest {
-            get {
+        public EndOfDayManifest EndOfDayManifest
+        {
+            get
+            {
                 return this.endOfDayManifestField;
             }
-            set {
+            set
+            {
                 this.endOfDayManifestField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageWeightRatePair {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageWeightRatePair
+    {
+
         private double weightField;
-        
+
         private decimal rateField;
-        
+
         /// <remarks/>
-        public double Weight {
-            get {
+        public double Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Rate {
-            get {
+        public decimal Rate
+        {
+            get
+            {
                 return this.rateField;
             }
-            set {
+            set
+            {
                 this.rateField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRateTable {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRateTable
+    {
+
         private string mailClassField;
-        
+
         private string zoneField;
-        
+
         private string intraBMCField;
-        
+
         private string pricingField;
-        
+
         private PostageWeightRatePair[] postageField;
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zone {
-            get {
+        public string Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IntraBMC {
-            get {
+        public string IntraBMC
+        {
+            get
+            {
                 return this.intraBMCField;
             }
-            set {
+            set
+            {
                 this.intraBMCField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Pricing {
-            get {
+        public string Pricing
+        {
+            get
+            {
                 return this.pricingField;
             }
-            set {
+            set
+            {
                 this.pricingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Postage")]
-        public PostageWeightRatePair[] Postage {
-            get {
+        public PostageWeightRatePair[] Postage
+        {
+            get
+            {
                 return this.postageField;
             }
-            set {
+            set
+            {
                 this.postageField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRateTableResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRateTableResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string zoneField;
-        
+
         private PostageRateTable postagePriceField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zone {
-            get {
+        public string Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PostageRateTable PostagePrice {
-            get {
+        public PostageRateTable PostagePrice
+        {
+            get
+            {
                 return this.postagePriceField;
             }
-            set {
+            set
+            {
                 this.postagePriceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupCancelResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupCancelResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string confirmationNumberField;
-        
+
         private string pickupStatusField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PickupStatus {
-            get {
+        public string PickupStatus
+        {
+            get
+            {
                 return this.pickupStatusField;
             }
-            set {
+            set
+            {
                 this.pickupStatusField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string confirmationNumberField;
-        
+
         private PackagePickup packagePickupField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackagePickup PackagePickup {
-            get {
+        public PackagePickup PackagePickup
+        {
+            get
+            {
                 return this.packagePickupField;
             }
-            set {
+            set
+            {
                 this.packagePickupField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickup {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickup
+    {
+
         private string dayOfWeekField;
-        
+
         private string dateField;
-        
+
         private string carrierRouteField;
-        
+
         /// <remarks/>
-        public string DayOfWeek {
-            get {
+        public string DayOfWeek
+        {
+            get
+            {
                 return this.dayOfWeekField;
             }
-            set {
+            set
+            {
                 this.dayOfWeekField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Date {
-            get {
+        public string Date
+        {
+            get
+            {
                 return this.dateField;
             }
-            set {
+            set
+            {
                 this.dateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CarrierRoute {
-            get {
+        public string CarrierRoute
+        {
+            get
+            {
                 return this.carrierRouteField;
             }
-            set {
+            set
+            {
                 this.carrierRouteField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupAvailabilityResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupAvailabilityResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private PackagePickup packagePickupField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackagePickup PackagePickup {
-            get {
+        public PackagePickup PackagePickup
+        {
+            get
+            {
                 return this.packagePickupField;
             }
-            set {
+            set
+            {
                 this.packagePickupField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupChangeResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupChangeResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string confirmationNumberField;
-        
+
         private PackagePickup packagePickupField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackagePickup PackagePickup {
-            get {
+        public PackagePickup PackagePickup
+        {
+            get
+            {
                 return this.packagePickupField;
             }
-            set {
+            set
+            {
                 this.packagePickupField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionsResponseOptions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionsResponseOptions
+    {
+
         private string startDateTimeField;
-        
+
         private string endDateTimeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StartDateTime {
-            get {
+        public string StartDateTime
+        {
+            get
+            {
                 return this.startDateTimeField;
             }
-            set {
+            set
+            {
                 this.startDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EndDateTime {
-            get {
+        public string EndDateTime
+        {
+            get
+            {
                 return this.endDateTimeField;
             }
-            set {
+            set
+            {
                 this.endDateTimeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ActualService {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ActualService
+    {
+
         private string deliveryConfirmationField;
-        
+
         private string insuredMailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DeliveryConfirmation {
-            get {
+        public string DeliveryConfirmation
+        {
+            get
+            {
                 return this.deliveryConfirmationField;
             }
-            set {
+            set
+            {
                 this.deliveryConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InsuredMail {
-            get {
+        public string InsuredMail
+        {
+            get
+            {
                 return this.insuredMailField;
             }
-            set {
+            set
+            {
                 this.insuredMailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DisputeDetails {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DisputeDetails
+    {
+
         private DisputeStatus disputeStatusField;
-        
+
         private string disputeCreateDateField;
-        
+
         private string disputeLastUpdateDateField;
-        
+
         /// <remarks/>
-        public DisputeStatus DisputeStatus {
-            get {
+        public DisputeStatus DisputeStatus
+        {
+            get
+            {
                 return this.disputeStatusField;
             }
-            set {
+            set
+            {
                 this.disputeStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DisputeCreateDate {
-            get {
+        public string DisputeCreateDate
+        {
+            get
+            {
                 return this.disputeCreateDateField;
             }
-            set {
+            set
+            {
                 this.disputeCreateDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DisputeLastUpdateDate {
-            get {
+        public string DisputeLastUpdateDate
+        {
+            get
+            {
                 return this.disputeLastUpdateDateField;
             }
-            set {
+            set
+            {
                 this.disputeLastUpdateDateField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum DisputeStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum DisputeStatus
+    {
+
         /// <remarks/>
         Approved,
-        
+
         /// <remarks/>
         Pending,
-        
+
         /// <remarks/>
         Rejected,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackageInfo {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackageInfo
+    {
+
         private string actualPackageTypeField;
-        
+
         private string actualWeightField;
-        
+
         private string actualLengthField;
-        
+
         private string actualWidthField;
-        
+
         private string actualHeightField;
-        
+
         /// <remarks/>
-        public string ActualPackageType {
-            get {
+        public string ActualPackageType
+        {
+            get
+            {
                 return this.actualPackageTypeField;
             }
-            set {
+            set
+            {
                 this.actualPackageTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualWeight {
-            get {
+        public string ActualWeight
+        {
+            get
+            {
                 return this.actualWeightField;
             }
-            set {
+            set
+            {
                 this.actualWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualLength {
-            get {
+        public string ActualLength
+        {
+            get
+            {
                 return this.actualLengthField;
             }
-            set {
+            set
+            {
                 this.actualLengthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualWidth {
-            get {
+        public string ActualWidth
+        {
+            get
+            {
                 return this.actualWidthField;
             }
-            set {
+            set
+            {
                 this.actualWidthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualHeight {
-            get {
+        public string ActualHeight
+        {
+            get
+            {
                 return this.actualHeightField;
             }
-            set {
+            set
+            {
                 this.actualHeightField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Adjustment {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Adjustment
+    {
+
         private AdjustmentStatus adjustmentStatusField;
-        
+
         private string dateAdjustmentProcessedField;
-        
+
         private string dateRecordedField;
-        
+
         private string actualTrackingNumberField;
-        
+
         private string actualFromZIPCodeField;
-        
+
         private string actualToCountryField;
-        
+
         private string actualToZipField;
-        
+
         private string actualMailClassField;
-        
+
         private string adjustedAmountField;
-        
+
         private PackageInfo actualPackageInfoField;
-        
+
         private DisputeDetails disputeField;
-        
+
         private ActualService actualServiceField;
-        
+
         /// <remarks/>
-        public AdjustmentStatus AdjustmentStatus {
-            get {
+        public AdjustmentStatus AdjustmentStatus
+        {
+            get
+            {
                 return this.adjustmentStatusField;
             }
-            set {
+            set
+            {
                 this.adjustmentStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DateAdjustmentProcessed {
-            get {
+        public string DateAdjustmentProcessed
+        {
+            get
+            {
                 return this.dateAdjustmentProcessedField;
             }
-            set {
+            set
+            {
                 this.dateAdjustmentProcessedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DateRecorded {
-            get {
+        public string DateRecorded
+        {
+            get
+            {
                 return this.dateRecordedField;
             }
-            set {
+            set
+            {
                 this.dateRecordedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualTrackingNumber {
-            get {
+        public string ActualTrackingNumber
+        {
+            get
+            {
                 return this.actualTrackingNumberField;
             }
-            set {
+            set
+            {
                 this.actualTrackingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualFromZIPCode {
-            get {
+        public string ActualFromZIPCode
+        {
+            get
+            {
                 return this.actualFromZIPCodeField;
             }
-            set {
+            set
+            {
                 this.actualFromZIPCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualToCountry {
-            get {
+        public string ActualToCountry
+        {
+            get
+            {
                 return this.actualToCountryField;
             }
-            set {
+            set
+            {
                 this.actualToCountryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualToZip {
-            get {
+        public string ActualToZip
+        {
+            get
+            {
                 return this.actualToZipField;
             }
-            set {
+            set
+            {
                 this.actualToZipField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ActualMailClass {
-            get {
+        public string ActualMailClass
+        {
+            get
+            {
                 return this.actualMailClassField;
             }
-            set {
+            set
+            {
                 this.actualMailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AdjustedAmount {
-            get {
+        public string AdjustedAmount
+        {
+            get
+            {
                 return this.adjustedAmountField;
             }
-            set {
+            set
+            {
                 this.adjustedAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageInfo ActualPackageInfo {
-            get {
+        public PackageInfo ActualPackageInfo
+        {
+            get
+            {
                 return this.actualPackageInfoField;
             }
-            set {
+            set
+            {
                 this.actualPackageInfoField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DisputeDetails Dispute {
-            get {
+        public DisputeDetails Dispute
+        {
+            get
+            {
                 return this.disputeField;
             }
-            set {
+            set
+            {
                 this.disputeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ActualService ActualService {
-            get {
+        public ActualService ActualService
+        {
+            get
+            {
                 return this.actualServiceField;
             }
-            set {
+            set
+            {
                 this.actualServiceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum AdjustmentStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum AdjustmentStatus
+    {
+
         /// <remarks/>
         Processed,
-        
+
         /// <remarks/>
         Refunded,
-        
+
         /// <remarks/>
         Pending,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionRefundDetails {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionRefundDetails
+    {
+
         private string refundRequestedDateTimeField;
-        
+
         private RefundType refundRequestTypeField;
-        
+
         private string refundRequestedByField;
-        
+
         private System.Nullable<TransactionRefundStatus> refundStatusField;
-        
+
         private string refundProcessedDateTimeField;
-        
+
         private string refundedAmountField;
-        
+
         /// <remarks/>
-        public string RefundRequestedDateTime {
-            get {
+        public string RefundRequestedDateTime
+        {
+            get
+            {
                 return this.refundRequestedDateTimeField;
             }
-            set {
+            set
+            {
                 this.refundRequestedDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RefundType RefundRequestType {
-            get {
+        public RefundType RefundRequestType
+        {
+            get
+            {
                 return this.refundRequestTypeField;
             }
-            set {
+            set
+            {
                 this.refundRequestTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RefundRequestedBy {
-            get {
+        public string RefundRequestedBy
+        {
+            get
+            {
                 return this.refundRequestedByField;
             }
-            set {
+            set
+            {
                 this.refundRequestedByField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public System.Nullable<TransactionRefundStatus> RefundStatus {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+        public System.Nullable<TransactionRefundStatus> RefundStatus
+        {
+            get
+            {
                 return this.refundStatusField;
             }
-            set {
+            set
+            {
                 this.refundStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RefundProcessedDateTime {
-            get {
+        public string RefundProcessedDateTime
+        {
+            get
+            {
                 return this.refundProcessedDateTimeField;
             }
-            set {
+            set
+            {
                 this.refundProcessedDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RefundedAmount {
-            get {
+        public string RefundedAmount
+        {
+            get
+            {
                 return this.refundedAmountField;
             }
-            set {
+            set
+            {
                 this.refundedAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum RefundType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum RefundType
+    {
+
         /// <remarks/>
         Undefined,
-        
+
         /// <remarks/>
         Physical,
-        
+
         /// <remarks/>
         Electronic,
-        
+
         /// <remarks/>
         Both,
-        
+
         /// <remarks/>
         SmartSaver,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum TransactionRefundStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum TransactionRefundStatus
+    {
+
         /// <remarks/>
         ALL,
-        
+
         /// <remarks/>
         SUBMITTED,
-        
+
         /// <remarks/>
         VALIDATED,
-        
+
         /// <remarks/>
         REJECTED,
-        
+
         /// <remarks/>
         REFUNDED,
-        
+
         /// <remarks/>
         MANUAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionStatus
+    {
+
         private string statusEventField;
-        
+
         private string statusDescriptionField;
-        
+
         private string deliveryDateTimeField;
-        
+
         /// <remarks/>
-        public string StatusEvent {
-            get {
+        public string StatusEvent
+        {
+            get
+            {
                 return this.statusEventField;
             }
-            set {
+            set
+            {
                 this.statusEventField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string StatusDescription {
-            get {
+        public string StatusDescription
+        {
+            get
+            {
                 return this.statusDescriptionField;
             }
-            set {
+            set
+            {
                 this.statusDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryDateTime {
-            get {
+        public string DeliveryDateTime
+        {
+            get
+            {
                 return this.deliveryDateTimeField;
             }
-            set {
+            set
+            {
                 this.deliveryDateTimeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AddressLines {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AddressLines
+    {
+
         private string addressLine1Field;
-        
+
         private string addressLine2Field;
-        
+
         /// <remarks/>
-        public string AddressLine1 {
-            get {
+        public string AddressLine1
+        {
+            get
+            {
                 return this.addressLine1Field;
             }
-            set {
+            set
+            {
                 this.addressLine1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AddressLine2 {
-            get {
+        public string AddressLine2
+        {
+            get
+            {
                 return this.addressLine2Field;
             }
-            set {
+            set
+            {
                 this.addressLine2Field = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionAddress {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionAddress
+    {
+
         private string companyField;
-        
+
         private string nameField;
-        
+
         private string phoneField;
-        
+
         private string emailField;
-        
+
         private AddressLines addressLinesField;
-        
+
         private string cityField;
-        
+
         private string stateField;
-        
+
         private string postalCodeField;
-        
+
         private string zip4Field;
-        
+
         private string countryField;
-        
+
         /// <remarks/>
-        public string Company {
-            get {
+        public string Company
+        {
+            get
+            {
                 return this.companyField;
             }
-            set {
+            set
+            {
                 this.companyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Phone {
-            get {
+        public string Phone
+        {
+            get
+            {
                 return this.phoneField;
             }
-            set {
+            set
+            {
                 this.phoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Email {
-            get {
+        public string Email
+        {
+            get
+            {
                 return this.emailField;
             }
-            set {
+            set
+            {
                 this.emailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AddressLines AddressLines {
-            get {
+        public AddressLines AddressLines
+        {
+            get
+            {
                 return this.addressLinesField;
             }
-            set {
+            set
+            {
                 this.addressLinesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string City {
-            get {
+        public string City
+        {
+            get
+            {
                 return this.cityField;
             }
-            set {
+            set
+            {
                 this.cityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string State {
-            get {
+        public string State
+        {
+            get
+            {
                 return this.stateField;
             }
-            set {
+            set
+            {
                 this.stateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PostalCode {
-            get {
+        public string PostalCode
+        {
+            get
+            {
                 return this.postalCodeField;
             }
-            set {
+            set
+            {
                 this.postalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zip4 {
-            get {
+        public string Zip4
+        {
+            get
+            {
                 return this.zip4Field;
             }
-            set {
+            set
+            {
                 this.zip4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Country {
-            get {
+        public string Country
+        {
+            get
+            {
                 return this.countryField;
             }
-            set {
+            set
+            {
                 this.countryField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Transaction {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Transaction
+    {
+
         private string pICField;
-        
+
         private long transactionIDField;
-        
+
         private string pieceIDField;
-        
+
         private string amountField;
-        
+
         private string weightField;
-        
+
         private string mailClassField;
-        
+
         private TransactionAddress toAddressField;
-        
+
         private TransactionAddress fromAddressField;
-        
+
         private string costCenterField;
-        
+
         private string referenceIDField;
-        
+
         private string retailAccountIDField;
-        
+
         private string retailAmountField;
-        
+
         private string contractIDField;
-        
+
         private TransactionStatus statusField;
-        
+
         private string zoneField;
-        
+
         private string cubicFtField;
-        
+
         private TransactionRefundDetails refundDetailsField;
-        
+
         private Adjustment adjustmentsDetailsField;
-        
+
         private TransactionType transactionTypeField;
-        
+
         private string transactionDateTimeField;
-        
+
         private string postmarkDateField;
-        
+
         private string refundStatusField;
-        
+
         /// <remarks/>
-        public string PIC {
-            get {
+        public string PIC
+        {
+            get
+            {
                 return this.pICField;
             }
-            set {
+            set
+            {
                 this.pICField = value;
             }
         }
-        
+
         /// <remarks/>
-        public long TransactionID {
-            get {
+        public long TransactionID
+        {
+            get
+            {
                 return this.transactionIDField;
             }
-            set {
+            set
+            {
                 this.transactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PieceID {
-            get {
+        public string PieceID
+        {
+            get
+            {
                 return this.pieceIDField;
             }
-            set {
+            set
+            {
                 this.pieceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Amount {
-            get {
+        public string Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Weight {
-            get {
+        public string Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionAddress ToAddress {
-            get {
+        public TransactionAddress ToAddress
+        {
+            get
+            {
                 return this.toAddressField;
             }
-            set {
+            set
+            {
                 this.toAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionAddress FromAddress {
-            get {
+        public TransactionAddress FromAddress
+        {
+            get
+            {
                 return this.fromAddressField;
             }
-            set {
+            set
+            {
                 this.fromAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CostCenter {
-            get {
+        public string CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RetailAccountID {
-            get {
+        public string RetailAccountID
+        {
+            get
+            {
                 return this.retailAccountIDField;
             }
-            set {
+            set
+            {
                 this.retailAccountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RetailAmount {
-            get {
+        public string RetailAmount
+        {
+            get
+            {
                 return this.retailAmountField;
             }
-            set {
+            set
+            {
                 this.retailAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContractID {
-            get {
+        public string ContractID
+        {
+            get
+            {
                 return this.contractIDField;
             }
-            set {
+            set
+            {
                 this.contractIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionStatus Status {
-            get {
+        public TransactionStatus Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zone {
-            get {
+        public string Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CubicFt {
-            get {
+        public string CubicFt
+        {
+            get
+            {
                 return this.cubicFtField;
             }
-            set {
+            set
+            {
                 this.cubicFtField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionRefundDetails RefundDetails {
-            get {
+        public TransactionRefundDetails RefundDetails
+        {
+            get
+            {
                 return this.refundDetailsField;
             }
-            set {
+            set
+            {
                 this.refundDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Adjustment AdjustmentsDetails {
-            get {
+        public Adjustment AdjustmentsDetails
+        {
+            get
+            {
                 return this.adjustmentsDetailsField;
             }
-            set {
+            set
+            {
                 this.adjustmentsDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public TransactionType TransactionType {
-            get {
+        public TransactionType TransactionType
+        {
+            get
+            {
                 return this.transactionTypeField;
             }
-            set {
+            set
+            {
                 this.transactionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string TransactionDateTime {
-            get {
+        public string TransactionDateTime
+        {
+            get
+            {
                 return this.transactionDateTimeField;
             }
-            set {
+            set
+            {
                 this.transactionDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PostmarkDate {
-            get {
+        public string PostmarkDate
+        {
+            get
+            {
                 return this.postmarkDateField;
             }
-            set {
+            set
+            {
                 this.postmarkDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RefundStatus {
-            get {
+        public string RefundStatus
+        {
+            get
+            {
                 return this.refundStatusField;
             }
-            set {
+            set
+            {
                 this.refundStatusField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum TransactionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum TransactionType
+    {
+
         /// <remarks/>
         PRINT,
-        
+
         /// <remarks/>
         PURCHASE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionsListingResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionsListingResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private Transaction[] transactionsResultsField;
-        
+
         private TransactionsResponseOptions responseOptionsField;
-        
+
         private Adjustment[] adjustmentsDetailsField;
-        
+
         private long startingTransactionIDField;
-        
+
         private long endingTransactionIDField;
-        
+
         private bool completeDataSetField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Transaction[] TransactionsResults {
-            get {
+        public Transaction[] TransactionsResults
+        {
+            get
+            {
                 return this.transactionsResultsField;
             }
-            set {
+            set
+            {
                 this.transactionsResultsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionsResponseOptions ResponseOptions {
-            get {
+        public TransactionsResponseOptions ResponseOptions
+        {
+            get
+            {
                 return this.responseOptionsField;
             }
-            set {
+            set
+            {
                 this.responseOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Adjustment[] AdjustmentsDetails {
-            get {
+        public Adjustment[] AdjustmentsDetails
+        {
+            get
+            {
                 return this.adjustmentsDetailsField;
             }
-            set {
+            set
+            {
                 this.adjustmentsDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public long StartingTransactionID {
-            get {
+        public long StartingTransactionID
+        {
+            get
+            {
                 return this.startingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.startingTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public long EndingTransactionID {
-            get {
+        public long EndingTransactionID
+        {
+            get
+            {
                 return this.endingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.endingTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool CompleteDataSet {
-            get {
+        public bool CompleteDataSet
+        {
+            get
+            {
                 return this.completeDataSetField;
             }
-            set {
+            set
+            {
                 this.completeDataSetField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UserSignUpResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UserSignUpResponse
+    {
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string tokenField;
-        
+
         private long confirmationNumberField;
-        
+
         private long accountIDField;
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Token {
-            get {
+        public string Token
+        {
+            get
+            {
                 return this.tokenField;
             }
-            set {
+            set
+            {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
-        public long ConfirmationNumber {
-            get {
+        public long ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public long AccountID {
-            get {
+        public long AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RetailAccount {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RetailAccount
+    {
+
         private int accountNumberField;
-        
+
         private string nameField;
-        
+
         private string companyNameField;
-        
+
         private string phoneNumberField;
-        
+
         private string phoneExtField;
-        
+
         private string faxNumberField;
-        
+
         private string emailAddressField;
-        
+
         private string referredByField;
-        
+
         private System.DateTime signupDateField;
-        
+
         private string domesticContractIdField;
-        
+
         private string internationalContractIdField;
-        
+
         private string physicalAddressField;
-        
+
         private string physicalCityField;
-        
+
         private string physicalStateField;
-        
+
         private string physicalZipField;
-        
+
         private string accountStatusField;
-        
+
         private decimal purchasedField;
-        
+
         private decimal printedField;
-        
+
         private decimal refundedField;
-        
+
         private decimal balanceField;
-        
+
         /// <remarks/>
-        public int AccountNumber {
-            get {
+        public int AccountNumber
+        {
+            get
+            {
                 return this.accountNumberField;
             }
-            set {
+            set
+            {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CompanyName {
-            get {
+        public string CompanyName
+        {
+            get
+            {
                 return this.companyNameField;
             }
-            set {
+            set
+            {
                 this.companyNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneExt {
-            get {
+        public string PhoneExt
+        {
+            get
+            {
                 return this.phoneExtField;
             }
-            set {
+            set
+            {
                 this.phoneExtField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FaxNumber {
-            get {
+        public string FaxNumber
+        {
+            get
+            {
                 return this.faxNumberField;
             }
-            set {
+            set
+            {
                 this.faxNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EmailAddress {
-            get {
+        public string EmailAddress
+        {
+            get
+            {
                 return this.emailAddressField;
             }
-            set {
+            set
+            {
                 this.emailAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferredBy {
-            get {
+        public string ReferredBy
+        {
+            get
+            {
                 return this.referredByField;
             }
-            set {
+            set
+            {
                 this.referredByField = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime SignupDate {
-            get {
+        public System.DateTime SignupDate
+        {
+            get
+            {
                 return this.signupDateField;
             }
-            set {
+            set
+            {
                 this.signupDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DomesticContractId {
-            get {
+        public string DomesticContractId
+        {
+            get
+            {
                 return this.domesticContractIdField;
             }
-            set {
+            set
+            {
                 this.domesticContractIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InternationalContractId {
-            get {
+        public string InternationalContractId
+        {
+            get
+            {
                 return this.internationalContractIdField;
             }
-            set {
+            set
+            {
                 this.internationalContractIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhysicalAddress {
-            get {
+        public string PhysicalAddress
+        {
+            get
+            {
                 return this.physicalAddressField;
             }
-            set {
+            set
+            {
                 this.physicalAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhysicalCity {
-            get {
+        public string PhysicalCity
+        {
+            get
+            {
                 return this.physicalCityField;
             }
-            set {
+            set
+            {
                 this.physicalCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhysicalState {
-            get {
+        public string PhysicalState
+        {
+            get
+            {
                 return this.physicalStateField;
             }
-            set {
+            set
+            {
                 this.physicalStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhysicalZip {
-            get {
+        public string PhysicalZip
+        {
+            get
+            {
                 return this.physicalZipField;
             }
-            set {
+            set
+            {
                 this.physicalZipField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountStatus {
-            get {
+        public string AccountStatus
+        {
+            get
+            {
                 return this.accountStatusField;
             }
-            set {
+            set
+            {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Purchased {
-            get {
+        public decimal Purchased
+        {
+            get
+            {
                 return this.purchasedField;
             }
-            set {
+            set
+            {
                 this.purchasedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Printed {
-            get {
+        public decimal Printed
+        {
+            get
+            {
                 return this.printedField;
             }
-            set {
+            set
+            {
                 this.printedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Refunded {
-            get {
+        public decimal Refunded
+        {
+            get
+            {
                 return this.refundedField;
             }
-            set {
+            set
+            {
                 this.refundedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Balance {
-            get {
+        public decimal Balance
+        {
+            get
+            {
                 return this.balanceField;
             }
-            set {
+            set
+            {
                 this.balanceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RetailAccountsResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RetailAccountsResponse
+    {
+
         private RetailAccount[] retailAccountsField;
-        
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         /// <remarks/>
-        public RetailAccount[] RetailAccounts {
-            get {
+        public RetailAccount[] RetailAccounts
+        {
+            get
+            {
                 return this.retailAccountsField;
             }
-            set {
+            set
+            {
                 this.retailAccountsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TrackingResult {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TrackingResult
+    {
+
         private string statusField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Status {
-            get {
+        public string Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class StatusEventList {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class StatusEventList
+    {
+
         private string statusCodeField;
-        
+
         private string statusDescriptionField;
-        
+
         private string eventDateTimeField;
-        
+
         private string trackingSummaryField;
-        
+
         private TrackingResult[] trackingResultsField;
-        
+
         /// <remarks/>
-        public string StatusCode {
-            get {
+        public string StatusCode
+        {
+            get
+            {
                 return this.statusCodeField;
             }
-            set {
+            set
+            {
                 this.statusCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string StatusDescription {
-            get {
+        public string StatusDescription
+        {
+            get
+            {
                 return this.statusDescriptionField;
             }
-            set {
+            set
+            {
                 this.statusDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EventDateTime {
-            get {
+        public string EventDateTime
+        {
+            get
+            {
                 return this.eventDateTimeField;
             }
-            set {
+            set
+            {
                 this.eventDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TrackingSummary {
-            get {
+        public string TrackingSummary
+        {
+            get
+            {
                 return this.trackingSummaryField;
             }
-            set {
+            set
+            {
                 this.trackingSummaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingResult[] TrackingResults {
-            get {
+        public TrackingResult[] TrackingResults
+        {
+            get
+            {
                 return this.trackingResultsField;
             }
-            set {
+            set
+            {
                 this.trackingResultsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class StatusResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class StatusResponse
+    {
+
         private string picNumberField;
-        
+
         private string pieceIdField;
-        
+
         private string transactionIDField;
-        
+
         private StatusEventList[] packageStatusEventListField;
-        
+
         /// <remarks/>
-        public string PicNumber {
-            get {
+        public string PicNumber
+        {
+            get
+            {
                 return this.picNumberField;
             }
-            set {
+            set
+            {
                 this.picNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PieceId {
-            get {
+        public string PieceId
+        {
+            get
+            {
                 return this.pieceIdField;
             }
-            set {
+            set
+            {
                 this.pieceIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TransactionID {
-            get {
+        public string TransactionID
+        {
+            get
+            {
                 return this.transactionIDField;
             }
-            set {
+            set
+            {
                 this.transactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public StatusEventList[] PackageStatusEventList {
-            get {
+        public StatusEventList[] PackageStatusEventList
+        {
+            get
+            {
                 return this.packageStatusEventListField;
             }
-            set {
+            set
+            {
                 this.packageStatusEventListField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackageStatusResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackageStatusResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private StatusResponse[] packageStatusField;
-        
+
         private string startingTransactionIDField;
-        
+
         private string endingTransactionIDField;
-        
+
         private bool completeDataSetField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public StatusResponse[] PackageStatus {
-            get {
+        public StatusResponse[] PackageStatus
+        {
+            get
+            {
                 return this.packageStatusField;
             }
-            set {
+            set
+            {
                 this.packageStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StartingTransactionID {
-            get {
+        public string StartingTransactionID
+        {
+            get
+            {
                 return this.startingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.startingTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EndingTransactionID {
-            get {
+        public string EndingTransactionID
+        {
+            get
+            {
                 return this.endingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.endingTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool CompleteDataSet {
-            get {
+        public bool CompleteDataSet
+        {
+            get
+            {
                 return this.completeDataSetField;
             }
-            set {
+            set
+            {
                 this.completeDataSetField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DHLeCManifestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DHLeCManifestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private int dHLeCDomesticManifestIDField;
-        
+
         private string[] driversSummaryManifestField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int DHLeCDomesticManifestID {
-            get {
+        public int DHLeCDomesticManifestID
+        {
+            get
+            {
                 return this.dHLeCDomesticManifestIDField;
             }
-            set {
+            set
+            {
                 this.dHLeCDomesticManifestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string[] DriversSummaryManifest {
-            get {
+        public string[] DriversSummaryManifest
+        {
+            get
+            {
                 return this.driversSummaryManifestField;
             }
-            set {
+            set
+            {
                 this.driversSummaryManifestField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DhlgmManifestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DhlgmManifestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private int manifestIDField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ManifestID {
-            get {
+        public int ManifestID
+        {
+            get
+            {
                 return this.manifestIDField;
             }
-            set {
+            set
+            {
                 this.manifestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SetPendingCloseAccountResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SetPendingCloseAccountResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRatesResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRatesResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private PostagePrice[] postagePriceField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PostagePrice")]
-        public PostagePrice[] PostagePrice {
-            get {
+        public PostagePrice[] PostagePrice
+        {
+            get
+            {
                 return this.postagePriceField;
             }
-            set {
+            set
+            {
                 this.postagePriceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostagePrice {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostagePrice
+    {
+
         private string mailClassField;
-        
+
         private Postage postageField;
-        
+
         private Fees feesField;
-        
+
         private string deliveryTimeDaysField;
-        
+
         private string estimatedDeliveryDateField;
-        
+
         private decimal ddpRateField;
-        
+
         private decimal totalAmountField;
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Postage Postage {
-            get {
+        public Postage Postage
+        {
+            get
+            {
                 return this.postageField;
             }
-            set {
+            set
+            {
                 this.postageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Fees Fees {
-            get {
+        public Fees Fees
+        {
+            get
+            {
                 return this.feesField;
             }
-            set {
+            set
+            {
                 this.feesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryTimeDays {
-            get {
+        public string DeliveryTimeDays
+        {
+            get
+            {
                 return this.deliveryTimeDaysField;
             }
-            set {
+            set
+            {
                 this.deliveryTimeDaysField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EstimatedDeliveryDate {
-            get {
+        public string EstimatedDeliveryDate
+        {
+            get
+            {
                 return this.estimatedDeliveryDateField;
             }
-            set {
+            set
+            {
                 this.estimatedDeliveryDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DdpRate {
-            get {
+        public decimal DdpRate
+        {
+            get
+            {
                 return this.ddpRateField;
             }
-            set {
+            set
+            {
                 this.ddpRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal TotalAmount {
-            get {
+        public decimal TotalAmount
+        {
+            get
+            {
                 return this.totalAmountField;
             }
-            set {
+            set
+            {
                 this.totalAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Postage {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Postage
+    {
+
         private string mailServiceField;
-        
+
         private string zoneField;
-        
+
         private string intraBMCField;
-        
+
         private string pricingField;
-        
+
         private decimal totalAmountField;
-        
+
         /// <remarks/>
-        public string MailService {
-            get {
+        public string MailService
+        {
+            get
+            {
                 return this.mailServiceField;
             }
-            set {
+            set
+            {
                 this.mailServiceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zone {
-            get {
+        public string Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IntraBMC {
-            get {
+        public string IntraBMC
+        {
+            get
+            {
                 return this.intraBMCField;
             }
-            set {
+            set
+            {
                 this.intraBMCField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Pricing {
-            get {
+        public string Pricing
+        {
+            get
+            {
                 return this.pricingField;
             }
-            set {
+            set
+            {
                 this.pricingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal TotalAmount {
-            get {
+        public decimal TotalAmount
+        {
+            get
+            {
                 return this.totalAmountField;
             }
-            set {
+            set
+            {
                 this.totalAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Fees {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Fees
+    {
+
         private decimal certificateOfMailingField;
-        
+
         private decimal certifiedMailField;
-        
+
         private decimal collectOnDeliveryField;
-        
+
         private decimal deliveryConfirmationField;
-        
+
         private decimal electronicReturnReceiptField;
-        
+
         private decimal insuredMailField;
-        
+
         private decimal registeredMailField;
-        
+
         private decimal restrictedDeliveryField;
-        
+
         private decimal returnReceiptField;
-        
+
         private decimal returnReceiptForMerchandiseField;
-        
+
         private decimal signatureConfirmationField;
-        
+
         private decimal specialHandlingField;
-        
+
         private decimal merchandiseReturnField;
-        
+
         private decimal openAndDistributeField;
-        
+
         private decimal adultSignatureField;
-        
+
         private decimal adultSignatureRestrictedDeliveryField;
-        
+
         private decimal liveAnimalSurchargeField;
-        
+
         private decimal fragileHandlingField;
-        
+
         private decimal aMDeliveryField;
-        
+
         private GroupedExtraServices groupedExtraServicesField;
-        
+
         private decimal totalAmountField;
-        
+
         /// <remarks/>
-        public decimal CertificateOfMailing {
-            get {
+        public decimal CertificateOfMailing
+        {
+            get
+            {
                 return this.certificateOfMailingField;
             }
-            set {
+            set
+            {
                 this.certificateOfMailingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CertifiedMail {
-            get {
+        public decimal CertifiedMail
+        {
+            get
+            {
                 return this.certifiedMailField;
             }
-            set {
+            set
+            {
                 this.certifiedMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CollectOnDelivery {
-            get {
+        public decimal CollectOnDelivery
+        {
+            get
+            {
                 return this.collectOnDeliveryField;
             }
-            set {
+            set
+            {
                 this.collectOnDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DeliveryConfirmation {
-            get {
+        public decimal DeliveryConfirmation
+        {
+            get
+            {
                 return this.deliveryConfirmationField;
             }
-            set {
+            set
+            {
                 this.deliveryConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ElectronicReturnReceipt {
-            get {
+        public decimal ElectronicReturnReceipt
+        {
+            get
+            {
                 return this.electronicReturnReceiptField;
             }
-            set {
+            set
+            {
                 this.electronicReturnReceiptField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal InsuredMail {
-            get {
+        public decimal InsuredMail
+        {
+            get
+            {
                 return this.insuredMailField;
             }
-            set {
+            set
+            {
                 this.insuredMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal RegisteredMail {
-            get {
+        public decimal RegisteredMail
+        {
+            get
+            {
                 return this.registeredMailField;
             }
-            set {
+            set
+            {
                 this.registeredMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal RestrictedDelivery {
-            get {
+        public decimal RestrictedDelivery
+        {
+            get
+            {
                 return this.restrictedDeliveryField;
             }
-            set {
+            set
+            {
                 this.restrictedDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceipt {
-            get {
+        public decimal ReturnReceipt
+        {
+            get
+            {
                 return this.returnReceiptField;
             }
-            set {
+            set
+            {
                 this.returnReceiptField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceiptForMerchandise {
-            get {
+        public decimal ReturnReceiptForMerchandise
+        {
+            get
+            {
                 return this.returnReceiptForMerchandiseField;
             }
-            set {
+            set
+            {
                 this.returnReceiptForMerchandiseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SignatureConfirmation {
-            get {
+        public decimal SignatureConfirmation
+        {
+            get
+            {
                 return this.signatureConfirmationField;
             }
-            set {
+            set
+            {
                 this.signatureConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SpecialHandling {
-            get {
+        public decimal SpecialHandling
+        {
+            get
+            {
                 return this.specialHandlingField;
             }
-            set {
+            set
+            {
                 this.specialHandlingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal MerchandiseReturn {
-            get {
+        public decimal MerchandiseReturn
+        {
+            get
+            {
                 return this.merchandiseReturnField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal OpenAndDistribute {
-            get {
+        public decimal OpenAndDistribute
+        {
+            get
+            {
                 return this.openAndDistributeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AdultSignature {
-            get {
+        public decimal AdultSignature
+        {
+            get
+            {
                 return this.adultSignatureField;
             }
-            set {
+            set
+            {
                 this.adultSignatureField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AdultSignatureRestrictedDelivery {
-            get {
+        public decimal AdultSignatureRestrictedDelivery
+        {
+            get
+            {
                 return this.adultSignatureRestrictedDeliveryField;
             }
-            set {
+            set
+            {
                 this.adultSignatureRestrictedDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal LiveAnimalSurcharge {
-            get {
+        public decimal LiveAnimalSurcharge
+        {
+            get
+            {
                 return this.liveAnimalSurchargeField;
             }
-            set {
+            set
+            {
                 this.liveAnimalSurchargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal FragileHandling {
-            get {
+        public decimal FragileHandling
+        {
+            get
+            {
                 return this.fragileHandlingField;
             }
-            set {
+            set
+            {
                 this.fragileHandlingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AMDelivery {
-            get {
+        public decimal AMDelivery
+        {
+            get
+            {
                 return this.aMDeliveryField;
             }
-            set {
+            set
+            {
                 this.aMDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public GroupedExtraServices GroupedExtraServices {
-            get {
+        public GroupedExtraServices GroupedExtraServices
+        {
+            get
+            {
                 return this.groupedExtraServicesField;
             }
-            set {
+            set
+            {
                 this.groupedExtraServicesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal TotalAmount {
-            get {
+        public decimal TotalAmount
+        {
+            get
+            {
                 return this.totalAmountField;
             }
-            set {
+            set
+            {
                 this.totalAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GroupedExtraServices {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GroupedExtraServices
+    {
+
         private decimal feeAmountField;
-        
+
         private string servicesField;
-        
+
         /// <remarks/>
-        public decimal FeeAmount {
-            get {
+        public decimal FeeAmount
+        {
+            get
+            {
                 return this.feeAmountField;
             }
-            set {
+            set
+            {
                 this.feeAmountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Services {
-            get {
+        public string Services
+        {
+            get
+            {
                 return this.servicesField;
             }
-            set {
+            set
+            {
                 this.servicesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ChangePassPhraseRequestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ChangePassPhraseRequestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string tokenField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Token {
-            get {
+        public string Token
+        {
+            get
+            {
                 return this.tokenField;
             }
-            set {
+            set
+            {
                 this.tokenField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UpdatePaymentInfoResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UpdatePaymentInfoResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SetAccountFeatureOptInResult {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SetAccountFeatureOptInResult
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private bool successField;
-        
+
         private string messageField;
-        
+
         private string termsAndConditionsLinkField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Success {
-            get {
+        public bool Success
+        {
+            get
+            {
                 return this.successField;
             }
-            set {
+            set
+            {
                 this.successField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Message {
-            get {
+        public string Message
+        {
+            get
+            {
                 return this.messageField;
             }
-            set {
+            set
+            {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TermsAndConditionsLink {
-            get {
+        public string TermsAndConditionsLink
+        {
+            get
+            {
                 return this.termsAndConditionsLinkField;
             }
-            set {
+            set
+            {
                 this.termsAndConditionsLinkField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class LabelNumberResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class LabelNumberResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string labelNumberField;
-        
+
         private string labelNumberTypeField;
-        
+
         private string labelNumberSourceField;
-        
+
         private string rDCField;
-        
+
         private string serverNameField;
-        
+
         private string serverDateTimeField;
-        
+
         private string barcodeNumberField;
-        
+
         private string bannerField;
-        
+
         private string mailerIDField;
-        
+
         private string displayLabelNumberField;
-        
+
         private long picIdField;
-        
+
         private decimal sDRValueField;
-        
+
         private int deliveryTimeDaysField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelNumber {
-            get {
+        public string LabelNumber
+        {
+            get
+            {
                 return this.labelNumberField;
             }
-            set {
+            set
+            {
                 this.labelNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelNumberType {
-            get {
+        public string LabelNumberType
+        {
+            get
+            {
                 return this.labelNumberTypeField;
             }
-            set {
+            set
+            {
                 this.labelNumberTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelNumberSource {
-            get {
+        public string LabelNumberSource
+        {
+            get
+            {
                 return this.labelNumberSourceField;
             }
-            set {
+            set
+            {
                 this.labelNumberSourceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RDC {
-            get {
+        public string RDC
+        {
+            get
+            {
                 return this.rDCField;
             }
-            set {
+            set
+            {
                 this.rDCField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServerName {
-            get {
+        public string ServerName
+        {
+            get
+            {
                 return this.serverNameField;
             }
-            set {
+            set
+            {
                 this.serverNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServerDateTime {
-            get {
+        public string ServerDateTime
+        {
+            get
+            {
                 return this.serverDateTimeField;
             }
-            set {
+            set
+            {
                 this.serverDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BarcodeNumber {
-            get {
+        public string BarcodeNumber
+        {
+            get
+            {
                 return this.barcodeNumberField;
             }
-            set {
+            set
+            {
                 this.barcodeNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Banner {
-            get {
+        public string Banner
+        {
+            get
+            {
                 return this.bannerField;
             }
-            set {
+            set
+            {
                 this.bannerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailerID {
-            get {
+        public string MailerID
+        {
+            get
+            {
                 return this.mailerIDField;
             }
-            set {
+            set
+            {
                 this.mailerIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DisplayLabelNumber {
-            get {
+        public string DisplayLabelNumber
+        {
+            get
+            {
                 return this.displayLabelNumberField;
             }
-            set {
+            set
+            {
                 this.displayLabelNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public long PicId {
-            get {
+        public long PicId
+        {
+            get
+            {
                 return this.picIdField;
             }
-            set {
+            set
+            {
                 this.picIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SDRValue {
-            get {
+        public decimal SDRValue
+        {
+            get
+            {
                 return this.sDRValueField;
             }
-            set {
+            set
+            {
                 this.sDRValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int DeliveryTimeDays {
-            get {
+        public int DeliveryTimeDays
+        {
+            get
+            {
                 return this.deliveryTimeDaysField;
             }
-            set {
+            set
+            {
                 this.deliveryTimeDaysField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ExtraServiceRate {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ExtraServiceRate
+    {
+
         private string extraServiceField;
-        
+
         private decimal rateField;
-        
+
         private string discountTypeField;
-        
+
         /// <remarks/>
-        public string ExtraService {
-            get {
+        public string ExtraService
+        {
+            get
+            {
                 return this.extraServiceField;
             }
-            set {
+            set
+            {
                 this.extraServiceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Rate {
-            get {
+        public decimal Rate
+        {
+            get
+            {
                 return this.rateField;
             }
-            set {
+            set
+            {
                 this.rateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DiscountType {
-            get {
+        public string DiscountType
+        {
+            get
+            {
                 return this.discountTypeField;
             }
-            set {
+            set
+            {
                 this.discountTypeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GetExtraServiceRateResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GetExtraServiceRateResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private ExtraServiceRate[] extraServiceField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExtraService")]
-        public ExtraServiceRate[] ExtraService {
-            get {
+        public ExtraServiceRate[] ExtraService
+        {
+            get
+            {
                 return this.extraServiceField;
             }
-            set {
+            set
+            {
                 this.extraServiceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRate {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRate
+    {
+
         private string mailServiceField;
-        
+
         private decimal rateField;
-        
+
         /// <remarks/>
-        public string MailService {
-            get {
+        public string MailService
+        {
+            get
+            {
                 return this.mailServiceField;
             }
-            set {
+            set
+            {
                 this.mailServiceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Rate {
-            get {
+        public decimal Rate
+        {
+            get
+            {
                 return this.rateField;
             }
-            set {
+            set
+            {
                 this.rateField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRateResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRateResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string zoneField;
-        
+
         private PostageRate[] postageField;
-        
+
         private PostagePrice[] postagePriceField;
-        
+
         private Commitment[] priorityMailExpressCommitmentsField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zone {
-            get {
+        public string Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Postage")]
-        public PostageRate[] Postage {
-            get {
+        public PostageRate[] Postage
+        {
+            get
+            {
                 return this.postageField;
             }
-            set {
+            set
+            {
                 this.postageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PostagePrice")]
-        public PostagePrice[] PostagePrice {
-            get {
+        public PostagePrice[] PostagePrice
+        {
+            get
+            {
                 return this.postagePriceField;
             }
-            set {
+            set
+            {
                 this.postagePriceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Commitment[] PriorityMailExpressCommitments {
-            get {
+        public Commitment[] PriorityMailExpressCommitments
+        {
+            get
+            {
                 return this.priorityMailExpressCommitmentsField;
             }
-            set {
+            set
+            {
                 this.priorityMailExpressCommitmentsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Commitment {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Commitment
+    {
+
         private string commitmentNameField;
-        
+
         private string commitmentTimeField;
-        
+
         private Location[] locationField;
-        
+
         /// <remarks/>
-        public string CommitmentName {
-            get {
+        public string CommitmentName
+        {
+            get
+            {
                 return this.commitmentNameField;
             }
-            set {
+            set
+            {
                 this.commitmentNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CommitmentTime {
-            get {
+        public string CommitmentTime
+        {
+            get
+            {
                 return this.commitmentTimeField;
             }
-            set {
+            set
+            {
                 this.commitmentTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Location")]
-        public Location[] Location {
-            get {
+        public Location[] Location
+        {
+            get
+            {
                 return this.locationField;
             }
-            set {
+            set
+            {
                 this.locationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Location {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Location
+    {
+
         private string cutOffField;
-        
+
         private string facilityField;
-        
+
         private string streetField;
-        
+
         private string cityField;
-        
+
         private string stateField;
-        
+
         private string zipField;
-        
+
         /// <remarks/>
-        public string CutOff {
-            get {
+        public string CutOff
+        {
+            get
+            {
                 return this.cutOffField;
             }
-            set {
+            set
+            {
                 this.cutOffField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Facility {
-            get {
+        public string Facility
+        {
+            get
+            {
                 return this.facilityField;
             }
-            set {
+            set
+            {
                 this.facilityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Street {
-            get {
+        public string Street
+        {
+            get
+            {
                 return this.streetField;
             }
-            set {
+            set
+            {
                 this.streetField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string City {
-            get {
+        public string City
+        {
+            get
+            {
                 return this.cityField;
             }
-            set {
+            set
+            {
                 this.cityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string State {
-            get {
+        public string State
+        {
+            get
+            {
                 return this.stateField;
             }
-            set {
+            set
+            {
                 this.stateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zip {
-            get {
+        public string Zip
+        {
+            get
+            {
                 return this.zipField;
             }
-            set {
+            set
+            {
                 this.zipField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DdpRateResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DdpRateResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private decimal ddpRateField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DdpRate {
-            get {
+        public decimal DdpRate
+        {
+            get
+            {
                 return this.ddpRateField;
             }
-            set {
+            set
+            {
                 this.ddpRateField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RecreditRequestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RecreditRequestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediaryStatus certifiedIntermediaryField;
-        
+
         private long transactionIDField;
-        
+
         private decimal controlRegisterField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediaryStatus CertifiedIntermediary {
-            get {
+        public CertifiedIntermediaryStatus CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public long TransactionID {
-            get {
+        public long TransactionID
+        {
+            get
+            {
                 return this.transactionIDField;
             }
-            set {
+            set
+            {
                 this.transactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ControlRegister {
-            get {
+        public decimal ControlRegister
+        {
+            get
+            {
                 return this.controlRegisterField;
             }
-            set {
+            set
+            {
                 this.controlRegisterField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CertifiedIntermediaryStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CertifiedIntermediaryStatus
+    {
+
         private string accountIDField;
-        
+
         private int serialNumberField;
-        
+
         private decimal postageBalanceField;
-        
+
         private decimal ascendingBalanceField;
-        
+
         private string accountStatusField;
-        
+
         private string deviceIDField;
-        
+
         private string referenceIDField;
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int SerialNumber {
-            get {
+        public int SerialNumber
+        {
+            get
+            {
                 return this.serialNumberField;
             }
-            set {
+            set
+            {
                 this.serialNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal PostageBalance {
-            get {
+        public decimal PostageBalance
+        {
+            get
+            {
                 return this.postageBalanceField;
             }
-            set {
+            set
+            {
                 this.postageBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AscendingBalance {
-            get {
+        public decimal AscendingBalance
+        {
+            get
+            {
                 return this.ascendingBalanceField;
             }
-            set {
+            set
+            {
                 this.ascendingBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountStatus {
-            get {
+        public string AccountStatus
+        {
+            get
+            {
                 return this.accountStatusField;
             }
-            set {
+            set
+            {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeviceID {
-            get {
+        public string DeviceID
+        {
+            get
+            {
                 return this.deviceIDField;
             }
-            set {
+            set
+            {
                 this.deviceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class VoidLabelResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class VoidLabelResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GetVersionResults {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GetVersionResults
+    {
+
         private string errorMessageField;
-        
+
         private string modeField;
-        
+
         private string postalSystemField;
-        
+
         private string serverNameField;
-        
+
         private int statusField;
-        
+
         private string versionField;
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Mode {
-            get {
+        public string Mode
+        {
+            get
+            {
                 return this.modeField;
             }
-            set {
+            set
+            {
                 this.modeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PostalSystem {
-            get {
+        public string PostalSystem
+        {
+            get
+            {
                 return this.postalSystemField;
             }
-            set {
+            set
+            {
                 this.postalSystemField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServerName {
-            get {
+        public string ServerName
+        {
+            get
+            {
                 return this.serverNameField;
             }
-            set {
+            set
+            {
                 this.serverNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Version {
-            get {
+        public string Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ResellerInformation {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ResellerInformation
+    {
+
         private long accountIdField;
-        
+
         private string deviceIdField;
-        
+
         private int customerEndUserIdField;
-        
+
         /// <remarks/>
-        public long AccountId {
-            get {
+        public long AccountId
+        {
+            get
+            {
                 return this.accountIdField;
             }
-            set {
+            set
+            {
                 this.accountIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeviceId {
-            get {
+        public string DeviceId
+        {
+            get
+            {
                 return this.deviceIdField;
             }
-            set {
+            set
+            {
                 this.deviceIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int CustomerEndUserId {
-            get {
+        public int CustomerEndUserId
+        {
+            get
+            {
                 return this.customerEndUserIdField;
             }
-            set {
+            set
+            {
                 this.customerEndUserIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ImageData {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ImageData
+    {
+
         private int partNumberField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int PartNumber {
-            get {
+        public int PartNumber
+        {
+            get
+            {
                 return this.partNumberField;
             }
-            set {
+            set
+            {
                 this.partNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ImageSet {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ImageSet
+    {
+
         private ImageData[] imageField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Image")]
-        public ImageData[] Image {
-            get {
+        public ImageData[] Image
+        {
+            get
+            {
                 return this.imageField;
             }
-            set {
+            set
+            {
                 this.imageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class LabelRequestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class LabelRequestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string base64LabelImageField;
-        
+
         private ImageSet labelField;
-        
+
         private ImageSet customsFormField;
-        
+
         private string pICField;
-        
+
         private string customsNumberField;
-        
+
         private string trackingNumberField;
-        
+
         private decimal finalPostageField;
-        
+
         private int transactionIDField;
-        
+
         private string transactionDateTimeField;
-        
+
         private string postmarkDateField;
-        
+
         private decimal postageBalanceField;
-        
+
         private string referenceIDField;
-        
+
         private int costCenterField;
-        
+
         private string hfpFacilityIDField;
-        
+
         private string hfpFacilityNameField;
-        
+
         private string hfpFacilityAddress1Field;
-        
+
         private string hfpFacilityCityField;
-        
+
         private string hfpFacilityStateField;
-        
+
         private string hfpFacilityPostalCodeField;
-        
+
         private string hfpFacilityZIP4Field;
-        
+
         private PostagePrice postagePriceField;
-        
+
         private string requesterIDField;
-        
+
         private string referenceID2Field;
-        
+
         private string referenceID3Field;
-        
+
         private string referenceID4Field;
-        
+
         private string costCenterAlphaNumericField;
-        
+
         private string indiciumField;
-        
+
         private string barcodeDisplayField;
-        
+
         private string barcodeNumberField;
-        
+
         private string bannerField;
-        
+
         private string rDCField;
-        
+
         private string routingNumberField;
-        
+
         private string deliveryTimeDaysField;
-        
+
         private string dHLInboundSortCodeField;
-        
+
         private string dHLOutboundSortCodeField;
-        
+
         private string dHLDestMailTerminalField;
-        
+
         private string dHLMailTypeField;
-        
+
         private string dHLITVersionField;
-        
+
         private string dHLServiceLevelField;
-        
+
         private Commitment[] priorityMailExpressCommitmentsField;
-        
+
         private string sequenceNumberField;
-        
+
         private ResellerInformation resellerInformationField;
-        
+
         private string estimatedDeliveryDateField;
-        
+
         private string sDRValueField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Base64LabelImage {
-            get {
+        public string Base64LabelImage
+        {
+            get
+            {
                 return this.base64LabelImageField;
             }
-            set {
+            set
+            {
                 this.base64LabelImageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ImageSet Label {
-            get {
+        public ImageSet Label
+        {
+            get
+            {
                 return this.labelField;
             }
-            set {
+            set
+            {
                 this.labelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ImageSet CustomsForm {
-            get {
+        public ImageSet CustomsForm
+        {
+            get
+            {
                 return this.customsFormField;
             }
-            set {
+            set
+            {
                 this.customsFormField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PIC {
-            get {
+        public string PIC
+        {
+            get
+            {
                 return this.pICField;
             }
-            set {
+            set
+            {
                 this.pICField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsNumber {
-            get {
+        public string CustomsNumber
+        {
+            get
+            {
                 return this.customsNumberField;
             }
-            set {
+            set
+            {
                 this.customsNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TrackingNumber {
-            get {
+        public string TrackingNumber
+        {
+            get
+            {
                 return this.trackingNumberField;
             }
-            set {
+            set
+            {
                 this.trackingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal FinalPostage {
-            get {
+        public decimal FinalPostage
+        {
+            get
+            {
                 return this.finalPostageField;
             }
-            set {
+            set
+            {
                 this.finalPostageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int TransactionID {
-            get {
+        public int TransactionID
+        {
+            get
+            {
                 return this.transactionIDField;
             }
-            set {
+            set
+            {
                 this.transactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TransactionDateTime {
-            get {
+        public string TransactionDateTime
+        {
+            get
+            {
                 return this.transactionDateTimeField;
             }
-            set {
+            set
+            {
                 this.transactionDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PostmarkDate {
-            get {
+        public string PostmarkDate
+        {
+            get
+            {
                 return this.postmarkDateField;
             }
-            set {
+            set
+            {
                 this.postmarkDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal PostageBalance {
-            get {
+        public decimal PostageBalance
+        {
+            get
+            {
                 return this.postageBalanceField;
             }
-            set {
+            set
+            {
                 this.postageBalanceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int CostCenter {
-            get {
+        public int CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityID {
-            get {
+        public string HfpFacilityID
+        {
+            get
+            {
                 return this.hfpFacilityIDField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityName {
-            get {
+        public string HfpFacilityName
+        {
+            get
+            {
                 return this.hfpFacilityNameField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityAddress1 {
-            get {
+        public string HfpFacilityAddress1
+        {
+            get
+            {
                 return this.hfpFacilityAddress1Field;
             }
-            set {
+            set
+            {
                 this.hfpFacilityAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityCity {
-            get {
+        public string HfpFacilityCity
+        {
+            get
+            {
                 return this.hfpFacilityCityField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityState {
-            get {
+        public string HfpFacilityState
+        {
+            get
+            {
                 return this.hfpFacilityStateField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityPostalCode {
-            get {
+        public string HfpFacilityPostalCode
+        {
+            get
+            {
                 return this.hfpFacilityPostalCodeField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityZIP4 {
-            get {
+        public string HfpFacilityZIP4
+        {
+            get
+            {
                 return this.hfpFacilityZIP4Field;
             }
-            set {
+            set
+            {
                 this.hfpFacilityZIP4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public PostagePrice PostagePrice {
-            get {
+        public PostagePrice PostagePrice
+        {
+            get
+            {
                 return this.postagePriceField;
             }
-            set {
+            set
+            {
                 this.postagePriceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID2 {
-            get {
+        public string ReferenceID2
+        {
+            get
+            {
                 return this.referenceID2Field;
             }
-            set {
+            set
+            {
                 this.referenceID2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID3 {
-            get {
+        public string ReferenceID3
+        {
+            get
+            {
                 return this.referenceID3Field;
             }
-            set {
+            set
+            {
                 this.referenceID3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID4 {
-            get {
+        public string ReferenceID4
+        {
+            get
+            {
                 return this.referenceID4Field;
             }
-            set {
+            set
+            {
                 this.referenceID4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CostCenterAlphaNumeric {
-            get {
+        public string CostCenterAlphaNumeric
+        {
+            get
+            {
                 return this.costCenterAlphaNumericField;
             }
-            set {
+            set
+            {
                 this.costCenterAlphaNumericField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Indicium {
-            get {
+        public string Indicium
+        {
+            get
+            {
                 return this.indiciumField;
             }
-            set {
+            set
+            {
                 this.indiciumField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BarcodeDisplay {
-            get {
+        public string BarcodeDisplay
+        {
+            get
+            {
                 return this.barcodeDisplayField;
             }
-            set {
+            set
+            {
                 this.barcodeDisplayField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BarcodeNumber {
-            get {
+        public string BarcodeNumber
+        {
+            get
+            {
                 return this.barcodeNumberField;
             }
-            set {
+            set
+            {
                 this.barcodeNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Banner {
-            get {
+        public string Banner
+        {
+            get
+            {
                 return this.bannerField;
             }
-            set {
+            set
+            {
                 this.bannerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RDC {
-            get {
+        public string RDC
+        {
+            get
+            {
                 return this.rDCField;
             }
-            set {
+            set
+            {
                 this.rDCField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RoutingNumber {
-            get {
+        public string RoutingNumber
+        {
+            get
+            {
                 return this.routingNumberField;
             }
-            set {
+            set
+            {
                 this.routingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryTimeDays {
-            get {
+        public string DeliveryTimeDays
+        {
+            get
+            {
                 return this.deliveryTimeDaysField;
             }
-            set {
+            set
+            {
                 this.deliveryTimeDaysField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLInboundSortCode {
-            get {
+        public string DHLInboundSortCode
+        {
+            get
+            {
                 return this.dHLInboundSortCodeField;
             }
-            set {
+            set
+            {
                 this.dHLInboundSortCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLOutboundSortCode {
-            get {
+        public string DHLOutboundSortCode
+        {
+            get
+            {
                 return this.dHLOutboundSortCodeField;
             }
-            set {
+            set
+            {
                 this.dHLOutboundSortCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLDestMailTerminal {
-            get {
+        public string DHLDestMailTerminal
+        {
+            get
+            {
                 return this.dHLDestMailTerminalField;
             }
-            set {
+            set
+            {
                 this.dHLDestMailTerminalField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLMailType {
-            get {
+        public string DHLMailType
+        {
+            get
+            {
                 return this.dHLMailTypeField;
             }
-            set {
+            set
+            {
                 this.dHLMailTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLITVersion {
-            get {
+        public string DHLITVersion
+        {
+            get
+            {
                 return this.dHLITVersionField;
             }
-            set {
+            set
+            {
                 this.dHLITVersionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DHLServiceLevel {
-            get {
+        public string DHLServiceLevel
+        {
+            get
+            {
                 return this.dHLServiceLevelField;
             }
-            set {
+            set
+            {
                 this.dHLServiceLevelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Commitment[] PriorityMailExpressCommitments {
-            get {
+        public Commitment[] PriorityMailExpressCommitments
+        {
+            get
+            {
                 return this.priorityMailExpressCommitmentsField;
             }
-            set {
+            set
+            {
                 this.priorityMailExpressCommitmentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SequenceNumber {
-            get {
+        public string SequenceNumber
+        {
+            get
+            {
                 return this.sequenceNumberField;
             }
-            set {
+            set
+            {
                 this.sequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ResellerInformation ResellerInformation {
-            get {
+        public ResellerInformation ResellerInformation
+        {
+            get
+            {
                 return this.resellerInformationField;
             }
-            set {
+            set
+            {
                 this.resellerInformationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EstimatedDeliveryDate {
-            get {
+        public string EstimatedDeliveryDate
+        {
+            get
+            {
                 return this.estimatedDeliveryDateField;
             }
-            set {
+            set
+            {
                 this.estimatedDeliveryDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SDRValue {
-            get {
+        public string SDRValue
+        {
+            get
+            {
                 return this.sDRValueField;
             }
-            set {
+            set
+            {
                 this.sDRValueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Feature {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Feature
+    {
+
         private string codeField;
-        
+
         private string nameField;
-        
+
         private bool isEligibleField;
-        
+
         private bool isActiveField;
-        
+
         private string termsAndConditionsLinkField;
-        
+
         /// <remarks/>
-        public string Code {
-            get {
+        public string Code
+        {
+            get
+            {
                 return this.codeField;
             }
-            set {
+            set
+            {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IsEligible {
-            get {
+        public bool IsEligible
+        {
+            get
+            {
                 return this.isEligibleField;
             }
-            set {
+            set
+            {
                 this.isEligibleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IsActive {
-            get {
+        public bool IsActive
+        {
+            get
+            {
                 return this.isActiveField;
             }
-            set {
+            set
+            {
                 this.isActiveField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TermsAndConditionsLink {
-            get {
+        public string TermsAndConditionsLink
+        {
+            get
+            {
                 return this.termsAndConditionsLinkField;
             }
-            set {
+            set
+            {
                 this.termsAndConditionsLinkField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountStatus
+    {
+
         private string statusField;
-        
+
         private System.Nullable<int> returnCodeField;
-        
+
         /// <remarks/>
-        public string Status {
-            get {
+        public string Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public System.Nullable<int> ReturnCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+        public System.Nullable<int> ReturnCode
+        {
+            get
+            {
                 return this.returnCodeField;
             }
-            set {
+            set
+            {
                 this.returnCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountContractIDs {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountContractIDs
+    {
+
         private string domesticCIDField;
-        
+
         private string internationalCIDField;
-        
+
         /// <remarks/>
-        public string DomesticCID {
-            get {
+        public string DomesticCID
+        {
+            get
+            {
                 return this.domesticCIDField;
             }
-            set {
+            set
+            {
                 this.domesticCIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InternationalCID {
-            get {
+        public string InternationalCID
+        {
+            get
+            {
                 return this.internationalCIDField;
             }
-            set {
+            set
+            {
                 this.internationalCIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class InternationalConsolidatorServiceDetailResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class InternationalConsolidatorServiceDetailResponse
+    {
+
         private string enabledInternationalConsolidatorServiceIDField;
-        
+
         private string enabledInternationalConsolidatorBrandedServiceNameField;
-        
+
         private string enabledInternationalConsolidatorGenericServiceNameField;
-        
+
         /// <remarks/>
-        public string EnabledInternationalConsolidatorServiceID {
-            get {
+        public string EnabledInternationalConsolidatorServiceID
+        {
+            get
+            {
                 return this.enabledInternationalConsolidatorServiceIDField;
             }
-            set {
+            set
+            {
                 this.enabledInternationalConsolidatorServiceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EnabledInternationalConsolidatorBrandedServiceName {
-            get {
+        public string EnabledInternationalConsolidatorBrandedServiceName
+        {
+            get
+            {
                 return this.enabledInternationalConsolidatorBrandedServiceNameField;
             }
-            set {
+            set
+            {
                 this.enabledInternationalConsolidatorBrandedServiceNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EnabledInternationalConsolidatorGenericServiceName {
-            get {
+        public string EnabledInternationalConsolidatorGenericServiceName
+        {
+            get
+            {
                 return this.enabledInternationalConsolidatorGenericServiceNameField;
             }
-            set {
+            set
+            {
                 this.enabledInternationalConsolidatorGenericServiceNameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ConsolidatorServiceDetailResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ConsolidatorServiceDetailResponse
+    {
+
         private bool internationalConsolidatorField;
-        
+
         private InternationalConsolidatorServiceDetailResponse[] enabledInternationalConsolidatorServicesField;
-        
+
         /// <remarks/>
-        public bool InternationalConsolidator {
-            get {
+        public bool InternationalConsolidator
+        {
+            get
+            {
                 return this.internationalConsolidatorField;
             }
-            set {
+            set
+            {
                 this.internationalConsolidatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("EnabledInternationalConsolidatorService")]
-        public InternationalConsolidatorServiceDetailResponse[] EnabledInternationalConsolidatorServices {
-            get {
+        public InternationalConsolidatorServiceDetailResponse[] EnabledInternationalConsolidatorServices
+        {
+            get
+            {
                 return this.enabledInternationalConsolidatorServicesField;
             }
-            set {
+            set
+            {
                 this.enabledInternationalConsolidatorServicesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DiscountRates {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DiscountRates
+    {
+
         private MailDiscount discountField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public MailDiscount Discount {
-            get {
+        public MailDiscount Discount
+        {
+            get
+            {
                 return this.discountField;
             }
-            set {
+            set
+            {
                 this.discountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum MailDiscount {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum MailDiscount
+    {
+
         /// <remarks/>
         ComBase,
-        
+
         /// <remarks/>
         CPP,
-        
+
         /// <remarks/>
         Custom,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Discounts {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Discounts
+    {
+
         private MailDiscount discountField;
-        
+
         private bool cubicPricingField;
-        
+
         private bool flatRatePaddedEnvelopeField;
-        
+
         private bool halfPoundRateField;
-        
+
         private bool regionalRateBoxField;
-        
+
         private bool openAndDistributeField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public MailDiscount Discount {
-            get {
+        public MailDiscount Discount
+        {
+            get
+            {
                 return this.discountField;
             }
-            set {
+            set
+            {
                 this.discountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool CubicPricing {
-            get {
+        public bool CubicPricing
+        {
+            get
+            {
                 return this.cubicPricingField;
             }
-            set {
+            set
+            {
                 this.cubicPricingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool FlatRatePaddedEnvelope {
-            get {
+        public bool FlatRatePaddedEnvelope
+        {
+            get
+            {
                 return this.flatRatePaddedEnvelopeField;
             }
-            set {
+            set
+            {
                 this.flatRatePaddedEnvelopeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool HalfPoundRate {
-            get {
+        public bool HalfPoundRate
+        {
+            get
+            {
                 return this.halfPoundRateField;
             }
-            set {
+            set
+            {
                 this.halfPoundRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool RegionalRateBox {
-            get {
+        public bool RegionalRateBox
+        {
+            get
+            {
                 return this.regionalRateBoxField;
             }
-            set {
+            set
+            {
                 this.regionalRateBoxField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool OpenAndDistribute {
-            get {
+        public bool OpenAndDistribute
+        {
+            get
+            {
                 return this.openAndDistributeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountDiscounts {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountDiscounts
+    {
+
         private Discounts priorityMailField;
-        
+
         private Discounts pMExpressField;
-        
+
         private Discounts fCPSField;
-        
+
         private DiscountRates pMIField;
-        
+
         private DiscountRates eMIField;
-        
+
         private DiscountRates fCPISField;
-        
+
         /// <remarks/>
-        public Discounts PriorityMail {
-            get {
+        public Discounts PriorityMail
+        {
+            get
+            {
                 return this.priorityMailField;
             }
-            set {
+            set
+            {
                 this.priorityMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Discounts PMExpress {
-            get {
+        public Discounts PMExpress
+        {
+            get
+            {
                 return this.pMExpressField;
             }
-            set {
+            set
+            {
                 this.pMExpressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Discounts FCPS {
-            get {
+        public Discounts FCPS
+        {
+            get
+            {
                 return this.fCPSField;
             }
-            set {
+            set
+            {
                 this.fCPSField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DiscountRates PMI {
-            get {
+        public DiscountRates PMI
+        {
+            get
+            {
                 return this.pMIField;
             }
-            set {
+            set
+            {
                 this.pMIField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DiscountRates EMI {
-            get {
+        public DiscountRates EMI
+        {
+            get
+            {
                 return this.eMIField;
             }
-            set {
+            set
+            {
                 this.eMIField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DiscountRates FCPIS {
-            get {
+        public DiscountRates FCPIS
+        {
+            get
+            {
                 return this.fCPISField;
             }
-            set {
+            set
+            {
                 this.fCPISField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountStatusResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountStatusResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediaryStatus certifiedIntermediaryField;
-        
+
         private AccountDiscounts discountsField;
-        
+
         private AccountTypes accountTypeField;
-        
+
         private bool approvedShipperField;
-        
+
         private bool consolidatorServicesField;
-        
+
         private ConsolidatorServiceDetailResponse consolidatorServiceDetailField;
-        
+
         private AccountContractIDs contractIDField;
-        
+
         private bool insuranceAgreementField;
-        
+
         private AccountStatus accountStatusField;
-        
+
         private decimal controlRegisterField;
-        
+
         private string licenseZip5Field;
-        
+
         private Address addressField;
-        
+
         private Feature[] accountFeaturesField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediaryStatus CertifiedIntermediary {
-            get {
+        public CertifiedIntermediaryStatus CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccountDiscounts Discounts {
-            get {
+        public AccountDiscounts Discounts
+        {
+            get
+            {
                 return this.discountsField;
             }
-            set {
+            set
+            {
                 this.discountsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccountTypes AccountType {
-            get {
+        public AccountTypes AccountType
+        {
+            get
+            {
                 return this.accountTypeField;
             }
-            set {
+            set
+            {
                 this.accountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ApprovedShipper {
-            get {
+        public bool ApprovedShipper
+        {
+            get
+            {
                 return this.approvedShipperField;
             }
-            set {
+            set
+            {
                 this.approvedShipperField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ConsolidatorServices {
-            get {
+        public bool ConsolidatorServices
+        {
+            get
+            {
                 return this.consolidatorServicesField;
             }
-            set {
+            set
+            {
                 this.consolidatorServicesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ConsolidatorServiceDetailResponse ConsolidatorServiceDetail {
-            get {
+        public ConsolidatorServiceDetailResponse ConsolidatorServiceDetail
+        {
+            get
+            {
                 return this.consolidatorServiceDetailField;
             }
-            set {
+            set
+            {
                 this.consolidatorServiceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccountContractIDs ContractID {
-            get {
+        public AccountContractIDs ContractID
+        {
+            get
+            {
                 return this.contractIDField;
             }
-            set {
+            set
+            {
                 this.contractIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool InsuranceAgreement {
-            get {
+        public bool InsuranceAgreement
+        {
+            get
+            {
                 return this.insuranceAgreementField;
             }
-            set {
+            set
+            {
                 this.insuranceAgreementField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccountStatus AccountStatus {
-            get {
+        public AccountStatus AccountStatus
+        {
+            get
+            {
                 return this.accountStatusField;
             }
-            set {
+            set
+            {
                 this.accountStatusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ControlRegister {
-            get {
+        public decimal ControlRegister
+        {
+            get
+            {
                 return this.controlRegisterField;
             }
-            set {
+            set
+            {
                 this.controlRegisterField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LicenseZip5 {
-            get {
+        public string LicenseZip5
+        {
+            get
+            {
                 return this.licenseZip5Field;
             }
-            set {
+            set
+            {
                 this.licenseZip5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public Address Address {
-            get {
+        public Address Address
+        {
+            get
+            {
                 return this.addressField;
             }
-            set {
+            set
+            {
                 this.addressField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-        public Feature[] AccountFeatures {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable = false)]
+        public Feature[] AccountFeatures
+        {
+            get
+            {
                 return this.accountFeaturesField;
             }
-            set {
+            set
+            {
                 this.accountFeaturesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum AccountTypes {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum AccountTypes
+    {
+
         /// <remarks/>
         USPS,
-        
+
         /// <remarks/>
         Retail,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Address : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Address : DataValidator
+    {
+
         private string firstNameField;
-        
+
         private string lastNameField;
-        
+
         private string address1Field;
-        
+
         private string cityField;
-        
+
         private string stateField;
-        
+
         private string zipCodeField;
-        
+
         private string zipCodeAddOnField;
-        
+
         private string phoneNumberField;
-        
+
         /// <remarks/>
-        public string FirstName {
-            get {
+        public string FirstName
+        {
+            get
+            {
                 return this.firstNameField;
             }
-            set {
+            set
+            {
                 this.firstNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LastName {
-            get {
+        public string LastName
+        {
+            get
+            {
                 return this.lastNameField;
             }
-            set {
+            set
+            {
                 this.lastNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Address1 {
-            get {
+        public string Address1
+        {
+            get
+            {
                 return this.address1Field;
             }
-            set {
+            set
+            {
                 this.address1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string City {
-            get {
+        public string City
+        {
+            get
+            {
                 return this.cityField;
             }
-            set {
+            set
+            {
                 this.cityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string State {
-            get {
+        public string State
+        {
+            get
+            {
                 return this.stateField;
             }
-            set {
+            set
+            {
                 this.stateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ZipCode {
-            get {
+        public string ZipCode
+        {
+            get
+            {
                 return this.zipCodeField;
             }
-            set {
+            set
+            {
                 this.zipCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ZipCodeAddOn {
-            get {
+        public string ZipCodeAddOn
+        {
+            get
+            {
                 return this.zipCodeAddOnField;
             }
-            set {
+            set
+            {
                 this.zipCodeAddOnField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ChallengeQuestionResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ChallengeQuestionResponse
+    {
+
         private string questionField;
-        
+
         private string errorMessageField;
-        
+
         private int statusField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         /// <remarks/>
-        public string Question {
-            get {
+        public string Question
+        {
+            get
+            {
                 return this.questionField;
             }
-            set {
+            set
+            {
                 this.questionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ResetSuspendedAccountRequestResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ResetSuspendedAccountRequestResponse
+    {
+
         private int statusField;
-        
+
         private string errorMessageField;
-        
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string tokenField;
-        
+
         /// <remarks/>
-        public int Status {
-            get {
+        public int Status
+        {
+            get
+            {
                 return this.statusField;
             }
-            set {
+            set
+            {
                 this.statusField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ErrorMessage {
-            get {
+        public string ErrorMessage
+        {
+            get
+            {
                 return this.errorMessageField;
             }
-            set {
+            set
+            {
                 this.errorMessageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Token {
-            get {
+        public string Token
+        {
+            get
+            {
                 return this.tokenField;
             }
-            set {
+            set
+            {
                 this.tokenField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GetSCANParameters {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GetSCANParameters
+    {
+
         private string fromNameField;
-        
+
         private string fromCompanyField;
-        
+
         private string fromAddressField;
-        
+
         private string fromCityField;
-        
+
         private string fromStateField;
-        
+
         private string fromZipField;
-        
+
         private string imageResolutionField;
-        
+
         private string imageFormatField;
-        
+
         private string submissionIDField;
-        
+
         private string costCenterField;
-        
+
         private string formTypeField;
-        
+
         private string referenceIDField;
-        
+
         private string searchZipField;
-        
+
         /// <remarks/>
-        public string FromName {
-            get {
+        public string FromName
+        {
+            get
+            {
                 return this.fromNameField;
             }
-            set {
+            set
+            {
                 this.fromNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCompany {
-            get {
+        public string FromCompany
+        {
+            get
+            {
                 return this.fromCompanyField;
             }
-            set {
+            set
+            {
                 this.fromCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromAddress {
-            get {
+        public string FromAddress
+        {
+            get
+            {
                 return this.fromAddressField;
             }
-            set {
+            set
+            {
                 this.fromAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCity {
-            get {
+        public string FromCity
+        {
+            get
+            {
                 return this.fromCityField;
             }
-            set {
+            set
+            {
                 this.fromCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromState {
-            get {
+        public string FromState
+        {
+            get
+            {
                 return this.fromStateField;
             }
-            set {
+            set
+            {
                 this.fromStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromZip {
-            get {
+        public string FromZip
+        {
+            get
+            {
                 return this.fromZipField;
             }
-            set {
+            set
+            {
                 this.fromZipField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageResolution {
-            get {
+        public string ImageResolution
+        {
+            get
+            {
                 return this.imageResolutionField;
             }
-            set {
+            set
+            {
                 this.imageResolutionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageFormat {
-            get {
+        public string ImageFormat
+        {
+            get
+            {
                 return this.imageFormatField;
             }
-            set {
+            set
+            {
                 this.imageFormatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SubmissionID {
-            get {
+        public string SubmissionID
+        {
+            get
+            {
                 return this.submissionIDField;
             }
-            set {
+            set
+            {
                 this.submissionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CostCenter {
-            get {
+        public string CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string FormType {
-            get {
+        public string FormType
+        {
+            get
+            {
                 return this.formTypeField;
             }
-            set {
+            set
+            {
                 this.formTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SearchZip {
-            get {
+        public string SearchZip
+        {
+            get
+            {
                 return this.searchZipField;
             }
-            set {
+            set
+            {
                 this.searchZipField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class TransactionListingsRequestOptions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class TransactionListingsRequestOptions
+    {
+
         private string costCenterField;
-        
+
         private string startDateTimeField;
-        
+
         private string endDateTimeField;
-        
+
         private string shipFromZipField;
-        
+
         private string shipToZipField;
-        
+
         private string referenceIDField;
-        
+
         private GetTransactionsType transactionTypeField;
-        
+
         private string startingTransactionIDField;
-        
+
         private TransactionRefundStatus refundStatusField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CostCenter {
-            get {
+        public string CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StartDateTime {
-            get {
+        public string StartDateTime
+        {
+            get
+            {
                 return this.startDateTimeField;
             }
-            set {
+            set
+            {
                 this.startDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EndDateTime {
-            get {
+        public string EndDateTime
+        {
+            get
+            {
                 return this.endDateTimeField;
             }
-            set {
+            set
+            {
                 this.endDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ShipFromZip {
-            get {
+        public string ShipFromZip
+        {
+            get
+            {
                 return this.shipFromZipField;
             }
-            set {
+            set
+            {
                 this.shipFromZipField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ShipToZip {
-            get {
+        public string ShipToZip
+        {
+            get
+            {
                 return this.shipToZipField;
             }
-            set {
+            set
+            {
                 this.shipToZipField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public GetTransactionsType TransactionType {
-            get {
+        public GetTransactionsType TransactionType
+        {
+            get
+            {
                 return this.transactionTypeField;
             }
-            set {
+            set
+            {
                 this.transactionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StartingTransactionID {
-            get {
+        public string StartingTransactionID
+        {
+            get
+            {
                 return this.startingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.startingTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public TransactionRefundStatus RefundStatus {
-            get {
+        public TransactionRefundStatus RefundStatus
+        {
+            get
+            {
                 return this.refundStatusField;
             }
-            set {
+            set
+            {
                 this.refundStatusField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum GetTransactionsType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum GetTransactionsType
+    {
+
         /// <remarks/>
         ALL,
-        
+
         /// <remarks/>
         PRINTS,
-        
+
         /// <remarks/>
         PURCHASES,
-        
+
         /// <remarks/>
         ADJUSTMENTS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackageStatusRequestOptions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackageStatusRequestOptions
+    {
+
         private string costCenterField;
-        
+
         private string referenceIDField;
-        
+
         private GetPackageStatus packageStatusField;
-        
+
         private string startingTransactionIDField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CostCenter {
-            get {
+        public string CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public GetPackageStatus PackageStatus {
-            get {
+        public GetPackageStatus PackageStatus
+        {
+            get
+            {
                 return this.packageStatusField;
             }
-            set {
+            set
+            {
                 this.packageStatusField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StartingTransactionID {
-            get {
+        public string StartingTransactionID
+        {
+            get
+            {
                 return this.startingTransactionIDField;
             }
-            set {
+            set
+            {
                 this.startingTransactionIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum GetPackageStatus {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum GetPackageStatus
+    {
+
         /// <remarks/>
         CURRENT,
-        
+
         /// <remarks/>
         COMPLETE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DHLeCManifestRequestParameters {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DHLeCManifestRequestParameters
+    {
+
         private string imageResolutionField;
-        
+
         private string imageFormatField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageResolution {
-            get {
+        public string ImageResolution
+        {
+            get
+            {
                 return this.imageResolutionField;
             }
-            set {
+            set
+            {
                 this.imageResolutionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageFormat {
-            get {
+        public string ImageFormat
+        {
+            get
+            {
                 return this.imageFormatField;
             }
-            set {
+            set
+            {
                 this.imageFormatField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CloseAccountReasons {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CloseAccountReasons
+    {
+
         private bool changeInBusinessField;
-        
+
         private bool serviceIsExpensiveField;
-        
+
         private bool switchingToAnotherProviderField;
-        
+
         private bool productIsComplicatedField;
-        
+
         private bool otherField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool ChangeInBusiness {
-            get {
+        public bool ChangeInBusiness
+        {
+            get
+            {
                 return this.changeInBusinessField;
             }
-            set {
+            set
+            {
                 this.changeInBusinessField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool ServiceIsExpensive {
-            get {
+        public bool ServiceIsExpensive
+        {
+            get
+            {
                 return this.serviceIsExpensiveField;
             }
-            set {
+            set
+            {
                 this.serviceIsExpensiveField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool SwitchingToAnotherProvider {
-            get {
+        public bool SwitchingToAnotherProvider
+        {
+            get
+            {
                 return this.switchingToAnotherProviderField;
             }
-            set {
+            set
+            {
                 this.switchingToAnotherProviderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool ProductIsComplicated {
-            get {
+        public bool ProductIsComplicated
+        {
+            get
+            {
                 return this.productIsComplicatedField;
             }
-            set {
+            set
+            {
                 this.productIsComplicatedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool Other {
-            get {
+        public bool Other
+        {
+            get
+            {
                 return this.otherField;
             }
-            set {
+            set
+            {
                 this.otherField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UpdateACHInformation {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UpdateACHInformation
+    {
+
         private string checkingAccountNumberField;
-        
+
         private string checkingAccountRoutingNumberField;
-        
+
         private PaymentTypes paymentTypeField;
-        
+
         /// <remarks/>
-        public string CheckingAccountNumber {
-            get {
+        public string CheckingAccountNumber
+        {
+            get
+            {
                 return this.checkingAccountNumberField;
             }
-            set {
+            set
+            {
                 this.checkingAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CheckingAccountRoutingNumber {
-            get {
+        public string CheckingAccountRoutingNumber
+        {
+            get
+            {
                 return this.checkingAccountRoutingNumberField;
             }
-            set {
+            set
+            {
                 this.checkingAccountRoutingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PaymentTypes PaymentType {
-            get {
+        public PaymentTypes PaymentType
+        {
+            get
+            {
                 return this.paymentTypeField;
             }
-            set {
+            set
+            {
                 this.paymentTypeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum PaymentTypes {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum PaymentTypes
+    {
+
         /// <remarks/>
         Postage,
-        
+
         /// <remarks/>
         ServiceFees,
-        
+
         /// <remarks/>
         Both,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UpdateCreditCardInformation {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UpdateCreditCardInformation
+    {
+
         private string creditCardNumberField;
-        
+
         private string creditCardCVVField;
-        
+
         private string creditCardAddressField;
-        
+
         private string creditCardAddress2Field;
-        
+
         private string creditCardAddress3Field;
-        
+
         private string creditCardCityField;
-        
+
         private string creditCardStateField;
-        
+
         private string creditCardZipCodeField;
-        
+
         private string creditCardCountryCodeField;
-        
+
         private CreditCardType creditCardTypeField;
-        
+
         private CreditCardMonth creditCardExpMonthField;
-        
+
         private string creditCardExpYearField;
-        
+
         private PaymentTypes paymentTypeField;
-        
+
         /// <remarks/>
-        public string CreditCardNumber {
-            get {
+        public string CreditCardNumber
+        {
+            get
+            {
                 return this.creditCardNumberField;
             }
-            set {
+            set
+            {
                 this.creditCardNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCVV {
-            get {
+        public string CreditCardCVV
+        {
+            get
+            {
                 return this.creditCardCVVField;
             }
-            set {
+            set
+            {
                 this.creditCardCVVField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardAddress {
-            get {
+        public string CreditCardAddress
+        {
+            get
+            {
                 return this.creditCardAddressField;
             }
-            set {
+            set
+            {
                 this.creditCardAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardAddress2 {
-            get {
+        public string CreditCardAddress2
+        {
+            get
+            {
                 return this.creditCardAddress2Field;
             }
-            set {
+            set
+            {
                 this.creditCardAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardAddress3 {
-            get {
+        public string CreditCardAddress3
+        {
+            get
+            {
                 return this.creditCardAddress3Field;
             }
-            set {
+            set
+            {
                 this.creditCardAddress3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCity {
-            get {
+        public string CreditCardCity
+        {
+            get
+            {
                 return this.creditCardCityField;
             }
-            set {
+            set
+            {
                 this.creditCardCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardState {
-            get {
+        public string CreditCardState
+        {
+            get
+            {
                 return this.creditCardStateField;
             }
-            set {
+            set
+            {
                 this.creditCardStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardZipCode {
-            get {
+        public string CreditCardZipCode
+        {
+            get
+            {
                 return this.creditCardZipCodeField;
             }
-            set {
+            set
+            {
                 this.creditCardZipCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCountryCode {
-            get {
+        public string CreditCardCountryCode
+        {
+            get
+            {
                 return this.creditCardCountryCodeField;
             }
-            set {
+            set
+            {
                 this.creditCardCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CreditCardType CreditCardType {
-            get {
+        public CreditCardType CreditCardType
+        {
+            get
+            {
                 return this.creditCardTypeField;
             }
-            set {
+            set
+            {
                 this.creditCardTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CreditCardMonth CreditCardExpMonth {
-            get {
+        public CreditCardMonth CreditCardExpMonth
+        {
+            get
+            {
                 return this.creditCardExpMonthField;
             }
-            set {
+            set
+            {
                 this.creditCardExpMonthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardExpYear {
-            get {
+        public string CreditCardExpYear
+        {
+            get
+            {
                 return this.creditCardExpYearField;
             }
-            set {
+            set
+            {
                 this.creditCardExpYearField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PaymentTypes PaymentType {
-            get {
+        public PaymentTypes PaymentType
+        {
+            get
+            {
                 return this.paymentTypeField;
             }
-            set {
+            set
+            {
                 this.paymentTypeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum CreditCardType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum CreditCardType
+    {
+
         /// <remarks/>
         Visa,
-        
+
         /// <remarks/>
         Mastercard,
-        
+
         /// <remarks/>
         AmericanExpress,
-        
+
         /// <remarks/>
         CarteBlanche,
-        
+
         /// <remarks/>
         Discover,
-        
+
         /// <remarks/>
         DinersClub,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum CreditCardMonth {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum CreditCardMonth
+    {
+
         /// <remarks/>
         January,
-        
+
         /// <remarks/>
         February,
-        
+
         /// <remarks/>
         March,
-        
+
         /// <remarks/>
         April,
-        
+
         /// <remarks/>
         May,
-        
+
         /// <remarks/>
         June,
-        
+
         /// <remarks/>
         July,
-        
+
         /// <remarks/>
         August,
-        
+
         /// <remarks/>
         September,
-        
+
         /// <remarks/>
         October,
-        
+
         /// <remarks/>
         November,
-        
+
         /// <remarks/>
         December,
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsItem1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsInfo1))]
@@ -9070,9470 +10982,11748 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName="DataValidator", Namespace="LabelNumberService.Core")]
-    public partial class DataValidator1 {
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DataValidator", Namespace = "LabelNumberService.Core")]
+    public partial class DataValidator1
+    {
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName="CustomsItem", Namespace="LabelNumberService.Core")]
-    public partial class CustomsItem1 : DataValidator1 {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "CustomsItem", Namespace = "LabelNumberService.Core")]
+    public partial class CustomsItem1 : DataValidator1
+    {
+
         private string descriptionField;
-        
+
         private int quantityField;
-        
+
         private decimal weightField;
-        
+
         private decimal valueField;
-        
+
         private string hSTariffNumberField;
-        
+
         private string countryOfOriginField;
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Quantity {
-            get {
+        public int Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Weight {
-            get {
+        public decimal Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HSTariffNumber {
-            get {
+        public string HSTariffNumber
+        {
+            get
+            {
                 return this.hSTariffNumberField;
             }
-            set {
+            set
+            {
                 this.hSTariffNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CountryOfOrigin {
-            get {
+        public string CountryOfOrigin
+        {
+            get
+            {
                 return this.countryOfOriginField;
             }
-            set {
+            set
+            {
                 this.countryOfOriginField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName="CustomsInfo", Namespace="LabelNumberService.Core")]
-    public partial class CustomsInfo1 : DataValidator1 {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "CustomsInfo", Namespace = "LabelNumberService.Core")]
+    public partial class CustomsInfo1 : DataValidator1
+    {
+
         private string contentsTypeField;
-        
+
         private string contentsExplanationField;
-        
+
         private string restrictionTypeField;
-        
+
         private string restrictionCommmentsField;
-        
+
         private string sendersCustomsReferenceField;
-        
+
         private string importersCustomsReferenceField;
-        
+
         private string licenseNumberField;
-        
+
         private string certificateNumberField;
-        
+
         private string invoiceNumberField;
-        
+
         private string nonDeliveryOptionField;
-        
+
         private string redirectAddressField;
-        
+
         private string insuredNumberField;
-        
+
         private decimal sDRValueField;
-        
+
         private string itnEeiNumberField;
-        
+
         private CustomsItem1[] customsItemsField;
-        
+
         /// <remarks/>
-        public string ContentsType {
-            get {
+        public string ContentsType
+        {
+            get
+            {
                 return this.contentsTypeField;
             }
-            set {
+            set
+            {
                 this.contentsTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContentsExplanation {
-            get {
+        public string ContentsExplanation
+        {
+            get
+            {
                 return this.contentsExplanationField;
             }
-            set {
+            set
+            {
                 this.contentsExplanationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RestrictionType {
-            get {
+        public string RestrictionType
+        {
+            get
+            {
                 return this.restrictionTypeField;
             }
-            set {
+            set
+            {
                 this.restrictionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RestrictionCommments {
-            get {
+        public string RestrictionCommments
+        {
+            get
+            {
                 return this.restrictionCommmentsField;
             }
-            set {
+            set
+            {
                 this.restrictionCommmentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SendersCustomsReference {
-            get {
+        public string SendersCustomsReference
+        {
+            get
+            {
                 return this.sendersCustomsReferenceField;
             }
-            set {
+            set
+            {
                 this.sendersCustomsReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ImportersCustomsReference {
-            get {
+        public string ImportersCustomsReference
+        {
+            get
+            {
                 return this.importersCustomsReferenceField;
             }
-            set {
+            set
+            {
                 this.importersCustomsReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LicenseNumber {
-            get {
+        public string LicenseNumber
+        {
+            get
+            {
                 return this.licenseNumberField;
             }
-            set {
+            set
+            {
                 this.licenseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CertificateNumber {
-            get {
+        public string CertificateNumber
+        {
+            get
+            {
                 return this.certificateNumberField;
             }
-            set {
+            set
+            {
                 this.certificateNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InvoiceNumber {
-            get {
+        public string InvoiceNumber
+        {
+            get
+            {
                 return this.invoiceNumberField;
             }
-            set {
+            set
+            {
                 this.invoiceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NonDeliveryOption {
-            get {
+        public string NonDeliveryOption
+        {
+            get
+            {
                 return this.nonDeliveryOptionField;
             }
-            set {
+            set
+            {
                 this.nonDeliveryOptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RedirectAddress {
-            get {
+        public string RedirectAddress
+        {
+            get
+            {
                 return this.redirectAddressField;
             }
-            set {
+            set
+            {
                 this.redirectAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InsuredNumber {
-            get {
+        public string InsuredNumber
+        {
+            get
+            {
                 return this.insuredNumberField;
             }
-            set {
+            set
+            {
                 this.insuredNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SDRValue {
-            get {
+        public decimal SDRValue
+        {
+            get
+            {
                 return this.sDRValueField;
             }
-            set {
+            set
+            {
                 this.sDRValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ItnEeiNumber {
-            get {
+        public string ItnEeiNumber
+        {
+            get
+            {
                 return this.itnEeiNumberField;
             }
-            set {
+            set
+            {
                 this.itnEeiNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsItem1[] CustomsItems {
-            get {
+        public CustomsItem1[] CustomsItems
+        {
+            get
+            {
                 return this.customsItemsField;
             }
-            set {
+            set
+            {
                 this.customsItemsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class HazMat {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class HazMat
+    {
+
         private string hazMatDescriptionField;
-        
+
         private string hazMatPhoneField;
-        
+
         /// <remarks/>
-        public string HazMatDescription {
-            get {
+        public string HazMatDescription
+        {
+            get
+            {
                 return this.hazMatDescriptionField;
             }
-            set {
+            set
+            {
                 this.hazMatDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HazMatPhone {
-            get {
+        public string HazMatPhone
+        {
+            get
+            {
                 return this.hazMatPhoneField;
             }
-            set {
+            set
+            {
                 this.hazMatPhoneField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Cod3816 {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Cod3816
+    {
+
         private string aS3816Field;
-        
+
         private string uSPSCAField;
-        
+
         private string pMExpressReturnField;
-        
+
         private string optionalEndorsementField;
-        
+
         private string returnNameField;
-        
+
         private string returnCompanyField;
-        
+
         private string returnAddress1Field;
-        
+
         private string returnAddress2Field;
-        
+
         private string returnCityField;
-        
+
         private string returnStateField;
-        
+
         private string returnPostalCodeField;
-        
+
         /// <remarks/>
-        public string AS3816 {
-            get {
+        public string AS3816
+        {
+            get
+            {
                 return this.aS3816Field;
             }
-            set {
+            set
+            {
                 this.aS3816Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string USPSCA {
-            get {
+        public string USPSCA
+        {
+            get
+            {
                 return this.uSPSCAField;
             }
-            set {
+            set
+            {
                 this.uSPSCAField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PMExpressReturn {
-            get {
+        public string PMExpressReturn
+        {
+            get
+            {
                 return this.pMExpressReturnField;
             }
-            set {
+            set
+            {
                 this.pMExpressReturnField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OptionalEndorsement {
-            get {
+        public string OptionalEndorsement
+        {
+            get
+            {
                 return this.optionalEndorsementField;
             }
-            set {
+            set
+            {
                 this.optionalEndorsementField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnName {
-            get {
+        public string ReturnName
+        {
+            get
+            {
                 return this.returnNameField;
             }
-            set {
+            set
+            {
                 this.returnNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnCompany {
-            get {
+        public string ReturnCompany
+        {
+            get
+            {
                 return this.returnCompanyField;
             }
-            set {
+            set
+            {
                 this.returnCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress1 {
-            get {
+        public string ReturnAddress1
+        {
+            get
+            {
                 return this.returnAddress1Field;
             }
-            set {
+            set
+            {
                 this.returnAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress2 {
-            get {
+        public string ReturnAddress2
+        {
+            get
+            {
                 return this.returnAddress2Field;
             }
-            set {
+            set
+            {
                 this.returnAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnCity {
-            get {
+        public string ReturnCity
+        {
+            get
+            {
                 return this.returnCityField;
             }
-            set {
+            set
+            {
                 this.returnCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnState {
-            get {
+        public string ReturnState
+        {
+            get
+            {
                 return this.returnStateField;
             }
-            set {
+            set
+            {
                 this.returnStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnPostalCode {
-            get {
+        public string ReturnPostalCode
+        {
+            get
+            {
                 return this.returnPostalCodeField;
             }
-            set {
+            set
+            {
                 this.returnPostalCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class eVSOptions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class eVSOptions
+    {
+
         private string permitNumberField;
-        
+
         private string eVSMailerIdField;
-        
+
         /// <remarks/>
-        public string PermitNumber {
-            get {
+        public string PermitNumber
+        {
+            get
+            {
                 return this.permitNumberField;
             }
-            set {
+            set
+            {
                 this.permitNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string eVSMailerId {
-            get {
+        public string eVSMailerId
+        {
+            get
+            {
                 return this.eVSMailerIdField;
             }
-            set {
+            set
+            {
                 this.eVSMailerIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ResponseOptions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ResponseOptions
+    {
+
         private string postagePriceField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PostagePrice {
-            get {
+        public string PostagePrice
+        {
+            get
+            {
                 return this.postagePriceField;
             }
-            set {
+            set
+            {
                 this.postagePriceField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SpecialServices {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SpecialServices
+    {
+
         private string deliveryConfirmationField;
-        
+
         private string mailClassOnlyField;
-        
+
         private string certifiedMailField;
-        
+
         private string cODField;
-        
+
         private string electronicReturnReceiptField;
-        
+
         private string insuredMailField;
-        
+
         private string registeredMailField;
-        
+
         private string restrictedDeliveryField;
-        
+
         private string returnReceiptField;
-        
+
         private string signatureConfirmationField;
-        
+
         private string signatureServiceField;
-        
+
         private string holdForPickupField;
-        
+
         private string merchandiseReturnServiceField;
-        
+
         private string openAndDistributeField;
-        
+
         private string adultSignatureField;
-        
+
         private string adultSignatureRestrictedDeliveryField;
-        
+
         private string aMDeliveryField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DeliveryConfirmation {
-            get {
+        public string DeliveryConfirmation
+        {
+            get
+            {
                 return this.deliveryConfirmationField;
             }
-            set {
+            set
+            {
                 this.deliveryConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MailClassOnly {
-            get {
+        public string MailClassOnly
+        {
+            get
+            {
                 return this.mailClassOnlyField;
             }
-            set {
+            set
+            {
                 this.mailClassOnlyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CertifiedMail {
-            get {
+        public string CertifiedMail
+        {
+            get
+            {
                 return this.certifiedMailField;
             }
-            set {
+            set
+            {
                 this.certifiedMailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string COD {
-            get {
+        public string COD
+        {
+            get
+            {
                 return this.cODField;
             }
-            set {
+            set
+            {
                 this.cODField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ElectronicReturnReceipt {
-            get {
+        public string ElectronicReturnReceipt
+        {
+            get
+            {
                 return this.electronicReturnReceiptField;
             }
-            set {
+            set
+            {
                 this.electronicReturnReceiptField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InsuredMail {
-            get {
+        public string InsuredMail
+        {
+            get
+            {
                 return this.insuredMailField;
             }
-            set {
+            set
+            {
                 this.insuredMailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RegisteredMail {
-            get {
+        public string RegisteredMail
+        {
+            get
+            {
                 return this.registeredMailField;
             }
-            set {
+            set
+            {
                 this.registeredMailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RestrictedDelivery {
-            get {
+        public string RestrictedDelivery
+        {
+            get
+            {
                 return this.restrictedDeliveryField;
             }
-            set {
+            set
+            {
                 this.restrictedDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReturnReceipt {
-            get {
+        public string ReturnReceipt
+        {
+            get
+            {
                 return this.returnReceiptField;
             }
-            set {
+            set
+            {
                 this.returnReceiptField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SignatureConfirmation {
-            get {
+        public string SignatureConfirmation
+        {
+            get
+            {
                 return this.signatureConfirmationField;
             }
-            set {
+            set
+            {
                 this.signatureConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SignatureService {
-            get {
+        public string SignatureService
+        {
+            get
+            {
                 return this.signatureServiceField;
             }
-            set {
+            set
+            {
                 this.signatureServiceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string HoldForPickup {
-            get {
+        public string HoldForPickup
+        {
+            get
+            {
                 return this.holdForPickupField;
             }
-            set {
+            set
+            {
                 this.holdForPickupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MerchandiseReturnService {
-            get {
+        public string MerchandiseReturnService
+        {
+            get
+            {
                 return this.merchandiseReturnServiceField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnServiceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string OpenAndDistribute {
-            get {
+        public string OpenAndDistribute
+        {
+            get
+            {
                 return this.openAndDistributeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AdultSignature {
-            get {
+        public string AdultSignature
+        {
+            get
+            {
                 return this.adultSignatureField;
             }
-            set {
+            set
+            {
                 this.adultSignatureField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AdultSignatureRestrictedDelivery {
-            get {
+        public string AdultSignatureRestrictedDelivery
+        {
+            get
+            {
                 return this.adultSignatureRestrictedDeliveryField;
             }
-            set {
+            set
+            {
                 this.adultSignatureRestrictedDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AMDelivery {
-            get {
+        public string AMDelivery
+        {
+            get
+            {
                 return this.aMDeliveryField;
             }
-            set {
+            set
+            {
                 this.aMDeliveryField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class Dimensions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class Dimensions
+    {
+
         private double lengthField;
-        
+
         private double widthField;
-        
+
         private double heightField;
-        
+
         /// <remarks/>
-        public double Length {
-            get {
+        public double Length
+        {
+            get
+            {
                 return this.lengthField;
             }
-            set {
+            set
+            {
                 this.lengthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double Width {
-            get {
+        public double Width
+        {
+            get
+            {
                 return this.widthField;
             }
-            set {
+            set
+            {
                 this.widthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double Height {
-            get {
+        public double Height
+        {
+            get
+            {
                 return this.heightField;
             }
-            set {
+            set
+            {
                 this.heightField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CertifiedIntermediary {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CertifiedIntermediary
+    {
+
         private string accountIDField;
-        
+
         private string passPhraseField;
-        
+
         private string tokenField;
-        
+
         private string tokenTimeStampField;
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PassPhrase {
-            get {
+        public string PassPhrase
+        {
+            get
+            {
                 return this.passPhraseField;
             }
-            set {
+            set
+            {
                 this.passPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Token {
-            get {
+        public string Token
+        {
+            get
+            {
                 return this.tokenField;
             }
-            set {
+            set
+            {
                 this.tokenField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TokenTimeStamp {
-            get {
+        public string TokenTimeStamp
+        {
+            get
+            {
                 return this.tokenTimeStampField;
             }
-            set {
+            set
+            {
                 this.tokenTimeStampField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RefundRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RefundRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string[] picNumbersField;
-        
+
         private long[] transactionIdsField;
-        
+
         private int[] pieceNumbersField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PicNumber")]
-        public string[] PicNumbers {
-            get {
+        public string[] PicNumbers
+        {
+            get
+            {
                 return this.picNumbersField;
             }
-            set {
+            set
+            {
                 this.picNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("TransactionId", IsNullable=false)]
-        public long[] TransactionIds {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("TransactionId", IsNullable = false)]
+        public long[] TransactionIds
+        {
+            get
+            {
                 return this.transactionIdsField;
             }
-            set {
+            set
+            {
                 this.transactionIdsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("PieceNumber", IsNullable=false)]
-        public int[] PieceNumbers {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("PieceNumber", IsNullable = false)]
+        public int[] PieceNumbers
+        {
+            get
+            {
                 return this.pieceNumbersField;
             }
-            set {
+            set
+            {
                 this.pieceNumbersField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SCANRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SCANRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private GetSCANParameters getSCANRequestParametersField;
-        
+
         private string[] picNumbersField;
-        
+
         private string[] transactionIdsField;
-        
+
         private string[] pieceNumbersField;
-        
+
         private ManifestType manifestTypeField;
-        
+
         private bool manifestTypeFieldSpecified;
-        
+
         private int numberOfContainerLabelsField;
-        
+
         private bool numberOfContainerLabelsFieldSpecified;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public GetSCANParameters GetSCANRequestParameters {
-            get {
+        public GetSCANParameters GetSCANRequestParameters
+        {
+            get
+            {
                 return this.getSCANRequestParametersField;
             }
-            set {
+            set
+            {
                 this.getSCANRequestParametersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PicNumber")]
-        public string[] PicNumbers {
-            get {
+        public string[] PicNumbers
+        {
+            get
+            {
                 return this.picNumbersField;
             }
-            set {
+            set
+            {
                 this.picNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("TransactionId")]
-        public string[] TransactionIds {
-            get {
+        public string[] TransactionIds
+        {
+            get
+            {
                 return this.transactionIdsField;
             }
-            set {
+            set
+            {
                 this.transactionIdsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PieceNumber")]
-        public string[] PieceNumbers {
-            get {
+        public string[] PieceNumbers
+        {
+            get
+            {
                 return this.pieceNumbersField;
             }
-            set {
+            set
+            {
                 this.pieceNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ManifestType ManifestType {
-            get {
+        public ManifestType ManifestType
+        {
+            get
+            {
                 return this.manifestTypeField;
             }
-            set {
+            set
+            {
                 this.manifestTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ManifestTypeSpecified {
-            get {
+        public bool ManifestTypeSpecified
+        {
+            get
+            {
                 return this.manifestTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.manifestTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public int NumberOfContainerLabels {
-            get {
+        public int NumberOfContainerLabels
+        {
+            get
+            {
                 return this.numberOfContainerLabelsField;
             }
-            set {
+            set
+            {
                 this.numberOfContainerLabelsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberOfContainerLabelsSpecified {
-            get {
+        public bool NumberOfContainerLabelsSpecified
+        {
+            get
+            {
                 return this.numberOfContainerLabelsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.numberOfContainerLabelsFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupCancelRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupCancelRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string useAddressOnFileField;
-        
+
         private PhysicalPickupAddress physicalPickupAddressField;
-        
+
         private string confirmationNumberField;
-        
+
         private string testField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UseAddressOnFile {
-            get {
+        public string UseAddressOnFile
+        {
+            get
+            {
                 return this.useAddressOnFileField;
             }
-            set {
+            set
+            {
                 this.useAddressOnFileField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPickupAddress PhysicalPickupAddress {
-            get {
+        public PhysicalPickupAddress PhysicalPickupAddress
+        {
+            get
+            {
                 return this.physicalPickupAddressField;
             }
-            set {
+            set
+            {
                 this.physicalPickupAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Test {
-            get {
+        public string Test
+        {
+            get
+            {
                 return this.testField;
             }
-            set {
+            set
+            {
                 this.testField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PhysicalPickupAddress : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PhysicalPickupAddress : DataValidator
+    {
+
         private string firstNameField;
-        
+
         private string lastNameField;
-        
+
         private string companyNameField;
-        
+
         private string suiteOrAptField;
-        
+
         private string addressField;
-        
+
         private string cityField;
-        
+
         private string stateField;
-        
+
         private string zip5Field;
-        
+
         private string zip4Field;
-        
+
         private string phoneField;
-        
+
         private string extensionField;
-        
+
         /// <remarks/>
-        public string FirstName {
-            get {
+        public string FirstName
+        {
+            get
+            {
                 return this.firstNameField;
             }
-            set {
+            set
+            {
                 this.firstNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LastName {
-            get {
+        public string LastName
+        {
+            get
+            {
                 return this.lastNameField;
             }
-            set {
+            set
+            {
                 this.lastNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CompanyName {
-            get {
+        public string CompanyName
+        {
+            get
+            {
                 return this.companyNameField;
             }
-            set {
+            set
+            {
                 this.companyNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SuiteOrApt {
-            get {
+        public string SuiteOrApt
+        {
+            get
+            {
                 return this.suiteOrAptField;
             }
-            set {
+            set
+            {
                 this.suiteOrAptField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Address {
-            get {
+        public string Address
+        {
+            get
+            {
                 return this.addressField;
             }
-            set {
+            set
+            {
                 this.addressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string City {
-            get {
+        public string City
+        {
+            get
+            {
                 return this.cityField;
             }
-            set {
+            set
+            {
                 this.cityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string State {
-            get {
+        public string State
+        {
+            get
+            {
                 return this.stateField;
             }
-            set {
+            set
+            {
                 this.stateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zip5 {
-            get {
+        public string Zip5
+        {
+            get
+            {
                 return this.zip5Field;
             }
-            set {
+            set
+            {
                 this.zip5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Zip4 {
-            get {
+        public string Zip4
+        {
+            get
+            {
                 return this.zip4Field;
             }
-            set {
+            set
+            {
                 this.zip4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Phone {
-            get {
+        public string Phone
+        {
+            get
+            {
                 return this.phoneField;
             }
-            set {
+            set
+            {
                 this.phoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Extension {
-            get {
+        public string Extension
+        {
+            get
+            {
                 return this.extensionField;
             }
-            set {
+            set
+            {
                 this.extensionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupAvailabilityRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupAvailabilityRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string useAddressOnFileField;
-        
+
         private PhysicalPickupAddress physicalPickupAddressField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UseAddressOnFile {
-            get {
+        public string UseAddressOnFile
+        {
+            get
+            {
                 return this.useAddressOnFileField;
             }
-            set {
+            set
+            {
                 this.useAddressOnFileField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPickupAddress PhysicalPickupAddress {
-            get {
+        public PhysicalPickupAddress PhysicalPickupAddress
+        {
+            get
+            {
                 return this.physicalPickupAddressField;
             }
-            set {
+            set
+            {
                 this.physicalPickupAddressField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PackagePickupChangeRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string useAddressOnFileField;
-        
+
         private PhysicalPickupAddress physicalPickupAddressField;
-        
+
         private int expressMailCountField;
-        
+
         private int priorityMailCountField;
-        
+
         private int firstClassPackageCountField;
-        
+
         private int returnsCountField;
-        
+
         private int internationalCountField;
-        
+
         private int otherPackagesCountField;
-        
+
         private double estimatedWeightLbField;
-        
+
         private string packageLocationField;
-        
+
         private string specialInstructionsField;
-        
+
         private string costCenterField;
-        
+
         private string testField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UseAddressOnFile {
-            get {
+        public string UseAddressOnFile
+        {
+            get
+            {
                 return this.useAddressOnFileField;
             }
-            set {
+            set
+            {
                 this.useAddressOnFileField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPickupAddress PhysicalPickupAddress {
-            get {
+        public PhysicalPickupAddress PhysicalPickupAddress
+        {
+            get
+            {
                 return this.physicalPickupAddressField;
             }
-            set {
+            set
+            {
                 this.physicalPickupAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ExpressMailCount {
-            get {
+        public int ExpressMailCount
+        {
+            get
+            {
                 return this.expressMailCountField;
             }
-            set {
+            set
+            {
                 this.expressMailCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int PriorityMailCount {
-            get {
+        public int PriorityMailCount
+        {
+            get
+            {
                 return this.priorityMailCountField;
             }
-            set {
+            set
+            {
                 this.priorityMailCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int FirstClassPackageCount {
-            get {
+        public int FirstClassPackageCount
+        {
+            get
+            {
                 return this.firstClassPackageCountField;
             }
-            set {
+            set
+            {
                 this.firstClassPackageCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ReturnsCount {
-            get {
+        public int ReturnsCount
+        {
+            get
+            {
                 return this.returnsCountField;
             }
-            set {
+            set
+            {
                 this.returnsCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int InternationalCount {
-            get {
+        public int InternationalCount
+        {
+            get
+            {
                 return this.internationalCountField;
             }
-            set {
+            set
+            {
                 this.internationalCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int OtherPackagesCount {
-            get {
+        public int OtherPackagesCount
+        {
+            get
+            {
                 return this.otherPackagesCountField;
             }
-            set {
+            set
+            {
                 this.otherPackagesCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double EstimatedWeightLb {
-            get {
+        public double EstimatedWeightLb
+        {
+            get
+            {
                 return this.estimatedWeightLbField;
             }
-            set {
+            set
+            {
                 this.estimatedWeightLbField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackageLocation {
-            get {
+        public string PackageLocation
+        {
+            get
+            {
                 return this.packageLocationField;
             }
-            set {
+            set
+            {
                 this.packageLocationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecialInstructions {
-            get {
+        public string SpecialInstructions
+        {
+            get
+            {
                 return this.specialInstructionsField;
             }
-            set {
+            set
+            {
                 this.specialInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CostCenter {
-            get {
+        public string CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Test {
-            get {
+        public string Test
+        {
+            get
+            {
                 return this.testField;
             }
-            set {
+            set
+            {
                 this.testField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackagePickupChangeRequest : PackagePickupRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackagePickupChangeRequest : PackagePickupRequest
+    {
+
         private string confirmationNumberField;
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GetTransactionsListingRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GetTransactionsListingRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private TransactionListingsRequestOptions requestOptionsField;
-        
+
         private string[] picNumbersField;
-        
+
         private string[] pieceIDsField;
-        
+
         private string[] transactionIDsField;
-        
+
         private string[] costCentersField;
-        
+
         private string includeTrackingField;
-        
+
         private string includeFromAddressField;
-        
+
         private string includeAdjustmentDetailsField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionListingsRequestOptions RequestOptions {
-            get {
+        public TransactionListingsRequestOptions RequestOptions
+        {
+            get
+            {
                 return this.requestOptionsField;
             }
-            set {
+            set
+            {
                 this.requestOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PIC")]
-        public string[] PicNumbers {
-            get {
+        public string[] PicNumbers
+        {
+            get
+            {
                 return this.picNumbersField;
             }
-            set {
+            set
+            {
                 this.picNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PieceID")]
-        public string[] PieceIDs {
-            get {
+        public string[] PieceIDs
+        {
+            get
+            {
                 return this.pieceIDsField;
             }
-            set {
+            set
+            {
                 this.pieceIDsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("TransactionID")]
-        public string[] TransactionIDs {
-            get {
+        public string[] TransactionIDs
+        {
+            get
+            {
                 return this.transactionIDsField;
             }
-            set {
+            set
+            {
                 this.transactionIDsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("CostCenterID")]
-        public string[] CostCenters {
-            get {
+        public string[] CostCenters
+        {
+            get
+            {
                 return this.costCentersField;
             }
-            set {
+            set
+            {
                 this.costCentersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IncludeTracking {
-            get {
+        public string IncludeTracking
+        {
+            get
+            {
                 return this.includeTrackingField;
             }
-            set {
+            set
+            {
                 this.includeTrackingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IncludeFromAddress {
-            get {
+        public string IncludeFromAddress
+        {
+            get
+            {
                 return this.includeFromAddressField;
             }
-            set {
+            set
+            {
                 this.includeFromAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IncludeAdjustmentDetails {
-            get {
+        public string IncludeAdjustmentDetails
+        {
+            get
+            {
                 return this.includeAdjustmentDetailsField;
             }
-            set {
+            set
+            {
                 this.includeAdjustmentDetailsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CheckingAccount : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CheckingAccount : DataValidator
+    {
+
         private string accountNumberField;
-        
+
         private string routingNumberField;
-        
+
         /// <remarks/>
-        public string AccountNumber {
-            get {
+        public string AccountNumber
+        {
+            get
+            {
                 return this.accountNumberField;
             }
-            set {
+            set
+            {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RoutingNumber {
-            get {
+        public string RoutingNumber
+        {
+            get
+            {
                 return this.routingNumberField;
             }
-            set {
+            set
+            {
                 this.routingNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CreditCard : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CreditCard : DataValidator
+    {
+
         private string creditCardNumberField;
-        
+
         private CreditCardType creditCardTypeField;
-        
+
         private CreditCardMonth creditCardMonthField;
-        
+
         private int creditCardYearField;
-        
+
         private string creditCardAddressField;
-        
+
         private string creditCardCityField;
-        
+
         private string creditCardStateField;
-        
+
         private string creditCardZip5Field;
-        
+
         private string creditCardCVVField;
-        
+
         private string creditCardCountryCodeField;
-        
+
         /// <remarks/>
-        public string CreditCardNumber {
-            get {
+        public string CreditCardNumber
+        {
+            get
+            {
                 return this.creditCardNumberField;
             }
-            set {
+            set
+            {
                 this.creditCardNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CreditCardType CreditCardType {
-            get {
+        public CreditCardType CreditCardType
+        {
+            get
+            {
                 return this.creditCardTypeField;
             }
-            set {
+            set
+            {
                 this.creditCardTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CreditCardMonth CreditCardMonth {
-            get {
+        public CreditCardMonth CreditCardMonth
+        {
+            get
+            {
                 return this.creditCardMonthField;
             }
-            set {
+            set
+            {
                 this.creditCardMonthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int CreditCardYear {
-            get {
+        public int CreditCardYear
+        {
+            get
+            {
                 return this.creditCardYearField;
             }
-            set {
+            set
+            {
                 this.creditCardYearField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardAddress {
-            get {
+        public string CreditCardAddress
+        {
+            get
+            {
                 return this.creditCardAddressField;
             }
-            set {
+            set
+            {
                 this.creditCardAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCity {
-            get {
+        public string CreditCardCity
+        {
+            get
+            {
                 return this.creditCardCityField;
             }
-            set {
+            set
+            {
                 this.creditCardCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardState {
-            get {
+        public string CreditCardState
+        {
+            get
+            {
                 return this.creditCardStateField;
             }
-            set {
+            set
+            {
                 this.creditCardStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardZip5 {
-            get {
+        public string CreditCardZip5
+        {
+            get
+            {
                 return this.creditCardZip5Field;
             }
-            set {
+            set
+            {
                 this.creditCardZip5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCVV {
-            get {
+        public string CreditCardCVV
+        {
+            get
+            {
                 return this.creditCardCVVField;
             }
-            set {
+            set
+            {
                 this.creditCardCVVField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CreditCardCountryCode {
-            get {
+        public string CreditCardCountryCode
+        {
+            get
+            {
                 return this.creditCardCountryCodeField;
             }
-            set {
+            set
+            {
                 this.creditCardCountryCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountCredentials : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountCredentials : DataValidator
+    {
+
         private string webPasswordField;
-        
+
         private string temporaryPassPhraseField;
-        
+
         private string securityQuestionField;
-        
+
         private string securityAnswerField;
-        
+
         /// <remarks/>
-        public string WebPassword {
-            get {
+        public string WebPassword
+        {
+            get
+            {
                 return this.webPasswordField;
             }
-            set {
+            set
+            {
                 this.webPasswordField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TemporaryPassPhrase {
-            get {
+        public string TemporaryPassPhrase
+        {
+            get
+            {
                 return this.temporaryPassPhraseField;
             }
-            set {
+            set
+            {
                 this.temporaryPassPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SecurityQuestion {
-            get {
+        public string SecurityQuestion
+        {
+            get
+            {
                 return this.securityQuestionField;
             }
-            set {
+            set
+            {
                 this.securityQuestionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SecurityAnswer {
-            get {
+        public string SecurityAnswer
+        {
+            get
+            {
                 return this.securityAnswerField;
             }
-            set {
+            set
+            {
                 this.securityAnswerField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UserSignUpRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UserSignUpRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string firstNameField;
-        
+
         private string lastNameField;
-        
+
         private string middleNameField;
-        
+
         private string titleField;
-        
+
         private string emailAddressField;
-        
+
         private string phoneNumberField;
-        
+
         private string phoneNumberExtField;
-        
+
         private string faxNumberField;
-        
+
         private string billingTypeField;
-        
+
         private string partnerIDField;
-        
+
         private string originatingIpAddressField;
-        
+
         private string[] contractsField;
-        
+
         private AccountCredentials accountCredentialsField;
-        
+
         private CreditCard creditCardField;
-        
+
         private CheckingAccount checkingAccountField;
-        
+
         private PhysicalPickupAddress physicalAddressField;
-        
+
         private PhysicalPickupAddress mailingAddressField;
-        
+
         private bool paymentDetailsDeferredField;
-        
+
         private string uSPSRepField;
-        
+
         private bool dedicatedResellerAccountField;
-        
+
         private bool iCertifyField;
-        
+
         private bool tokenRequestedField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FirstName {
-            get {
+        public string FirstName
+        {
+            get
+            {
                 return this.firstNameField;
             }
-            set {
+            set
+            {
                 this.firstNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LastName {
-            get {
+        public string LastName
+        {
+            get
+            {
                 return this.lastNameField;
             }
-            set {
+            set
+            {
                 this.lastNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MiddleName {
-            get {
+        public string MiddleName
+        {
+            get
+            {
                 return this.middleNameField;
             }
-            set {
+            set
+            {
                 this.middleNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Title {
-            get {
+        public string Title
+        {
+            get
+            {
                 return this.titleField;
             }
-            set {
+            set
+            {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EmailAddress {
-            get {
+        public string EmailAddress
+        {
+            get
+            {
                 return this.emailAddressField;
             }
-            set {
+            set
+            {
                 this.emailAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumberExt {
-            get {
+        public string PhoneNumberExt
+        {
+            get
+            {
                 return this.phoneNumberExtField;
             }
-            set {
+            set
+            {
                 this.phoneNumberExtField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FaxNumber {
-            get {
+        public string FaxNumber
+        {
+            get
+            {
                 return this.faxNumberField;
             }
-            set {
+            set
+            {
                 this.faxNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BillingType {
-            get {
+        public string BillingType
+        {
+            get
+            {
                 return this.billingTypeField;
             }
-            set {
+            set
+            {
                 this.billingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PartnerID {
-            get {
+        public string PartnerID
+        {
+            get
+            {
                 return this.partnerIDField;
             }
-            set {
+            set
+            {
                 this.partnerIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OriginatingIpAddress {
-            get {
+        public string OriginatingIpAddress
+        {
+            get
+            {
                 return this.originatingIpAddressField;
             }
-            set {
+            set
+            {
                 this.originatingIpAddressField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("ContractId")]
-        public string[] Contracts {
-            get {
+        public string[] Contracts
+        {
+            get
+            {
                 return this.contractsField;
             }
-            set {
+            set
+            {
                 this.contractsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccountCredentials AccountCredentials {
-            get {
+        public AccountCredentials AccountCredentials
+        {
+            get
+            {
                 return this.accountCredentialsField;
             }
-            set {
+            set
+            {
                 this.accountCredentialsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CreditCard CreditCard {
-            get {
+        public CreditCard CreditCard
+        {
+            get
+            {
                 return this.creditCardField;
             }
-            set {
+            set
+            {
                 this.creditCardField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CheckingAccount CheckingAccount {
-            get {
+        public CheckingAccount CheckingAccount
+        {
+            get
+            {
                 return this.checkingAccountField;
             }
-            set {
+            set
+            {
                 this.checkingAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPickupAddress PhysicalAddress {
-            get {
+        public PhysicalPickupAddress PhysicalAddress
+        {
+            get
+            {
                 return this.physicalAddressField;
             }
-            set {
+            set
+            {
                 this.physicalAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPickupAddress MailingAddress {
-            get {
+        public PhysicalPickupAddress MailingAddress
+        {
+            get
+            {
                 return this.mailingAddressField;
             }
-            set {
+            set
+            {
                 this.mailingAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool PaymentDetailsDeferred {
-            get {
+        public bool PaymentDetailsDeferred
+        {
+            get
+            {
                 return this.paymentDetailsDeferredField;
             }
-            set {
+            set
+            {
                 this.paymentDetailsDeferredField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string USPSRep {
-            get {
+        public string USPSRep
+        {
+            get
+            {
                 return this.uSPSRepField;
             }
-            set {
+            set
+            {
                 this.uSPSRepField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool DedicatedResellerAccount {
-            get {
+        public bool DedicatedResellerAccount
+        {
+            get
+            {
                 return this.dedicatedResellerAccountField;
             }
-            set {
+            set
+            {
                 this.dedicatedResellerAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ICertify {
-            get {
+        public bool ICertify
+        {
+            get
+            {
                 return this.iCertifyField;
             }
-            set {
+            set
+            {
                 this.iCertifyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool TokenRequested {
-            get {
+        public bool TokenRequested
+        {
+            get
+            {
                 return this.tokenRequestedField;
             }
-            set {
+            set
+            {
                 this.tokenRequestedField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RetailAccountsRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RetailAccountsRequest : DataValidator
+    {
+
         private string accountIDField;
-        
+
         private string passPhraseField;
-        
+
         private string startDateTimeField;
-        
+
         private string endDateTimeField;
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PassPhrase {
-            get {
+        public string PassPhrase
+        {
+            get
+            {
                 return this.passPhraseField;
             }
-            set {
+            set
+            {
                 this.passPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string StartDateTime {
-            get {
+        public string StartDateTime
+        {
+            get
+            {
                 return this.startDateTimeField;
             }
-            set {
+            set
+            {
                 this.startDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EndDateTime {
-            get {
+        public string EndDateTime
+        {
+            get
+            {
                 return this.endDateTimeField;
             }
-            set {
+            set
+            {
                 this.endDateTimeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PackageStatusRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PackageStatusRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private PackageStatusRequestOptions requestOptionsField;
-        
+
         private string[] picNumbersField;
-        
+
         private string[] pieceNumbersField;
-        
+
         private string[] transactionIdsField;
-        
+
         private string[] referenceIdsField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageStatusRequestOptions RequestOptions {
-            get {
+        public PackageStatusRequestOptions RequestOptions
+        {
+            get
+            {
                 return this.requestOptionsField;
             }
-            set {
+            set
+            {
                 this.requestOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PicNumber")]
-        public string[] PicNumbers {
-            get {
+        public string[] PicNumbers
+        {
+            get
+            {
                 return this.picNumbersField;
             }
-            set {
+            set
+            {
                 this.picNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("PieceNumber")]
-        public string[] PieceNumbers {
-            get {
+        public string[] PieceNumbers
+        {
+            get
+            {
                 return this.pieceNumbersField;
             }
-            set {
+            set
+            {
                 this.pieceNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("TransactionId")]
-        public string[] TransactionIds {
-            get {
+        public string[] TransactionIds
+        {
+            get
+            {
                 return this.transactionIdsField;
             }
-            set {
+            set
+            {
                 this.transactionIdsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("ReferenceId")]
-        public string[] ReferenceIds {
-            get {
+        public string[] ReferenceIds
+        {
+            get
+            {
                 return this.referenceIdsField;
             }
-            set {
+            set
+            {
                 this.referenceIdsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DHLeCManifestRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DHLeCManifestRequest : DataValidator
+    {
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private RequestType typeField;
-        
+
         private string tokenTimeStampField;
-        
+
         private DHLeCManifestRequestParameters manifestParametersField;
-        
+
         private string manifestIDField;
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequestType Type {
-            get {
+        public RequestType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TokenTimeStamp {
-            get {
+        public string TokenTimeStamp
+        {
+            get
+            {
                 return this.tokenTimeStampField;
             }
-            set {
+            set
+            {
                 this.tokenTimeStampField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DHLeCManifestRequestParameters ManifestParameters {
-            get {
+        public DHLeCManifestRequestParameters ManifestParameters
+        {
+            get
+            {
                 return this.manifestParametersField;
             }
-            set {
+            set
+            {
                 this.manifestParametersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ManifestID {
-            get {
+        public string ManifestID
+        {
+            get
+            {
                 return this.manifestIDField;
             }
-            set {
+            set
+            {
                 this.manifestIDField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum RequestType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum RequestType
+    {
+
         /// <remarks/>
         Create,
-        
+
         /// <remarks/>
         Resubmit,
-        
+
         /// <remarks/>
         Reprint,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CreateDhlgmManifestRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CreateDhlgmManifestRequest : DataValidator
+    {
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CloseAccountRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CloseAccountRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private CloseAccountReasons reasonsForClosingField;
-        
+
         private string descriptiveReasonField;
-        
+
         private string responseVersionField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CloseAccountReasons ReasonsForClosing {
-            get {
+        public CloseAccountReasons ReasonsForClosing
+        {
+            get
+            {
                 return this.reasonsForClosingField;
             }
-            set {
+            set
+            {
                 this.reasonsForClosingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DescriptiveReason {
-            get {
+        public string DescriptiveReason
+        {
+            get
+            {
                 return this.descriptiveReasonField;
             }
-            set {
+            set
+            {
                 this.descriptiveReasonField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ResponseVersion {
-            get {
+        public string ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRatesRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRatesRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string mailClassField;
-        
+
         private double weightOzField;
-        
+
         private string mailpieceShapeField;
-        
+
         private Dimensions mailpieceDimensionsField;
-        
+
         private string machinableField;
-        
+
         private SpecialServices servicesField;
-        
+
         private double cODAmountField;
-        
+
         private double insuredValueField;
-        
+
         private double registeredMailValueField;
-        
+
         private string fromPostalCodeField;
-        
+
         private string toPostalCodeField;
-        
+
         private string toCountryField;
-        
+
         private string toCountryCodeField;
-        
+
         private int dateAdvanceField;
-        
+
         private string extensionField;
-        
+
         private string deliveryTimeDaysField;
-        
+
         private string estimatedDeliveryDateField;
-        
+
         private string contentsTypeField;
-        
+
         private RespVersion responseVersionField;
-        
-        public PostageRatesRequest() {
+
+        public PostageRatesRequest()
+        {
             this.dateAdvanceField = 0;
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double WeightOz {
-            get {
+        public double WeightOz
+        {
+            get
+            {
                 return this.weightOzField;
             }
-            set {
+            set
+            {
                 this.weightOzField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailpieceShape {
-            get {
+        public string MailpieceShape
+        {
+            get
+            {
                 return this.mailpieceShapeField;
             }
-            set {
+            set
+            {
                 this.mailpieceShapeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions MailpieceDimensions {
-            get {
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
                 return this.mailpieceDimensionsField;
             }
-            set {
+            set
+            {
                 this.mailpieceDimensionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Machinable {
-            get {
+        public string Machinable
+        {
+            get
+            {
                 return this.machinableField;
             }
-            set {
+            set
+            {
                 this.machinableField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SpecialServices Services {
-            get {
+        public SpecialServices Services
+        {
+            get
+            {
                 return this.servicesField;
             }
-            set {
+            set
+            {
                 this.servicesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double CODAmount {
-            get {
+        public double CODAmount
+        {
+            get
+            {
                 return this.cODAmountField;
             }
-            set {
+            set
+            {
                 this.cODAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double InsuredValue {
-            get {
+        public double InsuredValue
+        {
+            get
+            {
                 return this.insuredValueField;
             }
-            set {
+            set
+            {
                 this.insuredValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double RegisteredMailValue {
-            get {
+        public double RegisteredMailValue
+        {
+            get
+            {
                 return this.registeredMailValueField;
             }
-            set {
+            set
+            {
                 this.registeredMailValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromPostalCode {
-            get {
+        public string FromPostalCode
+        {
+            get
+            {
                 return this.fromPostalCodeField;
             }
-            set {
+            set
+            {
                 this.fromPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPostalCode {
-            get {
+        public string ToPostalCode
+        {
+            get
+            {
                 return this.toPostalCodeField;
             }
-            set {
+            set
+            {
                 this.toPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountry {
-            get {
+        public string ToCountry
+        {
+            get
+            {
                 return this.toCountryField;
             }
-            set {
+            set
+            {
                 this.toCountryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountryCode {
-            get {
+        public string ToCountryCode
+        {
+            get
+            {
                 return this.toCountryCodeField;
             }
-            set {
+            set
+            {
                 this.toCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.ComponentModel.DefaultValueAttribute(0)]
-        public int DateAdvance {
-            get {
+        public int DateAdvance
+        {
+            get
+            {
                 return this.dateAdvanceField;
             }
-            set {
+            set
+            {
                 this.dateAdvanceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Extension {
-            get {
+        public string Extension
+        {
+            get
+            {
                 return this.extensionField;
             }
-            set {
+            set
+            {
                 this.extensionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryTimeDays {
-            get {
+        public string DeliveryTimeDays
+        {
+            get
+            {
                 return this.deliveryTimeDaysField;
             }
-            set {
+            set
+            {
                 this.deliveryTimeDaysField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EstimatedDeliveryDate {
-            get {
+        public string EstimatedDeliveryDate
+        {
+            get
+            {
                 return this.estimatedDeliveryDateField;
             }
-            set {
+            set
+            {
                 this.estimatedDeliveryDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContentsType {
-            get {
+        public string ContentsType
+        {
+            get
+            {
                 return this.contentsTypeField;
             }
-            set {
+            set
+            {
                 this.contentsTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public RespVersion ResponseVersion {
-            get {
+        public RespVersion ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public enum RespVersion {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public enum RespVersion
+    {
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ChangePassPhraseRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ChangePassPhraseRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string newPassPhraseField;
-        
+
         private bool tokenRequestedField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NewPassPhrase {
-            get {
+        public string NewPassPhrase
+        {
+            get
+            {
                 return this.newPassPhraseField;
             }
-            set {
+            set
+            {
                 this.newPassPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool TokenRequested {
-            get {
+        public bool TokenRequested
+        {
+            get
+            {
                 return this.tokenRequestedField;
             }
-            set {
+            set
+            {
                 this.tokenRequestedField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class UpdatePaymentInfoRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class UpdatePaymentInfoRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private UpdateCreditCardInformation updateCreditCardInfoField;
-        
+
         private UpdateACHInformation updateACHInfoField;
-        
+
         private string responseVersionField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public UpdateCreditCardInformation UpdateCreditCardInfo {
-            get {
+        public UpdateCreditCardInformation UpdateCreditCardInfo
+        {
+            get
+            {
                 return this.updateCreditCardInfoField;
             }
-            set {
+            set
+            {
                 this.updateCreditCardInfoField = value;
             }
         }
-        
+
         /// <remarks/>
-        public UpdateACHInformation UpdateACHInfo {
-            get {
+        public UpdateACHInformation UpdateACHInfo
+        {
+            get
+            {
                 return this.updateACHInfoField;
             }
-            set {
+            set
+            {
                 this.updateACHInfoField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ResponseVersion {
-            get {
+        public string ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class SetAccountFeatureOptInRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class SetAccountFeatureOptInRequest : DataValidator
+    {
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string featureCodeField;
-        
+
         private bool enableField;
-        
+
         private bool acceptTermsAndConditionsField;
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FeatureCode {
-            get {
+        public string FeatureCode
+        {
+            get
+            {
                 return this.featureCodeField;
             }
-            set {
+            set
+            {
                 this.featureCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Enable {
-            get {
+        public bool Enable
+        {
+            get
+            {
                 return this.enableField;
             }
-            set {
+            set
+            {
                 this.enableField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool AcceptTermsAndConditions {
-            get {
+        public bool AcceptTermsAndConditions
+        {
+            get
+            {
                 return this.acceptTermsAndConditionsField;
             }
-            set {
+            set
+            {
                 this.acceptTermsAndConditionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PicNumberRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public abstract partial class LabelNumberRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public abstract partial class LabelNumberRequest : DataValidator
+    {
+
         private string labelNumberSourceField;
-        
+
         private string accountIDField;
-        
+
         private string passPhraseField;
-        
+
         private string clientMailerIDField;
-        
+
         private string pTSActionCodeField;
-        
+
         private string labelDateField;
-        
+
         private string mailClassField;
-        
+
         private decimal postageField;
-        
+
         private decimal feesField;
-        
+
         private decimal weightField;
-        
+
         private int zoneField;
-        
+
         private string pricingField;
-        
+
         private string priceTierField;
-        
+
         private string containerField;
-        
+
         private bool machinableField;
-        
+
         private string sortTypeField;
-        
+
         private decimal declaredValueField;
-        
+
         private bool cODField;
-        
+
         private decimal cODFeeField;
-        
+
         private decimal cODAmountField;
-        
+
         private string fromNameField;
-        
+
         private string fromCompanyField;
-        
+
         private string fromAddress1Field;
-        
+
         private string fromAddress2Field;
-        
+
         private string fromCityField;
-        
+
         private string fromStateField;
-        
+
         private string fromZip5Field;
-        
+
         private string fromZip4Field;
-        
+
         private string fromPhoneField;
-        
+
         private string fromEmailField;
-        
+
         private string entryFacilityField;
-        
+
         private string toNameField;
-        
+
         private string toCompanyField;
-        
+
         private string toAddress1Field;
-        
+
         private string toAddress2Field;
-        
+
         private string toCityField;
-        
+
         private string toStateField;
-        
+
         private string toPostalCodeField;
-        
+
         private string toCountryCodeField;
-        
+
         private string toPhoneField;
-        
+
         private string toFaxField;
-        
+
         private string toEmailField;
-        
+
         private bool toPOBoxField;
-        
+
         private string destinationFacilityField;
-        
+
         private string referenceIDField;
-        
+
         private string surchargeTypeField;
-        
+
         private decimal surchargeAmountField;
-        
+
         private string surchargeDescriptionField;
-        
+
         private CustomsInfo1 customsInfoField;
-        
+
         private bool computeRDCField;
-        
+
         private bool returnServiceField;
-        
+
         private bool reShipmentField;
-        
+
         private bool adultSignatureField;
-        
+
         private bool adultSignatureRestrictedField;
-        
+
         private bool expressMailMerchandiseInsuranceField;
-        
+
         private bool parcelAirliftField;
-        
+
         private bool specialHandlingField;
-        
+
         private bool holdForPickupField;
-        
+
         private bool openAndDistributeField;
-        
+
         private bool certifiedMailField;
-        
+
         private bool deliveryConfirmationField;
-        
+
         private bool signatureConfirmationField;
-        
+
         private bool registeredMailField;
-        
+
         private bool passiveEnrouteScanField;
-        
+
         private bool restrictedDeliveryField;
-        
+
         private bool expressMailField;
-        
+
         private bool expeditedReturnField;
-        
+
         private bool merchandiseReturnField;
-        
+
         private bool merchandiseReturnWithDeliveryConfirmationField;
-        
+
         private bool dayCertainDeliveryField;
-        
+
         private bool newFormatField;
-        
+
         private string sMSEmailField;
-        
+
         private string sMSPhoneField;
-        
+
         private decimal certifiedMailFeeField;
-        
+
         private decimal deliveryConfirmationFeeField;
-        
+
         private decimal merchandiseReturnFeeField;
-        
+
         private decimal dayCertainDeliveryFeeField;
-        
+
         private decimal merchandiseReturnWithDeliveryConfirmationFeeField;
-        
+
         private decimal openAndDistributeFeeField;
-        
+
         private decimal passiveEnrouteScanFeeField;
-        
+
         private decimal registeredMailFeeField;
-        
+
         private decimal signatureConfirmationFeeField;
-        
+
         private decimal signatureServiceFeeField;
-        
+
         private decimal expressMailFeeField;
-        
+
         private decimal expeditedReturnFeeField;
-        
+
         private decimal adultSignatureFeeField;
-        
+
         private decimal adultSignatureRestrictedFeeField;
-        
+
         private decimal groupedExtraServicesFeeField;
-        
+
         private bool isConsolidatorField;
-        
+
         private bool isEvsField;
-        
+
         private int consolidatorPrefIdField;
-        
+
         private decimal chargedFeeField;
-        
+
         private string internationalPicnumberPrefixField;
-        
+
         private bool scanBasedPaymentField;
-        
+
         private bool outboundScanBasedPaymentField;
-        
+
         private bool signatureServiceField;
-        
+
         private decimal lengthField;
-        
+
         private decimal widthField;
-        
+
         private decimal heightField;
-        
+
         private float valueField;
-        
+
         private bool flagGenerateField;
-        
+
         private string toCarrierRouteField;
-        
+
         private string specialContentsField;
-        
+
         private decimal liveAnimalSurchargeField;
-        
+
         private decimal fragileHandlingSurchargeField;
-        
+
         private string permitNumberField;
-        
+
         private bool sbpUseCommercialConstructField;
-        
+
         private string picMailerIDField;
-        
+
         private string fromDeliveryPointField;
-        
+
         private string toDeliveryPointField;
-        
+
         private bool isBalloonRateField;
-        
+
         private string pOZipCodeField;
-        
+
         private bool returnsField;
-        
+
         private int consolidatorAccountIdField;
-        
+
         private bool testField;
-        
+
         /// <remarks/>
-        public string LabelNumberSource {
-            get {
+        public string LabelNumberSource
+        {
+            get
+            {
                 return this.labelNumberSourceField;
             }
-            set {
+            set
+            {
                 this.labelNumberSourceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PassPhrase {
-            get {
+        public string PassPhrase
+        {
+            get
+            {
                 return this.passPhraseField;
             }
-            set {
+            set
+            {
                 this.passPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ClientMailerID {
-            get {
+        public string ClientMailerID
+        {
+            get
+            {
                 return this.clientMailerIDField;
             }
-            set {
+            set
+            {
                 this.clientMailerIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PTSActionCode {
-            get {
+        public string PTSActionCode
+        {
+            get
+            {
                 return this.pTSActionCodeField;
             }
-            set {
+            set
+            {
                 this.pTSActionCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelDate {
-            get {
+        public string LabelDate
+        {
+            get
+            {
                 return this.labelDateField;
             }
-            set {
+            set
+            {
                 this.labelDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Postage {
-            get {
+        public decimal Postage
+        {
+            get
+            {
                 return this.postageField;
             }
-            set {
+            set
+            {
                 this.postageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Fees {
-            get {
+        public decimal Fees
+        {
+            get
+            {
                 return this.feesField;
             }
-            set {
+            set
+            {
                 this.feesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Weight {
-            get {
+        public decimal Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Zone {
-            get {
+        public int Zone
+        {
+            get
+            {
                 return this.zoneField;
             }
-            set {
+            set
+            {
                 this.zoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Pricing {
-            get {
+        public string Pricing
+        {
+            get
+            {
                 return this.pricingField;
             }
-            set {
+            set
+            {
                 this.pricingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PriceTier {
-            get {
+        public string PriceTier
+        {
+            get
+            {
                 return this.priceTierField;
             }
-            set {
+            set
+            {
                 this.priceTierField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Container {
-            get {
+        public string Container
+        {
+            get
+            {
                 return this.containerField;
             }
-            set {
+            set
+            {
                 this.containerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Machinable {
-            get {
+        public bool Machinable
+        {
+            get
+            {
                 return this.machinableField;
             }
-            set {
+            set
+            {
                 this.machinableField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SortType {
-            get {
+        public string SortType
+        {
+            get
+            {
                 return this.sortTypeField;
             }
-            set {
+            set
+            {
                 this.sortTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DeclaredValue {
-            get {
+        public decimal DeclaredValue
+        {
+            get
+            {
                 return this.declaredValueField;
             }
-            set {
+            set
+            {
                 this.declaredValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool COD {
-            get {
+        public bool COD
+        {
+            get
+            {
                 return this.cODField;
             }
-            set {
+            set
+            {
                 this.cODField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CODFee {
-            get {
+        public decimal CODFee
+        {
+            get
+            {
                 return this.cODFeeField;
             }
-            set {
+            set
+            {
                 this.cODFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CODAmount {
-            get {
+        public decimal CODAmount
+        {
+            get
+            {
                 return this.cODAmountField;
             }
-            set {
+            set
+            {
                 this.cODAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromName {
-            get {
+        public string FromName
+        {
+            get
+            {
                 return this.fromNameField;
             }
-            set {
+            set
+            {
                 this.fromNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCompany {
-            get {
+        public string FromCompany
+        {
+            get
+            {
                 return this.fromCompanyField;
             }
-            set {
+            set
+            {
                 this.fromCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromAddress1 {
-            get {
+        public string FromAddress1
+        {
+            get
+            {
                 return this.fromAddress1Field;
             }
-            set {
+            set
+            {
                 this.fromAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromAddress2 {
-            get {
+        public string FromAddress2
+        {
+            get
+            {
                 return this.fromAddress2Field;
             }
-            set {
+            set
+            {
                 this.fromAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCity {
-            get {
+        public string FromCity
+        {
+            get
+            {
                 return this.fromCityField;
             }
-            set {
+            set
+            {
                 this.fromCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromState {
-            get {
+        public string FromState
+        {
+            get
+            {
                 return this.fromStateField;
             }
-            set {
+            set
+            {
                 this.fromStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromZip5 {
-            get {
+        public string FromZip5
+        {
+            get
+            {
                 return this.fromZip5Field;
             }
-            set {
+            set
+            {
                 this.fromZip5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromZip4 {
-            get {
+        public string FromZip4
+        {
+            get
+            {
                 return this.fromZip4Field;
             }
-            set {
+            set
+            {
                 this.fromZip4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromPhone {
-            get {
+        public string FromPhone
+        {
+            get
+            {
                 return this.fromPhoneField;
             }
-            set {
+            set
+            {
                 this.fromPhoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromEmail {
-            get {
+        public string FromEmail
+        {
+            get
+            {
                 return this.fromEmailField;
             }
-            set {
+            set
+            {
                 this.fromEmailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EntryFacility {
-            get {
+        public string EntryFacility
+        {
+            get
+            {
                 return this.entryFacilityField;
             }
-            set {
+            set
+            {
                 this.entryFacilityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToName {
-            get {
+        public string ToName
+        {
+            get
+            {
                 return this.toNameField;
             }
-            set {
+            set
+            {
                 this.toNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCompany {
-            get {
+        public string ToCompany
+        {
+            get
+            {
                 return this.toCompanyField;
             }
-            set {
+            set
+            {
                 this.toCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress1 {
-            get {
+        public string ToAddress1
+        {
+            get
+            {
                 return this.toAddress1Field;
             }
-            set {
+            set
+            {
                 this.toAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress2 {
-            get {
+        public string ToAddress2
+        {
+            get
+            {
                 return this.toAddress2Field;
             }
-            set {
+            set
+            {
                 this.toAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCity {
-            get {
+        public string ToCity
+        {
+            get
+            {
                 return this.toCityField;
             }
-            set {
+            set
+            {
                 this.toCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToState {
-            get {
+        public string ToState
+        {
+            get
+            {
                 return this.toStateField;
             }
-            set {
+            set
+            {
                 this.toStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPostalCode {
-            get {
+        public string ToPostalCode
+        {
+            get
+            {
                 return this.toPostalCodeField;
             }
-            set {
+            set
+            {
                 this.toPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountryCode {
-            get {
+        public string ToCountryCode
+        {
+            get
+            {
                 return this.toCountryCodeField;
             }
-            set {
+            set
+            {
                 this.toCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPhone {
-            get {
+        public string ToPhone
+        {
+            get
+            {
                 return this.toPhoneField;
             }
-            set {
+            set
+            {
                 this.toPhoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToFax {
-            get {
+        public string ToFax
+        {
+            get
+            {
                 return this.toFaxField;
             }
-            set {
+            set
+            {
                 this.toFaxField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToEmail {
-            get {
+        public string ToEmail
+        {
+            get
+            {
                 return this.toEmailField;
             }
-            set {
+            set
+            {
                 this.toEmailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ToPOBox {
-            get {
+        public bool ToPOBox
+        {
+            get
+            {
                 return this.toPOBoxField;
             }
-            set {
+            set
+            {
                 this.toPOBoxField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DestinationFacility {
-            get {
+        public string DestinationFacility
+        {
+            get
+            {
                 return this.destinationFacilityField;
             }
-            set {
+            set
+            {
                 this.destinationFacilityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SurchargeType {
-            get {
+        public string SurchargeType
+        {
+            get
+            {
                 return this.surchargeTypeField;
             }
-            set {
+            set
+            {
                 this.surchargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SurchargeAmount {
-            get {
+        public decimal SurchargeAmount
+        {
+            get
+            {
                 return this.surchargeAmountField;
             }
-            set {
+            set
+            {
                 this.surchargeAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SurchargeDescription {
-            get {
+        public string SurchargeDescription
+        {
+            get
+            {
                 return this.surchargeDescriptionField;
             }
-            set {
+            set
+            {
                 this.surchargeDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Namespace="LabelNumberService.Core")]
-        public CustomsInfo1 CustomsInfo {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "LabelNumberService.Core")]
+        public CustomsInfo1 CustomsInfo
+        {
+            get
+            {
                 return this.customsInfoField;
             }
-            set {
+            set
+            {
                 this.customsInfoField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ComputeRDC {
-            get {
+        public bool ComputeRDC
+        {
+            get
+            {
                 return this.computeRDCField;
             }
-            set {
+            set
+            {
                 this.computeRDCField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReturnService {
-            get {
+        public bool ReturnService
+        {
+            get
+            {
                 return this.returnServiceField;
             }
-            set {
+            set
+            {
                 this.returnServiceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReShipment {
-            get {
+        public bool ReShipment
+        {
+            get
+            {
                 return this.reShipmentField;
             }
-            set {
+            set
+            {
                 this.reShipmentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool AdultSignature {
-            get {
+        public bool AdultSignature
+        {
+            get
+            {
                 return this.adultSignatureField;
             }
-            set {
+            set
+            {
                 this.adultSignatureField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool AdultSignatureRestricted {
-            get {
+        public bool AdultSignatureRestricted
+        {
+            get
+            {
                 return this.adultSignatureRestrictedField;
             }
-            set {
+            set
+            {
                 this.adultSignatureRestrictedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ExpressMailMerchandiseInsurance {
-            get {
+        public bool ExpressMailMerchandiseInsurance
+        {
+            get
+            {
                 return this.expressMailMerchandiseInsuranceField;
             }
-            set {
+            set
+            {
                 this.expressMailMerchandiseInsuranceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ParcelAirlift {
-            get {
+        public bool ParcelAirlift
+        {
+            get
+            {
                 return this.parcelAirliftField;
             }
-            set {
+            set
+            {
                 this.parcelAirliftField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SpecialHandling {
-            get {
+        public bool SpecialHandling
+        {
+            get
+            {
                 return this.specialHandlingField;
             }
-            set {
+            set
+            {
                 this.specialHandlingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool HoldForPickup {
-            get {
+        public bool HoldForPickup
+        {
+            get
+            {
                 return this.holdForPickupField;
             }
-            set {
+            set
+            {
                 this.holdForPickupField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool OpenAndDistribute {
-            get {
+        public bool OpenAndDistribute
+        {
+            get
+            {
                 return this.openAndDistributeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool CertifiedMail {
-            get {
+        public bool CertifiedMail
+        {
+            get
+            {
                 return this.certifiedMailField;
             }
-            set {
+            set
+            {
                 this.certifiedMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool DeliveryConfirmation {
-            get {
+        public bool DeliveryConfirmation
+        {
+            get
+            {
                 return this.deliveryConfirmationField;
             }
-            set {
+            set
+            {
                 this.deliveryConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SignatureConfirmation {
-            get {
+        public bool SignatureConfirmation
+        {
+            get
+            {
                 return this.signatureConfirmationField;
             }
-            set {
+            set
+            {
                 this.signatureConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool RegisteredMail {
-            get {
+        public bool RegisteredMail
+        {
+            get
+            {
                 return this.registeredMailField;
             }
-            set {
+            set
+            {
                 this.registeredMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool PassiveEnrouteScan {
-            get {
+        public bool PassiveEnrouteScan
+        {
+            get
+            {
                 return this.passiveEnrouteScanField;
             }
-            set {
+            set
+            {
                 this.passiveEnrouteScanField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool RestrictedDelivery {
-            get {
+        public bool RestrictedDelivery
+        {
+            get
+            {
                 return this.restrictedDeliveryField;
             }
-            set {
+            set
+            {
                 this.restrictedDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ExpressMail {
-            get {
+        public bool ExpressMail
+        {
+            get
+            {
                 return this.expressMailField;
             }
-            set {
+            set
+            {
                 this.expressMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ExpeditedReturn {
-            get {
+        public bool ExpeditedReturn
+        {
+            get
+            {
                 return this.expeditedReturnField;
             }
-            set {
+            set
+            {
                 this.expeditedReturnField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool MerchandiseReturn {
-            get {
+        public bool MerchandiseReturn
+        {
+            get
+            {
                 return this.merchandiseReturnField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool MerchandiseReturnWithDeliveryConfirmation {
-            get {
+        public bool MerchandiseReturnWithDeliveryConfirmation
+        {
+            get
+            {
                 return this.merchandiseReturnWithDeliveryConfirmationField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnWithDeliveryConfirmationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool DayCertainDelivery {
-            get {
+        public bool DayCertainDelivery
+        {
+            get
+            {
                 return this.dayCertainDeliveryField;
             }
-            set {
+            set
+            {
                 this.dayCertainDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool NewFormat {
-            get {
+        public bool NewFormat
+        {
+            get
+            {
                 return this.newFormatField;
             }
-            set {
+            set
+            {
                 this.newFormatField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SMSEmail {
-            get {
+        public string SMSEmail
+        {
+            get
+            {
                 return this.sMSEmailField;
             }
-            set {
+            set
+            {
                 this.sMSEmailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SMSPhone {
-            get {
+        public string SMSPhone
+        {
+            get
+            {
                 return this.sMSPhoneField;
             }
-            set {
+            set
+            {
                 this.sMSPhoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CertifiedMailFee {
-            get {
+        public decimal CertifiedMailFee
+        {
+            get
+            {
                 return this.certifiedMailFeeField;
             }
-            set {
+            set
+            {
                 this.certifiedMailFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DeliveryConfirmationFee {
-            get {
+        public decimal DeliveryConfirmationFee
+        {
+            get
+            {
                 return this.deliveryConfirmationFeeField;
             }
-            set {
+            set
+            {
                 this.deliveryConfirmationFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal MerchandiseReturnFee {
-            get {
+        public decimal MerchandiseReturnFee
+        {
+            get
+            {
                 return this.merchandiseReturnFeeField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal DayCertainDeliveryFee {
-            get {
+        public decimal DayCertainDeliveryFee
+        {
+            get
+            {
                 return this.dayCertainDeliveryFeeField;
             }
-            set {
+            set
+            {
                 this.dayCertainDeliveryFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal MerchandiseReturnWithDeliveryConfirmationFee {
-            get {
+        public decimal MerchandiseReturnWithDeliveryConfirmationFee
+        {
+            get
+            {
                 return this.merchandiseReturnWithDeliveryConfirmationFeeField;
             }
-            set {
+            set
+            {
                 this.merchandiseReturnWithDeliveryConfirmationFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal OpenAndDistributeFee {
-            get {
+        public decimal OpenAndDistributeFee
+        {
+            get
+            {
                 return this.openAndDistributeFeeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal PassiveEnrouteScanFee {
-            get {
+        public decimal PassiveEnrouteScanFee
+        {
+            get
+            {
                 return this.passiveEnrouteScanFeeField;
             }
-            set {
+            set
+            {
                 this.passiveEnrouteScanFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal RegisteredMailFee {
-            get {
+        public decimal RegisteredMailFee
+        {
+            get
+            {
                 return this.registeredMailFeeField;
             }
-            set {
+            set
+            {
                 this.registeredMailFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SignatureConfirmationFee {
-            get {
+        public decimal SignatureConfirmationFee
+        {
+            get
+            {
                 return this.signatureConfirmationFeeField;
             }
-            set {
+            set
+            {
                 this.signatureConfirmationFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SignatureServiceFee {
-            get {
+        public decimal SignatureServiceFee
+        {
+            get
+            {
                 return this.signatureServiceFeeField;
             }
-            set {
+            set
+            {
                 this.signatureServiceFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ExpressMailFee {
-            get {
+        public decimal ExpressMailFee
+        {
+            get
+            {
                 return this.expressMailFeeField;
             }
-            set {
+            set
+            {
                 this.expressMailFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ExpeditedReturnFee {
-            get {
+        public decimal ExpeditedReturnFee
+        {
+            get
+            {
                 return this.expeditedReturnFeeField;
             }
-            set {
+            set
+            {
                 this.expeditedReturnFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AdultSignatureFee {
-            get {
+        public decimal AdultSignatureFee
+        {
+            get
+            {
                 return this.adultSignatureFeeField;
             }
-            set {
+            set
+            {
                 this.adultSignatureFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AdultSignatureRestrictedFee {
-            get {
+        public decimal AdultSignatureRestrictedFee
+        {
+            get
+            {
                 return this.adultSignatureRestrictedFeeField;
             }
-            set {
+            set
+            {
                 this.adultSignatureRestrictedFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal GroupedExtraServicesFee {
-            get {
+        public decimal GroupedExtraServicesFee
+        {
+            get
+            {
                 return this.groupedExtraServicesFeeField;
             }
-            set {
+            set
+            {
                 this.groupedExtraServicesFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IsConsolidator {
-            get {
+        public bool IsConsolidator
+        {
+            get
+            {
                 return this.isConsolidatorField;
             }
-            set {
+            set
+            {
                 this.isConsolidatorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IsEvs {
-            get {
+        public bool IsEvs
+        {
+            get
+            {
                 return this.isEvsField;
             }
-            set {
+            set
+            {
                 this.isEvsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ConsolidatorPrefId {
-            get {
+        public int ConsolidatorPrefId
+        {
+            get
+            {
                 return this.consolidatorPrefIdField;
             }
-            set {
+            set
+            {
                 this.consolidatorPrefIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ChargedFee {
-            get {
+        public decimal ChargedFee
+        {
+            get
+            {
                 return this.chargedFeeField;
             }
-            set {
+            set
+            {
                 this.chargedFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InternationalPicnumberPrefix {
-            get {
+        public string InternationalPicnumberPrefix
+        {
+            get
+            {
                 return this.internationalPicnumberPrefixField;
             }
-            set {
+            set
+            {
                 this.internationalPicnumberPrefixField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ScanBasedPayment {
-            get {
+        public bool ScanBasedPayment
+        {
+            get
+            {
                 return this.scanBasedPaymentField;
             }
-            set {
+            set
+            {
                 this.scanBasedPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool OutboundScanBasedPayment {
-            get {
+        public bool OutboundScanBasedPayment
+        {
+            get
+            {
                 return this.outboundScanBasedPaymentField;
             }
-            set {
+            set
+            {
                 this.outboundScanBasedPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SignatureService {
-            get {
+        public bool SignatureService
+        {
+            get
+            {
                 return this.signatureServiceField;
             }
-            set {
+            set
+            {
                 this.signatureServiceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Length {
-            get {
+        public decimal Length
+        {
+            get
+            {
                 return this.lengthField;
             }
-            set {
+            set
+            {
                 this.lengthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Width {
-            get {
+        public decimal Width
+        {
+            get
+            {
                 return this.widthField;
             }
-            set {
+            set
+            {
                 this.widthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Height {
-            get {
+        public decimal Height
+        {
+            get
+            {
                 return this.heightField;
             }
-            set {
+            set
+            {
                 this.heightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public float Value {
-            get {
+        public float Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool FlagGenerate {
-            get {
+        public bool FlagGenerate
+        {
+            get
+            {
                 return this.flagGenerateField;
             }
-            set {
+            set
+            {
                 this.flagGenerateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCarrierRoute {
-            get {
+        public string ToCarrierRoute
+        {
+            get
+            {
                 return this.toCarrierRouteField;
             }
-            set {
+            set
+            {
                 this.toCarrierRouteField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecialContents {
-            get {
+        public string SpecialContents
+        {
+            get
+            {
                 return this.specialContentsField;
             }
-            set {
+            set
+            {
                 this.specialContentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal LiveAnimalSurcharge {
-            get {
+        public decimal LiveAnimalSurcharge
+        {
+            get
+            {
                 return this.liveAnimalSurchargeField;
             }
-            set {
+            set
+            {
                 this.liveAnimalSurchargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal FragileHandlingSurcharge {
-            get {
+        public decimal FragileHandlingSurcharge
+        {
+            get
+            {
                 return this.fragileHandlingSurchargeField;
             }
-            set {
+            set
+            {
                 this.fragileHandlingSurchargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PermitNumber {
-            get {
+        public string PermitNumber
+        {
+            get
+            {
                 return this.permitNumberField;
             }
-            set {
+            set
+            {
                 this.permitNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SbpUseCommercialConstruct {
-            get {
+        public bool SbpUseCommercialConstruct
+        {
+            get
+            {
                 return this.sbpUseCommercialConstructField;
             }
-            set {
+            set
+            {
                 this.sbpUseCommercialConstructField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PicMailerID {
-            get {
+        public string PicMailerID
+        {
+            get
+            {
                 return this.picMailerIDField;
             }
-            set {
+            set
+            {
                 this.picMailerIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromDeliveryPoint {
-            get {
+        public string FromDeliveryPoint
+        {
+            get
+            {
                 return this.fromDeliveryPointField;
             }
-            set {
+            set
+            {
                 this.fromDeliveryPointField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToDeliveryPoint {
-            get {
+        public string ToDeliveryPoint
+        {
+            get
+            {
                 return this.toDeliveryPointField;
             }
-            set {
+            set
+            {
                 this.toDeliveryPointField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IsBalloonRate {
-            get {
+        public bool IsBalloonRate
+        {
+            get
+            {
                 return this.isBalloonRateField;
             }
-            set {
+            set
+            {
                 this.isBalloonRateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string POZipCode {
-            get {
+        public string POZipCode
+        {
+            get
+            {
                 return this.pOZipCodeField;
             }
-            set {
+            set
+            {
                 this.pOZipCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Returns {
-            get {
+        public bool Returns
+        {
+            get
+            {
                 return this.returnsField;
             }
-            set {
+            set
+            {
                 this.returnsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ConsolidatorAccountId {
-            get {
+        public int ConsolidatorAccountId
+        {
+            get
+            {
                 return this.consolidatorAccountIdField;
             }
-            set {
+            set
+            {
                 this.consolidatorAccountIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool Test {
-            get {
+        public bool Test
+        {
+            get
+            {
                 return this.testField;
             }
-            set {
+            set
+            {
                 this.testField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PicNumberRequest : LabelNumberRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PicNumberRequest : LabelNumberRequest
+    {
+
         private string insuredMailField;
-        
+
         private decimal insuredMailFeeField;
-        
+
         private decimal restrictedDeliveryFeeField;
-        
+
         private string returnReceiptField;
-        
+
         private decimal returnReceiptFeeField;
-        
+
         private bool returnReceiptRegularField;
-        
+
         private decimal returnReceiptRegularFeeField;
-        
+
         private bool returnReceiptElectronicField;
-        
+
         private decimal returnReceiptElectronicFeeField;
-        
+
         private bool returnReceiptMerchandiseField;
-        
+
         private decimal returnReceiptMerchandiseFeeField;
-        
+
         private string serviceLevelField;
-        
+
         private bool sundayHolidayDeliveryField;
-        
+
         private bool sundayDeliveryField;
-        
+
         private bool holidayDeliveryField;
-        
+
         private bool noDeliverySaturdayField;
-        
+
         private string facilityIDField;
-        
+
         private bool waiverOfSignatureField;
-        
+
         private bool aMDeliveryField;
-        
+
         private decimal aMDeliveryFeeField;
-        
+
         /// <remarks/>
-        public string InsuredMail {
-            get {
+        public string InsuredMail
+        {
+            get
+            {
                 return this.insuredMailField;
             }
-            set {
+            set
+            {
                 this.insuredMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal InsuredMailFee {
-            get {
+        public decimal InsuredMailFee
+        {
+            get
+            {
                 return this.insuredMailFeeField;
             }
-            set {
+            set
+            {
                 this.insuredMailFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal RestrictedDeliveryFee {
-            get {
+        public decimal RestrictedDeliveryFee
+        {
+            get
+            {
                 return this.restrictedDeliveryFeeField;
             }
-            set {
+            set
+            {
                 this.restrictedDeliveryFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnReceipt {
-            get {
+        public string ReturnReceipt
+        {
+            get
+            {
                 return this.returnReceiptField;
             }
-            set {
+            set
+            {
                 this.returnReceiptField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceiptFee {
-            get {
+        public decimal ReturnReceiptFee
+        {
+            get
+            {
                 return this.returnReceiptFeeField;
             }
-            set {
+            set
+            {
                 this.returnReceiptFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReturnReceiptRegular {
-            get {
+        public bool ReturnReceiptRegular
+        {
+            get
+            {
                 return this.returnReceiptRegularField;
             }
-            set {
+            set
+            {
                 this.returnReceiptRegularField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceiptRegularFee {
-            get {
+        public decimal ReturnReceiptRegularFee
+        {
+            get
+            {
                 return this.returnReceiptRegularFeeField;
             }
-            set {
+            set
+            {
                 this.returnReceiptRegularFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReturnReceiptElectronic {
-            get {
+        public bool ReturnReceiptElectronic
+        {
+            get
+            {
                 return this.returnReceiptElectronicField;
             }
-            set {
+            set
+            {
                 this.returnReceiptElectronicField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceiptElectronicFee {
-            get {
+        public decimal ReturnReceiptElectronicFee
+        {
+            get
+            {
                 return this.returnReceiptElectronicFeeField;
             }
-            set {
+            set
+            {
                 this.returnReceiptElectronicFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReturnReceiptMerchandise {
-            get {
+        public bool ReturnReceiptMerchandise
+        {
+            get
+            {
                 return this.returnReceiptMerchandiseField;
             }
-            set {
+            set
+            {
                 this.returnReceiptMerchandiseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ReturnReceiptMerchandiseFee {
-            get {
+        public decimal ReturnReceiptMerchandiseFee
+        {
+            get
+            {
                 return this.returnReceiptMerchandiseFeeField;
             }
-            set {
+            set
+            {
                 this.returnReceiptMerchandiseFeeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServiceLevel {
-            get {
+        public string ServiceLevel
+        {
+            get
+            {
                 return this.serviceLevelField;
             }
-            set {
+            set
+            {
                 this.serviceLevelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SundayHolidayDelivery {
-            get {
+        public bool SundayHolidayDelivery
+        {
+            get
+            {
                 return this.sundayHolidayDeliveryField;
             }
-            set {
+            set
+            {
                 this.sundayHolidayDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool SundayDelivery {
-            get {
+        public bool SundayDelivery
+        {
+            get
+            {
                 return this.sundayDeliveryField;
             }
-            set {
+            set
+            {
                 this.sundayDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool HolidayDelivery {
-            get {
+        public bool HolidayDelivery
+        {
+            get
+            {
                 return this.holidayDeliveryField;
             }
-            set {
+            set
+            {
                 this.holidayDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool NoDeliverySaturday {
-            get {
+        public bool NoDeliverySaturday
+        {
+            get
+            {
                 return this.noDeliverySaturdayField;
             }
-            set {
+            set
+            {
                 this.noDeliverySaturdayField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FacilityID {
-            get {
+        public string FacilityID
+        {
+            get
+            {
                 return this.facilityIDField;
             }
-            set {
+            set
+            {
                 this.facilityIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool WaiverOfSignature {
-            get {
+        public bool WaiverOfSignature
+        {
+            get
+            {
                 return this.waiverOfSignatureField;
             }
-            set {
+            set
+            {
                 this.waiverOfSignatureField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool AMDelivery {
-            get {
+        public bool AMDelivery
+        {
+            get
+            {
                 return this.aMDeliveryField;
             }
-            set {
+            set
+            {
                 this.aMDeliveryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal AMDeliveryFee {
-            get {
+        public decimal AMDeliveryFee
+        {
+            get
+            {
                 return this.aMDeliveryFeeField;
             }
-            set {
+            set
+            {
                 this.aMDeliveryFeeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class GetExtraServiceRatesRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class GetExtraServiceRatesRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private int dateAdvanceField;
-        
+
         private string responseVersionField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int DateAdvance {
-            get {
+        public int DateAdvance
+        {
+            get
+            {
                 return this.dateAdvanceField;
             }
-            set {
+            set
+            {
                 this.dateAdvanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ResponseVersion {
-            get {
+        public string ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class DdpRateRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class DdpRateRequest : DataValidator
+    {
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string fromStateField;
-        
+
         private string fromCityField;
-        
+
         private string fromCountryCodeField;
-        
+
         private string toStateField;
-        
+
         private string toCityField;
-        
+
         private string toPostalCodeField;
-        
+
         private string toCountryCodeField;
-        
+
         private double weightOzField;
-        
+
         private double valueField;
-        
+
         private CustomsItem[] customsItemsField;
-        
+
         private Dimensions mailpieceDimensionsField;
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromState {
-            get {
+        public string FromState
+        {
+            get
+            {
                 return this.fromStateField;
             }
-            set {
+            set
+            {
                 this.fromStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCity {
-            get {
+        public string FromCity
+        {
+            get
+            {
                 return this.fromCityField;
             }
-            set {
+            set
+            {
                 this.fromCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCountryCode {
-            get {
+        public string FromCountryCode
+        {
+            get
+            {
                 return this.fromCountryCodeField;
             }
-            set {
+            set
+            {
                 this.fromCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToState {
-            get {
+        public string ToState
+        {
+            get
+            {
                 return this.toStateField;
             }
-            set {
+            set
+            {
                 this.toStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCity {
-            get {
+        public string ToCity
+        {
+            get
+            {
                 return this.toCityField;
             }
-            set {
+            set
+            {
                 this.toCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPostalCode {
-            get {
+        public string ToPostalCode
+        {
+            get
+            {
                 return this.toPostalCodeField;
             }
-            set {
+            set
+            {
                 this.toPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountryCode {
-            get {
+        public string ToCountryCode
+        {
+            get
+            {
                 return this.toCountryCodeField;
             }
-            set {
+            set
+            {
                 this.toCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double WeightOz {
-            get {
+        public double WeightOz
+        {
+            get
+            {
                 return this.weightOzField;
             }
-            set {
+            set
+            {
                 this.weightOzField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double Value {
-            get {
+        public double Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsItem[] CustomsItems {
-            get {
+        public CustomsItem[] CustomsItems
+        {
+            get
+            {
                 return this.customsItemsField;
             }
-            set {
+            set
+            {
                 this.customsItemsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions MailpieceDimensions {
-            get {
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
                 return this.mailpieceDimensionsField;
             }
-            set {
+            set
+            {
                 this.mailpieceDimensionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CustomsItem : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CustomsItem : DataValidator
+    {
+
         private string descriptionField;
-        
+
         private int quantityField;
-        
+
         private decimal weightField;
-        
+
         private decimal valueField;
-        
+
         private string hSTariffNumberField;
-        
+
         private string countryOfOriginField;
-        
+
         private string itemCodeField;
-        
+
         private string productFamilyCodeField;
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Quantity {
-            get {
+        public int Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Weight {
-            get {
+        public decimal Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HSTariffNumber {
-            get {
+        public string HSTariffNumber
+        {
+            get
+            {
                 return this.hSTariffNumberField;
             }
-            set {
+            set
+            {
                 this.hSTariffNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CountryOfOrigin {
-            get {
+        public string CountryOfOrigin
+        {
+            get
+            {
                 return this.countryOfOriginField;
             }
-            set {
+            set
+            {
                 this.countryOfOriginField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ItemCode {
-            get {
+        public string ItemCode
+        {
+            get
+            {
                 return this.itemCodeField;
             }
-            set {
+            set
+            {
                 this.itemCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ProductFamilyCode {
-            get {
+        public string ProductFamilyCode
+        {
+            get
+            {
                 return this.productFamilyCodeField;
             }
-            set {
+            set
+            {
                 this.productFamilyCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class RecreditRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class RecreditRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string recreditAmountField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RecreditAmount {
-            get {
+        public string RecreditAmount
+        {
+            get
+            {
                 return this.recreditAmountField;
             }
-            set {
+            set
+            {
                 this.recreditAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class VoidLabelRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class VoidLabelRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private string trackingNumberField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TrackingNumber {
-            get {
+        public string TrackingNumber
+        {
+            get
+            {
                 return this.trackingNumberField;
             }
-            set {
+            set
+            {
                 this.trackingNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class CustomsInfo : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class CustomsInfo : DataValidator
+    {
+
         private string contentsTypeField;
-        
+
         private string contentsExplanationField;
-        
+
         private string restrictionTypeField;
-        
+
         private string restrictionCommentsField;
-        
+
         private string sendersCustomsReferenceField;
-        
+
         private string importersCustomsReferenceField;
-        
+
         private string licenseNumberField;
-        
+
         private string certificateNumberField;
-        
+
         private string invoiceNumberField;
-        
+
         private string nonDeliveryOptionField;
-        
+
         private string insuredNumberField;
-        
+
         private string eelPfcField;
-        
+
         private CustomsItem[] customsItemsField;
-        
+
         private string recipientTaxIDField;
-        
+
         private string dDPPayerField;
-        
+
         private string dDPNonPaymentOptionField;
-        
+
         /// <remarks/>
-        public string ContentsType {
-            get {
+        public string ContentsType
+        {
+            get
+            {
                 return this.contentsTypeField;
             }
-            set {
+            set
+            {
                 this.contentsTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContentsExplanation {
-            get {
+        public string ContentsExplanation
+        {
+            get
+            {
                 return this.contentsExplanationField;
             }
-            set {
+            set
+            {
                 this.contentsExplanationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RestrictionType {
-            get {
+        public string RestrictionType
+        {
+            get
+            {
                 return this.restrictionTypeField;
             }
-            set {
+            set
+            {
                 this.restrictionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RestrictionComments {
-            get {
+        public string RestrictionComments
+        {
+            get
+            {
                 return this.restrictionCommentsField;
             }
-            set {
+            set
+            {
                 this.restrictionCommentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SendersCustomsReference {
-            get {
+        public string SendersCustomsReference
+        {
+            get
+            {
                 return this.sendersCustomsReferenceField;
             }
-            set {
+            set
+            {
                 this.sendersCustomsReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ImportersCustomsReference {
-            get {
+        public string ImportersCustomsReference
+        {
+            get
+            {
                 return this.importersCustomsReferenceField;
             }
-            set {
+            set
+            {
                 this.importersCustomsReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LicenseNumber {
-            get {
+        public string LicenseNumber
+        {
+            get
+            {
                 return this.licenseNumberField;
             }
-            set {
+            set
+            {
                 this.licenseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CertificateNumber {
-            get {
+        public string CertificateNumber
+        {
+            get
+            {
                 return this.certificateNumberField;
             }
-            set {
+            set
+            {
                 this.certificateNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InvoiceNumber {
-            get {
+        public string InvoiceNumber
+        {
+            get
+            {
                 return this.invoiceNumberField;
             }
-            set {
+            set
+            {
                 this.invoiceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NonDeliveryOption {
-            get {
+        public string NonDeliveryOption
+        {
+            get
+            {
                 return this.nonDeliveryOptionField;
             }
-            set {
+            set
+            {
                 this.nonDeliveryOptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InsuredNumber {
-            get {
+        public string InsuredNumber
+        {
+            get
+            {
                 return this.insuredNumberField;
             }
-            set {
+            set
+            {
                 this.insuredNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EelPfc {
-            get {
+        public string EelPfc
+        {
+            get
+            {
                 return this.eelPfcField;
             }
-            set {
+            set
+            {
                 this.eelPfcField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsItem[] CustomsItems {
-            get {
+        public CustomsItem[] CustomsItems
+        {
+            get
+            {
                 return this.customsItemsField;
             }
-            set {
+            set
+            {
                 this.customsItemsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RecipientTaxID {
-            get {
+        public string RecipientTaxID
+        {
+            get
+            {
                 return this.recipientTaxIDField;
             }
-            set {
+            set
+            {
                 this.recipientTaxIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DDPPayer {
-            get {
+        public string DDPPayer
+        {
+            get
+            {
                 return this.dDPPayerField;
             }
-            set {
+            set
+            {
                 this.dDPPayerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DDPNonPaymentOption {
-            get {
+        public string DDPNonPaymentOption
+        {
+            get
+            {
                 return this.dDPNonPaymentOptionField;
             }
-            set {
+            set
+            {
                 this.dDPNonPaymentOptionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PostageRateRequest))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(LabelRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public abstract partial class CommonLabelRequestAndPostageRateRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class PostageRateRequest : DataValidator
+    {
+
+        private string requesterIDField;
+
+        private CertifiedIntermediary certifiedIntermediaryField;
+
+        private string automationRateField;
+
+        private string machinableField;
+
+        private string serviceLevelField;
+
+        private string sortTypeField;
+
+        private SpecialServices servicesField;
+
+        private float valueField;
+
+        private double cODAmountField;
+
+        private string insuredValueField;
+
+        private double registeredMailValueField;
+
+        private string entryFacilityField;
+
+        private string fromPostalCodeField;
+
+        private string toPostalCodeField;
+
+        private string toCountryField;
+
+        private string toCountryCodeField;
+
+        private string shipDateField;
+
+        private string shipTimeField;
+
+        private ResponseOptions responseOptionsField;
+
+        private string openAndDistributeFacilityTypeCodeField;
+
+        private string isConsolidatorField;
+
+        private string deliveryTimeDaysField;
+
+        private string printScanBasedPaymentLabelField;
+
+        private string specialContentsField;
+
+        private string fromCountryCodeField;
+
+        private string estimatedDeliveryDateField;
+
+        private string contentsTypeField;
+
+        private RespVersion responseVersionField;
+
         private string mailpieceShapeField;
-        
+
         private string mailClassField;
-        
+
         private double weightOzField;
-        
+
         private string packageTypeIndicatorField;
-        
+
         private int dateAdvanceField;
-        
+
         private string pricingField;
-        
+
         private string sundayHolidayDeliveryField;
-        
+
         private string liveAnimalSurchargeField;
-        
+
         private string extensionField;
-        
+
         private Dimensions mailpieceDimensionsField;
-        
-        public CommonLabelRequestAndPostageRateRequest() {
+
+        public PostageRateRequest()
+        {
+            this.cODAmountField = 0D;
+            this.registeredMailValueField = 0D;
             this.dateAdvanceField = 0;
         }
-        
+
         /// <remarks/>
-        public string MailpieceShape {
-            get {
-                return this.mailpieceShapeField;
+        public string RequesterID
+        {
+            get
+            {
+                return this.requesterIDField;
             }
-            set {
-                this.mailpieceShapeField = value;
+            set
+            {
+                this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MailClass {
-            get {
+        public string MailClass
+        {
+            get
+            {
                 return this.mailClassField;
             }
-            set {
+            set
+            {
                 this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public double WeightOz {
-            get {
+        public double WeightOz
+        {
+            get
+            {
                 return this.weightOzField;
             }
-            set {
+            set
+            {
                 this.weightOzField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackageTypeIndicator {
-            get {
-                return this.packageTypeIndicatorField;
+        public string MailpieceShape
+        {
+            get
+            {
+                return this.mailpieceShapeField;
             }
-            set {
-                this.packageTypeIndicatorField = value;
+            set
+            {
+                this.mailpieceShapeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(0)]
-        public int DateAdvance {
-            get {
-                return this.dateAdvanceField;
-            }
-            set {
-                this.dateAdvanceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Pricing {
-            get {
-                return this.pricingField;
-            }
-            set {
-                this.pricingField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SundayHolidayDelivery {
-            get {
-                return this.sundayHolidayDeliveryField;
-            }
-            set {
-                this.sundayHolidayDeliveryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string LiveAnimalSurcharge {
-            get {
-                return this.liveAnimalSurchargeField;
-            }
-            set {
-                this.liveAnimalSurchargeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Extension {
-            get {
-                return this.extensionField;
-            }
-            set {
-                this.extensionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Dimensions MailpieceDimensions {
-            get {
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
                 return this.mailpieceDimensionsField;
             }
-            set {
+            set
+            {
                 this.mailpieceDimensionsField = value;
             }
         }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRateRequest : CommonLabelRequestAndPostageRateRequest {
-        
-        private string requesterIDField;
-        
-        private CertifiedIntermediary certifiedIntermediaryField;
-        
-        private string automationRateField;
-        
-        private string machinableField;
-        
-        private string serviceLevelField;
-        
-        private string sortTypeField;
-        
-        private SpecialServices servicesField;
-        
-        private float valueField;
-        
-        private double cODAmountField;
-        
-        private string insuredValueField;
-        
-        private double registeredMailValueField;
-        
-        private string entryFacilityField;
-        
-        private string fromPostalCodeField;
-        
-        private string toPostalCodeField;
-        
-        private string toCountryField;
-        
-        private string toCountryCodeField;
-        
-        private string shipDateField;
-        
-        private string shipTimeField;
-        
-        private ResponseOptions responseOptionsField;
-        
-        private string openAndDistributeFacilityTypeCodeField;
-        
-        private string isConsolidatorField;
-        
-        private string deliveryTimeDaysField;
-        
-        private string printScanBasedPaymentLabelField;
-        
-        private string specialContentsField;
-        
-        private string fromCountryCodeField;
-        
-        private string estimatedDeliveryDateField;
-        
-        private string contentsTypeField;
-        
-        private RespVersion responseVersionField;
-        
-        public PostageRateRequest() {
-            this.cODAmountField = 0D;
-            this.registeredMailValueField = 0D;
-        }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
-                return this.requesterIDField;
-            }
-            set {
-                this.requesterIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AutomationRate {
-            get {
+        public string AutomationRate
+        {
+            get
+            {
                 return this.automationRateField;
             }
-            set {
+            set
+            {
                 this.automationRateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Machinable {
-            get {
+        public string Machinable
+        {
+            get
+            {
                 return this.machinableField;
             }
-            set {
+            set
+            {
                 this.machinableField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServiceLevel {
-            get {
+        public string ServiceLevel
+        {
+            get
+            {
                 return this.serviceLevelField;
             }
-            set {
+            set
+            {
                 this.serviceLevelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SortType {
-            get {
+        public string SortType
+        {
+            get
+            {
                 return this.sortTypeField;
             }
-            set {
+            set
+            {
                 this.sortTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SpecialServices Services {
-            get {
+        public SpecialServices Services
+        {
+            get
+            {
                 return this.servicesField;
             }
-            set {
+            set
+            {
                 this.servicesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public float Value {
-            get {
+        public float Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double CODAmount {
-            get {
+        public double CODAmount
+        {
+            get
+            {
                 return this.cODAmountField;
             }
-            set {
+            set
+            {
                 this.cODAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string InsuredValue {
-            get {
+        public string InsuredValue
+        {
+            get
+            {
                 return this.insuredValueField;
             }
-            set {
+            set
+            {
                 this.insuredValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double RegisteredMailValue {
-            get {
+        public double RegisteredMailValue
+        {
+            get
+            {
                 return this.registeredMailValueField;
             }
-            set {
+            set
+            {
                 this.registeredMailValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EntryFacility {
-            get {
+        public string EntryFacility
+        {
+            get
+            {
                 return this.entryFacilityField;
             }
-            set {
+            set
+            {
                 this.entryFacilityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromPostalCode {
-            get {
+        public string FromPostalCode
+        {
+            get
+            {
                 return this.fromPostalCodeField;
             }
-            set {
+            set
+            {
                 this.fromPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPostalCode {
-            get {
+        public string ToPostalCode
+        {
+            get
+            {
                 return this.toPostalCodeField;
             }
-            set {
+            set
+            {
                 this.toPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountry {
-            get {
+        public string ToCountry
+        {
+            get
+            {
                 return this.toCountryField;
             }
-            set {
+            set
+            {
                 this.toCountryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCountryCode {
-            get {
+        public string ToCountryCode
+        {
+            get
+            {
                 return this.toCountryCodeField;
             }
-            set {
+            set
+            {
                 this.toCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ShipDate {
-            get {
+        public string ShipDate
+        {
+            get
+            {
                 return this.shipDateField;
             }
-            set {
+            set
+            {
                 this.shipDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ShipTime {
-            get {
+        public string ShipTime
+        {
+            get
+            {
                 return this.shipTimeField;
             }
-            set {
+            set
+            {
                 this.shipTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ResponseOptions ResponseOptions {
-            get {
+        public ResponseOptions ResponseOptions
+        {
+            get
+            {
                 return this.responseOptionsField;
             }
-            set {
+            set
+            {
                 this.responseOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OpenAndDistributeFacilityTypeCode {
-            get {
+        public string OpenAndDistributeFacilityTypeCode
+        {
+            get
+            {
                 return this.openAndDistributeFacilityTypeCodeField;
             }
-            set {
+            set
+            {
                 this.openAndDistributeFacilityTypeCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IsConsolidator {
-            get {
+        public string IsConsolidator
+        {
+            get
+            {
                 return this.isConsolidatorField;
             }
-            set {
+            set
+            {
                 this.isConsolidatorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryTimeDays {
-            get {
+        public string DeliveryTimeDays
+        {
+            get
+            {
                 return this.deliveryTimeDaysField;
             }
-            set {
+            set
+            {
                 this.deliveryTimeDaysField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PrintScanBasedPaymentLabel {
-            get {
+        public string PrintScanBasedPaymentLabel
+        {
+            get
+            {
                 return this.printScanBasedPaymentLabelField;
             }
-            set {
+            set
+            {
                 this.printScanBasedPaymentLabelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecialContents {
-            get {
+        public string SpecialContents
+        {
+            get
+            {
                 return this.specialContentsField;
             }
-            set {
+            set
+            {
                 this.specialContentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCountryCode {
-            get {
+        public string FromCountryCode
+        {
+            get
+            {
                 return this.fromCountryCodeField;
             }
-            set {
+            set
+            {
                 this.fromCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EstimatedDeliveryDate {
-            get {
+        public string EstimatedDeliveryDate
+        {
+            get
+            {
                 return this.estimatedDeliveryDateField;
             }
-            set {
+            set
+            {
                 this.estimatedDeliveryDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContentsType {
-            get {
+        public string ContentsType
+        {
+            get
+            {
                 return this.contentsTypeField;
             }
-            set {
+            set
+            {
                 this.contentsTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public RespVersion ResponseVersion {
-            get {
+        public RespVersion ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
+
+        /// <remarks/>
+        public string PackageTypeIndicator
+        {
+            get
+            {
+                return this.packageTypeIndicatorField;
+            }
+            set
+            {
+                this.packageTypeIndicatorField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int DateAdvance
+        {
+            get
+            {
+                return this.dateAdvanceField;
+            }
+            set
+            {
+                this.dateAdvanceField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Pricing
+        {
+            get
+            {
+                return this.pricingField;
+            }
+            set
+            {
+                this.pricingField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SundayHolidayDelivery
+        {
+            get
+            {
+                return this.sundayHolidayDeliveryField;
+            }
+            set
+            {
+                this.sundayHolidayDeliveryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LiveAnimalSurcharge
+        {
+            get
+            {
+                return this.liveAnimalSurchargeField;
+            }
+            set
+            {
+                this.liveAnimalSurchargeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Extension
+        {
+            get
+            {
+                return this.extensionField;
+            }
+            set
+            {
+                this.extensionField = value;
+            }
+        }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class LabelRequest : CommonLabelRequestAndPostageRateRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class LabelRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string accountIDField;
-        
+
         private string passPhraseField;
-        
+
         private string automationRateField;
-        
+
+        private string mailpieceShapeField;
+
+        private string mailClassField;
+
+        private double weightOzField;
+
+        private string packageTypeIndicatorField;
+
+        private int dateAdvanceField;
+
+        private string pricingField;
+
+        private string sundayHolidayDeliveryField;
+
+        private string liveAnimalSurchargeField;
+
+        private string extensionField;
+
+        private Dimensions mailpieceDimensionsField;
+
         private string machinableField;
-        
+
         private string serviceLevelField;
-        
+
         private string sortTypeField;
-        
+
         private string includePostageField;
-        
+
         private string replyPostageField;
-        
+
         private string showReturnAddressField;
-        
+
         private string stealthField;
-        
+
         private string validateAddressField;
-        
+
         private string signatureWaiverField;
-        
+
         private string noWeekendDeliveryField;
-        
+
         private SpecialServices servicesField;
-        
+
         private int costCenterField;
-        
+
         private float valueField;
-        
+
         private double cODAmountField;
-        
+
         private double registeredMailValueField;
-        
+
         private string descriptionField;
-        
+
         private string integratedFormTypeField;
-        
+
         private string customsFormTypeField;
-        
+
         private string customsFormImageFormatField;
-        
+
         private string customsFormImageResolutionField;
-        
+
         private string originCountryField;
-        
+
         private string contentsTypeField;
-        
+
         private string contentsExplanationField;
-        
+
         private string nonDeliveryOptionField;
-        
+
         private string referenceIDField;
-        
+
         private string referenceID2Field;
-        
+
         private string referenceID3Field;
-        
+
         private string referenceID4Field;
-        
+
         private string partnerCustomerIDField;
-        
+
         private string partnerTransactionIDField;
-        
+
         private string bpodClientDunsNumberField;
-        
+
         private string rubberStamp1Field;
-        
+
         private string rubberStamp2Field;
-        
+
         private string rubberStamp3Field;
-        
+
         private string entryFacilityField;
-        
+
         private string pOZipCodeField;
-        
+
         private string shipDateField;
-        
+
         private string shipTimeField;
-        
+
         private CustomsInfo customsInfoField;
-        
+
         private string customsCertifyField;
-        
+
         private string customsSignerField;
-        
+
         private string hfpEmailAddressField;
-        
+
         private string hfpSMSField;
-        
+
         private string hfpFacilityIDField;
-        
+
         private string mRSPermitNoField;
-        
+
         private string mRSPermitCityStateZIPField;
-        
+
         private string mRSPermitFirmField;
-        
+
         private string mRSPermitStreetField;
-        
+
         private string mRSRMANumberField;
-        
+
         private string openAndDistributeFacilityTypeField;
-        
+
         private string openAndDistributeFacilityNameField;
-        
+
         private string openAndDistributeTrayField;
-        
+
         private string openAndDistributeMailClassEnclosedField;
-        
+
         private string openAndDistributeMailClassOtherField;
-        
+
         private string gXGFedexTrackingNumberField;
-        
+
         private string gXGUSPSTrackingNumberField;
-        
+
         private string printConsolidatorLabelField;
-        
+
         private ResponseOptions responseOptionsField;
-        
+
         private string tokenField;
-        
+
         private string customsSendersCopyField;
-        
+
         private string noDateField;
-        
+
         private string merchantIDField;
-        
+
         private string printScanBasedPaymentLabelField;
-        
+
         private string specialContentsField;
-        
+
         private eVSOptions eVSOptionsField;
-        
+
         private Cod3816 cOD3816Field;
-        
+
         private string emailMiscNotesField;
-        
+
         private string estimatedDeliveryDateField;
-        
+
         private string ancillaryServiceEndorsementField;
-        
+
         private string insuredValueField;
-        
+
         private string fromNameField;
-        
+
         private string fromCompanyField;
-        
+
         private string returnAddress1Field;
-        
+
         private string returnAddress2Field;
-        
+
         private string returnAddress3Field;
-        
+
         private string returnAddress4Field;
-        
+
         private string fromCityField;
-        
+
         private string fromStateField;
-        
+
         private string fromPostalCodeField;
-        
+
         private string fromZIP4Field;
-        
+
         private string fromCountryField;
-        
+
         private string fromPhoneField;
-        
+
         private string fromEMailField;
-        
+
         private string toNameField;
-        
+
         private string toCompanyField;
-        
+
         private string toAddress1Field;
-        
+
         private string toAddress2Field;
-        
+
         private string toAddress3Field;
-        
+
         private string toAddress4Field;
-        
+
         private string toCityField;
-        
+
         private string toStateField;
-        
+
         private string toPostalCodeField;
-        
+
         private string toZIP4Field;
-        
+
         private string toDeliveryPointField;
-        
+
         private string toCountryField;
-        
+
         private string toCountryCodeField;
-        
+
         private string toPhoneField;
-        
+
         private string toEMailField;
-        
+
         private string customsCountry1Field;
-        
+
         private string customsDescription1Field;
-        
+
         private uint customsQuantity1Field;
-        
+
         private bool customsQuantity1FieldSpecified;
-        
+
         private float customsValue1Field;
-        
+
         private bool customsValue1FieldSpecified;
-        
+
         private uint customsWeight1Field;
-        
+
         private bool customsWeight1FieldSpecified;
-        
+
         private string customsCountry2Field;
-        
+
         private string customsDescription2Field;
-        
+
         private uint customsQuantity2Field;
-        
+
         private bool customsQuantity2FieldSpecified;
-        
+
         private float customsValue2Field;
-        
+
         private bool customsValue2FieldSpecified;
-        
+
         private uint customsWeight2Field;
-        
+
         private bool customsWeight2FieldSpecified;
-        
+
         private string customsCountry3Field;
-        
+
         private string customsDescription3Field;
-        
+
         private uint customsQuantity3Field;
-        
+
         private bool customsQuantity3FieldSpecified;
-        
+
         private float customsValue3Field;
-        
+
         private bool customsValue3FieldSpecified;
-        
+
         private uint customsWeight3Field;
-        
+
         private bool customsWeight3FieldSpecified;
-        
+
         private string customsCountry4Field;
-        
+
         private string customsDescription4Field;
-        
+
         private uint customsQuantity4Field;
-        
+
         private bool customsQuantity4FieldSpecified;
-        
+
         private float customsValue4Field;
-        
+
         private bool customsValue4FieldSpecified;
-        
+
         private uint customsWeight4Field;
-        
+
         private bool customsWeight4FieldSpecified;
-        
+
         private string customsCountry5Field;
-        
+
         private string customsDescription5Field;
-        
+
         private uint customsQuantity5Field;
-        
+
         private bool customsQuantity5FieldSpecified;
-        
+
         private float customsValue5Field;
-        
+
         private bool customsValue5FieldSpecified;
-        
+
         private uint customsWeight5Field;
-        
+
         private bool customsWeight5FieldSpecified;
-        
+
         private string eelPfcField;
-        
+
         private string hfpFacilityNameField;
-        
+
         private string hfpFacilityAddress1Field;
-        
+
         private string hfpFacilityCityField;
-        
+
         private string hfpFacilityStateField;
-        
+
         private string hfpFacilityPostalCodeField;
-        
+
         private string hfpFacilityZIP4Field;
-        
+
         private string costCenterAlphaNumericField;
-        
+
         private string toCarrierRouteField;
-        
+
         private HazMat hazardousMaterialField;
-        
+
         private string fromCountryCodeField;
-        
+
         private string testField;
-        
+
         private string labelTypeField;
-        
+
         private string labelSubtypeField;
-        
+
         private string labelSizeField;
-        
+
         private string imageFormatField;
-        
+
         private string imageResolutionField;
-        
+
         private string imageRotationField;
-        
+
         private string labelTemplateField;
-        
-        public LabelRequest() {
+
+        public LabelRequest()
+        {
             this.cODAmountField = 0D;
             this.registeredMailValueField = 0D;
+            this.dateAdvanceField = 0;
         }
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PassPhrase {
-            get {
+        public string PassPhrase
+        {
+            get
+            {
                 return this.passPhraseField;
             }
-            set {
+            set
+            {
                 this.passPhraseField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AutomationRate {
-            get {
-                return this.automationRateField;
+        public string MailClass
+        {
+            get
+            {
+                return this.mailClassField;
             }
-            set {
-                this.automationRateField = value;
+            set
+            {
+                this.mailClassField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Machinable {
-            get {
+        public double WeightOz
+        {
+            get
+            {
+                return this.weightOzField;
+            }
+            set
+            {
+                this.weightOzField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailpieceShape
+        {
+            get
+            {
+                return this.mailpieceShapeField;
+            }
+            set
+            {
+                this.mailpieceShapeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
+                return this.mailpieceDimensionsField;
+            }
+            set
+            {
+                this.mailpieceDimensionsField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Machinable
+        {
+            get
+            {
                 return this.machinableField;
             }
-            set {
+            set
+            {
                 this.machinableField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServiceLevel {
-            get {
-                return this.serviceLevelField;
-            }
-            set {
-                this.serviceLevelField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SortType {
-            get {
-                return this.sortTypeField;
-            }
-            set {
-                this.sortTypeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string IncludePostage {
-            get {
+        public string IncludePostage
+        {
+            get
+            {
                 return this.includePostageField;
             }
-            set {
+            set
+            {
                 this.includePostageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReplyPostage {
-            get {
-                return this.replyPostageField;
-            }
-            set {
-                this.replyPostageField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ShowReturnAddress {
-            get {
-                return this.showReturnAddressField;
-            }
-            set {
-                this.showReturnAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Stealth {
-            get {
+        public string Stealth
+        {
+            get
+            {
                 return this.stealthField;
             }
-            set {
+            set
+            {
                 this.stealthField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ValidateAddress {
-            get {
-                return this.validateAddressField;
-            }
-            set {
-                this.validateAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SignatureWaiver {
-            get {
-                return this.signatureWaiverField;
-            }
-            set {
-                this.signatureWaiverField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string NoWeekendDelivery {
-            get {
-                return this.noWeekendDeliveryField;
-            }
-            set {
-                this.noWeekendDeliveryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public SpecialServices Services {
-            get {
+        public SpecialServices Services
+        {
+            get
+            {
                 return this.servicesField;
             }
-            set {
+            set
+            {
                 this.servicesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int CostCenter {
-            get {
+        public int CostCenter
+        {
+            get
+            {
                 return this.costCenterField;
             }
-            set {
+            set
+            {
                 this.costCenterField = value;
             }
         }
-        
+
         /// <remarks/>
-        public float Value {
-            get {
+        public float Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
         
         /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double CODAmount {
-            get {
-                return this.cODAmountField;
-            }
-            set {
-                this.cODAmountField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double RegisteredMailValue {
-            get {
-                return this.registeredMailValueField;
-            }
-            set {
-                this.registeredMailValueField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IntegratedFormType {
-            get {
+        public string IntegratedFormType
+        {
+            get
+            {
                 return this.integratedFormTypeField;
             }
-            set {
+            set
+            {
                 this.integratedFormTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsFormType {
-            get {
-                return this.customsFormTypeField;
-            }
-            set {
-                this.customsFormTypeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string CustomsFormImageFormat {
-            get {
-                return this.customsFormImageFormatField;
-            }
-            set {
-                this.customsFormImageFormatField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string CustomsFormImageResolution {
-            get {
-                return this.customsFormImageResolutionField;
-            }
-            set {
-                this.customsFormImageResolutionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OriginCountry {
-            get {
-                return this.originCountryField;
-            }
-            set {
-                this.originCountryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ContentsType {
-            get {
-                return this.contentsTypeField;
-            }
-            set {
-                this.contentsTypeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ContentsExplanation {
-            get {
-                return this.contentsExplanationField;
-            }
-            set {
-                this.contentsExplanationField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string NonDeliveryOption {
-            get {
-                return this.nonDeliveryOptionField;
-            }
-            set {
-                this.nonDeliveryOptionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ReferenceID {
-            get {
+        public string ReferenceID
+        {
+            get
+            {
                 return this.referenceIDField;
             }
-            set {
+            set
+            {
                 this.referenceIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceID2 {
-            get {
-                return this.referenceID2Field;
-            }
-            set {
-                this.referenceID2Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ReferenceID3 {
-            get {
-                return this.referenceID3Field;
-            }
-            set {
-                this.referenceID3Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ReferenceID4 {
-            get {
-                return this.referenceID4Field;
-            }
-            set {
-                this.referenceID4Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PartnerCustomerID {
-            get {
+        public string PartnerCustomerID
+        {
+            get
+            {
                 return this.partnerCustomerIDField;
             }
-            set {
+            set
+            {
                 this.partnerCustomerIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PartnerTransactionID {
-            get {
+        public string PartnerTransactionID
+        {
+            get
+            {
                 return this.partnerTransactionIDField;
             }
-            set {
+            set
+            {
                 this.partnerTransactionIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BpodClientDunsNumber {
-            get {
-                return this.bpodClientDunsNumberField;
-            }
-            set {
-                this.bpodClientDunsNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string RubberStamp1 {
-            get {
+        public string RubberStamp1
+        {
+            get
+            {
                 return this.rubberStamp1Field;
             }
-            set {
+            set
+            {
                 this.rubberStamp1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RubberStamp2 {
-            get {
+        public string RubberStamp2
+        {
+            get
+            {
                 return this.rubberStamp2Field;
             }
-            set {
+            set
+            {
                 this.rubberStamp2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RubberStamp3 {
-            get {
+        public string RubberStamp3
+        {
+            get
+            {
                 return this.rubberStamp3Field;
             }
-            set {
+            set
+            {
                 this.rubberStamp3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EntryFacility {
-            get {
-                return this.entryFacilityField;
-            }
-            set {
-                this.entryFacilityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string POZipCode {
-            get {
+        public string POZipCode
+        {
+            get
+            {
                 return this.pOZipCodeField;
             }
-            set {
+            set
+            {
                 this.pOZipCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ShipDate {
-            get {
+        public string ShipDate
+        {
+            get
+            {
                 return this.shipDateField;
             }
-            set {
+            set
+            {
                 this.shipDateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ShipTime {
-            get {
-                return this.shipTimeField;
-            }
-            set {
-                this.shipTimeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public CustomsInfo CustomsInfo {
-            get {
+        public CustomsInfo CustomsInfo
+        {
+            get
+            {
                 return this.customsInfoField;
             }
-            set {
+            set
+            {
                 this.customsInfoField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCertify {
-            get {
+        public string CustomsCertify
+        {
+            get
+            {
                 return this.customsCertifyField;
             }
-            set {
+            set
+            {
                 this.customsCertifyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsSigner {
-            get {
+        public string CustomsSigner
+        {
+            get
+            {
                 return this.customsSignerField;
             }
-            set {
+            set
+            {
                 this.customsSignerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpEmailAddress {
-            get {
-                return this.hfpEmailAddressField;
-            }
-            set {
-                this.hfpEmailAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string HfpSMS {
-            get {
-                return this.hfpSMSField;
-            }
-            set {
-                this.hfpSMSField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string HfpFacilityID {
-            get {
-                return this.hfpFacilityIDField;
-            }
-            set {
-                this.hfpFacilityIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MRSPermitNo {
-            get {
-                return this.mRSPermitNoField;
-            }
-            set {
-                this.mRSPermitNoField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MRSPermitCityStateZIP {
-            get {
-                return this.mRSPermitCityStateZIPField;
-            }
-            set {
-                this.mRSPermitCityStateZIPField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MRSPermitFirm {
-            get {
-                return this.mRSPermitFirmField;
-            }
-            set {
-                this.mRSPermitFirmField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MRSPermitStreet {
-            get {
-                return this.mRSPermitStreetField;
-            }
-            set {
-                this.mRSPermitStreetField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MRSRMANumber {
-            get {
-                return this.mRSRMANumberField;
-            }
-            set {
-                this.mRSRMANumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OpenAndDistributeFacilityType {
-            get {
-                return this.openAndDistributeFacilityTypeField;
-            }
-            set {
-                this.openAndDistributeFacilityTypeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OpenAndDistributeFacilityName {
-            get {
-                return this.openAndDistributeFacilityNameField;
-            }
-            set {
-                this.openAndDistributeFacilityNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OpenAndDistributeTray {
-            get {
-                return this.openAndDistributeTrayField;
-            }
-            set {
-                this.openAndDistributeTrayField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OpenAndDistributeMailClassEnclosed {
-            get {
-                return this.openAndDistributeMailClassEnclosedField;
-            }
-            set {
-                this.openAndDistributeMailClassEnclosedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OpenAndDistributeMailClassOther {
-            get {
-                return this.openAndDistributeMailClassOtherField;
-            }
-            set {
-                this.openAndDistributeMailClassOtherField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string GXGFedexTrackingNumber {
-            get {
-                return this.gXGFedexTrackingNumberField;
-            }
-            set {
-                this.gXGFedexTrackingNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string GXGUSPSTrackingNumber {
-            get {
-                return this.gXGUSPSTrackingNumberField;
-            }
-            set {
-                this.gXGUSPSTrackingNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PrintConsolidatorLabel {
-            get {
-                return this.printConsolidatorLabelField;
-            }
-            set {
-                this.printConsolidatorLabelField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public ResponseOptions ResponseOptions {
-            get {
+        public ResponseOptions ResponseOptions
+        {
+            get
+            {
                 return this.responseOptionsField;
             }
-            set {
+            set
+            {
                 this.responseOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Token {
-            get {
-                return this.tokenField;
-            }
-            set {
-                this.tokenField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string CustomsSendersCopy {
-            get {
-                return this.customsSendersCopyField;
-            }
-            set {
-                this.customsSendersCopyField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string NoDate {
-            get {
-                return this.noDateField;
-            }
-            set {
-                this.noDateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MerchantID {
-            get {
-                return this.merchantIDField;
-            }
-            set {
-                this.merchantIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PrintScanBasedPaymentLabel {
-            get {
-                return this.printScanBasedPaymentLabelField;
-            }
-            set {
-                this.printScanBasedPaymentLabelField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SpecialContents {
-            get {
-                return this.specialContentsField;
-            }
-            set {
-                this.specialContentsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public eVSOptions eVSOptions {
-            get {
-                return this.eVSOptionsField;
-            }
-            set {
-                this.eVSOptionsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Cod3816 COD3816 {
-            get {
-                return this.cOD3816Field;
-            }
-            set {
-                this.cOD3816Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string EmailMiscNotes {
-            get {
-                return this.emailMiscNotesField;
-            }
-            set {
-                this.emailMiscNotesField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string EstimatedDeliveryDate {
-            get {
-                return this.estimatedDeliveryDateField;
-            }
-            set {
-                this.estimatedDeliveryDateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string AncillaryServiceEndorsement {
-            get {
-                return this.ancillaryServiceEndorsementField;
-            }
-            set {
-                this.ancillaryServiceEndorsementField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string InsuredValue {
-            get {
-                return this.insuredValueField;
-            }
-            set {
-                this.insuredValueField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string FromName {
-            get {
+        public string FromName
+        {
+            get
+            {
                 return this.fromNameField;
             }
-            set {
+            set
+            {
                 this.fromNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCompany {
-            get {
+        public string FromCompany
+        {
+            get
+            {
                 return this.fromCompanyField;
             }
-            set {
+            set
+            {
                 this.fromCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress1 {
-            get {
+        public string ReturnAddress1
+        {
+            get
+            {
                 return this.returnAddress1Field;
             }
-            set {
+            set
+            {
                 this.returnAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress2 {
-            get {
+        public string ReturnAddress2
+        {
+            get
+            {
                 return this.returnAddress2Field;
             }
-            set {
+            set
+            {
                 this.returnAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress3 {
-            get {
+        public string ReturnAddress3
+        {
+            get
+            {
                 return this.returnAddress3Field;
             }
-            set {
+            set
+            {
                 this.returnAddress3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReturnAddress4 {
-            get {
-                return this.returnAddress4Field;
-            }
-            set {
-                this.returnAddress4Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string FromCity {
-            get {
+        public string FromCity
+        {
+            get
+            {
                 return this.fromCityField;
             }
-            set {
+            set
+            {
                 this.fromCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromState {
-            get {
+        public string FromState
+        {
+            get
+            {
                 return this.fromStateField;
             }
-            set {
+            set
+            {
                 this.fromStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromPostalCode {
-            get {
+        public string FromPostalCode
+        {
+            get
+            {
                 return this.fromPostalCodeField;
             }
-            set {
+            set
+            {
                 this.fromPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromZIP4 {
-            get {
-                return this.fromZIP4Field;
-            }
-            set {
-                this.fromZIP4Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string FromCountry {
-            get {
-                return this.fromCountryField;
-            }
-            set {
-                this.fromCountryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string FromPhone {
-            get {
+        public string FromPhone
+        {
+            get
+            {
                 return this.fromPhoneField;
             }
-            set {
+            set
+            {
                 this.fromPhoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromEMail {
-            get {
+        public string FromEMail
+        {
+            get
+            {
                 return this.fromEMailField;
             }
-            set {
+            set
+            {
                 this.fromEMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToName {
-            get {
+        public string ToName
+        {
+            get
+            {
                 return this.toNameField;
             }
-            set {
+            set
+            {
                 this.toNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCompany {
-            get {
+        public string ToCompany
+        {
+            get
+            {
                 return this.toCompanyField;
             }
-            set {
+            set
+            {
                 this.toCompanyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress1 {
-            get {
+        public string ToAddress1
+        {
+            get
+            {
                 return this.toAddress1Field;
             }
-            set {
+            set
+            {
                 this.toAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress2 {
-            get {
+        public string ToAddress2
+        {
+            get
+            {
                 return this.toAddress2Field;
             }
-            set {
+            set
+            {
                 this.toAddress2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress3 {
-            get {
+        public string ToAddress3
+        {
+            get
+            {
                 return this.toAddress3Field;
             }
-            set {
+            set
+            {
                 this.toAddress3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToAddress4 {
-            get {
-                return this.toAddress4Field;
-            }
-            set {
-                this.toAddress4Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ToCity {
-            get {
+        public string ToCity
+        {
+            get
+            {
                 return this.toCityField;
             }
-            set {
+            set
+            {
                 this.toCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToState {
-            get {
+        public string ToState
+        {
+            get
+            {
                 return this.toStateField;
             }
-            set {
+            set
+            {
                 this.toStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPostalCode {
-            get {
+        public string ToPostalCode
+        {
+            get
+            {
                 return this.toPostalCodeField;
             }
-            set {
+            set
+            {
                 this.toPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToZIP4 {
-            get {
+        public string ToZIP4
+        {
+            get
+            {
                 return this.toZIP4Field;
             }
-            set {
+            set
+            {
                 this.toZIP4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToDeliveryPoint {
-            get {
-                return this.toDeliveryPointField;
-            }
-            set {
-                this.toDeliveryPointField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ToCountry {
-            get {
-                return this.toCountryField;
-            }
-            set {
-                this.toCountryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ToCountryCode {
-            get {
+        public string ToCountryCode
+        {
+            get
+            {
                 return this.toCountryCodeField;
             }
-            set {
+            set
+            {
                 this.toCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToPhone {
-            get {
+        public string ToPhone
+        {
+            get
+            {
                 return this.toPhoneField;
             }
-            set {
+            set
+            {
                 this.toPhoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToEMail {
-            get {
+        public string ToEMail
+        {
+            get
+            {
                 return this.toEMailField;
             }
-            set {
+            set
+            {
                 this.toEMailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCountry1 {
-            get {
+        public string AutomationRate
+        {
+            get
+            {
+                return this.automationRateField;
+            }
+            set
+            {
+                this.automationRateField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ServiceLevel
+        {
+            get
+            {
+                return this.serviceLevelField;
+            }
+            set
+            {
+                this.serviceLevelField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SortType
+        {
+            get
+            {
+                return this.sortTypeField;
+            }
+            set
+            {
+                this.sortTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ReplyPostage
+        {
+            get
+            {
+                return this.replyPostageField;
+            }
+            set
+            {
+                this.replyPostageField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ShowReturnAddress
+        {
+            get
+            {
+                return this.showReturnAddressField;
+            }
+            set
+            {
+                this.showReturnAddressField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ValidateAddress
+        {
+            get
+            {
+                return this.validateAddressField;
+            }
+            set
+            {
+                this.validateAddressField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SignatureWaiver
+        {
+            get
+            {
+                return this.signatureWaiverField;
+            }
+            set
+            {
+                this.signatureWaiverField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string NoWeekendDelivery
+        {
+            get
+            {
+                return this.noWeekendDeliveryField;
+            }
+            set
+            {
+                this.noWeekendDeliveryField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double CODAmount
+        {
+            get
+            {
+                return this.cODAmountField;
+            }
+            set
+            {
+                this.cODAmountField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double RegisteredMailValue
+        {
+            get
+            {
+                return this.registeredMailValueField;
+            }
+            set
+            {
+                this.registeredMailValueField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsFormType
+        {
+            get
+            {
+                return this.customsFormTypeField;
+            }
+            set
+            {
+                this.customsFormTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsFormImageFormat
+        {
+            get
+            {
+                return this.customsFormImageFormatField;
+            }
+            set
+            {
+                this.customsFormImageFormatField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsFormImageResolution
+        {
+            get
+            {
+                return this.customsFormImageResolutionField;
+            }
+            set
+            {
+                this.customsFormImageResolutionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OriginCountry
+        {
+            get
+            {
+                return this.originCountryField;
+            }
+            set
+            {
+                this.originCountryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ContentsType
+        {
+            get
+            {
+                return this.contentsTypeField;
+            }
+            set
+            {
+                this.contentsTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ContentsExplanation
+        {
+            get
+            {
+                return this.contentsExplanationField;
+            }
+            set
+            {
+                this.contentsExplanationField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string NonDeliveryOption
+        {
+            get
+            {
+                return this.nonDeliveryOptionField;
+            }
+            set
+            {
+                this.nonDeliveryOptionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ReferenceID2
+        {
+            get
+            {
+                return this.referenceID2Field;
+            }
+            set
+            {
+                this.referenceID2Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ReferenceID3
+        {
+            get
+            {
+                return this.referenceID3Field;
+            }
+            set
+            {
+                this.referenceID3Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ReferenceID4
+        {
+            get
+            {
+                return this.referenceID4Field;
+            }
+            set
+            {
+                this.referenceID4Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string BpodClientDunsNumber
+        {
+            get
+            {
+                return this.bpodClientDunsNumberField;
+            }
+            set
+            {
+                this.bpodClientDunsNumberField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string EntryFacility
+        {
+            get
+            {
+                return this.entryFacilityField;
+            }
+            set
+            {
+                this.entryFacilityField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ShipTime
+        {
+            get
+            {
+                return this.shipTimeField;
+            }
+            set
+            {
+                this.shipTimeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string HfpEmailAddress
+        {
+            get
+            {
+                return this.hfpEmailAddressField;
+            }
+            set
+            {
+                this.hfpEmailAddressField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string HfpSMS
+        {
+            get
+            {
+                return this.hfpSMSField;
+            }
+            set
+            {
+                this.hfpSMSField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string HfpFacilityID
+        {
+            get
+            {
+                return this.hfpFacilityIDField;
+            }
+            set
+            {
+                this.hfpFacilityIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MRSPermitNo
+        {
+            get
+            {
+                return this.mRSPermitNoField;
+            }
+            set
+            {
+                this.mRSPermitNoField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MRSPermitCityStateZIP
+        {
+            get
+            {
+                return this.mRSPermitCityStateZIPField;
+            }
+            set
+            {
+                this.mRSPermitCityStateZIPField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MRSPermitFirm
+        {
+            get
+            {
+                return this.mRSPermitFirmField;
+            }
+            set
+            {
+                this.mRSPermitFirmField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MRSPermitStreet
+        {
+            get
+            {
+                return this.mRSPermitStreetField;
+            }
+            set
+            {
+                this.mRSPermitStreetField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MRSRMANumber
+        {
+            get
+            {
+                return this.mRSRMANumberField;
+            }
+            set
+            {
+                this.mRSRMANumberField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OpenAndDistributeFacilityType
+        {
+            get
+            {
+                return this.openAndDistributeFacilityTypeField;
+            }
+            set
+            {
+                this.openAndDistributeFacilityTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OpenAndDistributeFacilityName
+        {
+            get
+            {
+                return this.openAndDistributeFacilityNameField;
+            }
+            set
+            {
+                this.openAndDistributeFacilityNameField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OpenAndDistributeTray
+        {
+            get
+            {
+                return this.openAndDistributeTrayField;
+            }
+            set
+            {
+                this.openAndDistributeTrayField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OpenAndDistributeMailClassEnclosed
+        {
+            get
+            {
+                return this.openAndDistributeMailClassEnclosedField;
+            }
+            set
+            {
+                this.openAndDistributeMailClassEnclosedField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string OpenAndDistributeMailClassOther
+        {
+            get
+            {
+                return this.openAndDistributeMailClassOtherField;
+            }
+            set
+            {
+                this.openAndDistributeMailClassOtherField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string GXGFedexTrackingNumber
+        {
+            get
+            {
+                return this.gXGFedexTrackingNumberField;
+            }
+            set
+            {
+                this.gXGFedexTrackingNumberField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string GXGUSPSTrackingNumber
+        {
+            get
+            {
+                return this.gXGUSPSTrackingNumberField;
+            }
+            set
+            {
+                this.gXGUSPSTrackingNumberField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string PrintConsolidatorLabel
+        {
+            get
+            {
+                return this.printConsolidatorLabelField;
+            }
+            set
+            {
+                this.printConsolidatorLabelField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Token
+        {
+            get
+            {
+                return this.tokenField;
+            }
+            set
+            {
+                this.tokenField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsSendersCopy
+        {
+            get
+            {
+                return this.customsSendersCopyField;
+            }
+            set
+            {
+                this.customsSendersCopyField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string NoDate
+        {
+            get
+            {
+                return this.noDateField;
+            }
+            set
+            {
+                this.noDateField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MerchantID
+        {
+            get
+            {
+                return this.merchantIDField;
+            }
+            set
+            {
+                this.merchantIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string PrintScanBasedPaymentLabel
+        {
+            get
+            {
+                return this.printScanBasedPaymentLabelField;
+            }
+            set
+            {
+                this.printScanBasedPaymentLabelField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SpecialContents
+        {
+            get
+            {
+                return this.specialContentsField;
+            }
+            set
+            {
+                this.specialContentsField = value;
+            }
+        }
+
+        /// <remarks/>
+        public eVSOptions eVSOptions
+        {
+            get
+            {
+                return this.eVSOptionsField;
+            }
+            set
+            {
+                this.eVSOptionsField = value;
+            }
+        }
+
+        /// <remarks/>
+        public Cod3816 COD3816
+        {
+            get
+            {
+                return this.cOD3816Field;
+            }
+            set
+            {
+                this.cOD3816Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string EmailMiscNotes
+        {
+            get
+            {
+                return this.emailMiscNotesField;
+            }
+            set
+            {
+                this.emailMiscNotesField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string EstimatedDeliveryDate
+        {
+            get
+            {
+                return this.estimatedDeliveryDateField;
+            }
+            set
+            {
+                this.estimatedDeliveryDateField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string AncillaryServiceEndorsement
+        {
+            get
+            {
+                return this.ancillaryServiceEndorsementField;
+            }
+            set
+            {
+                this.ancillaryServiceEndorsementField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string InsuredValue
+        {
+            get
+            {
+                return this.insuredValueField;
+            }
+            set
+            {
+                this.insuredValueField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ReturnAddress4
+        {
+            get
+            {
+                return this.returnAddress4Field;
+            }
+            set
+            {
+                this.returnAddress4Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string FromZIP4
+        {
+            get
+            {
+                return this.fromZIP4Field;
+            }
+            set
+            {
+                this.fromZIP4Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string FromCountry
+        {
+            get
+            {
+                return this.fromCountryField;
+            }
+            set
+            {
+                this.fromCountryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ToAddress4
+        {
+            get
+            {
+                return this.toAddress4Field;
+            }
+            set
+            {
+                this.toAddress4Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ToDeliveryPoint
+        {
+            get
+            {
+                return this.toDeliveryPointField;
+            }
+            set
+            {
+                this.toDeliveryPointField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ToCountry
+        {
+            get
+            {
+                return this.toCountryField;
+            }
+            set
+            {
+                this.toCountryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CustomsCountry1
+        {
+            get
+            {
                 return this.customsCountry1Field;
             }
-            set {
+            set
+            {
                 this.customsCountry1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsDescription1 {
-            get {
+        public string CustomsDescription1
+        {
+            get
+            {
                 return this.customsDescription1Field;
             }
-            set {
+            set
+            {
                 this.customsDescription1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsQuantity1 {
-            get {
+        public uint CustomsQuantity1
+        {
+            get
+            {
                 return this.customsQuantity1Field;
             }
-            set {
+            set
+            {
                 this.customsQuantity1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsQuantity1Specified {
-            get {
+        public bool CustomsQuantity1Specified
+        {
+            get
+            {
                 return this.customsQuantity1FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsQuantity1FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public float CustomsValue1 {
-            get {
+        public float CustomsValue1
+        {
+            get
+            {
                 return this.customsValue1Field;
             }
-            set {
+            set
+            {
                 this.customsValue1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsValue1Specified {
-            get {
+        public bool CustomsValue1Specified
+        {
+            get
+            {
                 return this.customsValue1FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsValue1FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsWeight1 {
-            get {
+        public uint CustomsWeight1
+        {
+            get
+            {
                 return this.customsWeight1Field;
             }
-            set {
+            set
+            {
                 this.customsWeight1Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsWeight1Specified {
-            get {
+        public bool CustomsWeight1Specified
+        {
+            get
+            {
                 return this.customsWeight1FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsWeight1FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCountry2 {
-            get {
+        public string CustomsCountry2
+        {
+            get
+            {
                 return this.customsCountry2Field;
             }
-            set {
+            set
+            {
                 this.customsCountry2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsDescription2 {
-            get {
+        public string CustomsDescription2
+        {
+            get
+            {
                 return this.customsDescription2Field;
             }
-            set {
+            set
+            {
                 this.customsDescription2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsQuantity2 {
-            get {
+        public uint CustomsQuantity2
+        {
+            get
+            {
                 return this.customsQuantity2Field;
             }
-            set {
+            set
+            {
                 this.customsQuantity2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsQuantity2Specified {
-            get {
+        public bool CustomsQuantity2Specified
+        {
+            get
+            {
                 return this.customsQuantity2FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsQuantity2FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public float CustomsValue2 {
-            get {
+        public float CustomsValue2
+        {
+            get
+            {
                 return this.customsValue2Field;
             }
-            set {
+            set
+            {
                 this.customsValue2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsValue2Specified {
-            get {
+        public bool CustomsValue2Specified
+        {
+            get
+            {
                 return this.customsValue2FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsValue2FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsWeight2 {
-            get {
+        public uint CustomsWeight2
+        {
+            get
+            {
                 return this.customsWeight2Field;
             }
-            set {
+            set
+            {
                 this.customsWeight2Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsWeight2Specified {
-            get {
+        public bool CustomsWeight2Specified
+        {
+            get
+            {
                 return this.customsWeight2FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsWeight2FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCountry3 {
-            get {
+        public string CustomsCountry3
+        {
+            get
+            {
                 return this.customsCountry3Field;
             }
-            set {
+            set
+            {
                 this.customsCountry3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsDescription3 {
-            get {
+        public string CustomsDescription3
+        {
+            get
+            {
                 return this.customsDescription3Field;
             }
-            set {
+            set
+            {
                 this.customsDescription3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsQuantity3 {
-            get {
+        public uint CustomsQuantity3
+        {
+            get
+            {
                 return this.customsQuantity3Field;
             }
-            set {
+            set
+            {
                 this.customsQuantity3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsQuantity3Specified {
-            get {
+        public bool CustomsQuantity3Specified
+        {
+            get
+            {
                 return this.customsQuantity3FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsQuantity3FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public float CustomsValue3 {
-            get {
+        public float CustomsValue3
+        {
+            get
+            {
                 return this.customsValue3Field;
             }
-            set {
+            set
+            {
                 this.customsValue3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsValue3Specified {
-            get {
+        public bool CustomsValue3Specified
+        {
+            get
+            {
                 return this.customsValue3FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsValue3FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsWeight3 {
-            get {
+        public uint CustomsWeight3
+        {
+            get
+            {
                 return this.customsWeight3Field;
             }
-            set {
+            set
+            {
                 this.customsWeight3Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsWeight3Specified {
-            get {
+        public bool CustomsWeight3Specified
+        {
+            get
+            {
                 return this.customsWeight3FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsWeight3FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCountry4 {
-            get {
+        public string CustomsCountry4
+        {
+            get
+            {
                 return this.customsCountry4Field;
             }
-            set {
+            set
+            {
                 this.customsCountry4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsDescription4 {
-            get {
+        public string CustomsDescription4
+        {
+            get
+            {
                 return this.customsDescription4Field;
             }
-            set {
+            set
+            {
                 this.customsDescription4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsQuantity4 {
-            get {
+        public uint CustomsQuantity4
+        {
+            get
+            {
                 return this.customsQuantity4Field;
             }
-            set {
+            set
+            {
                 this.customsQuantity4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsQuantity4Specified {
-            get {
+        public bool CustomsQuantity4Specified
+        {
+            get
+            {
                 return this.customsQuantity4FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsQuantity4FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public float CustomsValue4 {
-            get {
+        public float CustomsValue4
+        {
+            get
+            {
                 return this.customsValue4Field;
             }
-            set {
+            set
+            {
                 this.customsValue4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsValue4Specified {
-            get {
+        public bool CustomsValue4Specified
+        {
+            get
+            {
                 return this.customsValue4FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsValue4FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsWeight4 {
-            get {
+        public uint CustomsWeight4
+        {
+            get
+            {
                 return this.customsWeight4Field;
             }
-            set {
+            set
+            {
                 this.customsWeight4Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsWeight4Specified {
-            get {
+        public bool CustomsWeight4Specified
+        {
+            get
+            {
                 return this.customsWeight4FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsWeight4FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsCountry5 {
-            get {
+        public string CustomsCountry5
+        {
+            get
+            {
                 return this.customsCountry5Field;
             }
-            set {
+            set
+            {
                 this.customsCountry5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomsDescription5 {
-            get {
+        public string CustomsDescription5
+        {
+            get
+            {
                 return this.customsDescription5Field;
             }
-            set {
+            set
+            {
                 this.customsDescription5Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsQuantity5 {
-            get {
+        public uint CustomsQuantity5
+        {
+            get
+            {
                 return this.customsQuantity5Field;
             }
-            set {
+            set
+            {
                 this.customsQuantity5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsQuantity5Specified {
-            get {
+        public bool CustomsQuantity5Specified
+        {
+            get
+            {
                 return this.customsQuantity5FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsQuantity5FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public float CustomsValue5 {
-            get {
+        public float CustomsValue5
+        {
+            get
+            {
                 return this.customsValue5Field;
             }
-            set {
+            set
+            {
                 this.customsValue5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsValue5Specified {
-            get {
+        public bool CustomsValue5Specified
+        {
+            get
+            {
                 return this.customsValue5FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsValue5FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public uint CustomsWeight5 {
-            get {
+        public uint CustomsWeight5
+        {
+            get
+            {
                 return this.customsWeight5Field;
             }
-            set {
+            set
+            {
                 this.customsWeight5Field = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomsWeight5Specified {
-            get {
+        public bool CustomsWeight5Specified
+        {
+            get
+            {
                 return this.customsWeight5FieldSpecified;
             }
-            set {
+            set
+            {
                 this.customsWeight5FieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EelPfc {
-            get {
+        public string EelPfc
+        {
+            get
+            {
                 return this.eelPfcField;
             }
-            set {
+            set
+            {
                 this.eelPfcField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityName {
-            get {
+        public string HfpFacilityName
+        {
+            get
+            {
                 return this.hfpFacilityNameField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityAddress1 {
-            get {
+        public string HfpFacilityAddress1
+        {
+            get
+            {
                 return this.hfpFacilityAddress1Field;
             }
-            set {
+            set
+            {
                 this.hfpFacilityAddress1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityCity {
-            get {
+        public string HfpFacilityCity
+        {
+            get
+            {
                 return this.hfpFacilityCityField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityCityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityState {
-            get {
+        public string HfpFacilityState
+        {
+            get
+            {
                 return this.hfpFacilityStateField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityStateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityPostalCode {
-            get {
+        public string HfpFacilityPostalCode
+        {
+            get
+            {
                 return this.hfpFacilityPostalCodeField;
             }
-            set {
+            set
+            {
                 this.hfpFacilityPostalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HfpFacilityZIP4 {
-            get {
+        public string HfpFacilityZIP4
+        {
+            get
+            {
                 return this.hfpFacilityZIP4Field;
             }
-            set {
+            set
+            {
                 this.hfpFacilityZIP4Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CostCenterAlphaNumeric {
-            get {
+        public string CostCenterAlphaNumeric
+        {
+            get
+            {
                 return this.costCenterAlphaNumericField;
             }
-            set {
+            set
+            {
                 this.costCenterAlphaNumericField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ToCarrierRoute {
-            get {
+        public string ToCarrierRoute
+        {
+            get
+            {
                 return this.toCarrierRouteField;
             }
-            set {
+            set
+            {
                 this.toCarrierRouteField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazMat HazardousMaterial {
-            get {
+        public HazMat HazardousMaterial
+        {
+            get
+            {
                 return this.hazardousMaterialField;
             }
-            set {
+            set
+            {
                 this.hazardousMaterialField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FromCountryCode {
-            get {
+        public string FromCountryCode
+        {
+            get
+            {
                 return this.fromCountryCodeField;
             }
-            set {
+            set
+            {
                 this.fromCountryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Test {
-            get {
+        public string Test
+        {
+            get
+            {
                 return this.testField;
             }
-            set {
+            set
+            {
                 this.testField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LabelType {
-            get {
+        public string LabelType
+        {
+            get
+            {
                 return this.labelTypeField;
             }
-            set {
+            set
+            {
                 this.labelTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LabelSubtype {
-            get {
+        public string LabelSubtype
+        {
+            get
+            {
                 return this.labelSubtypeField;
             }
-            set {
+            set
+            {
                 this.labelSubtypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LabelSize {
-            get {
+        public string LabelSize
+        {
+            get
+            {
                 return this.labelSizeField;
             }
-            set {
+            set
+            {
                 this.labelSizeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageFormat {
-            get {
+        public string ImageFormat
+        {
+            get
+            {
                 return this.imageFormatField;
             }
-            set {
+            set
+            {
                 this.imageFormatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageResolution {
-            get {
+        public string ImageResolution
+        {
+            get
+            {
                 return this.imageResolutionField;
             }
-            set {
+            set
+            {
                 this.imageResolutionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ImageRotation {
-            get {
+        public string ImageRotation
+        {
+            get
+            {
                 return this.imageRotationField;
             }
-            set {
+            set
+            {
                 this.imageRotationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LabelTemplate {
-            get {
+        public string LabelTemplate
+        {
+            get
+            {
                 return this.labelTemplateField;
             }
-            set {
+            set
+            {
                 this.labelTemplateField = value;
             }
         }
+
+        /// <remarks/>
+        public string PackageTypeIndicator
+        {
+            get
+            {
+                return this.packageTypeIndicatorField;
+            }
+            set
+            {
+                this.packageTypeIndicatorField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int DateAdvance
+        {
+            get
+            {
+                return this.dateAdvanceField;
+            }
+            set
+            {
+                this.dateAdvanceField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Pricing
+        {
+            get
+            {
+                return this.pricingField;
+            }
+            set
+            {
+                this.pricingField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SundayHolidayDelivery
+        {
+            get
+            {
+                return this.sundayHolidayDeliveryField;
+            }
+            set
+            {
+                this.sundayHolidayDeliveryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LiveAnimalSurcharge
+        {
+            get
+            {
+                return this.liveAnimalSurchargeField;
+            }
+            set
+            {
+                this.liveAnimalSurchargeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Extension
+        {
+            get
+            {
+                return this.extensionField;
+            }
+            set
+            {
+                this.extensionField = value;
+            }
+        }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class AccountStatusRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class AccountStatusRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private CertifiedIntermediary certifiedIntermediaryField;
-        
+
         private RespVersion responseVersionField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
+        public CertifiedIntermediary CertifiedIntermediary
+        {
+            get
+            {
                 return this.certifiedIntermediaryField;
             }
-            set {
+            set
+            {
                 this.certifiedIntermediaryField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public RespVersion ResponseVersion {
-            get {
+        public RespVersion ResponseVersion
+        {
+            get
+            {
                 return this.responseVersionField;
             }
-            set {
+            set
+            {
                 this.responseVersionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class ChallengeQuestionRequest : DataValidator {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "www.envmgr.com/LabelService")]
+    public partial class ChallengeQuestionRequest : DataValidator
+    {
+
         private string requesterIDField;
-        
+
         private string requestIDField;
-        
+
         private string accountIDField;
-        
+
         private string eMailField;
-        
+
         /// <remarks/>
-        public string RequesterID {
-            get {
+        public string RequesterID
+        {
+            get
+            {
                 return this.requesterIDField;
             }
-            set {
+            set
+            {
                 this.requesterIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RequestID {
-            get {
+        public string RequestID
+        {
+            get
+            {
                 return this.requestIDField;
             }
-            set {
+            set
+            {
                 this.requestIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccountID {
-            get {
+        public string AccountID
+        {
+            get
+            {
                 return this.accountIDField;
             }
-            set {
+            set
+            {
                 this.accountIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EMail {
-            get {
+        public string EMail
+        {
+            get
+            {
                 return this.eMailField;
             }
-            set {
+            set
+            {
                 this.eMailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void ResetSuspendedAccountCompletedEventHandler(object sender, ResetSuspendedAccountCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ResetSuspendedAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class ResetSuspendedAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal ResetSuspendedAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal ResetSuspendedAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ResetSuspendedAccountRequestResponse Result {
-            get {
+        public ResetSuspendedAccountRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ResetSuspendedAccountRequestResponse)(this.results[0]));
+                return ((ResetSuspendedAccountRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void ResetSuspendedAccountXMLCompletedEventHandler(object sender, ResetSuspendedAccountXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ResetSuspendedAccountXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class ResetSuspendedAccountXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal ResetSuspendedAccountXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal ResetSuspendedAccountXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ResetSuspendedAccountRequestResponse Result {
-            get {
+        public ResetSuspendedAccountRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ResetSuspendedAccountRequestResponse)(this.results[0]));
+                return ((ResetSuspendedAccountRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetChallengeQuestionCompletedEventHandler(object sender, GetChallengeQuestionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetChallengeQuestionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetChallengeQuestionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetChallengeQuestionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetChallengeQuestionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ChallengeQuestionResponse Result {
-            get {
+        public ChallengeQuestionResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ChallengeQuestionResponse)(this.results[0]));
+                return ((ChallengeQuestionResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetChallengeQuestionXMLCompletedEventHandler(object sender, GetChallengeQuestionXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetChallengeQuestionXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetChallengeQuestionXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetChallengeQuestionXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetChallengeQuestionXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ChallengeQuestionResponse Result {
-            get {
+        public ChallengeQuestionResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ChallengeQuestionResponse)(this.results[0]));
+                return ((ChallengeQuestionResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetAccountStatusCompletedEventHandler(object sender, GetAccountStatusCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetAccountStatusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetAccountStatusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetAccountStatusCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetAccountStatusCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public AccountStatusResponse Result {
-            get {
+        public AccountStatusResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((AccountStatusResponse)(this.results[0]));
+                return ((AccountStatusResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetAccountStatusXMLCompletedEventHandler(object sender, GetAccountStatusXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetAccountStatusXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetAccountStatusXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetAccountStatusXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetAccountStatusXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public AccountStatusResponse Result {
-            get {
+        public AccountStatusResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((AccountStatusResponse)(this.results[0]));
+                return ((AccountStatusResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPostageLabelCompletedEventHandler(object sender, GetPostageLabelCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPostageLabelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPostageLabelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPostageLabelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPostageLabelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public LabelRequestResponse Result {
-            get {
+        public LabelRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((LabelRequestResponse)(this.results[0]));
+                return ((LabelRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPostageLabelXMLCompletedEventHandler(object sender, GetPostageLabelXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPostageLabelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPostageLabelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPostageLabelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPostageLabelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public LabelRequestResponse Result {
-            get {
+        public LabelRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((LabelRequestResponse)(this.results[0]));
+                return ((LabelRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetVersionCompletedEventHandler(object sender, GetVersionCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public GetVersionResults Result {
-            get {
+        public GetVersionResults Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((GetVersionResults)(this.results[0]));
+                return ((GetVersionResults) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetVersionXMLCompletedEventHandler(object sender, GetVersionXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetVersionXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetVersionXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetVersionXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetVersionXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public GetVersionResults Result {
-            get {
+        public GetVersionResults Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((GetVersionResults)(this.results[0]));
+                return ((GetVersionResults) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void VoideVSLabelCompletedEventHandler(object sender, VoideVSLabelCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class VoideVSLabelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class VoideVSLabelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal VoideVSLabelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal VoideVSLabelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public VoidLabelResponse Result {
-            get {
+        public VoidLabelResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((VoidLabelResponse)(this.results[0]));
+                return ((VoidLabelResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void VoideVSLabelXMLCompletedEventHandler(object sender, VoideVSLabelXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class VoideVSLabelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class VoideVSLabelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal VoideVSLabelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal VoideVSLabelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public VoidLabelResponse Result {
-            get {
+        public VoidLabelResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((VoidLabelResponse)(this.results[0]));
+                return ((VoidLabelResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void BuyPostageCompletedEventHandler(object sender, BuyPostageCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class BuyPostageCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class BuyPostageCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal BuyPostageCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal BuyPostageCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RecreditRequestResponse Result {
-            get {
+        public RecreditRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RecreditRequestResponse)(this.results[0]));
+                return ((RecreditRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void BuyPostageXMLCompletedEventHandler(object sender, BuyPostageXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class BuyPostageXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class BuyPostageXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal BuyPostageXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal BuyPostageXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RecreditRequestResponse Result {
-            get {
+        public RecreditRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RecreditRequestResponse)(this.results[0]));
+                return ((RecreditRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculateDdpRateCompletedEventHandler(object sender, CalculateDdpRateCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculateDdpRateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculateDdpRateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculateDdpRateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculateDdpRateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DdpRateResponse Result {
-            get {
+        public DdpRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DdpRateResponse)(this.results[0]));
+                return ((DdpRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculateDdpRateXMLCompletedEventHandler(object sender, CalculateDdpRateXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculateDdpRateXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculateDdpRateXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculateDdpRateXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculateDdpRateXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DdpRateResponse Result {
-            get {
+        public DdpRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DdpRateResponse)(this.results[0]));
+                return ((DdpRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculatePostageRateCompletedEventHandler(object sender, CalculatePostageRateCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculatePostageRateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculatePostageRateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculatePostageRateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculatePostageRateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRateResponse Result {
-            get {
+        public PostageRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRateResponse)(this.results[0]));
+                return ((PostageRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculatePostageRateXMLCompletedEventHandler(object sender, CalculatePostageRateXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculatePostageRateXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculatePostageRateXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculatePostageRateXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculatePostageRateXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRateResponse Result {
-            get {
+        public PostageRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRateResponse)(this.results[0]));
+                return ((PostageRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetExtraServiceRatesCompletedEventHandler(object sender, GetExtraServiceRatesCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetExtraServiceRatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetExtraServiceRatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetExtraServiceRatesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetExtraServiceRatesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public GetExtraServiceRateResponse Result {
-            get {
+        public GetExtraServiceRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((GetExtraServiceRateResponse)(this.results[0]));
+                return ((GetExtraServiceRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetExtraServiceRatesXMLCompletedEventHandler(object sender, GetExtraServiceRatesXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetExtraServiceRatesXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetExtraServiceRatesXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetExtraServiceRatesXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetExtraServiceRatesXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public GetExtraServiceRateResponse Result {
-            get {
+        public GetExtraServiceRateResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((GetExtraServiceRateResponse)(this.results[0]));
+                return ((GetExtraServiceRateResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPicNumberCompletedEventHandler(object sender, GetPicNumberCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPicNumberCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPicNumberCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPicNumberCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPicNumberCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public LabelNumberResponse Result {
-            get {
+        public LabelNumberResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((LabelNumberResponse)(this.results[0]));
+                return ((LabelNumberResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPicNumberXmlCompletedEventHandler(object sender, GetPicNumberXmlCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPicNumberXmlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPicNumberXmlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPicNumberXmlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPicNumberXmlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public LabelNumberResponse Result {
-            get {
+        public LabelNumberResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((LabelNumberResponse)(this.results[0]));
+                return ((LabelNumberResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void SetAccountFeatureOptInCompletedEventHandler(object sender, SetAccountFeatureOptInCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class SetAccountFeatureOptInCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class SetAccountFeatureOptInCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal SetAccountFeatureOptInCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal SetAccountFeatureOptInCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SetAccountFeatureOptInResult Result {
-            get {
+        public SetAccountFeatureOptInResult Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SetAccountFeatureOptInResult)(this.results[0]));
+                return ((SetAccountFeatureOptInResult) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void SetAccountFeatureOptInXMLCompletedEventHandler(object sender, SetAccountFeatureOptInXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class SetAccountFeatureOptInXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class SetAccountFeatureOptInXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal SetAccountFeatureOptInXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal SetAccountFeatureOptInXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SetAccountFeatureOptInResult Result {
-            get {
+        public SetAccountFeatureOptInResult Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SetAccountFeatureOptInResult)(this.results[0]));
+                return ((SetAccountFeatureOptInResult) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void UpdatePaymentInformationCompletedEventHandler(object sender, UpdatePaymentInformationCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class UpdatePaymentInformationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class UpdatePaymentInformationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal UpdatePaymentInformationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal UpdatePaymentInformationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public UpdatePaymentInfoResponse Result {
-            get {
+        public UpdatePaymentInfoResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((UpdatePaymentInfoResponse)(this.results[0]));
+                return ((UpdatePaymentInfoResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void UpdatePaymentInformationXMLCompletedEventHandler(object sender, UpdatePaymentInformationXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class UpdatePaymentInformationXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class UpdatePaymentInformationXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal UpdatePaymentInformationXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal UpdatePaymentInformationXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public UpdatePaymentInfoResponse Result {
-            get {
+        public UpdatePaymentInfoResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((UpdatePaymentInfoResponse)(this.results[0]));
+                return ((UpdatePaymentInfoResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void ChangePassPhraseCompletedEventHandler(object sender, ChangePassPhraseCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ChangePassPhraseCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class ChangePassPhraseCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal ChangePassPhraseCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal ChangePassPhraseCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ChangePassPhraseRequestResponse Result {
-            get {
+        public ChangePassPhraseRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ChangePassPhraseRequestResponse)(this.results[0]));
+                return ((ChangePassPhraseRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void ChangePassPhraseXMLCompletedEventHandler(object sender, ChangePassPhraseXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ChangePassPhraseXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class ChangePassPhraseXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal ChangePassPhraseXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal ChangePassPhraseXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ChangePassPhraseRequestResponse Result {
-            get {
+        public ChangePassPhraseRequestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ChangePassPhraseRequestResponse)(this.results[0]));
+                return ((ChangePassPhraseRequestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculatePostageRatesCompletedEventHandler(object sender, CalculatePostageRatesCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculatePostageRatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculatePostageRatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculatePostageRatesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculatePostageRatesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRatesResponse Result {
-            get {
+        public PostageRatesResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRatesResponse)(this.results[0]));
+                return ((PostageRatesResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CalculatePostageRatesXMLCompletedEventHandler(object sender, CalculatePostageRatesXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CalculatePostageRatesXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CalculatePostageRatesXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CalculatePostageRatesXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CalculatePostageRatesXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRatesResponse Result {
-            get {
+        public PostageRatesResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRatesResponse)(this.results[0]));
+                return ((PostageRatesResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CloseAccountCompletedEventHandler(object sender, CloseAccountCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CloseAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CloseAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CloseAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CloseAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SetPendingCloseAccountResponse Result {
-            get {
+        public SetPendingCloseAccountResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SetPendingCloseAccountResponse)(this.results[0]));
+                return ((SetPendingCloseAccountResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CloseAccountXMLCompletedEventHandler(object sender, CloseAccountXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CloseAccountXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CloseAccountXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CloseAccountXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CloseAccountXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SetPendingCloseAccountResponse Result {
-            get {
+        public SetPendingCloseAccountResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SetPendingCloseAccountResponse)(this.results[0]));
+                return ((SetPendingCloseAccountResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CreateDhlgmManifestCompletedEventHandler(object sender, CreateDhlgmManifestCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CreateDhlgmManifestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CreateDhlgmManifestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CreateDhlgmManifestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CreateDhlgmManifestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DhlgmManifestResponse Result {
-            get {
+        public DhlgmManifestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DhlgmManifestResponse)(this.results[0]));
+                return ((DhlgmManifestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CreateDhlgmManifestXMLCompletedEventHandler(object sender, CreateDhlgmManifestXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class CreateDhlgmManifestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class CreateDhlgmManifestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal CreateDhlgmManifestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal CreateDhlgmManifestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DhlgmManifestResponse Result {
-            get {
+        public DhlgmManifestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DhlgmManifestResponse)(this.results[0]));
+                return ((DhlgmManifestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void HandleDHLeCManifestCompletedEventHandler(object sender, HandleDHLeCManifestCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class HandleDHLeCManifestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class HandleDHLeCManifestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal HandleDHLeCManifestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal HandleDHLeCManifestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DHLeCManifestResponse Result {
-            get {
+        public DHLeCManifestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DHLeCManifestResponse)(this.results[0]));
+                return ((DHLeCManifestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void HandleDHLeCManifestXMLCompletedEventHandler(object sender, HandleDHLeCManifestXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class HandleDHLeCManifestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class HandleDHLeCManifestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal HandleDHLeCManifestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal HandleDHLeCManifestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public DHLeCManifestResponse Result {
-            get {
+        public DHLeCManifestResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((DHLeCManifestResponse)(this.results[0]));
+                return ((DHLeCManifestResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void StatusRequestCompletedEventHandler(object sender, StatusRequestCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class StatusRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class StatusRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal StatusRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal StatusRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackageStatusResponse Result {
-            get {
+        public PackageStatusResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackageStatusResponse)(this.results[0]));
+                return ((PackageStatusResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void StatusRequestXMLCompletedEventHandler(object sender, StatusRequestXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class StatusRequestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class StatusRequestXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal StatusRequestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal StatusRequestXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackageStatusResponse Result {
-            get {
+        public PackageStatusResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackageStatusResponse)(this.results[0]));
+                return ((PackageStatusResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetRetailAccountsCompletedEventHandler(object sender, GetRetailAccountsCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetRetailAccountsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetRetailAccountsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetRetailAccountsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetRetailAccountsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RetailAccountsResponse Result {
-            get {
+        public RetailAccountsResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RetailAccountsResponse)(this.results[0]));
+                return ((RetailAccountsResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetRetailAccountsXMLCompletedEventHandler(object sender, GetRetailAccountsXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetRetailAccountsXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetRetailAccountsXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetRetailAccountsXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetRetailAccountsXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RetailAccountsResponse Result {
-            get {
+        public RetailAccountsResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RetailAccountsResponse)(this.results[0]));
+                return ((RetailAccountsResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetUserSignUpCompletedEventHandler(object sender, GetUserSignUpCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetUserSignUpCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetUserSignUpCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetUserSignUpCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetUserSignUpCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public UserSignUpResponse Result {
-            get {
+        public UserSignUpResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((UserSignUpResponse)(this.results[0]));
+                return ((UserSignUpResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetUserSignUpXMLCompletedEventHandler(object sender, GetUserSignUpXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetUserSignUpXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetUserSignUpXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetUserSignUpXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetUserSignUpXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public UserSignUpResponse Result {
-            get {
+        public UserSignUpResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((UserSignUpResponse)(this.results[0]));
+                return ((UserSignUpResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetTransactionsListingCompletedEventHandler(object sender, GetTransactionsListingCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetTransactionsListingCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetTransactionsListingCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetTransactionsListingCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetTransactionsListingCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public TransactionsListingResponse Result {
-            get {
+        public TransactionsListingResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((TransactionsListingResponse)(this.results[0]));
+                return ((TransactionsListingResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetTransactionsListingXMLCompletedEventHandler(object sender, GetTransactionsListingXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetTransactionsListingXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetTransactionsListingXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetTransactionsListingXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetTransactionsListingXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public TransactionsListingResponse Result {
-            get {
+        public TransactionsListingResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((TransactionsListingResponse)(this.results[0]));
+                return ((TransactionsListingResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupChangeCompletedEventHandler(object sender, GetPackagePickupChangeCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupChangeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupChangeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupChangeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupChangeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupChangeResponse Result {
-            get {
+        public PackagePickupChangeResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupChangeResponse)(this.results[0]));
+                return ((PackagePickupChangeResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupChangeXMLCompletedEventHandler(object sender, GetPackagePickupChangeXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupChangeXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupChangeXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupChangeXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupChangeXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupChangeResponse Result {
-            get {
+        public PackagePickupChangeResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupChangeResponse)(this.results[0]));
+                return ((PackagePickupChangeResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupAvailabilityCompletedEventHandler(object sender, GetPackagePickupAvailabilityCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupAvailabilityCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupAvailabilityCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupAvailabilityCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupAvailabilityCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupAvailabilityResponse Result {
-            get {
+        public PackagePickupAvailabilityResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupAvailabilityResponse)(this.results[0]));
+                return ((PackagePickupAvailabilityResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupAvailabilityXMLCompletedEventHandler(object sender, GetPackagePickupAvailabilityXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupAvailabilityXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupAvailabilityXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupAvailabilityXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupAvailabilityXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupAvailabilityResponse Result {
-            get {
+        public PackagePickupAvailabilityResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupAvailabilityResponse)(this.results[0]));
+                return ((PackagePickupAvailabilityResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupCompletedEventHandler(object sender, GetPackagePickupCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupResponse Result {
-            get {
+        public PackagePickupResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupResponse)(this.results[0]));
+                return ((PackagePickupResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupXMLCompletedEventHandler(object sender, GetPackagePickupXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupResponse Result {
-            get {
+        public PackagePickupResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupResponse)(this.results[0]));
+                return ((PackagePickupResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupCancelCompletedEventHandler(object sender, GetPackagePickupCancelCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupCancelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupCancelCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupCancelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupCancelCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupCancelResponse Result {
-            get {
+        public PackagePickupCancelResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupCancelResponse)(this.results[0]));
+                return ((PackagePickupCancelResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPackagePickupCancelXMLCompletedEventHandler(object sender, GetPackagePickupCancelXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPackagePickupCancelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPackagePickupCancelXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPackagePickupCancelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPackagePickupCancelXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PackagePickupCancelResponse Result {
-            get {
+        public PackagePickupCancelResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PackagePickupCancelResponse)(this.results[0]));
+                return ((PackagePickupCancelResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPostageRateTableCompletedEventHandler(object sender, GetPostageRateTableCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPostageRateTableCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPostageRateTableCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPostageRateTableCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPostageRateTableCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRateTableResponse Result {
-            get {
+        public PostageRateTableResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRateTableResponse)(this.results[0]));
+                return ((PostageRateTableResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetPostageRateTableXMLCompletedEventHandler(object sender, GetPostageRateTableXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetPostageRateTableXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetPostageRateTableXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetPostageRateTableXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetPostageRateTableXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public PostageRateTableResponse Result {
-            get {
+        public PostageRateTableResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((PostageRateTableResponse)(this.results[0]));
+                return ((PostageRateTableResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetSCANCompletedEventHandler(object sender, GetSCANCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetSCANCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetSCANCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetSCANCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetSCANCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SCANResponse Result {
-            get {
+        public SCANResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SCANResponse)(this.results[0]));
+                return ((SCANResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetSCANXMLCompletedEventHandler(object sender, GetSCANXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetSCANXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetSCANXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetSCANXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetSCANXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public SCANResponse Result {
-            get {
+        public SCANResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((SCANResponse)(this.results[0]));
+                return ((SCANResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetRefundCompletedEventHandler(object sender, GetRefundCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetRefundCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetRefundCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetRefundCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetRefundCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RefundResponse Result {
-            get {
+        public RefundResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RefundResponse)(this.results[0]));
+                return ((RefundResponse) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetRefundXMLCompletedEventHandler(object sender, GetRefundXMLCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetRefundXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class GetRefundXMLCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal GetRefundXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal GetRefundXMLCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public RefundResponse Result {
-            get {
+        public RefundResponse Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((RefundResponse)(this.results[0]));
+                return ((RefundResponse) (this.results[0]));
             }
         }
     }
