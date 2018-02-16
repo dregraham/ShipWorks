@@ -35,31 +35,42 @@ namespace ShipWorks.Shipping.Profiles
             // If this is the first time loading it, or we are supposed to refresh, do it now
             if (!profile.IsNew && refreshIfPresent)
             {
-                profile.Packages.Clear();
-
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.FetchEntityCollection(profile.Packages,
-                        new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
-                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
-                }
+                LoadPackages(profile);
             }
             
             if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
             {
-                if (profile.IsNew && !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages)
-                {
-                    profile.Packages.Add(new PackageProfileEntity());
-                }
+                LoadChildProfiles(profile, refreshIfPresent);
+            }
+        }
 
-                (string propertyName, Type type) = GetChildPropertyNameAndType(profile.ShipmentTypeCode);
-                LoadProfileData(profile, propertyName, type, refreshIfPresent);
+        /// <summary>
+        /// Load the profiles children
+        /// </summary>
+        private void LoadChildProfiles(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            (string propertyName, Type type) = GetChildPropertyNameAndType(profile.ShipmentTypeCode);
+            LoadProfileData(profile, propertyName, type, refreshIfPresent);
 
-                if (PostalUtility.IsPostalShipmentType(profile.ShipmentTypeCode) && profile.ShipmentTypeCode != ShipmentTypeCode.PostalWebTools)
-                {
-                    (string postalChildPropertyName, Type postalChildType) = GetPostalChildPropertyNameAndType(profile.ShipmentTypeCode);
-                    LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent);
-                }
+            if (PostalUtility.IsPostalShipmentType(profile.ShipmentTypeCode) && profile.ShipmentTypeCode != ShipmentTypeCode.PostalWebTools)
+            {
+                (string postalChildPropertyName, Type postalChildType) = GetPostalChildPropertyNameAndType(profile.ShipmentTypeCode);
+                LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent);
+            }
+        }
+
+        /// <summary>
+        /// Load the profiles packages
+        /// </summary>
+        private void LoadPackages(ShippingProfileEntity profile)
+        {
+            profile.Packages.Clear();
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                adapter.FetchEntityCollection(profile.Packages,
+                    new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
+                profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
             }
         }
 
