@@ -57,7 +57,7 @@
             <xsl:for-each select="$ordersWithShipments">
 
               <!-- Removes the $Nan -->
-              <xsl:variable name="charges">
+              <xsl:variable name="shippingCharges">
                 <xsl:choose>
                   <xsl:when test="Charge[Type='SHIPPING']/Amount">
                     <xsl:value-of select="Charge[Type='SHIPPING']/Amount" />
@@ -92,9 +92,9 @@
                     <td style="{$rowStyle};" colspan="3">(<xsl:value-of select="count($shipments)" /> shipments)</td>
 				        </xsl:if>
 
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($charges, '#,##0.00')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(shippingCharges, '#,##0.00')" /></td>
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCosts, '#,##0.00#')" /></td>
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($charges - $shippingCosts, '#,##0.00#')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(shippingCharges - $shippingCosts, '#,##0.00#')" /></td>
             </tr>
 
             </xsl:for-each>
