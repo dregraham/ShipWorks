@@ -12,6 +12,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Profiles
 {
