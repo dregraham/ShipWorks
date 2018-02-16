@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Profiles
                 return;
             }
 
-            if (!shortcutManager.IsBarcodeAvailable(barcode.Text))
+            if (!string.IsNullOrWhiteSpace(barcode.Text) && !shortcutManager.IsBarcodeAvailable(barcode.Text))
             {
                 MessageHelper.ShowError(this, $"The barcode \"{barcode.Text}\" is already in use.");
                 return;
