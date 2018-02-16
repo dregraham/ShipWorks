@@ -5,15 +5,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -24,7 +20,6 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly ShippingProfileEntity profile;
-        private readonly ILifetimeScope lifetimeScope;
         private readonly IProfileControlFactory profileControlFactory;
         private readonly IShippingProfileLoader shippingProfileLoader;
         private readonly IShortcutManager shortcutManager;
@@ -32,17 +27,19 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope, IProfileControlFactory profileControlFactory)
+        public ShippingProfileEditorDlg(
+            ShippingProfileEntity profile, 
+            IShippingProfileLoader shippingProfileLoader,
+            IShortcutManager shortcutManager,
+            IProfileControlFactory profileControlFactory)
         {
             InitializeComponent();
 
-            this.lifetimeScope = lifetimeScope;
             this.profileControlFactory = profileControlFactory;
             this.profile = profile;
-			this.shippingProfileLoader = lifetimeScope.Resolve<IShippingProfileLoader>();
-
-            shortcutManager = lifetimeScope.Resolve<IShortcutManager>();
-
+            this.shortcutManager = shortcutManager;
+            this.shippingProfileLoader = shippingProfileLoader;
+            
             WindowStateSaver.Manage(this);
         }
 
@@ -147,10 +144,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 // Have the profile control save itself
                 ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
-                if (profileControl != null)
-                {
-                    profileControl.SaveToEntity();
-                }
+                profileControl?.SaveToEntity();
 
                 ShippingProfileManager.SaveProfile(profile);
 
@@ -210,6 +204,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             if(provider.SelectedValue != null)
             {
+                profile.Packages.Clear();
                 profile.ShipmentType = (int) provider.SelectedValue;
                 LoadProfileEditor();
             }
