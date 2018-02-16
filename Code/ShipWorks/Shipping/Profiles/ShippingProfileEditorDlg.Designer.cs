@@ -64,7 +64,7 @@
             this.ok.TabIndex = 5;
             this.ok.Text = "OK";
             this.ok.UseVisualStyleBackColor = true;
-            this.ok.Click += new System.EventHandler(this.OnOK);
+            this.ok.Click += new System.EventHandler(this.OnOk);
             // 
             // labelName
             // 

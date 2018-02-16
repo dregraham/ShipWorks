@@ -36,6 +36,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         }
 
         /// <summary>
+        /// Initializes the object
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            tableSynchronizer = new TableSynchronizer<ShortcutEntity>();
+            CheckForChanges();
+        }
+
+
+        /// <summary>
         /// Save shortcut
         /// </summary>
         public async Task Save(ShortcutEntity shortcut)
@@ -60,16 +70,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         public bool IsBarcodeAvailable(string barcode) =>
             Shortcuts.None(s => s.Barcode.Equals(barcode, StringComparison.InvariantCulture));
-
-
-        /// <summary>
-        /// Initializes the object
-        /// </summary>
-        public void InitializeForCurrentSession()
-        {
-            tableSynchronizer = new TableSynchronizer<ShortcutEntity>();
-            CheckForChanges();
-        }
 
         /// <summary>
         /// Update local version of shortcuts from the database

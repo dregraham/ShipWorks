@@ -8,6 +8,7 @@ using Interapptive.Shared.UI;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
@@ -112,7 +113,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// OKing the close of the window
         /// </summary>
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOk(object sender, EventArgs e)
         {
             string name = profileName.Text.Trim();
 
@@ -141,7 +142,7 @@ namespace ShipWorks.Shipping.Profiles
                 // Save shortcut if user entered one
                 if (keyboardShortcut.SelectedValue != null)
                 {
-                    SaveShortcut(profile);
+                    await SaveShortcut(profile);
                 }
 
                 // Have the profile control save itself
@@ -217,7 +218,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Save the 
         /// </summary>
-        private void SaveShortcut(ShippingProfileEntity profile)
+        private Task SaveShortcut(ShippingProfileEntity profile)
         {
             ShortcutEntity shortcut = new ShortcutEntity()
             {
@@ -227,7 +228,7 @@ namespace ShipWorks.Shipping.Profiles
                 ObjectID = profile.ShippingProfileID
             };
 
-            shortcutManager.Save(shortcut);
+            return shortcutManager.Save(shortcut);
         }
     }
 }
