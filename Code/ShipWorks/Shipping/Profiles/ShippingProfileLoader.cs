@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -21,6 +22,9 @@ namespace ShipWorks.Shipping.Profiles
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingProfileLoader(ISqlAdapterFactory sqlAdapterFactory, IShipmentTypeManager shipmentTypeManager)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -36,6 +40,12 @@ namespace ShipWorks.Shipping.Profiles
             if (!profile.IsNew && refreshIfPresent)
             {
                 LoadPackages(profile);
+            }
+
+            if (profile.Packages.None() &&
+                (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages))
+            {
+                profile.Packages.Add(new PackageProfileEntity());
             }
             
             if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
