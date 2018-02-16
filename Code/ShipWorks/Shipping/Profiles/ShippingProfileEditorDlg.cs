@@ -5,16 +5,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Profiles
@@ -35,7 +31,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope, IProfileControlFactory profileControlFactory)
+        public ShippingProfileEditorDlg(
             ShippingProfileEntity profile, 
             IShippingProfileLoader shippingProfileLoader,
             IShortcutManager shortcutManager,
@@ -44,12 +40,11 @@ namespace ShipWorks.Shipping.Profiles
         {
             InitializeComponent();
 
-            this.lifetimeScope = lifetimeScope;
+            this.profile = profile;
+            this.shippingProfileLoader = shippingProfileLoader;
             this.shortcutManager = shortcutManager;
             this.profileControlFactory = profileControlFactory;
             this.shippingSettings = shippingSettings;
-            this.shortcutManager = shortcutManager;
-            this.shippingProfileLoader = shippingProfileLoader;
 
             WindowStateSaver.Manage(this);
         }
@@ -95,7 +90,7 @@ namespace ShipWorks.Shipping.Profiles
                 }
                 else
                 {
-                newControl = profileControlFactory.Create(shipmentTypeCode);
+                    newControl = profileControlFactory.Create(shipmentTypeCode);
                 }
 
                 if (newControl != null)
@@ -155,7 +150,7 @@ namespace ShipWorks.Shipping.Profiles
             try
             {
                 // Save shortcut if user entered one
-                if (keyboardShortcut.SelectedValue != null)
+                if ((int) keyboardShortcut.SelectedValue != NoChangeValue || !string.IsNullOrWhiteSpace(barcode.Text))
                 {
                     await SaveShortcut(profile);
                 }
