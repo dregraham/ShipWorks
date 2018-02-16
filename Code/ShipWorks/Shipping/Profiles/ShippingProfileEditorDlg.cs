@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileLoader shippingProfileLoader;
         private readonly IShippingSettings shippingSettings;
         private readonly IShortcutManager shortcutManager;
-        private const int NoChangeValue = -1;
         
         /// <summary>
         /// Constructor
@@ -79,15 +78,15 @@ namespace ShipWorks.Shipping.Profiles
 
             ShippingProfileControlBase newControl = null;
 
-            int selectedProvider = (int) provider.SelectedValue;
+            ShipmentTypeCode? selectedProvider = (ShipmentTypeCode?) provider.SelectedValue;
             // Create the new profile control            
-            if (selectedProvider == NoChangeValue)
+            if (selectedProvider.HasValue)
             {
-                newControl = profileControlFactory.Create();
+                newControl = profileControlFactory.Create((ShipmentTypeCode) selectedProvider);
             }
             else
             {
-                newControl = profileControlFactory.Create((ShipmentTypeCode) selectedProvider);
+                newControl = profileControlFactory.Create();
             }
 
             if (newControl != null)
@@ -146,7 +145,7 @@ namespace ShipWorks.Shipping.Profiles
             try
             {
                 // Save shortcut if user entered one
-                if ((int) keyboardShortcut.SelectedValue != NoChangeValue || !string.IsNullOrWhiteSpace(barcode.Text))
+                if ((ShortcutHotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
                 {
                     await SaveShortcut(profile);
                 }
@@ -190,11 +189,11 @@ namespace ShipWorks.Shipping.Profiles
 
             List<ShortcutHotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
 
-            List<KeyValuePair<string, int>> dataSource = new List<KeyValuePair<string, int>>();
-            dataSource.Add(new KeyValuePair<string, int>("None", NoChangeValue));
+            List<KeyValuePair<string, ShortcutHotkey?>> dataSource = new List<KeyValuePair<string, ShortcutHotkey?>>();
+            dataSource.Add(new KeyValuePair<string, ShortcutHotkey?>("None", null));
             foreach (ShortcutHotkey hotkey in availableHotkeys)
             {                
-                dataSource.Add(new KeyValuePair<string, int>(EnumHelper.GetDescription(hotkey), (int) hotkey));
+                dataSource.Add(new KeyValuePair<string, ShortcutHotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
             }
 
             keyboardShortcut.DisplayMember = "Key";
@@ -212,11 +211,11 @@ namespace ShipWorks.Shipping.Profiles
             provider.Items.Clear();
             IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
 
-            List<KeyValuePair<string, int>> dataSource = new List<KeyValuePair<string, int>>();
-            dataSource.Add(new KeyValuePair<string, int>("No Change", NoChangeValue));
+            List<KeyValuePair<string, ShipmentTypeCode?>> dataSource = new List<KeyValuePair<string, ShipmentTypeCode?>>();
+            dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>("No Change", null));
             foreach(ShipmentTypeCode shipmentType in configuredShipmentTypes)
             {
-                dataSource.Add(new KeyValuePair<string, int>(EnumHelper.GetDescription(shipmentType), (int) shipmentType));
+                dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>(EnumHelper.GetDescription(shipmentType), shipmentType));
             }
 
             provider.DisplayMember = "Key";
@@ -231,13 +230,13 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnChangeProvider(object sender, EventArgs e)
         {
-            if((int) provider.SelectedValue != NoChangeValue)
+            if(provider.SelectedValue == null)
             {
-                profile.ShipmentType = (int) provider.SelectedValue;
+                profile.ShipmentType = null;
             }
             else
             {
-                profile.ShipmentType = null;
+                profile.ShipmentType = (int) provider.SelectedValue;
             }
 
             profile.Packages.Clear();
@@ -252,7 +251,7 @@ namespace ShipWorks.Shipping.Profiles
             ShortcutEntity shortcut = new ShortcutEntity()
             {
                 Barcode = barcode.Text,
-                Hotkey = (ShortcutHotkey) keyboardShortcut.SelectedValue,
+                Hotkey = (ShortcutHotkey?) keyboardShortcut.SelectedValue,
                 Action = (int) KeyboardShortcutCommand.ApplyProfile,
                 RelatedObjectID = profile.ShippingProfileID
             };
