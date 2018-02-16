@@ -1,9 +1,5 @@
-require 'albacore'
-require 'win32/registry'
-require "securerandom"
-require 'date'
-require 'fileutils'
-require 'nokogiri'
+require 'bundler/setup'
+Bundler.require :default
 
 def program_files
 	ENV["PROGRAMFILES(x86)"] || ENV["PROGRAMFILES"]
