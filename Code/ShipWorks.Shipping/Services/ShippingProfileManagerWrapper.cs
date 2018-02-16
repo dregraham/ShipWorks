@@ -11,14 +11,14 @@ namespace ShipWorks.Shipping.Profiles
     public class ShippingProfileManagerWrapper : IShippingProfileManager
     {
         private static object syncLock = new object();
-        private readonly IShippingProfileRepository shippingProfileRepository;
+        private readonly IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerWrapper(IShippingProfileRepository shippingProfileRepository)
+        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader)
         {
-            this.shippingProfileRepository = shippingProfileRepository;
+            this.shippingProfileLoader = shippingProfileLoader;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Profiles
                 profile.ShipmentTypePrimary = true;
 
                 // Load the shipmentType specific profile data
-                shippingProfileRepository.LoadProfileData(profile, true);
+                shippingProfileLoader.LoadProfileData(profile, true);
 
                 // Configure it as a primary profile
                 shipmentType.ConfigurePrimaryProfile(profile);

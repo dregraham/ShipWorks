@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly ShippingProfileEntity profile;
         private readonly ILifetimeScope lifetimeScope;
         private readonly IProfileControlFactory profileControlFactory;
-        private readonly IShippingProfileRepository shippingProfileRepository;
+        private readonly IShippingProfileLoader shippingProfileLoader;
         private readonly IShortcutManager shortcutManager;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Profiles
             this.lifetimeScope = lifetimeScope;
             this.profileControlFactory = profileControlFactory;
             this.profile = profile;
-			this.shippingProfileRepository = lifetimeScope.Resolve<IShippingProfileRepository>();
+			this.shippingProfileLoader = lifetimeScope.Resolve<IShippingProfileLoader>();
 
             shortcutManager = lifetimeScope.Resolve<IShortcutManager>();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Profiles
                     newControl.BackColor = Color.Transparent;
 
                     // Ensure the profile is loaded.  If its already there, no need to refresh
-                    shippingProfileRepository.LoadProfileData(profile, false);
+                    shippingProfileLoader.LoadProfileData(profile, false);
 
                     // Load the profile data into the control
                     newControl.LoadProfile(profile);

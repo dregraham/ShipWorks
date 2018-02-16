@@ -8,16 +8,11 @@ namespace ShipWorks.Shipping.Profiles
     /// Interface for loading and saving profile data
     /// </summary>
     [Service(SingleInstance = true)]
-    public interface IShippingProfileRepository
+    public interface IShippingProfileLoader
     {
         /// <summary>
         /// Load the given profile
         /// </summary>
         void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent);
-
-        /// <summary>
-        /// Save the given profile
-        /// </summary>
-        bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter);
     }
 }

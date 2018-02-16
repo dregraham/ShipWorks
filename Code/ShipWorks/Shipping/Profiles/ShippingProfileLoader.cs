@@ -15,55 +15,18 @@ namespace ShipWorks.Shipping.Profiles
     /// <summary>
     /// Repository for saving and loading profile data
     /// </summary>
-    public class ShippingProfileRepository : IShippingProfileRepository
+    public class ShippingProfileLoader : IShippingProfileLoader
     {
-        Dictionary<string, PropertyInfo> propertyMap = new Dictionary<string, PropertyInfo>();
+        private readonly Dictionary<string, PropertyInfo> propertyMap = new Dictionary<string, PropertyInfo>();
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
-        public ShippingProfileRepository(ISqlAdapterFactory sqlAdapterFactory, IShipmentTypeManager shipmentTypeManager)
+        public ShippingProfileLoader(ISqlAdapterFactory sqlAdapterFactory, IShipmentTypeManager shipmentTypeManager)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
         }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public virtual bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = false;
-
-            // First delete out anything that needs deleted
-            // Introducing new variable as we will be removing items from PackageProfile
-            // and if we used the same colleciton, we would get an exception.
-            List<PackageProfileEntity> allPackageProfiles = profile.Packages.ToList();
-            foreach (PackageProfileEntity package in allPackageProfiles)
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-            return changes;
-        }
-
-
+        
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
@@ -82,7 +45,7 @@ namespace ShipWorks.Shipping.Profiles
                 }
             }
             
-            if (profile.ShipmentType != null)
+            if (profile.ShipmentType != null || profile.ShipmentTypeCode != ShipmentTypeCode.None)
             {
                 if (profile.IsNew && !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages)
                 {
@@ -150,7 +113,6 @@ namespace ShipWorks.Shipping.Profiles
                     return ("DhlExpress", typeof(DhlExpressProfileEntity));
                 case ShipmentTypeCode.Asendia:
                     return ("Asendia", typeof(AsendiaProfileEntity));
-                case ShipmentTypeCode.None:
                 default:
                     throw new InvalidOperationException("Unknown child property for ShipmentTypeCode");
             }

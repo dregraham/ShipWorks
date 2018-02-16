@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Profiles
         static IEnumerable<IShippingProfileEntity> readOnlyEntities;
         static TableSynchronizer<ShippingProfileEntity> synchronizer;
         static bool needCheckForChanges = false;
-        static IShippingProfileRepository shippingProfileRepository;
+        static IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProfileEntity>();
-            shippingProfileRepository = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileRepository>();
+            shippingProfileLoader = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileLoader>();
             InternalCheckForChanges();
         }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                     foreach (ShippingProfileEntity profile in modified.Concat(added))
                     {
-                        shippingProfileRepository.LoadProfileData(profile, true);
+                        shippingProfileLoader.LoadProfileData(profile, true);
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.Profiles
             // Transaction
             using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                bool extraDirty = shippingProfileRepository.SaveProfileData(profile, adapter);
+                bool extraDirty = SaveProfilePackages(profile, adapter);
 
                 // Force the profile change if any derived stuff changes
                 if ((anyDirty || extraDirty) && !rootDirty)
@@ -175,6 +175,42 @@ namespace ShipWorks.Shipping.Profiles
                 synchronizer.MergeEntity(profile);
                 CheckForChangesNeeded();
             }
+        }
+
+        /// <summary>
+        /// Save the profile packages
+        /// </summary>
+        private static bool SaveProfilePackages(ShippingProfileEntity profile, SqlAdapter adapter)
+        {
+            bool changes = false;
+
+            // First delete out anything that needs deleted
+            // Introducing new variable as we will be removing items from PackageProfile
+            // and if we used the same colleciton, we would get an exception.
+            List<PackageProfileEntity> allPackageProfiles = profile.Packages.ToList();
+            foreach (PackageProfileEntity package in allPackageProfiles)
+            {
+                // If its new but deleted, just get rid of it
+                if (package.Fields.State == EntityState.Deleted)
+                {
+                    if (package.IsNew)
+                    {
+                        profile.Packages.Remove(package);
+                    }
+
+                    // If its deleted, delete it
+                    else
+                    {
+                        package.Fields.State = EntityState.Fetched;
+                        profile.Packages.Remove(package);
+
+                        adapter.DeleteEntity(package);
+
+                        changes = true;
+                    }
+                }
+            }
+            return changes;
         }
 
         /// <summary>
