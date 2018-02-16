@@ -70,8 +70,6 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadProfileEditor()
         {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) profile.ShipmentType;
-
             // If there was a previous control loaded, have it save itself
             ShippingProfileControlBase oldControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
             if (oldControl != null)
@@ -81,31 +79,29 @@ namespace ShipWorks.Shipping.Profiles
 
             ShippingProfileControlBase newControl = null;
 
-            // Create the new profile control
-            if (shipmentTypeCode != ShipmentTypeCode.None)
+            int selectedProvider = (int) provider.SelectedValue;
+            // Create the new profile control            
+            if (selectedProvider == NoChangeValue)
             {
-                if(profile.ShipmentType == null)
-                {
-                    newControl = profileControlFactory.Create();
-                }
-                else
-                {
-                    newControl = profileControlFactory.Create(shipmentTypeCode);
-                }
-
-                if (newControl != null)
-                {
-                    newControl.Width = panelSettings.Width;
-                    newControl.Dock = DockStyle.Fill;
-                    newControl.BackColor = Color.Transparent;
-
-                    // Ensure the profile is loaded.  If its already there, no need to refresh
-                    shippingProfileLoader.LoadProfileData(profile, false);
-
-                    // Load the profile data into the control
-                    newControl.LoadProfile(profile);
-                }
+                newControl = profileControlFactory.Create();
             }
+            else
+            {
+                newControl = profileControlFactory.Create((ShipmentTypeCode) selectedProvider);
+            }
+
+            if (newControl != null)
+            {
+                newControl.Width = panelSettings.Width;
+                newControl.Dock = DockStyle.Fill;
+                newControl.BackColor = Color.Transparent;
+
+                // Ensure the profile is loaded.  If its already there, no need to refresh
+                shippingProfileLoader.LoadProfileData(profile, false);
+
+                // Load the profile data into the control
+                newControl.LoadProfile(profile);
+            }            
 
             // If there is a new control, add it now
             if (newControl != null)
@@ -237,10 +233,14 @@ namespace ShipWorks.Shipping.Profiles
         {
             if((int) provider.SelectedValue != NoChangeValue)
             {
-                profile.Packages.Clear();
                 profile.ShipmentType = (int) provider.SelectedValue;
             }
+            else
+            {
+                profile.ShipmentType = null;
+            }
 
+            profile.Packages.Clear();
             LoadProfileEditor();
         }
 
