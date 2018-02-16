@@ -22742,10 +22742,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Action);}
 		}
-		/// <summary>Creates a new ShortcutEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new ShortcutEntity.RelatedObjectID field instance</summary>
+		public static EntityField2 RelatedObjectID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RelatedObjectID);}
 		}
 	}
 

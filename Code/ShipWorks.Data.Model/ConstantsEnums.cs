@@ -9792,8 +9792,8 @@ namespace ShipWorks.Data.Model
 		Hotkey,
 		///<summary>Action. </summary>
 		Action,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>RelatedObjectID. </summary>
+		RelatedObjectID,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2623,7 +2623,7 @@
           <Field Name="Action" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="Hotkey" Type="ShortcutHotkey" FieldIndex="2" />
-          <Field Name="ObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
+          <Field Name="RelatedObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
           <Field Name="ShortcutID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -4210,7 +4210,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T16:34:31.2248697Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T18:06:53.8544929Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8099,7 +8099,7 @@
                     <Field Name="Barcode" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="Hotkey" Ordinal="3" DbType="8" Precision="10" />
                     <Field Name="Action" Ordinal="4" DbType="8" Precision="10" />
-                    <Field Name="ObjectID" Ordinal="5" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="RelatedObjectID" Ordinal="5" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="SparkPayStore">
@@ -12690,7 +12690,7 @@
             <FieldMapping FieldName="Action" TargetFieldName="Action" />
             <FieldMapping FieldName="Barcode" TargetFieldName="Barcode" />
             <FieldMapping FieldName="Hotkey" TargetFieldName="Hotkey" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="RelatedObjectID" TargetFieldName="RelatedObjectID" />
             <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" />
           </FieldMappings>
         </EntityMapping>

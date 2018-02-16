@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Barcode = source.Barcode;
             Hotkey = source.Hotkey;
             Action = source.Action;
-            ObjectID = source.ObjectID;
+            RelatedObjectID = source.RelatedObjectID;
             
             
             
@@ -73,12 +73,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Action { get; }
-        /// <summary> The ObjectID property of the Entity Shortcut<br/><br/>
+        /// <summary> The RelatedObjectID property of the Entity Shortcut<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "Shortcut"."ObjectID"<br/>
+        /// <remarks>Mapped on table field: "Shortcut"."RelatedObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ObjectID { get; }
+        public Nullable<System.Int64> RelatedObjectID { get; }
         
         
         

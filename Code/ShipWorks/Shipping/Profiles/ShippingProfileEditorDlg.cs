@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.Profiles
                 Barcode = barcode.Text,
                 Hotkey = (ShortcutHotkey) keyboardShortcut.SelectedValue,
                 Action = (int) KeyboardShortcutCommand.ApplyProfile,
-                ObjectID = profile.ShippingProfileID
+                RelatedObjectID = profile.ShippingProfileID
             };
 
             return shortcutManager.Save(shortcut);

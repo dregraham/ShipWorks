@@ -3,7 +3,7 @@
 	[Barcode] [nvarchar](50) NOT NULL,
 	[Hotkey] [int] NOT NULL,
 	[Action] [int] NOT NULL,
-	[ObjectID] [bigint] NULL,
+	[RelatedObjectID] [bigint] NULL,
  CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED 
 (
 	[ShortcutID] ASC

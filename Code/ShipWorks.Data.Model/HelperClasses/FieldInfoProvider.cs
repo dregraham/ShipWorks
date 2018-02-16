@@ -2971,7 +2971,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShortcutEntity", "Barcode", typeof(System.String), false, false, false, false,  (int)ShortcutFieldIndex.Barcode, 50, 0, 0);
 			this.AddElementFieldInfo("ShortcutEntity", "Hotkey", typeof(ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey), false, false, false, false,  (int)ShortcutFieldIndex.Hotkey, 0, 0, 10);
 			this.AddElementFieldInfo("ShortcutEntity", "Action", typeof(System.Int32), false, false, false, false,  (int)ShortcutFieldIndex.Action, 0, 0, 10);
-			this.AddElementFieldInfo("ShortcutEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ShortcutEntity", "RelatedObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.RelatedObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()

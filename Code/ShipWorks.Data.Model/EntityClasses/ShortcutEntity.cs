@@ -305,7 +305,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Action", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("RelatedObjectID", fieldHashtable);
 		}
 		#endregion
 
@@ -404,14 +404,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShortcutFieldIndex.Action, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity Shortcut<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Shortcut"."ObjectID"<br/>
+		/// <summary> The RelatedObjectID property of the Entity Shortcut<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shortcut"."RelatedObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ObjectID
+		public virtual Nullable<System.Int64> RelatedObjectID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)ShortcutFieldIndex.ObjectID, false); }
-			set	{ SetValue((int)ShortcutFieldIndex.ObjectID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)ShortcutFieldIndex.RelatedObjectID, false); }
+			set	{ SetValue((int)ShortcutFieldIndex.RelatedObjectID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -3138,7 +3138,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShortcutEntity", "Barcode", "Barcode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ShortcutEntity", "Hotkey", "Hotkey", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("ShortcutEntity", "Action", "Action", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("ShortcutEntity", "ObjectID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 4);
+			this.AddElementFieldMapping("ShortcutEntity", "RelatedObjectID", "RelatedObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 4);
 		}
 
 		/// <summary>Inits SparkPayStoreEntity's mappings</summary>
