@@ -163,16 +163,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            ShipmentTypeDataService.LoadProfileData(profile, "BestRate", typeof(BestRateProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Gets whether the specified settings tab should be hidden in the UI
         /// </summary>
         public override bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)

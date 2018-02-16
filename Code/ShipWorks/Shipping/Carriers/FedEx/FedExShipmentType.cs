@@ -470,19 +470,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            bool existed = profile.FedEx != null;
-
-            // Load the profile data
-            ShipmentTypeDataService.LoadProfileData(profile, "FedEx", typeof(FedExProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         [NDependIgnoreLongMethod]

@@ -670,66 +670,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!profile.IsNew && refreshIfPresent)
-            {
-                profile.Packages.Clear();
-
-                using (ISqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(profile.Packages,
-                        new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
-                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
-                }
-            }
-
-            if (profile.IsNew && !SupportsMultiplePackages)
-            {
-                profile.Packages.Add(new PackageProfileEntity());
-            }
-        }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public virtual bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = false;
-
-            // First delete out anything that needs deleted
-            // Introducing new variable as we will be removing items from PackageProfile
-            // and if we used the same colleciton, we would get an exception.
-            List<PackageProfileEntity> allPackageProfiles = profile.Packages.ToList();
-            foreach (PackageProfileEntity package in allPackageProfiles)
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-            return changes;
-        }
-
-        /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
         public virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)

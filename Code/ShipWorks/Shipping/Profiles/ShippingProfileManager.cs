@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -23,6 +25,7 @@ namespace ShipWorks.Shipping.Profiles
         static IEnumerable<IShippingProfileEntity> readOnlyEntities;
         static TableSynchronizer<ShippingProfileEntity> synchronizer;
         static bool needCheckForChanges = false;
+        static IShippingProfileRepository shippingProfileRepository;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -30,6 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProfileEntity>();
+            shippingProfileRepository = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileRepository>();
             InternalCheckForChanges();
         }
 
@@ -60,8 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                     foreach (ShippingProfileEntity profile in modified.Concat(added))
                     {
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-                        shipmentType.LoadProfileData(profile, true);
+                        shippingProfileRepository.LoadProfileData(profile, true);
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -146,16 +149,13 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public static void SaveProfile(ShippingProfileEntity profile)
         {
-            // Get the shipment type of the profile
-            ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-
             bool rootDirty = profile.IsDirty;
             bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
 
             // Transaction
             using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                bool extraDirty = shipmentType.SaveProfileData(profile, adapter);
+                bool extraDirty = shippingProfileRepository.SaveProfileData(profile, adapter);
 
                 // Force the profile change if any derived stuff changes
                 if ((anyDirty || extraDirty) && !rootDirty)

@@ -247,15 +247,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 .Cast<int>()
                 .Except(GetExcludedServiceTypes(repository));
         }
-
-        /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            ShipmentTypeDataService.LoadProfileData(profile, "Asendia", typeof(AsendiaProfileEntity), refreshIfPresent);
-        }
-
+        
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>

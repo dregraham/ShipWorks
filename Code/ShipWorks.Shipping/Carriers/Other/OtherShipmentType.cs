@@ -40,12 +40,6 @@ namespace ShipWorks.Shipping.Carriers.Other
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Other", typeof(OtherShipmentEntity), refreshIfPresent);
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent) =>
-            ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
-
-        /// <summary>
         /// For 'Other' we just use return as a marker
         /// </summary>
         public override bool SupportsReturns => true;

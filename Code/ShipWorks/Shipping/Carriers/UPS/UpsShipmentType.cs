@@ -244,19 +244,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            bool existed = profile.Ups != null;
-
-            // Load the profile data
-            ShipmentTypeDataService.LoadProfileData(profile, "Ups", typeof(UpsProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not
         /// been excluded). The integer values are intended to correspond to the appropriate
         /// enumeration values of the specific shipment type (i.e. the integer values would

@@ -351,64 +351,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            bool existed = profile.DhlExpress != null;
-
-            ShipmentTypeDataService.LoadProfileData(profile, "DhlExpress", typeof(DhlExpressProfileEntity), refreshIfPresent);
-            
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!existed || refreshIfPresent)
-            {
-                profile.Packages.Clear();
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(profile.Packages,
-                                                  new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
-                    
-                    profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (PackageProfileEntity package in profile.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-
-            return changes;
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
