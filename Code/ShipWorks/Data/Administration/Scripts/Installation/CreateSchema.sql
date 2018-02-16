@@ -1100,7 +1100,7 @@ CREATE TABLE [dbo].[ShippingProfile]
 [ShippingProfileID] [bigint] NOT NULL IDENTITY(1053, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipmentType] [int] NOT NULL,
+[ShipmentType] [int] NULL,
 [ShipmentTypePrimary] [bit] NOT NULL,
 [OriginID] [bigint] NULL,
 [Insurance] [bit] NULL,

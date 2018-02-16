@@ -43,8 +43,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 ShipmentType { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> ShipmentType { get; }
         /// <summary> The ShipmentTypePrimary property of the Entity ShippingProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentTypePrimary"<br/>

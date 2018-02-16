@@ -2823,7 +2823,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingProfileEntity", "ShippingProfileID", typeof(System.Int64), true, false, true, false,  (int)ShippingProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("ShippingProfileEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ShippingProfileFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "Name", typeof(System.String), false, false, false, false,  (int)ShippingProfileFieldIndex.Name, 50, 0, 0);
-			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentType", typeof(System.Int32), false, false, false, false,  (int)ShippingProfileFieldIndex.ShipmentType, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ShippingProfileFieldIndex.ShipmentType, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentTypePrimary", typeof(System.Boolean), false, false, false, false,  (int)ShippingProfileFieldIndex.ShipmentTypePrimary, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "OriginID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingProfileFieldIndex.OriginID, 0, 0, 19);
 			this.AddElementFieldInfo("ShippingProfileEntity", "Insurance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.Insurance, 0, 0, 0);

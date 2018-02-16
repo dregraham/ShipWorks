@@ -2494,7 +2494,7 @@
           <Field Name="RequestedLabelFormat" Type="int" IsOptional="true" FieldIndex="10" />
           <Field Name="ReturnShipment" Type="bool" IsOptional="true" FieldIndex="9" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipmentType" Type="int" FieldIndex="3" />
+          <Field Name="ShipmentType" Type="int" IsOptional="true" FieldIndex="3" />
           <Field Name="ShipmentTypePrimary" Type="bool" FieldIndex="4" />
           <Field Name="ShippingProfileID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
@@ -4210,7 +4210,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-15T20:38:11.2825999Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T16:34:31.2248697Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7931,7 +7931,7 @@
                     <Field Name="ShippingProfileID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="Name" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ShipmentType" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ShipmentType" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ShipmentTypePrimary" Ordinal="5" DbType="2" />
                     <Field Name="OriginID" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="Insurance" Ordinal="7" IsOptional="true" DbType="2" />

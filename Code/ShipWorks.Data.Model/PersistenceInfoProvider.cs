@@ -2981,7 +2981,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShippingProfileEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShippingProfileEntity", "Name", "Name", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ShippingProfileEntity", "ShipmentType", "ShipmentType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("ShippingProfileEntity", "ShipmentType", "ShipmentType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("ShippingProfileEntity", "ShipmentTypePrimary", "ShipmentTypePrimary", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("ShippingProfileEntity", "OriginID", "OriginID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
 			this.AddElementFieldMapping("ShippingProfileEntity", "Insurance", "Insurance", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
