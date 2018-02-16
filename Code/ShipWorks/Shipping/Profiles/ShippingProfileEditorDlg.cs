@@ -7,17 +7,24 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using System.Linq;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Profiles
 {
     /// <summary>
     /// Window for editing a shipping profile
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class ShippingProfileEditorDlg : Form
     {
-        readonly ShippingProfileEntity profile;
+        private readonly ShippingProfileEntity profile;
         private readonly ILifetimeScope lifetimeScope;
         private readonly IProfileControlFactory profileControlFactory;
+        private readonly IShortcutManager shortcutManager;
 
         /// <summary>
         /// Constructor
@@ -30,6 +37,8 @@ namespace ShipWorks.Shipping.Profiles
             this.profileControlFactory = profileControlFactory;
             this.profile = profile;
 
+            shortcutManager = lifetimeScope.Resolve<IShortcutManager>();
+
             WindowStateSaver.Manage(this);
         }
 
@@ -39,11 +48,14 @@ namespace ShipWorks.Shipping.Profiles
         private void OnLoad(object sender, EventArgs e)
         {
             profileName.Text = profile.Name;
-            labelShipmentType.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
+            provider.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
 
+            EnumHelper.BindComboBox<ShortcutHotkey>(keyboardShortcut, k => shortcutManager.GetAvailableHotkeys().Contains(k));
+            LoadProviders();
             LoadProfileEditor();
 
             profileName.Enabled = !profile.ShipmentTypePrimary;
+            provider.Enabled = !profile.ShipmentTypePrimary;
         }
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadProfileEditor()
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(profile.ShipmentTypeCode);
 
             // If there was a previous control loaded, have it save itself
             ShippingProfileControlBase oldControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
@@ -74,7 +86,7 @@ namespace ShipWorks.Shipping.Profiles
                     newControl.BackColor = Color.Transparent;
 
                     // Ensure the profile is loaded.  If its already there, no need to refresh
-                    shipmentType.LoadProfileData(profile, false);
+                    shipmentType.LoadProfileData(profile, true);
 
                     // Load the profile data into the control
                     newControl.LoadProfile(profile);
@@ -115,8 +127,20 @@ namespace ShipWorks.Shipping.Profiles
                 return;
             }
 
+            if (!shortcutManager.IsBarcodeAvailable(barcode.Text))
+            {
+                MessageHelper.ShowError(this, $"The barcode \"{barcode.Text}\" is already in use.");
+                return;
+            }
+
             try
             {
+                // Save shortcut if user entered one
+                if (keyboardShortcut.SelectedValue != null)
+                {
+                    SaveShortcut(profile);
+                }
+
                 // Have the profile control save itself
                 ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
                 if (profileControl != null)
@@ -151,6 +175,56 @@ namespace ShipWorks.Shipping.Profiles
                     profileControl.CancelChanges();
                 }
             }
+        }
+
+        /// <summary>
+        /// Load configured providers into the provider combobox
+        /// </summary>
+        private void LoadProviders()
+        {
+            this.provider.SelectedValueChanged -= OnChangeProvider;
+
+            provider.Items.Clear();            
+            EnumHelper.BindComboBox<ShipmentTypeCode>(provider, t => ShippingManager.IsShipmentTypeConfigured(t));
+
+            if(profile.ShipmentTypeCode == ShipmentTypeCode.None)
+            {
+                provider.SelectedValue = null;
+            }
+            else
+            {
+                provider.SelectedValue = (ShipmentTypeCode) profile.ShipmentType;
+            }
+
+            this.provider.SelectedValueChanged += OnChangeProvider;
+        }
+
+        /// <summary>
+        /// When provider changes, load the appropriate control
+        /// </summary>
+        private void OnChangeProvider(object sender, EventArgs e)
+        {
+            if(provider.SelectedValue != null)
+            {
+                profile.ShipmentType = (int) provider.SelectedValue;
+                LoadProfileEditor();
+            }
+        }        
+
+        /// <summary>
+        /// Save the 
+        /// </summary>
+        private void SaveShortcut(ShippingProfileEntity profile)
+        {
+            ShortcutEntity shortcut = new ShortcutEntity()
+            {
+                Barcode = barcode.Text,
+                Hotkey = (ShortcutHotkey) keyboardShortcut.SelectedValue,
+                Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                ObjectID = profile.ShippingProfileID
+            };
+
+            shortcutManager.Save(shortcut);
         }
     }
 }
