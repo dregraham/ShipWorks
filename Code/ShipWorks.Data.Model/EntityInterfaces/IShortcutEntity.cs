@@ -37,8 +37,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "Shortcut"."Hotkey"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey Hotkey { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey> Hotkey { get; }
         /// <summary> The Action property of the Entity Shortcut<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Shortcut"."Action"<br/>

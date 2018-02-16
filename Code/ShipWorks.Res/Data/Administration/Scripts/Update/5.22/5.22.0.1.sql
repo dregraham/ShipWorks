@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Shortcut](
-	[ShortcutID] [bigint] NOT NULL,
+	[ShortcutID] [bigint] NOT NULL IDENTITY(1105, 1000),
 	[Barcode] [nvarchar](50) NOT NULL,
-	[Hotkey] [int] NOT NULL,
+	[Hotkey] [int] NULL,
 	[Action] [int] NOT NULL,
 	[RelatedObjectID] [bigint] NULL,
  CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED 

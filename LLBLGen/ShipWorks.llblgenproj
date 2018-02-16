@@ -2622,7 +2622,7 @@
         <Fields>
           <Field Name="Action" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="1" />
-          <Field Name="Hotkey" Type="ShortcutHotkey" FieldIndex="2" />
+          <Field Name="Hotkey" Type="ShortcutHotkey" IsOptional="true" FieldIndex="2" />
           <Field Name="RelatedObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
           <Field Name="ShortcutID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
@@ -4210,7 +4210,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T18:06:53.8544929Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T20:58:40.0493746Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8097,7 +8097,7 @@
                   <Fields>
                     <Field Name="ShortcutID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Barcode" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="Hotkey" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="Hotkey" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Action" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="RelatedObjectID" Ordinal="5" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>

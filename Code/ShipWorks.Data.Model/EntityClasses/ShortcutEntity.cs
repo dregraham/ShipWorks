@@ -387,10 +387,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Hotkey property of the Entity Shortcut<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Shortcut"."Hotkey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey Hotkey
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey> Hotkey
 		{
-			get { return (ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey)GetValue((int)ShortcutFieldIndex.Hotkey, true); }
+			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey>)GetValue((int)ShortcutFieldIndex.Hotkey, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.Hotkey, value); }
 		}
 
