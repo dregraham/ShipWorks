@@ -348,7 +348,7 @@ namespace ShipWorks
                     SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
                     // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                    if (sqlServerInstaller.IsSqlServer2016Supported || sqlServerInstaller.IsSqlServer2014Supported)
+                    if (sqlServerInstaller.IsSqlServer2017Supported || sqlServerInstaller.IsSqlServer2014Supported)
                     {
                         using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
                         {

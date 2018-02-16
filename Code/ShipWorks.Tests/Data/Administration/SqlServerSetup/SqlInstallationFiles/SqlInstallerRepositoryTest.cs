@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Windows10x64_SqlServer2016LocalDB_IsFirst()
+        public void Windows10x64_SqlServer2017LocalDB_IsFirst()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win10_10_0_14393);
@@ -88,22 +88,22 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);
 
             ISqlInstallerInfo si = testObject.SqlInstallersForThisMachine().First();
-            Assert.True(si.Edition == SqlServerEditionType.LocalDb2016 && si.Is64Bit);
+            Assert.True(si.Edition == SqlServerEditionType.LocalDb2017 && si.Is64Bit);
         }
 
         [Fact]
-        public void Windows10x64_SqlServer2016ExpressIsAvailable()
+        public void Windows10x64_SqlServer2017ExpressIsAvailable()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win10_10_0_14393);
 
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);
 
-            Assert.True(testObject.SqlInstallersForThisMachine().Any(si => si.Edition == SqlServerEditionType.Express2016 && si.Is64Bit));
+            Assert.True(testObject.SqlInstallersForThisMachine().Any(si => si.Edition == SqlServerEditionType.Express2017 && si.Is64Bit));
         }
 
         [Fact]
-        public void Windows10x86_SqlServer2016IsNotAvailable()
+        public void Windows10x86_SqlServer2017IsNotAvailable()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(false);
             environment.Setup(e => e.OSVersion).Returns(Win10_10_0_14393);
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
             Assert.True(sqlInstallerInfos.Any());
-            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2016 || si.Edition == SqlServerEditionType.LocalDb2016));
+            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2017 || si.Edition == SqlServerEditionType.LocalDb2017));
         }
 
         [Fact]
@@ -168,14 +168,14 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.Equal(2, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2014 ||
                                                     si.Edition == SqlServerEditionType.LocalDb2014));
 
-            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016));
+            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017));
         }
 
 
         [Theory]
-        [InlineData(true, SqlServerEditionType.LocalDb2016)]
-        public void Server2012_SqlServerLocalDb2016_IsFirst(bool is64Bit, SqlServerEditionType expectedEdition)
+        [InlineData(true, SqlServerEditionType.LocalDb2017)]
+        public void Server2012_SqlServerLocalDb2017_IsFirst(bool is64Bit, SqlServerEditionType expectedEdition)
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
             environment.Setup(e => e.OSVersion).Returns(Server2012_6_2);
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Server2012_SqlServerLocalDb2016AndExpress_AreAvailable()
+        public void Server2012_SqlServerLocalDb2017AndExpress_AreAvailable()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Server2012_6_2);
@@ -196,14 +196,14 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
-            Assert.Equal(3, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2016 ||
+            Assert.Equal(3, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2017 ||
                                                           si.Edition == SqlServerEditionType.LocalDb2014 ||
                                                           si.Edition == SqlServerEditionType.Express2014));
         }
 
         [Theory]
-        [InlineData(true, SqlServerEditionType.LocalDb2016)]
-        public void Server2012R2_SqlServerLocalDb2016_IsFirst(bool is64Bit, SqlServerEditionType expectedEdition)
+        [InlineData(true, SqlServerEditionType.LocalDb2017)]
+        public void Server2012R2_SqlServerLocalDb2017_IsFirst(bool is64Bit, SqlServerEditionType expectedEdition)
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
             environment.Setup(e => e.OSVersion).Returns(Server2012R2_6_3);
@@ -215,7 +215,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Server2012R2_SqlServerLocalDb2016AndExpress_AreAvailable()
+        public void Server2012R2_SqlServerLocalDb2017AndExpress_AreAvailable()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Server2012R2_6_3);
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
-            Assert.Equal(3, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2016 ||
+            Assert.Equal(3, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2017 ||
                                                           si.Edition == SqlServerEditionType.LocalDb2014 ||
                                                           si.Edition == SqlServerEditionType.Express2014));
         }
@@ -285,13 +285,13 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.Equal(2, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2014 ||
                                                     si.Edition == SqlServerEditionType.LocalDb2014));
 
-            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016));
+            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017));
         }
 
         [Theory]
-        [InlineData(true, SqlServerEditionType.LocalDb2016)]
-        public void Win8_SqlServerLocalDb2016_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
+        [InlineData(true, SqlServerEditionType.LocalDb2017)]
+        public void Win8_SqlServerLocalDb2017_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
             environment.Setup(e => e.OSVersion).Returns(Win8_6_2_9200);
@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Win8_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit()
+        public void Win8_SqlServerLocalDb2017AndExpress_AreAvailable_When64Bit()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win8_6_2_9200);
@@ -312,8 +312,8 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
-            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016 ||
+            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017 ||
                                                      si.Edition == SqlServerEditionType.LocalDb2014 ||
                                                      si.Edition == SqlServerEditionType.Express2014));
 
@@ -346,13 +346,13 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.Equal(2, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2014 ||
                                                     si.Edition == SqlServerEditionType.LocalDb2014));
 
-            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016));
+            Assert.True(sqlInstallerInfos.None(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017));
         }
 
         [Theory]
-        [InlineData(true, SqlServerEditionType.LocalDb2016)]
-        public void Win81_SqlServerLocalDb2016_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
+        [InlineData(true, SqlServerEditionType.LocalDb2017)]
+        public void Win81_SqlServerLocalDb2017_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
             environment.Setup(e => e.OSVersion).Returns(Win81_6_3_9600);
@@ -364,7 +364,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Win81_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit()
+        public void Win81_SqlServerLocalDb2017AndExpress_AreAvailable_When64Bit()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win81_6_3_9600);
@@ -373,8 +373,8 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
-            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016 ||
+            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017 ||
                                                      si.Edition == SqlServerEditionType.LocalDb2014 ||
                                                      si.Edition == SqlServerEditionType.Express2014));
 
@@ -382,8 +382,8 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Theory]
-        [InlineData(true, SqlServerEditionType.LocalDb2016)]
-        public void Server2016_SqlServerLocalDb2016_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
+        [InlineData(true, SqlServerEditionType.LocalDb2017)]
+        public void Server2016_SqlServerLocalDb2017_IsFirst_When64Bit(bool is64Bit, SqlServerEditionType expectedEdition)
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
             environment.Setup(e => e.OSVersion).Returns(Server2016_10_0);
@@ -395,7 +395,7 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
         }
 
         [Fact]
-        public void Server2016_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit()
+        public void Server2016_SqlServerLocalDb2017AndExpress_AreAvailable_When64Bit()
         {
             environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Server2016_10_0);
@@ -404,8 +404,8 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
             IEnumerable<ISqlInstallerInfo> sqlInstallerInfos = testObject.SqlInstallersForThisMachine();
 
-            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                     si.Edition == SqlServerEditionType.LocalDb2016 ||
+            Assert.Equal(4, sqlInstallerInfos.Count(si => si.Edition == SqlServerEditionType.Express2017 ||
+                                                     si.Edition == SqlServerEditionType.LocalDb2017 ||
                                                      si.Edition == SqlServerEditionType.LocalDb2014 ||
                                                      si.Edition == SqlServerEditionType.Express2014));
 

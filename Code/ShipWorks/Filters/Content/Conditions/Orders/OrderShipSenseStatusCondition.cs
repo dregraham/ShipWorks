@@ -1,7 +1,5 @@
 ﻿using System;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping.ShipSense;
 

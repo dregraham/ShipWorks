@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.Ebay.Enums;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Stores.Platforms.Ebay.Enums;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
     [ConditionElement("eBay Feedback", "EbayOrderItem.Feedback")]
     [ConditionStoreType(StoreTypeCode.Ebay)]
-    public class EbayFeedbackCondition : EnumCondition<EbayFeedbackConditionStatusType>
+    public class EbayFeedbackCondition : ValueChoiceCondition<EbayFeedbackConditionStatusType>
     {
         /// <summary>
         /// Constructor
@@ -21,6 +19,17 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         public EbayFeedbackCondition()
         {
             Value = EbayFeedbackConditionStatusType.SellerNotLeftForBuyer;
+        }
+
+        /// <summary>
+        /// Get the value choices the user will be provided with
+        /// </summary>
+        public override ICollection<ValueChoice<EbayFeedbackConditionStatusType>> ValueChoices
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<EbayFeedbackConditionStatusType>().Select(e => new ValueChoice<EbayFeedbackConditionStatusType>(e.Description, e.Value)).ToList();
+            }
         }
 
         /// <summary>
@@ -39,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                     case EbayFeedbackConditionStatusType.SellerLeftForBuyer:
                         sql = string.Format("{0} {1} {2}",
                             context.GetColumnReference(EbayOrderItemFields.FeedbackLeftType),
-                            (Operator == EqualityOperator.Equals) ? "!=" : "=" ,
+                            (Operator == EqualityOperator.Equals) ? "!=" : "=",
                             (int) EbayFeedbackType.None);
                         break;
 

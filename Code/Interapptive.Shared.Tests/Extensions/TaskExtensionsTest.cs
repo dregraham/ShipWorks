@@ -65,21 +65,6 @@ namespace Interapptive.Shared.Tests.Extensions
             Assert.Equal(id, taskId);
         }
 
-        [STAFact]
-        public async Task Bind_UsesDifferentThread_WhenRequested()
-        {
-            var id = Thread.CurrentThread.ManagedThreadId;
-            int taskId = 0;
-
-            await Task.Run(() => 6).Bind(x =>
-            {
-                taskId = Thread.CurrentThread.ManagedThreadId;
-                return Task.FromResult(x * 2);
-            }, ex => Task.FromResult(1), ContinueOn.AnyThread);
-
-            Assert.NotEqual(id, taskId);
-        }
-
         [Fact]
         public async Task Map_ReturnsNewTask_WhenInitialTaskIsSuccessful()
         {

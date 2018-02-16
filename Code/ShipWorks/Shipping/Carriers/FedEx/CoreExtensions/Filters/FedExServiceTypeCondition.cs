@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.CoreExtensions;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.CoreExtensions;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.CoreExtensions.Filters
 {
@@ -39,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.CoreExtensions.Filters
                     // This makes sure its a fedex shipment type
                     shipmentTypeCondition,
 
-                    // This actually deos the service test
+                    // This actually does the service test
                     scope.Adorn(GenerateSql(context.GetColumnReference(FedExShipmentFields.Service), context))
 
                     );

@@ -1039,6 +1039,7 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Filters\Content\Conditions\EnumEqualityOperator.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\QuickSearch\QuickSearchCondition.cs" />
@@ -1046,6 +1047,18 @@
     <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorDialog.cs" />
     <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorViewModel.cs" />
     <Compile Include="Filters\Content\Editors\ValueEditors\StringValueListEditorViewModel.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\ValueChoicePopup.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\ValueChoicePopup.Designer.cs">
+      <DependentUpon>ValueChoicePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.Designer.cs">
+      <DependentUpon>EnumValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
     <Compile Include="Filters\Content\SqlGeneration\ISqlGenerationBuilder.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
@@ -7836,6 +7849,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileTransfer\FtpAccountEditorDlg.resx">
       <DependentUpon>FtpAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.resx">
+      <DependentUpon>EnumValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Filters\Management\DisableLinkedFilterDlg.resx">
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>

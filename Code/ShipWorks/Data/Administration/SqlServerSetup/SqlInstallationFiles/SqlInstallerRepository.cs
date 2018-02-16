@@ -98,10 +98,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
                 sqlInstallers.Add(
                     new SqlInstallerInfo()
                     {
-                        Edition = SqlServerEditionType.Express2016,
-                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/newinstallersql42016/sqlserver2016/express/SQLEXPR_x64_ENU.exe"),
-                        Checksum = "H92UUFL0pLDMnI8cwSOF+F64DZY=",
-                        FileSize = 431398912,
+                        Edition = SqlServerEditionType.Express2017,
+                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlserver2017/express/SQLEXPR_x64_ENU.exe"),
+                        Checksum = "4KWjiCVSRPH16y+/Rr3HKS9+PY4=",
+                        FileSize = 289058768,
                         IsLocalDB = false,
                         MinDotNetVersion = new Version(3, 5, 30729, 0), // The installer will install .Net 4.6, so just need 3.5 SP1
                         MinOsVersion = new Version(6, 2, 0, 0),
@@ -113,10 +113,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
                 sqlInstallers.Add(
                     new SqlInstallerInfo()
                     {
-                        Edition = SqlServerEditionType.LocalDb2016,
-                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/newinstallersql42016/sqlserver2016/localdb/SqlLocalDB.msi"),
-                        Checksum = "2kCz+oa2cIEZSfDc5nm+LippXEM=",
-                        FileSize = 46563328,
+                        Edition = SqlServerEditionType.LocalDb2017,
+                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlserver2017/localdb/SqlLocalDB.msi"),
+                        Checksum = "cTIVWe/5IwZnmdf8JrbHrt1B7uE=",
+                        FileSize = 48230400,
                         IsLocalDB = true,
                         MinDotNetVersion = new Version(3, 5, 30729, 0), // The installer will install .Net 4.6, so just need 3.5 SP1
                         MinOsVersion = new Version(6, 2, 0, 0),
