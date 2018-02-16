@@ -111,3 +111,11 @@ DECLARE @Sql NVARCHAR(500) =
 
 EXECUTE sp_executesql @Sql;
 GO
+
+DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
+DECLARE @TrustworthySql NVARCHAR(500) =
+'IF '''+ @version + ''' LIKE ''14%''
+	ALTER DATABASE {DBNAME} SET TRUSTWORTHY ON'
+
+EXECUTE sp_executesql @TrustworthySql;
+GO

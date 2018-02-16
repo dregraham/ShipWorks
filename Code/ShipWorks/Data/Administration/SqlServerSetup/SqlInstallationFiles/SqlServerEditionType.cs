@@ -17,12 +17,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
         [Description("SQL Server 2014 LocalDB")]
         LocalDb2014 = 2,
 
-        // SQL Server 2016 Express
-        [Description("SQL Server 2016 Express")]
-        Express2016 = 3,
+        // SQL Server 2017 Express
+        [Description("SQL Server 2017 Express")]
+        Express2017 = 3,
 
-        // SQL Server 2016 LocalDB
-        [Description("SQL Server 2016 LocalDB")]
-        LocalDb2016 = 4,
+        // SQL Server 2017 LocalDB
+        [Description("SQL Server 2017 LocalDB")]
+        LocalDb2017 = 4,
     }
 }
