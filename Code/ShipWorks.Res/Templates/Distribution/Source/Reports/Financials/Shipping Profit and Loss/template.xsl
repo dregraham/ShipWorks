@@ -92,9 +92,9 @@
                     <td style="{$rowStyle};" colspan="3">(<xsl:value-of select="count($shipments)" /> shipments)</td>
 				        </xsl:if>
 
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(shippingCharges, '#,##0.00')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCharges, '#,##0.00')" /></td>
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCosts, '#,##0.00#')" /></td>
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(shippingCharges - $shippingCosts, '#,##0.00#')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCharges - $shippingCosts, '#,##0.00#')" /></td>
             </tr>
 
             </xsl:for-each>
