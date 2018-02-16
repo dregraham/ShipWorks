@@ -72,16 +72,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            ShipmentTypeDataService.LoadProfileData(profile, "Postal", typeof(PostalProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not
         /// been excluded). The integer values are intended to correspond to the appropriate
         /// enumeration values of the specific shipment type (i.e. the integer values would

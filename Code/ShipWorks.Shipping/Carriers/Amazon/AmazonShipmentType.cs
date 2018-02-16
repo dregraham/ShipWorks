@@ -201,15 +201,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-            ShipmentTypeDataService.LoadProfileData(profile, "Amazon", typeof(AmazonProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

@@ -66,14 +66,5 @@ namespace ShipWorks.Shipping.Carriers.None
             // doesn't need it.
             profile.Packages.Clear();
         }
-
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            // The base configures dimensions for all shipment types. None is an exception and
-            // doesn't need it.
-            profile.Packages.Clear();
-        }
     }
 }

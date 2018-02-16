@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly ShippingProfileEntity profile;
         private readonly ILifetimeScope lifetimeScope;
         private readonly IProfileControlFactory profileControlFactory;
+        private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShortcutManager shortcutManager;
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace ShipWorks.Shipping.Profiles
             this.lifetimeScope = lifetimeScope;
             this.profileControlFactory = profileControlFactory;
             this.profile = profile;
+			this.shippingProfileRepository = lifetimeScope.Resolve<IShippingProfileRepository>();
 
             shortcutManager = lifetimeScope.Resolve<IShortcutManager>();
 
@@ -63,7 +65,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadProfileEditor()
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(profile.ShipmentTypeCode);
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) profile.ShipmentType;
 
             // If there was a previous control loaded, have it save itself
             ShippingProfileControlBase oldControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
@@ -75,9 +77,9 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileControlBase newControl = null;
 
             // Create the new profile control
-            if (shipmentType.ShipmentTypeCode != ShipmentTypeCode.None)
+            if (shipmentTypeCode != ShipmentTypeCode.None)
             {
-                newControl = profileControlFactory.Create(shipmentType.ShipmentTypeCode);
+                newControl = profileControlFactory.Create(shipmentTypeCode);
 
                 if (newControl != null)
                 {
@@ -86,7 +88,7 @@ namespace ShipWorks.Shipping.Profiles
                     newControl.BackColor = Color.Transparent;
 
                     // Ensure the profile is loaded.  If its already there, no need to refresh
-                    shipmentType.LoadProfileData(profile, true);
+                    shippingProfileRepository.LoadProfileData(profile, false);
 
                     // Load the profile data into the control
                     newControl.LoadProfile(profile);
