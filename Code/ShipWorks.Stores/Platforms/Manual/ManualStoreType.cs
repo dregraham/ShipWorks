@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -16,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.Manual
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Manual, ExternallyOwned = false)]
     public class ManualStoreType : StoreType
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ManualStoreType(StoreEntity store)
             : base(store)
         {
-           
         }
 
         /// <summary>
