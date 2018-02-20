@@ -450,8 +450,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // While we still need to create more, create more
             for (int i = 0; i < count; i++)
             {
-                FedExProfilePackageEntity package = new FedExProfilePackageEntity();
-                Profile.Packages.Add(package);
+                Profile.Packages.Add(new FedExProfilePackageEntity());
             }
 
             LoadPackageEditingUI();
