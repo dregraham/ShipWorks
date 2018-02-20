@@ -27,8 +27,6 @@ CREATE TABLE dbo.Tmp_ShippingProfile
 	RequestedLabelFormat int NULL
 	)  ON [PRIMARY]
 GO
-ALTER TABLE dbo.Tmp_ShippingProfile SET (LOCK_ESCALATION = TABLE)
-GO
 SET IDENTITY_INSERT dbo.Tmp_ShippingProfile ON
 GO
 IF EXISTS(SELECT * FROM dbo.ShippingProfile)
@@ -92,7 +90,4 @@ ALTER TABLE dbo.AsendiaProfile ADD CONSTRAINT
 	ShippingProfileID
 	) ON UPDATE  NO ACTION 
 	 ON DELETE  CASCADE 
-	
-GO
-ALTER TABLE dbo.AsendiaProfile SET (LOCK_ESCALATION = TABLE)
 GO
