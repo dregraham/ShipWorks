@@ -25,8 +25,8 @@ namespace ShipWorks.Tests.Filters.Search
             var testObject = new SingleScanSearchCondition("52x");
             var sql = testObject.GenerateSql(context);
 
-            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE @param1", sql);
-            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE @param1", sql);
+            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE N'52x%'", sql);
+            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE N'52x%'", sql);
         }
 
         [Fact]
@@ -45,8 +45,8 @@ namespace ShipWorks.Tests.Filters.Search
             var testObject = new SingleScanSearchCondition("52");
             var sql = testObject.GenerateSql(context);
 
-            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE @param1", sql);
-            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE @param1", sql);
+            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE N'52%'", sql);
+            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE N'52%'", sql);
         }
 
         [Fact]
@@ -55,8 +55,8 @@ namespace ShipWorks.Tests.Filters.Search
             var testObject = new SingleScanSearchCondition("52");
             var sql = testObject.GenerateSql(context);
 
-            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumber = @param2", sql);
-            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumber = @param2", sql);
+            Assert.Contains("SELECT OrderId FROM [Order] WHERE OrderNumber = 52", sql);
+            Assert.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumber = 52", sql);
         }
 
         public void Dispose()
