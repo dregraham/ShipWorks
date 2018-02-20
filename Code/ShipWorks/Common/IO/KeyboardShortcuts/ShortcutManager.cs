@@ -44,7 +44,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             CheckForChanges();
         }
 
-
         /// <summary>
         /// Save shortcut
         /// </summary>

@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Profiles
             // Create the new profile control            
             if (selectedProvider.HasValue)
             {
-                newControl = profileControlFactory.Create((ShipmentTypeCode) selectedProvider);
+                newControl = profileControlFactory.Create(selectedProvider.Value);
             }
             else
             {
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Profiles
                 // Save shortcut if user entered one
                 if ((ShortcutHotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
                 {
-                    await SaveShortcut(profile);
+                    await SaveShortcut(profile).ConfigureAwait(true);
                 }
 
                 DialogResult = DialogResult.OK;
