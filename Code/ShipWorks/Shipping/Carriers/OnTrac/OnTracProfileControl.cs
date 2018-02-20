@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             dimensionsControl.Initialize();
 
             OnTracProfileEntity onTracProfile = profile.OnTrac;
+            PackageProfileEntity packageProfile = profile.Packages.Single();
 
             if (ShippingSettings.Fetch().OnTracInsuranceProvider == (int)InsuranceProvider.Carrier)
             {
@@ -60,8 +61,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             AddValueMapping(onTracProfile, OnTracProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(onTracProfile, OnTracProfileFields.SignatureRequired, signatureState, signatureRequired, labelSignature);
             AddValueMapping(onTracProfile, OnTracProfileFields.PackagingType, packagingState, packaging, labelPackaging);
-            AddValueMapping(onTracProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(onTracProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             //Options
             AddValueMapping(onTracProfile, OnTracProfileFields.Reference1, referenceState, referenceNumber, labelReference);
