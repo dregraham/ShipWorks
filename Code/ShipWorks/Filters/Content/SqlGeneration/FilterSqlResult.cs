@@ -134,9 +134,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<SqlParameter> parameters, ICollection<EntityField2> columnsUsed, ICollection<FilterNodeJoinType> joinsUsed)
-            : this(filterCountID, initialSql, updateSql, parameters, CreateColumnMask(columnsUsed), CreateJoinMask(joinsUsed))
+        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<EntityField2> columnsUsed, ICollection<FilterNodeJoinType> joinsUsed)
+            : this(filterCountID, initialSql, updateSql, CreateColumnMask(columnsUsed), CreateJoinMask(joinsUsed))
         {
 
         }
@@ -144,8 +143,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<SqlParameter> parameters, byte[] columnMask, int joinMask)
+        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, byte[] columnMask, int joinMask)
         {
             this.columnMask = columnMask;
             this.joinMask = joinMask;
@@ -156,8 +154,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 this.columnMask = new byte[1];
             }
 
-            this.initialSql = GenerateSql(filterCountID, initialSql, parameters);
-            this.updateSql = GenerateSql(filterCountID, updateSql, parameters);
+            this.initialSql = GenerateSql(filterCountID, initialSql);
+            this.updateSql = GenerateSql(filterCountID, updateSql);
 
         }
 
@@ -277,12 +275,12 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Generate the complete sql statement for a node based on the given sql, the parameter collection, and count ID
         /// </summary>
-        private string GenerateSql(long filterCountID, string sql, ICollection<SqlParameter> parameters)
+        private string GenerateSql(long filterCountID, string sql)
         {
             StringBuilder sb = new StringBuilder(500);
 
             // Append the list of local parameter declarations
-            AppendLocalParameters(sb, parameters, filterCountID);
+            AppendLocalParameters(sb, filterCountID);
 
             // Call using sp_executesql so we get parameter sniffing
             sb.AppendLine("EXECUTE sp_executesql");
@@ -295,7 +293,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             sb.AppendLine();
 
             // Append the parameter declarations and values for sp_executesql
-            AppendExecuteSqlParameters(sb, parameters);
+            AppendExecuteSqlParameters(sb);
 
             return sb.ToString();
         }
@@ -303,7 +301,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Append all parameter declarations and values to the output
         /// </summary>
-        private void AppendLocalParameters(StringBuilder sb, ICollection<SqlParameter> parameters, long filterCountID)
+        private void AppendLocalParameters(StringBuilder sb, long filterCountID)
         {
             // Declare the count id and node id (the node id will be set at execution time)
             sb.AppendLine("DECLARE @filterNodeContentID bigint");
@@ -312,12 +310,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Declare the column mask.  Currently, all our column masks are 100 in size.  But in case we change that later,
             // use the max of 100 or the actual length.
             sb.AppendLine(string.Format("DECLARE @columnMask varbinary({0})", Math.Max(100, columnMask.Length)));
-
-            // Declare all variables
-            foreach (SqlParameter parameter in parameters)
-            {
-                sb.AppendFormat("DECLARE {0} {1}\n", parameter.ParameterName, GetParameterTypeDeclaration(parameter));
-            }
 
             sb.AppendLine();
 
@@ -328,42 +320,13 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Set the placeholder for the node ID value... it will get replaced at execution time with the current node id value
             sb.AppendLine("SET @filterNodeID = <SwFilterNodeID />");
 
-            // Set variable values
-            foreach (SqlParameter parameter in parameters)
-            {
-                object value = parameter.Value;
-                bool needQuotes = false;
-
-                // If it's a string, wrap it in qoutes
-                string stringValue = value as string;
-                if (stringValue != null)
-                {
-                    value = stringValue.Replace("'", "''");
-                    needQuotes = true;
-                }
-
-                if (value is DateTime)
-                {
-                    needQuotes = true;
-                }
-
-                if (value is bool)
-                {
-                    value = (bool) value ? 1 : 0;
-                }
-
-                string qoute = needQuotes ? "'" : "";
-
-                sb.AppendFormat("SET {0} = {2}{1}{2}\n", parameter.ParameterName, value, qoute);
-            }
-
             sb.AppendLine();
         }
 
         /// <summary>
         /// Append the parameter declarations, and values, as part of an sp_executesql call
         /// </summary>
-        private void AppendExecuteSqlParameters(StringBuilder sb, ICollection<SqlParameter> parameters)
+        private void AppendExecuteSqlParameters(StringBuilder sb)
         {
             StringBuilder declarations = new StringBuilder();
             StringBuilder values = new StringBuilder();
@@ -371,12 +334,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             AppendExecuteSqlParameter(new SqlParameter("@filterNodeContentID", SqlDbType.BigInt), declarations, values);
             AppendExecuteSqlParameter(new SqlParameter("@filterNodeID", SqlDbType.BigInt), declarations, values);
             AppendExecuteSqlParameter(new SqlParameter("@columnMask", SqlDbType.Binary, columnMask.Length), declarations, values);
-
-            // Declare all variables
-            foreach (SqlParameter parameter in parameters)
-            {
-                AppendExecuteSqlParameter(parameter, declarations, values);
-            }
 
             sb.AppendFormat("N'{0}',", declarations);
             sb.AppendLine();

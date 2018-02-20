@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Filters;
@@ -51,9 +52,8 @@ namespace ShipWorks.Tests.Filters.Search
 
             Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
-
-            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
-            Assert.Equal(2, context.Parameters.Count);
+            
+            Assert.Equal(2, Regex.Matches(sql, $"'{testNumericQuery}%'".ToLowerInvariant()).Count);
         }
 
         [Fact]
@@ -71,9 +71,8 @@ namespace ShipWorks.Tests.Filters.Search
 
             Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumber =".ToLowerInvariant()));
             Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumber =".ToLowerInvariant()));
-
-            Assert.Equal(42L, context.Parameters.ElementAt(1).Value);
-            Assert.Equal(2, context.Parameters.Count);
+            Assert.Equal(2, Regex.Matches(sql, $"= {testNumericQuery}".ToLowerInvariant()).Count);
+            Assert.Equal(2, Regex.Matches(sql, $"'{testNumericQuery}%'".ToLowerInvariant()).Count);
         }
 
         [Fact]
@@ -93,8 +92,8 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.False(sql.Contains("LastName".ToLowerInvariant()));
             Assert.False(sql.Contains("Email".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
-            Assert.Equal(2, context.Parameters.Count);
+            Assert.True(sql.ToLowerInvariant().Contains($"like n'{testNumericQuery}%'"));
+            Assert.True(sql.ToLowerInvariant().Contains($"= {testNumericQuery}"));
         }
 
         [Fact]
@@ -113,10 +112,9 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("FirstName".ToLowerInvariant()));
             Assert.True(sql.Contains("LastName".ToLowerInvariant()));
             Assert.False(sql.Contains("Email".ToLowerInvariant()));
-
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
-            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains("First".ToLowerInvariant())));
-            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains("Last".ToLowerInvariant())));
+            Assert.True(sql.Contains($"like n'{testTwoWordQuery}%'".ToLowerInvariant()));
+            Assert.True(sql.Contains("'First%".ToLowerInvariant()));
+            Assert.True(sql.Contains("'Last%".ToLowerInvariant()));
         }
 
         [Fact]
@@ -135,10 +133,7 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("FirstName".ToLowerInvariant()));
             Assert.True(sql.Contains("LastName".ToLowerInvariant()));
             Assert.True(sql.Contains("Email".ToLowerInvariant()));
-
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
-            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
-            Assert.Equal(1, context.Parameters.Count(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
+            Assert.Equal(8, Regex.Matches(sql, $"'{testOneWordQuery}%'".ToLowerInvariant()).Count);
         }
 
         [Fact]
@@ -170,9 +165,9 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
-
-            Assert.True(context.Parameters.ElementAt(0).Value.ToString().EndsWith("%"));
-            Assert.Equal(2, context.Parameters.Count);
+            
+            Assert.Equal(2, Regex.Matches(sql, $"= {testNumericQuery}".ToLowerInvariant()).Count);
+            Assert.Equal(2, Regex.Matches(sql, $"'{testNumericQuery}%'".ToLowerInvariant()).Count);
         }
 
         public void Dispose()

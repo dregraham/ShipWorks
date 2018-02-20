@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
@@ -183,7 +184,7 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
             Assert.True(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.Equal(8, Regex.Matches(sql, $"'hi%'".ToLowerInvariant()).Count);
         }
 
         [Fact]
@@ -223,7 +224,7 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.False(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
             Assert.False(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
 
-            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.Equal(8, Regex.Matches(sql, $"'hi%'".ToLowerInvariant()).Count);
         }
 
         public void Dispose()
