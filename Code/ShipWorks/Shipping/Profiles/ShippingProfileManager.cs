@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Profiles
                 throw new InvalidOperationException("Cannot apply profile to a processed shipment.");
             }
 
-            if (profile.ShipmentType == shipment.ShipmentType)
+            if (profile.ShipmentType == shipment.ShipmentTypeCode)
             {
                 ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
             }
@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.Profiles
         public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
         {
             return Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Profiles
         public static IShippingProfileEntity GetDefaultProfileReadOnly(ShipmentTypeCode shipmentTypeCode)
         {
             return ProfilesReadOnly.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
         }
     }
 }

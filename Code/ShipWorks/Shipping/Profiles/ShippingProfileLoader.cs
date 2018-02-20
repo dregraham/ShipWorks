@@ -44,15 +44,12 @@ namespace ShipWorks.Shipping.Profiles
                 }
 
                 if (profile.Packages.None() &&
-                    (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages))
+                    (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentType.Value).SupportsMultiplePackages))
                 {
                     profile.Packages.Add(new PackageProfileEntity());
                 }
-
-                if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
-                {
-                    LoadChildProfiles(profile, refreshIfPresent, sqlAdapter);
-                }
+                
+                LoadChildProfiles(profile, refreshIfPresent, sqlAdapter);
             }
         }
 
@@ -61,13 +58,18 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadChildProfiles(ShippingProfileEntity profile, bool refreshIfPresent, ISqlAdapter sqlAdapter)
         {
-            (string propertyName, Type type) = GetChildPropertyNameAndType(profile.ShipmentTypeCode);
-            LoadProfileData(profile, propertyName, type, refreshIfPresent, sqlAdapter);
-
-            if (PostalUtility.IsPostalShipmentType(profile.ShipmentTypeCode) && profile.ShipmentTypeCode != ShipmentTypeCode.PostalWebTools)
+            if (profile.ShipmentType != null && profile.ShipmentType.Value != ShipmentTypeCode.None)
             {
-                (string postalChildPropertyName, Type postalChildType) = GetPostalChildPropertyNameAndType(profile.ShipmentTypeCode);
-                LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent, sqlAdapter);
+                ShipmentTypeCode shipmentType = profile.ShipmentType.Value;
+                (string propertyName, Type type) = GetChildPropertyNameAndType(shipmentType);
+                LoadProfileData(profile, propertyName, type, refreshIfPresent, sqlAdapter);
+
+                if (PostalUtility.IsPostalShipmentType(shipmentType) && shipmentType != ShipmentTypeCode.PostalWebTools)
+                {
+                    (string postalChildPropertyName, Type postalChildType) = GetPostalChildPropertyNameAndType(shipmentType);
+
+                    LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent, sqlAdapter);
+                }
             }
         }
 

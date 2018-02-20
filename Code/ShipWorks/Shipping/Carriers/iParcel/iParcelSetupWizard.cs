@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous iparcel account that has since
                     // been deleted.
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.iParcel))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == ShipmentTypeCode.iParcel))
                     {
                         if (shippingProfileEntity.IParcel.IParcelAccountID.HasValue)
                         {

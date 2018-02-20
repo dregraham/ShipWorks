@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileManagerDlg : Form
     {
         long initialProfileID = -1;
-        ShipmentTypeCode? restriction;
+        readonly ShipmentTypeCode? restriction;
 
         /// <summary>
         /// Constructor
@@ -103,12 +103,12 @@ namespace ShipWorks.Shipping.Profiles
             // This orders the default to the top, followed by the rest
             foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles.OrderBy(p => p.ShipmentTypePrimary ? "____" : p.Name))
             {
-                if (profile.ShipmentType == (int) shipmentTypeCode)
+                if (profile.ShipmentType == shipmentTypeCode)
                 {
                     GridRow row = new GridRow(new GridCell[]
                     {
                         new GridCell(profile.Name),
-                        new GridCell((profile.ShipmentType == (int) ShipmentTypeCode.None)
+                        new GridCell((profile.ShipmentType == ShipmentTypeCode.None)
                             ? "Any"
                             : ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).ShipmentTypeName)
                     });
@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             ShippingProfileEntity profile = new ShippingProfileEntity();
             profile.Name = "";
-            profile.ShipmentType = (int) SelectedShipmentType;
+            profile.ShipmentType = SelectedShipmentType;
             profile.ShipmentTypePrimary = false;
 
             if (EditProfile(profile))

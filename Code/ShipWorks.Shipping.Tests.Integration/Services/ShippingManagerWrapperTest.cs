@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Create.Entity<ShippingProfileEntity>()
                 .SetDefaultsOnNullableFields()
                 .Set(x => x.ShipmentTypePrimary, true)
-                .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.OnTrac)
+                .Set(x => x.ShipmentType, ShipmentTypeCode.OnTrac)
                 .Set(x => x.OnTrac, onTracProfile)
                 .Save();
 

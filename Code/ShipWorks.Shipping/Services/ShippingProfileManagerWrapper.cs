@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 profile = new ShippingProfileEntity();
                 profile.Name = string.Format("Defaults - {0}", shipmentType.ShipmentTypeName);
-                profile.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+                profile.ShipmentType = shipmentType.ShipmentTypeCode;
                 profile.ShipmentTypePrimary = true;
 
                 // Load the shipmentType specific profile data
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value)
         {
-            return ShippingProfileManager.Profiles.Where(x => x.ShipmentTypeCode == value);
+            return ShippingProfileManager.Profiles.Where(x => x.ShipmentType == value);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public IEnumerable<IShippingProfileEntity> GetProfilesReadOnlyFor(ShipmentTypeCode value)
         {
-            return ShippingProfileManager.ProfilesReadOnly.Where(x => x.ShipmentTypeCode == value);
+            return ShippingProfileManager.ProfilesReadOnly.Where(x => x.ShipmentType == value);
         }
 
         /// <summary>

@@ -1229,9 +1229,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ShipmentType
+		public virtual Nullable<ShipWorks.Shipping.ShipmentTypeCode> ShipmentType
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.ShipmentType, false); }
+			get { return (Nullable<ShipWorks.Shipping.ShipmentTypeCode>)GetValue((int)ShippingProfileFieldIndex.ShipmentType, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.ShipmentType, value); }
 		}
 

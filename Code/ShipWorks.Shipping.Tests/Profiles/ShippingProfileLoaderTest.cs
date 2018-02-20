@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesNotFetchEntityCollection_IfProfileIsNewAndRefreshIfPresentIsTrue()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.None };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.None };
 
             profile.IsNew = true;
             bool refreshIfPresent = true;
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesFetchEntityCollection_IfProfileIsNotNewAndRefreshIfPresentIsTrue()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.None };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.None };
 
             profile.IsNew = false;
             bool refreshIfPresent = true;
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesNotFetchEntityCollection_IfProfileIsNotNewAndRefreshIfPresentIsFalse()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.None };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.None };
 
             profile.IsNew = false;
             bool refreshIfPresent = false;
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesNotFetchEntityCollection_IfProfileIsNewAndRefreshIfPresentIsFalse()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.None };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.None };
 
             profile.IsNew = true;
             bool refreshIfPresent = false;
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesNotFetchEntity_WhenShipmentTypeCodeIsNone()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.None };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.None };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_DoesFetchEntity_WhenShipmentTypeCodeIsNotNone()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.UpsOnLineTools };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesUpsProfileEntithy_WhenProfileIsUps()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.UpsOnLineTools };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesFedExProfileEntity_WhenProfileIsFedEx()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.FedEx };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.FedEx };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesOnTracProfileEntity_WhenProfileIsOnTrac()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.OnTrac };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.OnTrac };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesIParcelProfileEntity_WhenProfileIsIParcel()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.iParcel };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.iParcel };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesOtherProfileEntity_WhenProfileIsOther()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Other };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Other };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesBestRateProfileEntity_WhenProfileIsBestRate()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.BestRate };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.BestRate };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesAmazonProfileEntity_WhenProfileIsAmazon()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Amazon };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -224,7 +224,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesDhlExpressProfileEntity_WhenProfileIsDhlExpress()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.DhlExpress };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.DhlExpress };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesAsendiaProfileEntity_WhenProfileIsAsendia()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Asendia };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Asendia };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -252,7 +252,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesChildrenProfileEntity_WhenProfileIsUsps()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Usps };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Usps };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesChildrenProfileEntity_WhenProfileIsUspsExpress1()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Express1Usps };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Express1Usps };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -286,7 +286,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesChildrenProfileEntity_WhenProfileIsEndicia()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Endicia };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Endicia };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -303,7 +303,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesChildrenProfileEntity_WhenProfileIsEndiciaExpress1()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.Express1Endicia };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Express1Endicia };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
@@ -320,7 +320,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         [Fact]
         public void LoadProfileData_FetchesChildrenProfileEntity_WhenProfileIsPostalWebTools()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = (int) ShipmentTypeCode.PostalWebTools };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.PostalWebTools };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;

@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ProfileEntityBuilder()
         {
-            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None);
+            Set(x => x.ShipmentType, ShipmentTypeCode.None);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ProfileEntityBuilder AsPostal(Action<PostalProfileEntityBuilder> builderConfiguration)
         {
-            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
+            Set(x => x.ShipmentType, ShipmentTypeCode.PostalWebTools);
             SetupSinglePackage();
 
             PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this, isPrimaryProfile);
@@ -163,7 +163,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 builder.SetDefaultsOnNullableFields();
             }
 
-            Set(x => x.ShipmentTypeCode, shipmentTypeCode);
+            Set(x => x.ShipmentType, shipmentTypeCode);
             Set(shipmentAccessor, builder.Build());
 
             return this;

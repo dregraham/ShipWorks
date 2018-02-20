@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Profiles
             }
             else
             {
-                profile.ShipmentType = (int) provider.SelectedValue;
+                profile.ShipmentType = (ShipmentTypeCode) provider.SelectedValue;
             }
 
             profile.Packages.Clear();
