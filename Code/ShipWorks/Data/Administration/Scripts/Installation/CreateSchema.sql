@@ -2196,6 +2196,7 @@ GO
 PRINT N'Adding foreign key to [FedExProfilePackage]'
 ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
 REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
+ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[FilterNode]'
 GO
@@ -4138,6 +4139,7 @@ GO
 PRINT N'Adding foreign key to [UpsProfilePackage]' 
 ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
 REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[UserColumnSettings]'
 GO
@@ -5750,7 +5752,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [FK_Note_User] FOREIGN KEY ([UserID]) RE
 GO
 PRINT N'Adding foreign keys to [dbo].[OnTracProfile]'
 GO
-ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
+ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
 GO
