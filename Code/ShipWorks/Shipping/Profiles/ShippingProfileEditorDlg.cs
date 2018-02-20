@@ -144,17 +144,17 @@ namespace ShipWorks.Shipping.Profiles
 
             try
             {
-                // Save shortcut if user entered one
-                if ((ShortcutHotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
-                {
-                    await SaveShortcut(profile);
-                }
-
                 // Have the profile control save itself
                 ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
                 profileControl?.SaveToEntity();
 
                 ShippingProfileManager.SaveProfile(profile);
+
+                // Save shortcut if user entered one
+                if ((ShortcutHotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
+                {
+                    await SaveShortcut(profile);
+                }
 
                 DialogResult = DialogResult.OK;
             }
