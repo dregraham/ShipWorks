@@ -59,8 +59,8 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get unused/available hotkeys
         /// </summary>
-        public List<ShortcutHotkey> GetAvailableHotkeys() =>
-            EnumHelper.GetEnumList<ShortcutHotkey>().Select(h => h.Value)
+        public List<Hotkey> GetAvailableHotkeys() =>
+            EnumHelper.GetEnumList<Hotkey>().Select(h => h.Value)
                 .Where(hotkey => Shortcuts.None(s => s.Hotkey == hotkey))
                 .ToList();
 

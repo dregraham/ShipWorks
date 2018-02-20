@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Profiles
                 ShippingProfileManager.SaveProfile(profile);
 
                 // Save shortcut if user entered one
-                if ((ShortcutHotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
+                if ((Hotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
                 {
                     await SaveShortcut(profile).ConfigureAwait(true);
                 }
@@ -183,17 +183,18 @@ namespace ShipWorks.Shipping.Profiles
             }
         }
 
+        /// <summary>
+        /// Load list of available shortcuts to populated the shortcut combo box
+        /// </summary>
         private void LoadShortcuts()
         {
-            keyboardShortcut.Items.Clear();
+            List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
 
-            List<ShortcutHotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
-
-            List<KeyValuePair<string, ShortcutHotkey?>> dataSource = new List<KeyValuePair<string, ShortcutHotkey?>>();
-            dataSource.Add(new KeyValuePair<string, ShortcutHotkey?>("None", null));
-            foreach (ShortcutHotkey hotkey in availableHotkeys)
+            List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
+            dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
+            foreach (Hotkey hotkey in availableHotkeys)
             {                
-                dataSource.Add(new KeyValuePair<string, ShortcutHotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
+                dataSource.Add(new KeyValuePair<string, Hotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
             }
 
             keyboardShortcut.DisplayMember = "Key";
@@ -208,7 +209,6 @@ namespace ShipWorks.Shipping.Profiles
         {
             this.provider.SelectedValueChanged -= OnChangeProvider;
 
-            provider.Items.Clear();
             IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
 
             List<KeyValuePair<string, ShipmentTypeCode?>> dataSource = new List<KeyValuePair<string, ShipmentTypeCode?>>();
@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Profiles
             ShortcutEntity shortcut = new ShortcutEntity()
             {
                 Barcode = barcode.Text,
-                Hotkey = (ShortcutHotkey?) keyboardShortcut.SelectedValue,
+                Hotkey = (Hotkey?) keyboardShortcut.SelectedValue,
                 Action = (int) KeyboardShortcutCommand.ApplyProfile,
                 RelatedObjectID = profile.ShippingProfileID
             };

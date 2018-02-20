@@ -388,9 +388,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."Hotkey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey> Hotkey
+		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.Hotkey> Hotkey
 		{
-			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.ShortcutHotkey>)GetValue((int)ShortcutFieldIndex.Hotkey, false); }
+			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.Hotkey>)GetValue((int)ShortcutFieldIndex.Hotkey, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.Hotkey, value); }
 		}
 

@@ -13,7 +13,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get unused/available hotkeys
         /// </summary>
-        List<ShortcutHotkey> GetAvailableHotkeys();
+        List<Hotkey> GetAvailableHotkeys();
 
         /// <summary>
         /// Is the barcode already used by a shortcut?

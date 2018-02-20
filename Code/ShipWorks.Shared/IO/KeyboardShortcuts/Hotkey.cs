@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ShipWorks.IO.KeyboardShortcuts
 {
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
-    public enum ShortcutHotkey
+    public enum Hotkey
     {
         [Description("F5")]
         F5 = 0,
@@ -127,6 +127,6 @@ namespace ShipWorks.IO.KeyboardShortcuts
         CtrlShift8 = 39,
 
         [Description("Ctrl + Shift + 9")]
-        CtrlShift9 = 40,
+        CtrlShift9 = 40
     }
 }
