@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -36,52 +35,52 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!profile.IsNew && refreshIfPresent)
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                LoadPackages(profile);
-            }
+                // If this is the first time loading it, or we are supposed to refresh, do it now
+                if (!profile.IsNew && refreshIfPresent)
+                {
+                    LoadPackages(profile, sqlAdapter);
+                }
 
-            if (profile.Packages.None() &&
-                (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages))
-            {
-                profile.Packages.Add(new PackageProfileEntity());
-            }
-            
-            if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
-            {
-                LoadChildProfiles(profile, refreshIfPresent);
+                if (profile.Packages.None() &&
+                    (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentTypeCode).SupportsMultiplePackages))
+                {
+                    profile.Packages.Add(new PackageProfileEntity());
+                }
+
+                if (profile.ShipmentType != null && profile.ShipmentTypeCode != ShipmentTypeCode.None)
+                {
+                    LoadChildProfiles(profile, refreshIfPresent, sqlAdapter);
+                }
             }
         }
 
         /// <summary>
         /// Load the profiles children
         /// </summary>
-        private void LoadChildProfiles(ShippingProfileEntity profile, bool refreshIfPresent)
+        private void LoadChildProfiles(ShippingProfileEntity profile, bool refreshIfPresent, ISqlAdapter sqlAdapter)
         {
             (string propertyName, Type type) = GetChildPropertyNameAndType(profile.ShipmentTypeCode);
-            LoadProfileData(profile, propertyName, type, refreshIfPresent);
+            LoadProfileData(profile, propertyName, type, refreshIfPresent, sqlAdapter);
 
             if (PostalUtility.IsPostalShipmentType(profile.ShipmentTypeCode) && profile.ShipmentTypeCode != ShipmentTypeCode.PostalWebTools)
             {
                 (string postalChildPropertyName, Type postalChildType) = GetPostalChildPropertyNameAndType(profile.ShipmentTypeCode);
-                LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent);
+                LoadProfileData(profile.Postal, postalChildPropertyName, postalChildType, refreshIfPresent, sqlAdapter);
             }
         }
 
         /// <summary>
         /// Load the profiles packages
         /// </summary>
-        private void LoadPackages(ShippingProfileEntity profile)
+        private void LoadPackages(ShippingProfileEntity profile, ISqlAdapter sqlAdapter)
         {
             profile.Packages.Clear();
-
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                adapter.FetchEntityCollection(profile.Packages,
-                    new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
-                profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
-            }
+            
+            sqlAdapter.FetchEntityCollection(profile.Packages,
+                new RelationPredicateBucket(PackageProfileFields.ShippingProfileID == profile.ShippingProfileID));
+            profile.Packages.Sort((int) PackageProfileFieldIndex.PackageProfileID, ListSortDirection.Ascending);
         }
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Load an existing profile data into the parent entity, or create if it doesn't exist.  If its already loaded and present
         /// it can be optionally refreshed.
         /// </summary>
-        private void LoadProfileData(EntityBase2 parent, string childProperty, Type profileType, bool refreshIfPresent)
+        private void LoadProfileData(EntityBase2 parent, string childProperty, Type profileType, bool refreshIfPresent, ISqlAdapter sqlAdapter)
         {
             PropertyInfo property = GetChildProperty(parent, childProperty);
 
@@ -162,10 +161,7 @@ namespace ShipWorks.Shipping.Profiles
                 if (parent.Fields.State != EntityState.New)
                 {
                     childEntity = (EntityBase2) Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
-                    using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                    {
-                        adapter.FetchEntity(childEntity);
-                    }
+                    sqlAdapter.FetchEntity(childEntity);
                 }
                 // If the parent is new, just create a new child.
                 else
@@ -193,8 +189,7 @@ namespace ShipWorks.Shipping.Profiles
             Type type = parent.GetType();
             string identifier = type.FullName + "." + childProperty;
 
-            PropertyInfo property;
-            if (!propertyMap.TryGetValue(identifier, out property))
+            if (!propertyMap.TryGetValue(identifier, out PropertyInfo property))
             {
                 property = type.GetProperty(childProperty);
 
