@@ -264,7 +264,7 @@ GO
 
 PRINT N'Adding foreign keys to [dbo].[OnTracProfile]'
 ALTER TABLE [dbo].[OnTracProfile] DROP CONSTRAINT [FK_OnTracProfile_ShippingProfile]
-
+GO
 ALTER TABLE [dbo].[OnTracProfile]  WITH CHECK ADD  CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY([ShippingProfileID])
 REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
 ON DELETE CASCADE
