@@ -187,29 +187,27 @@ namespace ShipWorks.Shipping.Profiles
             // First delete out anything that needs deleted
             // Introducing new variable as we will be removing items from PackageProfile
             // and if we used the same colleciton, we would get an exception.
-            List<PackageProfileEntity> allPackageProfiles = profile.Packages.ToList();
+            List<PackageProfileEntity> allPackageProfiles = profile.Packages.Where(package => package.Fields.State == EntityState.Deleted).ToList();
             foreach (PackageProfileEntity package in allPackageProfiles)
             {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
+                // If its new but deleted, just get rid of it                
+                if (package.IsNew)
                 {
-                    if (package.IsNew)
-                    {
-                        profile.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
+                    profile.Packages.Remove(package);
                 }
+
+                // If its deleted, delete it
+                else
+                {
+                    package.Fields.State = EntityState.Fetched;
+                    profile.Packages.Remove(package);
+
+                    adapter.DeleteEntity(package);
+
+                    changes = true;
+                }                
             }
+
             return changes;
         }
 
