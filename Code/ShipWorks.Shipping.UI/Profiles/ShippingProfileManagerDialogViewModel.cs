@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -41,6 +42,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
             DeleteCommand = new RelayCommand(Delete, () => SelectedShippingProfile != null && !SelectedShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            ShippingProfiles = shippingProfileManager.Profiles;
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         public ShippingProfileEntity SelectedShippingProfile
         {
             get => selectedShippingProfile;
-            private set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
+            set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
         }
 
         /// <summary>
