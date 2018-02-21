@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -18,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.Manual
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Manual, ExternallyOwned = false)]
     public class ManualStoreType : StoreType
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ManualStoreType(StoreEntity store)
             : base(store)
         {
-           
         }
 
         /// <summary>
@@ -47,12 +48,20 @@ namespace ShipWorks.Stores.Platforms.Manual
             return store;
         }
 
-        /// <summary>
-        /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
+         /// <summary>
+        /// Create an identifier that uniquely identifies the order
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return null;
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
+        }
+
+        /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
+        {
+            return new AlphaNumericOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>
@@ -78,9 +87,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            ManualAccountSettingsControl control = new ManualAccountSettingsControl();
-
-            return control;
+            return new ManualAccountSettingsControl();
         }
     }
 }
