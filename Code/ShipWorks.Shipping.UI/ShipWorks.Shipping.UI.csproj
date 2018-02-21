@@ -283,6 +283,7 @@
     <Compile Include="Profiles\GlobalProfileControl.Designer.cs">
       <DependentUpon>GlobalProfileControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Profiles\IShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ProfileControlFactory.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
