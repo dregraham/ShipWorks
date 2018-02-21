@@ -99,10 +99,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             }
         }
 
-        public Task DeleteShortcutForProfile(ShippingProfileEntity profile, SqlAdapter adapter)
+        /// <summary>
+        /// Delete any shortcuts associated with the profile
+        /// </summary>
+        public async Task DeleteShortcutForProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
         {
-            // stub
-            return Task.CompletedTask;
+            foreach (ShortcutEntity entity in Shortcuts.Where(s => s.RelatedObjectID == profile.ShippingProfileID))
+            {
+                await adapter.DeleteEntityAsync(entity);
+            }
+
+            CheckForChangesNeeded();
         }
 
         /// <summary>
