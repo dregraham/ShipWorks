@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.UI.Profiles
     /// <summary>
     /// Interface that represents the Shipping Profile Manager Dialog view model
     /// </summary>
-    interface IShippingProfileManagerDialogViewModel
+    public interface IShippingProfileManagerDialogViewModel
     {
         /// <summary>
         /// Add a profile

@@ -62,9 +62,9 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private void OpenProfileManagerDialog(OpenProfileManagerDialogMessage message)
         {
-            IDialog dlg = shippingProfileManagerDialogFactory.Create();
+            IDialog dlg = shippingProfileManagerDialogFactory.Create(message.Sender as IWin32Window ?? mainWindow);
             dlg.ShowDialog();
-            
+
             message.OnComplete?.Invoke();
         }
 

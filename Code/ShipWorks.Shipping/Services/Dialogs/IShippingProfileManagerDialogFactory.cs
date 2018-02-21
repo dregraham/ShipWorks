@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.UI;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Create the ShippingProfileManagerDialog
         /// </summary>
-        IDialog Create();
+        IDialog Create(IWin32Window owner);
     }
 }

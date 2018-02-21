@@ -7,21 +7,38 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
     /// <summary>
     /// Interaction logic for ShippingProfileManagerDialog.xaml
     /// </summary>
-    public partial class ShippingProfileManagerDialog : Window
+    public partial class ShippingProfileManagerDialog : Window, IDialog
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingProfileManagerDialog()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Set the owner of this window
+        /// </summary>
+        public void LoadOwner(System.Windows.Forms.IWin32Window owner)
+        {
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
     }
 }
