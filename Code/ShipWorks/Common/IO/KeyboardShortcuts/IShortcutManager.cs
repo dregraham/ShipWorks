@@ -17,6 +17,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         List<Hotkey> GetAvailableHotkeys();
 
         /// <summary>
+        /// All of the shortcuts
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ShortcutEntity> Shortcuts { get; }
+
+        /// <summary>
         /// Is the barcode already used by a shortcut?
         /// </summary>
         bool IsBarcodeAvailable(string barcode);

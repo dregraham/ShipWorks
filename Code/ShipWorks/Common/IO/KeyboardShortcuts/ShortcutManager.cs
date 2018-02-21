@@ -115,7 +115,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// All the shortcuts
         /// </summary>
-        private IEnumerable<ShortcutEntity> Shortcuts
+        public IEnumerable<ShortcutEntity> Shortcuts
         {
             get
             {
