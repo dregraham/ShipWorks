@@ -87,9 +87,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            ManualAccountSettingsControl control = new ManualAccountSettingsControl();
-
-            return control;
+            return new ManualAccountSettingsControl();
         }
     }
 }
