@@ -83,7 +83,7 @@ namespace ShipWorks.Templates.Distribution
                     InstallTemplate(@"Packing Slips\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
-                    
+
                     UpdateDatabaseTemplateVersion(new Version("5.17.0.0000"));
                 }
 
@@ -91,6 +91,9 @@ namespace ShipWorks.Templates.Distribution
                 InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
                 InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
                 InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
+                InstallTemplate("Label with Packing Slip", @"Labels", "5.22.0.0000", false);
+                InstallTemplate("Items Grouped by SKU", @"Packing Slips", "5.22.0.0000", false);
+                InstallTemplate("Standard with SKU", @"Packing Slips", "5.22.0.0000", false);
             }
         }
 
