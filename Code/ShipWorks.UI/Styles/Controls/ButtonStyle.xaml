@@ -34,28 +34,27 @@
     </Style>
 
     <Style x:Key="Button.Add" TargetType="Button">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="23"/>
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid Margin="0, 0, 6, 0">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>                        
                         <Path Grid.Column="0"
-                              Width="16" Height="16"
-                              Margin="3,1,5,1"
-                              Style="{StaticResource Path.Plus.Green}">
+                              Width="15" Height="15"
+                              Margin="3 2 0 2"
+                              Style="{StaticResource Path.Plus.Green}"
+                              HorizontalAlignment="Left">
                         </Path>
-                        <TextBlock Grid.Column="1"
-                                   VerticalAlignment="Center">Add</TextBlock>
+                        <TextBlock Grid.Column="1" Text="Add"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"                                   
+                                   Margin="3 0 3 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -63,29 +62,28 @@
     </Style>
 
     <Style x:Key="Button.Delete" TargetType="Button">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="23"/>
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid Margin="0, 0, 6, 0">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
                         <Path Grid.Column="0"
                               Width="16" Height="16"
-                              Margin="3,1,5,1"
-                              Style="{StaticResource Path.Cross.Red}">
+                              Margin="2 2 0 1"
+                              Style="{StaticResource Path.Cross.Red}"
+                              HorizontalAlignment="Left">
                         </Path>
-
                         <TextBlock Grid.Column="1"
-                                   VerticalAlignment="Center">Delete</TextBlock>
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="Delete"
+                                   Margin="3 0 3 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -187,6 +185,58 @@
                                FontSize="16"
                                VerticalAlignment="Center">Create Label</TextBlock>
                     </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Button.Edit" TargetType="Button">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="23"/>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/edit.png" Margin="2"
+                               Height="auto"/>
+                        <TextBlock Grid.Column="1"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="Edit"
+                                   Margin="3 0 3 0"/>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Button.PrintBarcodes" TargetType="Button">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="23"/>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" 
+                               Source="/Shipworks.Core;component/Resources/printer.png" 
+                               Margin="2"
+                               Height="auto"/>
+                        <TextBlock Grid.Column="1"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="Print Barcodes"
+                                   Margin="3 0 3 0"/>
+                    </Grid>
                 </DataTemplate>
             </Setter.Value>
         </Setter>

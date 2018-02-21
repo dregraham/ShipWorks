@@ -20,11 +20,13 @@
                 <Setter Property="Width" Value="120"/>
                 <Setter Property="Height" Value="23"/>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            </Style>
-            
-            <Style TargetType="Image">
+            </Style>            
+            <Style TargetType="{x:Type Image}">
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -33,15 +35,14 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="profileView"
-                  Grid.Column="0" 
+        <ListView Grid.Column="0" 
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Provider" Width="100" ></GridViewColumn>
-                    <GridViewColumn Header="Profile Name" Width="100"></GridViewColumn>
-                    <GridViewColumn Header="Keyboard Shortcut" Width="auto"></GridViewColumn>
+                    <GridViewColumn Header="Provider" Width="80" DisplayMemberBinding="{Binding ShipmentType}"></GridViewColumn>
+                    <GridViewColumn Header="Profile Name" Width="120" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                    <GridViewColumn Header="Keyboard Shortcut" Width="136" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
                 </GridView>
             </ListView.View>            
         </ListView>
@@ -55,49 +56,23 @@
             </Grid.RowDefinitions>
             <Button Grid.Row="0"
                     Command="{Binding EditCommand}"
-                    CommandParameter="{Binding SelectedShippingProfile}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/edit.png" Margin="2"/>
-                    <TextBlock Grid.Column="1" Text="Edit" HorizontalAlignment="Center"></TextBlock>
-                </Grid>
+                    CommandParameter="{Binding SelectedShippingProfile}"
+                    Style="{StaticResource Button.Edit}">                
             </Button>
             <Button Grid.Row="1" Margin="0 10 0 0"
-                    Command="{Binding AddCommand}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/add.png" Margin="2"/>
-                    <TextBlock Grid.Column="1" Text="Add" HorizontalAlignment="Center"></TextBlock>
-                </Grid>
+                    Command="{Binding AddCommand}"
+                    Style="{StaticResource Button.Add}">               
             </Button>
             <Button Grid.Row="2" Margin="0 10 0 0"
-                    Command="{Binding DeleteCommand}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/delete2.png" Margin="2"/>
-                    <TextBlock Grid.Column="1" Text="Delete" HorizontalAlignment="Center"></TextBlock>
-                </Grid>
+                    Command="{Binding DeleteCommand}"
+                    Style="{StaticResource Button.Delete}">                
             </Button>
-            <Button Grid.Row="3" Margin="0 10 0 0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/printer.png" Margin="2"/>
-                    <TextBlock Grid.Column="1" Text="Print Barcodes" HorizontalAlignment="Center"></TextBlock>
-                </Grid>
+            <Button Grid.Row="3" Margin="0 10 0 0"
+                    Style="{StaticResource Button.PrintBarcodes}">
             </Button>
-            <Button Grid.Row="4" VerticalAlignment="Bottom" Content="Close" HorizontalContentAlignment="Center"/>
+            <Button Grid.Row="4" 
+                    VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
+                    Content="Close"/>
         </Grid>
     </Grid>
 </ui:InteropWindow>

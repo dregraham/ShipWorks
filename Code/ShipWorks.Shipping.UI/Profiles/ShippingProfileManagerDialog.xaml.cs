@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Profiles
     /// <summary>
     /// Interaction logic for ShippingProfileManagerDialog.xaml
     /// </summary>
-    public partial class ShippingProfileManagerDialog : InteropWindow
+    public partial class ShippingProfileManagerDialog
     {
         /// <summary>
         /// Constructor
