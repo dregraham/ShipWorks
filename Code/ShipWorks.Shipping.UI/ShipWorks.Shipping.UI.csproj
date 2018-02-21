@@ -285,6 +285,9 @@
     </Compile>
     <Compile Include="Profiles\IShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ProfileControlFactory.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialog.xaml.cs">
+      <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
@@ -627,6 +630,10 @@
     <Page Include="Insurance\InsuranceBehaviorChangeDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profiles\ShippingProfileManagerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
