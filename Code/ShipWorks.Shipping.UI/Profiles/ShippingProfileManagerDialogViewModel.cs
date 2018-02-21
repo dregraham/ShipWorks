@@ -52,16 +52,19 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Command to edit an existing profile
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand EditCommand { get; }
 
         /// <summary>
         /// Command to delete a profile
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand DeleteCommand { get; }
 
         /// <summary>
         /// Collection of profiles
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<ShippingProfileEntity> ShippingProfiles
         {
             get => shippingProfiles;
@@ -71,6 +74,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Currently selected ShippingProfile
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShippingProfileEntity SelectedShippingProfile
         {
             get => selectedShippingProfile;
