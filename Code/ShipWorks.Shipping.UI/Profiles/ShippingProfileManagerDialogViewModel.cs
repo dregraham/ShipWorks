@@ -8,6 +8,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -24,8 +26,9 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShippingProfileManager shippingProfileManager;
         private readonly PropertyChangedHandler handler;
         private ShippingProfileEntity selectedShippingProfile;
-        private IEnumerable<ShippingProfileEntity> shippingProfiles;
+        private IEnumerable<ShippingProfileAndShortcut> shippingProfilesAndShortcuts;
         private readonly Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
+        private readonly IShortcutManager shortcutManager;
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -33,16 +36,33 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         public ShippingProfileManagerDialogViewModel(IMessageHelper messageHelper,
             IShippingProfileManager shippingProfileManager,
-            Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory)
+            Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
+            IShortcutManager shortcutManager)
         {
             this.messageHelper = messageHelper;
             this.shippingProfileManager = shippingProfileManager;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
+            this.shortcutManager = shortcutManager;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
             DeleteCommand = new RelayCommand(Delete, () => SelectedShippingProfile != null && !SelectedShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            ShippingProfiles = shippingProfileManager.Profiles;
+            LoadShippingProfilesAndShortcuts();
+        }
+
+        /// <summary>
+        /// Given a profile, create a DTO with its associated hotkey text.
+        /// </summary>
+        private ShippingProfileAndShortcut CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
+        {
+            ShortcutEntity shortcut = shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
+            string shortcutText = null;
+            if (shortcut?.Hotkey != null)
+            {
+                shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
+            }
+
+            return new ShippingProfileAndShortcut(profile, shortcutText);
         }
 
         /// <summary>
@@ -67,10 +87,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<ShippingProfileEntity> ShippingProfiles
+        public IEnumerable<ShippingProfileAndShortcut> ShippingProfiles
         {
-            get => shippingProfiles;
-            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfiles, value);
+            get => shippingProfilesAndShortcuts;
+            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfilesAndShortcuts, value);
         }
 
         /// <summary>
@@ -93,7 +113,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             {
                 shippingProfileManager.DeleteProfile(SelectedShippingProfile);
 
-                ShippingProfiles = shippingProfileManager.Profiles;
+                LoadShippingProfilesAndShortcuts();
             }
         }
         
@@ -106,7 +126,7 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             if (profileEditor.ShowDialog() == DialogResult.OK)
             {
-                ShippingProfiles = shippingProfileManager.Profiles;
+                LoadShippingProfilesAndShortcuts();
             }
         }
 
@@ -125,9 +145,18 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             if (profileEditor.ShowDialog() == DialogResult.OK)
             {
-                ShippingProfiles = shippingProfileManager.Profiles;
+                LoadShippingProfilesAndShortcuts();
                 SelectedShippingProfile = profile;
             }
+        }
+
+        /// <summary>
+        /// LoadsShippingProfilesAndShortcuts
+        /// </summary>
+        private void LoadShippingProfilesAndShortcuts()
+        {
+            IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
+            ShippingProfiles = shippingProfileManager.Profiles.Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
         }
     }
 }

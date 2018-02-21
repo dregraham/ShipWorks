@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profiles loaded in the dialog
         /// </summary>
-        IEnumerable<ShippingProfileEntity> ShippingProfiles { get; }
+        IEnumerable<ShippingProfileAndShortcut> ShippingProfiles { get; }
 
         /// <summary>
         /// Selected Shipping Profile
