@@ -29,26 +29,5 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Automatically resizes the grid columns to get rid of the extra space after the last column header
-        /// </summary>
-        private void ProfileViewTargetUpdated(object sender, DataTransferEventArgs e)
-        {
-            GridView view = profileView.View as GridView;
-
-            if (view != null && view.Columns.Count > 0)
-            {
-                foreach (var column in view.Columns)
-                {
-                    // Forcing change
-                    if (double.IsNaN(column.Width))
-                    {
-                        column.Width = 1;
-                    }
-                    column.Width = double.NaN;
-                }
-            }
-        }
     }
 }

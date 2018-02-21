@@ -19,7 +19,9 @@
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="120"/>
                 <Setter Property="Height" Value="23"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             </Style>
+            
             <Style TargetType="Image">
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -33,18 +35,15 @@
         </Grid.ColumnDefinitions>
         <ListView x:Name="profileView"
                   Grid.Column="0" 
-                  ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
-                  TargetUpdated="ProfileViewTargetUpdated"
-                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
-                  >
+                  ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
+                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}">
             <ListView.View>
-                <GridView>
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="Provider" Width="100" ></GridViewColumn>
                     <GridViewColumn Header="Profile Name" Width="100"></GridViewColumn>
                     <GridViewColumn Header="Keyboard Shortcut" Width="auto"></GridViewColumn>
                 </GridView>
-            </ListView.View>
-            
+            </ListView.View>            
         </ListView>
         <Grid Grid.Column="1" Margin="10 0 0 0">
             <Grid.RowDefinitions>
@@ -57,88 +56,48 @@
             <Button Grid.Row="0"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding SelectedShippingProfile}">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/edit.png" Margin="2" HorizontalAlignment="Left"></Image>
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Edit"></TextBlock>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Button.Template>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/edit.png" Margin="2"/>
+                    <TextBlock Grid.Column="1" Text="Edit" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
             </Button>
             <Button Grid.Row="1" Margin="0 10 0 0"
                     Command="{Binding AddCommand}">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/add2.png" Margin="2" HorizontalAlignment="Left"></Image>
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Add"></TextBlock>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Button.Template>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/add.png" Margin="2"/>
+                    <TextBlock Grid.Column="1" Text="Add" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
             </Button>
             <Button Grid.Row="2" Margin="0 10 0 0"
                     Command="{Binding DeleteCommand}">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/delete2.png" Margin="2" HorizontalAlignment="Left"></Image>
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Delete"></TextBlock>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Button.Template>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/delete2.png" Margin="2"/>
+                    <TextBlock Grid.Column="1" Text="Delete" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
             </Button>
-            <Button Grid.Row="3" Margin="0 10 0 0" Content="Print Barcodes">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/printer.png" Margin="2" HorizontalAlignment="Left"></Image>
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Print Barcodes"></TextBlock>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Button.Template>
+            <Button Grid.Row="3" Margin="0 10 0 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/printer.png" Margin="2"/>
+                    <TextBlock Grid.Column="1" Text="Print Barcodes" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
             </Button>
-            <Button Grid.Row="4" VerticalAlignment="Bottom" Content="Close"/>
+            <Button Grid.Row="4" VerticalAlignment="Bottom" Content="Close" HorizontalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </ui:InteropWindow>
