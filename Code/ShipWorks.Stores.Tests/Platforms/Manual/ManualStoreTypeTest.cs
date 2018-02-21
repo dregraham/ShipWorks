@@ -57,6 +57,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Manual
             Assert.IsType<AlphaNumericOrderIdentifier>(orderIdentifier);
         }
 
+        [Theory]
+        [InlineData("", "123", "", "123")]
+        [InlineData("abc", "123", "", "abc123")]
+        [InlineData("", "123", "abc", "123abc")]
+        [InlineData("abc", "123", "abc", "abc123abc")]
+        public void CreateOrder_VerifyOrderNumber(string prefix, string orderNumber, 
+            string postfix, string orderNumberComplete)
+        {
+            OrderEntity order = new OrderEntity();
+
+            order.ChangeOrderNumber(orderNumber, prefix, postfix);
+
+            Assert.Equal(orderNumberComplete, order.OrderNumberComplete);
+        }
+
         public void Dispose()
         {
             mock.Dispose();
