@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -11,16 +12,37 @@ namespace ShipWorks.Data.Administration
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum SqlServerEditionIdType
     {
+        [Description("Enterprise")]
         Enterprise = 1804890536,
+
+        [Description("Enterprise Core Based Licensing")]
         EnterpriseEditionCoreBasedLicensing = 1872460670,
+
+        [Description("Enterprise Evaluation")]
         EnterpriseEvaluation = 610778273,
+
+        [Description("Business Intelligence")]
         BusinessIntelligence = 284895786,
+
+        [Description("Developer")]
         Developer = -2117995310,
+
+        [Description("Express")]
         Express = -1592396055,
+
+        [Description("Express With Advanced Services")]
         ExpressWithAdvancedServices = -133711905,
+
+        [Description("Standard")]
         Standard = -1534726760,
+
+        [Description("Web")]
         Web = 1293598313,
+
+        [Description("Sql Database Or Sql Data Warehouse")]
         SqlDatabaseOrSqlDataWarehouse = 1674378470,
+
+        [Description("Workgroup Edition")]
         WorkgroupEdition = 1333529388
     }
 
