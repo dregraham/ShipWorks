@@ -486,6 +486,10 @@
     <Content Include="Templates\Distribution\Source\Invoices\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Packing Slip\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Packing Slip\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\template.xsl">
       <SubType>Designer</SubType>
