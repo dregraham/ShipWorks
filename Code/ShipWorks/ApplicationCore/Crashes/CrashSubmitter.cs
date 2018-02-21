@@ -279,7 +279,10 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         public static string CreateCrashLogZip()
         {
-            ZipWriter writer = new ZipWriter();
+            ZipWriter writer = new ZipWriter
+            {
+                CompressionLevel = 9
+            };
 
             DirectoryInfo logRoot = new DirectoryInfo(DataPath.LogRoot);
 
@@ -299,6 +302,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                     writer.Items.Add(new ZipWriterFileItem(fileInfo.FullName, logRoot));
                 }
             }
+
             // Save the log to temp
             string tempZipFile = Path.Combine(DataPath.CreateUniqueTempPath(), "log.zip");
             writer.Save(tempZipFile);
