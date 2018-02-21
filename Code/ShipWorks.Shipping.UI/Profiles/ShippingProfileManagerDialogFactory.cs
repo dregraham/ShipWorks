@@ -24,13 +24,6 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Create the dialog
         /// </summary>
-        public IDialog Create(IWin32Window owner)
-        {
-            IDialog dialog = new ShippingProfileManagerDialog();
-            dialog.DataContext = viewModel;
-            dialog.LoadOwner(owner);
-
-            return dialog;
-        }
+        public IDialog Create(IWin32Window owner) => new ShippingProfileManagerDialog(owner, viewModel);        
     }
 }

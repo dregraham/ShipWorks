@@ -10266,7 +10266,7 @@
     <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
-    <EmbeddedResource Include="Resources\edit.png" />
+    <Resource Include="Resources\edit.png" />
     <None Include="Resources\rename.png" />
     <None Include="Resources\folderclosed_copy.png" />
     <None Include="Resources\CopyFolderHS.png" />
@@ -10359,7 +10359,7 @@
     <None Include="Resources\gear_run.png" />
     <None Include="Resources\funnel1.png" />
     <None Include="Resources\school3.png" />
-    <EmbeddedResource Include="Resources\printer.png" />
+    <Resource Include="Resources\printer.png" />
     <None Include="Resources\printer_view.png" />
     <None Include="Resources\printer1.png" />
     <None Include="Resources\printer_view1.png" />

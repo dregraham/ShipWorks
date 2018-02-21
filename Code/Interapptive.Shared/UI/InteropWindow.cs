@@ -27,7 +27,16 @@ namespace Interapptive.Shared.UI
         /// Initializes a new instance of the <see cref="InteropWindow"/> class.
         /// </summary>
         /// <param name="owner">The owner.</param>
-        protected InteropWindow(IWin32Window owner)
+        protected InteropWindow(IWin32Window owner) : this(owner, null)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InteropWindow"/> class.
+        /// </summary>
+        /// <param name="owner">The winforms control that created this control</param>
+        /// <param name="viewModel">The view model for this control</param>
+        protected InteropWindow(IWin32Window owner, object viewModel)
         {
             WindowStyle = WindowStyle.ToolWindow;
             ShowInTaskbar = false;
@@ -37,6 +46,11 @@ namespace Interapptive.Shared.UI
             Topmost = true;
 
             LoadOwner(owner);
+
+            if(viewModel != null)
+            {
+                DataContext = viewModel;
+            }
         }
 
         /// <summary>
