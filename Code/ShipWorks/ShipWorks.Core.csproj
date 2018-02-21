@@ -985,6 +985,7 @@
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\SqlServerEditionIdType.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstaller.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerInfo.cs" />
