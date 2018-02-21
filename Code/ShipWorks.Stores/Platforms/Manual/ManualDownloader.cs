@@ -8,8 +8,12 @@ using ShipWorks.Stores.Communication;
 namespace ShipWorks.Stores.Platforms.Manual
 {
     /// <summary>
-    /// Factory for ManualStore Downloader
+    /// ManualStore Downloader
     /// </summary>
+    /// <remarks>
+    /// This class was created to add a downloader shell to ShipWorks
+    /// Should download is set to false which disables the functionality
+    /// </remarks>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Manual)]
     public class ManualDownloader : IStoreDownloader
     {
