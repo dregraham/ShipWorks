@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -12,13 +15,17 @@ namespace ShipWorks.Shipping.Profiles
     {
         private static readonly object syncLock = new object();
         private readonly IShippingProfileLoader shippingProfileLoader;
+        private readonly IShortcutManager shortcutManager;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader)
+        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader, IShortcutManager shortcutManager, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.shippingProfileLoader = shippingProfileLoader;
+            this.shortcutManager = shortcutManager;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -29,9 +36,19 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileManager.InitializeForCurrentSession();
         }
 
-        public void DeleteProfile(ShippingProfileEntity profile)
+        /// <summary>
+        /// Delete the given profile
+        /// </summary>
+        public async Task DeleteProfile(ShippingProfileEntity profile)
         {
-            throw new System.NotImplementedException();
+            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            {
+                await shortcutManager.DeleteShortcutForProfile(profile, adapter);
+                await adapter.DeleteEntityAsync(profile);
+                adapter.Commit();
+            }
+
+            ShippingProfileManager.CheckForChangesNeeded();
         }
 
         /// <summary>
