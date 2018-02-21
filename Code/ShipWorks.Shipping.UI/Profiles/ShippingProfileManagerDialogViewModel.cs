@@ -51,21 +51,6 @@ namespace ShipWorks.Shipping.UI.Profiles
         }
 
         /// <summary>
-        /// Given a profile, create a DTO with its associated hotkey text.
-        /// </summary>
-        private ShippingProfileAndShortcut CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
-        {
-            ShortcutEntity shortcut = shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
-            string shortcutText = null;
-            if (shortcut?.Hotkey != null)
-            {
-                shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
-            }
-
-            return new ShippingProfileAndShortcut(profile, shortcutText);
-        }
-
-        /// <summary>
         /// Command to add a new profile
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -157,6 +142,21 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
             ShippingProfiles = shippingProfileManager.Profiles.Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
+        }
+        
+        /// <summary>
+        /// Given a profile, create a DTO with its associated hotkey text.
+        /// </summary>
+        private ShippingProfileAndShortcut CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
+        {
+            ShortcutEntity shortcut = shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
+            string shortcutText = string.Empty;
+            if (shortcut?.Hotkey != null)
+            {
+                shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
+            }
+
+            return new ShippingProfileAndShortcut(profile, shortcutText);
         }
     }
 }
