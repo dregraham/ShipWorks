@@ -5,4 +5,7 @@
     <Context>Automatic</Context>
     <OutputFormat>Html</OutputFormat>
   </General>
+  <Saving>
+    <Filename>ItemsBySku</Filename>
+  </Saving>
 </TemplateSettings>

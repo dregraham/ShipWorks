@@ -102,7 +102,7 @@ namespace ShipWorks.Templates.Distribution
             InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
             InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
             InstallTemplate("Label with Packing Slip", @"Labels", "5.22.0.0000", false);
-            InstallTemplate("Items Grouped by SKU", @"Packing Slips", "5.22.0.0000", false);
+            InstallTemplate("Items by SKU", @"Reports\Product Trends", "5.22.0.0000", false);
             InstallTemplate("Standard with SKU", @"Packing Slips", "5.22.0.0000", false);
         }
 
