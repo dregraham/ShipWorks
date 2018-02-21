@@ -63,38 +63,47 @@ namespace ShipWorks.Templates.Distribution
             }
             else
             {
-                InstallTemplate("Shipper Productivity", "Reports", "3.7.0.5018", false);
-
-                // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
-                // If the same snippet is installed twice it breaks all templates in ShipWorks
-                if (installed < new Version("5.10.0.0000") &&
-                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
-                {
-                    InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(new Version("5.10.0.0000"));
-                }
-
-                if (installed < new Version("5.17.0.0000") &&
-                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
-                {
-                    InstallTemplate(@"Packing Slips\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(new Version("5.17.0.0000"));
-                }
-
-                InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0.0000", false);
-                InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
-                InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
-                InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
-                InstallTemplate("Label with Packing Slip", @"Labels", "5.22.0.0000", false);
-                InstallTemplate("Items Grouped by SKU", @"Packing Slips", "5.22.0.0000", false);
-                InstallTemplate("Standard with SKU", @"Packing Slips", "5.22.0.0000", false);
+                InstallNewTemplates(installed);
             }
+        }
+
+        /// <summary>
+        /// Install new templates
+        /// </summary>
+        /// <param name="installed">Currently installed version</param>
+        private static void InstallNewTemplates(Version installed)
+        {
+            InstallTemplate("Shipper Productivity", "Reports", "3.7.0.5018", false);
+
+            // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
+            // If the same snippet is installed twice it breaks all templates in ShipWorks
+            if (installed < new Version("5.10.0.0000") &&
+                TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
+            {
+                InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
+                InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
+                InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
+
+                UpdateDatabaseTemplateVersion(new Version("5.10.0.0000"));
+            }
+
+            if (installed < new Version("5.17.0.0000") &&
+                TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
+            {
+                InstallTemplate(@"Packing Slips\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
+                InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
+                InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
+
+                UpdateDatabaseTemplateVersion(new Version("5.17.0.0000"));
+            }
+
+            InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0.0000", false);
+            InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
+            InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
+            InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
+            InstallTemplate("Label with Packing Slip", @"Labels", "5.22.0.0000", false);
+            InstallTemplate("Items Grouped by SKU", @"Packing Slips", "5.22.0.0000", false);
+            InstallTemplate("Standard with SKU", @"Packing Slips", "5.22.0.0000", false);
         }
 
         /// <summary>
