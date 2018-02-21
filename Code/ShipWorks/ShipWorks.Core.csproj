@@ -5517,12 +5517,6 @@
     <Compile Include="Shipping\Profiles\ShippingProfileEditorDlg.Designer.cs">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.Designer.cs">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Profiles\ShippingProfileUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingActionUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderControl.cs">
@@ -9613,9 +9607,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Profiles\ShippingProfileEditorDlg.resx">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Profiles\ShippingProfileManagerDlg.resx">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShippingProviderControl.resx">
       <DependentUpon>ShippingProviderControl.cs</DependentUpon>

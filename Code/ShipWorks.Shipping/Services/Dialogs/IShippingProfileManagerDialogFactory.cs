@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     /// <summary>
     /// Interface that represents a factory for creating the ShippingProfileManagerDialog
     /// </summary>
-    interface IShippingProfileManagerDialogFactory
+    public interface IShippingProfileManagerDialogFactory
     {
         /// <summary>
         /// Create the ShippingProfileManagerDialog
