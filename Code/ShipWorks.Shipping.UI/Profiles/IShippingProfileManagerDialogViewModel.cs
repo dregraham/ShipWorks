@@ -32,6 +32,6 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Selected Shipping Profile
         /// </summary>
-        ShippingProfileEntity SelectedShippingProfile { get; set; }
+        ShippingProfileAndShortcut SelectedShippingProfile { get; set; }
     }
 }

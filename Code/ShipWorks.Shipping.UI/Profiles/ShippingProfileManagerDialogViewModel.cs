@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IMessageHelper messageHelper;
         private readonly IShippingProfileManager shippingProfileManager;
         private readonly PropertyChangedHandler handler;
-        private ShippingProfileEntity selectedShippingProfile;
+        private ShippingProfileAndShortcut selectedShippingProfile;
         private IEnumerable<ShippingProfileAndShortcut> shippingProfilesAndShortcuts;
         private readonly Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
         private readonly IShortcutManager shortcutManager;
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.shortcutManager = shortcutManager;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(Delete, () => SelectedShippingProfile != null && !SelectedShippingProfile.ShipmentTypePrimary);
+            DeleteCommand = new RelayCommand(Delete, () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             LoadShippingProfilesAndShortcuts();
         }
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Currently selected ShippingProfile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfileEntity SelectedShippingProfile
+        public ShippingProfileAndShortcut SelectedShippingProfile
         {
             get => selectedShippingProfile;
             set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
@@ -93,10 +93,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Delete()
         {
-            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.Name}");
+            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfile.Name}");
             if (dialogResult == DialogResult.Yes)
             {
-                shippingProfileManager.DeleteProfile(SelectedShippingProfile);
+                shippingProfileManager.DeleteProfile(SelectedShippingProfile.ShippingProfile);
 
                 LoadShippingProfilesAndShortcuts();
             }
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile);
+            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile.ShippingProfile);
 
             if (profileEditor.ShowDialog() == DialogResult.OK)
             {
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             if (profileEditor.ShowDialog() == DialogResult.OK)
             {
                 LoadShippingProfilesAndShortcuts();
-                SelectedShippingProfile = profile;
+                SelectedShippingProfile.ShippingProfile = profile;
             }
         }
 

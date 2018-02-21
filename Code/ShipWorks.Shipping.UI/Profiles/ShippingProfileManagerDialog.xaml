@@ -14,19 +14,11 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="120"/>
                 <Setter Property="Height" Value="23"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            </Style>            
-            <Style TargetType="{x:Type Image}">
-                <Setter Property="Margin" Value="2"/>
-                <Setter Property="HorizontalAlignment" Value="Left"/>
-            </Style>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -38,11 +30,11 @@
         <ListView Grid.Column="0" 
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}">
-            <ListView.View>
+            <ListView.View>                
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Provider" Width="80" DisplayMemberBinding="{Binding ShipmentType}"></GridViewColumn>
-                    <GridViewColumn Header="Profile Name" Width="120" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
-                    <GridViewColumn Header="Keyboard Shortcut" Width="136" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                    <GridViewColumn Header="Provider" Width="80" DisplayMemberBinding="{Binding ShippingProfile.ShipmentType}"></GridViewColumn>
+                    <GridViewColumn Header="Profile Name" Width="120" DisplayMemberBinding="{Binding ShippingProfile.Name}"></GridViewColumn>
+                    <GridViewColumn Header="Keyboard Shortcut" Width="110" DisplayMemberBinding="{Binding ShortcutKey}"></GridViewColumn>
                 </GridView>
             </ListView.View>            
         </ListView>

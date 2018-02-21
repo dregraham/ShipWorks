@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profile
         /// </summary>
-        public ShippingProfileEntity ShippingProfile { get; }
+        public ShippingProfileEntity ShippingProfile { get; set; }
 
         /// <summary>
         /// The associated Shortcut 
