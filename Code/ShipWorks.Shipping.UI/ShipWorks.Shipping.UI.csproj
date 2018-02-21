@@ -103,6 +103,7 @@
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
@@ -285,6 +286,7 @@
     </Compile>
     <Compile Include="Profiles\IShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ProfileControlFactory.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ShippingProfileManagerDialog.xaml.cs">
       <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
     </Compile>

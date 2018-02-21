@@ -126,6 +126,11 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        public IEnumerable<ShippingProfileEntity> Profiles => ShippingProfileManager.Profiles;
+
+        /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
         public IEnumerable<IShippingProfileEntity> GetProfilesReadOnlyFor(ShipmentTypeCode value)

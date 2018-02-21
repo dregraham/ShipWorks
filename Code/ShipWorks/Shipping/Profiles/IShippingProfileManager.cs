@@ -11,6 +11,10 @@ namespace ShipWorks.Shipping.Profiles
     public interface IShippingProfileManager
     {
         /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        IEnumerable<ShippingProfileEntity> Profiles { get; }
+        /// <summary>
         /// Get the default profile for the given shipment type
         /// </summary>
         ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode);
