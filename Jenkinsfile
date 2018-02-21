@@ -8,11 +8,6 @@ pipeline {
 		}
 	}
 	stages {
-		stage('Install prereqs') {
-			steps {
-				bat 'bundle install'
-			}
-		}
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
