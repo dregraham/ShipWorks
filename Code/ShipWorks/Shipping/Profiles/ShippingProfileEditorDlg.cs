@@ -54,7 +54,10 @@ namespace ShipWorks.Shipping.Profiles
         private void OnLoad(object sender, EventArgs e)
         {
             profileName.Text = profile.Name;
-            provider.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
+            if (profile.ShipmentType != null)
+            {
+                provider.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
+            }
 
             LoadShortcuts();
             LoadProviders();
