@@ -53,5 +53,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Initialize ShippingProfileManager
         /// </summary>
         void InitializeForCurrentSession();
+
+        /// <summary>
+        /// Deletes the given profile
+        /// </summary>
+        void DeleteProfile(ShippingProfileEntity profile);
     }
 }

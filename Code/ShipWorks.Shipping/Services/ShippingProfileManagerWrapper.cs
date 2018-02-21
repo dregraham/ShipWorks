@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public class ShippingProfileManagerWrapper : IShippingProfileManager
     {
-        private static object syncLock = new object();
+        private static readonly object syncLock = new object();
         private readonly IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
@@ -27,6 +27,11 @@ namespace ShipWorks.Shipping.Profiles
         public void InitializeForCurrentSession()
         {
             ShippingProfileManager.InitializeForCurrentSession();
+        }
+
+        public void DeleteProfile(ShippingProfileEntity profile)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
