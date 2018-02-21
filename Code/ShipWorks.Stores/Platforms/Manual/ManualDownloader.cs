@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con)
         {
             progressItem.PercentComplete = 100;
-            progressItem.Detail = "Manual Orders Do Not Download";
+            progressItem.Detail = "Manual orders do not download";
 
             return Task.CompletedTask;
         }
