@@ -1,3 +1,7 @@
+require 'win32/registry'
+require 'securerandom'
+require 'date'
+require 'fileutils'
 require 'bundler/setup'
 Bundler.require :default
 
