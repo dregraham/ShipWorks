@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Profiles
     /// <summary>
     /// Interaction logic for ShippingProfileManagerDialog.xaml
     /// </summary>
-    public partial class ShippingProfileManagerDialog : Window, IDialog
+    public partial class ShippingProfileManagerDialog : InteropWindow
     {
         /// <summary>
         /// Constructor
@@ -31,14 +31,24 @@ namespace ShipWorks.Shipping.UI.Profiles
         }
 
         /// <summary>
-        /// Set the owner of this window
+        /// Automatically resizes the grid columns to get rid of the extra space after the last column header
         /// </summary>
-        public void LoadOwner(System.Windows.Forms.IWin32Window owner)
+        private void ProfileViewTargetUpdated(object sender, DataTransferEventArgs e)
         {
-            new WindowInteropHelper(this)
+            GridView view = profileView.View as GridView;
+
+            if (view != null && view.Columns.Count > 0)
             {
-                Owner = owner.Handle
-            };
+                foreach (var column in view.Columns)
+                {
+                    // Forcing change
+                    if (double.IsNaN(column.Width))
+                    {
+                        column.Width = 1;
+                    }
+                    column.Width = double.NaN;
+                }
+            }
         }
     }
 }

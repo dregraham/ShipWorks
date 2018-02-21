@@ -1,12 +1,16 @@
-﻿<Window x:Class="ShipWorks.Shipping.UI.Profiles.ShippingProfileManagerDialog"
+﻿<ui:InteropWindow
+    xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared" 
+    x:Class="ShipWorks.Shipping.UI.Profiles.ShippingProfileManagerDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Profiles"
-
         mc:Ignorable="d"
-        Title="ShippingProfileManagerDialog" Height="300" Width="500">
+        Title="ShippingProfileManagerDialog" 
+        Height="300" Width="500"
+        Background="{x:Static SystemColors.ControlBrush}"
+        d:DataContext="{d:DesignInstance local:ShippingProfileManagerDialogViewModel, IsDesignTimeCreatable=False}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,9 +31,21 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Column="0">
+        <ListView x:Name="profileView"
+                  Grid.Column="0" 
+                  ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                  TargetUpdated="ProfileViewTargetUpdated"
+                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Provider" Width="100" ></GridViewColumn>
+                    <GridViewColumn Header="Profile Name" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="Keyboard Shortcut" Width="auto"></GridViewColumn>
+                </GridView>
+            </ListView.View>
             
-        </DataGrid>
+        </ListView>
         <Grid Grid.Column="1" Margin="10 0 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -38,7 +54,9 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0">
+            <Button Grid.Row="0"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding SelectedShippingProfile}">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
@@ -58,7 +76,8 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Grid.Row="1" Margin="0 10 0 0">
+            <Button Grid.Row="1" Margin="0 10 0 0"
+                    Command="{Binding AddCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
@@ -71,14 +90,15 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/add2.png" Margin="2" HorizontalAlignment="Left"></Image>
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="New"></TextBlock>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Add"></TextBlock>
                                 </Grid>
                             </Border>
                         </Grid>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Grid.Row="2" Margin="0 10 0 0">
+            <Button Grid.Row="2" Margin="0 10 0 0"
+                    Command="{Binding DeleteCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
@@ -121,4 +141,4 @@
             <Button Grid.Row="4" VerticalAlignment="Bottom" Content="Close"/>
         </Grid>
     </Grid>
-</Window>
+</ui:InteropWindow>
