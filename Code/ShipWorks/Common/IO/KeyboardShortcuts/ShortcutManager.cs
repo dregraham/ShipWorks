@@ -10,7 +10,9 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.IO.KeyboardShortcuts;
 
@@ -95,6 +97,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             {
                 needCheckForChanges = true;
             }
+        }
+
+        public Task DeleteShortcutForProfile(ShippingProfileEntity profile, SqlAdapter adapter)
+        {
+            // stub
+            return Task.CompletedTask;
         }
 
         /// <summary>
