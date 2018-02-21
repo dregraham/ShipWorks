@@ -369,6 +369,7 @@
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
+    <Compile Include="Services\Dialogs\IShippingProfileManagerDialogFactory.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
