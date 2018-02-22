@@ -142,7 +142,8 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
             ShippingProfiles = shippingProfileManager.Profiles
-                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
+                                .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
+                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
         }
         
         /// <summary>
