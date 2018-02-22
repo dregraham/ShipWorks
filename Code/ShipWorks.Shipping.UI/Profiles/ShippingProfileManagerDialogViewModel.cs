@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             if (dialogResult == DialogResult.OK)
             {
                 await shippingProfileManager.DeleteProfile(SelectedShippingProfile.ShippingProfile).ConfigureAwait(false);
-
+                selectedShippingProfile = null;
                 LoadShippingProfilesAndShortcuts();
             }
         }

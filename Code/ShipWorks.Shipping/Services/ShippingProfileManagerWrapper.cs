@@ -43,14 +43,13 @@ namespace ShipWorks.Shipping.Profiles
         {
             await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
             {
-                await Task.WhenAll(shortcutManager.DeleteShortcutForProfile(profile, sqlAdapter), 
-                    sqlAdapter.DeleteEntityAsync(profile));
+                await shortcutManager.DeleteShortcutForProfile(profile, sqlAdapter).ConfigureAwait(false);
+                await sqlAdapter.DeleteEntityAsync(profile).ConfigureAwait(false);
 
                 sqlAdapter.Commit();
+                ShippingProfileManager.CheckForChangesNeeded();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
-
-            ShippingProfileManager.CheckForChangesNeeded();
+            }).ConfigureAwait(false);            
         }
         
         /// <summary>

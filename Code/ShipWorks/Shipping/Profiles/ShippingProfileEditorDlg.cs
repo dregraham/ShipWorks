@@ -12,6 +12,7 @@ using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Settings;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -193,7 +194,17 @@ namespace ShipWorks.Shipping.Profiles
         private void LoadShortcuts()
         {
             List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
+            ShortcutEntity profilesShortcut = null;
 
+            if (!profile.IsNew)
+            {
+                profilesShortcut = shortcutManager.Shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
+                if (profilesShortcut?.Hotkey != null)
+                {
+                    availableHotkeys.Add(profilesShortcut.Hotkey.Value);
+                }
+            }
+            
             List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
             dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
             foreach (Hotkey hotkey in availableHotkeys)
@@ -204,6 +215,11 @@ namespace ShipWorks.Shipping.Profiles
             keyboardShortcut.DisplayMember = "Key";
             keyboardShortcut.ValueMember = "Value";
             keyboardShortcut.DataSource = dataSource;
+
+            if (profilesShortcut?.Hotkey != null)
+            {
+                keyboardShortcut.SelectedValue = profilesShortcut.Hotkey.Value;
+            }
         }
 
         /// <summary>
