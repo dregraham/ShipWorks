@@ -486,6 +486,10 @@
     <Content Include="Templates\Distribution\Source\Invoices\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Packing Slip\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Packing Slip\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\template.xsl">
       <SubType>Designer</SubType>
@@ -515,11 +519,15 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\packingSlipHeaderGreen.jpg" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\packingSlipHeaderRed.jpg" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard with SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard with SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\settings.xml" />
