@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Profiles
             LoadProfileEditor();
 
             profileName.Enabled = !profile.ShipmentTypePrimary;
-            provider.Enabled = !profile.ShipmentTypePrimary || profile.ShippingProfileID == 0;
+            provider.Enabled = profile.IsNew;
 
             if (profile.ShipmentType != null)
             {
