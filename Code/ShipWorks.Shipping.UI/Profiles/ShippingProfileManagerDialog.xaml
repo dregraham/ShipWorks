@@ -6,6 +6,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Profiles"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviors="http://schemas.shipworks.com/ui"
         mc:Ignorable="d"
         Title="ShippingProfileManagerDialog" 
         Height="300" Width="500"
@@ -30,6 +32,9 @@
         <ListView Grid.Column="0" 
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:SortingBehavior />
+            </i:Interaction.Behaviors>
             <ListView.View>                
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="Provider" Width="80" DisplayMemberBinding="{Binding ShippingProfile.ShipmentType}"></GridViewColumn>
@@ -68,3 +73,4 @@
         </Grid>
     </Grid>
 </ui:InteropWindow>
+
