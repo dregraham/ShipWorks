@@ -18,13 +18,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
     {
         FilterTarget target;
         SqlGenerationScope topLevelScope;
-
-        List<SqlParameter> sqlParameters = new List<SqlParameter>();
         List<EntityField2> columnsUsed = new List<EntityField2>();
         List<FilterNodeJoinType> joinsUsed = new List<FilterNodeJoinType>();
-
-        // The next parameter to create
-        int nextParameter = 1;
 
         // For formatting
         int indentLevel;
@@ -57,17 +52,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             get
             {
                 return target;
-            }
-        }
-
-        /// <summary>
-        /// The parameters required by the context
-        /// </summary>
-        public ICollection<SqlParameter> Parameters
-        {
-            get
-            {
-                return sqlParameters;
             }
         }
 
@@ -195,43 +179,24 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// </summary>
         public string RegisterParameter(object value)
         {
-            string param = string.Format("@param{0}", nextParameter++);
-
-            string text = value as string;
-            if (text != null)
+            if (value is string || value is DateTime)
             {
-                int length = Math.Max(columnsUsed[columnsUsed.Count - 1].MaxLength, 1);
-
-                SqlParameter parameter;
-
-                // We can't send a 0 length param, so if length is 0, we don't send the size param.
-                // Also, if length is greater than int32's max value less 1, we don't send the size param.
-                // If we sent 0  or max length - 1, SQL Server would yell at us.
-                if (length == 0 || length >= Int32.MaxValue - 1)
-                {
-                    parameter = new SqlParameter(param, SqlDbType.NVarChar);
-                }
-                else
-                {
-                    parameter = new SqlParameter(param, SqlDbType.NVarChar, Math.Max(length, text.Length));
-                }
-
-                parameter.Value = value;
-
-                sqlParameters.Add(parameter);
+                return $"N'{value.ToString().Replace("'", "''")}'";
             }
-            else
+
+            if (value is bool boolValue)
+            {
+                return boolValue ? "1" : "0";
+            }
+
+            if (value is Enum)
             {
                 // If its an enum, we need to use its integer value
-                if (value is Enum)
-                {
-                    value = (int) value;
-                }
-
-                sqlParameters.Add(new SqlParameter(param, value));
+                value = (int) value;
+                return value.ToString();
             }
 
-            return param;
+            return value.ToString();
         }
 
         /// <summary>
