@@ -82,9 +82,9 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         }
 
         [Fact]
-        public void Delete_DelegatesToShippingProfileManager_WhenUserAnswersQuestionYes()
+        public void Delete_DelegatesToShippingProfileManager_WhenUserAnswersQuestionOK()
         {
-            mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.Yes);
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
             var profile = new ShippingProfileEntity();
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(new[] { profile });
 
