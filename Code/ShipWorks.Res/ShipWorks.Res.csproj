@@ -526,8 +526,8 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
-    <Content Include="Templates\Distribution\Source\Packing Slips\Standard With SKU\settings.xml" />
-    <Content Include="Templates\Distribution\Source\Packing Slips\Standard With SKU\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard with SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard with SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\settings.xml" />
