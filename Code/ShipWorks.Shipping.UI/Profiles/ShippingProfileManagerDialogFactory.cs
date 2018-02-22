@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Services.Dialogs;
@@ -11,19 +12,19 @@ namespace ShipWorks.Shipping.UI.Profiles
     [Component]
     public class ShippingProfileManagerDialogFactory : IShippingProfileManagerDialogFactory
     {
-        private readonly IShippingProfileManagerDialogViewModel viewModel;
+        private readonly Func<IShippingProfileManagerDialogViewModel> viewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerDialogFactory(IShippingProfileManagerDialogViewModel viewModel)
+        public ShippingProfileManagerDialogFactory(Func<IShippingProfileManagerDialogViewModel> viewModelFactory)
         {
-            this.viewModel = viewModel;
+            this.viewModelFactory = viewModelFactory;
         }
 
         /// <summary>
         /// Create the dialog
         /// </summary>
-        public IDialog Create(IWin32Window owner) => new ShippingProfileManagerDialog(owner, viewModel);        
+        public IDialog Create(IWin32Window owner) => new ShippingProfileManagerDialog(owner, viewModelFactory());        
     }
 }

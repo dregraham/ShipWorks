@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -133,7 +134,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             if (profileEditor.ShowDialog() == DialogResult.OK)
             {
                 LoadShippingProfilesAndShortcuts();
-                SelectedShippingProfile.ShippingProfile = profile;
+                SelectedShippingProfile = ShippingProfiles.FirstOrDefault(s => s.ShippingProfile.ShippingProfileID == profile.ShippingProfileID);
             }
         }
 
@@ -143,9 +144,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         private void LoadShippingProfilesAndShortcuts()
         {
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
-            ShippingProfiles = shippingProfileManager.Profiles
+
+            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>(shippingProfileManager.Profiles
                                 .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
+                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts)));
         }
         
         /// <summary>

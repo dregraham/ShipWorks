@@ -54,17 +54,18 @@ namespace ShipWorks.Shipping.Profiles
         private void OnLoad(object sender, EventArgs e)
         {
             profileName.Text = profile.Name;
-            if (profile.ShipmentType != null)
-            {
-                provider.Text = EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType);
-            }
 
             LoadShortcuts();
             LoadProviders();
             LoadProfileEditor();
 
             profileName.Enabled = !profile.ShipmentTypePrimary;
-            provider.Enabled = !profile.ShipmentTypePrimary;
+            provider.Enabled = !profile.ShipmentTypePrimary || profile.ShippingProfileID == 0;
+
+            if (profile.ShipmentType != null)
+            {
+                provider.SelectedValue = profile.ShipmentType;
+            }
         }
 
         /// <summary>
