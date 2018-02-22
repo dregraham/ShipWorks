@@ -6,7 +6,7 @@ using System.Windows.Media;
 namespace ShipWorks.UI.Behaviors.Sort
 {
     /// <summary>
-    /// Adorner for sorting a listview
+    /// Adorns header with up or down arrow to indicate sorting direction
     /// </summary>
     public class SortingAdorner : Adorner
     {

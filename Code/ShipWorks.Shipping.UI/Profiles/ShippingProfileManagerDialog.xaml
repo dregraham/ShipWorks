@@ -25,7 +25,6 @@
                 <Setter Property="Height" Value="23"/>
             </Style>
             <swui:EnumImageConverter x:Key="EnumImage" />
-            <swui:EnumDescriptionConverter x:Key="EnumDescription" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -52,7 +51,7 @@
                             <DataTemplate>
                                 <DockPanel>
                                     <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
-                                    <TextBlock Text="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumDescription}}"/>
+                                    <TextBlock Text="{Binding Path=ShipmentTypeDescription}"/>
                                 </DockPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

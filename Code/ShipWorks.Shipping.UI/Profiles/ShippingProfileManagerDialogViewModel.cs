@@ -141,7 +141,8 @@ namespace ShipWorks.Shipping.UI.Profiles
         private void LoadShippingProfilesAndShortcuts()
         {
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
-            ShippingProfiles = shippingProfileManager.Profiles.Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
+            ShippingProfiles = shippingProfileManager.Profiles
+                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts));
         }
         
         /// <summary>
@@ -156,7 +157,13 @@ namespace ShipWorks.Shipping.UI.Profiles
                 shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
             }
 
-            return new ShippingProfileAndShortcut(profile, shortcutText);
+            string shipmentTypeDescription = string.Empty;
+            if (profile.ShipmentType != null)
+            {
+                shipmentTypeDescription = EnumHelper.GetDescription(profile.ShipmentType);
+            }
+
+            return new ShippingProfileAndShortcut(profile, shortcutText, shipmentTypeDescription);
         }
     }
 }
