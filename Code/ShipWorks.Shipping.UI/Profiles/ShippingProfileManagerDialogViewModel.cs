@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -45,7 +46,8 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.shortcutManager = shortcutManager;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(Delete, () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
+            DeleteCommand = new RelayCommand(async () => await Delete().ConfigureAwait(false), 
+                () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             LoadShippingProfilesAndShortcuts();
         }
@@ -91,12 +93,12 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Delete a profile
         /// </summary>
-        private void Delete()
+        private async Task Delete()
         {
             DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfile.Name}");
-            if (dialogResult == DialogResult.Yes)
+            if (dialogResult == DialogResult.OK)
             {
-                shippingProfileManager.DeleteProfile(SelectedShippingProfile.ShippingProfile);
+                await shippingProfileManager.DeleteProfile(SelectedShippingProfile.ShippingProfile).ConfigureAwait(false);
 
                 LoadShippingProfilesAndShortcuts();
             }
