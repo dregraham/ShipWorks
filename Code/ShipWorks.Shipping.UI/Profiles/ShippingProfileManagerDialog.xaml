@@ -10,9 +10,14 @@
         xmlns:swui="http://schemas.shipworks.com/ui"
         mc:Ignorable="d"
         Title="Manage Profiles" 
-        Height="300" Width="600"
+        Height="300" 
+        Width="600"
+        MinHeight="300"
+        MinWidth="600"
         FontFamily="Tahoma"
         FontSize="11px"
+        Topmost="False"
+        ResizeMode="CanResizeWithGrip"
         Background="{x:Static SystemColors.ControlBrush}"
         d:DataContext="{d:DesignInstance local:ShippingProfileManagerDialogViewModel, IsDesignTimeCreatable=False}">
     <Window.Resources>

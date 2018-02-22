@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -10,14 +11,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerDialog(IWin32Window owner, object viewModel) : base(owner, viewModel)
+        public ShippingProfileManagerDialog(IWin32Window owner, object viewModel) 
+            : base(owner, viewModel, true)
         {
-            InitializeComponent();
-
-            // Need to set topmost to false because this window opens a winforms window
-            // which will appear behind this one if topmost is true
-            Topmost = false;
-            ResizeMode = System.Windows.ResizeMode.CanResizeWithGrip;
+            InitializeComponent();            
         }
     }
 }
