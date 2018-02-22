@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             // Need to set topmost to false because this window opens a winforms window
             // which will appear behind this one if topmost is true
             Topmost = false;
+            ResizeMode = System.Windows.ResizeMode.CanResizeWithGrip;
         }
     }
 }
