@@ -12,6 +12,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -102,12 +103,13 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Delete any shortcuts associated with the profile
         /// </summary>
-        public async Task DeleteShortcutForProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
+        public async Task DeleteShortcutForProfile(IShippingProfileEntity profile, ISqlAdapter adapter)
         {
             bool changes = false;
             foreach (ShortcutEntity entity in Shortcuts.Where(s => s.RelatedObjectID == profile.ShippingProfileID))
             {
                 await adapter.DeleteEntityAsync(entity);
+                changes = true;
             }
 
             if (changes)

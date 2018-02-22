@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -35,6 +36,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Delete the shortcut associated with the ShippingProfileEntity
         /// </summary>
-        Task DeleteShortcutForProfile(ShippingProfileEntity profile, ISqlAdapter adapter);
+        Task DeleteShortcutForProfile(IShippingProfileEntity profile, ISqlAdapter adapter);
     }
 }

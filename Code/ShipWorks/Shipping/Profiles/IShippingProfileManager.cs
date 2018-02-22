@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Return the active list of all profiles
         /// </summary>
         IEnumerable<ShippingProfileEntity> Profiles { get; }
+
         /// <summary>
         /// Get the default profile for the given shipment type
         /// </summary>

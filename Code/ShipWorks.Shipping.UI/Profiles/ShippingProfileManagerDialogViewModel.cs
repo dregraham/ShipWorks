@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.shortcutManager = shortcutManager;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(async () => await Delete().ConfigureAwait(false), 
+            DeleteCommand = new RelayCommand(async () => Delete().ConfigureAwait(false), 
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             LoadShippingProfilesAndShortcuts();
