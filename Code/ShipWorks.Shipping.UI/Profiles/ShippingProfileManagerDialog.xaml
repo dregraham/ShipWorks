@@ -37,7 +37,7 @@
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Behaviors>
-                <swui:SortingBehavior />
+                <swui:SortingBehavior DefaultSortColumnIndex="0" />
             </i:Interaction.Behaviors>
             <ListView.Resources>                
                 <Style TargetType="{x:Type TextBlock}">
@@ -46,7 +46,8 @@
             </ListView.Resources>
             <ListView.View>                
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Provider" Width="120">
+                    <GridViewColumn Width="120" swui:Sorting.Field="ShipmentTypeDescription" >
+                        <GridViewColumnHeader Content="Provider" />
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <DockPanel>

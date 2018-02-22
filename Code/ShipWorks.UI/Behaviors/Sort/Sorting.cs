@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -13,6 +14,23 @@ namespace ShipWorks.UI.Behaviors.Sort
     {
         private ListSortDirection sortDirection;
         private GridViewColumnHeader sortColumn;
+
+        /// <summary>
+        /// Field used for sorting
+        /// </summary>
+        public static readonly DependencyProperty FieldProperty =
+            DependencyProperty.RegisterAttached("Field", typeof(string), typeof(Sorting));
+
+        /// <summary>
+        /// Perform sort
+        /// </summary>
+        public void Sort(object columnHeader, CollectionView list)
+        {
+            string column = SetAdorner(columnHeader);
+
+            list.SortDescriptions.Clear();
+            list.SortDescriptions.Add(new SortDescription(column, sortDirection));
+        }
 
         /// <summary>
         /// Set the Adorner
@@ -51,26 +69,30 @@ namespace ShipWorks.UI.Behaviors.Sort
             SortingAdorner sortingAdorner = new SortingAdorner(column, sortDirection);
             AdornerLayer.GetAdornerLayer(column).Add(sortingAdorner);
 
-            string header = string.Empty;
+            string columnToSortBy = string.Empty;
 
             // if binding is used and property name doesn't match header content
             if (sortColumn.Column.DisplayMemberBinding is Binding b)
             {
-                header = b.Path.Path;
+                columnToSortBy = b.Path.Path;
             }
 
-            return header;
+            if (string.IsNullOrWhiteSpace(columnToSortBy))
+            {
+                columnToSortBy = GetField(sortColumn.Column);
+            }
+
+            return columnToSortBy;
         }
 
         /// <summary>
-        /// Perform sort
+        /// Get the current value of the property
         /// </summary>
-        public void Sort(object columnHeader, CollectionView list)
-        {
-            string column = SetAdorner(columnHeader);
+        public static string GetField(DependencyObject d) => (string) d.GetValue(FieldProperty);
 
-            list.SortDescriptions.Clear();
-            list.SortDescriptions.Add(new SortDescription(column, sortDirection));
-        }
+        /// <summary>
+        /// Set the current value of the property
+        /// </summary>
+        public static void SetField(DependencyObject d, string value) => d.SetValue(FieldProperty, value);
     }
 }
