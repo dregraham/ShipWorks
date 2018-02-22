@@ -13,6 +13,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         public ShippingProfileManagerDialog(IWin32Window owner, object viewModel) : base(owner, viewModel)
         {
             InitializeComponent();
+
+            // Need to set topmost to false because this window opens a winforms window
+            // which will appear behind this one if topmost is true
+            Topmost = false;
         }
     }
 }

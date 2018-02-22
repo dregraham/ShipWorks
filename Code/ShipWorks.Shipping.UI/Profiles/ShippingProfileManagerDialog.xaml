@@ -7,10 +7,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Profiles"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:behaviors="http://schemas.shipworks.com/ui"
+        xmlns:swui="http://schemas.shipworks.com/ui"
         mc:Ignorable="d"
-        Title="ShippingProfileManagerDialog" 
-        Height="300" Width="500"
+        Title="Manage Profiles" 
+        Height="300" Width="600"
+        FontFamily="Tahoma"
+        FontSize="11px"
         Background="{x:Static SystemColors.ControlBrush}"
         d:DataContext="{d:DesignInstance local:ShippingProfileManagerDialogViewModel, IsDesignTimeCreatable=False}">
     <Window.Resources>
@@ -19,9 +21,10 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="120"/>
+                <Setter Property="Width" Value="110"/>
                 <Setter Property="Height" Value="23"/>
             </Style>
+            <swui:EnumImageConverter x:Key="EnumImage" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -31,15 +34,30 @@
         </Grid.ColumnDefinitions>
         <ListView Grid.Column="0" 
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
-                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Behaviors>
-                <behaviors:SortingBehavior />
+                <swui:SortingBehavior />
             </i:Interaction.Behaviors>
+            <ListView.Resources>                
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                </Style>
+            </ListView.Resources>
             <ListView.View>                
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Provider" Width="80" DisplayMemberBinding="{Binding ShippingProfile.ShipmentType}"></GridViewColumn>
-                    <GridViewColumn Header="Profile Name" Width="120" DisplayMemberBinding="{Binding ShippingProfile.Name}"></GridViewColumn>
-                    <GridViewColumn Header="Keyboard Shortcut" Width="110" DisplayMemberBinding="{Binding ShortcutKey}"></GridViewColumn>
+                    <GridViewColumn Header="Provider" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
+                                    <TextBlock Text="{Binding Path=ShippingProfile.ShipmentType}"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Profile Name" Width="160" DisplayMemberBinding="{Binding ShippingProfile.Name}"></GridViewColumn>
+                    <GridViewColumn Header="Keyboard Shortcut" Width="135" DisplayMemberBinding="{Binding ShortcutKey}"></GridViewColumn>
                 </GridView>
             </ListView.View>            
         </ListView>
@@ -69,7 +87,8 @@
             </Button>
             <Button Grid.Row="4" 
                     VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
-                    Content="Close"/>
+                    Content="Close"
+                    IsCancel="True"/>
         </Grid>
     </Grid>
 </ui:InteropWindow>
