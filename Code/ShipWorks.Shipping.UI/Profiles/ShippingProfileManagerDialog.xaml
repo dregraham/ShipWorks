@@ -21,7 +21,6 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="110"/>
                 <Setter Property="Height" Value="23"/>
             </Style>
             <swui:EnumImageConverter x:Key="EnumImage" />

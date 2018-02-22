@@ -40,21 +40,17 @@
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>                        
-                        <Path Grid.Column="0"
-                              Width="15" Height="15"
+                    <Grid>                       
+                        <Path 
+                              Width="13" Height="13"
                               Margin="3 2 0 2"
                               Style="{StaticResource Path.Plus.Green}"
                               HorizontalAlignment="Left">
                         </Path>
-                        <TextBlock Grid.Column="1" Text="Add"
+                        <TextBlock Text="Add"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"                                   
-                                   Margin="3 0 3 0"/>
+                                   Margin="20 0 20 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -69,21 +65,15 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Path Grid.Column="0"
-                              Width="16" Height="16"
-                              Margin="2 2 0 1"
+                        <Path Width="14" Height="14"
+                              Margin="2 3 0 2"
                               Style="{StaticResource Path.Cross.Red}"
                               HorizontalAlignment="Left">
                         </Path>
-                        <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Text="Delete"
-                                   Margin="3 0 3 0"/>
+                                   Margin="20 0 20 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -198,17 +188,13 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="/Shipworks.Core;component/Resources/edit.png" Margin="2"
-                               Height="auto"/>
-                        <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
+                        <Image Source="/Shipworks.Core;component/Resources/edit.png" Margin="2"
+                               Height="auto"
+                               HorizontalAlignment="Left"/>
+                        <TextBlock HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Text="Edit"
-                                   Margin="3 0 3 0"/>
+                                   Margin="20 0 20 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -223,19 +209,14 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" 
-                               Source="/Shipworks.Core;component/Resources/printer.png" 
-                               Margin="2"
-                               Height="auto"/>
-                        <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
+                        <Image Source="/Shipworks.Core;component/Resources/printer.png" 
+                               Margin="3"
+                               Height="auto"
+                               HorizontalAlignment="Left"/>
+                        <TextBlock HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Text="Print Barcodes"
-                                   Margin="3 0 3 0"/>
+                                   Margin="22 0 22 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
