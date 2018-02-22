@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShippingProfileManager shippingProfileManager;
         private readonly PropertyChangedHandler handler;
         private ShippingProfileAndShortcut selectedShippingProfile;
-        private IEnumerable<ShippingProfileAndShortcut> shippingProfilesAndShortcuts;
+        private ObservableCollection<ShippingProfileAndShortcut> shippingProfilesAndShortcuts;
         private readonly Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
         private readonly IShortcutManager shortcutManager;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             DeleteCommand = new RelayCommand(async () => Delete().ConfigureAwait(false), 
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>();
             LoadShippingProfilesAndShortcuts();
         }
 
@@ -75,7 +76,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<ShippingProfileAndShortcut> ShippingProfiles
+        public ObservableCollection<ShippingProfileAndShortcut> ShippingProfiles
         {
             get => shippingProfilesAndShortcuts;
             private set => handler.Set(nameof(ShippingProfiles), ref shippingProfilesAndShortcuts, value);
@@ -143,11 +144,15 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void LoadShippingProfilesAndShortcuts()
         {
-            IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
-
-            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>(shippingProfileManager.Profiles
+            ShippingProfiles.Clear();
+            IEnumerable<ShippingProfileAndShortcut> shippingProfiles = shippingProfileManager.Profiles
                                 .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcuts)));
+                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts));
+            
+            foreach (var shippingProfile in shippingProfiles)
+            {
+                ShippingProfiles.Add(shippingProfile);
+            }
         }
         
         /// <summary>

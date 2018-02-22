@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -27,7 +26,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profiles loaded in the dialog
         /// </summary>
-        IEnumerable<ShippingProfileAndShortcut> ShippingProfiles { get; }
+        ObservableCollection<ShippingProfileAndShortcut> ShippingProfiles { get; }
 
         /// <summary>
         /// Selected Shipping Profile
