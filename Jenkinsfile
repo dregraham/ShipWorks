@@ -24,14 +24,6 @@ pipeline {
 				stage('NDepend') {
 					steps {
 						bat "c:\\tools\\NDepend\\NDepend.Console.exe ${WORKSPACE}\\NDepend\\ShipWorks.ndproj /Silent /Concurrent"
-						publishHTML([allowMissing: true,
-							alwaysLinkToLastBuild: false,
-							keepAll: false,
-							reportDir: 'NDepend\\NDependOut',
-							reportFiles: 'NDependReport.html',
-							reportName: 'NDepend Results',
-							reportTitles: ''])
-
 					}
 				}
 			}
@@ -47,6 +39,13 @@ pipeline {
 			step([$class: 'XUnitBuilder',
 				    thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
 				    tools: [[$class: 'XUnitDotNetTestType', pattern: 'TestResults/*.xml', failIfNotNew: true, deleteOutputFiles: true, stopProcessingIfError: true]]])
+			publishHTML([allowMissing: true,
+				alwaysLinkToLastBuild: false,
+				keepAll: false,
+				reportDir: 'NDepend\\NDependOut',
+				reportFiles: 'NDependReport.html',
+				reportName: 'NDepend Results',
+				reportTitles: ''])
 		}
 	}
 			/*
