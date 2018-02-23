@@ -39,17 +39,17 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Delete the given profile
         /// </summary>
-        public async Task DeleteProfile(ShippingProfileEntity profile)
+        public void DeleteProfile(ShippingProfileEntity profile)
         {
-            await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
+            using (var adapter = sqlAdapterFactory.CreateTransacted())
             {
-                await shortcutManager.DeleteShortcutForProfile(profile, sqlAdapter).ConfigureAwait(false);
-                await sqlAdapter.DeleteEntityAsync(profile).ConfigureAwait(false);
+                shortcutManager.DeleteShortcutForProfile(profile, adapter);
+                adapter.DeleteEntity(profile);
 
-                sqlAdapter.Commit();
-                ShippingProfileManager.CheckForChangesNeeded();
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);            
+                adapter.Commit();
+            }
+
+            ShippingProfileManager.CheckForChangesNeeded();
         }
         
         /// <summary>

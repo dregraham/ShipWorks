@@ -63,6 +63,6 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Deletes the given profile
         /// </summary>
-        Task DeleteProfile(ShippingProfileEntity profile);
+        void DeleteProfile(ShippingProfileEntity profile);
     }
 }

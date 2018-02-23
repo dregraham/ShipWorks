@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.shortcutManager = shortcutManager;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(async () => Delete().ConfigureAwait(false), 
+            DeleteCommand = new RelayCommand(Delete, 
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>();
@@ -95,13 +95,17 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Delete a profile
         /// </summary>
-        private async Task Delete()
+        private void Delete()
         {
             DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfile.Name}");
             if (dialogResult == DialogResult.OK)
             {
-                await shippingProfileManager.DeleteProfile(SelectedShippingProfile.ShippingProfile).ConfigureAwait(false);
+                // Unset the profile before deleting so it isnt used in logic after the delete
+                ShippingProfileAndShortcut profileToDelete = SelectedShippingProfile;
                 selectedShippingProfile = null;
+                ShippingProfiles.Remove(profileToDelete);
+                shippingProfileManager.DeleteProfile(profileToDelete.ShippingProfile);
+                
                 LoadShippingProfilesAndShortcuts();
             }
         }
@@ -144,15 +148,21 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void LoadShippingProfilesAndShortcuts()
         {
+            // Keep track of the id of the profile that was selected so we can reslected that profile after refreshing the list
+            long? selectedProfileId = SelectedShippingProfile?.ShippingProfile?.ShippingProfileID;
+
             ShippingProfiles.Clear();
             IEnumerable<ShippingProfileAndShortcut> shippingProfiles = shippingProfileManager.Profiles
                                 .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
                                 .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts));
             
-            foreach (var shippingProfile in shippingProfiles)
+            foreach (ShippingProfileAndShortcut shippingProfile in shippingProfiles)
             {
                 ShippingProfiles.Add(shippingProfile);
             }
+
+            // Selected the previously selected profile
+            SelectedShippingProfile = ShippingProfiles.FirstOrDefault(p => p.ShippingProfile.ShippingProfileID == selectedProfileId);
         }
         
         /// <summary>
