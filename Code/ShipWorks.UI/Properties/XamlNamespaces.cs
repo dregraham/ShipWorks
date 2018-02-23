@@ -3,7 +3,6 @@
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.AttachedProperties")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Behaviors")]
-[assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Behaviors.Sort")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.AddressControl")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.TypeBasedTemplateSelector")]
