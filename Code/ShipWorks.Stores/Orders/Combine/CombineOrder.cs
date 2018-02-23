@@ -244,6 +244,13 @@ namespace ShipWorks.Stores.Orders.Combine
             combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
             combinedOrder.IsManual = orders.All(o => o.IsManual);
 
+            // Ebay is the only store we found that has its own rollup count. If we find other stores that need
+            // a similar behavior, we should extract this into store specific classes.
+            if (combinedOrder is EbayOrderEntity ebayOrder)
+            {
+                ebayOrder.RollupEbayItemCount = 0;
+            }
+
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {
                 field.IsChanged = true;
