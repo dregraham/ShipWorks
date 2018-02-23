@@ -50,8 +50,10 @@ namespace ShipWorks.Shipping.UI.Profiles
             DeleteCommand = new RelayCommand(Delete, 
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>();
-            LoadShippingProfilesAndShortcuts();
+
+            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>(shippingProfileManager.Profiles
+                                .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
+                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts)));
         }
 
         /// <summary>
@@ -105,8 +107,6 @@ namespace ShipWorks.Shipping.UI.Profiles
                 selectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
                 shippingProfileManager.DeleteProfile(profileToDelete.ShippingProfile);
-                
-                LoadShippingProfilesAndShortcuts();
             }
         }
         
@@ -117,10 +117,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile.ShippingProfile);
 
-            if (profileEditor.ShowDialog() == DialogResult.OK)
-            {
-                LoadShippingProfilesAndShortcuts();
-            }
+            profileEditor.ShowDialog();
         }
 
         /// <summary>
@@ -130,41 +127,18 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             ShippingProfileEntity profile = new ShippingProfileEntity
             {
-                Name = "",
+                Name = string.Empty,
                 ShipmentTypePrimary = false
             };
-
-            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(profile);
-
-            if (profileEditor.ShowDialog() == DialogResult.OK)
-            {
-                LoadShippingProfilesAndShortcuts();
-                SelectedShippingProfile = ShippingProfiles.FirstOrDefault(s => s.ShippingProfile.ShippingProfileID == profile.ShippingProfileID);
-            }
-        }
-
-        /// <summary>
-        /// LoadsShippingProfilesAndShortcuts
-        /// </summary>
-        private void LoadShippingProfilesAndShortcuts()
-        {
-            // Keep track of the id of the profile that was selected so we can reslected that profile after refreshing the list
-            long? selectedProfileId = SelectedShippingProfile?.ShippingProfile?.ShippingProfileID;
-
-            ShippingProfiles.Clear();
-            IEnumerable<ShippingProfileAndShortcut> shippingProfiles = shippingProfileManager.Profiles
-                                .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts));
             
-            foreach (ShippingProfileAndShortcut shippingProfile in shippingProfiles)
+            if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
-                ShippingProfiles.Add(shippingProfile);
+                ShippingProfileAndShortcut newShortcut = CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts);
+                ShippingProfiles.Add(newShortcut);
+                SelectedShippingProfile = newShortcut;
             }
-
-            // Selected the previously selected profile
-            SelectedShippingProfile = ShippingProfiles.FirstOrDefault(p => p.ShippingProfile.ShippingProfileID == selectedProfileId);
         }
-        
+
         /// <summary>
         /// Given a profile, create a DTO with its associated hotkey text.
         /// </summary>
