@@ -13,6 +13,7 @@ namespace ShipWorks.UI.Behaviors.Sort
         private static readonly Geometry arrowUp = Geometry.Parse("M 5,5 15,5 10,0 5,5");
         private static readonly Geometry arrowDown = Geometry.Parse("M 5,0 10,5 15,0 5,0");
         private readonly Geometry sortDirection;
+        private const int gliphWidth = 20;
 
         /// <summary>
         /// Constructor
@@ -28,13 +29,13 @@ namespace ShipWorks.UI.Behaviors.Sort
         /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
-            double x = AdornedElement.RenderSize.Width - 20;
-            double y = (AdornedElement.RenderSize.Height - 5) / 2;
+            double offsetX = AdornedElement.RenderSize.Width - gliphWidth;
+            double offsetY = (AdornedElement.RenderSize.Height - 5) / 2;
 
-            if (x >= 20)
+            if (offsetX >= gliphWidth)
             {
                 // Right order of the statements is important
-                drawingContext.PushTransform(new TranslateTransform(x, y));
+                drawingContext.PushTransform(new TranslateTransform(offsetX, offsetY));
                 drawingContext.DrawGeometry(Brushes.Black, null, sortDirection);
                 drawingContext.Pop();
             }
