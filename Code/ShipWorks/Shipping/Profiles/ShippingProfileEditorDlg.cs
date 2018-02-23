@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.Profiles
             
             List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
             dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
-            foreach (Hotkey hotkey in availableHotkeys)
+            foreach (Hotkey hotkey in availableHotkeys.OrderBy(k => k))
             {                
                 dataSource.Add(new KeyValuePair<string, Hotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
             }
