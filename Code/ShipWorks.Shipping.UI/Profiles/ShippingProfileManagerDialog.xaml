@@ -6,7 +6,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Profiles"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:swui="http://schemas.shipworks.com/ui"
         mc:Ignorable="d"
         Title="Manage Profiles" 
@@ -24,6 +23,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DataGridStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Height" Value="23"/>
@@ -35,38 +35,56 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>        
-        <ListView Grid.Column="0" 
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0" AutoGenerateColumns="False"            
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
-                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <i:Interaction.Behaviors>
-                <swui:SortingBehavior DefaultSortColumnIndex="0" />
-            </i:Interaction.Behaviors>
-            <ListView.Resources>                
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                    <Setter Property="Foreground" Value="Black"/>
+                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
+                  SelectionUnit="FullRow"                  
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  HeadersVisibility="Column"
+                  AlternatingRowBackground="White"
+                  Style="{StaticResource DataGrid.Static}"
+                  GridLinesVisibility="None">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
-            </ListView.Resources>
-            <ListView.View>                
-                <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Width="120" swui:Sorting.Field="ShipmentTypeDescription" >
-                        <GridViewColumnHeader Content="Provider" />
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <DockPanel>
-                                    <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
-                                    <TextBlock Text="{Binding Path=ShipmentTypeDescription}" TextTrimming="CharacterEllipsis" Foreground="Black"/>
-                                </DockPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Profile Name" Width="160" DisplayMemberBinding="{Binding ShippingProfile.Name}"></GridViewColumn>
-                    <GridViewColumn Header="Keyboard Shortcut" Width="135" DisplayMemberBinding="{Binding ShortcutKey}"></GridViewColumn>
-                </GridView>
-            </ListView.View>            
-        </ListView>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>                
+                <DataGridTemplateColumn Header="Provider" Width=".25*" SortMemberPath="ShipmentTypeDescription" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="0 2 0 2">
+                                <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>                                
+                                <TextBlock Text="{Binding Path=ShipmentTypeDescription}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Profile Name" Width=".5*" Binding="{Binding Path=ShippingProfile.Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Keyboard Shortcut" Width=".25*" Binding="{Binding Path=ShortcutKey}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <Grid Grid.Column="1" Margin="10 0 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
