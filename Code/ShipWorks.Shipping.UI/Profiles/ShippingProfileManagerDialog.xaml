@@ -35,7 +35,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>        
         <ListView Grid.Column="0" 
                   ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}"
@@ -46,6 +46,7 @@
             <ListView.Resources>                
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                    <Setter Property="Foreground" Value="Black"/>
                 </Style>
             </ListView.Resources>
             <ListView.View>                
@@ -56,7 +57,7 @@
                             <DataTemplate>
                                 <DockPanel>
                                     <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
-                                    <TextBlock Text="{Binding Path=ShipmentTypeDescription}"/>
+                                    <TextBlock Text="{Binding Path=ShipmentTypeDescription}" TextTrimming="CharacterEllipsis" Foreground="Black"/>
                                 </DockPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
