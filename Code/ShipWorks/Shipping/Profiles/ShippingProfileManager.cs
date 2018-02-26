@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 adapter.Commit();
             }
-
+            
             lock (synchronizer)
             {
                 synchronizer.MergeEntity(profile);

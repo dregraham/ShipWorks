@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
@@ -41,13 +42,20 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public void DeleteProfile(ShippingProfileEntity profile)
         {
-            using (var adapter = sqlAdapterFactory.CreateTransacted())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                shortcutManager.DeleteShortcutForProfile(profile, adapter);
-                adapter.DeleteEntity(profile);
+                using (DbTransaction tran = con.BeginTransaction())
+                {
+                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(con, tran))
+                    {
+                        shortcutManager.DeleteShortcutForProfile(profile, adapter);
+                        adapter.DeleteEntity(profile);
 
-                adapter.Commit();
+                        adapter.Commit();
+                    }
+                }
             }
+
 
             ShippingProfileManager.CheckForChangesNeeded();
         }
