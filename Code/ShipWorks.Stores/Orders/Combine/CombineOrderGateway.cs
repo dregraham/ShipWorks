@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Orders.Combine
 {
@@ -26,12 +20,12 @@ namespace ShipWorks.Stores.Orders.Combine
     [Component]
     public class CombineOrderGateway : ICombineOrderGateway
     {
-        private readonly Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)>> storeSpecificSearches =
-            new Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)>>
+        private readonly Dictionary<StoreTypeCode, string> storeSpecificSearches =
+            new Dictionary<StoreTypeCode, string>
             {
-                { StoreTypeCode.Amazon, GetAmazonSearch },
-                { StoreTypeCode.Ebay, GetEbaySearch },
-                { StoreTypeCode.ChannelAdvisor, GetChannelAdvisorSearch }
+                { StoreTypeCode.Amazon, canCombineAmazonSql },
+                { StoreTypeCode.Ebay, canCombineEbaySql },
+                { StoreTypeCode.ChannelAdvisor, canCombineChannelAdvisorSql }
             };
 
         private readonly IOrderManager orderManager;
@@ -92,120 +86,163 @@ namespace ShipWorks.Stores.Orders.Combine
                 return false;
             }
 
-            DynamicQuery query = CreateCanCombineQuery(store, orderIDs, new QueryFactory());
-
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            using (var conn = SqlSession.Current.OpenConnection())
             {
-                long invalidOrders = sqlAdapter.FetchScalar<long>(query);
+                using (var comm = conn.CreateCommand())
+                {
+                    comm.CommandText = CreateCanCombineQuery(store);
+                    comm.AddParameterWithValue("@StoreID", store.StoreID);
+                    comm.Parameters.Add(CreateOrderIDParameter(orderIDs));
 
-                return invalidOrders == 0;
+                    var resultParameter = new SqlParameter("@result", SqlDbType.Bit)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    comm.Parameters.Add(resultParameter);
+
+                    comm.ExecuteNonQuery();
+
+                    return (bool) resultParameter.Value;
+                }
             }
+        }
+
+        /// <summary>
+        /// Create a table parameter for the order ID list
+        /// </summary>
+        /// <param name="orderIDs">List of order IDs</param>
+        private SqlParameter CreateOrderIDParameter(IEnumerable<long> orderIDs)
+        {
+            var table = new DataTable();
+            table.Columns.Add("item", typeof(long));
+            foreach (var value in orderIDs)
+            {
+                table.Rows.Add(value);
+            }
+
+            return new SqlParameter("@OrderID", SqlDbType.Structured)
+            {
+                TypeName = "LongList",
+                Value = table
+            };
         }
 
         /// <summary>
         /// Create the CanCombine query
         /// </summary>
-        private DynamicQuery CreateCanCombineQuery(IStoreEntity store, IEnumerable<long> orderIDs, QueryFactory queryFactory)
+        private string CreateCanCombineQuery(IStoreEntity store)
         {
-            IJoinOperand shipmentsJoin = Joins.Left(OrderEntity.Relations.ShipmentEntityUsingOrderID);
-            IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
-            IPredicate andWherePredicate = ShipmentFields.Processed == true;
+            return canCombineSql + Environment.NewLine +
+                CreateStoreSpecificQuery(store) + Environment.NewLine +
+                canCombineSuccess;
+        }
+
+        /// <summary>
+        /// Create the store specific query fragment
+        /// </summary>
+        private string CreateStoreSpecificQuery(IStoreEntity store)
+        {
+            // we can override store specific behavior here
+            if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out string getStoreSpecificSearch))
+            {
+                return getStoreSpecificSearch;
+            }
 
             // If it is a Generic Module based store type use the GenericModule behavior 
             if (storeTypeManager.IsStoreTypeCodeGenericModuleBased((StoreTypeCode) store.TypeCode))
             {
-                (shipmentsJoin, orPredicate) = GetGenericModuleSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
+                return canCombineGenericModuleSql;
             }
 
-            // we can override store specific behavior here
-            Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)> getStoreSpecificSearch;
-            if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
-            {
-                (shipmentsJoin, orPredicate) = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
-            }
-
-            return queryFactory.Create()
-                .From(shipmentsJoin)
-                .Select(OrderFields.OrderID.Count())
-                .Where(OrderFields.OrderID.In(orderIDs)
-                    .And(andWherePredicate.Or(orPredicate)));
+            return string.Empty;
         }
 
-        /// <summary>
-        /// Get Amazon search pieces
-        /// </summary>
-        private static (IJoinOperand newJoin, IPredicate newPredicate) GetAmazonSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
-        {
-            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.AmazonOrderEntity);
+        private static string canCombineSuccess = "SELECT @result = CAST(1 AS BIT)";
 
-            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
-            IPredicate newPredicate = predicate
-                .Or(AmazonOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
-                .Or(AmazonOrderFields.FulfillmentChannel.In((int) AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
+        private static string canCombineSql = @"
+SELECT TOP 1 StoreID
+	FROM [Order]
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) AND StoreID <> @StoreID
 
-            return (newJoin, newPredicate);
-        }
+IF @@ROWCOUNT > 0
+BEGIN
+	PRINT 'Too many stores'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END
 
-        /// <summary>
-        /// Get Ebay search pieces
-        /// </summary>
-        private static (IJoinOperand newJoin, IPredicate newPredicate) GetEbaySearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
-        {
-            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderEntity);
+IF EXISTS(SELECT ShipmentID FROM Shipment WHERE Processed = 1 AND OrderID IN (SELECT item FROM @OrderIDS))
+BEGIN
+	PRINT 'Has processed shipments'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END
+";
 
-            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
+        private static string canCombineAmazonSql = @"
+IF EXISTS(SELECT OrderID 
+	FROM AmazonOrder 
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) 
+		AND (IsPrime IN (0, 1) OR FulfillmentChannel IN (0, 1)))
+BEGIN
+	PRINT 'Amazon details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END";
 
-            var ebayOrderSource = factory.Order.As("InnerOrder")
-                .LeftJoin(factory.EbayOrder.As("InnerEbayOrder"))
-                .On(OrderFields.OrderID.Source("InnerOrder") == EbayOrderFields.OrderID.Source("InnerEbayOrder"));
-            IPredicate newPredicate = predicate
-                .Or(EbayOrderFields.GspEligible == true)
-                .OrNot(factory.Create()
-                    .From(ebayOrderSource)
-                    .Where(OrderFields.OrderID.Source("InnerOrder") == orderIDs.First())
-                    .Select(EbayOrderFields.RollupEffectiveCheckoutStatus.Source("InnerEbayOrder"))
-                    .Limit(1)
-                    .Contains(EbayOrderFields.RollupEffectiveCheckoutStatus));
+        private static string canCombineEbaySql = @"
+IF EXISTS(SELECT OrderID
+	FROM EbayOrder
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) AND GspEligible = 1)
+BEGIN
+	PRINT 'Ebay details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END
 
-            return (newJoin, newPredicate);
-        }
+SELECT TOP 2 RollupEffectiveCheckoutStatus
+	FROM EbayOrder
+	WHERE OrderID IN (SELECT item FROM @OrderIDS)
+	GROUP BY RollupEffectiveCheckoutStatus
+IF @@ROWCOUNT > 1
+BEGIN
+	PRINT 'Ebay details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END";
 
-        /// <summary>
-        /// Get ChannelAdvisor search pieces
-        /// </summary>
-        private static (IJoinOperand newJoin, IPredicate newPredicate) GetChannelAdvisorSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
-        {
-            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderEntity);
-            string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderItemEntity);
+        private static string canCombineChannelAdvisorSql = @"
+IF EXISTS(SELECT OrderID 
+	FROM ChannelAdvisorOrder 
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) 
+		AND IsPrime IN (0, 1))
+BEGIN
+	PRINT 'ChannelAdvisor details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END
 
-            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName))
-                .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
-                .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
-            IPredicate newPredicate = predicate
-                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
-                .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
+IF EXISTS (SELECT OrderID 
+	FROM ChannelAdvisorOrderItem
+		LEFT JOIN OrderItem
+			ON ChannelAdvisorOrderItem.OrderItemID = OrderItem.OrderItemID
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) 
+		AND IsFBA = 1)
+BEGIN
+	PRINT 'ChannelAdvisor details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END";
 
-            return (newJoin, newPredicate);
-        }
-
-        /// <summary>
-        /// Get GenericModule search pieces
-        /// </summary>
-        private static (IJoinOperand newJoin, IPredicate newPredicate) GetGenericModuleSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
-        {
-            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.GenericModuleOrderEntity);
-            string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.GenericModuleOrderItemEntity);
-
-            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName))
-                .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
-                .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
-
-            // Find orders that are prime or unknown OR FBA, these are the ones we don't now want to allow combining for
-            IPredicate newPredicate = predicate
-                .Or(GenericModuleOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
-                .Or(GenericModuleOrderFields.IsFBA.Equal(true));
-
-            return (newJoin, newPredicate);
-        }
+        private static string canCombineGenericModuleSql = @"
+IF EXISTS(SELECT OrderID 
+	FROM GenericModuleOrder 
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) 
+		AND (IsPrime IN (0, 1) OR IsFBA = 1))
+BEGIN
+	PRINT 'GenericModule details are bad'
+	SELECT @result = CAST(0 AS BIT)
+	RETURN
+END";
     }
 }
