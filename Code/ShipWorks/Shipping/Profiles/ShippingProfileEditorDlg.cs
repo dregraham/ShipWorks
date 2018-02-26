@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly ShippingProfileEntity profile;
+        private readonly ShortcutEntity shortcut;
         private readonly IProfileControlFactory profileControlFactory;
         private readonly IShippingProfileLoader shippingProfileLoader;
         private readonly IShippingSettings shippingSettings;
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Constructor
         /// </summary>
         public ShippingProfileEditorDlg(
-            ShippingProfileEntity profile, 
+            ShippingProfileAndShortcut profileAndShortcut, 
             IShippingProfileLoader shippingProfileLoader,
             IShortcutManager shortcutManager,
             IProfileControlFactory profileControlFactory,
@@ -40,7 +41,8 @@ namespace ShipWorks.Shipping.Profiles
         {
             InitializeComponent();
 
-            this.profile = profile;
+            this.profile = profileAndShortcut.ShippingProfile;
+            this.shortcut = profileAndShortcut.Shortcut;
             this.shippingProfileLoader = shippingProfileLoader;
             this.shortcutManager = shortcutManager;
             this.profileControlFactory = profileControlFactory;
@@ -198,10 +200,9 @@ namespace ShipWorks.Shipping.Profiles
 
             if (!profile.IsNew)
             {
-                profilesShortcut = shortcutManager.Shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
-                if (profilesShortcut?.Hotkey != null)
+                if (shortcut.Hotkey != null)
                 {
-                    availableHotkeys.Add(profilesShortcut.Hotkey.Value);
+                    availableHotkeys.Add(shortcut.Hotkey.Value);
                 }
             }
             
