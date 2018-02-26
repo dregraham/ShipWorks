@@ -258,12 +258,20 @@ namespace ShipWorks.Stores.Management
                 optionPageSettings.Controls.Remove(oldDownloadSettingsControl);
             }
 
-            downloadSettingsControl = storeType.CreateDownloadSettingsControl();
-            downloadSettingsControl.LoadStore(store);
-            downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
-            downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
-            downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            optionPageSettings.Controls.Add(downloadSettingsControl as Control);
+            if (store.StoreTypeCode != StoreTypeCode.Manual)
+            {
+                downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+                downloadSettingsControl.LoadStore(store);
+                downloadSettingsControl.Location =
+                    new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+                downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+                downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(downloadSettingsControl as Control);
+            }
+            else
+            {
+                sectionAutoDownloads.Visible = false;
+            }
         }
 
         /// <summary>
@@ -271,11 +279,25 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ConfigureManualOrderSettingsControl()
         {
-            manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
-            manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-            manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            optionPageSettings.Controls.Add(manualOrderSettingsControl);
+            if (store.StoreTypeCode != StoreTypeCode.Manual)
+            {
+                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+                manualOrderSettingsControl.Location =
+                    new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+                manualOrderSettingsControl.Width =
+                    optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(manualOrderSettingsControl);
+            }
+            else
+            {
+                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+                manualOrderSettingsControl.Location = new Point(32, 45);
+                manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(manualOrderSettingsControl);
+                sectionTitleManualOrders.Location = new Point(15, 15);
+            }
         }
 
         /// <summary>
