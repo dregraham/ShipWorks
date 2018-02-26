@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -10,10 +11,23 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileAndShortcut(ShippingProfileEntity shippingProfile, string shortcutKey, string shipmentTypeDescription)
+        public ShippingProfileAndShortcut(ShippingProfileEntity shippingProfile, ShortcutEntity shortcut)
         {
             ShippingProfile = shippingProfile;
-            ShortcutKey = shortcutKey;
+
+            string shortcutText = string.Empty;
+            if (shortcut?.Hotkey != null)
+            {
+                shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
+            }
+
+            ShortcutKey = shortcutText;
+
+            string shipmentTypeDescription = string.Empty;
+            if (shippingProfile.ShipmentType != null)
+            {
+                shipmentTypeDescription = EnumHelper.GetDescription(shippingProfile.ShipmentType);
+            }
             ShipmentTypeDescription = shipmentTypeDescription;
         }
 
