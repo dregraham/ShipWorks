@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(new[] { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-            testObject.SelectedShippingProfile = new ShippingProfileAndShortcut(profile, string.Empty, string.Empty);
+            testObject.SelectedShippingProfile = new ShippingProfileAndShortcut(profile, Enumerable.Empty<ShortcutEntity>());
 
             testObject.DeleteCommand.Execute(null);
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(new[] { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-            testObject.SelectedShippingProfile = new ShippingProfileAndShortcut(profile, string.Empty, string.Empty);
+            testObject.SelectedShippingProfile = new ShippingProfileAndShortcut(profile, Enumerable.Empty<ShortcutEntity>());
 
             testObject.DeleteCommand.Execute(null);
 
