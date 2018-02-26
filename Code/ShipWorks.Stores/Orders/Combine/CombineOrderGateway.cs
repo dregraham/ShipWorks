@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Orders.Combine
                 table.Rows.Add(value);
             }
 
-            return new SqlParameter("@OrderID", SqlDbType.Structured)
+            return new SqlParameter("@OrderIDs", SqlDbType.Structured)
             {
                 TypeName = "LongList",
                 Value = table
@@ -157,24 +157,22 @@ namespace ShipWorks.Stores.Orders.Combine
             return string.Empty;
         }
 
-        private static string canCombineSuccess = "SELECT @result = CAST(1 AS BIT)";
+        private static string canCombineSuccess = "SELECT @result = 1";
 
         private static string canCombineSql = @"
-SELECT TOP 1 StoreID
+IF EXISTS(SELECT TOP 1 StoreID
 	FROM [Order]
-	WHERE OrderID IN (SELECT item FROM @OrderIDS) AND StoreID <> @StoreID
-
-IF @@ROWCOUNT > 0
+	WHERE OrderID IN (SELECT item FROM @OrderIDS) AND StoreID <> @StoreID)
 BEGIN
 	PRINT 'Too many stores'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END
 
 IF EXISTS(SELECT ShipmentID FROM Shipment WHERE Processed = 1 AND OrderID IN (SELECT item FROM @OrderIDS))
 BEGIN
 	PRINT 'Has processed shipments'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END
 ";
@@ -186,7 +184,7 @@ IF EXISTS(SELECT OrderID
 		AND (IsPrime IN (0, 1) OR FulfillmentChannel IN (0, 1)))
 BEGIN
 	PRINT 'Amazon details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END";
 
@@ -196,7 +194,7 @@ IF EXISTS(SELECT OrderID
 	WHERE OrderID IN (SELECT item FROM @OrderIDS) AND GspEligible = 1)
 BEGIN
 	PRINT 'Ebay details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END
 
@@ -207,7 +205,7 @@ SELECT TOP 2 RollupEffectiveCheckoutStatus
 IF @@ROWCOUNT > 1
 BEGIN
 	PRINT 'Ebay details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END";
 
@@ -218,7 +216,7 @@ IF EXISTS(SELECT OrderID
 		AND IsPrime IN (0, 1))
 BEGIN
 	PRINT 'ChannelAdvisor details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END
 
@@ -230,7 +228,7 @@ IF EXISTS (SELECT OrderID
 		AND IsFBA = 1)
 BEGIN
 	PRINT 'ChannelAdvisor details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END";
 
@@ -241,7 +239,7 @@ IF EXISTS(SELECT OrderID
 		AND (IsPrime IN (0, 1) OR IsFBA = 1))
 BEGIN
 	PRINT 'GenericModule details are bad'
-	SELECT @result = CAST(0 AS BIT)
+	SELECT @result = 0
 	RETURN
 END";
     }
