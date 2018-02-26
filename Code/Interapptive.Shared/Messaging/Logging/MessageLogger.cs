@@ -49,6 +49,7 @@ namespace Interapptive.Shared.Messaging.Logging
                 return Disposable.Create(() => observer = null);
             })
             .ObserveOn(TaskPoolScheduler.Default)
+            .Where(x=>x.TrackingPath != null)
             .Select(x => new { Data = JsonConvert.SerializeObject(x, settings), Endpoint = x.Endpoint })
             .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
             .Subscribe(_ => { }, ex => { });

@@ -150,7 +150,9 @@ namespace ShipWorks.Shipping.Profiles
             try
             {
                 // Have the profile control save itself
-                ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0 ? panelSettings.Controls[0] as ShippingProfileControlBase : null;
+                ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
+                    ? panelSettings.Controls[0] as ShippingProfileControlBase
+                    : null;
                 profileControl?.SaveToEntity();
 
                 ShippingProfileManager.SaveProfile(profile);
@@ -169,6 +171,10 @@ namespace ShipWorks.Shipping.Profiles
 
                 ShippingProfileManager.InitializeForCurrentSession();
                 DialogResult = DialogResult.Abort;
+            }
+            catch (ORMQueryExecutionException)
+            {
+                MessageHelper.ShowError(this, "Your changes cannot be saved because another use has saved a profile with your selected HotKey.");
             }
         }
 
