@@ -7,6 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Profiles"
         xmlns:swui="http://schemas.shipworks.com/ui"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="Manage Profiles" 
         Height="312" 
@@ -29,6 +30,11 @@
                 <Setter Property="Height" Value="23"/>
             </Style>
             <swui:EnumImageConverter x:Key="EnumImage" />
+            <CollectionViewSource x:Key="profiles" Source="{Binding ShippingProfiles}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="ShipmentTypeDescription" Direction="Ascending" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -37,7 +43,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Column="0" AutoGenerateColumns="False"            
-                  ItemsSource="{Binding ShippingProfiles, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
+                  ItemsSource="{Binding Source={StaticResource profiles}, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"                  
                   SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
                   SelectionUnit="FullRow"                  
                   CanUserResizeColumns="True"
@@ -61,7 +67,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel Margin="0 2 0 2">
-                                <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>                                
+                                <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
                                 <TextBlock Text="{Binding Path=ShipmentTypeDescription}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
                             </DockPanel>
                         </DataTemplate>
