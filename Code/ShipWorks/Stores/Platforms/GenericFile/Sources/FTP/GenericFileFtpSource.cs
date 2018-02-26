@@ -1,15 +1,14 @@
 ﻿extern alias rebex2015;
-
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Interapptive.Shared.Utility;
+using log4net;
 using rebex2015::Rebex.IO;
 using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using log4net;
 using ShipWorks.FileTransfer;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 {
@@ -196,14 +195,18 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 
             try
             {
-                string newName = string.Format("{0} [{1}]{2}", 
-                    Path.GetFileNameWithoutExtension(file.Name), 
-                    DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"), 
+                string newName = string.Format("{0} [{1}]{2}",
+                    Path.GetFileNameWithoutExtension(file.Name),
+                    DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"),
                     Path.GetExtension(file.Name));
 
                 ftp.Rename(file.Path + "/" + file.Name, targetFolder + "/" + newName);
             }
             catch (NetworkSessionException ex)
+            {
+                log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
+            }
+            catch (InvalidOperationException ex)
             {
                 log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
             }

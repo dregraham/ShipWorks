@@ -51,7 +51,7 @@ namespace ShipWorks.Templates.Distribution
             if (swVersion.Major == 0)
             {
                 // Has to be set to the biggest number we check below
-                swVersion = new Version("5.20.0.0000");
+                swVersion = new Version(5, 22, 0, 0);
             }
 
             // No default templates are installed yet - we are safe to do the initial install
@@ -63,53 +63,74 @@ namespace ShipWorks.Templates.Distribution
             }
             else
             {
-                InstallTemplate("Shipper Productivity", "Reports", "3.7.0.5018", false);
+                InstallNewTemplates((version, action) =>
+                {
+                    if (installed < new Version(version))
+                    {
+                        action();
+                    }
+                });
 
-                // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
-                // If the same snippet is installed twice it breaks all templates in ShipWorks
-                if (installed < new Version("5.10.0.0000") &&
-                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
+                UpdateDatabaseTemplateVersion(swVersion);
+            }
+        }
+
+        /// <summary>
+        /// Install new templates
+        /// </summary>
+        /// <param name="installedTemplateVersion">Currently installed template version</param>
+        private static void InstallNewTemplates(Action<string, Action> ifVersionIsLessThan)
+        {
+            ifVersionIsLessThan("3.7.0.5018", () => InstallTemplate(@"Reports\Shipper Productivity"));
+
+            // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
+            // If the same snippet is installed twice it breaks all templates in ShipWorks
+            ifVersionIsLessThan("5.10.0.0000", () =>
+            {
+                if (TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
                 {
                     InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(new Version("5.10.0.0000"));
                 }
+            });
 
-                if (installed < new Version("5.17.0.0000") &&
-                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
+            ifVersionIsLessThan("5.17.0.0000", () =>
+            {
+                if (TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
                 {
                     InstallTemplate(@"Packing Slips\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
-                    
-                    UpdateDatabaseTemplateVersion(new Version("5.17.0.0000"));
                 }
+            });
 
-                InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0.0000", false);
-                InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
-                InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
-                InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
-            }
+            ifVersionIsLessThan("5.19.0.0000", () =>
+            {
+                InstallTemplate(@"Reports\Exports\Package Level Details");
+                InstallTemplate(@"Reports\Financials\Shipments by Provider");
+                InstallTemplate(@"Labels\Standard 4x6");
+            });
+
+            ifVersionIsLessThan("5.20.0.0000", () => InstallTemplate(@"Labels\Standard 8.5x11"));
+
+            ifVersionIsLessThan("5.22.0.0000", () =>
+            {
+                InstallTemplate(@"Labels\Label with Packing Slip");
+                InstallTemplate(@"Reports\Product Trends\Items by SKU");
+                InstallTemplate(@"Packing Slips\Standard with SKU");
+            });
         }
 
         /// <summary>
         /// Install the given template for the specific version
         /// </summary>
-        /// <param name="name">the template name</param>
-        /// <param name="folderPath">the path to the template</param>
-        /// <param name="version">the version that this template is being installed for</param>
-        /// <param name="replaceExisting">if a template with a matching name exists should we replace it</param>
-        private static void InstallTemplate(string name, string folderPath, string version, bool replaceExisting)
+        /// <param name="fullName">the template name and path</param>
+        private static void InstallTemplate(string fullName)
         {
-            if (new Version(SystemData.Fetch().TemplateVersion) < new Version(version))
+            if (TemplateManager.Tree.FindTemplate(fullName) == null)
             {
-                if (replaceExisting || TemplateManager.Tree.AllTemplates.None(t => t.Name == name))
-                {
-                    InstallTemplate($"{folderPath}\\{name}", TemplateManager.Tree.CreateEditableClone());
-                    UpdateDatabaseTemplateVersion(new Version(version));
-                }
+                InstallTemplate(fullName, TemplateManager.Tree.CreateEditableClone());
             }
         }
 
