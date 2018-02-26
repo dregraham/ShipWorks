@@ -102,7 +102,6 @@ namespace ShipWorks.Stores.Orders.Combine
             }
         }
 
-
         /// <summary>
         /// Create the CanCombine query
         /// </summary>
@@ -201,7 +200,7 @@ namespace ShipWorks.Stores.Orders.Combine
                 .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
                 .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
 
-            // Find orders that are prime or unknown OR FBA, these are the ones we dont now want to allow combining for
+            // Find orders that are prime or unknown OR FBA, these are the ones we don't now want to allow combining for
             IPredicate newPredicate = predicate
                 .Or(GenericModuleOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(GenericModuleOrderFields.IsFBA.Equal(true));
