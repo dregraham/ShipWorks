@@ -238,11 +238,10 @@ namespace ShipWorks.Stores.Orders.Combine
             combinedOrder.CombineSplitStatus = combinedOrder.CombineSplitStatus.AsCombined();
 
             combinedOrder.OnlineLastModified = onlineLastModified;
-            combinedOrder.RollupItemCount = 0;
-            combinedOrder.RollupItemTotalWeight = 0;
-            combinedOrder.RollupNoteCount = 0;
             combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
             combinedOrder.IsManual = orders.All(o => o.IsManual);
+
+            ResetRollupFields(combinedOrder);
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {
@@ -250,6 +249,23 @@ namespace ShipWorks.Stores.Orders.Combine
             }
 
             return GenericResult.FromSuccess(combinedOrder);
+        }
+
+        /// <summary>
+        /// Reset the rollup fields
+        /// </summary>
+        private static void ResetRollupFields(OrderEntity combinedOrder)
+        {
+            combinedOrder.RollupItemCount = 0;
+            combinedOrder.RollupItemTotalWeight = 0;
+            combinedOrder.RollupNoteCount = 0;
+
+            // Ebay is the only store we found that has its own rollup count. If we find other stores that need
+            // a similar behavior, we should extract this into store specific classes.
+            if (combinedOrder is EbayOrderEntity ebayOrder)
+            {
+                ebayOrder.RollupEbayItemCount = 0;
+            }
         }
 
         /// <summary>

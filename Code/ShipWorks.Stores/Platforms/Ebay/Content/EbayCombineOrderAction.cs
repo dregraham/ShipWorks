@@ -18,6 +18,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
     [KeyedComponent(typeof(IStoreSpecificCombineOrderAction), StoreTypeCode.Ebay)]
     public class EbayCombineOrderAction : IStoreSpecificCombineOrderAction
     {
+        private readonly static EntityField2[] rollupFields = new[] {
+            EbayOrderItemFields.EffectivePaymentMethod,
+            EbayOrderItemFields.EffectiveCheckoutStatus,
+            EbayOrderItemFields.PayPalAddressStatus,
+            EbayOrderItemFields.FeedbackLeftType,
+            EbayOrderItemFields.FeedbackLeftComments,
+            EbayOrderItemFields.FeedbackReceivedType,
+            EbayOrderItemFields.FeedbackReceivedComments };
+
         /// <summary>
         /// Perform the platform specific action
         /// </summary>
@@ -25,10 +34,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
         {
             // For some reason, EbayOrderItem has a FK to Order which also needs to be updated to point to the combined order id
             IRelationPredicateBucket itemsBucket = new RelationPredicateBucket(EbayOrderItemFields.LocalEbayOrderID.In(orders.Select(x => x.OrderID)));
-            await sqlAdapter.UpdateEntitiesDirectlyAsync(new EbayOrderItemEntity
+            var itemTemplate = new EbayOrderItemEntity
             {
-                LocalEbayOrderID = combinedOrder.OrderID
-            }, itemsBucket);
+                LocalEbayOrderID = combinedOrder.OrderID,
+            };
+
+            // Setting these fields to themselves causes SQL to mark the fields as updated, which causes our triggers to recalculate the rollups
+            foreach (var rollupField in rollupFields)
+            {
+                itemTemplate.Fields[rollupField.FieldIndex].ExpressionToApply = new Expression(rollupField);
+            }
+
+            await sqlAdapter.UpdateEntitiesDirectlyAsync(itemTemplate, itemsBucket);
 
             EbayOrderEntity order = (EbayOrderEntity) combinedOrder;
 
@@ -36,16 +53,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
                 .Where(o => o is EbayOrderEntity)
                 .Cast<EbayOrderEntity>()
                 .Any(o => o.GspEligible);
-
-            var ebayOrders = orders
-                .Where(o => o is EbayOrderEntity)
-                .Cast<EbayOrderEntity>();
-
-            if (ebayOrders.Any())
-            {
-                order.RollupEffectiveCheckoutStatus = ebayOrders
-                    .First().RollupEffectiveCheckoutStatus;
-            }
 
             var recordCreator = new SearchRecordMerger<IEbayOrderEntity>(combinedOrder, orders, sqlAdapter);
 
