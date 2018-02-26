@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.Management
             CheckLicense(store);
 
             // Check whether or not to display the store connection tab
-            CheckStoreConnection(store);
+            StoreHasConnectionString(store);
         }
 
         /// <summary>
@@ -157,11 +157,24 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Checks the store to determine whether or not to display the store connection tab
         /// </summary>
-        private void CheckStoreConnection(StoreEntity storeEntity)
+        public void StoreHasConnectionString(StoreEntity storeEntity)
         {
             if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
             {
                 optionControl.Controls.Remove(optionPageOnlineAccount);
+                sectionAutoDownloads.Visible = false;
+
+                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+                manualOrderSettingsControl.Location = new Point(32, 45);
+                manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(manualOrderSettingsControl);
+                sectionTitleManualOrders.Location = new Point(15, 15);
+            }
+            else
+            {
+                ConfigureDownloadSettingsControl();
+                ConfigureManualOrderSettingsControl();
             }
         }
 
@@ -272,20 +285,14 @@ namespace ShipWorks.Stores.Management
                 optionPageSettings.Controls.Remove(oldDownloadSettingsControl);
             }
 
-            if (store.StoreTypeCode != StoreTypeCode.Manual)
-            {
-                downloadSettingsControl = storeType.CreateDownloadSettingsControl();
-                downloadSettingsControl.LoadStore(store);
-                downloadSettingsControl.Location =
-                    new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
-                downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
-                downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-                optionPageSettings.Controls.Add(downloadSettingsControl as Control);
-            }
-            else
-            {
-                sectionAutoDownloads.Visible = false;
-            }
+            downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+            downloadSettingsControl.LoadStore(store);
+            downloadSettingsControl.Location =
+                new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+            downloadSettingsControl.Width =
+                optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+            downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            optionPageSettings.Controls.Add(downloadSettingsControl as Control);
         }
 
         /// <summary>
@@ -293,25 +300,13 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ConfigureManualOrderSettingsControl()
         {
-            if (store.StoreTypeCode != StoreTypeCode.Manual)
-            {
-                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-                manualOrderSettingsControl.Location =
-                    new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
-                manualOrderSettingsControl.Width =
-                    optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-                optionPageSettings.Controls.Add(manualOrderSettingsControl);
-            }
-            else
-            {
-                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-                manualOrderSettingsControl.Location = new Point(32, 45);
-                manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-                optionPageSettings.Controls.Add(manualOrderSettingsControl);
-                sectionTitleManualOrders.Location = new Point(15, 15);
-            }
+            manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+            manualOrderSettingsControl.Location =
+                new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+            manualOrderSettingsControl.Width =
+                optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+            manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            optionPageSettings.Controls.Add(manualOrderSettingsControl);
         }
 
         /// <summary>
@@ -322,8 +317,7 @@ namespace ShipWorks.Stores.Management
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(internationalAddressValidationSetting);
 
-            ConfigureDownloadSettingsControl();
-            ConfigureManualOrderSettingsControl();
+            StoreHasConnectionString(store);
 
             // store-specific settings control
             storeSettingsControl = storeType.CreateStoreSettingsControl();
