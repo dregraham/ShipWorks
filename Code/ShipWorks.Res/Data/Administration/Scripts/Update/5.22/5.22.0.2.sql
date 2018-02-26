@@ -11,6 +11,10 @@
 ) ON [PRIMARY]
 
 GO
+PRINT N'Creating index [IX_Shortcut_Hotkey] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Hotkey]) WHERE ([Shortcut].[Hotkey] IS NOT NULL)
+GO
 
 CREATE TABLE dbo.Tmp_ShippingProfile
 	(

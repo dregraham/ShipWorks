@@ -3720,7 +3720,7 @@
           <FieldFieldRelationship FkField="EntityID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="OnTracProfile.ShippingProfile-ShippingProfile.OnTrac" Start=":OnTracProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="OnTrac" Type="1">
+      <NormalRelationship Name="OnTracProfile.ShippingProfile-ShippingProfile.OnTrac" Start=":OnTracProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="OnTrac" Type="1" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
@@ -4212,7 +4212,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-16T20:58:40.0493746Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-26T15:50:34.4407596Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8097,7 +8097,7 @@
                 <Table Name="Shortcut">
                   <PkConstraintName Name="PK_Shortcut" />
                   <Fields>
-                    <Field Name="ShortcutID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ShortcutID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Barcode" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="Hotkey" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Action" Ordinal="4" DbType="8" Precision="10" />
@@ -9416,7 +9416,7 @@
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:FedExProfile:ShippingProfileID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:FedExProfilePackage:FK_FedExProfilePackage_PackageProfile">
+            <ForeignKeyConstraint Name="dbo:FedExProfilePackage:FK_FedExProfilePackage_PackageProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:PackageProfile:PackageProfileID" FkField="dbo:FedExProfilePackage:PackageProfileID" />
               </FieldPairs>
@@ -9681,7 +9681,7 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OdbcStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:OnTracProfile:FK_OnTracProfile_ShippingProfile">
+            <ForeignKeyConstraint Name="dbo:OnTracProfile:FK_OnTracProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:OnTracProfile:ShippingProfileID" />
               </FieldPairs>
@@ -10044,7 +10044,7 @@
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:UpsProfile:ShippingProfileID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:UpsProfilePackage:FK_UpsProfilePackage_PackageProfile">
+            <ForeignKeyConstraint Name="dbo:UpsProfilePackage:FK_UpsProfilePackage_PackageProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:PackageProfile:PackageProfileID" FkField="dbo:UpsProfilePackage:PackageProfileID" />
               </FieldPairs>
@@ -12693,7 +12693,7 @@
             <FieldMapping FieldName="Barcode" TargetFieldName="Barcode" />
             <FieldMapping FieldName="Hotkey" TargetFieldName="Hotkey" />
             <FieldMapping FieldName="RelatedObjectID" TargetFieldName="RelatedObjectID" />
-            <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" />
+            <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":SparkPayStore" TargetName="ShipWorksLocal:dbo:SparkPayStore">
