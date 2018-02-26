@@ -129,6 +129,9 @@ namespace ShipWorks.Stores.Management
 
             // Check whether or not to display license tab
             CheckLicense(store);
+
+            // Check whether or not to display the store connection tab
+            CheckStoreConnection(store);
         }
 
         /// <summary>
@@ -148,6 +151,17 @@ namespace ShipWorks.Stores.Management
             if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
             {
                 optionControl.Controls.Remove(optionPageLicense);
+            }
+        }
+
+        /// <summary>
+        /// Checks the store to determine whether or not to display the store connection tab
+        /// </summary>
+        private void CheckStoreConnection(StoreEntity storeEntity)
+        {
+            if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
+            {
+                optionControl.Controls.Remove(optionPageOnlineAccount);
             }
         }
 
