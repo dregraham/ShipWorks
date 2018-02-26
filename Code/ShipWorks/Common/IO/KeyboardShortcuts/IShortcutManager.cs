@@ -37,5 +37,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Delete the shortcut associated with the ShippingProfileEntity
         /// </summary>
         void DeleteShortcutForProfile(IShippingProfileEntity profile, ISqlAdapter adapter);
+
+        /// <summary>
+        /// Direct shortcut manager to update shortcuts from database before Shortcuts are returned
+        /// </summary>
+        void CheckForChangesNeeded();
     }
 }

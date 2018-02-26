@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Profiles;
 
-namespace ShipWorks.Shipping.Profiles
+namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Wraps the static ShippingProfileManager with an instance that implements an interface

@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -81,6 +83,30 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var profile = testObject.GetOrCreatePrimaryProfile(shipmentType.Object);
 
             shipmentType.Verify(x => x.ConfigurePrimaryProfile(profile));
+        }
+
+        [Fact]
+        public void DeleteTwoProfilesWithShortcuts()
+        {
+            Mock<OtherShipmentType> shipmentType = context.Mock.CreateMock<OtherShipmentType>();
+            shipmentType.CallBase = true;
+
+            ShippingProfileEntity profileToDeleteFirst = Create.Profile()
+                .AsOther()
+                .Save();
+            Create.Entity<ShortcutEntity>()
+                .Set(s => s.RelatedObjectID = profileToDeleteFirst.ShippingProfileID)
+                .SetDefaultsOnNullableFields();
+
+            ShippingProfileEntity profileToDeleteSecond = Create.Profile()
+                .AsOther()
+                .Save();
+
+            ShippingProfileManager.CheckForChangesNeeded();
+            context.Mock.Create<IShortcutManager>().CheckForChangesNeeded();
+
+            testObject.DeleteProfile(profileToDeleteFirst);
+            testObject.DeleteProfile(profileToDeleteSecond);
         }
 
         #region "Carrier specific tests"
