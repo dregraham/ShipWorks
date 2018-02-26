@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {

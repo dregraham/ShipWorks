@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>(shippingProfileManager.Profiles
                                 .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => new ShippingProfileAndShortcut(profile, shortcutManager.Shortcuts)));
+                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts)));
         }
 
         /// <summary>
@@ -133,10 +133,31 @@ namespace ShipWorks.Shipping.UI.Profiles
             
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
-                ShippingProfileAndShortcut newShortcut = new ShippingProfileAndShortcut(profile, shortcutManager.Shortcuts);
+                ShippingProfileAndShortcut newShortcut = CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts);
                 ShippingProfiles.Add(newShortcut);
                 SelectedShippingProfile = newShortcut;
             }
+        }
+
+        /// <summary>
+        /// Given a profile, create a DTO with its associated hotkey text.
+        /// </summary>
+        private ShippingProfileAndShortcut CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
+        {
+            ShortcutEntity shortcut = shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
+            string shortcutText = string.Empty;
+            if (shortcut?.Hotkey != null)
+            {
+                shortcutText = EnumHelper.GetDescription(shortcut.Hotkey);
+            }
+
+            string shipmentTypeDescription = string.Empty;
+            if (profile.ShipmentType != null)
+            {
+                shipmentTypeDescription = EnumHelper.GetDescription(profile.ShipmentType);
+            }
+
+            return new ShippingProfileAndShortcut(profile, shortcutText, shipmentTypeDescription);
         }
     }
 }
