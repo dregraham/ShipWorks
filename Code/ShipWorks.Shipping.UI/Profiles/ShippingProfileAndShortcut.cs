@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileAndShortcut(ShippingProfileEntity shippingProfile, ShortcutEntity shortcut)
+        public ShippingProfileAndShortcut(ShippingProfileEntity shippingProfile, IShortcutEntity shortcut)
         {
             ShippingProfile = shippingProfile;
 
