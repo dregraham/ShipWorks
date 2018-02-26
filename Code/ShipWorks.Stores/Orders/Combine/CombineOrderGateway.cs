@@ -17,7 +17,6 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Orders.Combine
 {
@@ -125,7 +124,7 @@ namespace ShipWorks.Stores.Orders.Combine
             {
                 (shipmentsJoin, orPredicate) = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
             }
-            
+
             return queryFactory.Create()
                 .From(shipmentsJoin)
                 .Select(OrderFields.OrderID.Count())
@@ -156,11 +155,16 @@ namespace ShipWorks.Stores.Orders.Combine
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderEntity);
 
             IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
+
+            var ebayOrderSource = factory.Order.As("InnerOrder")
+                .LeftJoin(factory.EbayOrder.As("InnerEbayOrder"))
+                .On(OrderFields.OrderID.Source("InnerOrder") == EbayOrderFields.OrderID.Source("InnerEbayOrder"));
             IPredicate newPredicate = predicate
                 .Or(EbayOrderFields.GspEligible == true)
-                .OrNot(factory.EbayOrder.As("Inner")
-                    .Where(EbayOrderFields.OrderID.Source("Inner") == orderIDs.First())
-                    .Select(EbayOrderFields.RollupEffectiveCheckoutStatus.Source("Inner"))
+                .OrNot(factory.Create()
+                    .From(ebayOrderSource)
+                    .Where(OrderFields.OrderID.Source("InnerOrder") == orderIDs.First())
+                    .Select(EbayOrderFields.RollupEffectiveCheckoutStatus.Source("InnerEbayOrder"))
                     .Limit(1)
                     .Contains(EbayOrderFields.RollupEffectiveCheckoutStatus));
 
