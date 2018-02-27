@@ -21,7 +21,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyMagentoOrderEntity : ReadOnlyOrderEntity, IMagentoOrderEntity
+    public partial class ReadOnlyMagentoOrderEntity : ReadOnlyGenericModuleOrderEntity, IMagentoOrderEntity
     {
         /// <summary>
         /// Constructor

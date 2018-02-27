@@ -18,7 +18,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 namespace ShipWorks.Data.Model.RelationClasses
 {
 	/// <summary>Implements the relations factory for the entity: MagentoOrder. </summary>
-	public partial class MagentoOrderRelations : OrderRelations
+	public partial class MagentoOrderRelations : GenericModuleOrderRelations
 	{
 		/// <summary>CTor</summary>
 		public MagentoOrderRelations()
@@ -186,13 +186,13 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between MagentoOrderEntity and OrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>
-		internal IEntityRelation RelationToSuperTypeOrderEntity
+		/// <summary>Returns a new IEntityRelation object, between MagentoOrderEntity and GenericModuleOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>
+		internal IEntityRelation RelationToSuperTypeGenericModuleOrderEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, false);
-				relation.AddEntityFieldPair(OrderFields.OrderID, MagentoOrderFields.OrderID);
+				relation.AddEntityFieldPair(GenericModuleOrderFields.OrderID, MagentoOrderFields.OrderID);
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
@@ -211,7 +211,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		/// <returns>relation which makes the current entity a subtype of its supertype entity or null if not applicable/found</returns>
 		public override IEntityRelation GetSuperTypeRelation()
 		{
-			return this.RelationToSuperTypeOrderEntity;
+			return this.RelationToSuperTypeGenericModuleOrderEntity;
 		}
 
 		#endregion

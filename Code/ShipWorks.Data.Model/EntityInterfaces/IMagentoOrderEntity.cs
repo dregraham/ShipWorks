@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     /// Entity interface which represents the entity 'MagentoOrder'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IMagentoOrderEntity: IOrderEntity
+    public partial interface IMagentoOrderEntity: IGenericModuleOrderEntity
     {
         
         /// <summary> The MagentoOrderID property of the Entity MagentoOrder<br/><br/>
