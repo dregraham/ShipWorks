@@ -37,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
         private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
         private const string InvoiceEndpoint = "rest/V1/order/{0}/invoice";
+        private const string BundleProductEndpoint = "rest/V1/bundle-products";
         private const int PageSize = 50;
 
         private string token;
@@ -252,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Gets the product for the speified sku
+        /// Gets the product for the specified SKU
         /// </summary>
         public Product GetProductBySku(string sku)
         {
@@ -276,7 +277,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Gets the product for the speified sku
+        /// Gets the product for the specified SKU
+        /// </summary>
+        public IEnumerable<ProductOptionDetail> GetBundleProductOptionsBySku(string sku)
+        {
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
+                new Uri($"{storeUri.AbsoluteUri}/{BundleProductEndpoint}/{sku}/options/all"));
+
+            string response = ProcessRequest("GetBundleProductOptions", request);
+
+            return DeserializeResponse<IEnumerable<ProductOptionDetail>>(response);
+        }
+
+        /// <summary>
+        /// Gets the product for the specified SKU
         /// </summary>
         public Product GetProductById(int productId)
         {

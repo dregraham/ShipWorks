@@ -316,7 +316,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             IEnumerable<Item> itemList = items as IList<Item> ?? items.ToList();
-            foreach (Item item in itemList.Where(i => i.ProductType != "configurable"))
+            IEnumerable<Item> subItemList = itemList.Where(i => i.ProductType != "configurable" && !i.ParentItemId.HasValue);
+
+            foreach (Item item in subItemList)
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -344,16 +346,42 @@ namespace ShipWorks.Stores.Platforms.Magento
                     AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
                 }
 
+                if (item.ProductType.Equals("bundle", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    AddBundleOptions(orderItem, magentoOrderItem?.Sku);
+                }
+
                 if (magentoOrderItem?.ParentItemId != null)
                 {
                     Item magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
 
                     if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
                     {
-
                         AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Add all of the bundle options for the order item
+        /// </summary>
+        private void AddBundleOptions(OrderItemEntity item, string parentProductSku)
+        {
+            if (parentProductSku.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+            
+            // Get the parent product option details so we can add attributes
+            IEnumerable<ProductOptionDetail> parentProductOptionDetails = webClient.GetBundleProductOptionsBySku(parentProductSku);
+
+            foreach (ProductOptionDetail optionDetail in parentProductOptionDetails)
+            {
+                OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
+                orderItemAttribute.Description = optionDetail?.Title; 
+                orderItemAttribute.Name = optionDetail?.Title ?? "Option";
+                orderItemAttribute.UnitPrice = 0;
             }
         }
 
