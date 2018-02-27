@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private ShippingProfile selectedShippingProfile;
-        private ObservableCollection<ShippingProfile> shippingProfiles;
+        private ObservableCollection<ShippingProfile> shippingProfiles = new ObservableCollection<ShippingProfile>();
         private readonly Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,6 +35,8 @@ namespace ShipWorks.Shipping.UI.Profiles
             Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
             IMessageHelper messageHelper)
         {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
             this.shippingProfileService = shippingProfileService;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
             this.messageHelper = messageHelper;
@@ -46,8 +48,6 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileService.GetAll()
                                 .Where(profile => profile.ShippingProfileEntity.ShipmentType != ShipmentTypeCode.None));
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
