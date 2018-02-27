@@ -286,7 +286,6 @@
     </Compile>
     <Compile Include="Profiles\IShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ProfileControlFactory.cs" />
-    <Compile Include="Profiles\ShippingProfileAndShortcut.cs" />
     <Compile Include="Profiles\ShippingProfileManagerDialogViewModel.cs" />
     <Compile Include="Profiles\ShippingProfileManagerDialog.xaml.cs">
       <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>

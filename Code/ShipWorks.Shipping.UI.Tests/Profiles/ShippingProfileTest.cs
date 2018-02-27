@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.UI.Profiles;
+using ShipWorks.Shipping.Profiles;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Profiles
 {
-    public class ShippingProfileAndShortcutTest
+    public class ShippingProfileTest
     {
         [Fact]
-        public void ShippingProfileAndShortcut_ShipmentTypeDescriptionIsShipmentTypeDescription()
+        public void ShippingProfile_ShipmentTypeDescriptionIsShipmentTypeDescription()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity()
             {
@@ -25,12 +25,12 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
                 Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
             };
 
-            ShippingProfileAndShortcut testObject = new ShippingProfileAndShortcut(profile, shortcut);
+            ShippingProfile testObject = new ShippingProfile(profile, shortcut);
             Assert.Equal(testObject.ShipmentTypeDescription, EnumHelper.GetDescription(profile.ShipmentType));
         }
 
         [Fact]
-        public void ShippingProfileAndShortcut_ShortcutKey_IsShortcutKeyDescription()
+        public void ShippingProfile_ShortcutKey_IsShortcutKeyDescription()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity()
             {
@@ -42,24 +42,24 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
                 Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
             };
 
-            ShippingProfileAndShortcut testObject = new ShippingProfileAndShortcut(profile, shortcut);
+            ShippingProfile testObject = new ShippingProfile(profile, shortcut);
             Assert.Equal(testObject.ShortcutKey, EnumHelper.GetDescription(shortcut.Hotkey));
         }
 
         [Fact]
-        public void ShippingProfileAndShortcut_ShortcutKeyIsBlank_WhenShortcutIsNull()
+        public void ShippingProfile_ShortcutKeyIsBlank_WhenShortcutIsNull()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity()
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
 
-            ShippingProfileAndShortcut testObject = new ShippingProfileAndShortcut(profile, null);
+            ShippingProfile testObject = new ShippingProfile(profile, null);
             Assert.Equal(testObject.ShortcutKey, string.Empty);
         }
 
         [Fact]
-        public void ShippingProfileAndShortcut_ShipmentTypeDescriptionIsBlank_WhenShipmentTypeIsNull()
+        public void ShippingProfile_ShipmentTypeDescriptionIsBlank_WhenShipmentTypeIsNull()
         {
             ShortcutEntity shortcut = new ShortcutEntity()
             {
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
                 ShipmentType = null
             };
 
-            ShippingProfileAndShortcut testObject = new ShippingProfileAndShortcut(profile, shortcut);
+            ShippingProfile testObject = new ShippingProfile(profile, shortcut);
             Assert.Equal(testObject.ShipmentTypeDescription, string.Empty);
         }
     }

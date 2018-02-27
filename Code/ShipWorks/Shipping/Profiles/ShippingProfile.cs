@@ -2,19 +2,19 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Shipping.UI.Profiles
+namespace ShipWorks.Shipping.Profiles
 {
     /// <summary>
     /// DTO for ShippingProfileAndShortcut
     /// </summary>
-    public class ShippingProfileAndShortcut
+    public class ShippingProfile
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileAndShortcut(ShippingProfileEntity shippingProfile, IShortcutEntity shortcut)
+        public ShippingProfile(ShippingProfileEntity shippingProfileEntity, IShortcutEntity shortcut)
         {
-            ShippingProfile = shippingProfile;
+            ShippingProfileEntity = shippingProfileEntity;
 
             string shortcutText = string.Empty;
             if (shortcut?.Hotkey != null)
@@ -25,9 +25,9 @@ namespace ShipWorks.Shipping.UI.Profiles
             ShortcutKey = shortcutText;
 
             string shipmentTypeDescription = string.Empty;
-            if (shippingProfile.ShipmentType != null)
+            if (shippingProfileEntity.ShipmentType != null)
             {
-                shipmentTypeDescription = EnumHelper.GetDescription(shippingProfile.ShipmentType);
+                shipmentTypeDescription = EnumHelper.GetDescription(shippingProfileEntity.ShipmentType);
             }
             ShipmentTypeDescription = shipmentTypeDescription;
         }
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profile
         /// </summary>
-        public ShippingProfileEntity ShippingProfile { get; set; }
+        public ShippingProfileEntity ShippingProfileEntity { get; set; }
 
         /// <summary>
         /// The associated Shortcut 
