@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             manageProfilesButton = new RibbonButton
             {
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
-                Image = Properties.Resources.document_gear_32_32,
+                Image = Properties.Resources.box_closed_with_label_32_32,
                 Text = "Manage",
                 TextContentRelation = TextContentRelation.Underneath
             };

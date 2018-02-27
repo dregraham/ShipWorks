@@ -3617,7 +3617,7 @@ namespace ShipWorks
         /// <summary>
         /// Open the shipping settings window
         /// </summary>
-        private void OnShippingSettings(object sender, EventArgs e)
+        private void OnManageShippingSettings(object sender, EventArgs e)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -3626,6 +3626,14 @@ namespace ShipWorks
                     dlg.ShowDialog(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// Open the shipping settings window
+        /// </summary>
+        private void OnManageShippingProfiles(object sender, EventArgs e)
+        {
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this));
         }
 
         /// <summary>
