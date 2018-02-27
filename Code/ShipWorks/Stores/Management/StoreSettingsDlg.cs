@@ -129,9 +129,6 @@ namespace ShipWorks.Stores.Management
 
             // Check whether or not to display license tab
             CheckLicense(store);
-
-            // Check whether or not to display the store connection tab
-            StoreHasConnectionString(store);
         }
 
         /// <summary>
@@ -287,10 +284,8 @@ namespace ShipWorks.Stores.Management
 
             downloadSettingsControl = storeType.CreateDownloadSettingsControl();
             downloadSettingsControl.LoadStore(store);
-            downloadSettingsControl.Location =
-                new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
-            downloadSettingsControl.Width =
-                optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+            downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+            downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
             downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             optionPageSettings.Controls.Add(downloadSettingsControl as Control);
         }
@@ -301,10 +296,8 @@ namespace ShipWorks.Stores.Management
         private void ConfigureManualOrderSettingsControl()
         {
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location =
-                new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
-            manualOrderSettingsControl.Width =
-                optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+            manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
             manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             optionPageSettings.Controls.Add(manualOrderSettingsControl);
         }
