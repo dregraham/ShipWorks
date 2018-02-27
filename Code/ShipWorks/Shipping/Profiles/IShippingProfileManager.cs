@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -53,6 +54,11 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Saves the given profile
         /// </summary>
+        void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter);
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
         void SaveProfile(ShippingProfileEntity profile);
 
         /// <summary>
@@ -63,6 +69,6 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Deletes the given profile
         /// </summary>
-        void DeleteProfile(ShippingProfileEntity profile);
+        void DeleteProfile(ShippingProfileEntity profile, ISqlAdapter sqlAdapter);
     }
 }

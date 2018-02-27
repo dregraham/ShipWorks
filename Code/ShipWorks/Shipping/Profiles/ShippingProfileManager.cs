@@ -143,33 +143,38 @@ namespace ShipWorks.Shipping.Profiles
                 ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
             }
         }
-
+        
         /// <summary>
         /// Save the given profile to the database
         /// </summary>
         public static void SaveProfile(ShippingProfileEntity profile)
         {
-            bool rootDirty = profile.IsDirty;
-            bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
-
-            // Transaction
             using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                bool extraDirty = SaveProfilePackages(profile, adapter);
-
-                // Force the profile change if any derived stuff changes
-                if ((anyDirty || extraDirty) && !rootDirty)
-                {
-                    profile.Fields[(int) ShippingProfileFieldIndex.ShipmentType].IsChanged = true;
-                    profile.Fields.IsDirty = true;
-                }
-
-                // Save the base profile
-                adapter.SaveAndRefetch(profile);
-
+                SaveProfile(profile, adapter);
                 adapter.Commit();
             }
-            
+        }
+
+        /// <summary>
+        /// Save the given profile to the database
+        /// </summary>
+        public static void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
+        {
+            bool rootDirty = profile.IsDirty;
+            bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
+            bool extraDirty = SaveProfilePackages(profile, adapter);
+
+            // Force the profile change if any derived stuff changes
+            if ((anyDirty || extraDirty) && !rootDirty)
+            {
+                profile.Fields[(int) ShippingProfileFieldIndex.ShipmentType].IsChanged = true;
+                profile.Fields.IsDirty = true;
+            }
+
+            // Save the base profile
+            adapter.SaveAndRefetch(profile);
+
             lock (synchronizer)
             {
                 synchronizer.MergeEntity(profile);
@@ -180,7 +185,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Save the profile packages
         /// </summary>
-        private static bool SaveProfilePackages(ShippingProfileEntity profile, SqlAdapter adapter)
+        private static bool SaveProfilePackages(ShippingProfileEntity profile, ISqlAdapter adapter)
         {
             bool changes = false;
 
