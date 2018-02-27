@@ -1425,6 +1425,7 @@
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
     <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileLoader.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileService.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileLoader.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
