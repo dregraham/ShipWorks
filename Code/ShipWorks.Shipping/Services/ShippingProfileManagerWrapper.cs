@@ -40,6 +40,20 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Delete the given profile
         /// </summary>
+        public void DeleteProfile(ShippingProfileEntity profile)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                adapter.DeleteEntity(profile);
+                adapter.Commit();
+            }
+            
+            ShippingProfileManager.CheckForChangesNeeded();
+        }
+
+        /// <summary>
+        /// Delete the given profile
+        /// </summary>
         public void DeleteProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
         {
             adapter.DeleteEntity(profile);
