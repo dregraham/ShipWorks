@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadShortcuts()
         {
-            IEnumerable<Hotkey> availableHotkeys = shippingProfileService.GetAvailableHotKeys(profile);
+            IEnumerable<Hotkey> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
             
             List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
             dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));

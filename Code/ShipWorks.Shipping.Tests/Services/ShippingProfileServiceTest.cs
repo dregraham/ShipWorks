@@ -1,0 +1,310 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Tests.Shared;
+using Autofac.Extras.Moq;
+using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
+using Xunit;
+using Xunit.Abstractions;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+
+namespace ShipWorks.Shipping.Tests.Services
+{
+    public class ShippingProfileServiceTest : IDisposable
+    {
+        private readonly ITestOutputHelper output;
+        private readonly AutoMock mock;
+        
+        public ShippingProfileServiceTest(ITestOutputHelper output)
+        {
+            this.output = output;
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
+        [Fact]
+        public void GetAll_ReturnsShortcutAssociatedWithProfile()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
+
+            var shortcuts = new[] { shortcut };
+            var profiles = new[] { profile };
+
+            mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
+            mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
+
+            var shippingProfiles = mock.Create<ShippingProfileService>().GetAll();
+
+            ShippingProfile shippingProfile = shippingProfiles.Single();
+
+            Assert.Equal(shortcut, shippingProfile.Shortcut);
+            Assert.Equal(profile, shippingProfile.ShippingProfileEntity);
+        }
+
+        [Fact]
+        public void Get_ReturnsShortcutAssociatedWithProfile()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
+
+            var shortcuts = new[] { shortcut };
+            var profiles = new[] { profile };
+
+            mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
+            mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
+
+            ShippingProfile shippingProfile = mock.Create<ShippingProfileService>().Get(42);
+
+            Assert.Equal(shortcut, shippingProfile.Shortcut);
+            Assert.Equal(profile, shippingProfile.ShippingProfileEntity);
+        }
+
+        [Fact]
+        public void Create_ReturnsNewShippingProfile()
+        {
+            var newProfile = mock.Create<ShippingProfileService>().Create();
+            
+            Assert.True(newProfile.Shortcut.IsNew);
+            Assert.False(newProfile.Shortcut.IsDirty);
+
+            Assert.True(newProfile.ShippingProfileEntity.IsNew);
+            Assert.False(newProfile.ShippingProfileEntity.IsDirty);
+        }
+
+        [Fact]
+        public void Save_DelegatesToManagers()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                ShippingProfileID = 42,
+                Name = "name"
+            };
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Success);
+            mock.Mock<IShippingProfileManager>().Verify(m => m.SaveProfile(profile, sqlAdapter.Object), Times.Once);
+            mock.Mock<IShortcutManager>().Verify(m => m.Save(shortcut, sqlAdapter.Object), Times.Once);
+        }
+
+        [Fact]
+        public void Save_CommitsTransaction()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                ShippingProfileID = 42,
+                Name = "name"
+            };
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            var testObject = mock.Create<ShippingProfileService>();
+            testObject.Save(new ShippingProfile(profile, shortcut));
+
+            sqlAdapter.Verify(a=>a.Commit(), Times.Once);
+        }
+
+        [Fact]
+        public void Save_ReturnsFailure_WhenAdapterThrowsORMConcurrencyException()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                ShippingProfileID = 42,
+                Name = "name"
+            };
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            mock.Mock<IShippingProfileManager>()
+                .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
+                .Throws(new ORMConcurrencyException("blah", profile));
+
+            ShippingProfile shippingProfile = new ShippingProfile(profile, shortcut);
+
+            var testObject = mock.Create<ShippingProfileService>();
+
+            var result = testObject.Save(shippingProfile);
+
+            Assert.Equal("Your changes cannot be saved because another use has deleted the profile.", result.Message);
+        }
+
+        [Fact]
+        public void Save_ReturnsFailure_WhenAdapterThrowsORMQueryExecutionException()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                ShippingProfileID = 42,
+                Name = "name"
+            };
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            mock.Mock<IShippingProfileManager>()
+                .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
+                .Throws(new ORMQueryExecutionException("","",null, null, null));
+
+            ShippingProfile shippingProfile = new ShippingProfile(profile, shortcut);
+
+            var testObject = mock.Create<ShippingProfileService>();
+
+            var result = testObject.Save(shippingProfile);
+
+            Assert.True(result.Failure);
+            Assert.Equal("Your changes cannot be saved because another use has saved a profile with your selected HotKey.", result.Message);
+        }
+
+        [Fact]
+        public void Save_ReturnsFailure_WhenProfileHasNoName()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Failure);
+            Assert.Equal("Enter a name for the profile.", result.Message);
+        }
+
+        [Fact]
+        public void Save_ReturnsFailure_WhenProfileNameIsUsed()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                ShippingProfileID = 42,
+                Name = "blah"
+            };
+
+            mock.Mock<IShippingProfileManager>().Setup(m => m.Profiles)
+                .Returns(new[] { new ShippingProfileEntity { Name = "blah" } });
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Failure);
+            Assert.Equal("A profile with the chosen name already exists.", result.Message);
+        }
+
+        [Fact]
+        public void Save_ReturnsFailure_WhenBarcodeIsUsed()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity
+            {
+                ShortcutID = 42,
+                Barcode = "blip"
+            };
+            ShippingProfileEntity profile = new ShippingProfileEntity()
+            {
+                Name = "blah"
+            };
+
+            mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts)
+                .Returns(new[] { new ShortcutEntity { Barcode = "blip" } });
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Failure);
+            Assert.Equal("The barcode \"blip\" is already in use.", result.Message);
+        }
+
+        [Fact]
+        public void Delete_DelegatesToManager()
+        {
+
+            ShortcutEntity shortcut = new ShortcutEntity();
+            ShippingProfileEntity profile = new ShippingProfileEntity();
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Delete(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Success);
+            mock.Mock<IShippingProfileManager>().Verify(m => m.DeleteProfile(profile, sqlAdapter.Object), Times.Once);
+            mock.Mock<IShortcutManager>().Verify(m => m.Delete(shortcut, sqlAdapter.Object), Times.Once);
+        }
+
+        [Fact]
+        public void Delete_CommitsTransaction()
+        {
+
+            ShortcutEntity shortcut = new ShortcutEntity();
+            ShippingProfileEntity profile = new ShippingProfileEntity();
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+
+            var testObject = mock.Create<ShippingProfileService>();
+            testObject.Delete(new ShippingProfile(profile, shortcut));
+
+            sqlAdapter.Verify(a=>a.Commit(), Times.Once);
+        }
+
+        [Fact]
+        public void Delete_ReturnsFailure_WhenOrmExceptionThrown()
+        {
+            ShortcutEntity shortcut = new ShortcutEntity();
+            ShippingProfileEntity profile = new ShippingProfileEntity();
+
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(f => f.CreateTransacted());
+            
+            mock.Mock<IShippingProfileManager>()
+                .Setup(m => m.DeleteProfile(profile, sqlAdapter.Object))
+                .Throws(new ORMQueryExecutionException("", "", null, null, null));
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.Delete(new ShippingProfile(profile, shortcut));
+
+            Assert.True(result.Failure);
+            Assert.Equal("An error occured when deleting the profile.", result.Message);
+        }
+
+        [Fact]
+        public void GetAvailableHotkeys_ReturnsExistingHotkeysAndHotkeyOfCurrentProfile()
+        {
+            mock.Mock<IShortcutManager>()
+                .Setup(m => m.GetAvailableHotkeys())
+                .Returns(new List<Hotkey> { Hotkey.CtrlShift0 });
+
+            ShortcutEntity shortcut = new ShortcutEntity
+            {
+                Hotkey = Hotkey.CtrlShift1
+            };
+
+
+            var testObject = mock.Create<ShippingProfileService>();
+            var result = testObject.GetAvailableHotkeys(new ShippingProfile(null, shortcut));
+
+            Assert.Equal(2, result.Count());
+            Assert.Contains(Hotkey.CtrlShift0, result);
+            Assert.Contains(Hotkey.CtrlShift1, result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
+        }
+    }
+}

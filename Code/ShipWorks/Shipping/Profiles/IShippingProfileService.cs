@@ -4,12 +4,14 @@ using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Shipping.Profiles
 {
+    /// <summary>
+    /// Interface for Service that manages ShippingProfiles and their shortcuts
+    /// </summary>
     public interface IShippingProfileService
     {
         /// <summary>
         /// Get all of the ShippingProfiles
         /// </summary>
-        /// <returns></returns>
         IEnumerable<ShippingProfile> GetAll();
 
         /// <summary>
@@ -35,6 +37,6 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        IEnumerable<Hotkey> GetAvailableHotKeys(ShippingProfile shippingProfile);
+        IEnumerable<Hotkey> GetAvailableHotkeys(ShippingProfile shippingProfile);
     }
 }
