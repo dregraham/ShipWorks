@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profile
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShippingProfileEntity ShippingProfile { get; set; }
 
         /// <summary>
