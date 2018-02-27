@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Services
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                DeleteProfile(profile);
+                DeleteProfile(profile, adapter);
                 adapter.Commit();
             }
             
