@@ -6484,6 +6484,10 @@ PRINT N'Creating index [IX_Shortcut_Hotkey] on [dbo].[Shortcut]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Hotkey]) WHERE ([Shortcut].[Hotkey] IS NOT NULL)
 GO
+PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Barcode]) WHERE Barcode != ''
+GO
 
 PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO

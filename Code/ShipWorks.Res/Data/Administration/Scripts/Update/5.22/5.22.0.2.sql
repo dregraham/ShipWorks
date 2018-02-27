@@ -16,6 +16,11 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Hotkey]) WHERE ([Shortcut].[Hotkey] IS NOT NULL)
 GO
 
+PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Barcode]) WHERE Barcode != ''
+GO
+
 CREATE TABLE dbo.Tmp_ShippingProfile
 	(
 	ShippingProfileID bigint NOT NULL IDENTITY (1053, 1000),
