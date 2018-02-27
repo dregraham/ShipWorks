@@ -129,6 +129,9 @@ namespace ShipWorks.Stores.Management
 
             // Check whether or not to display license tab
             CheckLicense(store);
+
+            // Check whether or not to display the store connection tab
+            StoreHasConnectionString(store);
         }
 
         /// <summary>
@@ -148,6 +151,30 @@ namespace ShipWorks.Stores.Management
             if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
             {
                 optionControl.Controls.Remove(optionPageLicense);
+            }
+        }
+
+        /// <summary>
+        /// Checks the store to determine whether or not to display the store connection tab
+        /// </summary>
+        public void StoreHasConnectionString(StoreEntity storeEntity)
+        {
+            if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
+            {
+                optionControl.Controls.Remove(optionPageOnlineAccount);
+                sectionAutoDownloads.Visible = false;
+
+                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+                manualOrderSettingsControl.Location = new Point(32, 45);
+                manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(manualOrderSettingsControl);
+                sectionTitleManualOrders.Location = new Point(15, 15);
+            }
+            else
+            {
+                ConfigureDownloadSettingsControl();
+                ConfigureManualOrderSettingsControl();
             }
         }
 
@@ -260,8 +287,10 @@ namespace ShipWorks.Stores.Management
 
             downloadSettingsControl = storeType.CreateDownloadSettingsControl();
             downloadSettingsControl.LoadStore(store);
-            downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
-            downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+            downloadSettingsControl.Location =
+                new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+            downloadSettingsControl.Width =
+                optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
             downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             optionPageSettings.Controls.Add(downloadSettingsControl as Control);
         }
@@ -272,8 +301,10 @@ namespace ShipWorks.Stores.Management
         private void ConfigureManualOrderSettingsControl()
         {
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
-            manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+            manualOrderSettingsControl.Location =
+                new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+            manualOrderSettingsControl.Width =
+                optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
             manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             optionPageSettings.Controls.Add(manualOrderSettingsControl);
         }
@@ -286,8 +317,7 @@ namespace ShipWorks.Stores.Management
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(internationalAddressValidationSetting);
 
-            ConfigureDownloadSettingsControl();
-            ConfigureManualOrderSettingsControl();
+            StoreHasConnectionString(store);
 
             // store-specific settings control
             storeSettingsControl = storeType.CreateStoreSettingsControl();
