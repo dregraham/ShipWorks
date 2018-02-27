@@ -547,6 +547,11 @@ namespace ShipWorks.Data.Connection
                 }
             }
 
+            if (exceptions.OfType<TypeInitializationException>().Any(e => e.Message.Contains("SqlPerformanceCounters", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return true;
+            }
+
             return false;
         }
     }
