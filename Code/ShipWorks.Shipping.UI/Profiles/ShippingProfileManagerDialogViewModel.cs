@@ -112,6 +112,8 @@ namespace ShipWorks.Shipping.UI.Profiles
             ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile);
 
             profileEditor.ShowDialog();
+
+            handler.RaisePropertyChanged(nameof(ShippingProfiles));
         }
 
         /// <summary>

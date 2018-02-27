@@ -7,6 +7,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -38,7 +39,12 @@ namespace ShipWorks.Shipping.Services
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
             IEnumerable<ShippingProfileEntity> profiles = profileManager.Profiles;
 
-            return profiles.Select(p => new ShippingProfile(p, shortcuts.SingleOrDefault(s => s.RelatedObjectID == p.ShippingProfileID)));
+            return profiles.Select(p => new ShippingProfile(p,
+                shortcuts.SingleOrDefault(s => s.RelatedObjectID == p.ShippingProfileID) ?? new ShortcutEntity()
+                {
+                    Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                    RelatedObjectID = p.ShippingProfileID
+                }));
         }
 
         /// <summary>
@@ -145,7 +151,7 @@ namespace ShipWorks.Shipping.Services
         public IEnumerable<Hotkey> GetAvailableHotkeys(ShippingProfile shippingProfile)
         {
             List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
-            if (shippingProfile.Shortcut.Hotkey.HasValue)
+            if (shippingProfile.Shortcut?.Hotkey.HasValue ?? false)
             {
                 availableHotkeys.Add(shippingProfile.Shortcut.Hotkey.Value);
             }

@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Profiles
         private void OnLoad(object sender, EventArgs e)
         {
             profileName.Text = profile.ShippingProfileEntity.Name;
+            barcode.Text = profile.Shortcut.Barcode;
 
             LoadShortcuts();
             LoadProviders();
@@ -114,6 +115,8 @@ namespace ShipWorks.Shipping.Profiles
         private void OnOk(object sender, EventArgs e)
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
+            profile.Shortcut.Hotkey = (Hotkey?) keyboardShortcut.SelectedValue;
+            profile.Shortcut.Barcode = barcode.Text.Trim();
             
             // Have the profile control save itself
             ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
