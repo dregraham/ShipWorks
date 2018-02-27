@@ -354,11 +354,14 @@ namespace ShipWorks.Data
             {
                 IEntityRelation relation = relationFactory.GetSubTypeRelation(subTypeEntityName);
 
-                // Add this relation
-                RelationPredicateBucket bucket = EntityUtility.ClonePredicateBucket(baseFilter);
-                bucket.Relations.Add(relation);
+                if (relation != null)
+                {
+                    // Add this relation
+                    RelationPredicateBucket bucket = EntityUtility.ClonePredicateBucket(baseFilter);
+                    bucket.Relations.Add(relation);
 
-                adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(subTypeEntityName), bucket);
+                    adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(subTypeEntityName), bucket);
+                }
             }
         }
     }

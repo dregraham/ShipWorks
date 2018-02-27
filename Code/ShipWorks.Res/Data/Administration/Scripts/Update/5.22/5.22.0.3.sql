@@ -10,6 +10,7 @@ PRINT N'Creating MagentoOrder foreign key'
 GO
 ALTER TABLE [dbo].[MagentoOrder]  WITH CHECK ADD CONSTRAINT [FK_MagentoOrder_GenericModuleOrder] FOREIGN KEY([OrderID])
 REFERENCES [dbo].[GenericModuleOrder] ([OrderID])
+ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[MagentoOrder] CHECK CONSTRAINT [FK_MagentoOrder_GenericModuleOrder]
 GO
