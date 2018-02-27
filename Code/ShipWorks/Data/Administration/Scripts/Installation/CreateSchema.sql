@@ -6470,6 +6470,7 @@ PRINT N'Creating [dbo].[Shortcut]'
 GO
 CREATE TABLE [dbo].[Shortcut](
 	[ShortcutID] [bigint] NOT NULL IDENTITY(1105, 1000),
+	[RowVersion] [timestamp] NOT NULL,
 	[Barcode] [nvarchar](50) NOT NULL,
 	[Hotkey] [int] NULL,
 	[Action] [int] NOT NULL,
@@ -6486,9 +6487,10 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Hotk
 GO
 PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Barcode]) WHERE Barcode != ''
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE Barcode != ''
 GO
-
+ALTER TABLE [dbo].[Shortcut] ENABLE CHANGE_TRACKING
+GO
 PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 CREATE NONCLUSTERED INDEX [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])

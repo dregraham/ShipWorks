@@ -2626,6 +2626,7 @@
           <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="Hotkey" Type="Hotkey" IsOptional="true" FieldIndex="2" />
           <Field Name="RelatedObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="5" />
           <Field Name="ShortcutID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -4212,7 +4213,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-26T15:50:34.4407596Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-27T23:00:31.1529317Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8098,10 +8099,11 @@
                   <PkConstraintName Name="PK_Shortcut" />
                   <Fields>
                     <Field Name="ShortcutID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="Barcode" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="Hotkey" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="Action" Ordinal="4" DbType="8" Precision="10" />
-                    <Field Name="RelatedObjectID" Ordinal="5" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="Barcode" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="Hotkey" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Action" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="RelatedObjectID" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="SparkPayStore">
@@ -12693,6 +12695,7 @@
             <FieldMapping FieldName="Barcode" TargetFieldName="Barcode" />
             <FieldMapping FieldName="Hotkey" TargetFieldName="Hotkey" />
             <FieldMapping FieldName="RelatedObjectID" TargetFieldName="RelatedObjectID" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>

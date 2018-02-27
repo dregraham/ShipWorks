@@ -306,6 +306,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Action", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RelatedObjectID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -412,6 +414,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShortcutFieldIndex.RelatedObjectID, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.RelatedObjectID, value); }
+		}
+
+		/// <summary> The RowVersion property of the Entity Shortcut<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shortcut"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte[] RowVersion
+		{
+			get { return (System.Byte[])GetValue((int)ShortcutFieldIndex.RowVersion, true); }
+
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

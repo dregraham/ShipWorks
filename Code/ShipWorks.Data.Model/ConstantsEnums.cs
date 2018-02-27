@@ -9794,6 +9794,8 @@ namespace ShipWorks.Data.Model
 		Action,
 		///<summary>RelatedObjectID. </summary>
 		RelatedObjectID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
