@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Services
 {
@@ -64,7 +63,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Check to see if the given StoreTypeCode is GenericModule based
         /// </summary>
-        public bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode) => 
+        public bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode) =>
             StoreTypeManager.IsStoreTypeCodeGenericModuleBased(storeTypeCode);
     }
 }

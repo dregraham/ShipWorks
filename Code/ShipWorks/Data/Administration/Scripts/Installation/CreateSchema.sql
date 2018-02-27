@@ -6970,6 +6970,10 @@ PRINT N'Adding foreign keys to [dbo].[YahooOrderSearch]'
 GO
 ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID]) ON DELETE CASCADE
 GO
+PRINT N'Creating custom types'
+GO
+CREATE TYPE dbo.LongList AS TABLE ( item BIGINT );
+GO
 PRINT N'Creating extended properties'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'
