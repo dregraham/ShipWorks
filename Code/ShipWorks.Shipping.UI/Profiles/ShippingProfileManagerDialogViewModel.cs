@@ -109,11 +109,15 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile);
+            ShippingProfile selected = SelectedShippingProfile;
+
+            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(selected);
 
             profileEditor.ShowDialog();
 
-            handler.RaisePropertyChanged(nameof(ShippingProfiles));
+            ShippingProfiles.Remove(selected);
+            ShippingProfiles.Add(selected);
+            SelectedShippingProfile = selected;
         }
 
         /// <summary>
