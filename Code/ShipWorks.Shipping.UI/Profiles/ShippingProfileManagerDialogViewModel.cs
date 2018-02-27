@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Delete()
         {
-            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}");
+            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}?");
             if (dialogResult == DialogResult.OK)
             {
                 // Unset the profile before deleting so it isnt used in logic after the delete
