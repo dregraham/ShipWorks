@@ -211,6 +211,8 @@ namespace ShipWorks.Shipping.Profiles
                 profile.ShippingProfileEntity.ShipmentType = (ShipmentTypeCode) provider.SelectedValue;
             }
 
+            shippingProfileService.LoadProfileData(profile, false);
+
             profile.ShippingProfileEntity.Packages.Clear();
             LoadProfileEditor();
         }

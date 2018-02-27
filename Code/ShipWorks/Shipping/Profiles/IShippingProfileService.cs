@@ -38,5 +38,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
         IEnumerable<Hotkey> GetAvailableHotkeys(ShippingProfile shippingProfile);
+
+        /// <summary>
+        /// Load the given profile
+        /// </summary>
+        void LoadProfileData(ShippingProfile profile, bool refreshIfPresent);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -21,14 +22,17 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingProfileManager profileManager;
         private readonly IShortcutManager shortcutManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IShippingProfileLoader profileLoader;
 
         public ShippingProfileService(IShippingProfileManager profileManager,
             IShortcutManager shortcutManager,
-            ISqlAdapterFactory sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IShippingProfileLoader profileLoader)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.profileLoader = profileLoader;
         }
 
         /// <summary>
@@ -39,12 +43,13 @@ namespace ShipWorks.Shipping.Services
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
             IEnumerable<ShippingProfileEntity> profiles = profileManager.Profiles;
 
-            return profiles.Select(p => new ShippingProfile(p,
-                shortcuts.SingleOrDefault(s => s.RelatedObjectID == p.ShippingProfileID) ?? new ShortcutEntity()
-                {
-                    Action = (int) KeyboardShortcutCommand.ApplyProfile,
-                    RelatedObjectID = p.ShippingProfileID
-                }));
+            return profiles.ForEach(p => profileLoader.LoadProfileData(p, true))
+                .Select(p => new ShippingProfile(p,
+                    shortcuts.SingleOrDefault(s => s.RelatedObjectID == p.ShippingProfileID) ?? new ShortcutEntity()
+                    {
+                        Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                        RelatedObjectID = p.ShippingProfileID
+                    }));
         }
 
         /// <summary>
@@ -60,7 +65,19 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShippingProfile Create()
         {
-            return new ShippingProfile(new ShippingProfileEntity(), new ShortcutEntity());
+            ShippingProfileEntity profile = new ShippingProfileEntity
+            {
+                Name = string.Empty,
+                ShipmentTypePrimary = false
+            };
+
+            ShortcutEntity shortcutEntity = new ShortcutEntity
+            {
+                Action = (int) KeyboardShortcutCommand.ApplyProfile
+            };
+
+            profileLoader.LoadProfileData(profile, false);
+            return new ShippingProfile(profile, shortcutEntity);
         }
 
         /// <summary>
@@ -76,6 +93,9 @@ namespace ShipWorks.Shipping.Services
                     using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                     {
                         profileManager.SaveProfile(shippingProfile.ShippingProfileEntity, sqlAdapter);
+
+                        shippingProfile.Shortcut.RelatedObjectID = shippingProfile.ShippingProfileEntity.ShippingProfileID;
+
                         shortcutManager.Save(shippingProfile.Shortcut, sqlAdapter);
 
                         sqlAdapter.Commit();
@@ -157,6 +177,14 @@ namespace ShipWorks.Shipping.Services
             }
 
             return availableHotkeys;
+        }
+
+        /// <summary>
+        /// Load the given profile
+        /// </summary>
+        public void LoadProfileData(ShippingProfile profile, bool refreshIfPresent)
+        {
+            profileLoader.LoadProfileData(profile.ShippingProfileEntity, refreshIfPresent);
         }
     }
 }
