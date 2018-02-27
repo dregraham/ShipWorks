@@ -238,8 +238,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+                
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfileEntity), profile)
+                    new TypedParameter(typeof(ShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
                 );
                 profileEditor.ShowDialog(this);
             }
