@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI.Profiles
@@ -25,35 +20,34 @@ namespace ShipWorks.Shipping.UI.Profiles
     public class ShippingProfileManagerDialogViewModel : IShippingProfileManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IShippingProfileManager shippingProfileManager;
+        private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private ShippingProfile selectedShippingProfile;
-        private ObservableCollection<ShippingProfile> shippingProfilesAndShortcuts;
-        private readonly Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
-        private readonly IShortcutManager shortcutManager;
+        private ObservableCollection<ShippingProfile> shippingProfiles;
+        private readonly Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerDialogViewModel(IMessageHelper messageHelper,
-            IShippingProfileManager shippingProfileManager,
-            Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
-            IShortcutManager shortcutManager)
+        public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
+            Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
+            IMessageHelper messageHelper)
         {
-            this.messageHelper = messageHelper;
-            this.shippingProfileManager = shippingProfileManager;
+            this.shippingProfileService = shippingProfileService;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
-            this.shortcutManager = shortcutManager;
+            this.messageHelper = messageHelper;
+
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
             DeleteCommand = new RelayCommand(Delete, 
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileManager.Profiles
-                                .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts)));
+            ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileService.GetAll()
+                                .Where(profile => profile.ShippingProfileEntity.ShipmentType != ShipmentTypeCode.None));
+
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -80,8 +74,8 @@ namespace ShipWorks.Shipping.UI.Profiles
         [Obfuscation(Exclude = true)]
         public ObservableCollection<ShippingProfile> ShippingProfiles
         {
-            get => shippingProfilesAndShortcuts;
-            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfilesAndShortcuts, value);
+            get => shippingProfiles;
+            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfiles, value);
         }
 
         /// <summary>
@@ -106,7 +100,7 @@ namespace ShipWorks.Shipping.UI.Profiles
                 ShippingProfile profileToDelete = SelectedShippingProfile;
                 selectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
-                shippingProfileManager.DeleteProfile(profileToDelete.ShippingProfileEntity);
+                shippingProfileService.Delete(profileToDelete);
             }
         }
         
@@ -115,7 +109,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile.ShippingProfileEntity);
+            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile);
 
             profileEditor.ShowDialog();
         }
@@ -125,26 +119,13 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Add()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity
-            {
-                Name = string.Empty,
-                ShipmentTypePrimary = false
-            };
-            
+            ShippingProfile profile = shippingProfileService.Create();
+
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
-                ShippingProfile newShortcut = CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts);
-                ShippingProfiles.Add(newShortcut);
-                SelectedShippingProfile = newShortcut;
+                ShippingProfiles.Add(profile);
+                SelectedShippingProfile = profile;
             }
-        }
-
-        /// <summary>
-        /// Given a profile, create a DTO with its associated hotkey text.
-        /// </summary>
-        private ShippingProfile CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
-        {
-            return new ShippingProfile(profile, shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID));
         }
     }
 }
