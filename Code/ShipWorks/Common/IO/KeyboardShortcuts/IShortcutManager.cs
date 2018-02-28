@@ -29,7 +29,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Delete the shortcut
         /// </summary>
-        void Delete(ShortcutEntity profile, ISqlAdapter adapter);
+        void Delete(ShortcutEntity shortcut, ISqlAdapter adapter);
 
         /// <summary>
         /// Direct shortcut manager to update shortcuts from database before Shortcuts are returned
