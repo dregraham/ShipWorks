@@ -119,7 +119,7 @@
             this.provider.Location = new System.Drawing.Point(69, 72);
             this.provider.Name = "provider";
             this.provider.Size = new System.Drawing.Size(165, 21);
-            this.provider.TabIndex = 7;
+            this.provider.TabIndex = 3;
             this.provider.SelectedValueChanged += new System.EventHandler(this.OnChangeProvider);
             // 
             // keyboardShortcut
@@ -129,7 +129,7 @@
             this.keyboardShortcut.Location = new System.Drawing.Point(359, 41);
             this.keyboardShortcut.Name = "keyboardShortcut";
             this.keyboardShortcut.Size = new System.Drawing.Size(165, 21);
-            this.keyboardShortcut.TabIndex = 11;
+            this.keyboardShortcut.TabIndex = 2;
             // 
             // barcode
             // 
@@ -137,7 +137,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.barcode, ShipWorks.Data.Utility.EntityFieldLengthSource.ShippingProfileName);
             this.barcode.Name = "barcode";
             this.barcode.Size = new System.Drawing.Size(165, 21);
-            this.barcode.TabIndex = 9;
+            this.barcode.TabIndex = 1;
             // 
             // profileName
             // 
@@ -145,7 +145,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.profileName, ShipWorks.Data.Utility.EntityFieldLengthSource.ShippingProfileName);
             this.profileName.Name = "profileName";
             this.profileName.Size = new System.Drawing.Size(165, 21);
-            this.profileName.TabIndex = 1;
+            this.profileName.TabIndex = 0;
             // 
             // ShippingProfileEditorDlg
             // 

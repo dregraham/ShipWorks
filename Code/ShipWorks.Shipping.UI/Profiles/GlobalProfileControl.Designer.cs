@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.groupBoxFrom.Location = new System.Drawing.Point(3, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
             this.groupBoxFrom.Size = new System.Drawing.Size(419, 51);
-            this.groupBoxFrom.TabIndex = 12;
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
             // 
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.origin.Name = "origin";
             this.origin.PromptText = "(Multiple Values)";
             this.origin.Size = new System.Drawing.Size(206, 21);
-            this.origin.TabIndex = 3;
+            this.origin.TabIndex = 2;
             // 
             // originState
             // 
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.originState.Location = new System.Drawing.Point(11, 21);
             this.originState.Name = "originState";
             this.originState.Size = new System.Drawing.Size(15, 14);
-            this.originState.TabIndex = 2;
+            this.originState.TabIndex = 1;
             this.originState.Tag = "";
             this.originState.UseVisualStyleBackColor = true;
             // 
@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.groupInsurance.Location = new System.Drawing.Point(3, 203);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(419, 70);
-            this.groupInsurance.TabIndex = 11;
+            this.groupInsurance.TabIndex = 2;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.insuranceControl.Location = new System.Drawing.Point(42, 14);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -193,7 +193,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.groupShipment.Location = new System.Drawing.Point(3, 67);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(419, 129);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.dimensionsState.Location = new System.Drawing.Point(11, 54);
             this.dimensionsState.Name = "dimensionsState";
             this.dimensionsState.Size = new System.Drawing.Size(15, 14);
-            this.dimensionsState.TabIndex = 73;
+            this.dimensionsState.TabIndex = 2;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
             // 
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.dimensionsControl.Location = new System.Drawing.Point(125, 46);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 72;
+            this.dimensionsControl.TabIndex = 3;
             // 
             // labelDimensions
             // 
@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.weightState.Location = new System.Drawing.Point(11, 22);
             this.weightState.Name = "weightState";
             this.weightState.Size = new System.Drawing.Size(15, 14);
-            this.weightState.TabIndex = 70;
+            this.weightState.TabIndex = 0;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
             // 
@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(269, 24);
-            this.weight.TabIndex = 68;
+            this.weight.TabIndex = 1;
             this.weight.Weight = 0D;
             // 
             // labelWeight
