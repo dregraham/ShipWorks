@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
@@ -23,16 +25,19 @@ namespace ShipWorks.Shipping.Services
         private readonly IShortcutManager shortcutManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingProfileLoader profileLoader;
+        private readonly ILog log;
 
         public ShippingProfileService(IShippingProfileManager profileManager,
             IShortcutManager shortcutManager,
             ISqlAdapterFactory sqlAdapterFactory,
-            IShippingProfileLoader profileLoader)
+            IShippingProfileLoader profileLoader,
+            Func<Type, ILog> createLogger)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.profileLoader = profileLoader;
+            this.log = createLogger(GetType());
         }
 
         /// <summary>
@@ -112,15 +117,16 @@ namespace ShipWorks.Shipping.Services
                         sqlAdapter.Commit();
                     }
                 }
-                catch (ORMConcurrencyException)
+                catch (ORMConcurrencyException ex)
                 {
                     profileManager.InitializeForCurrentSession();
                     result = Result.FromError("Your changes cannot be saved because another use has deleted the profile.");
+                    log.Error("Error saving shippingProfile", ex);
                 }
-                catch (ORMQueryExecutionException)
+                catch (ORMQueryExecutionException ex)
                 {
-                    result = Result.FromError(
-                        "Your changes cannot be saved because another use has saved a profile with your selected HotKey.");
+                    result = Result.FromError("An error ocurred saving your profile.");
+                    log.Error("Error saving shippingProfile", ex);
                 }
             }
 
@@ -170,8 +176,9 @@ namespace ShipWorks.Shipping.Services
 
                 return Result.FromSuccess();
             }
-            catch (ORMException)
+            catch (ORMException ex)
             {
+                log.Error("Error deleting shipping profile", ex);
                 return Result.FromError("An error occured when deleting the profile.");
             }
         }

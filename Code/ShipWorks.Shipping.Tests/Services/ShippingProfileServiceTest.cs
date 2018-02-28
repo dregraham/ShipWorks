@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var result = testObject.Save(shippingProfile);
 
             Assert.True(result.Failure);
-            Assert.Equal("Your changes cannot be saved because another use has saved a profile with your selected HotKey.", result.Message);
+            Assert.Equal("An error ocurred saving your profile.", result.Message);
         }
 
         [Fact]
