@@ -354,6 +354,10 @@ namespace ShipWorks.Data
             {
                 IEntityRelation relation = relationFactory.GetSubTypeRelation(subTypeEntityName);
 
+                // If we can't find the relation, it means that the leaf is a descendant farther down the tree than a child.
+                // Doing this will let us handle the deletion through a CASCADE DELETE on the SQL relation.  If there isn't
+                // a CASCADE DELETE on the relation, this will crash. It would have crashed anyway when trying to add a null
+                // relation to the bucket, so this should be a relatively safe thing to do.
                 if (relation != null)
                 {
                     // Add this relation
