@@ -4,11 +4,13 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
@@ -294,6 +296,12 @@ namespace ShipWorks.ApplicationCore.Services
                     return hasChanged;
                 }
                 catch (ConnectionLostException ex)
+                {
+                    log.Error("Connection to ShipWorks Database was lost.", ex);
+
+                    return hasChanged;
+                }
+                catch (TypeInitializationException ex) when (ex.Message.Contains("SqlPerformanceCounters", StringComparison.InvariantCultureIgnoreCase))
                 {
                     log.Error("Connection to ShipWorks Database was lost.", ex);
 
