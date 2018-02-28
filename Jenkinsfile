@@ -7,6 +7,9 @@ pipeline {
 			customWorkspace "c:/jenkins-builds/SB_${BUILD_FOLDER}"
 		}
 	}
+	options {
+    	disableConcurrentBuilds()
+  	}
 	stages {
 		stage('Compile the solution') {
 			steps {
