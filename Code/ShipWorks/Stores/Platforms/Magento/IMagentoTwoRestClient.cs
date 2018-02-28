@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -72,5 +73,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// and is not order specific details like option names and image urls
         /// </returns>
         Product GetProductById(int productId);
+
+        /// <summary>
+        /// Get bundle production options by sku
+        /// </summary>
+        IEnumerable<ProductOptionDetail> GetBundleProductOptionsBySku(string sku);
     }
 }
