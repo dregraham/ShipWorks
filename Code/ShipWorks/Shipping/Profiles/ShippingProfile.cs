@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Reflection;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
@@ -20,11 +21,13 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Shipping Profile
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShippingProfileEntity ShippingProfileEntity { get; }
 
         /// <summary>
         /// Shortcut
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShortcutEntity Shortcut { get; }
 
         /// <summary>
@@ -33,16 +36,16 @@ namespace ShipWorks.Shipping.Profiles
         /// <remarks>
         /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
         /// </remarks>
-        public string ShortcutKey
-        {
-            get => Shortcut?.Hotkey != null ? EnumHelper.GetDescription(Shortcut.Hotkey) : string.Empty;
-        }
+        [Obfuscation(Exclude = true)]
+        public string ShortcutKey => Shortcut?.Hotkey != null ? EnumHelper.GetDescription(Shortcut.Hotkey) : string.Empty;
+
         /// <summary>
         /// The associated ShipmentType description. Blank if global
         /// </summary>
-        public string ShipmentTypeDescription
-        {
-            get => ShippingProfileEntity?.ShipmentType != null ? EnumHelper.GetDescription(ShippingProfileEntity.ShipmentType) : string.Empty;
-        }
+        [Obfuscation(Exclude = true)]
+        public string ShipmentTypeDescription => 
+            ShippingProfileEntity?.ShipmentType != null ?
+                EnumHelper.GetDescription(ShippingProfileEntity.ShipmentType) :
+                string.Empty;
     }
 }
