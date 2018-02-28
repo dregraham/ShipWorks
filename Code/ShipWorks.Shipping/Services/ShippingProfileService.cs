@@ -57,7 +57,18 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShippingProfile Get(long shippingProfileEntityId)
         {
-            return GetAll().Single(p => p.ShippingProfileEntity.ShippingProfileID == shippingProfileEntityId);
+            ShippingProfile fetchedShippingProfile = null;
+
+            ShippingProfileEntity profile = profileManager.Profiles.SingleOrDefault(p => p.ShippingProfileID == shippingProfileEntityId);
+
+            if (profile!=null)
+            {
+                profileLoader.LoadProfileData(profile, true);
+                ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ?? new ShortcutEntity();
+                fetchedShippingProfile = new ShippingProfile(profile, shortcut);
+            }
+
+            return fetchedShippingProfile;
         }
 
         /// <summary>

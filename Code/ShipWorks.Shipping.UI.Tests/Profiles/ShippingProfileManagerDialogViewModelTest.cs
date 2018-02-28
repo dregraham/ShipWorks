@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         public void Constructor_ProfileShortcutKeyIsBlank_WhenNoMatchingShortcut()
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 43, Hotkey = Hotkey.CtrlShiftD };
+            var shortcut = new ShortcutEntity();
             var profile = new ShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
             

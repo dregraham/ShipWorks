@@ -9,6 +9,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using Xunit;
@@ -72,10 +73,11 @@ namespace ShipWorks.Shipping.Tests.Services
             var newProfile = mock.Create<ShippingProfileService>().Create();
             
             Assert.True(newProfile.Shortcut.IsNew);
-            Assert.False(newProfile.Shortcut.IsDirty);
-
+            Assert.Equal((int) KeyboardShortcutCommand.ApplyProfile, newProfile.Shortcut.Action);
+            
             Assert.True(newProfile.ShippingProfileEntity.IsNew);
-            Assert.False(newProfile.ShippingProfileEntity.IsDirty);
+            Assert.Equal(string.Empty, newProfile.ShippingProfileEntity.Name);
+            Assert.False(newProfile.ShippingProfileEntity.ShipmentTypePrimary);
         }
 
         [Fact]
