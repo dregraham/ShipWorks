@@ -158,6 +158,8 @@ namespace ShipWorks.Stores.Management
         {
             if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
             {
+                downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+                downloadSettingsControl.LoadStore(store);
                 optionControl.Controls.Remove(optionPageOnlineAccount);
                 sectionAutoDownloads.Visible = false;
 
