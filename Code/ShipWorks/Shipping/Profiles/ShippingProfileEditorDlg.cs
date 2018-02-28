@@ -130,8 +130,10 @@ namespace ShipWorks.Shipping.Profiles
             {
                 MessageHelper.ShowError(this, result.Message);
             }
-            
-            DialogResult = DialogResult.OK;
+            else
+            {
+                DialogResult = DialogResult.OK;
+            }
         }
 
         /// <summary>
@@ -211,9 +213,10 @@ namespace ShipWorks.Shipping.Profiles
                 profile.ShippingProfileEntity.ShipmentType = (ShipmentTypeCode) provider.SelectedValue;
             }
 
-            shippingProfileService.LoadProfileData(profile, false);
-
             profile.ShippingProfileEntity.Packages.Clear();
+
+            shippingProfileService.LoadProfileData(profile, true);
+
             LoadProfileEditor();
         }
     }
