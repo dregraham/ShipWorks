@@ -63,7 +63,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>                
-                <DataGridTemplateColumn Header="Provider" Width=".25*" SortMemberPath="ShipmentTypeDescription" CanUserSort="True">
+                <DataGridTemplateColumn Header="Provider" Width=".25*" SortMemberPath="ShipmentTypeDescription" CanUserSort="True" SortDirection="Ascending">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel Margin="0 2 0 2">
