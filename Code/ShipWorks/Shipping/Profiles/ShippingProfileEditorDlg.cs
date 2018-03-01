@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IProfileControlFactory profileControlFactory;
         private readonly ShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
-        private readonly IShippingSettings shippingSettings;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         
         /// <summary>
         /// Constructor
@@ -30,13 +30,13 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfile profile, 
             IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
-			IShippingSettings shippingSettings)
+            IShipmentTypeManager shipmentTypeManager)
         {
             InitializeComponent();
             this.profile = profile;
             this.shippingProfileService = shippingProfileService;
             this.profileControlFactory = profileControlFactory;
-            this.shippingSettings = shippingSettings;
+            this.shipmentTypeManager = shipmentTypeManager;
 
             WindowStateSaver.Manage(this);
         }
@@ -187,8 +187,8 @@ namespace ShipWorks.Shipping.Profiles
         {
             this.provider.SelectedValueChanged -= OnChangeProvider;
             ShipmentTypeCode? profileShipmentType = profile.ShippingProfileEntity.ShipmentType;
-            
-            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
+
+            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shipmentTypeManager.ShipmentTypeCodes;
             if (profileShipmentType != null)
             {
                 configuredShipmentTypes = configuredShipmentTypes.Union(new[] { profileShipmentType.Value });
