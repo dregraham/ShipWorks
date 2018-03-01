@@ -49,12 +49,26 @@ namespace ShipWorks.Shipping.Services
             IEnumerable<ShippingProfileEntity> profiles = profileManager.Profiles;
 
             return profiles.ForEach(p => profileLoader.LoadProfileData(p, true))
-                .Select(p => new ShippingProfile(p,
-                    shortcuts.SingleOrDefault(s => s.RelatedObjectID == p.ShippingProfileID) ?? new ShortcutEntity()
-                    {
-                        Action = (int) KeyboardShortcutCommand.ApplyProfile,
-                        RelatedObjectID = p.ShippingProfileID
-                    }));
+                .Select(p => CreateShippingProfile(p, shortcuts));
+        }
+
+        /// <summary>
+        /// Given a profile and all the shortcuts, create a ShippingProfile
+        /// </summary>
+        private ShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, IEnumerable<ShortcutEntity> shortcuts)
+        {
+            ShortcutEntity shortcutEntity = shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntity.ShippingProfileID);
+            if (shortcutEntity == null)
+            {
+                shortcutEntity = new ShortcutEntity
+                {
+                    Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                    RelatedObjectID = shippingProfileEntity.ShippingProfileID
+                };
+            }
+
+            return new ShippingProfile(shippingProfileEntity, shortcutEntity,
+                                profileManager, shortcutManager, profileLoader);
         }
 
         /// <summary>
@@ -70,7 +84,7 @@ namespace ShipWorks.Shipping.Services
             {
                 profileLoader.LoadProfileData(profile, true);
                 ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ?? new ShortcutEntity();
-                fetchedShippingProfile = new ShippingProfile(profile, shortcut);
+                fetchedShippingProfile = new ShippingProfile(profile, shortcut, profileManager, shortcutManager, profileLoader);
             }
 
             return fetchedShippingProfile;
@@ -79,7 +93,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Create an empty ShippingProfile
         /// </summary>
-        public ShippingProfile Create()
+        public ShippingProfile CreateEmptyShippingProfile()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity
             {
@@ -93,7 +107,7 @@ namespace ShipWorks.Shipping.Services
             };
 
             profileLoader.LoadProfileData(profile, false);
-            return new ShippingProfile(profile, shortcutEntity);
+            return new ShippingProfile(profile, shortcutEntity, profileManager, shortcutManager, profileLoader);
         }
 
         /// <summary>
@@ -101,7 +115,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public Result Save(ShippingProfile shippingProfile)
         {
-            Result result = Validate(shippingProfile);
+            Result result = shippingProfile.Validate();
             if (result.Success)
             {
                 try
@@ -111,7 +125,6 @@ namespace ShipWorks.Shipping.Services
                         profileManager.SaveProfile(shippingProfile.ShippingProfileEntity, sqlAdapter);
 
                         shippingProfile.Shortcut.RelatedObjectID = shippingProfile.ShippingProfileEntity.ShippingProfileID;
-
                         shortcutManager.Save(shippingProfile.Shortcut, sqlAdapter);
 
                         sqlAdapter.Commit();
@@ -133,32 +146,6 @@ namespace ShipWorks.Shipping.Services
             return result;
         }
 
-        /// <summary>
-        /// Validate that the shippintProfile can be saved
-        /// </summary>
-        private Result Validate(ShippingProfile shippingProfile)
-        {
-            Result result = Result.FromSuccess();
-
-            if (string.IsNullOrWhiteSpace(shippingProfile.ShippingProfileEntity.Name))
-            {
-                result = Result.FromError("Enter a name for the profile.");
-            }
-            else if (profileManager.Profiles.Any(profile =>
-                profile.ShippingProfileID != shippingProfile.ShippingProfileEntity.ShippingProfileID &&
-                profile.Name == shippingProfile.ShippingProfileEntity.Name))
-            {
-                result = Result.FromError("A profile with the chosen name already exists.");
-            }
-            else if (shortcutManager.Shortcuts.Any(s =>
-                s.ShortcutID != shippingProfile.Shortcut.ShortcutID && s.Barcode == shippingProfile.Shortcut.Barcode))
-            {
-                result = Result.FromError($"The barcode \"{shippingProfile.Shortcut.Barcode}\" is already in use.");
-            }
-
-            return result;
-        }
-        
         /// <summary>
         /// Delete the ShippingProfile and its children
         /// </summary>
@@ -195,14 +182,6 @@ namespace ShipWorks.Shipping.Services
             }
 
             return availableHotkeys;
-        }
-
-        /// <summary>
-        /// Load the given profile
-        /// </summary>
-        public void LoadProfileData(ShippingProfile profile, bool refreshIfPresent)
-        {
-            profileLoader.LoadProfileData(profile.ShippingProfileEntity, refreshIfPresent);
         }
     }
 }

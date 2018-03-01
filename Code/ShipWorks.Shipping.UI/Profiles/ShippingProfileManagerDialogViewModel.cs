@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Add()
         {
-            ShippingProfile profile = shippingProfileService.Create();
+            ShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
 
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {

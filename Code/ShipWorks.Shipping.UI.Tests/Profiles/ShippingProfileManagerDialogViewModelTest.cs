@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity();
-            var profile = new ShippingProfile(profileEntity, shortcut);
+            var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = Hotkey.CtrlShiftD };
-            var profile = new ShippingProfile(profileEntity, shortcut);
+            var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity();
-            var profile = new ShippingProfile(profileEntity, shortcut);
+            var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
-            var profile = new ShippingProfile(profileEntity, shortcut);
+            var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         {
             mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
             var profileEntity = new ShippingProfileEntity();
-            var profile = new ShippingProfile(profileEntity, null);
+            var profile = CreateShippingProfile(profileEntity, null);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.No);
 
             var profileEntity = new ShippingProfileEntity();
-            var profile = new ShippingProfile(profileEntity, null);
+            var profile = CreateShippingProfile(profileEntity, null);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
@@ -113,6 +113,12 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             testObject.DeleteCommand.Execute(null);
 
             mock.Mock<IShippingProfileService>().Verify(m => m.Delete(profile), Times.Never);
+        }
+
+        private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
+        {
+            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
+                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
         }
 
         public void Dispose()

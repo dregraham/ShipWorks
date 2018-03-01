@@ -204,18 +204,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnChangeProvider(object sender, EventArgs e)
         {
-            if(provider.SelectedValue == null)
-            {
-                profile.ShippingProfileEntity.ShipmentType = null;
-            }
-            else
-            {
-                profile.ShippingProfileEntity.ShipmentType = (ShipmentTypeCode) provider.SelectedValue;
-            }
-
-            profile.ShippingProfileEntity.Packages.Clear();
-
-            shippingProfileService.LoadProfileData(profile, true);
+            profile.ChangeProvider((ShipmentTypeCode?) provider.SelectedValue);
 
             LoadProfileEditor();
         }

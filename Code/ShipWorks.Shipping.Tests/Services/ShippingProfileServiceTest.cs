@@ -13,19 +13,15 @@ using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using Xunit;
-using Xunit.Abstractions;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
     public class ShippingProfileServiceTest : IDisposable
     {
-        private readonly ITestOutputHelper output;
         private readonly AutoMock mock;
         
-        public ShippingProfileServiceTest(ITestOutputHelper output)
+        public ShippingProfileServiceTest()
         {
-            this.output = output;
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
@@ -70,7 +66,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public void Create_ReturnsNewShippingProfile()
         {
-            var newProfile = mock.Create<ShippingProfileService>().Create();
+            var newProfile = mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
             
             Assert.True(newProfile.Shortcut.IsNew);
             Assert.Equal((int) KeyboardShortcutCommand.ApplyProfile, newProfile.Shortcut.Action);
@@ -94,7 +90,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Mock(f => f.CreateTransacted());
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+            var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Success);
             mock.Mock<IShippingProfileManager>().Verify(m => m.SaveProfile(profile, sqlAdapter.Object), Times.Once);
@@ -115,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Mock(f => f.CreateTransacted());
 
             var testObject = mock.Create<ShippingProfileService>();
-            testObject.Save(new ShippingProfile(profile, shortcut));
+            testObject.Save(CreateShippingProfile(profile, shortcut));
 
             sqlAdapter.Verify(a=>a.Commit(), Times.Once);
         }
@@ -137,7 +133,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
                 .Throws(new ORMConcurrencyException("blah", profile));
 
-            ShippingProfile shippingProfile = new ShippingProfile(profile, shortcut);
+            ShippingProfile shippingProfile = CreateShippingProfile(profile, shortcut);
 
             var testObject = mock.Create<ShippingProfileService>();
 
@@ -163,7 +159,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
                 .Throws(new ORMQueryExecutionException("","",null, null, null));
 
-            ShippingProfile shippingProfile = new ShippingProfile(profile, shortcut);
+            ShippingProfile shippingProfile = CreateShippingProfile(profile, shortcut);
 
             var testObject = mock.Create<ShippingProfileService>();
 
@@ -180,7 +176,7 @@ namespace ShipWorks.Shipping.Tests.Services
             ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+            var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
             Assert.Equal("Enter a name for the profile.", result.Message);
@@ -200,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Returns(new[] { new ShippingProfileEntity { Name = "blah" } });
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+            var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
             Assert.Equal("A profile with the chosen name already exists.", result.Message);
@@ -223,7 +219,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Returns(new[] { new ShortcutEntity { Barcode = "blip" } });
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Save(new ShippingProfile(profile, shortcut));
+            var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
             Assert.Equal("The barcode \"blip\" is already in use.", result.Message);
@@ -240,7 +236,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Mock(f => f.CreateTransacted());
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Delete(new ShippingProfile(profile, shortcut));
+            var result = testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Success);
             mock.Mock<IShippingProfileManager>().Verify(m => m.DeleteProfile(profile, sqlAdapter.Object), Times.Once);
@@ -258,7 +254,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Mock(f => f.CreateTransacted());
 
             var testObject = mock.Create<ShippingProfileService>();
-            testObject.Delete(new ShippingProfile(profile, shortcut));
+            testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             sqlAdapter.Verify(a=>a.Commit(), Times.Once);
         }
@@ -277,7 +273,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Throws(new ORMQueryExecutionException("", "", null, null, null));
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.Delete(new ShippingProfile(profile, shortcut));
+            var result = testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
             Assert.Equal("An error occured when deleting the profile.", result.Message);
@@ -297,11 +293,17 @@ namespace ShipWorks.Shipping.Tests.Services
 
 
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.GetAvailableHotkeys(new ShippingProfile(null, shortcut));
+            var result = testObject.GetAvailableHotkeys(CreateShippingProfile(null, shortcut));
 
             Assert.Equal(2, result.Count());
             Assert.Contains(Hotkey.CtrlShift0, result);
             Assert.Contains(Hotkey.CtrlShift1, result);
+        }
+
+        private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
+        {
+            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
+                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
         }
 
         public void Dispose()
