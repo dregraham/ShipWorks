@@ -84,7 +84,12 @@ namespace ShipWorks.Shipping.Services
             {
                 profileLoader.LoadProfileData(profile, true);
                 ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ??
-                    new ShortcutEntity();
+                    new ShortcutEntity
+                    {
+                        Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                        RelatedObjectID = shippingProfileEntityId
+                    };
+                
                 fetchedShippingProfile = new ShippingProfile(profile, shortcut, profileManager, shortcutManager, profileLoader);
             }
 
