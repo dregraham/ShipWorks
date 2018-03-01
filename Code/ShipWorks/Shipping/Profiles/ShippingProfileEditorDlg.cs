@@ -8,7 +8,8 @@ using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Settings;
 using System.Linq;
-using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -22,7 +23,8 @@ namespace ShipWorks.Shipping.Profiles
         private readonly ShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        
+        private readonly IMessenger messenger;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -30,13 +32,15 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfile profile, 
             IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
-            IShipmentTypeManager shipmentTypeManager)
+			IShippingSettings shippingSettings)
+            IMessenger messenger)
         {
             InitializeComponent();
             this.profile = profile;
             this.shippingProfileService = shippingProfileService;
             this.profileControlFactory = profileControlFactory;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.messenger = messenger;
 
             WindowStateSaver.Manage(this);
         }
@@ -46,6 +50,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            messenger.Send(new DisableSingleScanInputFilterMessage(this));
             profileName.Text = profile.ShippingProfileEntity.Name;
             barcode.Text = profile.Shortcut.Barcode;
 
@@ -154,6 +159,8 @@ namespace ShipWorks.Shipping.Profiles
                     profileControl.CancelChanges();
                 }
             }
+            
+            messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
 
         /// <summary>
@@ -216,6 +223,22 @@ namespace ShipWorks.Shipping.Profiles
             profile.ChangeProvider((ShipmentTypeCode?) provider.SelectedValue);
 
             LoadProfileEditor();
+        }
+        
+        /// <summary>
+        /// Disable accept button as scans can send an enter key
+        /// </summary>
+        private void OnEnterBarcode(object sender, EventArgs e)
+        {
+            AcceptButton = null;
+        }
+
+        /// <summary>
+        /// Enable accept button as we now want the enter key to work
+        /// </summary>
+        private void OnLeaveBarcode(object sender, EventArgs e)
+        {
+            AcceptButton = ok;
         }
     }
 }

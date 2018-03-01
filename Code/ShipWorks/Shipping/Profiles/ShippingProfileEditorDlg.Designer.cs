@@ -138,6 +138,8 @@
             this.barcode.Name = "barcode";
             this.barcode.Size = new System.Drawing.Size(165, 21);
             this.barcode.TabIndex = 1;
+            this.barcode.Enter += OnEnterBarcode;
+            this.barcode.Leave += OnLeaveBarcode;
             // 
             // profileName
             // 
