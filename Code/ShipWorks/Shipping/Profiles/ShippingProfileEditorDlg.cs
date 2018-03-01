@@ -58,6 +58,10 @@ namespace ShipWorks.Shipping.Profiles
             {
                 provider.SelectedValue = profile.ShippingProfileEntity.ShipmentType;
             }
+            else
+            {
+                LoadProfileEditor();
+            }
         }
 
         /// <summary>
