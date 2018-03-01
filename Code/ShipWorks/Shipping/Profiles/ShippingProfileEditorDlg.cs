@@ -8,6 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Settings;
 using System.Linq;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -185,8 +186,13 @@ namespace ShipWorks.Shipping.Profiles
         private void LoadProviders()
         {
             this.provider.SelectedValueChanged -= OnChangeProvider;
-
+            ShipmentTypeCode? profileShipmentType = profile.ShippingProfileEntity.ShipmentType;
+            
             IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
+            if (profileShipmentType != null)
+            {
+                configuredShipmentTypes = configuredShipmentTypes.Union(new[] { profileShipmentType.Value });
+            }
 
             List<KeyValuePair<string, ShipmentTypeCode?>> dataSource = new List<KeyValuePair<string, ShipmentTypeCode?>>();
             dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>("No Change", null));
