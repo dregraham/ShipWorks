@@ -80,10 +80,11 @@ namespace ShipWorks.Shipping.Services
 
             ShippingProfileEntity profile = profileManager.Profiles.SingleOrDefault(p => p.ShippingProfileID == shippingProfileEntityId);
 
-            if (profile!=null)
+            if (profile != null)
             {
                 profileLoader.LoadProfileData(profile, true);
-                ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ?? new ShortcutEntity();
+                ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ??
+                    new ShortcutEntity();
                 fetchedShippingProfile = new ShippingProfile(profile, shortcut, profileManager, shortcutManager, profileLoader);
             }
 
