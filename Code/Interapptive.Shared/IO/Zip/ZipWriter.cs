@@ -15,7 +15,7 @@ namespace Interapptive.Shared.IO.Zip
         static readonly ILog log = LogManager.GetLogger(typeof(ZipWriter));
 
         // Compression level used
-        int compression = 5;
+        int compression = 1;
 
         // Size of buffer used when writing data
         int bufferSize = 8192;

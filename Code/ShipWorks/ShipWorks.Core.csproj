@@ -190,6 +190,9 @@
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -984,6 +987,7 @@
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\SqlServerEditionIdType.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstaller.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerInfo.cs" />
