@@ -21,6 +21,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters;
@@ -148,11 +149,32 @@ namespace ShipWorks.Stores
         private static void UpdateInheritanceActiveTable(string tableName, Func<StoreType, IEntityCore> getEntity)
         {
             IEnumerable<string> tables = uniqueStoreTypes.Select(getEntity)
-                .Select(x => x.LLBLGenProEntityName)
+                .SelectMany(GetAncestorEntityTypes)
+                .Select(x => EntityFactoryFactory.GetFactory(x).ForEntityName)
                 .Distinct()
                 .Except(new[] { tableName });
 
             ActiveTableInheritanceManager.SetActiveTables(tableName, tables);
+        }
+
+        /// <summary>
+        /// Get EntityType list for the entity and its ancestors
+        /// </summary>
+        /// <remarks>
+        /// We need to do this so that we include entities with more than one level between
+        /// it and the root of the hierarchy. We create some redundancy by returning the parent
+        /// and roots for each entity, but that gets filtered out later.
+        /// </remarks>
+        private static IEnumerable<EntityType> GetAncestorEntityTypes(IEntityCore entity)
+        {
+            var type = entity.GetType();
+            yield return EntityUtility.GetEntityType(type);
+
+            while (type.BaseType != typeof(CommonEntityBase))
+            {
+                yield return EntityUtility.GetEntityType(type.BaseType);
+                type = type.BaseType;
+            }
         }
 
         /// <summary>
@@ -228,8 +250,8 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool DoAnyStoresHaveAutomaticValidationEnabled()
         {
-            return GetEnabledStores().Any(s => 
-            AddressValidationPolicy.ShouldAutoValidate(s.DomesticAddressValidationSetting) || 
+            return GetEnabledStores().Any(s =>
+            AddressValidationPolicy.ShouldAutoValidate(s.DomesticAddressValidationSetting) ||
             AddressValidationPolicy.ShouldAutoValidate(s.InternationalAddressValidationSetting));
         }
 
