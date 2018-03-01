@@ -50,7 +50,6 @@ namespace ShipWorks.Shipping.Profiles
 
             LoadShortcuts();
             LoadProviders();
-            LoadProfileEditor();
 
             profileName.Enabled = !profile.ShippingProfileEntity.ShipmentTypePrimary;
             provider.Enabled = profile.ShippingProfileEntity.IsNew;
