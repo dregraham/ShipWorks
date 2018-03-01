@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Profiles
             {
                 result = Result.FromError("A profile with the chosen name already exists.");
             }
-            else if (shortcutManager.Shortcuts.Any(s =>
+            else if (!Shortcut.Barcode.IsNullOrWhiteSpace() && shortcutManager.Shortcuts.Any(s =>
                 s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
             {
                 result = Result.FromError($"The barcode \"{Shortcut.Barcode}\" is already in use.");

@@ -111,7 +111,22 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             Assert.True(result.Failure);
             Assert.Equal("A profile with the chosen name already exists.", result.Message);
         }
-        
+
+        [Fact]
+        public void Validate_ReturnsTrue_WhenBarcodeIsBlank()
+        {
+            mock.Mock<IShortcutManager>()
+                .SetupGet(m => m.Shortcuts)
+                .Returns(new[] { new ShortcutEntity() { Barcode = "" } });
+
+            var testObject = CreateShippingProfile(new ShippingProfileEntity() { ShippingProfileID = 5, Name = "name" },
+                new ShortcutEntity() { Barcode = "" });
+
+            var result = testObject.Validate();
+
+            Assert.True(result.Success);
+        }
+
         [Fact]
         public void Validate_ReturnsFailure_WhenAShortcutWithSameBarcodeExists()
         {
