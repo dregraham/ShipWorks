@@ -5775,10 +5775,6 @@ PRINT N'Adding foreign keys to [dbo].[iParcelShipment]'
 GO
 ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [FK_iParcelShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[MagentoOrder]'
-GO
-ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [FK_MagentoOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
 PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorOrder]'
 GO
 ALTER TABLE [dbo].[MarketplaceAdvisorOrder] ADD CONSTRAINT [FK_MarketworksOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
@@ -6262,6 +6258,15 @@ REFERENCES [dbo].[Order] ([OrderID])
 GO
 
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+GO
+
+PRINT N'Creating MagentoOrder foreign key'
+GO
+ALTER TABLE [dbo].[MagentoOrder]  WITH CHECK ADD CONSTRAINT [FK_MagentoOrder_GenericModuleOrder] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[GenericModuleOrder] ([OrderID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[MagentoOrder] CHECK CONSTRAINT [FK_MagentoOrder_GenericModuleOrder]
 GO
 
 PRINT N'Creating table GenericModuleOrderItem'

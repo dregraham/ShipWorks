@@ -182,13 +182,30 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between GenericModuleOrderEntity and MagentoOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeMagentoOrderEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(GenericModuleOrderFields.OrderID, MagentoOrderFields.OrderID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
 		/// <returns>relation which makes the current entity a supertype of the subtype entity with the name specified, or null if not applicable/found</returns>
 		public override IEntityRelation GetSubTypeRelation(string subTypeEntityName)
 		{
-			return null;
+			switch(subTypeEntityName)
+			{
+				case "MagentoOrderEntity":
+					return this.RelationToSubTypeMagentoOrderEntity;
+				default:
+					return null;
+			}
 		}
 		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with its supertype, if applicable.</summary>

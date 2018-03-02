@@ -13698,6 +13698,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.CombineSplitStatus);}
 		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_GenericModuleOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.OrderID_GenericModuleOrder);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.AmazonOrderID field instance</summary>
+		public static EntityField2 AmazonOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.AmazonOrderID);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.IsFBA field instance</summary>
+		public static EntityField2 IsFBA
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.IsFBA);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.IsPrime field instance</summary>
+		public static EntityField2 IsPrime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.IsPrime);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.IsSameDay field instance</summary>
+		public static EntityField2 IsSameDay
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.IsSameDay);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.OrderID);}

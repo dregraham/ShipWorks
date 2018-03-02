@@ -5906,6 +5906,16 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>OrderID. Inherited from GenericModuleOrder</summary>
+		OrderID_GenericModuleOrder,
+		///<summary>AmazonOrderID. Inherited from GenericModuleOrder</summary>
+		AmazonOrderID,
+		///<summary>IsFBA. Inherited from GenericModuleOrder</summary>
+		IsFBA,
+		///<summary>IsPrime. Inherited from GenericModuleOrder</summary>
+		IsPrime,
+		///<summary>IsSameDay. Inherited from GenericModuleOrder</summary>
+		IsSameDay,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
