@@ -195,6 +195,11 @@ PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
 GO
+PRINT N'Creating index [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC) 
+	INCLUDE ([RollupEffectiveCheckoutStatus], [GspEligible]) ON [PRIMARY]
+GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -4671,10 +4676,9 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
 GO
-ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
 GO
-CREATE INDEX [SW_FilterNodeContentDirty_FilterNodeContentDirtyID] 
-	ON [dbo].[FilterNodeContentDirty] (FilterNodeContentDirtyID)
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_FilterNodeContentDirtyID] ON [dbo].[FilterNodeContentDirty] ([ObjectID], [ComputerID], [ColumnsUpdated]) INCLUDE ([ObjectType], [ParentID])
 GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
