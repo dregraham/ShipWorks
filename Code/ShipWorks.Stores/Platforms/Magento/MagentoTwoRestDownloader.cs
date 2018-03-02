@@ -316,7 +316,10 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             IEnumerable<Item> itemList = items as IList<Item> ?? items.ToList();
-            IEnumerable<Item> subItemList = itemList.Where(i => i.ProductType != "configurable" && !i.ParentItemId.HasValue);
+            IEnumerable<Item> subItemList = itemList
+                .Where(i => i.ProductType != "configurable")  // Ignore configurable items
+                .Where(i => !i.ParentItemId.HasValue ||       // Ignore items that are part of a bundle
+                    items.FirstOrDefault(x => x.ItemId == i.ParentItemId.Value)?.ProductType != "bundle");
 
             foreach (Item item in subItemList)
             {
@@ -346,7 +349,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
                 }
 
-                if (item.ProductType.Equals("bundle", StringComparison.InvariantCultureIgnoreCase))
+                if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
                 {
                     AddBundleOptions(orderItem, magentoOrderItem?.Sku);
                 }
@@ -372,14 +375,14 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 return;
             }
-            
+
             // Get the parent product option details so we can add attributes
             IEnumerable<ProductOptionDetail> parentProductOptionDetails = webClient.GetBundleProductOptionsBySku(parentProductSku);
 
             foreach (ProductOptionDetail optionDetail in parentProductOptionDetails)
             {
                 OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
-                orderItemAttribute.Description = optionDetail?.Title; 
+                orderItemAttribute.Description = optionDetail?.Title;
                 orderItemAttribute.Name = optionDetail?.Title ?? "Option";
                 orderItemAttribute.UnitPrice = 0;
             }
@@ -440,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     log.Error($"Error getting Item Options by SKU {ex.Message}", ex);
                 }
             }
-            
+
             try
             {
                 // Getting a prodcut by Id does not give us all the product info we need like option info
