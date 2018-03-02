@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfile profile, 
             IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
-			IShippingSettings shippingSettings,
+			IShipmentTypeManager shipmentTypeManager,
             IMessenger messenger)
         {
             InitializeComponent();
