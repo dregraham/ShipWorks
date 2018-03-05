@@ -96,13 +96,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Create an order
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new MagentoOrderEntity
+        protected override OrderEntity CreateOrderInstance() =>
+            PopulateGenericOrderInstance(new MagentoOrderEntity
             {
                 MagentoOrderID = 0
-            };
-        }
+            });
 
         /// <summary>
         /// Creates an order identifier that will locate the order provided in the database.

@@ -27,7 +27,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	// __LLBLGENPRO_USER_CODE_REGION_END
 	/// <summary>Entity class which represents the entity 'MagentoOrder'.<br/><br/></summary>
 	[Serializable]
-	public partial class MagentoOrderEntity : OrderEntity
+	public partial class MagentoOrderEntity : GenericModuleOrderEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -174,7 +174,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					toReturn.Add(Relations.MagentoOrderSearchEntityUsingOrderID);
 					break;
 				default:
-					toReturn = OrderEntity.GetRelationsForField(fieldName);
+					toReturn = GenericModuleOrderEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;

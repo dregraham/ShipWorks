@@ -195,6 +195,11 @@ PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
 GO
+PRINT N'Creating index [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC) 
+	INCLUDE ([RollupEffectiveCheckoutStatus], [GspEligible]) ON [PRIMARY]
+GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -4671,10 +4676,9 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
 GO
-ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
 GO
-CREATE INDEX [SW_FilterNodeContentDirty_FilterNodeContentDirtyID] 
-	ON [dbo].[FilterNodeContentDirty] (FilterNodeContentDirtyID)
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_FilterNodeContentDirtyID] ON [dbo].[FilterNodeContentDirty] ([ObjectID], [ComputerID], [ColumnsUpdated]) INCLUDE ([ObjectType], [ParentID])
 GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
@@ -5771,10 +5775,6 @@ PRINT N'Adding foreign keys to [dbo].[iParcelShipment]'
 GO
 ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [FK_iParcelShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[MagentoOrder]'
-GO
-ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [FK_MagentoOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
 PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorOrder]'
 GO
 ALTER TABLE [dbo].[MarketplaceAdvisorOrder] ADD CONSTRAINT [FK_MarketworksOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
@@ -6258,6 +6258,15 @@ REFERENCES [dbo].[Order] ([OrderID])
 GO
 
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+GO
+
+PRINT N'Creating MagentoOrder foreign key'
+GO
+ALTER TABLE [dbo].[MagentoOrder]  WITH CHECK ADD CONSTRAINT [FK_MagentoOrder_GenericModuleOrder] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[GenericModuleOrder] ([OrderID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[MagentoOrder] CHECK CONSTRAINT [FK_MagentoOrder_GenericModuleOrder]
 GO
 
 PRINT N'Creating table GenericModuleOrderItem'

@@ -291,17 +291,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between OrderEntity and MagentoOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
-		internal IEntityRelation RelationToSubTypeMagentoOrderEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-				relation.AddEntityFieldPair(OrderFields.OrderID, MagentoOrderFields.OrderID);
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		/// <summary>Returns a new IEntityRelation object, between OrderEntity and MarketplaceAdvisorOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeMarketplaceAdvisorOrderEntity
 		{
@@ -451,8 +440,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeJetOrderEntity;
 				case "LemonStandOrderEntity":
 					return this.RelationToSubTypeLemonStandOrderEntity;
-				case "MagentoOrderEntity":
-					return this.RelationToSubTypeMagentoOrderEntity;
 				case "MarketplaceAdvisorOrderEntity":
 					return this.RelationToSubTypeMarketplaceAdvisorOrderEntity;
 				case "NetworkSolutionsOrderEntity":

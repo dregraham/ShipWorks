@@ -4206,7 +4206,7 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":LemonStandOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":LemonStandOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":LemonStandStore" />
-      <InheritanceHierarchy SuperType=":Order" SubType=":MagentoOrder" />
+      <InheritanceHierarchy SuperType=":GenericModuleOrder" SubType=":MagentoOrder" />
       <InheritanceHierarchy SuperType=":GenericModuleStore" SubType=":MagentoStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":MarketplaceAdvisorOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":MarketplaceAdvisorStore" />

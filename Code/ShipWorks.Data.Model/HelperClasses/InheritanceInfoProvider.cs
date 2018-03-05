@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("LemonStandOrderEntity", "OrderEntity", new LemonStandOrderRelations(), new LemonStandOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("LemonStandOrderItemEntity", "OrderItemEntity", new LemonStandOrderItemRelations(), new LemonStandOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("LemonStandStoreEntity", "StoreEntity", new LemonStandStoreRelations(), new LemonStandStoreEntityFactory(), 1-1);
-			this.AddEntityInfo("MagentoOrderEntity", "OrderEntity", new MagentoOrderRelations(), new MagentoOrderEntityFactory(), 1-1);
+			this.AddEntityInfo("MagentoOrderEntity", "GenericModuleOrderEntity", new MagentoOrderRelations(), new MagentoOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("MagentoStoreEntity", "GenericModuleStoreEntity", new MagentoStoreRelations(), new MagentoStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("MarketplaceAdvisorOrderEntity", "OrderEntity", new MarketplaceAdvisorOrderRelations(), new MarketplaceAdvisorOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("MarketplaceAdvisorStoreEntity", "StoreEntity", new MarketplaceAdvisorStoreRelations(), new MarketplaceAdvisorStoreEntityFactory(), 1-1);

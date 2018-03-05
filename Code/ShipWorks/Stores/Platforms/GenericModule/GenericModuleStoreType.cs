@@ -571,13 +571,19 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// Create Order Instance
         /// </summary>
         protected override OrderEntity CreateOrderInstance() =>
-            new GenericModuleOrderEntity
-            {
-                IsFBA = false,
-                IsPrime = AmazonIsPrime.No,
-                AmazonOrderID = string.Empty,
-                IsSameDay = false
-            };
+            PopulateGenericOrderInstance(new GenericModuleOrderEntity());
+
+        /// <summary>
+        /// Populate a GenericOrder instance
+        /// </summary>
+        protected OrderEntity PopulateGenericOrderInstance(GenericModuleOrderEntity order)
+        {
+            order.IsFBA = false;
+            order.IsPrime = AmazonIsPrime.No;
+            order.AmazonOrderID = string.Empty;
+            order.IsSameDay = false;
+            return order;
+        }
 
         /// <summary>
         /// Create Order Item Instance

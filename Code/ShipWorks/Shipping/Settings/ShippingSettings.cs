@@ -192,7 +192,9 @@ namespace ShipWorks.Shipping.Settings
             IShippingSettingsEntity settings = FetchReadOnly();
 
             // Grab the ShipmentTypeCodes description excluding express 1 because we need a more explicit description
-            List<string> shipmentTypeDescriptions = settings.ActivatedTypes.Except(settings.ExcludedTypes)
+            List<string> shipmentTypeDescriptions = settings.ActivatedTypes
+                .Intersect(Enum.GetValues(typeof(ShipmentTypeCode)).Cast<ShipmentTypeCode>())
+                .Except(settings.ExcludedTypes)
                 .Except(new[] { ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps })
                 .Select(t => EnumHelper.GetDescription(t))
                 .ToList();
