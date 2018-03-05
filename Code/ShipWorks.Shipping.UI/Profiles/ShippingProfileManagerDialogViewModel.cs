@@ -9,7 +9,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -20,6 +22,8 @@ namespace ShipWorks.Shipping.UI.Profiles
     public class ShippingProfileManagerDialogViewModel : IShippingProfileManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
+        private readonly IShippingSettings shippingSettings;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private ShippingProfile selectedShippingProfile;
@@ -33,21 +37,53 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
             Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            IShippingSettings shippingSettings,
+            IShipmentTypeManager shipmentTypeManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.shippingProfileService = shippingProfileService;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
             this.messageHelper = messageHelper;
+            this.shippingSettings = shippingSettings;
+            this.shipmentTypeManager = shipmentTypeManager;
 
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(Delete, 
+            DeleteCommand = new RelayCommand(Delete,
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
 
             ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileService.GetAll()
-                                .Where(profile => profile.ShippingProfileEntity.ShipmentType != ShipmentTypeCode.None));
+                .Where(IncludeProfileInGrid));
+        }
+
+        /// <summary>
+        /// Returns true if should show in grid
+        /// </summary>
+        private bool IncludeProfileInGrid(ShippingProfile shippingProfile)
+        {
+            ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
+            // Global shipment types should be included
+            if (!shipmentType.HasValue)
+            {
+                return true;
+            }
+
+            // None shipment type should always be excluded
+            if (shipmentType.Value == ShipmentTypeCode.None)
+            {
+                return false;
+            }
+            
+            // Best rate never gets configured, so we include it if it is allowed
+            if (shipmentType.Value == ShipmentTypeCode.BestRate && shipmentTypeManager.ShipmentTypeCodes.Contains(ShipmentTypeCode.BestRate))
+            {
+                return true;
+            }
+
+            // For all other types, include if configured
+            return shippingSettings.IsConfigured(shipmentType.Value);
         }
 
         /// <summary>
