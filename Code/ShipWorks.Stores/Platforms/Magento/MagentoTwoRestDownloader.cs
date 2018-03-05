@@ -323,45 +323,56 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             foreach (Item item in subItemList)
             {
-                OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
+                LoadItem(orderEntity, itemList, item);
+            }
+        }
 
-                orderItem.Name = item.Name;
-                orderItem.Quantity = item.QtyOrdered;
-                orderItem.Code = item.ItemId.ToString();
-                orderItem.SKU = item.Sku;
-                orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
-                if (orderItem.UnitPrice == 0m)
+        /// <summary>
+        /// Load an item
+        /// </summary>
+        /// <param name="orderEntity">Order that owns the item</param>
+        /// <param name="itemList">List of all items for the order</param>
+        /// <param name="item">Item that is being populated</param>
+        private void LoadItem(OrderEntity orderEntity, IEnumerable<Item> itemList, Item item)
+        {
+            OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
+
+            orderItem.Name = item.Name;
+            orderItem.Quantity = item.QtyOrdered;
+            orderItem.Code = item.ItemId.ToString();
+            orderItem.SKU = item.Sku;
+            orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
+            if (orderItem.UnitPrice == 0m)
+            {
+                Item configurableItemWithPrice = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU && (i.ParentItem?.Price ?? i.Price) > 0D);
+                if (configurableItemWithPrice != null)
                 {
-                    Item configurableItemWithPrice = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU && (i.ParentItem?.Price ?? i.Price) > 0D);
-                    if (configurableItemWithPrice != null)
-                    {
-                        orderItem.UnitPrice = Convert.ToDecimal(configurableItemWithPrice.ParentItem?.Price ?? configurableItemWithPrice.Price);
-                    }
+                    orderItem.UnitPrice = Convert.ToDecimal(configurableItemWithPrice.ParentItem?.Price ?? configurableItemWithPrice.Price);
                 }
+            }
 
-                orderItem.Weight = item.Weight;
+            orderItem.Weight = item.Weight;
 
-                Item magentoOrderItem = webClient.GetItem(item.ItemId);
+            Item magentoOrderItem = webClient.GetItem(item.ItemId);
 
-                if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
+            if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
+            {
+                int productId = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU)?.ProductId ?? item.ProductId;
+                AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
+            }
+
+            if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
+            {
+                AddBundleOptions(orderItem, magentoOrderItem?.Sku);
+            }
+
+            if (magentoOrderItem?.ParentItemId != null)
+            {
+                Item magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
+
+                if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
                 {
-                    int productId = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU)?.ProductId ?? item.ProductId;
-                    AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
-                }
-
-                if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    AddBundleOptions(orderItem, magentoOrderItem?.Sku);
-                }
-
-                if (magentoOrderItem?.ParentItemId != null)
-                {
-                    Item magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
-
-                    if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
-                    {
-                        AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
-                    }
+                    AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
                 }
             }
         }
