@@ -470,7 +470,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void DeleteShipment(long shipmentID)
         {
-            if (loadedOrderSelection.ShipmentAdapters.None())
+            if (loadedOrderSelection.ShipmentAdapters == null || loadedOrderSelection.ShipmentAdapters.None())
             {
                 return;
             }
