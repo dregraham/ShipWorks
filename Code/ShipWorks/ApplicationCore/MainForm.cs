@@ -690,7 +690,7 @@ namespace ShipWorks
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.InitialSetup))
+                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.NoStores))
                 {
                     UserSession.Logoff(false);
                     UserSession.Reset();

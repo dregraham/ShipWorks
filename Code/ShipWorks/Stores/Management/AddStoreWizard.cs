@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Management
         /// Indicates if we show the activation page.
         /// </summary>
         private bool showActivationError = false;
-
+        private bool wasSkipped;
         private readonly ILicenseService licenseService;
         private readonly Func<IChannelLimitFactory> channelLimitFactory;
 
@@ -271,13 +272,20 @@ namespace ShipWorks.Stores.Management
         public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
+        /// Can the setup be skipped
+        /// </summary>
+        private bool CanSkip =>
+            !licenseService.IsLegacy &&
+            (OpenedFrom == OpenedFromSource.InitialSetup || OpenedFrom == OpenedFromSource.NoStores);
+
+        /// <summary>
         /// Wizard is loading
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
-            skipPanel.Visible = !licenseService.IsLegacy && OpenedFrom == OpenedFromSource.InitialSetup;
+            skipPanel.Visible = CanSkip;
 
             LoadStoreTypes();
 
@@ -349,6 +357,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
         {
+            wasSkipped = false;
             storeOverride = null;
 
             UpdateStoreConnectionUI();
@@ -985,18 +994,7 @@ namespace ShipWorks.Stores.Management
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    // Create the default presets
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
-
-                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                    storeFilterRepository.Save(true);
-
-                    AdjustShipmentType();
-
-                    // Mark that this store is now ready
-                    store.SetupComplete = true;
-                    StoreManager.SaveStore(store, adapter);
+                    SaveStore(adapter);
 
                     adapter.Commit();
                 }
@@ -1021,6 +1019,35 @@ namespace ShipWorks.Stores.Management
             finally
             {
                 FilterLayoutContext.PopScope();
+            }
+        }
+
+        /// <summary>
+        /// Save the store using the given adapter
+        /// </summary>
+        private void SaveStore(SqlAdapter adapter)
+        {
+            // Create the default presets
+            CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
+            CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
+
+            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+            storeFilterRepository.Save(true);
+
+            AdjustShipmentType();
+
+            // Mark that this store is now ready
+            store.SetupComplete = true;
+            StoreManager.SaveStore(store, adapter);
+
+            if (wasSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
+            {
+                var origin = new ShippingOriginEntity();
+                origin.InitializeNullsToDefault();
+                origin.Description = store.StoreName;
+
+                new PersonAdapter(store, string.Empty).CopyTo(origin, string.Empty);
+                adapter.SaveEntity(origin);
             }
         }
 
@@ -1136,8 +1163,12 @@ namespace ShipWorks.Stores.Management
                 .OfType<StoreType>()
                 .FirstOrDefault(x => x.TypeCode == StoreTypeCode.Manual);
 
-            storeOverride = manualStoreType;
-            MoveNext();
+            if (manualStoreType != null)
+            {
+                storeOverride = manualStoreType;
+                MoveNext();
+                wasSkipped = true;
+            }
         }
     }
 }
