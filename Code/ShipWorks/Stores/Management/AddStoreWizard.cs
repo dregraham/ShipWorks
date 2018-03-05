@@ -277,6 +277,8 @@ namespace ShipWorks.Stores.Management
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
+            skipPanel.Visible = !licenseService.IsLegacy && OpenedFrom == OpenedFromSource.InitialSetup;
+
             LoadStoreTypes();
 
             isFreemiumMode = FreemiumFreeEdition.IsActive;
@@ -1123,7 +1125,9 @@ namespace ShipWorks.Stores.Management
             showActivationError = false;
         }
 
-
+        /// <summary>
+        /// Skip the store setup
+        /// </summary>
         private void OnSkipButtonClick(object sender, EventArgs e)
         {
             var manualStoreType = comboStoreType.Items
