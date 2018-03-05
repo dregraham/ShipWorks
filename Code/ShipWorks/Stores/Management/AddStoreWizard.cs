@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -371,15 +370,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void UpdateStoreConnectionUI()
         {
-            NextEnabled = SelectedStoreType != null || radioStoreSamples.Checked;
-
-            comboStoreType.Enabled = radioStoreConnect.Checked;
-
-            if (radioStoreSamples.Checked)
-            {
-                // Index zero is the choose option
-                comboStoreType.SelectedIndex = 0;
-            }
+            NextEnabled = SelectedStoreType != null;
         }
 
         /// <summary>
@@ -405,30 +396,22 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
-            if (radioStoreSamples.Checked)
+            StoreType storeType = SelectedStoreType;
+
+            if (storeType == null)
             {
-                MessageHelper.ShowError(this, "Not done.");
+                MessageHelper.ShowInformation(this, "Please select the online platform that you use.");
+
                 e.NextPage = CurrentPage;
+                return;
             }
-            else
-            {
-                StoreType storeType = SelectedStoreType;
 
-                if (storeType == null)
-                {
-                    MessageHelper.ShowInformation(this, "Please select the online platform that you use.");
+            // Setup for the selected\licensed storetype
+            SetupForStoreType(storeType);
+            store.License = "";
 
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                // Setup for the selected\licensed storetype
-                SetupForStoreType(storeType);
-                store.License = "";
-
-                // Move to the now newly inserted next page
-                e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
-            }
+            // Move to the now newly inserted next page
+            e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
         }
 
         /// <summary>

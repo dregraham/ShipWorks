@@ -31,15 +31,12 @@ namespace ShipWorks.Stores.Management
         {
             this.wizardPageStoreType = new ShipWorks.UI.Wizard.WizardPage();
             this.label2 = new System.Windows.Forms.Label();
-            this.labelSampleOrderHelp = new System.Windows.Forms.Label();
-            this.radioStoreSamples = new System.Windows.Forms.RadioButton();
             this.labelStoreTypeHelp = new System.Windows.Forms.Label();
             this.pictureShoppingCart = new System.Windows.Forms.PictureBox();
-            this.radioStoreConnect = new System.Windows.Forms.RadioButton();
             this.comboStoreType = new ShipWorks.UI.Controls.ImageComboBox();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
-            this.wizardPageFinished = new AddStoreWizardFinishPage();
+            this.wizardPageFinished = new ShipWorks.Stores.Management.AddStoreWizardFinishPage();
             this.wizardPageAlreadyActive = new ShipWorks.UI.Wizard.WizardPage();
             this.label3 = new System.Windows.Forms.Label();
             this.linkLicenseKeyHelp = new ShipWorks.UI.Controls.LinkControl();
@@ -75,6 +72,9 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
+            this.skipPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.skipButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -94,13 +94,12 @@ namespace ShipWorks.Stores.Management
             this.panelFirstOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDownloadRange)).BeginInit();
             this.wizardPageAddress.SuspendLayout();
+            this.skipPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
             // 
             this.next.Location = new System.Drawing.Point(380, 572);
-            this.next.Tag = System.Windows.Forms.DialogResult.OK;
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -112,7 +111,7 @@ namespace ShipWorks.Stores.Management
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinished);
+            this.mainPanel.Controls.Add(this.wizardPageStoreType);
             this.mainPanel.Size = new System.Drawing.Size(548, 500);
             // 
             // etchBottom
@@ -133,12 +132,10 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageStoreType
             // 
+            this.wizardPageStoreType.Controls.Add(this.skipPanel);
             this.wizardPageStoreType.Controls.Add(this.label2);
-            this.wizardPageStoreType.Controls.Add(this.labelSampleOrderHelp);
-            this.wizardPageStoreType.Controls.Add(this.radioStoreSamples);
             this.wizardPageStoreType.Controls.Add(this.labelStoreTypeHelp);
             this.wizardPageStoreType.Controls.Add(this.pictureShoppingCart);
-            this.wizardPageStoreType.Controls.Add(this.radioStoreConnect);
             this.wizardPageStoreType.Controls.Add(this.comboStoreType);
             this.wizardPageStoreType.Description = "Configure ShipWorks for your online store.";
             this.wizardPageStoreType.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -161,30 +158,6 @@ namespace ShipWorks.Stores.Management
             this.label2.TabIndex = 61;
             this.label2.Text = "What platform do you sell on?";
             // 
-            // labelSampleOrderHelp
-            // 
-            this.labelSampleOrderHelp.AutoSize = true;
-            this.labelSampleOrderHelp.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelSampleOrderHelp.Location = new System.Drawing.Point(95, 203);
-            this.labelSampleOrderHelp.Name = "labelSampleOrderHelp";
-            this.labelSampleOrderHelp.Size = new System.Drawing.Size(328, 13);
-            this.labelSampleOrderHelp.TabIndex = 60;
-            this.labelSampleOrderHelp.Text = "(We\'ll make up some fake orders, and you can fake ship them too.)";
-            this.labelSampleOrderHelp.Visible = false;
-            // 
-            // radioStoreSamples
-            // 
-            this.radioStoreSamples.AutoSize = true;
-            this.radioStoreSamples.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioStoreSamples.Location = new System.Drawing.Point(77, 181);
-            this.radioStoreSamples.Name = "radioStoreSamples";
-            this.radioStoreSamples.Size = new System.Drawing.Size(219, 17);
-            this.radioStoreSamples.TabIndex = 59;
-            this.radioStoreSamples.Text = "Create a sample store to play with";
-            this.radioStoreSamples.UseVisualStyleBackColor = true;
-            this.radioStoreSamples.Visible = false;
-            this.radioStoreSamples.CheckedChanged += new System.EventHandler(this.OnChangeStoreConnection);
-            // 
             // labelStoreTypeHelp
             // 
             this.labelStoreTypeHelp.AutoSize = true;
@@ -204,20 +177,6 @@ namespace ShipWorks.Stores.Management
             this.pictureShoppingCart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureShoppingCart.TabIndex = 56;
             this.pictureShoppingCart.TabStop = false;
-            // 
-            // radioStoreConnect
-            // 
-            this.radioStoreConnect.AutoSize = true;
-            this.radioStoreConnect.Checked = true;
-            this.radioStoreConnect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioStoreConnect.Location = new System.Drawing.Point(77, 156);
-            this.radioStoreConnect.Name = "radioStoreConnect";
-            this.radioStoreConnect.Size = new System.Drawing.Size(213, 17);
-            this.radioStoreConnect.TabIndex = 1;
-            this.radioStoreConnect.TabStop = true;
-            this.radioStoreConnect.Text = "Get connected to my online store";
-            this.radioStoreConnect.Visible = false;
-            this.radioStoreConnect.CheckedChanged += new System.EventHandler(this.OnChangeStoreConnection);
             // 
             // comboStoreType
             // 
@@ -252,12 +211,14 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageFinished
             // 
+            this.wizardPageFinished.Description = "ShipWorks is ready to connect to your store.";
             this.wizardPageFinished.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageFinished.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinished.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinished.Name = "wizardPageFinished";
             this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
+            this.wizardPageFinished.Title = "Setup Complete";
             this.wizardPageFinished.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoComplete);
             // 
             // wizardPageAlreadyActive
@@ -630,12 +591,40 @@ namespace ShipWorks.Stores.Management
             this.wizardPageActivationError.Title = "Store Setup";
             this.wizardPageActivationError.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageActivationError);
             // 
+            // skipPanel
+            // 
+            this.skipPanel.Controls.Add(this.skipButton);
+            this.skipPanel.Controls.Add(this.label1);
+            this.skipPanel.Location = new System.Drawing.Point(84, 97);
+            this.skipPanel.Name = "skipPanel";
+            this.skipPanel.Size = new System.Drawing.Size(290, 107);
+            this.skipPanel.TabIndex = 62;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(206, 16);
+            this.label1.TabIndex = 62;
+            this.label1.Text = "Not ready to connect directly?";
+            // 
+            // skipButton
+            // 
+            this.skipButton.Font = new System.Drawing.Font("Tahoma", 9.25F);
+            this.skipButton.Location = new System.Drawing.Point(12, 32);
+            this.skipButton.Name = "skipButton";
+            this.skipButton.Size = new System.Drawing.Size(138, 51);
+            this.skipButton.TabIndex = 63;
+            this.skipButton.Text = "Skip this step >>";
+            this.skipButton.UseVisualStyleBackColor = true;
+            // 
             // AddStoreWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 607);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximumSize = new System.Drawing.Size(564, 1000);
             this.MinimumSize = new System.Drawing.Size(564, 452);
@@ -681,6 +670,8 @@ namespace ShipWorks.Stores.Management
             this.panelFirstOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDownloadRange)).EndInit();
             this.wizardPageAddress.ResumeLayout(false);
+            this.skipPanel.ResumeLayout(false);
+            this.skipPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -688,7 +679,6 @@ namespace ShipWorks.Stores.Management
         #endregion
 
         private ShipWorks.UI.Wizard.WizardPage wizardPageStoreType;
-        private System.Windows.Forms.RadioButton radioStoreConnect;
         private ShipWorks.UI.Controls.ImageComboBox comboStoreType;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private AddStoreWizardFinishPage wizardPageFinished;
@@ -701,8 +691,6 @@ namespace ShipWorks.Stores.Management
         private StoreContactControl storeContactControl;
         private UI.Wizard.WizardPage wizardPageAddress;
         private StoreAddressControl storeAddressControl;
-        private System.Windows.Forms.Label labelSampleOrderHelp;
-        private System.Windows.Forms.RadioButton radioStoreSamples;
         private System.Windows.Forms.Label labelStoreTypeHelp;
         private System.Windows.Forms.PictureBox pictureShoppingCart;
         private System.Windows.Forms.PictureBox pictureBoxLicense;
@@ -733,5 +721,8 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Panel panelDownloadSettings;
         private System.Windows.Forms.Label label2;        
         private ActivationErrorWizardPage wizardPageActivationError;
+        private System.Windows.Forms.Panel skipPanel;
+        private System.Windows.Forms.Button skipButton;
+        private System.Windows.Forms.Label label1;
     }
 }
