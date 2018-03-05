@@ -30,6 +30,9 @@ namespace ShipWorks.Stores.Management
         private void InitializeComponent()
         {
             this.wizardPageStoreType = new ShipWorks.UI.Wizard.WizardPage();
+            this.skipPanel = new System.Windows.Forms.Panel();
+            this.skipButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.labelStoreTypeHelp = new System.Windows.Forms.Label();
             this.pictureShoppingCart = new System.Windows.Forms.PictureBox();
@@ -72,13 +75,11 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
-            this.skipPanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.skipButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageStoreType.SuspendLayout();
+            this.skipPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureShoppingCart)).BeginInit();
             this.wizardPageContactInfo.SuspendLayout();
             this.wizardPageAlreadyActive.SuspendLayout();
@@ -94,7 +95,6 @@ namespace ShipWorks.Stores.Management
             this.panelFirstOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDownloadRange)).BeginInit();
             this.wizardPageAddress.SuspendLayout();
-            this.skipPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -147,6 +147,36 @@ namespace ShipWorks.Stores.Management
             this.wizardPageStoreType.Title = "Online Store";
             this.wizardPageStoreType.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextStoreType);
             this.wizardPageStoreType.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoStoreType);
+            // 
+            // skipPanel
+            // 
+            this.skipPanel.Controls.Add(this.skipButton);
+            this.skipPanel.Controls.Add(this.label1);
+            this.skipPanel.Location = new System.Drawing.Point(84, 97);
+            this.skipPanel.Name = "skipPanel";
+            this.skipPanel.Size = new System.Drawing.Size(290, 107);
+            this.skipPanel.TabIndex = 62;
+            // 
+            // skipButton
+            // 
+            this.skipButton.Font = new System.Drawing.Font("Tahoma", 9.25F);
+            this.skipButton.Location = new System.Drawing.Point(12, 32);
+            this.skipButton.Name = "skipButton";
+            this.skipButton.Size = new System.Drawing.Size(138, 51);
+            this.skipButton.TabIndex = 63;
+            this.skipButton.Text = "Skip this step >>";
+            this.skipButton.UseVisualStyleBackColor = true;
+            this.skipButton.Click += new System.EventHandler(this.OnSkipButtonClick);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(206, 16);
+            this.label1.TabIndex = 62;
+            this.label1.Text = "Not ready to connect directly?";
             // 
             // label2
             // 
@@ -591,35 +621,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageActivationError.Title = "Store Setup";
             this.wizardPageActivationError.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageActivationError);
             // 
-            // skipPanel
-            // 
-            this.skipPanel.Controls.Add(this.skipButton);
-            this.skipPanel.Controls.Add(this.label1);
-            this.skipPanel.Location = new System.Drawing.Point(84, 97);
-            this.skipPanel.Name = "skipPanel";
-            this.skipPanel.Size = new System.Drawing.Size(290, 107);
-            this.skipPanel.TabIndex = 62;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(206, 16);
-            this.label1.TabIndex = 62;
-            this.label1.Text = "Not ready to connect directly?";
-            // 
-            // skipButton
-            // 
-            this.skipButton.Font = new System.Drawing.Font("Tahoma", 9.25F);
-            this.skipButton.Location = new System.Drawing.Point(12, 32);
-            this.skipButton.Name = "skipButton";
-            this.skipButton.Size = new System.Drawing.Size(138, 51);
-            this.skipButton.TabIndex = 63;
-            this.skipButton.Text = "Skip this step >>";
-            this.skipButton.UseVisualStyleBackColor = true;
-            // 
             // AddStoreWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,6 +649,8 @@ namespace ShipWorks.Stores.Management
             this.topPanel.PerformLayout();
             this.wizardPageStoreType.ResumeLayout(false);
             this.wizardPageStoreType.PerformLayout();
+            this.skipPanel.ResumeLayout(false);
+            this.skipPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureShoppingCart)).EndInit();
             this.wizardPageContactInfo.ResumeLayout(false);
             this.wizardPageAlreadyActive.ResumeLayout(false);
@@ -670,8 +673,6 @@ namespace ShipWorks.Stores.Management
             this.panelFirstOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDownloadRange)).EndInit();
             this.wizardPageAddress.ResumeLayout(false);
-            this.skipPanel.ResumeLayout(false);
-            this.skipPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }

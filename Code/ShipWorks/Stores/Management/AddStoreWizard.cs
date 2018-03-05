@@ -47,6 +47,7 @@ namespace ShipWorks.Stores.Management
 
         // The store that is being created
         StoreEntity store;
+        StoreType storeOverride;
 
         // All of the store specific wizard pages currently added.
         List<WizardPage> storePages = new List<WizardPage>();
@@ -346,6 +347,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
         {
+            storeOverride = null;
+
             UpdateStoreConnectionUI();
         }
 
@@ -380,6 +383,11 @@ namespace ShipWorks.Stores.Management
         {
             get
             {
+                if (storeOverride != null)
+                {
+                    return storeOverride;
+                }
+
                 if (comboStoreType.SelectedIndex > 0)
                 {
                     ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
@@ -1113,6 +1121,19 @@ namespace ShipWorks.Stores.Management
             BackEnabled = false;
             e.Skip = !showActivationError;
             showActivationError = false;
+        }
+
+
+        private void OnSkipButtonClick(object sender, EventArgs e)
+        {
+            var manualStoreType = comboStoreType.Items
+                .OfType<ImageComboBoxItem>()
+                .Select(x => x.Value)
+                .OfType<StoreType>()
+                .FirstOrDefault(x => x.TypeCode == StoreTypeCode.Manual);
+
+            storeOverride = manualStoreType;
+            MoveNext();
         }
     }
 }
