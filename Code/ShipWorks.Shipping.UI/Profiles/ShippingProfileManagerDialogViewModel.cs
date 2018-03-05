@@ -165,6 +165,10 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
+                // The dialog saves and refetches, but this profile still points to the old profile,
+                // so we need to get the new one.
+                profile = shippingProfileService.Get(profile.ShippingProfileEntity.ShippingProfileID);
+                
                 ShippingProfiles.Add(profile);
                 SelectedShippingProfile = profile;
             }
