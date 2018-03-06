@@ -4,9 +4,9 @@ using System.Reactive.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Messaging.Messages.Dialogs;
-using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     {
         readonly IObservable<IShipWorksMessage> messenger;
         readonly IWin32Window mainWindow;
+        private readonly IShippingProfileManagerDialogFactory shippingProfileManagerDialogFactory;
         readonly ISchedulerProvider schedulerProvider;
         IDisposable subscription;
 
@@ -24,11 +25,13 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// Constructor
         /// </summary>
         public ShippingProfileManagerDialogService(IObservable<IShipWorksMessage> messenger,
-            ISchedulerProvider schedulerProvider, IWin32Window mainWindow)
+            ISchedulerProvider schedulerProvider, IWin32Window mainWindow, 
+            IShippingProfileManagerDialogFactory shippingProfileManagerDialogFactory)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.mainWindow = mainWindow;
+            this.shippingProfileManagerDialogFactory = shippingProfileManagerDialogFactory;
         }
 
         /// <summary>
@@ -59,10 +62,8 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private void OpenProfileManagerDialog(OpenProfileManagerDialogMessage message)
         {
-            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(message.RestrictToShipmentType))
-            {
-                dlg.ShowDialog(message.Sender as IWin32Window ?? mainWindow);
-            }
+            IDialog dlg = shippingProfileManagerDialogFactory.Create(message.Sender as IWin32Window ?? mainWindow);
+            dlg.ShowDialog();
 
             message.OnComplete?.Invoke();
         }

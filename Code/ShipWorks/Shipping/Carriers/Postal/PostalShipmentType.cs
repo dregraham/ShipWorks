@@ -72,14 +72,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            ShipmentTypeDataService.LoadProfileData(profile, "Postal", typeof(PostalProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not
         /// been excluded). The integer values are intended to correspond to the appropriate
         /// enumeration values of the specific shipment type (i.e. the integer values would
@@ -140,17 +132,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             PostalProfileEntity postal = profile.Postal;
-
+            
             postal.Service = (int) PostalServiceType.PriorityMail;
             postal.Confirmation = (int) PostalConfirmationType.Delivery;
-            postal.Weight = 0;
-
-            postal.DimsProfileID = 0;
-            postal.DimsLength = 0;
-            postal.DimsWidth = 0;
-            postal.DimsHeight = 0;
-            postal.DimsWeight = 0;
-            postal.DimsAddWeight = true;
 
             postal.PackagingType = (int) PostalPackagingType.Package;
             postal.NonRectangular = false;
@@ -180,24 +164,25 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             PostalShipmentEntity postalShipment = shipment.Postal;
             IPostalProfileEntity postalProfile = profile.Postal;
-
+            IPackageProfileEntity packageProfile = profile.Packages.Single();
+            
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Service, postalShipment, PostalShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Confirmation, postalShipment, PostalShipmentFields.Confirmation);
 
             // Special case - only apply if the weight is not zero.  This prevents the weight entry from the default profile from overwriting the prefilled weight from products.
-            if (postalProfile.Weight != null && postalProfile.Weight.Value != 0)
+            if (packageProfile.Weight != null && packageProfile.Weight.Value != 0)
             {
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.Weight, shipment, ShipmentFields.ContentWeight);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
 
-            ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsProfileID, postalShipment, PostalShipmentFields.DimsProfileID);
-            if (postalProfile.DimsProfileID != null)
+            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, postalShipment, PostalShipmentFields.DimsProfileID);
+            if (packageProfile.DimsProfileID != null)
             {
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsLength, postalShipment, PostalShipmentFields.DimsLength);
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsWidth, postalShipment, PostalShipmentFields.DimsWidth);
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsHeight, postalShipment, PostalShipmentFields.DimsHeight);
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsWeight, postalShipment, PostalShipmentFields.DimsWeight);
-                ShippingProfileUtility.ApplyProfileValue(postalProfile.DimsAddWeight, postalShipment, PostalShipmentFields.DimsAddWeight);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, postalShipment, PostalShipmentFields.DimsLength);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, postalShipment, PostalShipmentFields.DimsWidth);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, postalShipment, PostalShipmentFields.DimsHeight);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, postalShipment, PostalShipmentFields.DimsWeight);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, postalShipment, PostalShipmentFields.DimsAddWeight);
             }
 
             ShippingProfileUtility.ApplyProfileValue(postalProfile.PackagingType, postalShipment, PostalShipmentFields.PackagingType);

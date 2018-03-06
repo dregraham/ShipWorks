@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ProfileEntityBuilder()
         {
-            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None);
+            Set(x => x.ShipmentType, ShipmentTypeCode.None);
         }
 
         /// <summary>
@@ -74,7 +74,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ProfileEntityBuilder AsPostal(Action<PostalProfileEntityBuilder> builderConfiguration)
         {
-            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
+            Set(x => x.ShipmentType, ShipmentTypeCode.PostalWebTools);
+            SetupSinglePackage();
 
             PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this, isPrimaryProfile);
             builderConfiguration?.Invoke(builder);
@@ -131,7 +132,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// Make the shipment an OnTrac shipment
         /// </summary>
         public ProfileEntityBuilder AsOnTrac(Action<EntityBuilder<OnTracProfileEntity>> builderConfiguration) =>
-            SetShipmentType(builderConfiguration, ShipmentTypeCode.OnTrac, x => x.OnTrac);
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.OnTrac, x => x.OnTrac)
+                .SetupSinglePackage();
 
         /// <summary>
         /// Make the shipment an iParcel shipment
@@ -161,7 +163,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 builder.SetDefaultsOnNullableFields();
             }
 
-            Set(x => x.ShipmentTypeCode, shipmentTypeCode);
+            Set(x => x.ShipmentType, shipmentTypeCode);
             Set(shipmentAccessor, builder.Build());
 
             return this;
@@ -175,6 +177,24 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             ShippingProfileManager.CheckForChangesNeeded();
 
             return value;
+        }
+
+        /// <summary>
+        /// Add a package to the Profile
+        /// </summary>
+        /// <param name="b"></param>
+        public ProfileEntityBuilder SetupSinglePackage()
+        {
+            EntityBuilder<PackageProfileEntity> builder = new EntityBuilder<PackageProfileEntity>();
+
+            if (isPrimaryProfile)
+            {
+                builder.SetDefaultsOnNullableFields();
+            }
+
+            Set(x => x.Packages.Add(builder.Build()));
+
+            return this;
         }
     }
 }

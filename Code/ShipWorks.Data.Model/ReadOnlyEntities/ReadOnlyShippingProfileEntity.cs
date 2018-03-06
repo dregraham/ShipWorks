@@ -60,6 +60,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Ups = (IUpsProfileEntity) source.Ups?.AsReadOnly(objectMap);
             
             
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IPackageProfileEntity>().ToReadOnly() ??
+                Enumerable.Empty<IPackageProfileEntity>();
 
             CopyCustomShippingProfileData(source);
         }
@@ -87,8 +89,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 ShipmentType { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<ShipWorks.Shipping.ShipmentTypeCode> ShipmentType { get; }
         /// <summary> The ShipmentTypePrimary property of the Entity ShippingProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentTypePrimary"<br/>
@@ -153,6 +155,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IUpsProfileEntity Ups { get; }
         
         
+        
+        public IEnumerable<IPackageProfileEntity> Packages { get; }
         
         /// <summary>
         /// Get a read only version of the entity

@@ -186,6 +186,8 @@
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRatingViewModelTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OrderSelectionChangedHandlerTest.cs" />
+    <Compile Include="Profiles\ShippingProfileAndShortcutTest.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialogViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipelineTest.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipelineTest.cs" />

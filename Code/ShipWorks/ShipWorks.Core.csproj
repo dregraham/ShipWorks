@@ -956,10 +956,12 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\IKeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\IShortcutManager.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutManager.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Net\IJsonRequest.cs" />
     <Compile Include="Common\Net\JsonRequest.cs" />
@@ -1425,6 +1427,9 @@
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
+    <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileLoader.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfileLoader.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
@@ -5515,12 +5520,6 @@
     </Compile>
     <Compile Include="Shipping\Profiles\ShippingProfileEditorDlg.Designer.cs">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.Designer.cs">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Profiles\ShippingProfileUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingActionUtility.cs" />
@@ -9613,9 +9612,6 @@
     <EmbeddedResource Include="Shipping\Profiles\ShippingProfileEditorDlg.resx">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Profiles\ShippingProfileManagerDlg.resx">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShippingProviderControl.resx">
       <DependentUpon>ShippingProviderControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10274,7 +10270,7 @@
     <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
-    <None Include="Resources\edit.png" />
+    <Resource Include="Resources\edit.png" />
     <None Include="Resources\rename.png" />
     <None Include="Resources\folderclosed_copy.png" />
     <None Include="Resources\CopyFolderHS.png" />
@@ -10367,7 +10363,7 @@
     <None Include="Resources\gear_run.png" />
     <None Include="Resources\funnel1.png" />
     <None Include="Resources\school3.png" />
-    <None Include="Resources\printer.png" />
+    <Resource Include="Resources\printer.png" />
     <None Include="Resources\printer_view.png" />
     <None Include="Resources\printer1.png" />
     <None Include="Resources\printer_view1.png" />

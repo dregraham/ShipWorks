@@ -121,14 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsServiceControl(ShipmentTypeCode, rateControl);
         }
-
-        /// <summary>
-        /// Create the UserControl used to handle USPS profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UspsProfileControl();
-        }
                 
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information
@@ -265,15 +257,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // We need to call the base after setting up the USPS specific information because LLBLgen was
             // sometimes not including the above values when we first save the shipment deep in the customs loader
             base.ConfigureNewShipment(shipment);
-        }
-
-        /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Usps", typeof(UspsProfileEntity), refreshIfPresent);
         }
 
         /// <summary>

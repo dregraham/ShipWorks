@@ -39,14 +39,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new WorldShipProfileControl();
-        }
-
-        /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not
         /// been excluded). The integer values are intended to correspond to the appropriate
         /// enumeration values of the specific shipment type (i.e. the integer values would

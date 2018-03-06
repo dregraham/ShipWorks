@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
 
             foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles)
             {
-                if (profile.ShipmentType == rule.ShipmentType && !profile.ShipmentTypePrimary)
+                if (profile.ShipmentType == (ShipmentTypeCode) rule.ShipmentType && !profile.ShipmentTypePrimary)
                 {
                     ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                     menuItem.Tag = profile;

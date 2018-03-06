@@ -73,20 +73,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             BestRateShipmentEntity bestRateShipment = shipment.BestRate;
             IBestRateProfileEntity bestRateProfile = profile.BestRate;
+            IPackageProfileEntity packageProfileEntity = profile.Packages.Single();
 
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
+            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
 
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ShippingProfile.Insurance, bestRateShipment, BestRateShipmentFields.Insurance);
 
-            if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
+            if (packageProfileEntity.Weight.HasValue && packageProfileEntity.Weight.Value != 0)
             {
-                ShippingProfileUtility.ApplyProfileValue(bestRateProfile.Weight, shipment, ShipmentFields.ContentWeight);
+                ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.Weight, shipment, ShipmentFields.ContentWeight);
             }
         }
         
@@ -98,14 +99,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
             return new BestRateServiceControl(ShipmentTypeCode, rateControl);
-        }
-
-        /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new BestRateProfileControl();
         }
 
         /// <summary>
@@ -167,14 +160,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null),
                 new DimensionsAdapter(shipment.BestRate));
-        }
-
-        /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            ShipmentTypeDataService.LoadProfileData(profile, "BestRate", typeof(BestRateProfileEntity), refreshIfPresent);
         }
 
         /// <summary>

@@ -73,6 +73,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("EtsyOrderEntity", "OrderEntity", new EtsyOrderRelations(), new EtsyOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("EtsyOrderItemEntity", "OrderItemEntity", new EtsyOrderItemRelations(), new EtsyOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("EtsyStoreEntity", "StoreEntity", new EtsyStoreRelations(), new EtsyStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("FedExProfilePackageEntity", "PackageProfileEntity", new FedExProfilePackageRelations(), new FedExProfilePackageEntityFactory(), 1-1);
 			this.AddEntityInfo("GenericFileStoreEntity", "StoreEntity", new GenericFileStoreRelations(), new GenericFileStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("GenericModuleOrderEntity", "OrderEntity", new GenericModuleOrderRelations(), new GenericModuleOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("GenericModuleOrderItemEntity", "OrderItemEntity", new GenericModuleOrderItemRelations(), new GenericModuleOrderItemEntityFactory(), 1-1);
@@ -105,6 +106,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("OrderItemAttributeEntity", string.Empty, new OrderItemAttributeRelations(), new OrderItemAttributeEntityFactory());
 			this.AddEntityInfo("OrderMotionOrderEntity", "OrderEntity", new OrderMotionOrderRelations(), new OrderMotionOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("OrderMotionStoreEntity", "StoreEntity", new OrderMotionStoreRelations(), new OrderMotionStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("PackageProfileEntity", string.Empty, new PackageProfileRelations(), new PackageProfileEntityFactory());
 			this.AddEntityInfo("PayPalOrderEntity", "OrderEntity", new PayPalOrderRelations(), new PayPalOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("PayPalStoreEntity", "StoreEntity", new PayPalStoreRelations(), new PayPalStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("ProStoresOrderEntity", "OrderEntity", new ProStoresOrderRelations(), new ProStoresOrderEntityFactory(), 1-1);
@@ -121,6 +123,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("ThreeDCartOrderEntity", "OrderEntity", new ThreeDCartOrderRelations(), new ThreeDCartOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("ThreeDCartOrderItemEntity", "OrderItemEntity", new ThreeDCartOrderItemRelations(), new ThreeDCartOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("ThreeDCartStoreEntity", "StoreEntity", new ThreeDCartStoreRelations(), new ThreeDCartStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("UpsProfilePackageEntity", "PackageProfileEntity", new UpsProfilePackageRelations(), new UpsProfilePackageEntityFactory(), 1-1);
 			this.AddEntityInfo("VolusionStoreEntity", "StoreEntity", new VolusionStoreRelations(), new VolusionStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("WalmartOrderEntity", "OrderEntity", new WalmartOrderRelations(), new WalmartOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("WalmartOrderItemEntity", "OrderItemEntity", new WalmartOrderItemRelations(), new WalmartOrderItemEntityFactory(), 1-1);

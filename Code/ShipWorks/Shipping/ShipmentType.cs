@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -19,6 +20,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -346,24 +348,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected virtual ShippingProfileControlBase CreateProfileControl()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
-                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
-                CreateProfileControl();
-        }
-
-        /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
         /// been excluded for this shipment type. The integer values are intended to correspond to
         /// the appropriate enumeration values of the specific shipment type (i.e. the integer values
@@ -686,22 +670,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-
-        }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public virtual bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
         public virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -715,6 +683,24 @@ namespace ShipWorks.Shipping
             profile.ReturnShipment = false;
 
             profile.RequestedLabelFormat = (int) ThermalLanguage.None;
+
+            //Single package carriers only have one package profile, initialize it now
+            if (!SupportsMultiplePackages)
+            {
+                // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                profile.Packages.Clear();
+                profile.Packages.Add(new PackageProfileEntity()
+                {
+                    Weight = 0,
+                    DimsProfileID = 0,
+                    DimsLength = 0,
+                    DimsWidth = 0,
+                    DimsHeight = 0,
+                    DimsWeight = 0,
+                    DimsAddWeight = true
+                });
+            }
         }
 
         /// <summary>

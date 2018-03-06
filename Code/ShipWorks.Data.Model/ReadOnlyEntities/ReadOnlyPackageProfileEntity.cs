@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'DhlExpressProfilePackage'. <br/><br/>
+    /// Read-only representation of the entity 'PackageProfile'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyDhlExpressProfilePackageEntity : IDhlExpressProfilePackageEntity
+    public partial class ReadOnlyPackageProfileEntity : IPackageProfileEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyDhlExpressProfilePackageEntity(IDhlExpressProfilePackageEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyPackageProfileEntity(IPackageProfileEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            DhlExpressProfilePackageID = source.DhlExpressProfilePackageID;
+            PackageProfileID = source.PackageProfileID;
             ShippingProfileID = source.ShippingProfileID;
             Weight = source.Weight;
             DimsProfileID = source.DimsProfileID;
@@ -47,87 +47,87 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DimsAddWeight = source.DimsAddWeight;
             
             
-            DhlExpressProfile = (IDhlExpressProfileEntity) source.DhlExpressProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
 
-            CopyCustomDhlExpressProfilePackageData(source);
+            CopyCustomPackageProfileData(source);
         }
 
         
-        /// <summary> The DhlExpressProfilePackageID property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The PackageProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DhlExpressProfilePackageID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."PackageProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        public System.Int64 DhlExpressProfilePackageID { get; }
-        /// <summary> The ShippingProfileID property of the Entity DhlExpressProfilePackage<br/><br/>
+        public System.Int64 PackageProfileID { get; }
+        /// <summary> The ShippingProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."ShippingProfileID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."ShippingProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ShippingProfileID { get; }
-        /// <summary> The Weight property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The Weight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."Weight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."Weight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsProfileID property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsProfileID"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsLength property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsLength"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsLength"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsWidth property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsWidth"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsWidth"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsHeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsHeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsHeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsWeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsWeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsWeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity DhlExpressProfilePackage<br/><br/>
+        /// <summary> The DimsAddWeight property of the Entity PackageProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfilePackage"."DimsAddWeight"<br/>
+        /// <remarks>Mapped on table field: "PackageProfile"."DimsAddWeight"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> DimsAddWeight { get; }
         
         
-        public IDhlExpressProfileEntity DhlExpressProfile { get; }
+        public IShippingProfileEntity ShippingProfile { get; }
         
         
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IDhlExpressProfilePackageEntity AsReadOnly() => this;
+        public virtual IPackageProfileEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IDhlExpressProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IPackageProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomDhlExpressProfilePackageData(IDhlExpressProfilePackageEntity source);
+        partial void CopyCustomPackageProfileData(IPackageProfileEntity source);
     }
 }

@@ -135,14 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Endicia profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new EndiciaProfileControl(EndiciaReseller);
-        }
-
-        /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
@@ -186,16 +178,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             base.LoadShipmentDataInternal(shipment, refreshIfPresent);
 
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Endicia", typeof(EndiciaShipmentEntity), refreshIfPresent);
-        }
-
-        /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Endicia", typeof(EndiciaProfileEntity), refreshIfPresent);
         }
 
         /// <summary>

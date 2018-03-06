@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutCommand.cs" />
+    <Compile Include="IO\KeyboardShortcuts\Hotkey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryMaterialType.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryPackingType.cs" />

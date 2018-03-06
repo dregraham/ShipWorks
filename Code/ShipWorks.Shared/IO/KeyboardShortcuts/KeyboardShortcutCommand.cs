@@ -21,5 +21,11 @@ namespace ShipWorks.Shared.IO.KeyboardShortcuts
         /// <remarks>This is only used for testing at the moment</remarks>
         [Description("focus quick search")]
         FocusQuickSearch = 1,
+
+        /// <summary>
+        /// Apply a profile
+        /// </summary>
+        [Description("apply profile")]
+        ApplyProfile = 2,
     }
 }

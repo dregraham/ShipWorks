@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -23,6 +25,7 @@ namespace ShipWorks.Shipping.Profiles
         static IEnumerable<IShippingProfileEntity> readOnlyEntities;
         static TableSynchronizer<ShippingProfileEntity> synchronizer;
         static bool needCheckForChanges = false;
+        static IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -30,6 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProfileEntity>();
+            shippingProfileLoader = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileLoader>();
             InternalCheckForChanges();
         }
 
@@ -60,8 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                     foreach (ShippingProfileEntity profile in modified.Concat(added))
                     {
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-                        shipmentType.LoadProfileData(profile, true);
+                        shippingProfileLoader.LoadProfileData(profile, true);
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -135,7 +138,7 @@ namespace ShipWorks.Shipping.Profiles
                 throw new InvalidOperationException("Cannot apply profile to a processed shipment.");
             }
 
-            if (profile.ShipmentType == shipment.ShipmentType)
+            if (profile.ShipmentType == shipment.ShipmentTypeCode)
             {
                 ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
             }
@@ -146,16 +149,13 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public static void SaveProfile(ShippingProfileEntity profile)
         {
-            // Get the shipment type of the profile
-            ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-
             bool rootDirty = profile.IsDirty;
             bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
 
             // Transaction
             using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                bool extraDirty = shipmentType.SaveProfileData(profile, adapter);
+                bool extraDirty = SaveProfilePackages(profile, adapter);
 
                 // Force the profile change if any derived stuff changes
                 if ((anyDirty || extraDirty) && !rootDirty)
@@ -169,12 +169,46 @@ namespace ShipWorks.Shipping.Profiles
 
                 adapter.Commit();
             }
-
+            
             lock (synchronizer)
             {
                 synchronizer.MergeEntity(profile);
                 CheckForChangesNeeded();
             }
+        }
+
+        /// <summary>
+        /// Save the profile packages
+        /// </summary>
+        private static bool SaveProfilePackages(ShippingProfileEntity profile, SqlAdapter adapter)
+        {
+            bool changes = false;
+
+            // First delete out anything that needs deleted
+            // Introducing new variable as we will be removing items from PackageProfile
+            // and if we used the same colleciton, we would get an exception.
+            List<PackageProfileEntity> allPackageProfiles = profile.Packages.Where(package => package.Fields.State == EntityState.Deleted).ToList();
+            foreach (PackageProfileEntity package in allPackageProfiles)
+            {
+                // If its new but deleted, just get rid of it                
+                if (package.IsNew)
+                {
+                    profile.Packages.Remove(package);
+                }
+
+                // If its deleted, delete it
+                else
+                {
+                    package.Fields.State = EntityState.Fetched;
+                    profile.Packages.Remove(package);
+
+                    adapter.DeleteEntity(package);
+
+                    changes = true;
+                }                
+            }
+
+            return changes;
         }
 
         /// <summary>
@@ -200,7 +234,7 @@ namespace ShipWorks.Shipping.Profiles
         public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
         {
             return Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
@@ -209,7 +243,7 @@ namespace ShipWorks.Shipping.Profiles
         public static IShippingProfileEntity GetDefaultProfileReadOnly(ShipmentTypeCode shipmentTypeCode)
         {
             return ProfilesReadOnly.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
         }
     }
 }

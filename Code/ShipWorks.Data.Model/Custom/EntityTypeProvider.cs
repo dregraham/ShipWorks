@@ -61,7 +61,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "DhlExpressAccountEntity": return EntityType.DhlExpressAccountEntity;
 				case "DhlExpressPackageEntity": return EntityType.DhlExpressPackageEntity;
 				case "DhlExpressProfileEntity": return EntityType.DhlExpressProfileEntity;
-				case "DhlExpressProfilePackageEntity": return EntityType.DhlExpressProfilePackageEntity;
 				case "DhlExpressShipmentEntity": return EntityType.DhlExpressShipmentEntity;
 				case "DimensionsProfileEntity": return EntityType.DimensionsProfileEntity;
 				case "DownloadEntity": return EntityType.DownloadEntity;
@@ -114,7 +113,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "IParcelAccountEntity": return EntityType.IParcelAccountEntity;
 				case "IParcelPackageEntity": return EntityType.IParcelPackageEntity;
 				case "IParcelProfileEntity": return EntityType.IParcelProfileEntity;
-				case "IParcelProfilePackageEntity": return EntityType.IParcelProfilePackageEntity;
 				case "IParcelShipmentEntity": return EntityType.IParcelShipmentEntity;
 				case "JetOrderEntity": return EntityType.JetOrderEntity;
 				case "JetOrderItemEntity": return EntityType.JetOrderItemEntity;
@@ -157,6 +155,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "OrderSearchEntity": return EntityType.OrderSearchEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "OtherShipmentEntity": return EntityType.OtherShipmentEntity;
+				case "PackageProfileEntity": return EntityType.PackageProfileEntity;
 				case "PayPalOrderEntity": return EntityType.PayPalOrderEntity;
 				case "PayPalOrderSearchEntity": return EntityType.PayPalOrderSearchEntity;
 				case "PayPalStoreEntity": return EntityType.PayPalStoreEntity;
@@ -193,6 +192,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ShopifyOrderSearchEntity": return EntityType.ShopifyOrderSearchEntity;
 				case "ShopifyStoreEntity": return EntityType.ShopifyStoreEntity;
 				case "ShopSiteStoreEntity": return EntityType.ShopSiteStoreEntity;
+				case "ShortcutEntity": return EntityType.ShortcutEntity;
 				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
 				case "StatusPresetEntity": return EntityType.StatusPresetEntity;
 				case "StoreEntity": return EntityType.StoreEntity;
@@ -307,6 +307,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.EtsyOrderEntity: return new EtsyOrderRelations();
 				case EntityType.EtsyOrderItemEntity: return new EtsyOrderItemRelations();
 				case EntityType.EtsyStoreEntity: return new EtsyStoreRelations();
+				case EntityType.FedExProfilePackageEntity: return new FedExProfilePackageRelations();
 				case EntityType.GenericFileStoreEntity: return new GenericFileStoreRelations();
 				case EntityType.GenericModuleOrderEntity: return new GenericModuleOrderRelations();
 				case EntityType.GenericModuleOrderItemEntity: return new GenericModuleOrderItemRelations();
@@ -339,6 +340,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.OrderItemAttributeEntity: return new OrderItemAttributeRelations();
 				case EntityType.OrderMotionOrderEntity: return new OrderMotionOrderRelations();
 				case EntityType.OrderMotionStoreEntity: return new OrderMotionStoreRelations();
+				case EntityType.PackageProfileEntity: return new PackageProfileRelations();
 				case EntityType.PayPalOrderEntity: return new PayPalOrderRelations();
 				case EntityType.PayPalStoreEntity: return new PayPalStoreRelations();
 				case EntityType.ProStoresOrderEntity: return new ProStoresOrderRelations();
@@ -355,6 +357,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.ThreeDCartOrderEntity: return new ThreeDCartOrderRelations();
 				case EntityType.ThreeDCartOrderItemEntity: return new ThreeDCartOrderItemRelations();
 				case EntityType.ThreeDCartStoreEntity: return new ThreeDCartStoreRelations();
+				case EntityType.UpsProfilePackageEntity: return new UpsProfilePackageRelations();
 				case EntityType.VolusionStoreEntity: return new VolusionStoreRelations();
 				case EntityType.WalmartOrderEntity: return new WalmartOrderRelations();
 				case EntityType.WalmartOrderItemEntity: return new WalmartOrderItemRelations();

@@ -209,9 +209,12 @@ INSERT INTO [dbo].[ShippingProfile] ([Name], [ShipmentType], [ShipmentTypePrimar
 VALUES ('Defaults - Best rate', 14, 1, 0, 0, 0, 0.00, 0)
 GO
 
-INSERT INTO [dbo].[BestRateProfile] ([ShippingProfileID], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Weight], [ServiceLevel])
-SELECT TOP 1 ShippingProfileID, 0, 0, 0, 0, 0, 0, 0, 0  FROM ShippingProfile WHERE ShipmentType = 14
+INSERT INTO [dbo].[BestRateProfile] ([ShippingProfileID], [ServiceLevel])
+SELECT TOP 1 ShippingProfileID, 0  FROM ShippingProfile WHERE ShipmentType = 14
 GO
+
+INSERT INTO [dbo].[PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT TOP 1 ShippingProfileID, 0, 0, 0, 0, 0, 0, 0 FROM ShippingProfile WHERE ShipmentType = 14
 
 -- Cleanup functions
 DROP FUNCTION [dbo].[GetTicksFromDateTime]

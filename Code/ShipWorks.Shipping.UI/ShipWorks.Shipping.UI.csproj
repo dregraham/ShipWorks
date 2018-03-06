@@ -103,6 +103,7 @@
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
@@ -277,6 +278,20 @@
     </Compile>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
+    <Compile Include="Profiles\GlobalProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Profiles\GlobalProfileControl.Designer.cs">
+      <DependentUpon>GlobalProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Profiles\IShippingProfileManagerDialogViewModel.cs" />
+    <Compile Include="Profiles\ProfileControlFactory.cs" />
+    <Compile Include="Profiles\ShippingProfileAndShortcut.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialogViewModel.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialog.xaml.cs">
+      <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Profiles\ShippingProfileManagerDialogFactory.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
@@ -548,6 +563,9 @@
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressCustomsControl.resx">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Profiles\GlobalProfileControl.resx">
+      <DependentUpon>GlobalProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
@@ -616,6 +634,10 @@
     <Page Include="Insurance\InsuranceBehaviorChangeDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profiles\ShippingProfileManagerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>

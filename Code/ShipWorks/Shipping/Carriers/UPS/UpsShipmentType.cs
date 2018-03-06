@@ -104,14 +104,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Create the UPS specific profile control
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UpsProfileControl();
-        }
-
-        /// <summary>
         /// Create the UPS specific customs control
         /// </summary>
         public override CustomsControlBase CreateCustomsControl()
@@ -252,65 +244,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            bool existed = profile.Ups != null;
-
-            // Load the profile data
-            ShipmentTypeDataService.LoadProfileData(profile, "Ups", typeof(UpsProfileEntity), refreshIfPresent);
-
-            UpsProfileEntity ups = profile.Ups;
-
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!existed || refreshIfPresent)
-            {
-                ups.Packages.Clear();
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save UPS specific profile data
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (UpsProfilePackageEntity package in profile.Ups.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.Ups.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.Ups.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-
-            return changes;
-        }
-
-        /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not
         /// been excluded). The integer values are intended to correspond to the appropriate
         /// enumeration values of the specific shipment type (i.e. the integer values would
@@ -430,14 +363,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             IUpsProfileEntity source = profile.Ups;
 
             bool changedPackageWeights = false;
-            int profilePackageCount = profile.Ups.Packages.Count();
+            int profilePackageCount = profile.Packages.Count();
 
             // Apply all package profiles
             for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IUpsProfilePackageEntity packageProfile = profile.Ups.Packages.ElementAt(i);
-
+                IUpsProfilePackageEntity packageProfile = profile.Packages.ElementAt(i) as IUpsProfilePackageEntity;
+                
                 UpsPackageEntity package;
 
                 // Get the existing, or create a new package

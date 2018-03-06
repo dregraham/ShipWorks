@@ -1594,8 +1594,8 @@ namespace ShipWorks.Shipping
             {
                 foreach (IShippingProfileEntity profile in ShippingProfileManager.ProfilesReadOnly.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
                 {
-                    if (profile.ShipmentTypeCode != ShipmentTypeCode.None &&
-                        profile.ShipmentTypeCode == shipmentTypeCode.Value)
+                    if (profile.ShipmentType != ShipmentTypeCode.None &&
+                        profile.ShipmentType == shipmentTypeCode.Value)
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
