@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public class BaseShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        protected readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
