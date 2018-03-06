@@ -7,12 +7,18 @@ using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
 {
+    /// <summary>
+    /// Applys a Global Profile to a shipment
+    /// </summary>
     [Component]
     public class GlobalShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingProfileApplicationStrategy baseStrategy;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GlobalShippingProfileApplicationStrategy(
             IShipmentTypeManager shipmentTypeManager,
             IShippingProfileApplicationStrategy baseStrategy)
@@ -21,6 +27,9 @@ namespace ShipWorks.Shipping.Profiles
             this.baseStrategy = baseStrategy;
         }
 
+        /// <summary>
+        /// Applies a profile
+        /// </summary>
         public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             baseStrategy.ApplyProfile(profile, shipment);
