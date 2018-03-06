@@ -87,6 +87,9 @@
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +177,7 @@
     </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\LambdaComparer.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\KeyedComponent.cs" />
@@ -420,62 +424,6 @@
     <Compile Include="IO\Text\XmlDiffPatch\XmlPatchNodeLists.cs" />
     <Compile Include="IO\Text\XmlDiffPatch\XmlPatchOperations.cs" />
     <Compile Include="IO\Zip\GZipUtility.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2Constants.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2Exception.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2InputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2OutputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Checksums\Adler32.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Checksums\CRC32.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Checksums\IChecksum.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Checksums\StrangeCRC.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\FileSystemScanner.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\INameTransform.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\IScanFilter.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\NameFilter.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\PathFilter.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\StreamUtils.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Core\WindowsPathUtils.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Encryption\PkzipClassic.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\GZip\GZIPConstants.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\GZip\GZipException.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\GZip\GzipInputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\GZip\GzipOutputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\SharpZipBaseException.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\InvalidHeaderException.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarArchive.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarBuffer.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarEntry.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarException.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarHeader.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarInputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Tar\TarOutputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Deflater.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterPending.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Inflater.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\PendingBuffer.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\FastZip.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\IEntryFactory.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\WindowsNameTransform.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipConstants.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipEntry.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipEntryFactory.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipException.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipExtraData.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipFile.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipHelperStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipInputStream.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipNameTransform.cs" />
-    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipOutputStream.cs" />
     <Compile Include="IO\Zip\ZipExtractProgressEventArgs.cs" />
     <Compile Include="IO\Zip\ZipReader.cs" />
     <Compile Include="IO\Zip\ZipReaderItem.cs" />

@@ -1,5 +1,4 @@
-﻿using ShipWorks.AddressValidation;
-using ShipWorks.AddressValidation.Enums;
+﻿using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -32,8 +31,8 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         public override string GenerateSql(SqlGenerationContext context)
         {
             return BillShipAddressConditionUtility.GenerateSqlInternal(context, AddressOperator,
-                context.GetColumnReference(OrderFields.BillResidentialStatus), 
-                context.GetColumnReference(OrderFields.ShipResidentialStatus), 
+                context.GetColumnReference(OrderFields.BillResidentialStatus),
+                context.GetColumnReference(OrderFields.ShipResidentialStatus),
                 GenerateSql);
         }
 

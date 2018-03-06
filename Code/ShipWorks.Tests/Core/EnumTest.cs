@@ -81,7 +81,8 @@ namespace ShipWorks.Tests.Core
                     {
                         var memberInfos = type.GetMember(enumValueName);
 
-                        var descriptionAttributes = memberInfos[0].GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
+                        // Some Enums have values that match built in methods, like 'Equals' so just make sure at least one of the members has the attribute
+                        var descriptionAttributes = memberInfos.SelectMany(x => x.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false));
 
                         if (!descriptionAttributes.Any())
                         {
@@ -149,8 +150,6 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Stores.Platforms.Amazon.Mws.AmazonMwsApiCall".ToUpperInvariant(),
                 "ShipWorks.Stores.Platforms.Amazon.AmazonWeightField".ToUpperInvariant(),
                 "ShipWorks.Shipping.Settings.Origin.ShipmentOriginSource".ToUpperInvariant(),
-                "ShipWorks.Filters.Content.Conditions.StringOperator".ToUpperInvariant(),
-                "ShipWorks.Filters.Content.Conditions.EqualityOperator".ToUpperInvariant(),
                 "ShipWorks.Actions.ActionQueueStatus".ToUpperInvariant(),
                 "ShipWorks.Actions.ActionQueueStepStatus".ToUpperInvariant(),
                 "ShipWorks.Actions.ActionQueueType".ToUpperInvariant(),

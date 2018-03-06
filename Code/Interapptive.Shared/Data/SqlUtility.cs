@@ -268,6 +268,28 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Configure SQL Server 2017 to work with our assemblies
+        /// </summary>
+        /// <param name="con">The connection to use</param>
+        /// <param name="databaseName">The database to configure</param>
+        /// <param name="databaseOwner">The database owner</param>
+        public static void ConfigureSql2017ForClr(DbConnection con, string databaseName, string databaseOwner)
+        {
+            // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
+            string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
+            if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
+            {
+                string trustworthyStatement = $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON";
+                log.Info($"Executing: {trustworthyStatement}");
+                DbCommandProvider.ExecuteNonQuery(con, trustworthyStatement);
+
+                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {databaseOwner}";
+                log.Info($"Executing: {setDatabaseOwnerStatement}");
+                DbCommandProvider.ExecuteNonQuery(con, setDatabaseOwnerStatement);
+            }
+        }
+
+        /// <summary>
         /// Truncate the given table contents
         /// </summary>
         public static void TruncateTable(string filterNodeContentDirty, DbConnection sqlConnection)

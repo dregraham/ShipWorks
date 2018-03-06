@@ -190,6 +190,9 @@
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -982,6 +985,7 @@
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\SqlServerEditionIdType.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstaller.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerInfo.cs" />
@@ -1037,10 +1041,26 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Filters\Content\Conditions\EnumEqualityOperator.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\QuickSearch\QuickSearchCondition.cs" />
     <Compile Include="Filters\Content\Conditions\QuickSearch\IQuickSearchStoreSql.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorDialog.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\IStringValueListEditorViewModel.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\StringValueListEditorViewModel.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\ValueChoicePopup.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\ValueChoicePopup.Designer.cs">
+      <DependentUpon>ValueChoicePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.Designer.cs">
+      <DependentUpon>EnumValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
     <Compile Include="Filters\Content\SqlGeneration\ISqlGenerationBuilder.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
@@ -1970,6 +1990,7 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
@@ -4069,7 +4090,6 @@
     <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyException.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreType.cs" />
@@ -7828,6 +7848,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileTransfer\FtpAccountEditorDlg.resx">
       <DependentUpon>FtpAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\EnumValueEditor.resx">
+      <DependentUpon>EnumValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Filters\Management\DisableLinkedFilterDlg.resx">
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>

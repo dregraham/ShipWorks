@@ -31,13 +31,14 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             this.addressOperator = new ShipWorks.Filters.Content.Editors.ChoiceLabel();
             this.equalityOperator = new ShipWorks.Filters.Content.Editors.ChoiceLabel();
             this.targetValue = new System.Windows.Forms.ComboBox();
+            this.targetValueList = new UI.ValueChoicePopup<T>();
             this.SuspendLayout();
             // 
             // addressOperator
             // 
             this.addressOperator.AutoSize = true;
             this.addressOperator.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.addressOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addressOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.addressOperator.ForeColor = System.Drawing.Color.Green;
             this.addressOperator.Location = new System.Drawing.Point(3, 6);
             this.addressOperator.Name = "addressOperator";
@@ -49,7 +50,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             // 
             this.equalityOperator.AutoSize = true;
             this.equalityOperator.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.equalityOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.equalityOperator.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.equalityOperator.ForeColor = System.Drawing.Color.Green;
             this.equalityOperator.Location = new System.Drawing.Point(102, 6);
             this.equalityOperator.Name = "equalityOperator";
@@ -68,11 +69,24 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             this.targetValue.TabIndex = 2;
             this.targetValue.Validating += new System.ComponentModel.CancelEventHandler(this.OnValidating);
             // 
+            // targetValueList
+            // 
+            this.targetValueList.DropDownHeight = 293;
+            this.targetValueList.DropDownMinimumHeight = 293;
+            this.targetValueList.FormattingEnabled = true;
+            this.targetValueList.IntegralHeight = false;
+            this.targetValueList.Location = new System.Drawing.Point(200, 3);
+            this.targetValueList.Name = "targetValueList";
+            this.targetValueList.Size = new System.Drawing.Size(179, 21);
+            this.targetValueList.TabIndex = 3;
+            this.targetValueList.Validating += new System.ComponentModel.CancelEventHandler(this.OnValidating);
+            //
             // BillShipAddressEnumValueEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.targetValue);
+            this.Controls.Add(this.targetValueList);
             this.Controls.Add(this.equalityOperator);
             this.Controls.Add(this.addressOperator);
             this.Name = "BillShipAddressEnumValueEditor";
@@ -87,5 +101,6 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         private ChoiceLabel addressOperator;
         private ChoiceLabel equalityOperator;
         private System.Windows.Forms.ComboBox targetValue;
+        private UI.ValueChoicePopup<T> targetValueList;
     }
 }

@@ -78,7 +78,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 return new FilterSqlResult(countID,
                     GenerateFolderSql(true),
                     GenerateFolderSql(false),
-                    new List<SqlParameter>(),
                     masks.Item1,
                     masks.Item2);
             }
@@ -88,7 +87,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                     countID,
                     GetFilterSql(true),
                     GetFilterSql(false),
-                    filterSqlContext.Parameters,
                     filterSqlContext.ColumnsUsed,
                     filterSqlContext.JoinsUsed);
             }

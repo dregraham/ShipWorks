@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Filters.Content.Conditions;
 
@@ -28,12 +29,12 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             this.condition = condition;
 
-            // Fill the addrestype combo
+            // Fill the address type combo
             addressOperator.InitializeFromEnumType(typeof(BillShipAddressOperator));
             addressOperator.SelectedValue = billShipCondition.AddressOperator;
 
             // Fill the value combo
-            equalityOperator.InitializeFromEnumType(typeof(EqualityOperator));
+            equalityOperator.InitializeFromEnumType(typeof(EnumEqualityOperator));
             equalityOperator.SelectedValue = condition.Operator;
 
             // Load the combo
@@ -42,6 +43,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             targetValue.DataSource = condition.ValueChoices;
             targetValue.SelectedValue = condition.Value;
 
+            targetValueList.InitializeValuesList(condition.ValueChoices);
+            targetValueList.SelectStatuses(condition.SelectedValues ?? Enumerable.Empty<T>());
             // If the value the condition wanted as it's default isn't in the list, select the first available
             if (targetValue.SelectedValue == null && targetValue.Items.Count > 0)
             {
@@ -49,7 +52,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             }
 
             UpdateComboBoxSize();
-            UpdateValueVisibility();
+            UpdateValueVisibility(condition.Operator);
 
             // Start listening for changes
             equalityOperator.SelectedValueChanged += OnChangeOperator;
@@ -69,7 +72,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             {
                 foreach (ValueChoice<T> choice in targetValue.Items)
                 {
-                    int choiceWidth = (int)g.MeasureString(choice.Name, Font).Width;
+                    int choiceWidth = (int) g.MeasureString(choice.Name, Font).Width;
 
                     if (choiceWidth > width)
                     {
@@ -84,28 +87,29 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// <summary>
         /// Update the visibility of the value operators
         /// </summary>
-        private void UpdateValueVisibility()
+        private void UpdateValueVisibility(EnumEqualityOperator op)
         {
             BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;
 
             equalityOperator.Visible = !IsBillShipComparison(addressOp);
-
             equalityOperator.Left = addressOperator.Right + 3;
-            targetValue.Left = equalityOperator.Right + 3;
 
             if (!equalityOperator.Visible)
             {
                 Width = equalityOperator.Left;
+
+                targetValue.Visible = false;
+                targetValueList.Visible = false;
             }
             else
             {
-                if (targetValue.Visible)
+                if (op == EnumEqualityOperator.Equals || op == EnumEqualityOperator.NotEqual)
                 {
-                    Width = targetValue.Right + errorSpace;
+                    SwitchVisibleDropdown(targetValue, targetValueList);
                 }
                 else
                 {
-                    Width = targetValue.Left;
+                    SwitchVisibleDropdown(targetValueList, targetValue);
                 }
             }
         }
@@ -119,19 +123,32 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         }
 
         /// <summary>
+        /// Switch which dropdown is visible
+        /// </summary>
+        /// <param name="controlToUse">Control that will be shown</param>
+        /// <param name="controlToHide">Control that will be hidden</param>
+        private void SwitchVisibleDropdown(Control controlToUse, Control controlToHide)
+        {
+            controlToHide.Visible = false;
+            controlToUse.Visible = true;
+            controlToUse.Left = equalityOperator.Right + 5;
+            Width = controlToUse.Right + 2;
+        }
+
+        /// <summary>
         /// Operator type is changing
         /// </summary>
         private void OnChangeOperator(object sender, EventArgs e)
         {
-            EqualityOperator op = (EqualityOperator)equalityOperator.SelectedValue;
+            EnumEqualityOperator op = (EnumEqualityOperator) equalityOperator.SelectedValue;
             condition.Operator = op;
 
             BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;
             ((IBillShipAddressCondition) condition).AddressOperator = addressOp;
 
-            UpdateValueVisibility();
+            UpdateValueVisibility(op);
 
-            // Changint the operator can affect validity
+            // Changing the operator can affect validity
             ValidateChildren(ValidationConstraints.Visible);
 
             RaiseContentChanged();
@@ -152,8 +169,10 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         {
             if (targetValue.SelectedValue != null)
             {
-                condition.Value = (T)targetValue.SelectedValue;
+                condition.Value = (T) targetValue.SelectedValue;
             }
+
+            condition.SelectedValues = targetValueList.GetSelectedStatuses();
         }
     }
 }

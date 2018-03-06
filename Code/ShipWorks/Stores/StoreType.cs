@@ -302,7 +302,7 @@ namespace ShipWorks.Stores
                 definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
                 TCondition shippingStatusCondition = new TCondition();
-                shippingStatusCondition.Operator = EqualityOperator.Equals;
+                shippingStatusCondition.Operator = EnumEqualityOperator.Equals;
                 shippingStatusCondition.Value = shippingStatus;
                 definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
 

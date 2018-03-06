@@ -3,8 +3,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
 {

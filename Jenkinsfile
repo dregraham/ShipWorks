@@ -1,6 +1,9 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
 
 pipeline {
+	options {
+    	disableConcurrentBuilds()
+  	}
 	agent {
 		node {
 			label 'windows'

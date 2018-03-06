@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Filters.Content.Conditions;
-using Interapptive.Shared;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Utility;
+using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Filters.Content.Conditions;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {
@@ -30,7 +26,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             targetValue.Text = condition.TargetValue;
 
-            // Fill the addrestype combo
+            // Fill the address type combo
             addressOperator.InitializeFromEnumType(typeof(BillShipAddressOperator));
             addressOperator.SelectedValue = condition.AddressOperator;
 
@@ -55,9 +51,11 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             stringOperator.Visible = !IsBillShipComparison(addressOp);
             targetValue.Visible = !IsBillShipComparison(addressOp) && op != StringOperator.IsEmpty;
+            valueEditorPanel.Visible = condition.Operator == StringOperator.IsInList || condition.Operator == StringOperator.NotIsInList;
 
             stringOperator.Left = addressOperator.Right + 3;
             targetValue.Left = stringOperator.Right + 3;
+            valueEditorPanel.Left = targetValue.Right;
 
             if (!stringOperator.Visible)
             {
@@ -67,7 +65,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             {
                 if (targetValue.Visible)
                 {
-                    Width = targetValue.Right + errorSpace;
+                    Width = targetValue.Right + errorSpace + valueEditorPanel.Width;
                 }
                 else
                 {
@@ -97,7 +95,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             UpdateValueVisibility();
 
-            // Changint the operator can affect validity
+            // Changing the operator can affect validity
             ValidateChildren(ValidationConstraints.Visible);
 
             RaiseContentChanged();
@@ -134,6 +132,22 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
 
             ClearError(targetValue);
             condition.TargetValue = targetValue.Text;
+        }
+
+        /// <summary>
+        /// Use the editor to edit the list of items
+        /// </summary>
+        private void OnEditButtonClick(object sender, EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var editor = lifetimeScope.Resolve<IStringValueListEditorViewModel>();
+                targetValue.Text = editor
+                    .EditList(this.ParentForm, StringCondition.ValueAsItems(targetValue.Text))
+                    .Match(
+                        StringCondition.ItemsAsValue,
+                        ex => targetValue.Text);
+            }
         }
     }
 }

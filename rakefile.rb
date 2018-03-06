@@ -1,3 +1,7 @@
+require 'win32/registry'
+require 'securerandom'
+require 'date'
+require 'fileutils'
 require 'bundler/setup'
 Bundler.require :default
 
@@ -72,7 +76,7 @@ namespace :build do
 		zip.output_path = args.environment_path
 	end
 
-	desc "Zip the layout files"
+	desc "Zip the templates"
 	zip :templates do |zip|
 		zip.dirs = ["./Code/ShipWorks.Res/Templates/Distribution/Source"]
 		zip.output_path = "./Code/ShipWorks.Res/Templates/Distribution/Source.zip"
@@ -186,7 +190,7 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks and generate a public installer"
-	msbuild :public_installer, [:versionLabel] => "build:restore" do |msb, args|
+	msbuild :public_installer, [:versionLabel] => ["build:clean", "build:restore"] do |msb, args|
 		print "Building an installer for the public release...\r\n\r\n"
 
 		# Default the build label to 0.0.0

@@ -17,6 +17,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -149,16 +150,22 @@ namespace ShipWorks.Data.Administration
                         progress.ProgressItems.Add(compressProgress);
                     }
 
+                    SqlServerEditionIdType sqlServerEditionId = SqlServerEditionIdType.Express;
                     // Create the backups
                     foreach (BackupDatabase database in databases)
                     {
-                        CreateSqlBackup(database.Progress, database.DatabaseName, database.BackupFile);
+                        sqlServerEditionId = CreateSqlBackup(database.Progress, database.DatabaseName, database.BackupFile);
                     }
 
                     if (!IsCancelled)
                     {
                         // Create the archive to be zipped
                         ZipWriter zipWriter = new ZipWriter();
+
+                        // If the edition supports SQL backup compression we will only store the backup in the zip file.  If 
+                        // SQL backup compression is not supported, we need to compression it.
+                        zipWriter.CompressionLevel = sqlServerEditionId.SupportsCompression() ? 0 : 1;
+
                         zipWriter.Items.Add(new ZipWriterFileItem(CreateBackupInfoFile(tempPath), "backup.xml"));
 
                         // Add in each backup.  Could be more than one if this was a 2x database with archiving
@@ -293,9 +300,11 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create a backup of SQL Server to the specified backup file
         /// </summary>
-        private void CreateSqlBackup(ProgressItem progressItem, string database, string backupFile)
+        private SqlServerEditionIdType CreateSqlBackup(ProgressItem progressItem, string database, string backupFile)
         {
             log.InfoFormat("Backuping up '{0}' to '{1}'", database, backupFile);
+
+            SqlServerEditionIdType sqlServerEditionId = SqlServerEditionIdType.Express;
 
             progressItem.Starting();
             progressItem.Detail = "Connecting to SQL Server";
@@ -304,11 +313,27 @@ namespace ShipWorks.Data.Administration
             {
                 DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
+                
+                cmd.CommandText = $@"
+                    DECLARE @EditionTypeId sql_variant
 
-                cmd.CommandText =
-                    "BACKUP DATABASE @Database " +
-                    " TO DISK = @FilePath      " +
-                    " WITH INIT, NOUNLOAD, SKIP, STATS = 2, NOFORMAT";
+                    set @EditionTypeId = serverproperty('EditionID')
+
+                     /* These are Express or Web editions, so no compression */
+                     if -1592396055 = @EditionTypeId or -133711905 = @EditionTypeId or 1293598313 = @EditionTypeId
+	                     BEGIN
+		                     BACKUP DATABASE @Database 
+		                     TO DISK = @FilePath      
+		                     WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
+	                     END
+                    ELSE
+	                     BEGIN
+		                     BACKUP DATABASE @Database 
+		                     TO DISK = @FilePath      
+		                     WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 2
+	                     END
+
+                    SELECT serverproperty('EditionID')";
 
                 cmd.AddParameterWithValue("@Database", database);
                 cmd.AddParameterWithValue("@FilePath", backupFile);
@@ -335,7 +360,8 @@ namespace ShipWorks.Data.Administration
                 try
                 {
                     // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                    DbCommandProvider.ExecuteScalar(cmd);
+                    object commandResult = DbCommandProvider.ExecuteScalar(cmd);
+                    sqlServerEditionId = sqlServerEditionId.Parse(commandResult.ToString(), SqlServerEditionIdType.Express);
                 }
                 catch (SqlException ex)
                 {
@@ -355,6 +381,8 @@ namespace ShipWorks.Data.Administration
                 progressItem.Detail = "Done";
                 progressItem.Completed();
             }
+
+            return sqlServerEditionId;
         }
 
         /// <summary>
@@ -668,6 +696,7 @@ namespace ShipWorks.Data.Administration
             {
                 try
                 {
+                    SqlUtility.ConfigureSql2017ForClr(con, databaseName, SqlUtility.GetUsername(con));
                     con.ChangeDatabase(databaseName);
 
                     // Allow multiple connections again
