@@ -45,14 +45,11 @@ namespace ShipWorks.Shipping.Profiles
                     insuranceChoice.Insured = profile.Insurance.Value;
                 }
 
-                if (profile.InsuranceInitialValueSource != null)
+                if (profile.InsuranceInitialValueSource != null && i == 0)
                 {
                     // Don't apply the value to the subsequent parcels - that would probably end up over-ensuring the whole shipment.
-                    if (i == 0)
-                    {
-                        InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
-                        insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
-                    }
+                    InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
+                    insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
                 }
             }
         }
