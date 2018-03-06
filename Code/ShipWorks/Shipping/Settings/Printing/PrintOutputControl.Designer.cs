@@ -57,7 +57,7 @@
             this.toolStripAddPrintOutput.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripAddPrintOutput.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.add});
-            this.toolStripAddPrintOutput.Location = new System.Drawing.Point(16, 159);
+            this.toolStripAddPrintOutput.Location = new System.Drawing.Point(17, 159);
             this.toolStripAddPrintOutput.Name = "toolStripAddPrintOutput";
             this.toolStripAddPrintOutput.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripAddPrintOutput.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
