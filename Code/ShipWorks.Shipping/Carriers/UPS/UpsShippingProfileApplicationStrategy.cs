@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         private readonly IShippingProfileApplicationStrategy baseShippingProfileApplicationStrategy;
         private readonly ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IInsuranceUtility insuranceUtility;
 
         /// <summary>
         /// Constructor
@@ -26,12 +27,14 @@ namespace ShipWorks.Shipping.Carriers.Ups
         public UpsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager, 
             IShippingProfileApplicationStrategy baseShippingProfileApplicationStrategy, 
             ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever, 
-            ISqlAdapterFactory sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IInsuranceUtility insuranceUtility)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.baseShippingProfileApplicationStrategy = baseShippingProfileApplicationStrategy;
             this.accountRetriever = accountRetriever;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.insuranceUtility = insuranceUtility;
         }
         
         /// <summary>
@@ -143,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                         package.Weight = shipment.ContentWeight;
                         changedPackageWeights = true;
 
-                        package.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment);
+                        package.InsuranceValue = insuranceUtility.GetInsuranceValue(shipment);
                         package.DeclaredValue = 0;
                     }
                 }

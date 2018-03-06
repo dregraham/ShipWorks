@@ -354,14 +354,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     UpsAccountManager.Accounts.FirstOrDefault()?.CountryCode ?? "US";
 
         /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            //TODO: DELETE THIS
-        }
-
-        /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
