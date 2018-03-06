@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI.SandRibbon;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using TD.SandDock;
@@ -175,20 +177,51 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 return;
             }
 
-            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value, true)
-                .OrderBy(x => x.ShipmentTypePrimary)
-                .ThenBy(x => x.Name)
-                .Select(x => CreateMenuItem(x, x.ShipmentTypePrimary ? "Default" : "Custom"))
-                .ToArray();
-            
-            
+            List<WidgetBase> menuItems = new List<WidgetBase>();
+            List<IShippingProfileEntity> applicableProfiles =
+                ShippingProfileManager.GetProfilesFor(currentShipmentType.Value, true).ToList();
 
-            if (!menuItems.Any())
+            if (applicableProfiles.Any())
             {
-                menuItems = new[] { new MenuItem { Text = "(None)", Enabled = false } };
+                // Global profiles
+                List<IShippingProfileEntity> globalProfiles = applicableProfiles
+                                                              .Where(p => p.ShipmentType == null)
+                                                              .OrderBy(p => p.Name).ToList();
+
+                foreach (IShippingProfileEntity profile in globalProfiles)
+                {
+                    menuItems.Add(CreateMenuItem(profile, "Global"));
+                }
+
+                // Carrier Profiles
+                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
+                                                               .Where(p => p.ShipmentType == currentShipmentType.Value)
+                                                               .OrderBy(p => p.Name).ToList();
+
+                if (carrierProfiles.Any())
+                {
+                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(currentShipmentType.Value))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Margin = new WidgetEdges(-4, 2, 2, 2),
+                        GroupName = "Carrier",
+                        Enabled = false
+                    };
+                    
+                    menuItems.Add(carrierLabel);
+
+                    foreach (IShippingProfileEntity profile in carrierProfiles)
+                    {
+                        menuItems.Add(CreateMenuItem(profile, "Carrier"));
+                    }
+                }
+            }
+            else
+            {
+                menuItems = new List<WidgetBase>() { new MenuItem { Text = "(None)", Enabled = false } };
             }
 
-            applyProfileMenu.Items.AddRange(menuItems);
+            applyProfileMenu.Items.AddRange(menuItems.ToArray());
         }
 
         /// <summary>
