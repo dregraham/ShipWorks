@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -26,11 +27,11 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profiles loaded in the dialog
         /// </summary>
-        ObservableCollection<ShippingProfileAndShortcut> ShippingProfiles { get; }
+        ObservableCollection<ShippingProfile> ShippingProfiles { get; }
 
         /// <summary>
         /// Selected Shipping Profile
         /// </summary>
-        ShippingProfileAndShortcut SelectedShippingProfile { get; set; }
+        ShippingProfile SelectedShippingProfile { get; set; }
     }
 }

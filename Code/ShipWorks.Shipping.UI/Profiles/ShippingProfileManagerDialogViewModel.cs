@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -25,35 +22,68 @@ namespace ShipWorks.Shipping.UI.Profiles
     public class ShippingProfileManagerDialogViewModel : IShippingProfileManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IShippingProfileManager shippingProfileManager;
+        private readonly IShippingSettings shippingSettings;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
-        private ShippingProfileAndShortcut selectedShippingProfile;
-        private ObservableCollection<ShippingProfileAndShortcut> shippingProfilesAndShortcuts;
-        private readonly Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
-        private readonly IShortcutManager shortcutManager;
+        private ShippingProfile selectedShippingProfile;
+        private ObservableCollection<ShippingProfile> shippingProfiles = new ObservableCollection<ShippingProfile>();
+        private readonly Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerDialogViewModel(IMessageHelper messageHelper,
-            IShippingProfileManager shippingProfileManager,
-            Func<ShippingProfileEntity, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
-            IShortcutManager shortcutManager)
+        public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
+            Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
+            IMessageHelper messageHelper,
+            IShippingSettings shippingSettings,
+            IShipmentTypeManager shipmentTypeManager)
         {
-            this.messageHelper = messageHelper;
-            this.shippingProfileManager = shippingProfileManager;
-            this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
-            this.shortcutManager = shortcutManager;
-            AddCommand = new RelayCommand(Add);
-            EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
-            DeleteCommand = new RelayCommand(Delete, 
-                () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfile.ShipmentTypePrimary);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            ShippingProfiles = new ObservableCollection<ShippingProfileAndShortcut>(shippingProfileManager.Profiles
-                                .Where(profile => profile.ShipmentType != ShipmentTypeCode.None)
-                                .Select(profile => CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts)));
+            this.shippingProfileService = shippingProfileService;
+            this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
+            this.messageHelper = messageHelper;
+            this.shippingSettings = shippingSettings;
+            this.shipmentTypeManager = shipmentTypeManager;
+
+            AddCommand = new RelayCommand(Add);
+            EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
+            DeleteCommand = new RelayCommand(Delete,
+                () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
+
+            ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileService.GetAll()
+                .Where(IncludeProfileInGrid));
+        }
+
+        /// <summary>
+        /// Returns true if should show in grid
+        /// </summary>
+        private bool IncludeProfileInGrid(ShippingProfile shippingProfile)
+        {
+            ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
+            // Global shipment types should be included
+            if (!shipmentType.HasValue)
+            {
+                return true;
+            }
+
+            // None shipment type should always be excluded
+            if (shipmentType.Value == ShipmentTypeCode.None)
+            {
+                return false;
+            }
+            
+            // Best rate never gets configured, so we include it if it is allowed
+            if (shipmentType.Value == ShipmentTypeCode.BestRate && shipmentTypeManager.ShipmentTypeCodes.Contains(ShipmentTypeCode.BestRate))
+            {
+                return true;
+            }
+
+            // For all other types, include if configured
+            return shippingSettings.IsConfigured(shipmentType.Value);
         }
 
         /// <summary>
@@ -78,17 +108,17 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ShippingProfileAndShortcut> ShippingProfiles
+        public ObservableCollection<ShippingProfile> ShippingProfiles
         {
-            get => shippingProfilesAndShortcuts;
-            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfilesAndShortcuts, value);
+            get => shippingProfiles;
+            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfiles, value);
         }
 
         /// <summary>
         /// Currently selected ShippingProfile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfileAndShortcut SelectedShippingProfile
+        public ShippingProfile SelectedShippingProfile
         {
             get => selectedShippingProfile;
             set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
@@ -99,14 +129,14 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Delete()
         {
-            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfile.Name}");
+            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}?");
             if (dialogResult == DialogResult.OK)
             {
                 // Unset the profile before deleting so it isnt used in logic after the delete
-                ShippingProfileAndShortcut profileToDelete = SelectedShippingProfile;
+                ShippingProfile profileToDelete = SelectedShippingProfile;
                 selectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
-                shippingProfileManager.DeleteProfile(profileToDelete.ShippingProfile);
+                shippingProfileService.Delete(profileToDelete);
             }
         }
         
@@ -115,9 +145,15 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(SelectedShippingProfile.ShippingProfile);
+            ShippingProfile selected = SelectedShippingProfile;
+
+            ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(selected);
 
             profileEditor.ShowDialog();
+
+            ShippingProfiles.Remove(selected);
+            ShippingProfiles.Add(selected);
+            SelectedShippingProfile = selected;
         }
 
         /// <summary>
@@ -125,26 +161,17 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Add()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity
-            {
-                Name = string.Empty,
-                ShipmentTypePrimary = false
-            };
-            
+            ShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
+
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
-                ShippingProfileAndShortcut newShortcut = CreateShippingProfileAndShortcut(profile, shortcutManager.Shortcuts);
-                ShippingProfiles.Add(newShortcut);
-                SelectedShippingProfile = newShortcut;
+                // The dialog saves and refetches, but this profile still points to the old profile,
+                // so we need to get the new one.
+                profile = shippingProfileService.Get(profile.ShippingProfileEntity.ShippingProfileID);
+                
+                ShippingProfiles.Add(profile);
+                SelectedShippingProfile = profile;
             }
-        }
-
-        /// <summary>
-        /// Given a profile, create a DTO with its associated hotkey text.
-        /// </summary>
-        private ShippingProfileAndShortcut CreateShippingProfileAndShortcut(ShippingProfileEntity profile, IEnumerable<ShortcutEntity> shortcuts)
-        {
-            return new ShippingProfileAndShortcut(profile, shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID));
         }
     }
 }

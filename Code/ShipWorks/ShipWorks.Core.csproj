@@ -1429,6 +1429,8 @@
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
     <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileLoader.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileService.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileLoader.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
@@ -10695,6 +10697,7 @@
     <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
+    <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />

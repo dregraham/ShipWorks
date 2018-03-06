@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Hotkey = source.Hotkey;
             Action = source.Action;
             RelatedObjectID = source.RelatedObjectID;
+            RowVersion = source.RowVersion;
             
             
             
@@ -79,6 +80,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> RelatedObjectID { get; }
+        /// <summary> The RowVersion property of the Entity Shortcut<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shortcut"."RowVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Byte[] RowVersion { get; }
         
         
         

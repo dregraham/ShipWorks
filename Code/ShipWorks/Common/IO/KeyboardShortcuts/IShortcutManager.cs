@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -24,19 +22,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         IEnumerable<ShortcutEntity> Shortcuts { get; }
 
         /// <summary>
-        /// Is the barcode already used by a shortcut?
-        /// </summary>
-        bool IsBarcodeAvailable(string barcode);
-
-        /// <summary>
         /// Save shortcut
         /// </summary>
-        Task Save(ShortcutEntity shortcut);
+        void Save(ShortcutEntity shortcut, ISqlAdapter adapter);
 
         /// <summary>
-        /// Delete the shortcut associated with the ShippingProfileEntity
+        /// Delete the shortcut
         /// </summary>
-        void DeleteShortcutForProfile(IShippingProfileEntity profile, ISqlAdapter adapter);
+        void Delete(ShortcutEntity shortcut, ISqlAdapter adapter);
 
         /// <summary>
         /// Direct shortcut manager to update shortcuts from database before Shortcuts are returned

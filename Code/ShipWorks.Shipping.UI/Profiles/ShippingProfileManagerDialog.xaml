@@ -67,13 +67,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel Margin="0 2 0 2">
-                                <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfile.ShipmentType, Converter={StaticResource EnumImage}}"/>
+                                <Image Height="15" Width="15" Margin="0 0 5 0" Source="{Binding Path=ShippingProfileEntity.ShipmentType, Converter={StaticResource EnumImage}}"/>
                                 <TextBlock Text="{Binding Path=ShipmentTypeDescription}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
                             </DockPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Profile Name" Width=".5*" Binding="{Binding Path=ShippingProfile.Name}">
+                <DataGridTextColumn Header="Profile Name" Width=".5*" Binding="{Binding Path=ShippingProfileEntity.Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>

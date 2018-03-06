@@ -1,0 +1,101 @@
+﻿using System.Linq;
+using System.Reflection;
+using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Shipping.Profiles
+{
+    /// <summary>
+    /// DTO for ShippingProfileAndShortcut
+    /// </summary>
+    public class ShippingProfile
+    {
+        private readonly IShippingProfileManager profileManager;
+        private readonly IShortcutManager shortcutManager;
+        private readonly IShippingProfileLoader profileLoader;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
+            ShortcutEntity shortcut,
+            IShippingProfileManager profileManager,
+            IShortcutManager shortcutManager, 
+            IShippingProfileLoader profileLoader)
+        {
+            this.profileManager = profileManager;
+            this.shortcutManager = shortcutManager;
+            this.profileLoader = profileLoader;
+            ShippingProfileEntity = shippingProfileEntity;
+            Shortcut = shortcut;
+        }
+
+        /// <summary>
+        /// Shipping Profile
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShippingProfileEntity ShippingProfileEntity { get; }
+
+        /// <summary>
+        /// Shortcut
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShortcutEntity Shortcut { get; }
+
+        /// <summary>
+        /// The associated Shortcut 
+        /// </summary>
+        /// <remarks>
+        /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
+        /// </remarks>
+        [Obfuscation(Exclude = true)]
+        public string ShortcutKey => Shortcut?.Hotkey != null ? EnumHelper.GetDescription(Shortcut.Hotkey) : string.Empty;
+
+        /// <summary>
+        /// The associated ShipmentType description. Blank if global
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ShipmentTypeDescription => 
+            ShippingProfileEntity?.ShipmentType != null ?
+                EnumHelper.GetDescription(ShippingProfileEntity.ShipmentType) :
+                string.Empty;
+
+        /// <summary>
+        /// Validate that the shippintProfile can be saved
+        /// </summary>
+        public Result Validate()
+        {
+            Result result = Result.FromSuccess();
+
+            if (string.IsNullOrWhiteSpace(ShippingProfileEntity.Name))
+            {
+                result = Result.FromError("Enter a name for the profile.");
+            }
+            else if (profileManager.Profiles.Any(profile =>
+                profile.ShippingProfileID != ShippingProfileEntity.ShippingProfileID &&
+                profile.Name == ShippingProfileEntity.Name))
+            {
+                result = Result.FromError("A profile with the chosen name already exists.");
+            }
+            else if (!Shortcut.Barcode.IsNullOrWhiteSpace() && shortcutManager.Shortcuts.Any(s =>
+                s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
+            {
+                result = Result.FromError($"The barcode \"{Shortcut.Barcode}\" is already in use.");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Change profile to be of specified ShipmentType
+        /// </summary>
+        public void ChangeProvider(ShipmentTypeCode? shipmentType)
+        {
+            ShippingProfileEntity.ShipmentType = shipmentType;
+            ShippingProfileEntity.Packages.Clear();
+
+            profileLoader.LoadProfileData(ShippingProfileEntity, true);
+        }
+    }
+}

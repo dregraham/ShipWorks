@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using System.Threading.Tasks;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
 using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Settings;
 using System.Linq;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -22,29 +19,28 @@ namespace ShipWorks.Shipping.Profiles
     [Component(RegistrationType.Self)]
     public partial class ShippingProfileEditorDlg : Form
     {
-        private readonly ShippingProfileEntity profile;
         private readonly IProfileControlFactory profileControlFactory;
-        private readonly IShippingProfileLoader shippingProfileLoader;
-        private readonly IShippingSettings shippingSettings;
-        private readonly IShortcutManager shortcutManager;
-        
+        private readonly ShippingProfile profile;
+        private readonly IShippingProfileService shippingProfileService;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IMessenger messenger;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingProfileEditorDlg(
-            ShippingProfileEntity profile, 
-            IShippingProfileLoader shippingProfileLoader,
-            IShortcutManager shortcutManager,
+            ShippingProfile profile, 
+            IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
-			IShippingSettings shippingSettings)
+			IShipmentTypeManager shipmentTypeManager,
+            IMessenger messenger)
         {
             InitializeComponent();
-
             this.profile = profile;
-            this.shippingProfileLoader = shippingProfileLoader;
-            this.shortcutManager = shortcutManager;
+            this.shippingProfileService = shippingProfileService;
             this.profileControlFactory = profileControlFactory;
-            this.shippingSettings = shippingSettings;
+            this.shipmentTypeManager = shipmentTypeManager;
+            this.messenger = messenger;
 
             WindowStateSaver.Manage(this);
         }
@@ -54,18 +50,23 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            profileName.Text = profile.Name;
+            messenger.Send(new DisableSingleScanInputFilterMessage(this));
+            profileName.Text = profile.ShippingProfileEntity.Name;
+            barcode.Text = profile.Shortcut.Barcode;
 
             LoadShortcuts();
             LoadProviders();
-            LoadProfileEditor();
 
-            profileName.Enabled = !profile.ShipmentTypePrimary;
-            provider.Enabled = profile.IsNew;
+            profileName.Enabled = !profile.ShippingProfileEntity.ShipmentTypePrimary;
+            provider.Enabled = profile.ShippingProfileEntity.IsNew;
 
-            if (profile.ShipmentType != null)
+            if (profile.ShippingProfileEntity.ShipmentType != null)
             {
-                provider.SelectedValue = profile.ShipmentType;
+                provider.SelectedValue = profile.ShippingProfileEntity.ShipmentType;
+            }
+            else
+            {
+                LoadProfileEditor();
             }
         }
 
@@ -100,11 +101,8 @@ namespace ShipWorks.Shipping.Profiles
                 newControl.Dock = DockStyle.Fill;
                 newControl.BackColor = Color.Transparent;
 
-                // Ensure the profile is loaded.  If its already there, no need to refresh
-                shippingProfileLoader.LoadProfileData(profile, false);
-
                 // Load the profile data into the control
-                newControl.LoadProfile(profile);
+                newControl.LoadProfile(profile.ShippingProfileEntity);
             }            
 
             // If there is a new control, add it now
@@ -123,58 +121,27 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// OKing the close of the window
         /// </summary>
-        private async void OnOk(object sender, EventArgs e)
+        private void OnOk(object sender, EventArgs e)
         {
-            string name = profileName.Text.Trim();
-
-            if (name.Length == 0)
-            {
-                MessageHelper.ShowError(this, "Enter a name for the profile.");
-                return;
-            }
+            profile.ShippingProfileEntity.Name = profileName.Text.Trim();
+            profile.Shortcut.Hotkey = (Hotkey?) keyboardShortcut.SelectedValue;
+            profile.Shortcut.Barcode = barcode.Text.Trim();
             
-            profile.Name = name;
+            // Have the profile control save itself
+            ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
+                ? panelSettings.Controls[0] as ShippingProfileControlBase
+                : null;
+            profileControl?.SaveToEntity();
 
-            if (ShippingProfileManager.DoesNameExist(profile))
+            Result result = shippingProfileService.Save(profile);
+
+            if (result.Failure)
             {
-                MessageHelper.ShowError(this, "A profile with the chosen name already exists.");
-                return;
+                MessageHelper.ShowError(this, result.Message);
             }
-
-            if (!string.IsNullOrWhiteSpace(barcode.Text) && !shortcutManager.IsBarcodeAvailable(barcode.Text))
+            else
             {
-                MessageHelper.ShowError(this, $"The barcode \"{barcode.Text}\" is already in use.");
-                return;
-            }
-
-            try
-            {
-                // Have the profile control save itself
-                ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
-                    ? panelSettings.Controls[0] as ShippingProfileControlBase
-                    : null;
-                profileControl?.SaveToEntity();
-
-                ShippingProfileManager.SaveProfile(profile);
-
-                // Save shortcut if user entered one
-                if ((Hotkey?) keyboardShortcut.SelectedValue != null || !string.IsNullOrWhiteSpace(barcode.Text))
-                {
-                    await SaveShortcut(profile).ConfigureAwait(true);
-                }
-
                 DialogResult = DialogResult.OK;
-            }
-            catch (ORMConcurrencyException)
-            {
-                MessageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the profile.");
-
-                ShippingProfileManager.InitializeForCurrentSession();
-                DialogResult = DialogResult.Abort;
-            }
-            catch (ORMQueryExecutionException)
-            {
-                MessageHelper.ShowError(this, "Your changes cannot be saved because another use has saved a profile with your selected HotKey.");
             }
         }
 
@@ -192,6 +159,8 @@ namespace ShipWorks.Shipping.Profiles
                     profileControl.CancelChanges();
                 }
             }
+            
+            messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
 
         /// <summary>
@@ -199,17 +168,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadShortcuts()
         {
-            List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
-            ShortcutEntity profilesShortcut = null;
-
-            if (!profile.IsNew)
-            {
-                profilesShortcut = shortcutManager.Shortcuts.FirstOrDefault(s => s.RelatedObjectID == profile.ShippingProfileID);
-                if (profilesShortcut?.Hotkey != null)
-                {
-                    availableHotkeys.Add(profilesShortcut.Hotkey.Value);
-                }
-            }
+            IEnumerable<Hotkey> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
             
             List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
             dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
@@ -222,9 +181,9 @@ namespace ShipWorks.Shipping.Profiles
             keyboardShortcut.ValueMember = "Value";
             keyboardShortcut.DataSource = dataSource;
 
-            if (profilesShortcut?.Hotkey != null)
+            if (profile?.Shortcut?.Hotkey != null)
             {
-                keyboardShortcut.SelectedValue = profilesShortcut.Hotkey.Value;
+                keyboardShortcut.SelectedValue = profile.Shortcut.Hotkey;
             }
         }
 
@@ -234,8 +193,13 @@ namespace ShipWorks.Shipping.Profiles
         private void LoadProviders()
         {
             this.provider.SelectedValueChanged -= OnChangeProvider;
+            ShipmentTypeCode? profileShipmentType = profile.ShippingProfileEntity.ShipmentType;
 
-            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shippingSettings.GetConfiguredTypes();
+            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shipmentTypeManager.ShipmentTypeCodes;
+            if (profileShipmentType != null)
+            {
+                configuredShipmentTypes = configuredShipmentTypes.Union(new[] { profileShipmentType.Value });
+            }
 
             List<KeyValuePair<string, ShipmentTypeCode?>> dataSource = new List<KeyValuePair<string, ShipmentTypeCode?>>();
             dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>("No Change", null));
@@ -256,33 +220,25 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void OnChangeProvider(object sender, EventArgs e)
         {
-            if(provider.SelectedValue == null)
-            {
-                profile.ShipmentType = null;
-            }
-            else
-            {
-                profile.ShipmentType = (ShipmentTypeCode) provider.SelectedValue;
-            }
+            profile.ChangeProvider((ShipmentTypeCode?) provider.SelectedValue);
 
-            profile.Packages.Clear();
             LoadProfileEditor();
+        }
+        
+        /// <summary>
+        /// Disable accept button as scans can send an enter key
+        /// </summary>
+        private void OnEnterBarcode(object sender, EventArgs e)
+        {
+            AcceptButton = null;
         }
 
         /// <summary>
-        /// Save the 
+        /// Enable accept button as we now want the enter key to work
         /// </summary>
-        private Task SaveShortcut(ShippingProfileEntity profile)
+        private void OnLeaveBarcode(object sender, EventArgs e)
         {
-            ShortcutEntity shortcut = new ShortcutEntity()
-            {
-                Barcode = barcode.Text,
-                Hotkey = (Hotkey?) keyboardShortcut.SelectedValue,
-                Action = (int) KeyboardShortcutCommand.ApplyProfile,
-                RelatedObjectID = profile.ShippingProfileID
-            };
-
-            return shortcutManager.Save(shortcut);
+            AcceptButton = ok;
         }
     }
 }

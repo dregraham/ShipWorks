@@ -42,21 +42,21 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void DeleteProfile(ShippingProfileEntity profile)
         {
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                using (DbTransaction tran = con.BeginTransaction())
-                {
-                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(con, tran))
-                    {
-                        shortcutManager.DeleteShortcutForProfile(profile, adapter);
-                        adapter.DeleteEntity(profile);
-
-                        adapter.Commit();
-                    }
-                }
+                DeleteProfile(profile, adapter);
+                adapter.Commit();
             }
+            
+            ShippingProfileManager.CheckForChangesNeeded();
+        }
 
-
+        /// <summary>
+        /// Delete the given profile
+        /// </summary>
+        public void DeleteProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
+        {
+            adapter.DeleteEntity(profile);
             ShippingProfileManager.CheckForChangesNeeded();
         }
         
@@ -153,6 +153,14 @@ namespace ShipWorks.Shipping.Services
         public void SaveProfile(ShippingProfileEntity profile)
         {
             ShippingProfileManager.SaveProfile(profile);
+        }
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        public void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
+        {
+            ShippingProfileManager.SaveProfile(profile, adapter);
         }
     }
 }

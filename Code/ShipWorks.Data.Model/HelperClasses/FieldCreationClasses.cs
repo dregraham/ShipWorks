@@ -22772,6 +22772,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RelatedObjectID);}
 		}
+		/// <summary>Creates a new ShortcutEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RowVersion);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity SparkPayStoreEntity</summary>

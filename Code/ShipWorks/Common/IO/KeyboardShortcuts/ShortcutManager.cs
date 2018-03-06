@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
@@ -10,10 +9,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.IO.KeyboardShortcuts;
 
@@ -50,13 +46,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Save shortcut
         /// </summary>
-        public async Task Save(ShortcutEntity shortcut)
+        public void Save(ShortcutEntity shortcut, ISqlAdapter adapter)
         {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                await sqlAdapter.SaveAndRefetchAsync(shortcut);
-                CheckForChangesNeeded();
-            }
+            adapter.SaveAndRefetch(shortcut);
+            CheckForChangesNeeded();
         }
 
         /// <summary>
@@ -101,21 +94,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         }
 
         /// <summary>
-        /// Delete any shortcuts associated with the profile
+        /// Delete the shortcut
         /// </summary>
-        public void DeleteShortcutForProfile(IShippingProfileEntity profile, ISqlAdapter adapter)
+        public void Delete(ShortcutEntity shortcut, ISqlAdapter adapter)
         {
-            bool changes = false;
-            foreach (ShortcutEntity entity in Shortcuts.Where(s => s.RelatedObjectID == profile.ShippingProfileID))
-            {
-                adapter.DeleteEntity(entity);
-                changes = true;
-            }
-
-            if (changes)
-            {
-                CheckForChangesNeeded();
-            }
+            adapter.DeleteEntity(shortcut);
+            CheckForChangesNeeded();
         }
 
         /// <summary>
