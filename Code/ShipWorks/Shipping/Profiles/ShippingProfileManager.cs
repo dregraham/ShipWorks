@@ -127,6 +127,23 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ProfilesReadOnly.SingleOrDefault(p => p.ShippingProfileID == profileID);
         }
+        
+        /// <summary>
+        /// Get profiles for the given shipment type
+        /// </summary>
+        public static IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentTypeCode, 
+                                                                         bool includeDefaultProfiles)
+        {
+            IEnumerable<IShippingProfileEntity> profiles = ProfilesReadOnly.Where(p => p.ShipmentType == null ||
+                                                                                       p.ShipmentType == shipmentTypeCode);
+
+            if (!includeDefaultProfiles)
+            {
+                profiles = profiles.Where(p => !p.ShipmentTypePrimary);
+            }
+            
+            return profiles;
+        }
 
         /// <summary>
         /// Apply the given profile to the given shipment

@@ -2,13 +2,17 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using TD.SandDock;
+using Menu = Divelements.SandRibbon.Menu;
+using MenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -171,11 +175,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 return;
             }
 
-            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value)
+            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value, true)
                 .OrderBy(x => x.ShipmentTypePrimary)
                 .ThenBy(x => x.Name)
                 .Select(x => CreateMenuItem(x, x.ShipmentTypePrimary ? "Default" : "Custom"))
                 .ToArray();
+            
+            
 
             if (!menuItems.Any())
             {
@@ -188,7 +194,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Create a menu item from the given profile
         /// </summary>
-        private WidgetBase CreateMenuItem(ShippingProfileEntity profile, string groupName)
+        private WidgetBase CreateMenuItem(IShippingProfileEntity profile, string groupName)
         {
             MenuItem menuItem = new MenuItem(profile.Name);
             menuItem.GroupName = groupName;

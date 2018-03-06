@@ -33,6 +33,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -1592,23 +1593,7 @@ namespace ShipWorks.Shipping
             // Add each relevant profile
             if (shipmentTypeCode != null)
             {
-                foreach (IShippingProfileEntity profile in ShippingProfileManager.ProfilesReadOnly.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
-                {
-                    if (profile.ShipmentType != ShipmentTypeCode.None &&
-                        profile.ShipmentType == shipmentTypeCode.Value)
-                    {
-                        ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
-                        menuItem.Tag = profile;
-                        menuItem.Click += OnApplyProfile;
-
-                        if (profile.ShipmentTypePrimary && contextMenuProfiles.Items.Count > 0)
-                        {
-                            contextMenuProfiles.Items.Add(new ToolStripSeparator());
-                        }
-
-                        contextMenuProfiles.Items.Add(menuItem);
-                    }
-                }
+                AddProfilesToMenu(shipmentTypeCode.Value);
             }
 
             if (contextMenuProfiles.Items.Count == 0)
@@ -1622,6 +1607,65 @@ namespace ShipWorks.Shipping
             ToolStripMenuItem manageProfilesMenuItem = new ToolStripMenuItem("Manage Profiles...");
             manageProfilesMenuItem.Click += OnProfiles;
             contextMenuProfiles.Items.Add(manageProfilesMenuItem);
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        /// <param name="shipmentTypeCode"></param>
+        private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
+        {
+            List<IShippingProfileEntity> applicableProfiles =
+                ShippingProfileManager.GetProfilesFor(shipmentTypeCode, true).ToList();
+
+            if (applicableProfiles.Any())
+            {
+                // Global profiles
+                List<IShippingProfileEntity> globalProfiles = applicableProfiles
+                                                              .Where(p => p.ShipmentType == null)
+                                                              .OrderBy(p => p.Name).ToList();
+
+                foreach (IShippingProfileEntity profile in globalProfiles)
+                {
+                    AddProfileToMenu(profile, contextMenuProfiles);
+                }
+
+                // Carrier Profiles
+                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
+                                                               .Where(p => p.ShipmentType == shipmentTypeCode)
+                                                               .OrderBy(p => p.Name).ToList();
+
+                if (globalProfiles.Any() && carrierProfiles.Any())
+                {
+                    contextMenuProfiles.Items.Add(new ToolStripSeparator());
+                }
+
+                if (carrierProfiles.Any())
+                {
+                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(shipmentTypeCode))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Margin = new Padding(-4, 2, 2, 2)
+                    };
+                    contextMenuProfiles.Items.Add(carrierLabel);
+
+                    foreach (IShippingProfileEntity profile in carrierProfiles)
+                    {
+                        AddProfileToMenu(profile, contextMenuProfiles);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds given profile to the given menu
+        /// </summary>
+        private void AddProfileToMenu(IShippingProfileEntity profile, ContextMenuStrip menu)
+        {
+            ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
+            menuItem.Tag = profile;
+            menuItem.Click += OnApplyProfile;
+            menu.Items.Add(menuItem);
         }
 
         /// <summary>
