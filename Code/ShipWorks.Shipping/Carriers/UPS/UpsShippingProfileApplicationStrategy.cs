@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Get the AccountID to use for the profile
         /// </summary>
         private long? GetAccountID(IUpsProfileEntity upsProfile) => 
-            (upsProfile.UpsAccountID == 0 && accountRetriever.AccountsReadOnly.Count() > 0) ?
+            (upsProfile.UpsAccountID == 0 && accountRetriever.AccountsReadOnly.Any()) ?
                 (long?) accountRetriever.AccountsReadOnly.First().UpsAccountID :
                 upsProfile.UpsAccountID;
     }
