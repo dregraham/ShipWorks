@@ -43,26 +43,24 @@
             // 
             // borderLeft
             // 
-            this.borderLeft.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.borderLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.borderLeft.AutoSize = false;
             this.borderLeft.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.borderLeft.Location = new System.Drawing.Point(17, 28);
+            this.borderLeft.Location = new System.Drawing.Point(4, 28);
             this.borderLeft.Name = "borderLeft";
             this.borderLeft.Size = new System.Drawing.Size(1, 83);
-            this.borderLeft.TabIndex = 2;
             this.borderLeft.Text = "kryptonBorderEdge4";
             // 
             // borderBottom
             // 
-            this.borderBottom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.borderBottom.AutoSize = false;
+            this.borderBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.borderBottom.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.borderBottom.Location = new System.Drawing.Point(17, 110);
+            this.borderBottom.Location = new System.Drawing.Point(4, 111);
+            this.borderBottom.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.borderBottom.Name = "borderBottom";
-            this.borderBottom.Size = new System.Drawing.Size(600, 1);
-            this.borderBottom.TabIndex = 5;
+            this.borderBottom.Size = new System.Drawing.Size(567, 1);
             this.borderBottom.Text = "kryptonBorderEdge1";
             // 
             // toolStripDeleteRename
@@ -112,11 +110,11 @@
             this.toolStripAdd.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripAdd.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.add});
-            this.toolStripAdd.Location = new System.Drawing.Point(30, 84);
+            this.toolStripAdd.Location = new System.Drawing.Point(8, 84);
             this.toolStripAdd.Name = "toolStripAdd";
             this.toolStripAdd.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripAdd.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripAdd.Size = new System.Drawing.Size(51, 25);
+            this.toolStripAdd.Size = new System.Drawing.Size(82, 25);
             this.toolStripAdd.Stretch = true;
             this.toolStripAdd.TabIndex = 4;
             // 
@@ -132,8 +130,8 @@
             // labeName
             // 
             this.labeName.AutoSize = true;
-            this.labeName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labeName.Location = new System.Drawing.Point(3, 9);
+            this.labeName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labeName.Location = new System.Drawing.Point(0, 9);
             this.labeName.Name = "labeName";
             this.labeName.Size = new System.Drawing.Size(88, 13);
             this.labeName.TabIndex = 0;
@@ -141,9 +139,11 @@
             // 
             // panelMain
             // 
-            this.panelMain.Location = new System.Drawing.Point(26, 32);
+            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelMain.Location = new System.Drawing.Point(6, 32);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(596, 49);
+            this.panelMain.Size = new System.Drawing.Size(564, 49);
             this.panelMain.TabIndex = 3;
             // 
             // PrintOutputGroupControl
@@ -156,9 +156,9 @@
             this.Controls.Add(this.toolStripDeleteRename);
             this.Controls.Add(this.toolStripAdd);
             this.Controls.Add(this.labeName);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrintOutputGroupControl";
-            this.Size = new System.Drawing.Size(625, 125);
+            this.Size = new System.Drawing.Size(570, 125);
             this.toolStripDeleteRename.ResumeLayout(false);
             this.toolStripDeleteRename.PerformLayout();
             this.toolStripAdd.ResumeLayout(false);

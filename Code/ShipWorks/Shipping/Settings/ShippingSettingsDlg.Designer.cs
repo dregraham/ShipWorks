@@ -63,7 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optionControl.Controls.Add(this.optionPageGeneral);
             this.optionControl.Location = new System.Drawing.Point(12, 12);
-            this.optionControl.MenuListWidth = 160;
+            this.optionControl.MenuListWidth = 150;
             this.optionControl.Name = "optionControl";
             this.optionControl.SelectedIndex = 0;
             this.optionControl.Size = new System.Drawing.Size(719, 516);
