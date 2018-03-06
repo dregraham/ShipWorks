@@ -35,20 +35,17 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con)
+        public async Task Download(IProgressReporter progressItem, long downloadID, DbConnection con)
         {
-            progressItem.PercentComplete = 100;
-            progressItem.Detail = "Manual orders do not download";
-
-            return Task.CompletedTask;
+            
         }
 
         /// <summary>
         /// Does not support downloading OrderNumbers
         /// </summary>
-        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        public async Task Download(string orderNumber, long downloadID, DbConnection con)
         {
-            return Task.CompletedTask;
+            
         }
 
         /// <summary>

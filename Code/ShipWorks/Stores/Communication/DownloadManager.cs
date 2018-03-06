@@ -375,13 +375,22 @@ namespace ShipWorks.Stores.Communication
                     progressProvider = new ProgressProvider();
                 }
 
-                // Create the progress item, and tag it with the store
-                ProgressItem progressItem = new ProgressItem(store.StoreName);
-                progressProvider.ProgressItems.Add(progressItem);
+                if (store.StoreTypeCode != StoreTypeCode.Manual)
+                {
+                    // Create the progress item, and tag it with the store
+                    ProgressItem progressItem = new ProgressItem(store.StoreName);
+                    progressProvider.ProgressItems.Add(progressItem);
 
-                // Add to the download queue
-                PendingDownload download = new PendingDownload { StoreID = store.StoreID, ProgressItem = progressItem, DownloadInitiatedBy = initiatedBy };
-                downloadQueue.Add(download);
+
+                    // Add to the download queue
+                    PendingDownload download = new PendingDownload
+                    {
+                        StoreID = store.StoreID,
+                        ProgressItem = progressItem,
+                        DownloadInitiatedBy = initiatedBy
+                    };
+                    downloadQueue.Add(download);
+                }
 
                 // Ensure our downloader is working.
                 if (!isDownloading)
