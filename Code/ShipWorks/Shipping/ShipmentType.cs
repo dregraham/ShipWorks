@@ -865,32 +865,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
-            ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
-            ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
-
-            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
-            SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
-
-            // Special case for insurance
-            for (int i = 0; i < GetParcelCount(shipment); i++)
-            {
-                IInsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
-
-                if (profile.Insurance != null)
-                {
-                    insuranceChoice.Insured = profile.Insurance.Value;
-                }
-
-                if (profile.InsuranceInitialValueSource != null)
-                {
-                    // Don't apply the value to the subsequent parcels - that would probably end up over-ensuring the whole shipment.
-                    if (i == 0)
-                    {
-                        InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
-                        insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
-                    }
-                }
-            }
+            //TODO: DELETE THIS
         }
 
         /// <summary>
