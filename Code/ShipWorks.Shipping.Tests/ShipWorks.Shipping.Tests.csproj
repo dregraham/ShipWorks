@@ -290,6 +290,7 @@
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\PostalFirstClassInternationalMailFraudWarningTest.cs" />
+    <Compile Include="Carriers\Postal\PostalShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
