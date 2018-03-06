@@ -8,15 +8,22 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.Shipping.Profiles
 {
     [Component]
-    public class GlobalShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
+    public class GlobalShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
     {
-        public GlobalShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) : base(shipmentTypeManager)
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IShippingProfileApplicationStrategy baseStrategy;
+
+        public GlobalShippingProfileApplicationStrategy(
+            IShipmentTypeManager shipmentTypeManager,
+            IShippingProfileApplicationStrategy baseStrategy)
         {
+            this.shipmentTypeManager = shipmentTypeManager;
+            this.baseStrategy = baseStrategy;
         }
 
-        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            base.ApplyProfile(profile, shipment);
+            baseStrategy.ApplyProfile(profile, shipment);
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             IEnumerable<IPackageAdapter> packages = shipmentType.GetPackageAdapters(shipment);
@@ -51,9 +58,9 @@ namespace ShipWorks.Shipping.Profiles
                     package.DimsHeight = packageProfile.DimsHeight.Value;
                 }
                 
-                if (packageProfile.Weight.HasValue)
+                if (packageProfile.DimsWeight.HasValue)
                 {
-                    package.Weight = packageProfile.Weight.Value;
+                    package.AdditionalWeight = packageProfile.DimsWeight.Value;
                 }
                 
                 if (packageProfile.DimsAddWeight.HasValue)
