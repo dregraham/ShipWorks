@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public virtual void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            var shipmentType = shipmentTypeManager.Get(shipment);
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
 
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
