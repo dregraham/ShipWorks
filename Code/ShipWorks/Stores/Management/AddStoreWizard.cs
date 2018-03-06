@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Management
         /// Indicates if we show the activation page.
         /// </summary>
         private bool showActivationError = false;
-        private bool wasSkipped;
+        private bool wasStoreSelectionSkipped;
         private readonly ILicenseService licenseService;
         private readonly Func<IChannelLimitFactory> channelLimitFactory;
 
@@ -274,7 +274,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Can the setup be skipped
         /// </summary>
-        private bool CanSkip =>
+        private bool CanSkipStoreSelection =>
             !licenseService.IsLegacy &&
             (OpenedFrom == OpenedFromSource.InitialSetup || OpenedFrom == OpenedFromSource.NoStores);
 
@@ -285,7 +285,7 @@ namespace ShipWorks.Stores.Management
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
-            skipPanel.Visible = CanSkip;
+            skipPanel.Visible = CanSkipStoreSelection;
 
             LoadStoreTypes();
 
@@ -357,7 +357,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
         {
-            wasSkipped = false;
+            wasStoreSelectionSkipped = false;
             storeOverride = null;
 
             UpdateStoreConnectionUI();
@@ -1040,7 +1040,7 @@ namespace ShipWorks.Stores.Management
             store.SetupComplete = true;
             StoreManager.SaveStore(store, adapter);
 
-            if (wasSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
+            if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
             {
                 var origin = new ShippingOriginEntity();
                 origin.InitializeNullsToDefault();
@@ -1167,7 +1167,7 @@ namespace ShipWorks.Stores.Management
             {
                 storeOverride = manualStoreType;
                 MoveNext();
-                wasSkipped = true;
+                wasStoreSelectionSkipped = true;
             }
         }
     }
