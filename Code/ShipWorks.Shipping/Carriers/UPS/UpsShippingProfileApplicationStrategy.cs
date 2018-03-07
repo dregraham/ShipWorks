@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.UpsWorldShip)]
     public class UpsShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IInsuranceUtility insuranceUtility;
@@ -32,7 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
             IInsuranceUtility insuranceUtility)
             : base(shipmentTypeManager)
         {
-            this.shipmentTypeManager = shipmentTypeManager;
             this.accountRetriever = accountRetriever;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.insuranceUtility = insuranceUtility;

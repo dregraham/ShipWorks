@@ -145,7 +145,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private bool ApplyProfilesPackages(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             FedExShipmentEntity fedex = shipment.FedEx;
-            IFedExProfileEntity source = profile.FedEx;
 
             bool changedPackageWeights = false;
             int profilePackageCount = profile.Packages.Count();

@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         private readonly Mock<ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity>> accountRetriever;
         private readonly Mock<ShipmentType> shipmentType;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<IShippingProfileApplicationStrategy> baseShippingProfileApplicationStrategy;
         private readonly UpsShippingProfileApplicationStrategy testObject;
 
         public UpsShippingProfileApplicationStrategyTest()
@@ -29,7 +28,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             shipmentType = mock.Mock<ShipmentType>();
             shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
             shipmentTypeManager.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentType);
-            baseShippingProfileApplicationStrategy = mock.Mock<IShippingProfileApplicationStrategy>();
 
             testObject = mock.Create<UpsShippingProfileApplicationStrategy>();
         }
@@ -443,27 +441,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [Fact]
         public void ApplyProfile_DelegatesToShipmentTypeManagerWithShipment()
         {
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-            var shipment = new ShipmentEntity();
-            var profile = new ShippingProfileEntity();
-
-            testObject.ApplyProfile(profile, shipment);
-
-            shipmentTypeManager.Verify(s => s.Get(shipment));
+            mock.Mock<IShipmentTypeManager>().Verify(s => s.Get(shipment));
         }
 
         [Fact]
         public void ApplyProfile_SetsOriginIDOnShipment()
         {
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            profile.OriginID = 123;
 
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-            var shipment = new ShipmentEntity();
-            var profile = new ShippingProfileEntity() { OriginID = 123 };
-
-            testObject.ApplyProfile(profile, shipment);
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             Assert.Equal(123, shipment.OriginOriginID);
         }
@@ -471,13 +461,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [Fact]
         public void ApplyProfile_SetsReturnShipmentOnShipment()
         {
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            profile.ReturnShipment = true;
 
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-            var shipment = new ShipmentEntity();
-            var profile = new ShippingProfileEntity() { ReturnShipment = true };
-
-            testObject.ApplyProfile(profile, shipment);
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             Assert.True(shipment.ReturnShipment);
         }
@@ -485,13 +472,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [Fact]
         public void ApplyProfile_SetsRequestedLabelFormatOnShipment()
         {
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            profile.RequestedLabelFormat = (int) ThermalLanguage.EPL;
 
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-            var shipment = new ShipmentEntity();
-            var profile = new ShippingProfileEntity() { RequestedLabelFormat = (int) ThermalLanguage.EPL };
-
-            testObject.ApplyProfile(profile, shipment);
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             Assert.Equal(ThermalLanguage.EPL, (ThermalLanguage) shipment.OriginOriginID);
         }
@@ -499,16 +483,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [Fact]
         public void ApplyProfile_DelegatesToShipmentTypeToSaveLabelFormat()
         {
-            var shipment = new ShipmentEntity();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            profile.RequestedLabelFormat = (int) ThermalLanguage.EPL;
+            
             var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
-
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-
-            var profile = new ShippingProfileEntity() { RequestedLabelFormat = (int) ThermalLanguage.EPL };
-
-            testObject.ApplyProfile(profile, shipment);
+            
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             shipmentType.Verify(s => s.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment));
         }
@@ -516,9 +498,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [Fact]
         public void ApplyProfile_SetsInsuranceValueOnPackage()
         {
-            var insuranceChoice = mock.Mock<IInsuranceChoice>();
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            profile.Insurance = true;
 
-            var shipment = new ShipmentEntity();
+            var insuranceChoice = mock.Mock<IInsuranceChoice>();
+            
             var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(s => s.GetParcelCount(shipment)).Returns(1);
@@ -528,12 +512,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
 
             shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
 
-            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
-            var profile = new ShippingProfileEntity() { Insurance = true };
+            var testObject = mock.Create<UpsShippingProfileApplicationStrategy>();
 
             testObject.ApplyProfile(profile, shipment);
 
             insuranceChoice.VerifySet(i => i.Insured = true);
+        }
+
+        private (ShippingProfileEntity, ShipmentEntity) GetEmptyShipmentAndProfile()
+        {
+            var profile = new ShippingProfileEntity()
+            {
+                Ups = new UpsProfileEntity()
+            };
+
+            profile.Packages.Add(new UpsProfilePackageEntity());
+
+            return (profile, new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+            });
         }
 
     }
