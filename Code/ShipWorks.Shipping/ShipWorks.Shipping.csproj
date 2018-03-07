@@ -311,6 +311,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressRatingService.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilder.cs" />
