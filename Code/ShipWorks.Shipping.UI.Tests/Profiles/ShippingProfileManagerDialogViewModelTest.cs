@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -221,8 +222,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
-                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
+            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
         }
 
         public void Dispose()

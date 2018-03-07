@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileManager profileManager;
         private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileLoader profileLoader;
+        private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
 
         /// <summary>
         /// Constructor
@@ -22,11 +23,13 @@ namespace ShipWorks.Shipping.Profiles
             ShortcutEntity shortcut,
             IShippingProfileManager profileManager,
             IShortcutManager shortcutManager, 
-            IShippingProfileLoader profileLoader)
+            IShippingProfileLoader profileLoader,
+            IShippingProfileApplicationStrategyFactory strategyFactory)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
             this.profileLoader = profileLoader;
+            this.strategyFactory = strategyFactory;
             ShippingProfileEntity = shippingProfileEntity;
             Shortcut = shortcut;
         }
@@ -96,6 +99,15 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity.Packages.Clear();
 
             profileLoader.LoadProfileData(ShippingProfileEntity, true);
+        }
+
+        /// <summary>
+        /// Apply profile to shipment
+        /// </summary>
+        public void Apply(ShipmentEntity shipment)
+        {
+            IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
+            strategy.ApplyProfile(ShippingProfileEntity, shipment);
         }
     }
 }

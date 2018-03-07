@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Moq;
@@ -302,8 +303,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
-                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
+            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
         }
 
         public void Dispose()

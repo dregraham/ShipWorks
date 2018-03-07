@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.UI.Tests.Profiles
+namespace ShipWorks.Tests.Shipping.Profiles
 {
     public class ShippingProfileTest : IDisposable
     {
@@ -186,8 +184,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
-                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
+            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
         }
 
         public void Dispose()

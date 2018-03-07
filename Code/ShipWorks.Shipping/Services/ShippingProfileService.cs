@@ -25,18 +25,21 @@ namespace ShipWorks.Shipping.Services
         private readonly IShortcutManager shortcutManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingProfileLoader profileLoader;
+        private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly ILog log;
 
         public ShippingProfileService(IShippingProfileManager profileManager,
             IShortcutManager shortcutManager,
             ISqlAdapterFactory sqlAdapterFactory,
             IShippingProfileLoader profileLoader,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger,
+            IShippingProfileApplicationStrategyFactory strategyFactory)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.profileLoader = profileLoader;
+            this.strategyFactory = strategyFactory;
             this.log = createLogger(GetType());
         }
 
@@ -67,8 +70,15 @@ namespace ShipWorks.Shipping.Services
                 };
             }
 
-            return new ShippingProfile(shippingProfileEntity, shortcutEntity,
-                                profileManager, shortcutManager, profileLoader);
+            return CreateShippingProfile(shippingProfileEntity, shortcutEntity);
+        }
+
+        /// <summary>
+        /// Given a profile and its associated shortcut, create a Shipping Profile
+        /// </summary>
+        private ShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcutEntity)
+        {
+            return new ShippingProfile(shippingProfileEntity, shortcutEntity, profileManager, shortcutManager, profileLoader, strategyFactory);
         }
 
         /// <summary>
@@ -89,13 +99,13 @@ namespace ShipWorks.Shipping.Services
                         Action = (int) KeyboardShortcutCommand.ApplyProfile,
                         RelatedObjectID = shippingProfileEntityId
                     };
-                
-                fetchedShippingProfile = new ShippingProfile(profile, shortcut, profileManager, shortcutManager, profileLoader);
+
+                fetchedShippingProfile = CreateShippingProfile(profile, shortcut);
             }
 
             return fetchedShippingProfile;
         }
-
+        
         /// <summary>
         /// Create an empty ShippingProfile
         /// </summary>
@@ -113,7 +123,7 @@ namespace ShipWorks.Shipping.Services
             };
 
             profileLoader.LoadProfileData(profile, false);
-            return new ShippingProfile(profile, shortcutEntity, profileManager, shortcutManager, profileLoader);
+            return CreateShippingProfile(profile, shortcutEntity);
         }
 
         /// <summary>
