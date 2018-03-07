@@ -33,8 +33,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         [Fact]
         public void ApplyProfile_DelegatesToBaseStrategy()
         {
-            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
+            Apply();
 
             mock.Mock<IShippingProfileApplicationStrategy>().Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
         }
@@ -45,11 +44,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         [InlineData(5, 5)]
         public void ApplyProfile_WeightIsSetProperly(double? profileWeight, double expectedWeight)
         {
+            // Here just to make sure content weight changes or stays the same after apply 
             shipment.ContentWeight = 42;
             packageProfile.Weight = profileWeight;
 
-            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
+            Apply();
 
             Assert.Equal(expectedWeight, shipment.ContentWeight);
         }
@@ -58,13 +57,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         public void ApplyProfile_DimsProfileIDIsSet()
         {
             packageProfile.DimsProfileID = 44;
-            
-            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
 
-            Assert.Equal(42, shipment.Postal.DimsProfileID);
+            Apply();
+
+            Assert.Equal(44, shipment.Postal.DimsProfileID);
         }
-        
+
         [Fact]
         public void ApplyProfile_DimsensionsAreSet()
         {
@@ -74,15 +72,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             packageProfile.DimsHeight = 3;
             packageProfile.DimsWeight = 4;
             packageProfile.DimsAddWeight = true;
-            
-            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
 
-            Assert.Equal(42, shipment.Postal.DimsProfileID);
+            Apply();
+
+            Assert.Equal(44, shipment.Postal.DimsProfileID);
             Assert.Equal(1, shipment.Postal.DimsLength);
-            Assert.Equal(1, shipment.Postal.DimsWidth);
-            Assert.Equal(1, shipment.Postal.DimsHeight);
-            Assert.Equal(1, shipment.Postal.DimsWeight);
+            Assert.Equal(2, shipment.Postal.DimsWidth);
+            Assert.Equal(3, shipment.Postal.DimsHeight);
+            Assert.Equal(4, shipment.Postal.DimsWeight);
             Assert.True(shipment.Postal.DimsAddWeight);
         }
 
@@ -92,17 +89,98 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             profile.Postal.PackagingType = 7;
             profile.Postal.NonRectangular = true;
             profile.Postal.NonMachinable = true;
-            
-            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
-            
+
+            Apply();
+
             Assert.Equal(7, shipment.Postal.PackagingType);
             Assert.True(shipment.Postal.NonRectangular);
             Assert.True(shipment.Postal.NonMachinable);
         }
-        
-        //TODO: Test all the things!
-        
+
+        [Fact]
+        public void ApplyProfile_CustomsInformationIsSet()
+        {
+            profile.Postal.CustomsContentType = 42;
+            profile.Postal.CustomsContentDescription = "Not Drugs";
+
+            Apply();
+
+            Assert.Equal(42, shipment.Postal.CustomsContentType);
+            Assert.Equal("Not Drugs", shipment.Postal.CustomsContentDescription);
+        }
+
+        [Fact]
+        public void ApplyProfile_ExpressSignatureIsSet()
+        {
+            profile.Postal.ExpressSignatureWaiver = true;
+
+            Apply();
+
+            Assert.True(shipment.Postal.ExpressSignatureWaiver);
+        }
+
+        [Fact]
+        public void ApplyProfile_FacilityInfoIsSet()
+        {
+            profile.Postal.SortType = 42;
+            profile.Postal.EntryFacility = 43;
+
+            Apply();
+
+            Assert.Equal(42, shipment.Postal.SortType);
+            Assert.Equal(43, shipment.Postal.EntryFacility);
+        }
+
+        [Fact]
+        public void ApplyProfile_MemoIsSet()
+        {
+            profile.Postal.Memo1 = "m1";
+            profile.Postal.Memo2 = "m2";
+            profile.Postal.Memo3 = "m3";
+
+            Apply();
+
+            Assert.Equal("m1", shipment.Postal.Memo1);
+            Assert.Equal("m2", shipment.Postal.Memo2);
+            Assert.Equal("m3", shipment.Postal.Memo3);
+        }
+
+        [Fact]
+        public void ApplyProfile_NoPostageSet()
+        {
+            profile.Postal.NoPostage = true;
+            Apply();
+            Assert.True(shipment.Postal.NoPostage);
+        }
+
+        [Fact]
+        public void ApplyProfile_InsuranceSet()
+        {
+            profile.Insurance = true;
+            Apply();
+            Assert.True(shipment.Postal.Insurance);
+        }
+
+        [Fact]
+        public void ApplyProfile_UpdateDymanicShipmentDataIsCalled()
+        {
+            Apply();
+            mock.Mock<ShipmentType>().Verify(s => s.UpdateDynamicShipmentData(shipment), Times.Once);
+        }
+
+        [Fact]
+        public void ApplyProfile_UpdateTotalWeightIsCalled()
+        {
+            Apply();
+            mock.Mock<ShipmentType>().Verify(s => s.UpdateTotalWeight(shipment), Times.Once);
+        }
+
+        private void Apply()
+        {
+            var testObject = mock.Create<PostalShippingProfileApplicationStrategy>();
+            testObject.ApplyProfile(profile, shipment);
+        }
+
         public void Dispose()
         {
             mock.Dispose();
