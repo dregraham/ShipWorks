@@ -1,11 +1,12 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Profiles
+namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
     public class UspsShippingProfileApplicationStrategyTest : IDisposable
     {

@@ -197,6 +197,7 @@
     <Compile Include="Carriers\BestRate\BestRatePrefetchProvider.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
@@ -370,13 +371,12 @@
     <Compile Include="Carriers\Postal\PostalShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Postal\Usps\IFirstClassInternationalWarningDialog.cs" />
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
-    <Compile Include="Profiles\BestRateShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />
-    <Compile Include="Profiles\UspsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Services\Dialogs\IShippingProfileManagerDialogFactory.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />

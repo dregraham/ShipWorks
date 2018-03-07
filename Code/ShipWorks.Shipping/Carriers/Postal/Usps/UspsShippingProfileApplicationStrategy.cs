@@ -2,8 +2,9 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Profiles;
 
-namespace ShipWorks.Shipping.Profiles
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Usps shipping profile application strategy

@@ -182,6 +182,7 @@
     <Compile Include="Carriers\Asendia\AsendiaShipmentTypeTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressBestRateBrokerTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressDownloadedLabelDataTest.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\UPS\UpsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
@@ -353,10 +355,8 @@
     <Compile Include="Loading\OrderLoaderTest.cs" />
     <Compile Include="Loading\ShipmentsLoaderTest.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategyTest.cs" />
-    <Compile Include="Profiles\BestRateShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Profiles\ShippingProfileLoaderTest.cs" />
-    <Compile Include="Profiles\UspsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteFactoryTests.cs" />
     <Compile Include="ReturnItemRepositoryTest.cs" />

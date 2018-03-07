@@ -1,12 +1,12 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Profiles
+namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 {
     public class BestRateShippingProfileApplicationStrategyTest : IDisposable
     {
