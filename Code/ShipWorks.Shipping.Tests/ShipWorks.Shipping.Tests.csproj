@@ -355,6 +355,7 @@
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Profiles\ShippingProfileLoaderTest.cs" />
+    <Compile Include="Profiles\UspsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteFactoryTests.cs" />
     <Compile Include="ReturnItemRepositoryTest.cs" />

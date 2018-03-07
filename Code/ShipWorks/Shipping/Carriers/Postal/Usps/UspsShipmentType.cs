@@ -294,28 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             profile.Postal.Usps.RateShop = true;
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            // We can be called during the creation of the base Postal shipment, before the USPS one exists
-            if (shipment.Postal.Usps != null)
-            {
-                UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
-                IUspsProfileEntity uspsProfile = profile.Postal.Usps;
-
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.UspsAccountID, uspsShipment, UspsShipmentFields.UspsAccountID);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.PostalProfile.Profile.Insurance, uspsShipment, UspsShipmentFields.Insurance);
-            }
-        }
-
+        
         /// <summary>
         /// Generate the carrier specific template xml
         /// </summary>
