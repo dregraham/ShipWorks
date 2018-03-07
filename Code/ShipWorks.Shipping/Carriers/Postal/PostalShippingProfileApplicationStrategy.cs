@@ -9,27 +9,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// <summary>
     /// Applies a postal shipping profile
     /// </summary>
-    public class PostalShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    public class PostalShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
-        private readonly IShippingProfileApplicationStrategy baseStrategy;
-        private readonly ShipmentType shipmentType;
-
         /// <summary>
         /// Applies Constructor
         /// </summary>
-        public PostalShippingProfileApplicationStrategy(IShippingProfileApplicationStrategy baseStrategy,
-            ShipmentType shipmentType)
+        public PostalShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager)
+            :base(shipmentTypeManager)
         {
-            this.baseStrategy = baseStrategy;
-            this.shipmentType = shipmentType;
         }
         
         /// <summary>
         /// Applies a profile 
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            baseStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
 
             PostalShipmentEntity postalShipment = shipment.Postal;
             IPostalProfileEntity postalProfile = profile.Postal;
@@ -72,6 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             ShippingProfileUtility.ApplyProfileValue(postalProfile.NoPostage, postalShipment, PostalShipmentFields.NoPostage);
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Profile.Insurance, postalShipment, PostalShipmentFields.Insurance);
+
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
 
             shipmentType.UpdateDynamicShipmentData(shipment);
             shipmentType.UpdateTotalWeight(shipment);

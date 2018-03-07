@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Apply the profile to the shipment
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             bool changedPackageWeights = ApplyProfilesPackages(profile, shipment);
             changedPackageWeights |= RemoveExcessPackages(shipment.Ups, profile.Packages.Count());

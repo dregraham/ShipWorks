@@ -8,25 +8,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Endicia shipping profile application strategy
     /// </summary>
-    public class EndiciaShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    public class EndiciaShippingProfileApplicationStrategy : PostalShippingProfileApplicationStrategy
     {
-        private readonly IShippingProfileApplicationStrategy baseStrategy;
-
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="baseStrategy"></param>
-        public EndiciaShippingProfileApplicationStrategy(IShippingProfileApplicationStrategy baseStrategy)
+        public EndiciaShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager)
+            :base(shipmentTypeManager)
         {
-            this.baseStrategy = baseStrategy;
         }
 
         /// <summary>
         /// Apply the Endicia profile to the shipment
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            baseStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
 
             // We can be called during the creation of the base Postal shipment, before the endicia one exists
             if (shipment.Postal.Endicia != null)
