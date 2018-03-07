@@ -212,43 +212,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             amazon.ShippingServiceID = string.Empty;
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            if (shipment.Amazon == null)
-            {
-                return;
-            }
-
-            AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            IAmazonProfileEntity amazonProfile = profile.Amazon;
-            
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
-            
-            IPackageProfileEntity packageProfile = profile.Packages.First();
-            if (packageProfile.Weight.GetValueOrDefault() > 0)
-            {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
-            if (packageProfile.DimsProfileID != null)
-            {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
-            }
-        }
-
+       
         /// <summary>
         /// Updates the total weight of the shipment
         /// </summary>
