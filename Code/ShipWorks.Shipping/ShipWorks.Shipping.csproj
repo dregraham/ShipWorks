@@ -377,6 +377,7 @@
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Profiles\ShippingProfileApplicationStrategyFactory.cs" />
     <Compile Include="Services\Dialogs\IShippingProfileManagerDialogFactory.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />
