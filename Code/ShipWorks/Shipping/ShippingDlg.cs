@@ -1645,7 +1645,8 @@ namespace ShipWorks.Shipping
                     ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(shipmentTypeCode))
                     {
                         Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Margin = new Padding(-4, 2, 2, 2)
+                        Margin = new Padding(-4, 2, 2, 2),
+                        Enabled = false
                     };
                     contextMenuProfiles.Items.Add(carrierLabel);
 

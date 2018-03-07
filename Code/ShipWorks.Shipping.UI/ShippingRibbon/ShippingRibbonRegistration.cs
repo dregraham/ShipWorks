@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
@@ -24,19 +22,19 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     [Component]
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
-        readonly ComponentResourceManager resources;
-        readonly IShippingRibbonService shippingRibbonService;
-        readonly IShippingProfileManager profileManager;
-        RibbonButton createLabelButton;
-        RibbonButton voidButton;
-        RibbonButton returnButton;
-        RibbonButton reprintButton;
-        RibbonButton shipAgainButton;
-        ApplyProfileButtonWrapper applyProfileButton;
-        RibbonButton manageProfilesButton;
-        Popup applyProfilePopup;
-        Menu applyProfileMenu;
-        ShipmentTypeCode? currentShipmentType;
+        private readonly ComponentResourceManager resources;
+        private readonly IShippingRibbonService shippingRibbonService;
+        private readonly IShippingProfileManager profileManager;
+        private RibbonButton createLabelButton;
+        private RibbonButton voidButton;
+        private RibbonButton returnButton;
+        private RibbonButton reprintButton;
+        private RibbonButton shipAgainButton;
+        private ApplyProfileButtonWrapper applyProfileButton;
+        private RibbonButton manageProfilesButton;
+        private Popup applyProfilePopup;
+        private Menu applyProfileMenu;
+        private ShipmentTypeCode? currentShipmentType;
 
         public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileManager profileManager)
         {
@@ -102,7 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Items = { applyProfileMenu }
             };
 
-            applyProfilePopup.BeforePopup += new BeforePopupEventHandler(OnApplyProfileBeforePopup);
+            applyProfilePopup.BeforePopup += OnApplyProfileBeforePopup;
 
             RibbonButton actualApplyProfileButton = new RibbonButton
             {
@@ -178,8 +176,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             }
 
             List<WidgetBase> menuItems = new List<WidgetBase>();
-            List<IShippingProfileEntity> applicableProfiles =
-                ShippingProfileManager.GetProfilesFor(currentShipmentType.Value, true).ToList();
+            List<IShippingProfileEntity> applicableProfiles = profileManager.GetProfilesFor(currentShipmentType.Value, true).ToList();
 
             if (applicableProfiles.Any())
             {
@@ -203,9 +200,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(currentShipmentType.Value))
                     {
                         Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Margin = new WidgetEdges(-4, 2, 2, 2),
-                        GroupName = "Carrier",
-                        Enabled = false
+                        Padding = new WidgetEdges(28, -1, 0, -1),
+                        GroupName = "Carrier", 
+                        Enabled = false,
                     };
                     
                     menuItems.Add(carrierLabel);
