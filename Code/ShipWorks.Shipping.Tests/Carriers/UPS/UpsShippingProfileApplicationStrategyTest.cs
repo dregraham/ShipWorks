@@ -533,6 +533,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
                 Ups = new UpsShipmentEntity()
             });
         }
-
     }
 }

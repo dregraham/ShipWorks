@@ -279,6 +279,7 @@
     <Compile Include="Carriers\DefaultShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
