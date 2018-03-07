@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -164,22 +166,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             testObject.ApplyProfile(profile, shipment);
 
             Assert.Single(shipment.Ups.Packages);
-        }
-
-        [Fact]
-        public void ApplyProfile_DelegatesToBaseShippingProfileApplicationStrategy()
-        {
-            var shipment = new ShipmentEntity() { Ups = new UpsShipmentEntity() };
-            shipment.Ups.Packages.Add(new UpsPackageEntity());
-            shipment.Ups.Packages.Add(new UpsPackageEntity());
-
-            var profile = new ShippingProfileEntity() { Ups = new UpsProfileEntity() };
-            var package = new UpsProfilePackageEntity();
-            profile.Packages.Add(package);
-
-            testObject.ApplyProfile(profile, shipment);
-
-            baseShippingProfileApplicationStrategy.Verify(b => b.ApplyProfile(profile, shipment));
         }
         
         [Fact]
@@ -453,5 +439,102 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             Assert.Equal(3, shipment.Ups.Service);
             Assert.Equal(true, shipment.Ups.SaturdayDelivery);
         }
+
+        [Fact]
+        public void ApplyProfile_DelegatesToShipmentTypeManagerWithShipment()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+            var shipment = new ShipmentEntity();
+            var profile = new ShippingProfileEntity();
+
+            testObject.ApplyProfile(profile, shipment);
+
+            shipmentTypeManager.Verify(s => s.Get(shipment));
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsOriginIDOnShipment()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+            var shipment = new ShipmentEntity();
+            var profile = new ShippingProfileEntity() { OriginID = 123 };
+
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.Equal(123, shipment.OriginOriginID);
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsReturnShipmentOnShipment()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+            var shipment = new ShipmentEntity();
+            var profile = new ShippingProfileEntity() { ReturnShipment = true };
+
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.True(shipment.ReturnShipment);
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsRequestedLabelFormatOnShipment()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+            var shipment = new ShipmentEntity();
+            var profile = new ShippingProfileEntity() { RequestedLabelFormat = (int) ThermalLanguage.EPL };
+
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.Equal(ThermalLanguage.EPL, (ThermalLanguage) shipment.OriginOriginID);
+        }
+
+        [Fact]
+        public void ApplyProfile_DelegatesToShipmentTypeToSaveLabelFormat()
+        {
+            var shipment = new ShipmentEntity();
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+
+            var profile = new ShippingProfileEntity() { RequestedLabelFormat = (int) ThermalLanguage.EPL };
+
+            testObject.ApplyProfile(profile, shipment);
+
+            shipmentType.Verify(s => s.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment));
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsInsuranceValueOnPackage()
+        {
+            var insuranceChoice = mock.Mock<IInsuranceChoice>();
+
+            var shipment = new ShipmentEntity();
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(s => s.GetParcelCount(shipment)).Returns(1);
+            var shipmentParcel = new ShipmentParcel(shipment, null, insuranceChoice.Object, new Editing.DimensionsAdapter());
+
+            shipmentType.Setup(s => s.GetParcelDetail(shipment, 0)).Returns(shipmentParcel);
+
+            shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
+
+            var testObject = mock.Create<BaseShippingProfileApplicationStrategy>();
+            var profile = new ShippingProfileEntity() { Insurance = true };
+
+            testObject.ApplyProfile(profile, shipment);
+
+            insuranceChoice.VerifySet(i => i.Insured = true);
+        }
+
     }
 }

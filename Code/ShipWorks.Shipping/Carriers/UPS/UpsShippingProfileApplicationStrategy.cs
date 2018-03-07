@@ -15,10 +15,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
     /// </summary>
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.UpsWorldShip)]
-    public class UpsShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    public class UpsShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly IShippingProfileApplicationStrategy baseShippingProfileApplicationStrategy;
         private readonly ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IInsuranceUtility insuranceUtility;
@@ -28,13 +27,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         /// <param name="shipmentTypeManager"></param>
         public UpsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager, 
-            IShippingProfileApplicationStrategy baseShippingProfileApplicationStrategy, 
             ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever, 
             ISqlAdapterFactory sqlAdapterFactory,
             IInsuranceUtility insuranceUtility)
+            : base(shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
-            this.baseShippingProfileApplicationStrategy = baseShippingProfileApplicationStrategy;
             this.accountRetriever = accountRetriever;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.insuranceUtility = insuranceUtility;
@@ -48,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             bool changedPackageWeights = ApplyProfilesPackages(profile, shipment);
             changedPackageWeights |= RemoveExcessPackages(shipment.Ups, profile.Packages.Count());
             
-            baseShippingProfileApplicationStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
             ShippingProfileUtility.ApplyProfileValue(profile.Ups.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
 
             // Apply the UPS specific profile stuff to the UPS Shipment
