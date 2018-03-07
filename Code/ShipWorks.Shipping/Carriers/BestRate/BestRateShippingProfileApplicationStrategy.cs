@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -6,24 +7,26 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
-    public class BestRateShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    /// <summary>
+    /// Best Rate shipping profile application strategy
+    /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.BestRate)]
+    public class BestRateShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
-        private readonly IShippingProfileApplicationStrategy baseStrategy;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateShippingProfileApplicationStrategy(IShippingProfileApplicationStrategy baseStrategy)
+        public BestRateShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) :
+            base(shipmentTypeManager)
         {
-            this.baseStrategy = baseStrategy;
         }
         
         /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            baseStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
  
             BestRateShipmentEntity bestRateShipment = shipment.BestRate;
             IBestRateProfileEntity bestRateProfile = profile.BestRate;

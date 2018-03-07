@@ -10,24 +10,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Usps shipping profile application strategy
     /// </summary>
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Usps)]
-    public class UspsShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Express1Usps)]
+    public class UspsShippingProfileApplicationStrategy : PostalShippingProfileApplicationStrategy
     {
-        private readonly IShippingProfileApplicationStrategy baseStrategy;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShippingProfileApplicationStrategy(IShippingProfileApplicationStrategy baseStrategy)
+        public UspsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) : 
+            base(shipmentTypeManager)
         {
-            this.baseStrategy = baseStrategy;
         }
         
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            baseStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
 
             // We can be called during the creation of the base Postal shipment, before the USPS one exists
             if (shipment.Postal.Usps != null)
