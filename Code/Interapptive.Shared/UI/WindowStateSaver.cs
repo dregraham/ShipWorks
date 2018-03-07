@@ -49,16 +49,21 @@ namespace Interapptive.Shared.UI
         /// Load the window state from the state file
         /// </summary>
         private static IDictionary<string, WindowState> LoadState(string fileName) =>
-            HydrateState(File.Exists(fileName) ? XElement.Load(fileName) : XElement.Parse("<empty />"));
+            HydrateState(() => File.Exists(fileName) ? XElement.Load(fileName) : XElement.Parse("<empty />"));
 
         /// <summary>
         /// Load state from root element
         /// </summary>
-        private static IDictionary<string, WindowState> HydrateState(XElement root)
+        /// <param name="getRoot">Get the root element of the state</param>
+        /// <remarks>
+        /// getRoot is a func so that we can load the XML inside the try block in this method. This allows 
+        /// ShipWorks to load with default settings if there is a problem with the windows.xml file.
+        /// </remarks>
+        private static IDictionary<string, WindowState> HydrateState(Func<XElement> getRoot)
         {
             try
             {
-                return root
+                return getRoot()
                     .Elements("WindowState")
                     .Select(HydrateWindowState)
                     .ToDictionary(x => x.Name, x => x);

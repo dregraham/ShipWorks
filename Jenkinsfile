@@ -1,16 +1,15 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
 
 pipeline {
-	options { disableConcurrentBuilds() }
+	options {
+    	disableConcurrentBuilds()
+  	}
 	agent {
 		node {
 			label 'windows'
 			customWorkspace "c:/jenkins-builds/SB_${BUILD_FOLDER}"
 		}
 	}
-	options {
-    	disableConcurrentBuilds()
-  	}
 	stages {
 		stage('Compile the solution') {
 			steps {
