@@ -341,6 +341,7 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaPrefetchProvider.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Postal\Express1\Endicia\Express1EndiciaOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
