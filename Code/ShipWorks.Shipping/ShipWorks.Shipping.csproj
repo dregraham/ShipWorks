@@ -373,6 +373,7 @@
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Profiles\BestRateShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\UspsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Services\Dialogs\IShippingProfileManagerDialogFactory.cs" />
