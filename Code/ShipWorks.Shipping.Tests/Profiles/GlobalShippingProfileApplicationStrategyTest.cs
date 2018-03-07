@@ -2,7 +2,9 @@
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using Xunit;
@@ -20,24 +22,6 @@ namespace ShipWorks.Shipping.Tests.Profiles
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             profile = new ShippingProfileEntity() { Packages = { new PackageProfileEntity() } };
             shipment = new ShipmentEntity();
-        }
-
-        [Fact]
-        public void ApplyProfile_DelegatesApplyProfileToBaseStrategy()
-        {
-            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
-
-            mock.Mock<IShippingProfileApplicationStrategy>().Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
-        }
-
-        [Fact]
-        public void ApplyProfile_GetsShipmentTypeFromShipmentTypeManager()
-        {
-            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
-            testObject.ApplyProfile(profile, shipment);
-
-            mock.Mock<IShipmentTypeManager>().Verify(s => s.Get(shipment), Times.Once);
         }
 
         [Fact]
@@ -193,6 +177,89 @@ namespace ShipWorks.Shipping.Tests.Profiles
 
             package1.VerifySet(s => s.ApplyAdditionalWeight = addWeight, Times.Once);
             package2.VerifySet(s => s.ApplyAdditionalWeight = addWeight, Times.Once);
+        }
+        
+        [Fact]
+        public void ApplyProfile_DelegatesToShipmentTypeManagerWithShipment()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+
+            testObject.ApplyProfile(profile, shipment);
+
+            shipmentTypeManager.Verify(s => s.Get(shipment));
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsOriginIDOnShipment()
+        {
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+            profile.OriginID = 123;
+            
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.Equal(123, shipment.OriginOriginID);
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsReturnShipmentOnShipment()
+        {
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+            profile.ReturnShipment = true;
+            
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.True(shipment.ReturnShipment);
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsRequestedLabelFormatOnShipment()
+        {
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+            profile.RequestedLabelFormat = (int)ThermalLanguage.EPL;
+
+            testObject.ApplyProfile(profile, shipment);
+
+            Assert.Equal(ThermalLanguage.EPL, (ThermalLanguage) shipment.OriginOriginID);
+        }
+
+        [Fact]
+        public void ApplyProfile_DelegatesToShipmentTypeToSaveLabelFormat()
+        {
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
+
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+            
+            profile.RequestedLabelFormat = (int) ThermalLanguage.EPL ;
+
+            testObject.ApplyProfile(profile, shipment);
+
+            shipmentType.Verify(s => s.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment));
+        }
+
+        [Fact]
+        public void ApplyProfile_SetsInsuranceValueOnPackage()
+        {
+            var insuranceChoice = mock.Mock<IInsuranceChoice>();
+
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(s => s.GetParcelCount(shipment)).Returns(1);
+            var shipmentParcel = new ShipmentParcel(shipment, null, insuranceChoice.Object, new Editing.DimensionsAdapter());
+
+            shipmentType.Setup(s => s.GetParcelDetail(shipment, 0)).Returns(shipmentParcel);
+
+            shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
+
+            var testObject = mock.Create<GlobalShippingProfileApplicationStrategy>();
+            profile.Insurance = true;
+
+            testObject.ApplyProfile(profile, shipment);
+
+            insuranceChoice.VerifySet(i => i.Insured = true);
         }
 
         public void Dispose()

@@ -11,28 +11,25 @@ namespace ShipWorks.Shipping.Profiles
     /// Applys a Global Profile to a shipment
     /// </summary>
     [Component]
-    public class GlobalShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    public class GlobalShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly IShippingProfileApplicationStrategy baseStrategy;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public GlobalShippingProfileApplicationStrategy(
-            IShipmentTypeManager shipmentTypeManager,
-            IShippingProfileApplicationStrategy baseStrategy)
+        public GlobalShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) :
+            base(shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
-            this.baseStrategy = baseStrategy;
         }
 
         /// <summary>
         /// Applies a profile
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
-            baseStrategy.ApplyProfile(profile, shipment);
+            base.ApplyProfile(profile, shipment);
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             IEnumerable<IPackageAdapter> packages = shipmentType.GetPackageAdapters(shipment);
