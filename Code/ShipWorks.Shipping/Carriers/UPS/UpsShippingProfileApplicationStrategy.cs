@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -12,6 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
     /// <summary>
     /// Ups shipping profile application strategy
     /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.UpsWorldShip)]
     public class UpsShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
