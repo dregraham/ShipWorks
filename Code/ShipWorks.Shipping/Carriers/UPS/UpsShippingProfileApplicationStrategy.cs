@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private long? GetAccountID(IUpsProfileEntity upsProfile) => 
             (upsProfile.UpsAccountID == 0 && accountRetriever.AccountsReadOnly.Any()) ?
-                (long?) accountRetriever.AccountsReadOnly.First().UpsAccountID :
+                accountRetriever.AccountsReadOnly.First().UpsAccountID :
                 upsProfile.UpsAccountID;
     }
 }
