@@ -135,36 +135,36 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(387, 542);
+            this.next.Location = new System.Drawing.Point(399, 542);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(468, 542);
+            this.cancel.Location = new System.Drawing.Point(480, 542);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(306, 542);
+            this.back.Location = new System.Drawing.Point(318, 542);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePayment);
-            this.mainPanel.Size = new System.Drawing.Size(555, 470);
+            this.mainPanel.Controls.Add(this.wizardPageAccountType);
+            this.mainPanel.Size = new System.Drawing.Size(567, 470);
             // 
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 532);
-            this.etchBottom.Size = new System.Drawing.Size(559, 2);
+            this.etchBottom.Size = new System.Drawing.Size(571, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.EndiciaLogo;
-            this.pictureBox.Location = new System.Drawing.Point(386, 7);
+            this.pictureBox.Location = new System.Drawing.Point(398, 7);
             this.pictureBox.Size = new System.Drawing.Size(164, 42);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(555, 56);
+            this.topPanel.Size = new System.Drawing.Size(567, 56);
             // 
             // wizardPageAccountType
             // 
@@ -175,7 +175,7 @@
             this.wizardPageAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountType.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountType.Name = "wizardPageAccountType";
-            this.wizardPageAccountType.Size = new System.Drawing.Size(555, 470);
+            this.wizardPageAccountType.Size = new System.Drawing.Size(567, 470);
             this.wizardPageAccountType.TabIndex = 0;
             this.wizardPageAccountType.Title = "Setup Endicia Shipping";
             this.wizardPageAccountType.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountType);
@@ -1075,7 +1075,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 577);
+            this.ClientSize = new System.Drawing.Size(567, 577);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EndiciaSetupWizard";
             this.NextVisible = true;
