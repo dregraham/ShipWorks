@@ -1047,6 +1047,9 @@ namespace ShipWorks.Stores.Management
                 origin.Description = store.StoreName;
 
                 new PersonAdapter(store, string.Empty).CopyTo(origin, string.Empty);
+
+                origin.FirstName = store.StoreName;
+
                 adapter.SaveEntity(origin);
             }
         }
