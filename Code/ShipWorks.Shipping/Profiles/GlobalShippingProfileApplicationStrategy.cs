@@ -13,15 +13,12 @@ namespace ShipWorks.Shipping.Profiles
     [Component]
     public class GlobalShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
-        
         /// <summary>
         /// Constructor
         /// </summary>
         public GlobalShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) :
             base(shipmentTypeManager)
         {
-            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>

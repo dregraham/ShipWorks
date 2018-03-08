@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Apply the FexEx profile to the shipment
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
+        public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             bool changedPackageWeights = ApplyProfilesPackages(profile, shipment);
             changedPackageWeights |= RemoveExcessPackages(shipment.FedEx, profile.Packages.Count());
