@@ -68,6 +68,7 @@ namespace ShipWorks
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
+            this.buttonArchive = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
             this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
@@ -721,6 +722,16 @@ namespace ShipWorks
             this.buttonRestore.Text = "Restore";
             this.buttonRestore.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonRestore.Activate += new System.EventHandler(this.OnRestoreBackup);
+            //
+            // buttonArchive
+            //
+            this.buttonArchive.Guid = new System.Guid("457547E9-DC3A-4CD9-A196-864C43CD1249");
+            this.buttonArchive.Image = global::ShipWorks.Properties.Resources.data_time;
+            this.ribbonSecurityProvider.SetPermission(this.buttonArchive, ShipWorks.Users.Security.PermissionType.DatabaseArchive);
+            this.buttonArchive.QuickAccessKey = "A";
+            this.buttonArchive.Text = "Archive";
+            this.buttonArchive.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonArchive.Activate += new System.EventHandler(this.OnArchive);
             //
             // buttonSetupDatabase
             //
@@ -2397,6 +2408,7 @@ namespace ShipWorks
             this.separator2,
             this.buttonBackup,
             this.buttonRestore,
+            this.buttonArchive,
             stripLayoutDatabase});
             this.ribbonChunkAdminDatabase.Text = "Database";
             //
@@ -2840,6 +2852,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkAdminDatabase;
         private Divelements.SandRibbon.Button buttonBackup;
         private Divelements.SandRibbon.Button buttonRestore;
+        private Divelements.SandRibbon.Button buttonArchive;
         private Divelements.SandRibbon.Button buttonSetupDatabase;
         private Divelements.SandRibbon.Button buttonChangeConnection;
         private Divelements.SandRibbon.Button buttonManageUsers;
