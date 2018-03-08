@@ -294,6 +294,7 @@
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\Other\OtherShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\PostalFirstClassInternationalMailFraudWarningTest.cs" />
     <Compile Include="Carriers\Postal\PostalShippingProfileApplicationStrategyTest.cs" />

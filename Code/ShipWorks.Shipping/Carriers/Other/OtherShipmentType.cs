@@ -77,23 +77,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            OtherShipmentEntity otherShipment = shipment.Other;
-            IOtherProfileEntity otherProfile = profile.Other;
-
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.ShippingProfile.Insurance, otherShipment, OtherShipmentFields.Insurance);
-
-            UpdateDynamicShipmentData(shipment);
-        }
-
-        /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)

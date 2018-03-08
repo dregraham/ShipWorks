@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Security.Policy;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -18,7 +15,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
     public class iParcelShippingProfileApplicationStrategyTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICarrierAccountRetriever<IParcelAccountEntity, IIParcelAccountEntity>> accountRetriever;
         private readonly Mock<ShipmentType> shipmentType;
         private readonly ShipmentEntity shipment;
@@ -29,17 +25,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = mock.Mock<ShipmentType>();
-            shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
             shipmentTypeManager.Setup(s => s.Get(ShipmentTypeCode.iParcel)).Returns(shipmentType);
             accountRetriever = mock.Mock<ICarrierAccountRetriever<IParcelAccountEntity, IIParcelAccountEntity>>();
             
             shipment = new ShipmentEntity
             {
-                IParcel = new IParcelShipmentEntity()
+                IParcel = new IParcelShipmentEntity
                 {
                     Packages =
                     {
-                        new IParcelPackageEntity()
+                        new IParcelPackageEntity
                         {
                             DimsProfileID = 9,
                             DimsLength = 9,
@@ -75,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
                         Weight = 5
                     }
                 },
-                IParcel = new IParcelProfileEntity()
+                IParcel = new IParcelProfileEntity
                 {
                     SkuAndQuantities = "profileSkuAndQuantities",
                     IParcelAccountID = 6,
@@ -112,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void ApplyProfile_AppliesPackageProfilesWeight_WhenMultiplePackageProfiles()
         {
-            profile.Packages.Add(new PackageProfileEntity(){Weight = 10});
+            profile.Packages.Add(new PackageProfileEntity {Weight = 10});
             
             testObject.ApplyProfile(profile, shipment);
             
@@ -197,7 +193,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             var sqlAdapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(sqlAdapter);
             
-            var extraPackage = new IParcelPackageEntity(){IsNew = false};
+            var extraPackage = new IParcelPackageEntity {IsNew = false};
             shipment.IParcel.Packages.Add(extraPackage);
             
             testObject.ApplyProfile(profile, shipment);
@@ -224,7 +220,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void ApplyProfile_SetsiParcelAccountIDToFirstAccountID_WhenProfileAccountIDIsZeroAndiParcelAccountsExist()
         {
-            accountRetriever.SetupGet(a => a.AccountsReadOnly).Returns(new[] { new IParcelAccountEntity() {IParcelAccountID = 1 } });
+            accountRetriever.SetupGet(a => a.AccountsReadOnly).Returns(new[] { new IParcelAccountEntity {IParcelAccountID = 1 } });
             profile.IParcel.IParcelAccountID = 0;
             
             testObject.ApplyProfile(profile, shipment);
