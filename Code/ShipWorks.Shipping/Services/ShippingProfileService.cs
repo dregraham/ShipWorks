@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingProfileManager profileManager;
         private readonly IShortcutManager shortcutManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly Func<ShippingProfileEntity, ShortcutEntity, ShippingProfile> shippingProfileFactory;
+        private readonly Func<ShippingProfileEntity, ShortcutEntity, IShippingProfile> shippingProfileFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Services
             IShortcutManager shortcutManager,
             ISqlAdapterFactory sqlAdapterFactory,
             Func<Type, ILog> createLogger,
-            Func<ShippingProfileEntity, ShortcutEntity, ShippingProfile> shippingProfileFactory)
+            Func<ShippingProfileEntity, ShortcutEntity, IShippingProfile> shippingProfileFactory)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.Services
             {
                 IShippingProfile shippingProfile = CreateShippingProfile(profile, shortcuts);
                 shippingProfile.LoadProfileData(true);
+                shippingProfiles.Add(shippingProfile);
             }
 
             return shippingProfiles;

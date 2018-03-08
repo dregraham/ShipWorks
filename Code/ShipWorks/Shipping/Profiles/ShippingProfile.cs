@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,6 +11,7 @@ namespace ShipWorks.Shipping.Profiles
     /// <summary>
     /// DTO for ShippingProfileAndShortcut
     /// </summary>
+    [Component]
     public class ShippingProfile : IShippingProfile
     {
         private readonly IShippingProfileLoader profileLoader;

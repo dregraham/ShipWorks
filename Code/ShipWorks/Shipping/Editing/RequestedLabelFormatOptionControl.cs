@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Editing
                 IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfile), shippingProfile)
+                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }

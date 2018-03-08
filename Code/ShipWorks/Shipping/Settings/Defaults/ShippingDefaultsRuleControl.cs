@@ -267,7 +267,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
                 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
+                    new TypedParameter(typeof(IShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
                 );
                 profileEditor.ShowDialog(this);
             }
