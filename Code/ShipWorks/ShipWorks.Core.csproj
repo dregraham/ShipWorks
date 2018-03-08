@@ -948,6 +948,8 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Archiving\OrderArchiveSqlGenerator.cs" />
+    <Compile Include="Archiving\IOrderArchiveSqlGenerator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
@@ -10547,6 +10549,8 @@
     <None Include="Resources\add - Copy.png" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
+    <EmbeddedResource Include="Archiving\CopyDatabase.sql" />
+    <Content Include="Archiving\ArchiveOrderData.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
