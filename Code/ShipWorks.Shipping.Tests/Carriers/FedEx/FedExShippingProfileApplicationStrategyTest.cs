@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -140,6 +140,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             mock.Create<FedExShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             Assert.Single(shipment.FedEx.Packages);
+        }
+
+        [Fact]
+        public void ApplyProfile_DelegatesToSqlAdapterToDeleteNotNewPackages()
+        {
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { IsNew = false });
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { IsNew = false });
+
+            var sqlAdapter = mock.Mock<ISqlAdapter>();
+            mock.Mock<ISqlAdapterFactory>().Setup(s => s.Create()).Returns(sqlAdapter);
+
+            mock.Create<FedExShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
+
+            sqlAdapter.Verify(s => s.DeleteEntity(It.IsAny<FedExPackageEntity>()));
         }
 
         [Fact]

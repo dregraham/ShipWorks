@@ -1,13 +1,12 @@
-﻿using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -445,6 +444,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
 
             mock.Mock<IShipmentTypeManager>().Verify(s => s.Get(shipment));
+        }
+
+        [Fact]
+        public void ApplyProfile_DelegatesToSqlAdapterToDeleteNotNewPackages()
+        {
+            var (profile, shipment) = GetEmptyShipmentAndProfile();
+            shipment.Ups.Packages.Add(new UpsPackageEntity() { IsNew = false });
+            shipment.Ups.Packages.Add(new UpsPackageEntity() { IsNew = false });
+
+            var sqlAdapter = mock.Mock<ISqlAdapter>();
+            mock.Mock<ISqlAdapterFactory>().Setup(s => s.Create()).Returns(sqlAdapter);
+
+            mock.Create<UpsShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
+
+            sqlAdapter.Verify(s => s.DeleteEntity(It.IsAny<UpsPackageEntity>()));
         }
 
         [Fact]
