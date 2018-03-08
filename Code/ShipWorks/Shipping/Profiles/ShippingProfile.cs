@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
             ShortcutEntity shortcut,
             IShippingProfileManager profileManager,

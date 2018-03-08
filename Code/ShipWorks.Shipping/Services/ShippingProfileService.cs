@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -28,6 +29,10 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly ILog log;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShippingProfileService(IShippingProfileManager profileManager,
             IShortcutManager shortcutManager,
             ISqlAdapterFactory sqlAdapterFactory,
