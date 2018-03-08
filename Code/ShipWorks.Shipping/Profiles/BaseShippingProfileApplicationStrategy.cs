@@ -1,4 +1,5 @@
-﻿using ShipWorks.Common.IO.Hardware.Printers;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -9,7 +10,7 @@ namespace ShipWorks.Shipping.Profiles
     /// <summary>
     /// Base shipping profile application strategy
     /// </summary>
-    public class BaseShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
+    public abstract class BaseShippingProfileApplicationStrategy : IShippingProfileApplicationStrategy
     {
         protected readonly IShipmentTypeManager shipmentTypeManager;
 
@@ -29,10 +30,10 @@ namespace ShipWorks.Shipping.Profiles
         {
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
 
-            ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
-            ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
+            ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
+            ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
 
-            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
+            ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
             shipmentType.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
@@ -51,6 +52,28 @@ namespace ShipWorks.Shipping.Profiles
                     InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
                     insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Apply the given value to the specified entity and field, but only if the value is non-null
+        /// </summary>
+        protected static void ApplyProfileValue<T>(T? value, EntityBase2 entity, EntityField2 field) where T : struct
+        {
+            if (value.HasValue)
+            {
+                entity.SetNewFieldValue(field.FieldIndex, value.Value);
+            }
+        }
+
+        /// <summary>
+        /// Apply the given value to the specified entity and field, but only if the value is non-null
+        /// </summary>
+        protected static void ApplyProfileValue(string value, EntityBase2 entity, EntityField2 field)
+        {
+            if (value != null)
+            {
+                entity.SetNewFieldValue(field.FieldIndex, value);
             }
         }
     }

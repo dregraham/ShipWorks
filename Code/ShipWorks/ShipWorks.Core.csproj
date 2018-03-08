@@ -5526,7 +5526,6 @@
     <Compile Include="Shipping\Profiles\ShippingProfileEditorDlg.Designer.cs">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingActionUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderControl.cs">
       <SubType>UserControl</SubType>

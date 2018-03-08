@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,11 +9,18 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
+    /// <summary>
+    /// DhlExpress shipping profile application strategy
+    /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DhlExpressShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
             ISqlAdapterFactory sqlAdapterFactory) :
@@ -100,17 +108,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 }
 
                 double originalPackageWeight = package.Weight;
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, DhlExpressPackageFields.Weight);
+                ApplyProfileValue(packageProfile.Weight, package, DhlExpressPackageFields.Weight);
                 changedPackageWeights |= originalPackageWeight != package.Weight;
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, DhlExpressPackageFields.DimsProfileID);
+                ApplyProfileValue(packageProfile.DimsProfileID, package, DhlExpressPackageFields.DimsProfileID);
                 if (packageProfile.DimsProfileID != null)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, DhlExpressPackageFields.DimsLength);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, DhlExpressPackageFields.DimsWidth);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, DhlExpressPackageFields.DimsHeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, DhlExpressPackageFields.DimsWeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, DhlExpressPackageFields.DimsAddWeight);
+                    ApplyProfileValue(packageProfile.DimsLength, package, DhlExpressPackageFields.DimsLength);
+                    ApplyProfileValue(packageProfile.DimsWidth, package, DhlExpressPackageFields.DimsWidth);
+                    ApplyProfileValue(packageProfile.DimsHeight, package, DhlExpressPackageFields.DimsHeight);
+                    ApplyProfileValue(packageProfile.DimsWeight, package, DhlExpressPackageFields.DimsWeight);
+                    ApplyProfileValue(packageProfile.DimsAddWeight, package, DhlExpressPackageFields.DimsAddWeight);
                 }
             }
 
@@ -128,13 +136,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 ? accountRepository.Accounts.First().DhlExpressAccountID
                 : source.DhlExpressAccountID;
 
-            ShippingProfileUtility.ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.DhlExpressAccountID);
-            ShippingProfileUtility.ApplyProfileValue(source.Service, dhlShipment, DhlExpressShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(source.DeliveryDutyPaid, dhlShipment, DhlExpressShipmentFields.DeliveredDutyPaid);
-            ShippingProfileUtility.ApplyProfileValue(source.NonMachinable, dhlShipment, DhlExpressShipmentFields.NonMachinable);
-            ShippingProfileUtility.ApplyProfileValue(source.SaturdayDelivery, dhlShipment, DhlExpressShipmentFields.SaturdayDelivery);
-            ShippingProfileUtility.ApplyProfileValue(source.NonDelivery, dhlShipment, DhlExpressShipmentFields.NonDelivery);
-            ShippingProfileUtility.ApplyProfileValue(source.Contents, dhlShipment, DhlExpressShipmentFields.Contents);
+            ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.DhlExpressAccountID);
+            ApplyProfileValue(source.Service, dhlShipment, DhlExpressShipmentFields.Service);
+            ApplyProfileValue(source.DeliveryDutyPaid, dhlShipment, DhlExpressShipmentFields.DeliveredDutyPaid);
+            ApplyProfileValue(source.NonMachinable, dhlShipment, DhlExpressShipmentFields.NonMachinable);
+            ApplyProfileValue(source.SaturdayDelivery, dhlShipment, DhlExpressShipmentFields.SaturdayDelivery);
+            ApplyProfileValue(source.NonDelivery, dhlShipment, DhlExpressShipmentFields.NonDelivery);
+            ApplyProfileValue(source.Contents, dhlShipment, DhlExpressShipmentFields.Contents);
         }
     }
 }

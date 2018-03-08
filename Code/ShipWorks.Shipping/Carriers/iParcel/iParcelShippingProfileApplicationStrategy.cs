@@ -79,17 +79,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     iParcel.Packages.Add(package);
                 }
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, IParcelPackageFields.Weight);
+                ApplyProfileValue(packageProfile.Weight, package, IParcelPackageFields.Weight);
                 shipmentTotalWeightChanged |= packageProfile.Weight != null;
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, IParcelPackageFields.DimsProfileID);
+                ApplyProfileValue(packageProfile.DimsProfileID, package, IParcelPackageFields.DimsProfileID);
                 if (packageProfile.DimsProfileID != null)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, IParcelPackageFields.DimsLength);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, IParcelPackageFields.DimsWidth);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, IParcelPackageFields.DimsHeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, IParcelPackageFields.DimsWeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, IParcelPackageFields.DimsAddWeight);
+                    ApplyProfileValue(packageProfile.DimsLength, package, IParcelPackageFields.DimsLength);
+                    ApplyProfileValue(packageProfile.DimsWidth, package, IParcelPackageFields.DimsWidth);
+                    ApplyProfileValue(packageProfile.DimsHeight, package, IParcelPackageFields.DimsHeight);
+                    ApplyProfileValue(packageProfile.DimsWeight, package, IParcelPackageFields.DimsWeight);
+                    ApplyProfileValue(packageProfile.DimsAddWeight, package, IParcelPackageFields.DimsAddWeight);
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Apply value stored at shipment level which applies to each package.
             foreach (IParcelPackageEntity package in iParcel.Packages)
             {
-                ShippingProfileUtility.ApplyProfileValue(profile.IParcel.SkuAndQuantities, package, IParcelPackageFields.SkuAndQuantities);
+                ApplyProfileValue(profile.IParcel.SkuAndQuantities, package, IParcelPackageFields.SkuAndQuantities);
             }
 
             base.ApplyProfile(profile, shipment);
@@ -112,12 +112,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 accountRepo.AccountsReadOnly.First().IParcelAccountID :
                 source.IParcelAccountID;
 
-            ShippingProfileUtility.ApplyProfileValue(accountID, iParcel, IParcelShipmentFields.IParcelAccountID);
-            ShippingProfileUtility.ApplyProfileValue(source.Service, iParcel, IParcelShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(source.Reference, iParcel, IParcelShipmentFields.Reference);
-            ShippingProfileUtility.ApplyProfileValue(source.TrackByEmail, iParcel, IParcelShipmentFields.TrackByEmail);
-            ShippingProfileUtility.ApplyProfileValue(source.TrackBySMS, iParcel, IParcelShipmentFields.TrackBySMS);
-            ShippingProfileUtility.ApplyProfileValue(source.IsDeliveryDutyPaid, iParcel, IParcelShipmentFields.IsDeliveryDutyPaid);
+            ApplyProfileValue(accountID, iParcel, IParcelShipmentFields.IParcelAccountID);
+            ApplyProfileValue(source.Service, iParcel, IParcelShipmentFields.Service);
+            ApplyProfileValue(source.Reference, iParcel, IParcelShipmentFields.Reference);
+            ApplyProfileValue(source.TrackByEmail, iParcel, IParcelShipmentFields.TrackByEmail);
+            ApplyProfileValue(source.TrackBySMS, iParcel, IParcelShipmentFields.TrackBySMS);
+            ApplyProfileValue(source.IsDeliveryDutyPaid, iParcel, IParcelShipmentFields.IsDeliveryDutyPaid);
         }
         
         /// <summary>

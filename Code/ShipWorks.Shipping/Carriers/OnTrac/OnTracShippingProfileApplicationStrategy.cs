@@ -7,6 +7,9 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// OnTrac shipping profile application strategy
+    /// </summary>
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.OnTrac)]
     public class OnTracShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
@@ -39,31 +42,31 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 accountRepo.AccountsReadOnly.First().OnTracAccountID :
                 onTracProfile.OnTracAccountID;
 
-            ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ShippingProfile.Insurance, onTracShipment, OnTracShipmentFields.Insurance);
+            ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
+            ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
+            ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
+            ApplyProfileValue(onTracProfile.ShippingProfile.Insurance, onTracShipment, OnTracShipmentFields.Insurance);
 
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);
+            ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
+            ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);
 
             if (packageProfile.Weight.HasValue && packageProfile.Weight.Value != 0)
             {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
+                ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
 
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, onTracShipment, OnTracShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, onTracShipment, OnTracShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, onTracShipment, OnTracShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, onTracShipment, OnTracShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, onTracShipment, OnTracShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, onTracShipment, OnTracShipmentFields.DimsAddWeight);
+            ApplyProfileValue(packageProfile.DimsProfileID, onTracShipment, OnTracShipmentFields.DimsProfileID);
+            ApplyProfileValue(packageProfile.DimsWeight, onTracShipment, OnTracShipmentFields.DimsWeight);
+            ApplyProfileValue(packageProfile.DimsLength, onTracShipment, OnTracShipmentFields.DimsLength);
+            ApplyProfileValue(packageProfile.DimsHeight, onTracShipment, OnTracShipmentFields.DimsHeight);
+            ApplyProfileValue(packageProfile.DimsWidth, onTracShipment, OnTracShipmentFields.DimsWidth);
+            ApplyProfileValue(packageProfile.DimsAddWeight, onTracShipment, OnTracShipmentFields.DimsAddWeight);
 
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Reference1, onTracShipment, OnTracShipmentFields.Reference1);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Reference2, onTracShipment, OnTracShipmentFields.Reference2);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Instructions, onTracShipment, OnTracShipmentFields.Instructions);
+            ApplyProfileValue(onTracProfile.Reference1, onTracShipment, OnTracShipmentFields.Reference1);
+            ApplyProfileValue(onTracProfile.Reference2, onTracShipment, OnTracShipmentFields.Reference2);
+            ApplyProfileValue(onTracProfile.Instructions, onTracShipment, OnTracShipmentFields.Instructions);
 
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
+            ApplyProfileValue(onTracProfile.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
 
             shipmentType.UpdateTotalWeight(shipment);
             shipmentType.UpdateDynamicShipmentData(shipment);

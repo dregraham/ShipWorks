@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             changedPackageWeights |= RemoveExcessPackages(shipment.Ups, profile.Packages.Count());
             
             base.ApplyProfile(profile, shipment);
-            ShippingProfileUtility.ApplyProfileValue(profile.Ups.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
+            ApplyProfileValue(profile.Ups.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
 
             // Apply the UPS specific profile stuff to the UPS Shipment
             ApplyProfile(profile.Ups, shipment.Ups);
@@ -65,42 +65,42 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private void ApplyProfile(IUpsProfileEntity upsProfile, UpsShipmentEntity upsShipment)
         {
-            ShippingProfileUtility.ApplyProfileValue(GetAccountID(upsProfile), upsShipment, UpsShipmentFields.UpsAccountID);
+            ApplyProfileValue(GetAccountID(upsProfile), upsShipment, UpsShipmentFields.UpsAccountID);
             
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.DeliveryConfirmation, upsShipment, UpsShipmentFields.DeliveryConfirmation);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ReferenceNumber, upsShipment, UpsShipmentFields.ReferenceNumber);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ReferenceNumber2, upsShipment, UpsShipmentFields.ReferenceNumber2);
+            ApplyProfileValue(upsProfile.DeliveryConfirmation, upsShipment, UpsShipmentFields.DeliveryConfirmation);
+            ApplyProfileValue(upsProfile.ReferenceNumber, upsShipment, UpsShipmentFields.ReferenceNumber);
+            ApplyProfileValue(upsProfile.ReferenceNumber2, upsShipment, UpsShipmentFields.ReferenceNumber2);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.Service, upsShipment, UpsShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.SaturdayDelivery, upsShipment, UpsShipmentFields.SaturdayDelivery);
+            ApplyProfileValue(upsProfile.Service, upsShipment, UpsShipmentFields.Service);
+            ApplyProfileValue(upsProfile.SaturdayDelivery, upsShipment, UpsShipmentFields.SaturdayDelivery);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.PayorType, upsShipment, UpsShipmentFields.PayorType);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.PayorAccount, upsShipment, UpsShipmentFields.PayorAccount);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.PayorPostalCode, upsShipment, UpsShipmentFields.PayorPostalCode);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.PayorCountryCode, upsShipment, UpsShipmentFields.PayorCountryCode);
+            ApplyProfileValue(upsProfile.PayorType, upsShipment, UpsShipmentFields.PayorType);
+            ApplyProfileValue(upsProfile.PayorAccount, upsShipment, UpsShipmentFields.PayorAccount);
+            ApplyProfileValue(upsProfile.PayorPostalCode, upsShipment, UpsShipmentFields.PayorPostalCode);
+            ApplyProfileValue(upsProfile.PayorCountryCode, upsShipment, UpsShipmentFields.PayorCountryCode);
 
             ApplyProfileEmailNotify(upsProfile, upsShipment);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ReturnService, upsShipment, UpsShipmentFields.ReturnService);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ReturnContents, upsShipment, UpsShipmentFields.ReturnContents);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ReturnUndeliverableEmail, upsShipment, UpsShipmentFields.ReturnUndeliverableEmail);
+            ApplyProfileValue(upsProfile.ReturnService, upsShipment, UpsShipmentFields.ReturnService);
+            ApplyProfileValue(upsProfile.ReturnContents, upsShipment, UpsShipmentFields.ReturnContents);
+            ApplyProfileValue(upsProfile.ReturnUndeliverableEmail, upsShipment, UpsShipmentFields.ReturnUndeliverableEmail);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.Subclassification, upsShipment, UpsShipmentFields.Subclassification);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.Endorsement, upsShipment, UpsShipmentFields.Endorsement);
+            ApplyProfileValue(upsProfile.Subclassification, upsShipment, UpsShipmentFields.Subclassification);
+            ApplyProfileValue(upsProfile.Endorsement, upsShipment, UpsShipmentFields.Endorsement);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.PaperlessAdditionalDocumentation, upsShipment, UpsShipmentFields.PaperlessAdditionalDocumentation);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.CommercialPaperlessInvoice, upsShipment, UpsShipmentFields.CommercialPaperlessInvoice);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ShipperRelease, upsShipment, UpsShipmentFields.ShipperRelease);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.CarbonNeutral, upsShipment, UpsShipmentFields.CarbonNeutral);
+            ApplyProfileValue(upsProfile.PaperlessAdditionalDocumentation, upsShipment, UpsShipmentFields.PaperlessAdditionalDocumentation);
+            ApplyProfileValue(upsProfile.CommercialPaperlessInvoice, upsShipment, UpsShipmentFields.CommercialPaperlessInvoice);
+            ApplyProfileValue(upsProfile.ShipperRelease, upsShipment, UpsShipmentFields.ShipperRelease);
+            ApplyProfileValue(upsProfile.CarbonNeutral, upsShipment, UpsShipmentFields.CarbonNeutral);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.UspsPackageID, upsShipment, UpsShipmentFields.UspsPackageID);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.CostCenter, upsShipment, UpsShipmentFields.CostCenter);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.IrregularIndicator, upsShipment, UpsShipmentFields.IrregularIndicator);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.Cn22Number, upsShipment, UpsShipmentFields.Cn22Number);
+            ApplyProfileValue(upsProfile.UspsPackageID, upsShipment, UpsShipmentFields.UspsPackageID);
+            ApplyProfileValue(upsProfile.CostCenter, upsShipment, UpsShipmentFields.CostCenter);
+            ApplyProfileValue(upsProfile.IrregularIndicator, upsShipment, UpsShipmentFields.IrregularIndicator);
+            ApplyProfileValue(upsProfile.Cn22Number, upsShipment, UpsShipmentFields.Cn22Number);
 
             ApplyProfileShipmentCharge(upsProfile, upsShipment);
 
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.CustomsDescription, upsShipment, UpsShipmentFields.CustomsDescription);
+            ApplyProfileValue(upsProfile.CustomsDescription, upsShipment, UpsShipmentFields.CustomsDescription);
         }
 
         /// <summary>
@@ -108,13 +108,13 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private void ApplyProfileEmailNotify(IUpsProfileEntity upsProfile, UpsShipmentEntity upsShipment)
         {
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifySender, upsShipment, UpsShipmentFields.EmailNotifySender);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifyRecipient, upsShipment, UpsShipmentFields.EmailNotifyRecipient);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifyOther, upsShipment, UpsShipmentFields.EmailNotifyOther);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifyOtherAddress, upsShipment, UpsShipmentFields.EmailNotifyOtherAddress);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifyFrom, upsShipment, UpsShipmentFields.EmailNotifyFrom);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifySubject, upsShipment, UpsShipmentFields.EmailNotifySubject);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.EmailNotifyMessage, upsShipment, UpsShipmentFields.EmailNotifyMessage);
+            ApplyProfileValue(upsProfile.EmailNotifySender, upsShipment, UpsShipmentFields.EmailNotifySender);
+            ApplyProfileValue(upsProfile.EmailNotifyRecipient, upsShipment, UpsShipmentFields.EmailNotifyRecipient);
+            ApplyProfileValue(upsProfile.EmailNotifyOther, upsShipment, UpsShipmentFields.EmailNotifyOther);
+            ApplyProfileValue(upsProfile.EmailNotifyOtherAddress, upsShipment, UpsShipmentFields.EmailNotifyOtherAddress);
+            ApplyProfileValue(upsProfile.EmailNotifyFrom, upsShipment, UpsShipmentFields.EmailNotifyFrom);
+            ApplyProfileValue(upsProfile.EmailNotifySubject, upsShipment, UpsShipmentFields.EmailNotifySubject);
+            ApplyProfileValue(upsProfile.EmailNotifyMessage, upsShipment, UpsShipmentFields.EmailNotifyMessage);
         }
 
         /// <summary>
@@ -122,10 +122,10 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private void ApplyProfileShipmentCharge(IUpsProfileEntity upsProfile, UpsShipmentEntity upsShipment)
         {
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ShipmentChargeType, upsShipment, UpsShipmentFields.ShipmentChargeType);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ShipmentChargePostalCode, upsShipment, UpsShipmentFields.ShipmentChargePostalCode);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ShipmentChargeCountryCode, upsShipment, UpsShipmentFields.ShipmentChargeCountryCode);
-            ShippingProfileUtility.ApplyProfileValue(upsProfile.ShipmentChargeAccount, upsShipment, UpsShipmentFields.ShipmentChargeAccount);
+            ApplyProfileValue(upsProfile.ShipmentChargeType, upsShipment, UpsShipmentFields.ShipmentChargeType);
+            ApplyProfileValue(upsProfile.ShipmentChargePostalCode, upsShipment, UpsShipmentFields.ShipmentChargePostalCode);
+            ApplyProfileValue(upsProfile.ShipmentChargeCountryCode, upsShipment, UpsShipmentFields.ShipmentChargeCountryCode);
+            ApplyProfileValue(upsProfile.ShipmentChargeAccount, upsShipment, UpsShipmentFields.ShipmentChargeAccount);
         }
 
         /// <summary>
@@ -166,18 +166,18 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     }
                 }
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackagingType, package, UpsPackageFields.PackagingType);
+                ApplyProfileValue(packageProfile.PackagingType, package, UpsPackageFields.PackagingType);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, UpsPackageFields.Weight);
+                ApplyProfileValue(packageProfile.Weight, package, UpsPackageFields.Weight);
                 changedPackageWeights |= (packageProfile.Weight != null);
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, UpsPackageFields.DimsProfileID);
+                ApplyProfileValue(packageProfile.DimsProfileID, package, UpsPackageFields.DimsProfileID);
                 if (packageProfile.DimsProfileID != null)
                 {
                     ApplyProfilePackageDims(packageProfile, package);
                 }
 
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.AdditionalHandlingEnabled, package, UpsPackageFields.AdditionalHandlingEnabled);
+                ApplyProfileValue(packageProfile.AdditionalHandlingEnabled, package, UpsPackageFields.AdditionalHandlingEnabled);
 
                 ApplyProfilePackageDryIce(packageProfile, package);
                 ApplyProfilePackageVerbalConfirmation(packageProfile, package);
@@ -191,10 +191,10 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private static void ApplyProfilePackageVerbalConfirmation(IUpsProfilePackageEntity packageProfile, UpsPackageEntity package)
         {
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationEnabled, package, UpsPackageFields.VerbalConfirmationEnabled);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationName, package, UpsPackageFields.VerbalConfirmationName);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhone, package, UpsPackageFields.VerbalConfirmationPhone);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhoneExtension, package, UpsPackageFields.VerbalConfirmationPhoneExtension);
+            ApplyProfileValue(packageProfile.VerbalConfirmationEnabled, package, UpsPackageFields.VerbalConfirmationEnabled);
+            ApplyProfileValue(packageProfile.VerbalConfirmationName, package, UpsPackageFields.VerbalConfirmationName);
+            ApplyProfileValue(packageProfile.VerbalConfirmationPhone, package, UpsPackageFields.VerbalConfirmationPhone);
+            ApplyProfileValue(packageProfile.VerbalConfirmationPhoneExtension, package, UpsPackageFields.VerbalConfirmationPhoneExtension);
         }
 
         /// <summary>
@@ -202,10 +202,10 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private static void ApplyProfilePackageDryIce(IUpsProfilePackageEntity packageProfile, UpsPackageEntity package)
         {
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceEnabled, package, UpsPackageFields.DryIceEnabled);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceIsForMedicalUse, package, UpsPackageFields.DryIceIsForMedicalUse);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceRegulationSet, package, UpsPackageFields.DryIceRegulationSet);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceWeight, package, UpsPackageFields.DryIceWeight);
+            ApplyProfileValue(packageProfile.DryIceEnabled, package, UpsPackageFields.DryIceEnabled);
+            ApplyProfileValue(packageProfile.DryIceIsForMedicalUse, package, UpsPackageFields.DryIceIsForMedicalUse);
+            ApplyProfileValue(packageProfile.DryIceRegulationSet, package, UpsPackageFields.DryIceRegulationSet);
+            ApplyProfileValue(packageProfile.DryIceWeight, package, UpsPackageFields.DryIceWeight);
         }
 
         /// <summary>
@@ -213,11 +213,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private static void ApplyProfilePackageDims(IUpsProfilePackageEntity packageProfile, UpsPackageEntity package)
         {
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, UpsPackageFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
+            ApplyProfileValue(packageProfile.DimsLength, package, UpsPackageFields.DimsLength);
+            ApplyProfileValue(packageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
+            ApplyProfileValue(packageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
+            ApplyProfileValue(packageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
+            ApplyProfileValue(packageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
         }
 
         /// <summary>

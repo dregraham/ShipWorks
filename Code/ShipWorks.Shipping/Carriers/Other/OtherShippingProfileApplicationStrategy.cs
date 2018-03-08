@@ -32,9 +32,9 @@ namespace ShipWorks.Shipping.Carriers.Other
             OtherShipmentEntity otherShipment = shipment.Other;
             IOtherProfileEntity otherProfile = profile.Other;
 
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.ShippingProfile.Insurance, otherShipment, OtherShipmentFields.Insurance);
+            ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
+            ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
+            ApplyProfileValue(otherProfile.ShippingProfile.Insurance, otherShipment, OtherShipmentFields.Insurance);
 
             shipmentType.UpdateDynamicShipmentData(shipment);
         }

@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Profiles;
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
-    /// 
+    /// Amazon shipping profile application strategy
     /// </summary>
     [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Amazon)]
     public class AmazonShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
@@ -36,24 +36,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             IAmazonProfileEntity amazonProfile = profile.Amazon;
             
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
+            ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
+            ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
+            ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
             
             IPackageProfileEntity packageProfile = profile.Packages.First();
             if (packageProfile.Weight.GetValueOrDefault() > 0)
             {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
+                ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
 
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
+            ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
             if (packageProfile.DimsProfileID != null)
             {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
+                ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
+                ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
+                ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
+                ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
             }
         }
     }

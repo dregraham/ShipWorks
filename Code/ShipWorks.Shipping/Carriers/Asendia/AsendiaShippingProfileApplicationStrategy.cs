@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -7,10 +8,17 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
+    /// <summary>
+    /// Asendia shipping profile application strategy
+    /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Asendia)]
     public class AsendiaShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
         private readonly ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity> accountRepository;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public AsendiaShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity> accountRepository)
             : base(shipmentTypeManager)
@@ -31,25 +39,25 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             long? accountID = (asendiaProfile.AsendiaAccountID == 0 && accountRepository.AccountsReadOnly.Any()) ?
                 accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 asendiaProfile.AsendiaAccountID;
-            ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
+            ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
             
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
+            ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
+            ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
+            ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
+            ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
+            ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
 
             IPackageProfileEntity packageProfile = profile.Packages.Single();
             if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))
             {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
+                ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
+            ApplyProfileValue(packageProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
+            ApplyProfileValue(packageProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
+            ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
+            ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
+            ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
+            ApplyProfileValue(packageProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             shipmentType.UpdateTotalWeight(shipment);
