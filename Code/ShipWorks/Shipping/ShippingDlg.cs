@@ -95,6 +95,7 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
+        private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
 
@@ -128,6 +129,8 @@ namespace ShipWorks.Shipping
             this.shippingManager = shippingManager;
             this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, nameof(shipments));
+
+            shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
             ManageWindowPositioning();
 
@@ -1696,7 +1699,7 @@ namespace ShipWorks.Shipping
             {
                 if (!shipment.Processed)
                 {
-                    ShippingProfileManager.ApplyProfile(shipment, profile);
+                    shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
                 }
             }
 

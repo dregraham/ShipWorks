@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get all of the ShippingProfiles
         /// </summary>
-        public IEnumerable<ShippingProfile> GetAll()
+        public IEnumerable<IShippingProfile> GetAll()
         {
             IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
             IEnumerable<ShippingProfileEntity> profiles = profileManager.Profiles;
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Given a profile and all the shortcuts, create a ShippingProfile
         /// </summary>
-        private ShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, IEnumerable<ShortcutEntity> shortcuts)
+        private IShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, IEnumerable<ShortcutEntity> shortcuts)
         {
             ShortcutEntity shortcutEntity = shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntity.ShippingProfileID);
             if (shortcutEntity == null)
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Given a profile and its associated shortcut, create a Shipping Profile
         /// </summary>
-        private ShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcutEntity)
+        private IShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcutEntity)
         {
             return new ShippingProfile(shippingProfileEntity, shortcutEntity, profileManager, shortcutManager, profileLoader, strategyFactory);
         }
@@ -84,9 +84,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the ShippingProfileEntities corrisponding ShippingProfile
         /// </summary>
-        public ShippingProfile Get(long shippingProfileEntityId)
+        public IShippingProfile Get(long shippingProfileEntityId)
         {
-            ShippingProfile fetchedShippingProfile = null;
+            IShippingProfile fetchedShippingProfile = null;
 
             ShippingProfileEntity profile = profileManager.Profiles.SingleOrDefault(p => p.ShippingProfileID == shippingProfileEntityId);
 
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Create an empty ShippingProfile
         /// </summary>
-        public ShippingProfile CreateEmptyShippingProfile()
+        public IShippingProfile CreateEmptyShippingProfile()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity
             {
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Save the ShippingProfile and its children 
         /// </summary>
-        public Result Save(ShippingProfile shippingProfile)
+        public Result Save(IShippingProfile shippingProfile)
         {
             Result result = shippingProfile.Validate();
             if (result.Success)
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Delete the ShippingProfile and its children
         /// </summary>
-        public Result Delete(ShippingProfile shippingProfile)
+        public Result Delete(IShippingProfile shippingProfile)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        public IEnumerable<Hotkey> GetAvailableHotkeys(ShippingProfile shippingProfile)
+        public IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile)
         {
             List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
             if (shippingProfile.Shortcut?.Hotkey.HasValue ?? false)

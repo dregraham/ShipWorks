@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -20,11 +19,9 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
@@ -515,9 +512,10 @@ namespace ShipWorks.Shipping
                 ICustomsManager customsManager = lifetimeScope.Resolve<ICustomsManager>();
                 ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
-
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+                
                 // First apply the base profile
-                ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this));
+                shippingProfileService.Get(shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this).ShippingProfileID).Apply(shipment);
 
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
@@ -533,7 +531,7 @@ namespace ShipWorks.Shipping
                     IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                     if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                     {
-                        ApplyProfile(shipment, profile);
+                        shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
                     }
                 }
 
@@ -858,14 +856,6 @@ namespace ShipWorks.Shipping
             }
 
             return new List<string> { shipment.TrackingNumber };
-        }
-
-        /// <summary>
-        /// Apply the specified shipment profile to the given shipment.
-        /// </summary>
-        public virtual void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            //TODO: DELETE THIS
         }
 
         /// <summary>

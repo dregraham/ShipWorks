@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Autofac;
@@ -143,22 +142,6 @@ namespace ShipWorks.Shipping.Profiles
             }
             
             return profiles;
-        }
-
-        /// <summary>
-        /// Apply the given profile to the given shipment
-        /// </summary>
-        public static void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            if (shipment.Processed)
-            {
-                throw new InvalidOperationException("Cannot apply profile to a processed shipment.");
-            }
-
-            if (profile.ShipmentType == shipment.ShipmentTypeCode)
-            {
-                ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
-            }
         }
         
         /// <summary>

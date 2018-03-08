@@ -12,31 +12,31 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Get all of the ShippingProfiles
         /// </summary>
-        IEnumerable<ShippingProfile> GetAll();
+        IEnumerable<IShippingProfile> GetAll();
 
         /// <summary>
         /// Get the ShippingProfileEntities corrisponding ShippingProfile
         /// </summary>
-        ShippingProfile Get(long shippingProfileEntityId);
+        IShippingProfile Get(long shippingProfileEntityId);
 
         /// <summary>
         /// Create an empty ShippingProfile
         /// </summary>
-        ShippingProfile CreateEmptyShippingProfile();
+        IShippingProfile CreateEmptyShippingProfile();
 
         /// <summary>
         /// Save the ShippingProfile and its children 
         /// </summary>
-        Result Save(ShippingProfile shippingProfile);
+        Result Save(IShippingProfile shippingProfile);
 
         /// <summary>
         /// Delete the ShippingProfile and its children
         /// </summary>
-        Result Delete(ShippingProfile shippingProfile);
+        Result Delete(IShippingProfile shippingProfile);
 
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        IEnumerable<Hotkey> GetAvailableHotkeys(ShippingProfile shippingProfile);
+        IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile);
     }
 }

@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var shippingProfiles = mock.Create<ShippingProfileService>().GetAll();
 
-            ShippingProfile shippingProfile = shippingProfiles.Single();
+            IShippingProfile shippingProfile = shippingProfiles.Single();
 
             Assert.Equal(shortcut, shippingProfile.Shortcut);
             Assert.Equal(profile, shippingProfile.ShippingProfileEntity);
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            ShippingProfile shippingProfile = mock.Create<ShippingProfileService>().Get(42);
+            IShippingProfile shippingProfile = mock.Create<ShippingProfileService>().Get(42);
 
             Assert.Equal(shortcut, shippingProfile.Shortcut);
             Assert.Equal(profile, shippingProfile.ShippingProfileEntity);

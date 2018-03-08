@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Editing
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                ShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
+                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
                     new TypedParameter(typeof(ShippingProfile), shippingProfile)

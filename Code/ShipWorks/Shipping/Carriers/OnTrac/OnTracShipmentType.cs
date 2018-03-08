@@ -10,7 +10,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -18,7 +17,6 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -261,8 +259,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.Reference2 = string.Empty;
             onTrac.Instructions = string.Empty;
         }
-
-        /// <summary>
+        
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)

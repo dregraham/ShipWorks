@@ -6,6 +6,7 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
@@ -35,31 +36,31 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             messenger.OnNext(new ApplyProfileMessage(this, 1234, new ShippingProfileEntity()));
 
-            mock.Mock<IShipmentTypeManager>()
-                .Verify(x => x.Get(It.IsAny<ShipmentEntity>()), Times.Never);
+            mock.Mock<IShippingProfileService>()
+                .Verify(x => x.Get(It.IsAny<long>()), Times.Never);
         }
 
         [Fact]
         public void Register_DelegatesToApplyProfile_WhenShipmentMatchesViewModel()
         {
-            Mock<ShipmentType> shipmentTypeMock = mock.CreateMock<ShipmentType>();
+            Mock<IShippingProfile> shippingProfile = mock.CreateMock<IShippingProfile>();
             ShipmentEntity shipment = new ShipmentEntity { ShipmentID = 12 };
 
             Mock<ShippingPanelViewModel> viewModel = mock.CreateMock<ShippingPanelViewModel>();
             viewModel.Setup(x => x.Shipment).Returns(shipment);
 
-            ShippingProfileEntity profile = new ShippingProfileEntity();
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShippingProfileID = 123 };
 
-            mock.Mock<IShipmentTypeManager>()
-                .Setup(x => x.Get(shipment))
-                .Returns(shipmentTypeMock.Object);
+            mock.Mock<IShippingProfileService>()
+                .Setup(x => x.Get(123))
+                .Returns(shippingProfile);
 
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
             messenger.OnNext(new ApplyProfileMessage(this, 12, profile));
 
-            shipmentTypeMock.Verify(x => x.ApplyProfile(shipment, profile));
+            shippingProfile.Verify(x => x.Apply(shipment));
         }
 
         [Fact]

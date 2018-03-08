@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Profiles
     /// <summary>
     /// DTO for ShippingProfileAndShortcut
     /// </summary>
-    public class ShippingProfile
+    public class ShippingProfile : IShippingProfile
     {
         private readonly IShippingProfileManager profileManager;
         private readonly IShortcutManager shortcutManager;
