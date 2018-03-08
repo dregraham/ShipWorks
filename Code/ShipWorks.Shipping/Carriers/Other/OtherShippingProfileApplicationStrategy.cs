@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Profiles;
@@ -8,6 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// Profile application strategy for Other carrier
     /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Other)]
     public class OtherShippingProfileApplicationStrategy : BaseShippingProfileApplicationStrategy
     {
         private readonly ShipmentType shipmentType;
