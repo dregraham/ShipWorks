@@ -8,6 +8,8 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -90,7 +92,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            ShippingProfileEntity profile = (sender as IRibbonButton)?.Tag as ShippingProfileEntity;
+            IShippingProfileEntity profile = (IShippingProfileEntity)(sender as IRibbonButton)?.Tag;
 
             if (currentShipment != null && !currentShipment.Processed && profile != null)
             {

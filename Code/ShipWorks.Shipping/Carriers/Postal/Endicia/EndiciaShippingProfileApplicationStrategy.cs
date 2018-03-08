@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Profiles;
@@ -8,6 +9,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Endicia shipping profile application strategy
     /// </summary>
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IShippingProfileApplicationStrategy), ShipmentTypeCode.Express1Endicia)]
     public class EndiciaShippingProfileApplicationStrategy : PostalShippingProfileApplicationStrategy
     {
         /// <summary>
