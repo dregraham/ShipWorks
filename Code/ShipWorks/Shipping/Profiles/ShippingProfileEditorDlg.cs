@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly IProfileControlFactory profileControlFactory;
-        private readonly ShippingProfile profile;
+        private readonly IShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IMessenger messenger;
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Constructor
         /// </summary>
         public ShippingProfileEditorDlg(
-            ShippingProfile profile, 
+            IShippingProfile profile, 
             IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
 			IShipmentTypeManager shipmentTypeManager,
