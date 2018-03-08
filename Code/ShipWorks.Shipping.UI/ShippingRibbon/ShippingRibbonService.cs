@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            IShippingProfileEntity profile = (IShippingProfileEntity)(sender as IRibbonButton)?.Tag;
+            IShippingProfileEntity profile = (sender as IRibbonButton)?.Tag as IShippingProfileEntity;
 
             if (currentShipment != null && !currentShipment.Processed && profile != null)
             {
