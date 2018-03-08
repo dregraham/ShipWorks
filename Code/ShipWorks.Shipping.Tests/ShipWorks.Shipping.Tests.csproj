@@ -285,6 +285,7 @@
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapterTest.cs" />

@@ -324,6 +324,7 @@
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelData.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapter.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\LabelServiceFactory.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentType.cs" />

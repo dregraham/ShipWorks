@@ -21,30 +21,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void ApplyProfile_AppliesBaseProfile()
-        {
-            var baseShippingProfileApplicationStrategy = mock.Mock<IShippingProfileApplicationStrategy>();
-            var shipment = new ShipmentEntity
-            {
-                Postal = new PostalShipmentEntity
-                {
-                    Usps = new UspsShipmentEntity()
-                }
-            };
-            var profile = new ShippingProfileEntity
-            {
-                Postal = new PostalProfileEntity
-                {
-                    Usps = new UspsProfileEntity()
-                }
-            };
-
-            testObject.ApplyProfile(profile, shipment);
-            
-            baseShippingProfileApplicationStrategy.Verify(b => b.ApplyProfile(profile, shipment));
-        }
-
-        [Fact]
         public void ApplyProfile_AppliesUspsAccountID()
         {
             var shipment = new ShipmentEntity
