@@ -299,7 +299,6 @@
     <Compile Include="Carriers\Other\OtherShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\PostalFirstClassInternationalMailFraudWarningTest.cs" />
-    <Compile Include="Carriers\Postal\PostalShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
