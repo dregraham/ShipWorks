@@ -3,13 +3,12 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonShippingProfileApplicationStrategyTest : IDisposable
     {

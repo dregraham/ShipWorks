@@ -176,6 +176,7 @@
     <Compile Include="Carriers\Amazon\AmazonServiceTypeRepositoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelServiceTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactoryTest.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Carriers\DhlExpress\DhlExpressRatingServiceTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentServiceBuilderTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactoryTest.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkTest.cs" />
     <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressRequestTest.cs" />
