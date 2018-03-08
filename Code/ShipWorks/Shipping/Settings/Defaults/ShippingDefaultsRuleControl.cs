@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Update the displayed profile text
         /// </summary>
-        private void UpdateProfileDisplay(ShippingProfileEntity profile)
+        private void UpdateProfileDisplay(IShippingProfileEntity profile)
         {
             linkProfile.Text = profile?.Name ?? "(none)";
             linkProfile.Tag = profile?.ShippingProfileID ?? 0;
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private ContextMenuStrip CreateProfilesMenu()
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
-            ShippingProfileEntity selected = ShippingProfileManager.GetProfile((long) linkProfile.Tag);
+            IShippingProfileEntity selected = ShippingProfileManager.GetProfile((long) linkProfile.Tag);
 
             if (selected != null)
             {
@@ -260,7 +260,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private void OnEditProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -271,7 +271,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 );
                 profileEditor.ShowDialog(this);
             }
-
+            
             UpdateProfileDisplay(profile);
         }
 
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private void OnChooseProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             UpdateProfileDisplay(profile);
         }
