@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         {
             testObject.ApplyProfile(profile, shipment);
 
-            Assert.True(shipment.IParcel.IsDeliveryDutyPaid);
+            shipmentType.Verify(s => s.UpdateDynamicShipmentData(shipment), Times.Once);
         }
 
         public void Dispose()

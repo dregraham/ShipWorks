@@ -337,6 +337,7 @@
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapter.cs" />
     <Compile Include="Carriers\NullDownloadedLabelData.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Other\OtherPrefetchProvider.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
