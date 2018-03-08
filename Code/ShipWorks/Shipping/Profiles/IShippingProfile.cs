@@ -46,5 +46,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Validate that the shippintProfile can be saved
         /// </summary>
         Result Validate(IShippingProfileManager profileManager, IShortcutManager shortcutManager);
+
+        /// <summary>
+        /// Load the ShippingProfileEntities data
+        /// </summary>
+        void LoadProfileData(bool refreshIfPresent);
     }
 }

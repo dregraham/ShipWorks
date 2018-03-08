@@ -104,5 +104,10 @@ namespace ShipWorks.Shipping.Profiles
             IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
             strategy.ApplyProfile(ShippingProfileEntity, shipment);
         }
+
+        public void LoadProfileData(bool refreshIfPresent)
+        {
+            profileLoader.LoadProfileData(ShippingProfileEntity, refreshIfPresent);
+        }
     }
 }
