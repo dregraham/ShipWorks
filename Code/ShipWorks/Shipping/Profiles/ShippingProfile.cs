@@ -12,24 +12,17 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public class ShippingProfile : IShippingProfile
     {
-        private readonly IShippingProfileManager profileManager;
-        private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileLoader profileLoader;
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
         public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
             ShortcutEntity shortcut,
-            IShippingProfileManager profileManager,
-            IShortcutManager shortcutManager, 
             IShippingProfileLoader profileLoader,
             IShippingProfileApplicationStrategyFactory strategyFactory)
         {
-            this.profileManager = profileManager;
-            this.shortcutManager = shortcutManager;
             this.profileLoader = profileLoader;
             this.strategyFactory = strategyFactory;
             ShippingProfileEntity = shippingProfileEntity;
@@ -69,7 +62,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Validate that the shippintProfile can be saved
         /// </summary>
-        public Result Validate()
+        public Result Validate(IShippingProfileManager profileManager, IShortcutManager shortcutManager)
         {
             Result result = Result.FromSuccess();
 
@@ -84,7 +77,7 @@ namespace ShipWorks.Shipping.Profiles
                 result = Result.FromError("A profile with the chosen name already exists.");
             }
             else if (!Shortcut.Barcode.IsNullOrWhiteSpace() && shortcutManager.Shortcuts.Any(s =>
-                s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
+                         s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
             {
                 result = Result.FromError($"The barcode \"{Shortcut.Barcode}\" is already in use.");
             }

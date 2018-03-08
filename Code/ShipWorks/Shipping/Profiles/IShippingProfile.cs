@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
@@ -44,6 +45,6 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Validate that the shippintProfile can be saved
         /// </summary>
-        Result Validate();
+        Result Validate(IShippingProfileManager profileManager, IShortcutManager shortcutManager);
     }
 }

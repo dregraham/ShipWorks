@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private IShippingProfile CreateShippingProfile(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcutEntity)
         {
-            return new ShippingProfile(shippingProfileEntity, shortcutEntity, profileManager, shortcutManager, profileLoader, strategyFactory);
+            return new ShippingProfile(shippingProfileEntity, shortcutEntity, profileLoader, strategyFactory);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public Result Save(IShippingProfile shippingProfile)
         {
-            Result result = shippingProfile.Validate();
+            Result result = shippingProfile.Validate(profileManager, shortcutManager);
             if (result.Success)
             {
                 try
