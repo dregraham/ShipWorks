@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             :base(shipmentTypeManager)
         {
         }
-        
+
         /// <summary>
         /// Applies a profile 
         /// </summary>
@@ -39,15 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
 
-            ApplyProfileValue(packageProfile.DimsProfileID, postalShipment, PostalShipmentFields.DimsProfileID);
-            if (packageProfile.DimsProfileID != null)
-            {
-                ApplyProfileValue(packageProfile.DimsLength, postalShipment, PostalShipmentFields.DimsLength);
-                ApplyProfileValue(packageProfile.DimsWidth, postalShipment, PostalShipmentFields.DimsWidth);
-                ApplyProfileValue(packageProfile.DimsHeight, postalShipment, PostalShipmentFields.DimsHeight);
-                ApplyProfileValue(packageProfile.DimsWeight, postalShipment, PostalShipmentFields.DimsWeight);
-                ApplyProfileValue(packageProfile.DimsAddWeight, postalShipment, PostalShipmentFields.DimsAddWeight);
-            }
+            ApplyProfilesPackageDims(packageProfile, postalShipment);
 
             ApplyProfileValue(postalProfile.PackagingType, postalShipment, PostalShipmentFields.PackagingType);
             ApplyProfileValue(postalProfile.NonRectangular, postalShipment, PostalShipmentFields.NonRectangular);
@@ -72,6 +64,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             shipmentType.UpdateDynamicShipmentData(shipment);
             shipmentType.UpdateTotalWeight(shipment);
+        }
+
+        /// <summary>
+        /// Apply the profiles dims
+        /// </summary>
+        private static void ApplyProfilesPackageDims(IPackageProfileEntity packageProfile, PostalShipmentEntity postalShipment)
+        {
+            ApplyProfileValue(packageProfile.DimsProfileID, postalShipment, PostalShipmentFields.DimsProfileID);
+            if (packageProfile.DimsProfileID != null)
+            {
+                ApplyProfileValue(packageProfile.DimsLength, postalShipment, PostalShipmentFields.DimsLength);
+                ApplyProfileValue(packageProfile.DimsWidth, postalShipment, PostalShipmentFields.DimsWidth);
+                ApplyProfileValue(packageProfile.DimsHeight, postalShipment, PostalShipmentFields.DimsHeight);
+                ApplyProfileValue(packageProfile.DimsWeight, postalShipment, PostalShipmentFields.DimsWeight);
+                ApplyProfileValue(packageProfile.DimsAddWeight, postalShipment, PostalShipmentFields.DimsAddWeight);
+            }
         }
     }
 }
