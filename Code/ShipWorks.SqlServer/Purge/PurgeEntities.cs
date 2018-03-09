@@ -39,15 +39,15 @@ public partial class StoredProcedures
     /// 
     /// </param>
     [SqlProcedure]
-    public static void PurgeEntities(SqlString tableName, SqlString tableColumnName)
+    public static void PurgeEntities(SqlString tableName, SqlString tableColumnName, SqlString tablePrimaryKeyName)
     {
-        RunPurgeScript(tableName, tableColumnName);
+        RunPurgeScript(tableName, tableColumnName, tablePrimaryKeyName);
     }
 
     /// <summary>
     /// Runs a sql script. 
     /// </summary>
-    private static void RunPurgeScript(SqlString tableName, SqlString tableColumnName)
+    private static void RunPurgeScript(SqlString tableName, SqlString tableColumnName, SqlString tablePrimaryKeyName)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
@@ -55,7 +55,10 @@ public partial class StoredProcedures
             {
                 SqlCommand command = (SqlCommand) com;
 
-                command.CommandText = PurgeEntitiesCommandText.Replace("@tableName@", tableName.ToString()).Replace("@tableColumnName@", tableColumnName.ToString());
+                command.CommandText = PurgeEntitiesCommandText
+                    .Replace("@tableName@", tableName.ToString())
+                    .Replace("@tableColumnName@", tableColumnName.ToString())
+                    .Replace("@tablePrimaryKeyName@", tablePrimaryKeyName.ToString());
 
                 //command.Parameters.Add(new SqlParameter("tableName", tableName));
                 //command.Parameters.Add(new SqlParameter("tableColumnName", tableColumnName));
@@ -86,13 +89,23 @@ SET NOCOUNT ON;
 
 IF EXISTS(SELECT * FROM sys.tables WHERE name = 'EntityIDsToDelete')
 BEGIN
-	IF EXISTS(SELECT * FROM sys.tables WHERE name = '#DeletePurgeBatch')
+	IF OBJECT_ID('tempdb..#DeletePurgeBatch') IS NOT NULL
 	BEGIN
 		DROP TABLE #DeletePurgeBatch
 	END
 
+	IF OBJECT_ID('tempdb..#DeleteObjectReferences') IS NOT NULL
+	BEGIN
+		DROP TABLE #DeleteObjectReferences
+	END
+
 	-- create batch purge ID table
 	CREATE TABLE #DeletePurgeBatch (
+		EntityID BIGINT PRIMARY KEY
+	);
+
+	-- create holding table object references to delete
+	CREATE TABLE #DeleteObjectReferences (
 		EntityID BIGINT PRIMARY KEY
 	);
 
@@ -108,10 +121,18 @@ BEGIN
 	-- purge in batches while time allows
 	WHILE EXISTS (SELECT TOP 1 EntityID FROM #DeletePurgeBatch)
 		BEGIN
+			-- Populate object reference holding table
+			INSERT INTO #DeleteObjectReferences (EntityID)
+				SELECT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
+
 			print 'Deleting from @tableName@'
 			DELETE FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
 				
 			DELETE FROM #DeletePurgeBatch WHERE EntityID IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
+
+			DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from #DeleteObjectReferences);
+
+			TRUNCATE TABLE #DeleteObjectReferences
 		
 			IF NOT EXISTS (SELECT TOP 1 EntityID FROM #DeletePurgeBatch)
 			BEGIN
