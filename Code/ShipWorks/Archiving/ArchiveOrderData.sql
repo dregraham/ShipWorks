@@ -347,7 +347,7 @@ BEGIN
 		DROP TABLE [EntityIDsToDelete]
 	END
 
-	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'OrderIDsToDelete')
+	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'ShipmentIDsToDelete')
 	BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
 	END
