@@ -14,6 +14,15 @@ namespace Interapptive.Shared.UI
     public interface IAsyncMessageHelper
     {
         /// <summary>
+        /// Show a message box with the given text.
+        /// </summary>
+        /// <param name="message">Message that should be displayed</param>
+        /// <returns>
+        /// Task that will complete when the dialog is closed
+        /// </returns>
+        Task ShowMessage(string message);
+
+        /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
         /// <param name="message">Error message that should be displayed</param>

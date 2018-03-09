@@ -60,7 +60,12 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a message
         /// </summary>
-        public void ShowMessage(string message) => MessageHelper.ShowMessage(ownerFactory(), message);
+        public void ShowMessage(string message) => ShowMessage(ownerFactory(), message);
+
+        /// <summary>
+        /// Show a message
+        /// </summary>
+        public void ShowMessage(IWin32Window owner, string message) => MessageHelper.ShowMessage(owner, message);
 
         /// <summary>
         /// Show a yes/no question with the given text
@@ -83,7 +88,7 @@ namespace ShipWorks.UI.Services
             }
             else
             {
-               popupViewModelFactory().Show(message, owner);
+                popupViewModelFactory().Show(message, owner);
             }
         }
 
@@ -147,7 +152,7 @@ namespace ShipWorks.UI.Services
                 return dlg.ShowDialog(ownerFactory());
             }
         }
-        
+
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
@@ -156,7 +161,7 @@ namespace ShipWorks.UI.Services
             Control owner = ownerFactory();
             if (owner.InvokeRequired)
             {
-                return (bool?)owner.Invoke((Func<Func<IDialog>, bool?>)ShowDialog, createDialog);
+                return (bool?) owner.Invoke((Func<Func<IDialog>, bool?>) ShowDialog, createDialog);
             }
 
             IDialog dlg = createDialog();

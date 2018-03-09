@@ -32,6 +32,19 @@ namespace ShipWorks.UI
         }
 
         /// <summary>
+        /// Show a message box with the given text.
+        /// </summary>
+        /// <param name="message">Message that should be displayed</param>
+        /// <returns>
+        /// Task that will complete when the dialog is closed
+        /// </returns>
+        public Task ShowMessage(string message)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => messageHelper.ShowMessage(owner, message));
+        }
+
+        /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
         /// <param name="message">Error message that should be displayed</param>

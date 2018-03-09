@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace ShipWorks.Archiving
@@ -12,6 +13,6 @@ namespace ShipWorks.Archiving
         /// Perform the archive
         /// </summary>
         /// <param name="cutoffDate">Date before which orders will be archived</param>
-        Task Archive(DateTime cutoffDate);
+        Task<Unit> Archive(DateTime cutoffDate);
     }
 }

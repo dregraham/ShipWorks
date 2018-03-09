@@ -950,6 +950,7 @@
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Archiving\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Archiving\IOrderArchiver.cs" />
+    <Compile Include="Archiving\OrderArchiveOrchestrator.cs" />
     <Compile Include="Archiving\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Archiving\IOrderArchiveSqlGenerator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
