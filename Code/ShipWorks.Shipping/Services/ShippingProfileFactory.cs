@@ -4,6 +4,9 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
 {
+    /// <summary>
+    /// Factory for creating ShippingProfile
+    /// </summary>
     [Component]
     public class ShippingProfileFactory : IShippingProfileFactory
     {

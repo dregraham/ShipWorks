@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Profiles
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             IEnumerable<IPackageAdapter> packages = shipmentType.GetPackageAdapters(shipment);
-
             IPackageProfileEntity packageProfile = profile.Packages.Single();
 
 
