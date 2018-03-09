@@ -40,10 +40,25 @@ END
 ELSE 
 BEGIN
 	BEGIN TRY
-		BACKUP DATABASE @SourceDatabaseName
-			TO  DISK = @SourceDatabaseBackupPathAndFileName 
-			WITH NOFORMAT, INIT,  NAME = N''BackupForArchive'', 
-			SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 10, COPY_ONLY;
+        DECLARE @EditionTypeId sql_variant
+
+        set @EditionTypeId = serverproperty(''EditionID'')
+
+        /* These are Express or Web editions, so no compression */
+        if -1592396055 = @EditionTypeId or -133711905 = @EditionTypeId or 1293598313 = @EditionTypeId
+	        BEGIN
+				BACKUP DATABASE @SourceDatabaseName
+					TO  DISK = @SourceDatabaseBackupPathAndFileName 
+					WITH NOFORMAT, INIT,  NAME = N''BackupForArchive'', 
+					SKIP, NOREWIND, NOUNLOAD, STATS = 10, COPY_ONLY
+	        END
+        ELSE
+	        BEGIN
+				BACKUP DATABASE @SourceDatabaseName
+					TO  DISK = @SourceDatabaseBackupPathAndFileName 
+					WITH NOFORMAT, INIT,  NAME = N''BackupForArchive'', 
+					SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 10, COPY_ONLY;
+	        END
 
 		declare @backupSetId as int
 		select @backupSetId = position 
