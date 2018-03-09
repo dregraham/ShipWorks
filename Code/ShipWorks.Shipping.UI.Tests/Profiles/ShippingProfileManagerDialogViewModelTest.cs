@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Constructor_ShippingProfilesContainsBestRate_WhenShipmentTypeAllowed()
         {
-            var profileEntity = new ShippingProfileEntity()
+            var profileEntity = new ShippingProfileEntity
             {
                 ShippingProfileID = 42,
                 ShipmentType = ShipmentTypeCode.BestRate
@@ -134,9 +134,9 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile> { profile });
 
-            mock.Mock<IShipmentTypeManager>().Setup(m => m.ShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.BestRate });
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes).Returns(new[] { ShipmentTypeCode.BestRate });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
-            mock.Mock<IShipmentTypeManager>().Setup(m => m.ShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.Amazon });
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes).Returns(new[] { ShipmentTypeCode.Usps });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -165,9 +165,9 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         }
 
         [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
-        public void Constructor_ShippingProfileContainsShipmentType_WhenShipmentTypeConfigured(bool isShipmentTypeConfigured, int expectedShipmentProfileCount)
+        [InlineData(ShipmentTypeCode.Amazon, 1)]
+        [InlineData(ShipmentTypeCode.Asendia, 0)]
+        public void Constructor_ShippingProfileContainsShipmentType_WhenShipmentTypeConfigured(ShipmentTypeCode configuredType, int expectedShipmentProfileCount)
         {
             var profileEntity = new ShippingProfileEntity()
             {
@@ -180,7 +180,8 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
-            mock.Mock<IShippingSettings>().Setup(s => s.IsConfigured(ShipmentTypeCode.Amazon)).Returns(isShipmentTypeConfigured);
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes)
+                .Returns(new[] { configuredType });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 

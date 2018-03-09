@@ -64,26 +64,9 @@ namespace ShipWorks.Shipping.UI.Profiles
         private bool IncludeProfileInGrid(IShippingProfile shippingProfile)
         {
             ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
-            // Global shipment types should be included
-            if (!shipmentType.HasValue)
-            {
-                return true;
-            }
-
-            // None shipment type should always be excluded
-            if (shipmentType.Value == ShipmentTypeCode.None)
-            {
-                return false;
-            }
             
-            // Best rate never gets configured, so we include it if it is allowed
-            if (shipmentType.Value == ShipmentTypeCode.BestRate && shipmentTypeManager.ShipmentTypeCodes.Contains(ShipmentTypeCode.BestRate))
-            {
-                return true;
-            }
-
-            // For all other types, include if configured
-            return shippingSettings.IsConfigured(shipmentType.Value);
+            // Return true if glbal profile or the shipment type is configured
+            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypes.Contains(shipmentType.Value);
         }
 
         /// <summary>
