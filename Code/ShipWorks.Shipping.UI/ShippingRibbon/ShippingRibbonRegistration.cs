@@ -185,10 +185,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                                                               .Where(p => p.ShipmentType == null)
                                                               .OrderBy(p => p.Name).ToList();
 
-                foreach (IShippingProfileEntity profile in globalProfiles)
-                {
-                    menuItems.Add(CreateMenuItem(profile, "Global"));
-                }
+                globalProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Global")));
 
                 // Carrier Profiles
                 List<IShippingProfileEntity> carrierProfiles = applicableProfiles
@@ -206,11 +203,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     };
                     
                     menuItems.Add(carrierLabel);
-
-                    foreach (IShippingProfileEntity profile in carrierProfiles)
-                    {
-                        menuItems.Add(CreateMenuItem(profile, "Carrier"));
-                    }
+                    carrierProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Carrier")));
                 }
             }
             else

@@ -204,10 +204,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
                                                               .Where(p => p.ShipmentType == null)
                                                               .OrderBy(p => p.Name).ToList();
 
-                foreach (IShippingProfileEntity profile in globalProfiles)
-                {
-                    AddProfileToMenu(profile, selectMenu);
-                }
+                globalProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
 
                 // Carrier Profiles
                 List<IShippingProfileEntity> carrierProfiles = applicableProfiles
@@ -228,10 +225,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
                         Enabled = false
                     };
                     selectMenu.DropDownItems.Add(carrierLabel);
-                    foreach (IShippingProfileEntity profile in carrierProfiles)
-                    {
-                        AddProfileToMenu(profile, selectMenu);
-                    }
+                    carrierProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
                     
                     selectMenu.DropDown.PerformLayout();
                 }
@@ -252,7 +246,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
             menuItem.Tag = profile;
             menuItem.Click += OnChooseProfile;
-            menu.DropDownItems.Add(menuItem);
+            menu.DropDown.Items.Add(menuItem);
         }
 
         /// <summary>

@@ -1618,25 +1618,22 @@ namespace ShipWorks.Shipping
         /// <param name="shipmentTypeCode"></param>
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
-            List<IShippingProfileEntity> applicableProfiles =
-                ShippingProfileManager.GetProfilesFor(shipmentTypeCode, true).ToList();
+            IEnumerable<IShippingProfileEntity> applicableProfiles =
+                ShippingProfileManager.GetProfilesFor(shipmentTypeCode, true);
 
             if (applicableProfiles.Any())
             {
                 // Global profiles
-                List<IShippingProfileEntity> globalProfiles = applicableProfiles
+                IEnumerable<IShippingProfileEntity> globalProfiles = applicableProfiles
                                                               .Where(p => p.ShipmentType == null)
-                                                              .OrderBy(p => p.Name).ToList();
+                                                              .OrderBy(p => p.Name);
 
-                foreach (IShippingProfileEntity profile in globalProfiles)
-                {
-                    AddProfileToMenu(profile, contextMenuProfiles);
-                }
-
+                globalProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+                
                 // Carrier Profiles
-                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
+                IEnumerable<IShippingProfileEntity> carrierProfiles = applicableProfiles
                                                                .Where(p => p.ShipmentType == shipmentTypeCode)
-                                                               .OrderBy(p => p.Name).ToList();
+                                                               .OrderBy(p => p.Name);
 
                 if (globalProfiles.Any() && carrierProfiles.Any())
                 {
@@ -1653,10 +1650,7 @@ namespace ShipWorks.Shipping
                     };
                     contextMenuProfiles.Items.Add(carrierLabel);
 
-                    foreach (IShippingProfileEntity profile in carrierProfiles)
-                    {
-                        AddProfileToMenu(profile, contextMenuProfiles);
-                    }
+                    carrierProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
                 }
             }
         }
