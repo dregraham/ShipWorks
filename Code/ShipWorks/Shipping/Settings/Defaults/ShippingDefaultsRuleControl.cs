@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             ToolStripMenuItem manageProfiles = new ToolStripMenuItem("Manage Profiles...");
             manageProfiles.Click += OnManageProfiles;
             menuStrip.Items.Add(manageProfiles);
-
+            
             return menuStrip;
         }
 
@@ -193,10 +193,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private ToolStripMenuItem CreateSelectProfileMenu()
         {
             ToolStripMenuItem selectMenu = new ToolStripMenuItem("Select");
-
+            
             List<IShippingProfileEntity> applicableProfiles =
                 ShippingProfileManager.GetProfilesFor(Rule.ShipmentTypeCode, false).ToList();
-
+            
             if (applicableProfiles.Any())
             {
                 // Global profiles
@@ -228,18 +228,19 @@ namespace ShipWorks.Shipping.Settings.Defaults
                         Enabled = false
                     };
                     selectMenu.DropDownItems.Add(carrierLabel);
-
                     foreach (IShippingProfileEntity profile in carrierProfiles)
                     {
                         AddProfileToMenu(profile, selectMenu);
                     }
+                    
+                    selectMenu.DropDown.PerformLayout();
                 }
             }
             else
             {
                 selectMenu.DropDownItems.Add(new ToolStripMenuItem("(none)") {Enabled = false});
             }
-
+            
             return selectMenu;
         }
 
