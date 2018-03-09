@@ -515,7 +515,9 @@ namespace ShipWorks.Shipping
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
                 
                 // First apply the base profile
-                shippingProfileService.Get(shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this).ShippingProfileID).Apply(shipment);
+                IShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this);
+                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                shippingProfile.Apply(shipment);
 
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when

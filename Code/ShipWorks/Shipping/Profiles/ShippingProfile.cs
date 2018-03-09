@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Reflection;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -20,6 +20,28 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Constructor
         /// </summary>
+        public ShippingProfile(IShippingProfileLoader profileLoader,
+            IShippingProfileApplicationStrategyFactory strategyFactory)
+        {
+            this.profileLoader = profileLoader;
+            this.strategyFactory = strategyFactory;
+            ShippingProfileEntity = new ShippingProfileEntity
+            {
+                Name = string.Empty,
+                ShipmentTypePrimary = false
+            };
+
+            Shortcut = new ShortcutEntity
+            {
+                Action = (int) KeyboardShortcutCommand.ApplyProfile
+            };
+
+            profileLoader.LoadProfileData(ShippingProfileEntity, false);
+        }
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
             ShortcutEntity shortcut,
             IShippingProfileLoader profileLoader,
@@ -29,6 +51,8 @@ namespace ShipWorks.Shipping.Profiles
             this.strategyFactory = strategyFactory;
             ShippingProfileEntity = shippingProfileEntity;
             Shortcut = shortcut;
+            
+            profileLoader.LoadProfileData(shippingProfileEntity, true);
         }
 
         /// <summary>
@@ -105,11 +129,6 @@ namespace ShipWorks.Shipping.Profiles
         {
             IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
             strategy.ApplyProfile(ShippingProfileEntity, shipment);
-        }
-
-        public void LoadProfileData(bool refreshIfPresent)
-        {
-            profileLoader.LoadProfileData(ShippingProfileEntity, refreshIfPresent);
         }
     }
 }

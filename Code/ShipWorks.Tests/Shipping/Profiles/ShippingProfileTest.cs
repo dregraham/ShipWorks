@@ -26,6 +26,26 @@ namespace ShipWorks.Tests.Shipping.Profiles
         }
 
         [Fact]
+        public void Constructor_LoadProfileDataIsCalledWithTrue_WhenProfileEntityPassedIn()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity();
+            ShortcutEntity shortcut = new ShortcutEntity();
+
+            CreateShippingProfile(profile, shortcut);
+            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Once);
+        }
+
+        [Fact]
+        public void Constructor_LoadProfileDataIsCalledWithFalse_WhenNoProfileEntityPassedIn()
+        {
+            var loaderMock = mock.Mock<IShippingProfileLoader>();
+
+            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object);
+            
+            loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
+        }
+
+        [Fact]
         public void ShippingProfile_ShipmentTypeDescriptionIsShipmentTypeDescription()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity
@@ -180,10 +200,11 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity();
             ShortcutEntity shortcut = new ShortcutEntity();
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
-            
+
             testObject.ChangeProvider(ShipmentTypeCode.Endicia);
-            
-            mock.Mock<IShippingProfileLoader>().Verify(l=>l.LoadProfileData(profile, true), Times.Once);
+
+            // The constructor will call LoadProfileData the first time
+            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Exactly(2));
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)

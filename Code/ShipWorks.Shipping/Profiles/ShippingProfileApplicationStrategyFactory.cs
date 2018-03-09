@@ -10,16 +10,16 @@ namespace ShipWorks.Shipping.Profiles
     [Component]
     public class ShippingProfileApplicationStrategyFactory : IShippingProfileApplicationStrategyFactory
     {
-        private readonly IIndex<ShipmentTypeCode, IShippingProfileApplicationStrategy> strategyChooser;
+        private readonly IIndex<ShipmentTypeCode, IShippingProfileApplicationStrategy> strategyIndex;
         private readonly Func<IShippingProfileApplicationStrategy> createGlobalStrategy;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileApplicationStrategyFactory(IIndex<ShipmentTypeCode, IShippingProfileApplicationStrategy> strategyChooser,
+        public ShippingProfileApplicationStrategyFactory(IIndex<ShipmentTypeCode, IShippingProfileApplicationStrategy> strategyIndex,
             Func<IShippingProfileApplicationStrategy> createGlobalStrategy)
         {
-            this.strategyChooser = strategyChooser;
+            this.strategyIndex = strategyIndex;
             this.createGlobalStrategy = createGlobalStrategy;
         }
 
@@ -27,6 +27,6 @@ namespace ShipWorks.Shipping.Profiles
         /// Create an Profile Application Strategy
         /// </summary>
         public IShippingProfileApplicationStrategy Create(ShipmentTypeCode? shipmentType) => 
-            shipmentType == null ? createGlobalStrategy() : strategyChooser[shipmentType.Value];
+            shipmentType == null ? createGlobalStrategy() : strategyIndex[shipmentType.Value];
     }
 }

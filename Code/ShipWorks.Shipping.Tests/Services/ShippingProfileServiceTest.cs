@@ -29,9 +29,6 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public void GetAll_ReturnsShortcutAssociatedWithProfile()
         {
-            var shippingProfileFactory = mock.MockRepository.Create<Func<ShippingProfileEntity, ShortcutEntity, IShippingProfile>>();
-            mock.Provide(shippingProfileFactory.Object);
-
             ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
             ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
 
@@ -41,19 +38,14 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            var shippingProfiles = mock.Create<ShippingProfileService>().GetAll();
+            mock.Create<ShippingProfileService>().GetAll();
 
-            IShippingProfile shippingProfile = shippingProfiles.Single();
-
-            shippingProfileFactory.Verify(s => s(profile, shortcut));
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
         }
 
         [Fact]
         public void Get_ReturnsShortcutAssociatedWithProfile()
         {
-            var shippingProfileFactory = mock.MockRepository.Create<Func<ShippingProfileEntity, ShortcutEntity, IShippingProfile>>();
-            mock.Provide(shippingProfileFactory.Object);
-
             ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
             ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
 
@@ -63,20 +55,17 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            IShippingProfile shippingProfile = mock.Create<ShippingProfileService>().Get(42);
+            mock.Create<ShippingProfileService>().Get(42);
 
-            shippingProfileFactory.Verify(s => s(profile, shortcut));
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
         }
 
         [Fact]
         public void Create_DelegatesToShippingProfileFactoryFuncWithNewEntities()
         {
-            var shippingProfileFactory = mock.MockRepository.Create<Func<ShippingProfileEntity, ShortcutEntity, IShippingProfile>>();
-            mock.Provide(shippingProfileFactory.Object);
-
-            var newProfile = mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
+            mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
             
-            shippingProfileFactory.Verify(f => f(It.Is<ShippingProfileEntity>(s => s.IsNew && s.Name == string.Empty && s.ShipmentTypePrimary == false), It.Is<ShortcutEntity>(s => s.IsNew)));
+            mock.Mock<IShippingProfileFactory>().Verify(f=>f.Create(), Times.Once);
         }
 
         [Fact]
