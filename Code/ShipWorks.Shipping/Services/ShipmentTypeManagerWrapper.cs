@@ -78,9 +78,9 @@ namespace ShipWorks.Shipping.Services
             allShipmentTypeCodes.Except(noAccountShipmentTypes);
 
         /// <summary>
-        /// Configured ShipmentTypes
+        /// Configured ShipmentTypeCodes
         /// </summary>
-        public IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypes =>
+        public IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypeCodes =>
             ShipmentTypeCodes.Where(c => c == ShipmentTypeCode.BestRate || shippingSettings.IsConfigured(c));
 
         /// <summary>

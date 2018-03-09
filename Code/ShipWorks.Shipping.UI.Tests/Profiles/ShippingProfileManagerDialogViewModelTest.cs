@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile> { profile });
 
-            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes).Returns(new[] { ShipmentTypeCode.BestRate });
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.BestRate });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
-            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes).Returns(new[] { ShipmentTypeCode.Usps });
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.Usps });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
 
-            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypes)
+            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes)
                 .Returns(new[] { configuredType });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();

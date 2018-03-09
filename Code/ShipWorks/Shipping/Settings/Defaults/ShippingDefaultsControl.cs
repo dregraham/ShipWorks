@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             // We go up the parent chain to get the actual settings dlg so that the manage profile dialog will center
             // on the settings dlg instead of the profile rule control
-            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this.Parent.Parent.Parent.Parent.Parent.Parent, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(ParentForm, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
         }
 
         /// <summary>

@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
             
             // Return true if glbal profile or the shipment type is configured
-            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypes.Contains(shipmentType.Value);
+            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
         }
 
         /// <summary>

@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.Profiles
             this.provider.SelectedValueChanged -= OnChangeProvider;
             ShipmentTypeCode? profileShipmentType = profile.ShippingProfileEntity.ShipmentType;
 
-            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shipmentTypeManager.ConfiguredShipmentTypes;
+            IEnumerable<ShipmentTypeCode> configuredShipmentTypes = shipmentTypeManager.ConfiguredShipmentTypeCodes;
             if (profileShipmentType != null)
             {
                 configuredShipmentTypes = configuredShipmentTypes.Union(new[] { profileShipmentType.Value });

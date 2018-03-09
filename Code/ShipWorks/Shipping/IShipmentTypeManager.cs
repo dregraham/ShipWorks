@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Returns a list of Configured ShipmentTypeCodes
         /// </summary>
-        IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypes { get; }
+        IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypeCodes { get; }
         
         /// <summary>
         /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
