@@ -21,13 +21,12 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Creates a new ShippingProfile
+        /// Creates a new ShippingProfile with a new ShippingProfileEntity and ShortcutEntity
         /// </summary>
-        /// <returns></returns>
         public IShippingProfile Create() => new ShippingProfile(profileLoader, strategyFactory);
         
         /// <summary>
-        /// Creates a ShippingProfile
+        /// Creates a ShippingProfile with an existing ShippingProfileEntity and ShortcutEntity
         /// </summary>
         public IShippingProfile Create(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcut) =>
             new ShippingProfile(shippingProfileEntity, shortcut, profileLoader, strategyFactory);

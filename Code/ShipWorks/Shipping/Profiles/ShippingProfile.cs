@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
 
         /// <summary>
-        /// Constructor
+        /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
         /// </summary>
         public ShippingProfile(IShippingProfileLoader profileLoader,
             IShippingProfileApplicationStrategyFactory strategyFactory)
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Profiles
         }
         
         /// <summary>
-        /// Constructor
+        /// Constructor used when we have an existing ShippingProfileEntiy and ShortcutEntity
         /// </summary>
         public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
             ShortcutEntity shortcut,
