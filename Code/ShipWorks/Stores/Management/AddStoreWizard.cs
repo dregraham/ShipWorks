@@ -20,6 +20,7 @@ using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
@@ -1043,12 +1044,41 @@ namespace ShipWorks.Stores.Management
             if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
             {
                 var origin = new ShippingOriginEntity();
+                var personAdapter = new PersonAdapter();
                 origin.InitializeNullsToDefault();
                 origin.Description = store.StoreName;
 
                 new PersonAdapter(store, string.Empty).CopyTo(origin, string.Empty);
 
-                origin.FirstName = store.StoreName;
+                var value = store.StoreName;
+
+                PersonName name = PersonName.Parse(value);
+
+                int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
+                if (name.First.Length > maxFirst)
+                {
+                    name.Middle = name.First.Substring(maxFirst) + name.Middle;
+                    name.First = name.First.Substring(0, maxFirst);
+                }
+
+                int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
+                if (name.Middle.Length > maxMiddle)
+                {
+                    name.Last = name.Middle.Substring(maxMiddle) + name.Last;
+                    name.Middle = name.Middle.Substring(0, maxMiddle);
+                }
+
+                int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
+                if (name.Last.Length > maxLast)
+                {
+                    name.Last = name.Last.Substring(0, maxLast);
+                }
+
+                personAdapter.ParsedName = name;
+
+                origin.FirstName = name.First;
+                origin.MiddleName = name.Middle;
+                origin.LastName = name.Last;
 
                 adapter.SaveEntity(origin);
             }
