@@ -20,7 +20,6 @@ using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
@@ -1044,7 +1043,6 @@ namespace ShipWorks.Stores.Management
             if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
             {
                 var origin = new ShippingOriginEntity();
-                var personAdapter = new PersonAdapter();
                 origin.InitializeNullsToDefault();
                 origin.Description = store.StoreName;
 
@@ -1073,8 +1071,6 @@ namespace ShipWorks.Stores.Management
                 {
                     name.Last = name.Last.Substring(0, maxLast);
                 }
-
-                personAdapter.ParsedName = name;
 
                 origin.FirstName = name.First;
                 origin.MiddleName = name.Middle;
