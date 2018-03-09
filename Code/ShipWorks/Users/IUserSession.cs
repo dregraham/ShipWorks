@@ -44,5 +44,10 @@ namespace ShipWorks.Users
         /// Update the current user's settings
         /// </summary>
         void UpdateSettings(Action<UserSettingsEntity> updateAction);
+
+        /// <summary>
+        /// Logoff the currently logged on user.
+        /// </summary>
+        void Logoff(bool clearRememberMe);
     }
 }

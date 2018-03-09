@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -34,7 +33,7 @@ namespace ShipWorks.Archiving
         /// <summary>
         /// Start the archiving process
         /// </summary>
-        public Task<Unit> Archive()
+        public Task<int> Archive()
         {
             return userSecurity.RequestPermission(PermissionType.DatabaseArchive, null)
                 .Bind(() => archiver.Archive(dateTimeProvider.Now.Subtract(TimeSpan.FromDays(90))))

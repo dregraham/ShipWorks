@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Archiving
                 .Setup(x => x.RequestPermission(PermissionType.DatabaseArchive, null))
                 .Returns(Result.FromError("No permission"));
 
-            await testObject.Archive().Recover(ex => Unit.Default);
+            await testObject.Archive().Recover(ex => 0);
 
             mock.Mock<IOrderArchiver>().Verify(x => x.Archive(AnyDate), Times.Never);
         }
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Archiving
                 .Setup(x => x.Archive(AnyDate))
                 .ThrowsAsync(new InvalidOperationException("Failed"));
 
-            await testObject.Archive().Recover(ex => Unit.Default);
+            await testObject.Archive().Recover(ex => 0);
 
             mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowError("Failed"));
         }
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Archiving
         [Fact]
         public async Task Archive_ShowsSuccess_WhenProcessSucceeds()
         {
-            await testObject.Archive().Recover(ex => Unit.Default);
+            await testObject.Archive().Recover(ex => 0);
 
             mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowMessage("Archive finished"));
         }

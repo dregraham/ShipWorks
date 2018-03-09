@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Archiving
@@ -6,6 +7,7 @@ namespace ShipWorks.Archiving
     /// <summary>
     /// Class used for generating SQL for order archiving
     /// </summary>
+    [Component]
     public class OrderArchiveSqlGenerator : IOrderArchiveSqlGenerator
     {
         /// <summary>

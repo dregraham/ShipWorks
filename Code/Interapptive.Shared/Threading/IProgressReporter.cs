@@ -51,5 +51,10 @@ namespace Interapptive.Shared.Threading
         /// Cancel the current progress reporter
         /// </summary>
         void Cancel();
+
+        /// <summary>
+        /// Name of the progress item
+        /// </summary>
+        string Name { get; }
     }
 }

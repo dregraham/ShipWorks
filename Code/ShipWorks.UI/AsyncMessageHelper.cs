@@ -86,6 +86,12 @@ namespace ShipWorks.UI
             ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description));
 
         /// <summary>
+        /// Show a new progress dialog
+        /// </summary>
+        public Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan) =>
+            ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description, progressProvider, timeSpan));
+
+        /// <summary>
         /// Show a dialog
         /// </summary>
         /// <param name="owner">Owner of the dialog</param>

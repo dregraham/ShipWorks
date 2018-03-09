@@ -52,5 +52,10 @@ namespace Interapptive.Shared.UI
         /// Show a new progress dialog
         /// </summary>
         Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description);
+
+        /// <summary>
+        /// Show a new progress dialog with the given provider
+        /// </summary>
+        Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan);
     }
 }

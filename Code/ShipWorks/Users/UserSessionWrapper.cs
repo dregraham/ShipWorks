@@ -39,6 +39,11 @@ namespace ShipWorks.Users
         public IUserSettingsEntity Settings => UserSession.User?.Settings;
 
         /// <summary>
+        /// Logoff the currently logged on user.
+        /// </summary>
+        public void Logoff(bool clearRememberMe) => UserSession.Logoff(clearRememberMe);
+
+        /// <summary>
         /// Logs the user in with the given credentials
         /// </summary>
         public bool Logon(LogonCredentials credentials)

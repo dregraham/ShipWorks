@@ -1990,7 +1990,7 @@ namespace ShipWorks
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 var archiveOrchestrator = scope.Resolve<IOrderArchiveOrchestrator>();
-                await archiveOrchestrator.Archive().ConfigureAwait(false);
+                await archiveOrchestrator.Archive().Recover(ex => 0).ConfigureAwait(false);
             }
         }
 
