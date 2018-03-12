@@ -42,9 +42,9 @@ namespace ShipWorks.Tests.Archiving
                 .Returns(transactionMock);
 
             mock.Mock<IOrderArchiveDataAccess>()
-                .Setup(x => x.WithSingleUserConnectionAsync<int>(It.IsAny<Func<DbConnection, Task<int>>>()))
-                .Callback((Func<DbConnection, Task<int>> x) => x(connectionMock.Object))
-                .ReturnsAsync(0);
+                .Setup(x => x.WithSingleUserConnectionAsync<Unit>(It.IsAny<Func<DbConnection, Task<Unit>>>()))
+                .Callback((Func<DbConnection, Task<Unit>> x) => x(connectionMock.Object))
+                .ReturnsAsync(Unit.Default);
 
             preparingProgress = mock.CreateMock<IProgressReporter>();
             archivingProgress = mock.CreateMock<IProgressReporter>();
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Archiving
             var ex = new ORMException();
 
             mock.Mock<IOrderArchiveDataAccess>()
-                .Setup(x => x.WithSingleUserConnectionAsync<int>(It.IsAny<Func<DbConnection, Task<int>>>()))
+                .Setup(x => x.WithSingleUserConnectionAsync<Unit>(It.IsAny<Func<DbConnection, Task<Unit>>>()))
                 .ThrowsAsync(ex);
 
             await testObject.Archive(DateTime.Now).Recover(e => Unit.Default);
