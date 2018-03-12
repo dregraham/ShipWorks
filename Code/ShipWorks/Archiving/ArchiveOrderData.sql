@@ -1,5 +1,38 @@
-﻿SET NOCOUNT ON;
-GO
+﻿DECLARE @OriginalRecoveryModel nvarchar(50)
+DECLARE @SetRecoveryModelSimpleSql nvarchar(255)
+DECLARE @SetRecoveryModelOriginalSql nvarchar(255)
+
+SELECT @OriginalRecoveryModel = recovery_model_desc  
+   FROM sys.databases  
+   WHERE name = DB_NAME(); 
+
+SET @SetRecoveryModelSimpleSql = 
+	'USE [master]
+	
+	ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY SIMPLE WITH NO_WAIT
+	
+	use ' + DB_NAME() + '';
+
+SET @SetRecoveryModelOriginalSql = 
+	'USE [master]
+	
+	ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
+	
+	use ' + DB_NAME() + '';
+	
+EXEC(@SetRecoveryModelSimpleSql)
+
+SET NOCOUNT ON;
+	
+DECLARE @DisableAllTriggersSql NVARCHAR(MAX) = N'';
+DECLARE @EnableAllTriggersSql NVARCHAR(MAX) = N'';
+DECLARE @DisableAllIndexesSql NVARCHAR(MAX) = N'';
+DECLARE @EnableAllIndexesSql NVARCHAR(MAX) = N'';
+DECLARE @DisableAllChangeTrackingSql NVARCHAR(MAX) = N'';
+DECLARE @EnableAllChangeTrackingSql NVARCHAR(MAX) = N'';
+DECLARE @DisableAllForeignKeysSql NVARCHAR(MAX) = N'';
+DECLARE @EnableAllForeignKeysSql NVARCHAR(MAX) = N'';
+
 /*******************************************************************/
 /* Get static list of OrderIDs to delete.                          */
 /* We won't delete or modify this list, it is only for joining to. */
@@ -12,7 +45,7 @@ END
 SELECT DISTINCT o.OrderID as 'EntityID'
 INTO    dbo.[OrderIDsToDelete]
 FROM    dbo.[Order] o
-WHERE   o.OrderDate <= @MaxOrderDate
+WHERE   o.OrderDate <= '{0}'
 ORDER BY o.OrderID
 
 IF NOT EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
@@ -36,15 +69,6 @@ BEGIN
 	FROM    dbo.[Shipment] s
 		inner join [OrderIDsToDelete] o on s.OrderID = o.EntityID
 	ORDER BY s.Shipmentid
-	
-	DECLARE @DisableAllTriggersSql NVARCHAR(MAX) = N'';
-	DECLARE @EnableAllTriggersSql NVARCHAR(MAX) = N'';
-	DECLARE @DisableAllIndexesSql NVARCHAR(MAX) = N'';
-	DECLARE @EnableAllIndexesSql NVARCHAR(MAX) = N'';
-	DECLARE @DisableAllChangeTrackingSql NVARCHAR(MAX) = N'';
-	DECLARE @EnableAllChangeTrackingSql NVARCHAR(MAX) = N'';
-	DECLARE @DisableAllForeignKeysSql NVARCHAR(MAX) = N'';
-	DECLARE @EnableAllForeignKeysSql NVARCHAR(MAX) = N'';
 
 	/* Get Disable/Enable all table change tracking SQL. */
 		SELECT @DisableAllChangeTrackingSql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(t.object_id)) + N'.' + QUOTENAME(OBJECT_NAME(object_id)) + N' DISABLE CHANGE_TRACKING; ' + NCHAR(13),
@@ -259,6 +283,7 @@ BEGIN
 	exec PurgeEntities 'WalmartOrderSearch', 'OrderID', 'WalmartOrderSearchID'
 	exec PurgeEntities 'YahooOrderSearch', 'OrderID', 'YahooOrderSearchID'
 	exec PurgeEntities 'AmazonOrder', 'OrderID', 'OrderID'
+	exec PurgeEntities 'ProStoresOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ChannelAdvisorOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ClickCartProOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'CommerceInterfaceOrder', 'OrderID', 'OrderID'
@@ -323,18 +348,25 @@ BEGIN
 	exec PurgeAbandonedResources @runUntil = null, @olderThan = null
 
 	/* Cleanup */
-
 	/* Enable all triggers */
+	print 'Enable all triggers'
 	exec (@EnableAllTriggersSql);
 
 	/* Enable all indexes */
+	print 'Enable all indexes'
 	exec (@EnableAllIndexesSql);
 
 	/* Enable all change tracking */
+	print 'Enable all change tracking'
 	exec (@EnableAllChangeTrackingSql);
 
 	/* Enable all foreign keys */
+	print 'Enable all foreign keys';
 	exec (@EnableAllForeignKeysSql);
+
+	/* Put the database back in its original recovery model */
+	print 'Setting original recovery model';
+	EXEC(@SetRecoveryModelOriginalSql)
 
 	/* Drop id holding tables */
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'OrderIDsToDelete')

@@ -21,7 +21,8 @@ namespace ShipWorks.Archiving
         /// </summary>
         public string ArchiveOrderDataSql(DateTime maxOrderDate)
         {
-            return string.Format(ResourceUtility.ReadString("ShipWorks.Archiving.ArchiveOrderData.sql"), maxOrderDate.Date.ToString("yyyy-MM-dd HH:mm:ss"));
+            return string.Format(ResourceUtility.ReadString("ShipWorks.Archiving.ArchiveOrderData.sql"),
+                maxOrderDate.Date.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 }

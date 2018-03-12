@@ -12,6 +12,9 @@ public partial class StoredProcedures
     /// </summary>
     /// <param name="tableName">Name of the table from which to delete rows.</param>
     /// <param name="tableColumnName">Column name for matching against the EntityIDsToDelete table.
+    /// <param name="tablePrimaryKeyName">Primary key column name of the table for which we are deleting.  
+    /// Used for filtering down rows specific to tableName when matching against the EntityIDsToDelete table.
+    /// 
     /// The EntityIDsToDelete table is populated prior to calling this stored procedure.  For example,
     /// to delete orders older than a specific date, one could do:
     /// 
@@ -21,7 +24,7 @@ public partial class StoredProcedures
     ///         WHERE o.OrderDate &lt;= '1/1/2018'
     ///        ORDER BY o.EntityID
     /// 
-    ///     EXEC PurgeEntities 'Order', 'OrderID'
+    ///     EXEC PurgeEntities 'Order', 'OrderID', 'OrderID'
     /// 
     /// This is partly a security feature so that you can't just run this procedure without having populated
     /// the holding table.
@@ -35,7 +38,7 @@ public partial class StoredProcedures
     ///           AND o.OrderDate &lt;= '1/1/2018'
     ///        ORDER BY o.EntityID
     /// 
-    ///     EXEC PurgeEntities 'Shipment', 'ShipmentID'
+    ///     EXEC PurgeEntities 'Shipment', 'ShipmentID', 'ShipmentID'
     /// 
     /// </param>
     [SqlProcedure]
@@ -59,9 +62,6 @@ public partial class StoredProcedures
                     .Replace("@tableName@", tableName.ToString())
                     .Replace("@tableColumnName@", tableColumnName.ToString())
                     .Replace("@tablePrimaryKeyName@", tablePrimaryKeyName.ToString());
-
-                //command.Parameters.Add(new SqlParameter("tableName", tableName));
-                //command.Parameters.Add(new SqlParameter("tableColumnName", tableColumnName));
 
                 // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed
                 // to the console of client (i.e. SQL Management Studio)
@@ -104,51 +104,23 @@ BEGIN
 		EntityID BIGINT PRIMARY KEY
 	);
 
-	-- create holding table object references to delete
-	CREATE TABLE #DeleteObjectReferences (
-		EntityID BIGINT PRIMARY KEY
-	);
-
 	DECLARE
 		@startTime DATETIME = GETUTCDATE(),
-		@batchSize INT = 4500,
-		@batchTotal BIGINT = 1,
 		@totalSeconds INT = 1
 		
 	INSERT INTO #DeletePurgeBatch (EntityID)
-		SELECT EntityID FROM [EntityIDsToDelete] with (nolock)
+		SELECT DISTINCT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT EntityID FROM [EntityIDsToDelete] with (nolock))
 			
-	-- purge in batches while time allows
-	WHILE EXISTS (SELECT TOP 1 EntityID FROM #DeletePurgeBatch)
-		BEGIN
-			-- Populate object reference holding table
-			INSERT INTO #DeleteObjectReferences (EntityID)
-				SELECT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
-
-			print 'Deleting from @tableName@'
-			DELETE FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
+	print 'Deleting from @tableName@'
+	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM #DeletePurgeBatch)
 				
-			DELETE FROM #DeletePurgeBatch WHERE EntityID IN (SELECT TOP (@batchSize) EntityID FROM #DeletePurgeBatch)
+	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from #DeletePurgeBatch);
 
-			DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from #DeleteObjectReferences);
-
-			TRUNCATE TABLE #DeleteObjectReferences
+	SET @totalSeconds = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
+	PRINT 'TotalSeconds: ' + CONVERT(NVARCHAR(50), @totalSeconds)
 		
-			IF NOT EXISTS (SELECT TOP 1 EntityID FROM #DeletePurgeBatch)
-			BEGIN
-				BREAK;
-			END
-
-			SET @totalSeconds = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
-			PRINT 'BatchTotal: ' + CONVERT(NVARCHAR(50), @batchTotal) + ', BatchSize: ' + CONVERT(NVARCHAR(50), @batchSize) + ', TotalSeconds: ' + CONVERT(NVARCHAR(50), @totalSeconds)
-
-			-- update batch total and adjust batch size to an amount expected to complete in 10 seconds
-			SET @batchTotal = @batchTotal + @batchSize;
-			SET @batchSize = @batchTotal / @totalSeconds * 10;
-				
-			--select @batchTotal as 'batchTotal'
-			--select @batchSize as 'batchSize'
-		END;
+    -- Allow SQL Server write it's transaction buffer to disk.  This helps minimize the final log size.
+	CHECKPOINT;
 END
             ";
         }
