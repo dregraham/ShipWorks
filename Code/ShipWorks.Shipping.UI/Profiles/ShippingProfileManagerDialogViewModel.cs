@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         public ICommand DeleteCommand { get; }
 
         /// <summary>
-        /// Command to edit an existing profile
+        /// Command to print the barcodes
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand PrintBarcodesCommand { get; }
