@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reactive;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Archiving
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Archiving
         /// <summary>
         /// Start the archiving process
         /// </summary>
-        Task<int> Archive();
+        Task<Unit> Archive();
     }
 }

@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.UI
 {
@@ -90,6 +91,11 @@ namespace ShipWorks.UI
         /// </summary>
         public Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan) =>
             ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description, progressProvider, timeSpan));
+
+        /// <summary>
+        /// Create a progress provider
+        /// </summary>
+        public IProgressProvider CreateProgressProvider() => new ProgressProvider();
 
         /// <summary>
         /// Show a dialog

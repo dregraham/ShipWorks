@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
-using ShipWorks.Common.Threading;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
 
@@ -45,11 +46,11 @@ namespace ShipWorks.Archiving
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        public async Task<int> Archive(DateTime cutoffDate)
+        public async Task<Unit> Archive(DateTime cutoffDate)
         {
             userSession.Logoff(clearRememberMe: false);
 
-            IProgressProvider progressProvider = new ProgressProvider();
+            IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
 
             IProgressReporter prepareProgress = progressProvider.AddItem("Preparing archive");
             prepareProgress.CanCancel = false;
@@ -83,8 +84,15 @@ namespace ShipWorks.Archiving
                             filterHelper.RegenerateFilters(conn);
                             filterProgress.Completed();
 
-                            return 0;
+                            return Unit.Default;
                         }).ConfigureAwait(false);
+                    }
+                    catch (ORMException ex)
+                    {
+                        prepareProgress.Failed(ex);
+                        archiveProgress.Failed(ex);
+                        filterProgress.Failed(ex);
+                        throw;
                     }
                     catch (SqlException ex)
                     {

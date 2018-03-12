@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Moq;
 using Moq.Protected;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Archiving;
+using ShipWorks.Filters;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -19,6 +24,9 @@ namespace ShipWorks.Tests.Archiving
         private readonly OrderArchiver testObject;
         private readonly Mock<DbTransaction> transactionMock;
         private readonly Mock<DbConnection> connectionMock;
+        private readonly Mock<IProgressReporter> preparingProgress;
+        private readonly Mock<IProgressReporter> archivingProgress;
+        private readonly Mock<IProgressReporter> filterProgress;
 
         public OrderArchiverTest()
         {
@@ -37,26 +45,61 @@ namespace ShipWorks.Tests.Archiving
                 .Setup(x => x.WithSingleUserConnectionAsync<int>(It.IsAny<Func<DbConnection, Task<int>>>()))
                 .Callback((Func<DbConnection, Task<int>> x) => x(connectionMock.Object))
                 .ReturnsAsync(0);
+
+            preparingProgress = mock.CreateMock<IProgressReporter>();
+            archivingProgress = mock.CreateMock<IProgressReporter>();
+            filterProgress = mock.CreateMock<IProgressReporter>();
+
+            var progressProvider = mock.FromFactory<IAsyncMessageHelper>()
+                .Mock(x => x.CreateProgressProvider());
+
+            progressProvider.Setup(x => x.AddItem("Preparing archive")).Returns(preparingProgress);
+            progressProvider.Setup(x => x.AddItem("Archiving orders")).Returns(archivingProgress);
+            progressProvider.Setup(x => x.AddItem("Regenerating filters")).Returns(filterProgress);
         }
 
         [Fact]
-        public async Task Test()
+        public async Task Archive_DelegatesToOrderArchiveDataAccess()
         {
             await testObject.Archive(DateTime.Now);
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
                         It.IsAny<DbTransaction>(),
-                        It.Is<IProgressReporter>(p => p.Name == "Preparing archive"),
+                        preparingProgress.Object,
                         AnyString),
                     Times.Once);
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
                         It.IsAny<DbTransaction>(),
-                        It.Is<IProgressReporter>(p => p.Name == "Archiving orders"),
+                        archivingProgress.Object,
                         AnyString),
                     Times.Once);
+        }
+
+        [Fact]
+        public async Task Archive_DelegatesToFilterHelper()
+        {
+            await testObject.Archive(DateTime.Now);
+
+            mock.Mock<IFilterHelper>().Verify(x => x.RegenerateFilters(It.IsAny<DbConnection>()));
+        }
+
+        [Fact]
+        public async Task Archive_CallsFailedOnAllProgress_WhenArchiveFails()
+        {
+            var ex = new ORMException();
+
+            mock.Mock<IOrderArchiveDataAccess>()
+                .Setup(x => x.WithSingleUserConnectionAsync<int>(It.IsAny<Func<DbConnection, Task<int>>>()))
+                .ThrowsAsync(ex);
+
+            await testObject.Archive(DateTime.Now).Recover(e => Unit.Default);
+
+            preparingProgress.Verify(x => x.Failed(ex));
+            archivingProgress.Verify(x => x.Failed(ex));
+            filterProgress.Verify(x => x.Failed(ex));
         }
 
         public void Dispose()
