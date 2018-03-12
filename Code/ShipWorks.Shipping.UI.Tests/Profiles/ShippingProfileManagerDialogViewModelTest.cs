@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity();
             var profile = CreateShippingProfile(profileEntity, shortcut);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = Hotkey.CtrlShiftD };
             var profile = CreateShippingProfile(profileEntity, shortcut);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity();
             var profile = CreateShippingProfile(profileEntity, shortcut);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -77,30 +77,12 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
             Assert.Equal(1, testObject.ShippingProfiles.Count());
             Assert.Equal(string.Empty, testObject.ShippingProfiles.Single().ShortcutKey);
-        }
-
-        [Fact]
-        public void Constructor_ShippingProfilesDoesNotContainNone()
-        {
-            var profileEntity = new ShippingProfileEntity()
-            {
-                ShippingProfileID = 42, ShipmentType = ShipmentTypeCode.None
-            };
-            
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
-            var profile = CreateShippingProfile(profileEntity, shortcut);
-            
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
-
-            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-            
-            Assert.Empty(testObject.ShippingProfiles);
         }
 
         [Fact]
@@ -115,7 +97,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
@@ -134,58 +116,13 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile> { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile> { profile });
 
             mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.BestRate });
             
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
             Assert.Equal(1, testObject.ShippingProfiles.Count);
-        }
-        
-        [Fact]
-        public void Constructor_ShippingProfilesDoesNotContainBestRate_WhenShipmentTypeNotAllowed()
-        {
-            var profileEntity = new ShippingProfileEntity()
-            {
-                ShippingProfileID = 42,
-                ShipmentType = ShipmentTypeCode.BestRate
-            };
-
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
-            var profile = CreateShippingProfile(profileEntity, shortcut);
-
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
-
-            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes).Returns(new[] { ShipmentTypeCode.Usps });
-            
-            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-
-            Assert.Empty(testObject.ShippingProfiles);
-        }
-
-        [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, 1)]
-        [InlineData(ShipmentTypeCode.Asendia, 0)]
-        public void Constructor_ShippingProfileContainsShipmentType_WhenShipmentTypeConfigured(ShipmentTypeCode configuredType, int expectedShipmentProfileCount)
-        {
-            var profileEntity = new ShippingProfileEntity()
-            {
-                ShippingProfileID = 42,
-                ShipmentType = ShipmentTypeCode.Amazon
-            };
-
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
-            var profile = CreateShippingProfile(profileEntity, shortcut);
-
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
-
-            mock.Mock<IShipmentTypeManager>().SetupGet(s => s.ConfiguredShipmentTypeCodes)
-                .Returns(new[] { configuredType });
-            
-            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-
-            Assert.Equal(expectedShipmentProfileCount, testObject.ShippingProfiles.Count);
         }
 
         [Fact]
@@ -194,7 +131,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
             var profileEntity = new ShippingProfileEntity();
             var profile = CreateShippingProfile(profileEntity, null);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
             testObject.SelectedShippingProfile = profile;
@@ -211,7 +148,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             var profileEntity = new ShippingProfileEntity();
             var profile = CreateShippingProfile(profileEntity, null);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
             testObject.SelectedShippingProfile = profile;

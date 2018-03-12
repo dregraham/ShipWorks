@@ -13,17 +13,15 @@ namespace ShipWorks.Templates.Printing
     {
         private readonly IPrintJobFactory printJobFactory;
         private readonly IEnumerable<IShippingProfile> shippingProfiles;
-        private readonly IWin32Window owner;
         private const string htmlContent = "<html><head><title></title></head><body>{{BARCODEDATA}}</body></html>";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BarcodePrintJob(IPrintJobFactory printJobFactory, IEnumerable<IShippingProfile> shippingProfiles, IWin32Window owner)
+        public BarcodePrintJob(IPrintJobFactory printJobFactory, IEnumerable<IShippingProfile> shippingProfiles)
         {
             this.printJobFactory = printJobFactory;
             this.shippingProfiles = shippingProfiles;
-            this.owner = owner;
         }
         
         /// <summary>
@@ -43,11 +41,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Preview the barcode print job
         /// </summary>
-        public void PreviewAsync(Form parent)
-        {
-            IPrintJob job = printJobFactory.CreatePrintJob(CreateTemplateResults());
-
-            job.PreviewAsync((Form)owner);
-        }
+        public void PreviewAsync(Form parent) =>
+            printJobFactory.CreatePrintJob(CreateTemplateResults()).PreviewAsync(parent);
     }
 }

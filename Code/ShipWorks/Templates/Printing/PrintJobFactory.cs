@@ -12,21 +12,11 @@ namespace ShipWorks.Templates.Printing
     [Component]
     public class PrintJobFactory : IPrintJobFactory
     {
-        private readonly IWin32Window owner;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public PrintJobFactory(IWin32Window owner)
-        {
-            this.owner = owner;
-        }
-
         /// <summary>
         /// Create a barcode print job
         /// </summary>
         public IPrintJob CreateBarcodePrintJob(IEnumerable<IShippingProfile> shippingProfiles) => 
-            new BarcodePrintJob(this, shippingProfiles, owner);
+            new BarcodePrintJob(this, shippingProfiles);
 
         /// <summary>
         /// Crate a print job with the given template result

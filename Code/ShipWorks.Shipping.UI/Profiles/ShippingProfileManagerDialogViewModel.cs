@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -21,8 +20,8 @@ namespace ShipWorks.Shipping.UI.Profiles
     public class ShippingProfileManagerDialogViewModel : IShippingProfileManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IPrintJobFactory printJobFactory;
+        private readonly IWin32Window owner;
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private IShippingProfile selectedShippingProfile;
@@ -37,16 +36,16 @@ namespace ShipWorks.Shipping.UI.Profiles
         public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
             Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
             IMessageHelper messageHelper,
-            IShipmentTypeManager shipmentTypeManager,
-            IPrintJobFactory printJobFactory)
+            IPrintJobFactory printJobFactory,
+            IWin32Window owner)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.shippingProfileService = shippingProfileService;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
             this.messageHelper = messageHelper;
-            this.shipmentTypeManager = shipmentTypeManager;
             this.printJobFactory = printJobFactory;
+            this.owner = owner;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
             DeleteCommand = new RelayCommand(Delete,
@@ -54,28 +53,14 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             PrintBarcodesCommand = new RelayCommand(PrintBarcodes);
 
-            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetAll()
-                .Where(IncludeProfileInGrid));
+            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetConfiguredShipmentTypeProfiles());
         }
 
         /// <summary>
         /// Print the barcodes
         /// </summary>
-        private void PrintBarcodes()
-        {
-            printJobFactory.CreateBarcodePrintJob(ShippingProfiles).PreviewAsync(null);
-        }
-        
-        /// <summary>
-        /// Returns true if should show in grid
-        /// </summary>
-        private bool IncludeProfileInGrid(IShippingProfile shippingProfile)
-        {
-            ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
-            
-            // Return true if glbal profile or the shipment type is configured
-            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
-        }
+        private void PrintBarcodes() =>
+            printJobFactory.CreateBarcodePrintJob(ShippingProfiles).PreviewAsync((Form) owner);
 
         /// <summary>
         /// Command to add a new profile

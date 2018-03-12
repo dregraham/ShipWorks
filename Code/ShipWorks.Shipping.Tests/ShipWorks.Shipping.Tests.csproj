@@ -407,6 +407,7 @@
     <Compile Include="Carriers\Other\OtherLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
+    <Compile Include="Services\ShippingProfileRepositoryTest.cs" />
     <Compile Include="Services\ShippingProfileServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
