@@ -13,7 +13,7 @@ namespace ShipWorks.Templates.Printing
     {
         private readonly IPrintJobFactory printJobFactory;
         private readonly IEnumerable<IShippingProfile> shippingProfiles;
-        private const string htmlContent = "<html><head><title></title></head><body>{{BARCODEDATA}}</body></html>";
+        private const string HTMLContent = "<html><head><title></title></head><body>{{BARCODEDATA}}</body></html>";
 
         /// <summary>
         /// Constructor
@@ -25,6 +25,12 @@ namespace ShipWorks.Templates.Printing
         }
         
         /// <summary>
+        /// Preview the barcode print job
+        /// </summary>
+        public void PreviewAsync(Form parent) =>
+            printJobFactory.CreatePrintJob(CreateTemplateResults()).PreviewAsync(parent);
+
+        /// <summary>
         /// Create a list of template results to display 
         /// </summary>
         private IList<TemplateResult> CreateTemplateResults()
@@ -35,13 +41,10 @@ namespace ShipWorks.Templates.Printing
                 builder.AppendLine($"Barcode:{profile.ShortcutKey}");
             }
 
-            return new List<TemplateResult>() { new TemplateResult(null, htmlContent.Replace("{{BARCODEDATA}}", builder.ToString())) };
+            return new List<TemplateResult>()
+            {
+                new TemplateResult(null, HTMLContent.Replace("{{BARCODEDATA}}", builder.ToString()))
+            };
         }
-
-        /// <summary>
-        /// Preview the barcode print job
-        /// </summary>
-        public void PreviewAsync(Form parent) =>
-            printJobFactory.CreatePrintJob(CreateTemplateResults()).PreviewAsync(parent);
     }
 }
