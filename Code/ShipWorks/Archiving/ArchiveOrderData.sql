@@ -277,6 +277,7 @@ BEGIN
 	exec PurgeEntities 'NetworkSolutionsOrderSearch', 'OrderID', 'NetworkSolutionsOrderSearchID'
 	exec PurgeEntities 'OrderMotionOrderSearch', 'OrderID', 'OrderMotionOrderSearchID'
 	exec PurgeEntities 'PayPalOrderSearch', 'OrderID', 'PayPalOrderSearchID'
+	exec PurgeEntities 'ProStoresOrderSearchEntity', 'OrderID', 'ProStoresOrderSearchID'
 	exec PurgeEntities 'SearsOrderSearch', 'OrderID', 'SearsOrderSearchID'
 	exec PurgeEntities 'ShopifyOrderSearch', 'OrderID', 'ShopifyOrderSearchID'
 	exec PurgeEntities 'ThreeDCartOrderSearch', 'OrderID', 'ThreeDCartOrderSearchID'

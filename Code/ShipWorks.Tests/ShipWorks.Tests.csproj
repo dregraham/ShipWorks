@@ -296,6 +296,7 @@
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactoryTest.cs" />
     <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
+    <Compile Include="Archiving\OrderArchiveSqlGeneratorTest.cs" />
     <Compile Include="Archiving\OrderArchiveOrchestratorTest.cs" />
     <Compile Include="Archiving\OrderArchiverTest.cs" />
     <Compile Include="Common\KeyboardShortcuts\KeyboardShortcutKeyFilterTest.cs" />

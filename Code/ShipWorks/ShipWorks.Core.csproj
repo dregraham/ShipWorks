@@ -10556,7 +10556,7 @@
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
     <EmbeddedResource Include="Archiving\CopyDatabase.sql" />
-    <Content Include="Archiving\ArchiveOrderData.sql" />
+    <EmbeddedResource Include="Archiving\ArchiveOrderData.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
