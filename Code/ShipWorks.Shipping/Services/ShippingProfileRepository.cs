@@ -13,6 +13,9 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
 {
+    /// <summary>
+    /// Repository for ShippingProfiles.
+    /// </summary>
     [Component]
     public class ShippingProfileRepository : IShippingProfileRepository
     {
@@ -22,6 +25,9 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingProfileFactory shippingProfileFactory;
         private readonly ILog log;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingProfileRepository(IShippingProfileManager profileManager, 
             IShortcutManager shortcutManager, 
             ISqlAdapterFactory sqlAdapterFactory, 
@@ -32,7 +38,7 @@ namespace ShipWorks.Shipping.Services
             this.shortcutManager = shortcutManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.shippingProfileFactory = shippingProfileFactory;
-            this.log = createLogger(GetType());
+            log = createLogger(GetType());
         }
 
         /// <summary>
