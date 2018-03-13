@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -64,6 +67,20 @@ namespace ShipWorks.Stores.Orders.Archive
                 await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                 progressReporter.PercentComplete = 100;
                 progressReporter.Completed();
+            }
+        }
+
+        /// <summary>
+        /// Get count of orders that will be archived
+        /// </summary>
+        public async Task<long> GetCountOfOrdersToArchive(DateTime archiveDate)
+        {
+            var queryFactory = new QueryFactory();
+            var query = queryFactory.Order.Where(OrderFields.OrderDate < archiveDate.Date).Select(OrderFields.OrderID.CountBig());
+
+            using (var sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
             }
         }
 

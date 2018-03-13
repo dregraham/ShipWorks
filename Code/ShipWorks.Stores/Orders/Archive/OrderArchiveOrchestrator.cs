@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Orders.Archive.Errors;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -17,16 +17,20 @@ namespace ShipWorks.Stores.Orders.Archive
     {
         private readonly IOrderArchiver archiver;
         private readonly ISecurityContext userSecurity;
-        private readonly IDateTimeProvider dateTimeProvider;
         private readonly IAsyncMessageHelper messageHelper;
+        private readonly IOrderArchiveViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderArchiveOrchestrator(IOrderArchiver archiver, ISecurityContext userSecurity, IDateTimeProvider dateTimeProvider, IAsyncMessageHelper messageHelper)
+        public OrderArchiveOrchestrator(
+            IOrderArchiver archiver,
+            ISecurityContext userSecurity,
+            IAsyncMessageHelper messageHelper,
+            IOrderArchiveViewModel viewModel)
         {
             this.messageHelper = messageHelper;
-            this.dateTimeProvider = dateTimeProvider;
+            this.viewModel = viewModel;
             this.userSecurity = userSecurity;
             this.archiver = archiver;
         }
@@ -37,10 +41,23 @@ namespace ShipWorks.Stores.Orders.Archive
         public Task<Unit> Archive()
         {
             return userSecurity.RequestPermission(PermissionType.DatabaseArchive, null)
-                .Bind(() => archiver.Archive(dateTimeProvider.Now.Subtract(TimeSpan.FromDays(90))))
-                .Do(
-                    x => messageHelper.ShowMessage("Archive finished"),
-                    ex => messageHelper.ShowError(ex.Message));
+                .Bind(viewModel.GetArchiveDateFromUser)
+                .Bind(archiver.Archive)
+                .Do(DisplaySuccess, DisplayError);
         }
+
+        /// <summary>
+        /// Display a success message
+        /// </summary>
+        private Task DisplaySuccess(Unit _) =>
+            messageHelper.ShowMessage("Archive finished");
+
+        /// <summary>
+        /// Display an error
+        /// </summary>
+        private Task DisplayError(Exception ex) =>
+            ex == Error.Canceled ?
+                Task.CompletedTask :
+                messageHelper.ShowError(ex.Message);
     }
 }

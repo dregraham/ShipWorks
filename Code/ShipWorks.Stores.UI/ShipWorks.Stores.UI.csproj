@@ -143,6 +143,10 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Orders\Archive\DesignModeOrderArchiveViewModel.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveDialog.xaml.cs">
+      <DependentUpon>OrderArchiveDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Orders\Split\DesignModeOrderSplitChargeViewModel.cs" />
     <Compile Include="Orders\Split\DesignModeOrderSplitItemViewModel.cs" />
     <Compile Include="Orders\Split\DesignModeOrderSplitViewModel.cs" />
@@ -711,6 +715,10 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Orders\Archive\OrderArchiveDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Orders\Split\OrderSplitCharge.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

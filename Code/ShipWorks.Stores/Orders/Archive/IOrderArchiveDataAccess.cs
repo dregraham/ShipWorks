@@ -25,5 +25,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Execute a block of sql on the given DbConnection
         /// </summary>
         Task ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string commandText);
+
+        /// <summary>
+        /// Get count of orders that will be archived
+        /// </summary>
+        Task<long> GetCountOfOrdersToArchive(DateTime archiveDate);
     }
 }
