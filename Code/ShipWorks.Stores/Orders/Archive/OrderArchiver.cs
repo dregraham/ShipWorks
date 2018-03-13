@@ -64,11 +64,11 @@ namespace ShipWorks.Stores.Orders.Archive
 
             try
             {
-                using (var foo = messageHelper.ShowProgressDialog(
+                using (var progressDialog = await messageHelper.ShowProgressDialog(
                     "Archive order and shipment data",
                     "ShipWorks is archiving your orders",
                     progressProvider,
-                    TimeSpan.Zero))
+                    TimeSpan.Zero).ConfigureAwait(true))
                 {
                     try
                     {
