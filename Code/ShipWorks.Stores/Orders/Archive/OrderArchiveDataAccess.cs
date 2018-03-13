@@ -2,9 +2,11 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reactive.Disposables;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users.Audit;
 
@@ -16,8 +18,10 @@ namespace ShipWorks.Stores.Orders.Archive
     [Component]
     public class OrderArchiveDataAccess : IOrderArchiveDataAccess
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(OrderArchiveDataAccess));
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly int commandTimeout = int.MaxValue;
+        private bool isRestore = false;
 
         /// <summary>
         /// Constructor
@@ -55,8 +59,10 @@ namespace ShipWorks.Stores.Orders.Archive
                 command.CommandTimeout = commandTimeout;
 
                 progressReporter.Starting();
+                progressReporter.PercentComplete = 0;
                 command.CommandText = commandText;
                 await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                progressReporter.PercentComplete = 100;
                 progressReporter.Completed();
             }
         }
@@ -68,7 +74,7 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             if (connection is SqlConnection sqlConnection)
             {
-                void infoHandler(object sender, SqlInfoMessageEventArgs e) => progressReporter.Detail = e.Message;
+                void infoHandler(object sender, SqlInfoMessageEventArgs e) => UpdateProgress(progressReporter, e.Message);
 
                 sqlConnection.FireInfoMessageEventOnUserErrors = true;
                 sqlConnection.InfoMessage += infoHandler;
@@ -77,6 +83,39 @@ namespace ShipWorks.Stores.Orders.Archive
             }
 
             return Disposable.Empty;
+        }
+
+        /// <summary>
+        /// Handle SQL Info Messages and update progress as needed
+        /// </summary>
+        private void UpdateProgress(IProgressReporter progressReporter, string message)
+        {
+            log.Info($"OrderArchive: UpdateProgress SQL Message - {message}");
+
+            message = message.Trim();
+
+            if (message.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0)
+            {
+                if (int.TryParse(Regex.Match(message, "[0-9]{0,3}").Value, out int archiveDatabasePercentComplete))
+                {
+                    progressReporter.PercentComplete = (isRestore ? 50 : 0) + (archiveDatabasePercentComplete / 2);
+                }
+            }
+            else if (message.IndexOf("BACKUP DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                isRestore = true;
+            }
+            else if (message.IndexOf("pages for database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                     message.IndexOf("The backup set", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                     message.IndexOf("Processed ", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                     message.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                // Nothing to do for these, just continue.   
+            }
+            else
+            {
+                progressReporter.Detail = message;
+            }
         }
 
         /// <summary>

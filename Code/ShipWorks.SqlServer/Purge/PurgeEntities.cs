@@ -111,13 +111,12 @@ BEGIN
 	INSERT INTO #DeletePurgeBatch (EntityID)
 		SELECT DISTINCT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT EntityID FROM [EntityIDsToDelete] with (nolock))
 			
-	print 'Deleting from @tableName@'
+    RAISERROR ('Archiving data from @tableName@', 0, 1) WITH NOWAIT
 	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM #DeletePurgeBatch)
 				
 	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from #DeletePurgeBatch);
 
 	SET @totalSeconds = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
-	PRINT 'TotalSeconds: ' + CONVERT(NVARCHAR(50), @totalSeconds)
 		
     -- Allow SQL Server write it's transaction buffer to disk.  This helps minimize the final log size.
 	CHECKPOINT;

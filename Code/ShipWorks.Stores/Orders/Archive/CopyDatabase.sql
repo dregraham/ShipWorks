@@ -74,7 +74,7 @@ BEGIN
 			WITH  FILE = 1,  
 			MOVE @SourceDataName TO @DestinationDatabaseDataPathAndFileName,  
 			MOVE @SourceLogName  TO @DestinationDatabaseLogPathAndFileName,  
-			NOUNLOAD,  REPLACE,  STATS = 5;
+			NOUNLOAD,  REPLACE,  STATS = 10;
 	END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMsg nvarchar(500)
