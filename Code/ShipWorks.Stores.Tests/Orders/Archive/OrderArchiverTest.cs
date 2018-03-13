@@ -4,12 +4,10 @@ using System.Data.Common;
 using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
 using Moq.Protected;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
@@ -84,22 +82,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             await testObject.Archive(DateTime.Now);
 
             mock.Mock<IFilterHelper>().Verify(x => x.RegenerateFilters(It.IsAny<DbConnection>()));
-        }
-
-        [Fact]
-        public async Task Archive_CallsFailedOnAllProgress_WhenArchiveFails()
-        {
-            var ex = new ORMException();
-
-            mock.Mock<IOrderArchiveDataAccess>()
-                .Setup(x => x.WithSingleUserConnectionAsync<Unit>(It.IsAny<Func<DbConnection, Task<Unit>>>()))
-                .ThrowsAsync(ex);
-
-            await testObject.Archive(DateTime.Now).Recover(e => Unit.Default);
-
-            preparingProgress.Verify(x => x.Failed(ex));
-            archivingProgress.Verify(x => x.Failed(ex));
-            filterProgress.Verify(x => x.Failed(ex));
         }
 
         public void Dispose()
