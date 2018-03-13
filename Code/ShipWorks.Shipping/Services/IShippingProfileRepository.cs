@@ -28,10 +28,5 @@ namespace ShipWorks.Shipping.Services
         /// Save the ShippingProfile and its children 
         /// </summary>
         Result Save(IShippingProfile shippingProfile);
-
-        /// <summary>
-        /// Create a new shipping profile
-        /// </summary>
-        IShippingProfile CreateNewShippingProfile();
     }
 }

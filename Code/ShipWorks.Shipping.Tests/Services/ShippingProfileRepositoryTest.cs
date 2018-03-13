@@ -27,14 +27,6 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void Create_DelegatesToShippingProfileFactoryFuncWithNewEntities()
-        {
-            mock.Create<ShippingProfileRepository>().CreateNewShippingProfile();
-
-            mock.Mock<IShippingProfileFactory>().Verify(f => f.Create(), Times.Once);
-        }
-
-        [Fact]
         public void Delete_DelegatesToManager()
         {
 

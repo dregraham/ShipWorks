@@ -71,14 +71,7 @@ namespace ShipWorks.Shipping.Services
 
             if (profile != null)
             {
-                ShortcutEntity shortcut = shortcutManager.Shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntityId) ??
-                    new ShortcutEntity
-                    {
-                        Action = (int) KeyboardShortcutCommand.ApplyProfile,
-                        RelatedObjectID = shippingProfileEntityId
-                    };
-
-                fetchedShippingProfile = shippingProfileFactory.Create(profile, shortcut);
+                fetchedShippingProfile = CreateShippingProfile(profile, shortcutManager.Shortcuts);
             }
 
             return fetchedShippingProfile;
@@ -138,12 +131,6 @@ namespace ShipWorks.Shipping.Services
 
             return shippingProfileFactory.Create(shippingProfileEntity, shortcutEntity);
         }
-
-        /// <summary>
-        /// Create a new shipping profile
-        /// </summary>
-        public IShippingProfile CreateNewShippingProfile() =>
-            shippingProfileFactory.Create();
             
         /// <summary>
         /// Delete the ShippingProfile and its children

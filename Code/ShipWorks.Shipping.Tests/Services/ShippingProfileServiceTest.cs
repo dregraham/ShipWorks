@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -137,10 +138,10 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void CreateEmptyShippingProfile_DelegatesToShippingProfileRepository()
+        public void CreateEmptyShippingProfile_DelegatesToShippingProfileFactory()
         {
             var testObject = mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
-            mock.Mock<IShippingProfileRepository>().Verify(s => s.CreateNewShippingProfile());
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(), Times.Once);
         }
 
         public void Dispose()
