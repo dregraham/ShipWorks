@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<IShippingProfile> GetAll()
         {
-            IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts;
+            IEnumerable<ShortcutEntity> shortcuts = shortcutManager.Shortcuts.ToList();
             IEnumerable<ShippingProfileEntity> profiles = profileManager.Profiles;
 
             List<IShippingProfile> shippingProfiles = new List<IShippingProfile>();
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Services
                 catch (ORMConcurrencyException ex)
                 {
                     profileManager.InitializeForCurrentSession();
-                    result = Result.FromError("Your changes cannot be saved because another use has deleted the profile.");
+                    result = Result.FromError("Your changes cannot be saved because another user has deleted the profile.");
                     log.Error("Error saving shippingProfile", ex);
                 }
                 catch (ORMQueryExecutionException ex)

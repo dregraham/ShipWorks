@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var result = testObject.Save(shippingProfile);
 
-            Assert.Equal("Your changes cannot be saved because another use has deleted the profile.", result.Message);
+            Assert.Equal("Your changes cannot be saved because another user has deleted the profile.", result.Message);
         }
 
         [Fact]
