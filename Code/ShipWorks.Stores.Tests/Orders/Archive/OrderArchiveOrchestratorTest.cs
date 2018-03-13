@@ -6,13 +6,13 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.Archiving;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Tests.Archiving
+namespace ShipWorks.Stores.Tests.Orders.Archive
 {
     public class OrderArchiveOrchestratorTest : IDisposable
     {

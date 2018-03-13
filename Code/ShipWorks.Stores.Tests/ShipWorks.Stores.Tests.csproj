@@ -23,6 +23,9 @@
     <None Remove="obj\**" />
   </ItemGroup>
  <ItemGroup>
+<None Remove="Orders\Archive\OrderArchiveOrchestratorTest.cs" />
+<None Remove="Orders\Archive\OrderArchiverTest.cs" />
+<None Remove="Orders\Archive\OrderArchiveSqlGeneratorTest.cs" />
 <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
   </ItemGroup>
   <ItemGroup>

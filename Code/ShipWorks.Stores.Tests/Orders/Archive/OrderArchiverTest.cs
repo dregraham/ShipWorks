@@ -10,13 +10,13 @@ using Interapptive.Shared.UI;
 using Moq;
 using Moq.Protected;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Archiving;
 using ShipWorks.Filters;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Tests.Archiving
+namespace ShipWorks.Stores.Tests.Orders.Archive
 {
     public class OrderArchiverTest : IDisposable
     {

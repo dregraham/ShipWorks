@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Orchestrate the order archiving process

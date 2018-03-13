@@ -2,7 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Class used for generating SQL for order archiving
@@ -15,7 +15,7 @@ namespace ShipWorks.Archiving
         /// </summary>
         public string CopyDatabaseSql()
         {
-            return ResourceUtility.ReadString("ShipWorks.Archiving.CopyDatabase.sql");
+            return ResourceUtility.ReadString("ShipWorks.Stores.Orders.Archive.CopyDatabase.sql");
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace ShipWorks.Archiving
         /// </summary>
         public string ArchiveOrderDataSql(DateTime maxOrderDate)
         {
-            return string.Format(ResourceUtility.ReadString("ShipWorks.Archiving.ArchiveOrderData.sql"),
+            return string.Format(ResourceUtility.ReadString("ShipWorks.Stores.Orders.Archive.ArchiveOrderData.sql"),
                 maxOrderDate.Date.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }

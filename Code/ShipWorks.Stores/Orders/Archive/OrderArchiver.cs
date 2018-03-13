@@ -9,7 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Archive orders

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Tests.Archiving
+namespace ShipWorks.Stores.Tests.Orders.Archive
 {
     public class OrderArchiveSqlGeneratorTest : IDisposable
     {
@@ -62,6 +63,7 @@ namespace ShipWorks.Tests.Archiving
         public void ArchiveOrderDataSql_NoNewEntitiesHaveBeenAdded()
         {
             string newEntities = string.Empty;
+            var newEntitiesBuilder = new StringBuilder();
 
             Assembly mscorlib = typeof(AmazonOrderEntity).Assembly;
             foreach (Type type in mscorlib.GetTypes()
@@ -72,9 +74,11 @@ namespace ShipWorks.Tests.Archiving
             {
                 if (!CurrentlySupportedEntities.Contains(type))
                 {
-                    newEntities += $"{type.Name},{Environment.NewLine}";
+                    newEntitiesBuilder.AppendLine($"{type.Name},");
                 }
             }
+
+            newEntities = newEntitiesBuilder.ToString();
 
             if (!newEntities.IsNullOrWhiteSpace())
             {

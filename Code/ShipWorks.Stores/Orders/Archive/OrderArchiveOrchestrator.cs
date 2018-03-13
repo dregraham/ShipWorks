@@ -7,7 +7,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Orchestrate the order archiving process

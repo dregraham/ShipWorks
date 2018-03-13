@@ -8,7 +8,7 @@ using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users.Audit;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Connection manager for order archiving

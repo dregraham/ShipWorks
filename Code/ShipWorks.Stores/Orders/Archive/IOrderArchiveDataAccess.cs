@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Connection manager for order archiving
