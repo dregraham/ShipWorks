@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Templates.Printing
 
             testObject.PreviewAsync(new Form());
 
-            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title></head><body>Barcode:abcd\r\n</body></html>")));
+            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:50px;} td {text-align:center;} .barcode {font-family:Free 3 of 9 Extended;font-size:32pt;}</style></head><body><table><tr><td>  </td></tr><tr><td class='barcode'></td></tr><tr><td>abcd</td></tr></table>\r\n</body></html>")));
 
         }
     }

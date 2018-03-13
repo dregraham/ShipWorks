@@ -13,7 +13,7 @@ namespace ShipWorks.Templates.Printing
     {
         private readonly IPrintJobFactory printJobFactory;
         private readonly IEnumerable<IShippingProfile> shippingProfiles;
-        private const string HTMLContent = "<html><head><title></title></head><body>{{BARCODEDATA}}</body></html>";
+        private const string HTMLContent = "<html><head><title></title><style>body {{font-family:Arial; text-align:center;}}table {{margin-bottom:50px;}} td {{text-align:center;}} .barcode {{font-family:Free 3 of 9 Extended;font-size:32pt;}}</style></head><body>{0}</body></html>";
 
         /// <summary>
         /// Constructor
@@ -38,13 +38,19 @@ namespace ShipWorks.Templates.Printing
             StringBuilder builder = new StringBuilder();
             foreach (IShippingProfile profile in shippingProfiles)
             {
-                builder.AppendLine($"Barcode:{profile.ShortcutKey}");
+                builder.AppendLine(CreateBarcodeElement(profile.ShippingProfileEntity.Name, profile.Shortcut.Barcode, profile.ShortcutKey));
             }
 
             return new List<TemplateResult>()
             {
-                new TemplateResult(null, HTMLContent.Replace("{{BARCODEDATA}}", builder.ToString()))
+                new TemplateResult(null,string.Format(HTMLContent, builder.ToString()))
             };
         }
+
+        /// <summary>
+        /// Create the barcode element
+        /// </summary>
+        private static string CreateBarcodeElement(string name, string barcode, string hotkey) =>
+            $"<table><tr><td> {name} </td></tr><tr><td class='barcode'>{barcode}</td></tr><tr><td>{hotkey}</td></tr></table>";
     }
 }
