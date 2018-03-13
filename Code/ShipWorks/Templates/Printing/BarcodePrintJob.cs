@@ -70,7 +70,8 @@ namespace ShipWorks.Templates.Printing
             StringBuilder builder = new StringBuilder();
             foreach (IShippingProfile profile in shippingProfiles.Where(p => !string.IsNullOrWhiteSpace(p.ShortcutKey) || !string.IsNullOrWhiteSpace(p.Shortcut.Barcode)))
             {
-                builder.AppendLine(CreateBarcodeElement(profile.ShippingProfileEntity.Name, profile.Shortcut.Barcode, profile.ShortcutKey));
+                string barcode = string.IsNullOrWhiteSpace(profile.Shortcut.Barcode) ? string.Empty : $"*{profile.Shortcut.Barcode}*";
+                builder.AppendLine(CreateBarcodeElement(profile.ShippingProfileEntity.Name, barcode, profile.ShortcutKey));
             }
 
             return new List<TemplateResult>()
