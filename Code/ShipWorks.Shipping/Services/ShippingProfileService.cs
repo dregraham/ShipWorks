@@ -19,29 +19,24 @@ namespace ShipWorks.Shipping.Services
         private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingProfileService(IShortcutManager shortcutManager,
             IShippingProfileRepository shippingProfileRepository,
-            Func<Type, ILog> createLogger,
             IShipmentTypeManager shipmentTypeManager)
         {
             this.shortcutManager = shortcutManager;
             this.shippingProfileRepository = shippingProfileRepository;
             this.shipmentTypeManager = shipmentTypeManager;
-            this.log = createLogger(GetType());
         }
 
         /// <summary>
         /// Get the configured shipment types profiles
         /// </summary>
-        public IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles()
-        {
-            return shippingProfileRepository.GetAll().Where(ConfiguredShipmentTypeProfile);
-        }
+        public IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles() => 
+            shippingProfileRepository.GetAll().Where(ConfiguredShipmentTypeProfile);
 
         /// <summary>
         /// Returns true if should show in grid
