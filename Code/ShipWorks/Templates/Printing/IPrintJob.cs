@@ -8,12 +8,18 @@ namespace ShipWorks.Templates.Printing
     public interface IPrintJob
     {
         /// <summary>
+        /// Event for the preview completing
+        /// </summary>
+        event PrintActionCompletedEventHandler PreviewCompleted;
+
+        /// <summary>
         /// Preview the print job
         /// </summary>
         void PreviewAsync(Form parent);
 
-        event PrintActionCompletedEventHandler PreviewCompleted;
-
+        /// <summary>
+        /// Print the print job
+        /// </summary>
         void PrintAsync();
     }
 }
