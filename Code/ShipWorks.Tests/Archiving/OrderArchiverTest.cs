@@ -65,14 +65,14 @@ namespace ShipWorks.Tests.Archiving
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
-                        It.IsAny<DbTransaction>(),
+                        It.IsAny<DbConnection>(),
                         preparingProgress.Object,
                         AnyString),
                     Times.Once);
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
-                        It.IsAny<DbTransaction>(),
+                        It.IsAny<DbConnection>(),
                         archivingProgress.Object,
                         AnyString),
                     Times.Once);

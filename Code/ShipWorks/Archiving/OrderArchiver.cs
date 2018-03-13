@@ -71,14 +71,11 @@ namespace ShipWorks.Archiving
                     {
                         return await connectionManager.WithSingleUserConnectionAsync(async conn =>
                         {
-                            var transaction = conn.BeginTransaction();
-                            var command = conn.CreateCommand();
-                            command.Transaction = transaction;
+                            // Backup/Restore cannot be done in a transaction.
+                            await connectionManager.ExecuteSqlAsync(conn, prepareProgress, sqlGenerator.CopyDatabaseSql()).ConfigureAwait(false);
 
-                            await connectionManager.ExecuteSqlAsync(transaction, prepareProgress, sqlGenerator.CopyDatabaseSql()).ConfigureAwait(false);
-                            await connectionManager.ExecuteSqlAsync(transaction, archiveProgress, sqlGenerator.ArchiveOrderDataSql(cutoffDate)).ConfigureAwait(false);
-
-                            transaction.Commit();
+                            // The archive sql handles the transaction
+                            await connectionManager.ExecuteSqlAsync(conn, archiveProgress, sqlGenerator.ArchiveOrderDataSql(cutoffDate)).ConfigureAwait(false);
 
                             filterProgress.Starting();
                             filterHelper.RegenerateFilters(conn);

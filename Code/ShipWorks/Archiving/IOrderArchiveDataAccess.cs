@@ -22,8 +22,8 @@ namespace ShipWorks.Archiving
         ISqlAdapter CreateSqlAdapter(DbConnection con);
 
         /// <summary>
-        /// Execute a block of sql on the given transaction
+        /// Execute a block of sql on the given DbConnection
         /// </summary>
-        Task ExecuteSqlAsync(DbTransaction transaction, IProgressReporter prepareProgress, string commandText);
+        Task ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string commandText);
     }
 }

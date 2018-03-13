@@ -17,6 +17,7 @@ namespace ShipWorks.Archiving
     public class OrderArchiveDataAccess : IOrderArchiveDataAccess
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly int commandTimeout = int.MaxValue;
 
         /// <summary>
         /// Constructor
@@ -46,12 +47,12 @@ namespace ShipWorks.Archiving
         /// <summary>
         /// Execute a block of sql on the given transaction
         /// </summary>
-        public async Task ExecuteSqlAsync(DbTransaction transaction, IProgressReporter progressReporter, string commandText)
+        public async Task ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
         {
-            using (HandleSqlInfo(transaction.Connection, progressReporter))
+            using (HandleSqlInfo(connection, progressReporter))
             {
-                var command = transaction.Connection.CreateCommand();
-                command.Transaction = transaction;
+                var command = connection.CreateCommand();
+                command.CommandTimeout = commandTimeout;
 
                 progressReporter.Starting();
                 command.CommandText = commandText;

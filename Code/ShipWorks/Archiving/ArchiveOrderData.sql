@@ -22,6 +22,8 @@ SET @SetRecoveryModelOriginalSql =
 	
 EXEC(@SetRecoveryModelSimpleSql)
 
+BEGIN TRAN
+
 SET NOCOUNT ON;
 	
 DECLARE @DisableAllTriggersSql NVARCHAR(MAX) = N'';
@@ -45,7 +47,7 @@ END
 SELECT DISTINCT o.OrderID as 'EntityID'
 INTO    dbo.[OrderIDsToDelete]
 FROM    dbo.[Order] o
-WHERE   o.OrderDate <= '{0}'
+WHERE   o.OrderDate < '{0}'
 ORDER BY o.OrderID
 
 IF NOT EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
@@ -54,7 +56,6 @@ BEGIN
 END
 ELSE
 BEGIN
-
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'ShipmentIDsToDelete')
 	BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
@@ -346,7 +347,10 @@ BEGIN
 	/*************************************/
 	/*   Purge Abandoned Resources       */
 	/*************************************/
-	exec PurgeAbandonedResources @runUntil = null, @olderThan = null
+	exec PurgeAbandonedResources @runUntil = null, @olderThan = NULL
+    
+	/* The "All" Order filter does not get updated by filter regen, so force it's count to be correct. */
+	UPDATE FilterNodeContent SET [Count] = (SELECT COUNT(*) FROM [Order]) WHERE FilterNodeContentID = -26
 
 	/* Cleanup */
 	/* Enable all triggers */
@@ -365,10 +369,6 @@ BEGIN
 	print 'Enable all foreign keys';
 	exec (@EnableAllForeignKeysSql);
 
-	/* Put the database back in its original recovery model */
-	print 'Setting original recovery model';
-	EXEC(@SetRecoveryModelOriginalSql)
-
 	/* Drop id holding tables */
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'OrderIDsToDelete')
 	BEGIN
@@ -385,3 +385,10 @@ BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
 	END
 END	
+
+COMMIT TRAN
+	
+/* THIS MUST BE DONE OUTSIDE THE TRAN!!! */
+/* Put the database back in its original recovery model */
+print 'Setting original recovery model';
+EXEC(@SetRecoveryModelOriginalSql)

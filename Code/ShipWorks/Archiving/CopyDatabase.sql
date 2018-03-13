@@ -9,32 +9,32 @@ DECLARE @ErrorMessage nvarchar(255)
 DECLARE @DatabaseNamePostFix NVARCHAR(20)
 DECLARE @DestinationDatabaseName nvarchar(400)
 
-SELECT @DatabaseNamePostFix = ''_'' + replace(convert(varchar(8),getdate(), 112)+ ''_'' + convert(varchar(8), getdate(), 114), '':'','''');
-SELECT @DestinationDatabaseFilesPath = substring(physical_name, 0, LEN(physical_name) - CHARINDEX(''\'',REVERSE(physical_name)) + 2) FROM sys.database_files WHERE [type] = 0;
+SELECT @DatabaseNamePostFix = '_' + replace(convert(varchar(8),getdate(), 112)+ '_' + convert(varchar(8), getdate(), 114), ':','');
+SELECT @DestinationDatabaseFilesPath = substring(physical_name, 0, LEN(physical_name) - CHARINDEX('\',REVERSE(physical_name)) + 2) FROM sys.database_files WHERE [type] = 0;
 
 SET @SourceDatabaseName = DB_NAME();
 SET @DestinationDatabaseName = @SourceDatabaseName + @DatabaseNamePostFix;
-SET @DestinationDatabaseDataPathAndFileName = @DestinationDatabaseFilesPath + ''\'' + @DestinationDatabaseName + ''.mdf''
-SET @DestinationDatabaseLogPathAndFileName  = @DestinationDatabaseFilesPath + ''\'' + @DestinationDatabaseName + ''_log.ldf''
+SET @DestinationDatabaseDataPathAndFileName = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '.mdf'
+SET @DestinationDatabaseLogPathAndFileName  = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '_log.ldf'
 
 SELECT @SourceDataName = [name] FROM sys.database_files WHERE [type] = 0 /* ROWS */
 SELECT @SourceLogName  = [name] FROM sys.database_files WHERE [type] = 1 /* LOG */
-SELECT @SourceDatabaseBackupPathAndFileName = @DestinationDatabaseFilesPath + ''\'' + @SourceDatabaseName + CONVERT(NVARCHAR(36), newid()) + ''.bak''
-SET @SourceDatabaseBackupPathAndFileName = REPLACE(@SourceDatabaseBackupPathAndFileName, ''\\'', ''\'')
+SELECT @SourceDatabaseBackupPathAndFileName = @DestinationDatabaseFilesPath + '\' + @SourceDatabaseName + CONVERT(NVARCHAR(36), newid()) + '.bak'
+SET @SourceDatabaseBackupPathAndFileName = REPLACE(@SourceDatabaseBackupPathAndFileName, '\\', '\')
 
 IF EXISTS(select * from sys.databases where name = @DestinationDatabaseName)
 BEGIN
-	SET @ErrorMessage = N''The destination database ['' + @DestinationDatabaseName + ''] already exists.  Please choose a different destination database name.'';
+	SET @ErrorMessage = N'The destination database [' + @DestinationDatabaseName + '] already exists.  Please choose a different destination database name.';
 	RAISERROR(@ErrorMessage, 16, 1)
 END	
 ELSE IF EXISTS(select * from sys.master_files where physical_name = @DestinationDatabaseDataPathAndFileName)
 BEGIN
-	SET @ErrorMessage = N''The destination database data file, '' + @DestinationDatabaseDataPathAndFileName + '' already exists.  Please choose a different destination data file location.'';
+	SET @ErrorMessage = N'The destination database data file, ' + @DestinationDatabaseDataPathAndFileName + ' already exists.  Please choose a different destination data file location.';
 	RAISERROR(@ErrorMessage, 16, 1)
 END	
 ELSE IF EXISTS(select * from sys.master_files where physical_name = @DestinationDatabaseLogPathAndFileName)
 BEGIN
-	SET @ErrorMessage = N''The destination database log file '' + @DestinationDatabaseLogPathAndFileName + '' already exists.  Please choose a different destination log file location.'';
+	SET @ErrorMessage = N'The destination database log file ' + @DestinationDatabaseLogPathAndFileName + ' already exists.  Please choose a different destination log file location.';
 	RAISERROR(@ErrorMessage, 16, 1)
 END	
 ELSE 
@@ -42,21 +42,21 @@ BEGIN
 	BEGIN TRY
         DECLARE @EditionTypeId sql_variant
 
-        set @EditionTypeId = serverproperty(''EditionID'')
+        set @EditionTypeId = serverproperty('EditionID')
 
         /* These are Express or Web editions, so no compression */
         if -1592396055 = @EditionTypeId or -133711905 = @EditionTypeId or 1293598313 = @EditionTypeId
 	        BEGIN
 				BACKUP DATABASE @SourceDatabaseName
 					TO  DISK = @SourceDatabaseBackupPathAndFileName 
-					WITH NOFORMAT, INIT,  NAME = N''BackupForArchive'', 
+					WITH NOFORMAT, INIT,  NAME = N'BackupForArchive', 
 					SKIP, NOREWIND, NOUNLOAD, STATS = 10, COPY_ONLY
 	        END
         ELSE
 	        BEGIN
 				BACKUP DATABASE @SourceDatabaseName
 					TO  DISK = @SourceDatabaseBackupPathAndFileName 
-					WITH NOFORMAT, INIT,  NAME = N''BackupForArchive'', 
+					WITH NOFORMAT, INIT,  NAME = N'BackupForArchive', 
 					SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 10, COPY_ONLY;
 	        END
 
@@ -65,7 +65,7 @@ BEGIN
 			from msdb..backupset 
 			where database_name= @SourceDatabaseName
 			  and backup_set_id=(select max(backup_set_id) from msdb..backupset where database_name= @SourceDatabaseName )
-		if @backupSetId is null begin raiserror(N''Verify failed. Backup information for the database was not found.'', 16, 1) end
+		if @backupSetId is null begin raiserror(N'Verify failed. Backup information for the database was not found.', 16, 1) end
 		RESTORE VERIFYONLY FROM  DISK = @SourceDatabaseBackupPathAndFileName WITH  FILE = @backupSetId,  NOUNLOAD,  NOREWIND;
 
 		--USE [master]
