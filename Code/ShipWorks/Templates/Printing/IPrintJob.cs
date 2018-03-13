@@ -11,5 +11,9 @@ namespace ShipWorks.Templates.Printing
         /// Preview the print job
         /// </summary>
         void PreviewAsync(Form parent);
+
+        event PrintActionCompletedEventHandler PreviewCompleted;
+
+        void PrintAsync();
     }
 }
