@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -51,11 +52,17 @@ namespace ShipWorks.Shipping.UI.Profiles
             DeleteCommand = new RelayCommand(Delete,
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
 
-            PrintBarcodesCommand = new RelayCommand(PrintBarcodes);
+            PrintBarcodesCommand = new RelayCommand(PrintBarcodes, AnyShortcutsToPrint);
 
             ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetConfiguredShipmentTypeProfiles());
         }
 
+        /// <summary>
+        /// Are there any shortcuts to print
+        /// </summary>
+        private bool AnyShortcutsToPrint() => 
+            ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Shortcut.Barcode));
+        
         /// <summary>
         /// Print the barcodes
         /// </summary>
