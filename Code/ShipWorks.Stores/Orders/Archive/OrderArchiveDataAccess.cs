@@ -49,6 +49,20 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// Execute a function with a connection in multi user mode
+        /// </summary>
+        public void WithMultiUserConnectionAsync(Action<DbConnection> action)
+        {
+            using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
+            {
+                using (new ExistingConnectionScope())
+                {
+                    action(ExistingConnectionScope.ScopedConnection);
+                }
+            }
+        }
+
+        /// <summary>
         /// Execute a block of sql on the given transaction
         /// </summary>
         public async Task ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)

@@ -17,6 +17,11 @@ namespace ShipWorks.Stores.Orders.Archive
         Task<T> WithSingleUserConnectionAsync<T>(Func<DbConnection, Task<T>> func);
 
         /// <summary>
+        /// Execute an action with a connection in multi user mode
+        /// </summary>
+        void WithMultiUserConnectionAsync(Action<DbConnection> action);
+
+        /// <summary>
         /// Create a SqlAdapter with the given connection
         /// </summary>
         ISqlAdapter CreateSqlAdapter(DbConnection con);

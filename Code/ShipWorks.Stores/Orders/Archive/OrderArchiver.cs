@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -8,7 +6,6 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Filters;
 using ShipWorks.Users;
 
@@ -95,19 +92,19 @@ namespace ShipWorks.Stores.Orders.Archive
                         }).ConfigureAwait(false);
 
                         // We have to regenerate filters outside of a single user connection, otherwise they all get abandoned.
-                        using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
+                        connectionManager.WithMultiUserConnectionAsync(conn =>
                         {
-                            filterProgress.Starting();
-                            filterProgress.Detail = "Regenerating.";
-
-                            using (DbConnection con = SqlSession.Current.OpenConnection())
+                            using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
                             {
-                                filterHelper.RegenerateFilters(con);
-                            }
+                                filterProgress.Starting();
+                                filterProgress.Detail = "Regenerating.";
 
-                            filterProgress.Detail = "Done.";
-                            filterProgress.Completed();
-                        }
+                                filterHelper.RegenerateFilters(conn);
+
+                                filterProgress.Detail = "Done.";
+                                filterProgress.Completed();
+                            }
+                        });
 
                         return Unit.Default;
                     }
