@@ -10,9 +10,19 @@ namespace ShipWorks.Shipping.Profiles
     public interface IShippingProfileService
     {
         /// <summary>
-        /// Get all of the ShippingProfiles
+        /// Create an empty ShippingProfile
         /// </summary>
-        IEnumerable<IShippingProfile> GetAll();
+        IShippingProfile CreateEmptyShippingProfile();
+        
+        /// <summary>
+        /// Get the available hotkeys for the given ShippingProfile
+        /// </summary>
+        IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile);
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles();
 
         /// <summary>
         /// Get the ShippingProfileEntities corrisponding ShippingProfile
@@ -20,23 +30,13 @@ namespace ShipWorks.Shipping.Profiles
         IShippingProfile Get(long shippingProfileEntityId);
 
         /// <summary>
-        /// Create an empty ShippingProfile
-        /// </summary>
-        IShippingProfile CreateEmptyShippingProfile();
-
-        /// <summary>
-        /// Save the ShippingProfile and its children 
-        /// </summary>
-        Result Save(IShippingProfile shippingProfile);
-
-        /// <summary>
         /// Delete the ShippingProfile and its children
         /// </summary>
         Result Delete(IShippingProfile shippingProfile);
 
         /// <summary>
-        /// Get the available hotkeys for the given ShippingProfile
+        /// Save the ShippingProfile and its children
         /// </summary>
-        IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile);
+        Result Save(IShippingProfile shippingProfile);
     }
 }

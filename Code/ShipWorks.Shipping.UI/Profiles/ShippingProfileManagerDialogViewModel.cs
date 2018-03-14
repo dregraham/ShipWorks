@@ -9,9 +9,8 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Templates.Printing;
 
 namespace ShipWorks.Shipping.UI.Profiles
 {
@@ -22,8 +21,8 @@ namespace ShipWorks.Shipping.UI.Profiles
     public class ShippingProfileManagerDialogViewModel : IShippingProfileManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IShippingSettings shippingSettings;
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IPrintJobFactory printJobFactory;
+        private readonly IWin32Window owner;
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private IShippingProfile selectedShippingProfile;
@@ -38,36 +37,37 @@ namespace ShipWorks.Shipping.UI.Profiles
         public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
             Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
             IMessageHelper messageHelper,
-            IShippingSettings shippingSettings,
-            IShipmentTypeManager shipmentTypeManager)
+            IPrintJobFactory printJobFactory,
+            IWin32Window owner)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.shippingProfileService = shippingProfileService;
             this.shippingProfileEditorDialogFactory = shippingProfileEditorDialogFactory;
             this.messageHelper = messageHelper;
-            this.shippingSettings = shippingSettings;
-            this.shipmentTypeManager = shipmentTypeManager;
-
+            this.printJobFactory = printJobFactory;
+            this.owner = owner;
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedShippingProfile != null);
             DeleteCommand = new RelayCommand(Delete,
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
 
-            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetAll()
-                .Where(IncludeProfileInGrid));
+            PrintBarcodesCommand = new RelayCommand(PrintBarcodes, AnyShortcutsToPrint);
+
+            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetConfiguredShipmentTypeProfiles());
         }
 
         /// <summary>
-        /// Returns true if should show in grid
+        /// Are there any shortcuts to print
         /// </summary>
-        private bool IncludeProfileInGrid(IShippingProfile shippingProfile)
-        {
-            ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
-            
-            // Return true if glbal profile or the shipment type is configured
-            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
-        }
+        private bool AnyShortcutsToPrint() => 
+            ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Shortcut.Barcode));
+        
+        /// <summary>
+        /// Print the barcodes
+        /// </summary>
+        private void PrintBarcodes() =>
+            printJobFactory.CreateBarcodePrintJob(ShippingProfiles).PreviewAsync((Form) owner);
 
         /// <summary>
         /// Command to add a new profile
@@ -86,6 +86,12 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand DeleteCommand { get; }
+
+        /// <summary>
+        /// Command to print the barcodes
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand PrintBarcodesCommand { get; }
 
         /// <summary>
         /// Collection of profiles

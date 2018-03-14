@@ -113,6 +113,7 @@
                     Style="{StaticResource Button.Delete}">                
             </Button>
             <Button Grid.Row="3" Margin="0 10 0 0"
+                    Command="{Binding PrintBarcodesCommand}"
                     Style="{StaticResource Button.PrintBarcodes}">
             </Button>
             <Button Grid.Row="4" 

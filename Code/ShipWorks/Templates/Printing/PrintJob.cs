@@ -26,7 +26,7 @@ namespace ShipWorks.Templates.Printing
     /// <summary>
     /// Represents a print job that ShipWorks needs to fulfill.
     /// </summary>
-    public class PrintJob
+    public class PrintJob : IPrintJob
     {
         static readonly ILog log = LogManager.GetLogger(typeof(PrintJob));
 
@@ -151,6 +151,20 @@ namespace ShipWorks.Templates.Printing
             job.templateResults = templateResults.ToList();
 
             InitializeJob(job, template);
+
+            return job;
+        }
+
+        /// <summary>
+        /// Create a new PrintJob based on the default settings from the given set of already processed input results
+        /// </summary>
+        public static PrintJob Create(IList<TemplateResult> templateResults)
+        {
+            PrintJob job = new PrintJob();
+            job.templateResults = templateResults.ToList();
+
+            job.jobSettings = new PrintJobSettings(new PrintJobPageSettings(), false);
+            job.template = new TemplateEntity();
 
             return job;
         }
