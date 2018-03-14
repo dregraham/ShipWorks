@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
-        IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value);
+        IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentType, bool includeDefaultProfiles);
 
         /// <summary>
         /// Get profiles for the given shipment type

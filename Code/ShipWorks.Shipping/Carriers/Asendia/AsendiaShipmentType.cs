@@ -14,11 +14,9 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -43,7 +41,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Constructor
         /// </summary>
-        public AsendiaShipmentType(ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity> accountRepository, IShipEngineWebClient shipEngineWebClient, IShipEngineTrackingResultFactory trackingResultFactory, IShippingManager shippingManager)
+        public AsendiaShipmentType(ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity> accountRepository,
+            IShipEngineWebClient shipEngineWebClient,
+            IShipEngineTrackingResultFactory trackingResultFactory,
+            IShippingManager shippingManager)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
@@ -267,46 +268,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendia.NonMachinable = false;           
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            AsendiaShipmentEntity asendiaShipment = shipment.Asendia;
-            IAsendiaProfileEntity asendiaProfile = profile.Asendia;
-
-            long? accountID = (asendiaProfile.AsendiaAccountID == 0 && accountRepository.AccountsReadOnly.Any()) ?
-                accountRepository.AccountsReadOnly.First().AsendiaAccountID :
-                asendiaProfile.AsendiaAccountID;
-
-            ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
-            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
-
-            IPackageProfileEntity packageProfile = profile.Packages.FirstOrDefault();
-            if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))
-            {
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
-
-            UpdateTotalWeight(shipment);
-
-            UpdateDynamicShipmentData(shipment);
-        }
-
-        /// <summary>
+        
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

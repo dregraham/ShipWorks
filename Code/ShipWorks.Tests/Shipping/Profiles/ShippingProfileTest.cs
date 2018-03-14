@@ -1,37 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.UI.Tests.Profiles
+namespace ShipWorks.Tests.Shipping.Profiles
 {
     public class ShippingProfileTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly Mock<IShippingProfileManager> shippingProfileManagerMock;
+        private readonly Mock<IShortcutManager> shortcutManagerMock;
 
         public ShippingProfileTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            shippingProfileManagerMock = mock.Mock<IShippingProfileManager>();
+            shortcutManagerMock = mock.Mock<IShortcutManager>();
+        }
+
+        [Fact]
+        public void Constructor_LoadProfileDataIsCalledWithTrue_WhenProfileEntityPassedIn()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity();
+            ShortcutEntity shortcut = new ShortcutEntity();
+
+            CreateShippingProfile(profile, shortcut);
+            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Once);
+        }
+
+        [Fact]
+        public void Constructor_LoadProfileDataIsCalledWithFalse_WhenNoProfileEntityPassedIn()
+        {
+            var loaderMock = mock.Mock<IShippingProfileLoader>();
+
+            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object);
+            
+            loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
         }
 
         [Fact]
         public void ShippingProfile_ShipmentTypeDescriptionIsShipmentTypeDescription()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity()
+            ShippingProfileEntity profile = new ShippingProfileEntity
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
 
-            ShortcutEntity shortcut = new ShortcutEntity()
+            ShortcutEntity shortcut = new ShortcutEntity
             {
                 Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
             };
@@ -43,12 +65,12 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void ShippingProfile_ShortcutKey_IsShortcutKeyDescription()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity()
+            ShippingProfileEntity profile = new ShippingProfileEntity
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
 
-            ShortcutEntity shortcut = new ShortcutEntity()
+            ShortcutEntity shortcut = new ShortcutEntity
             {
                 Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
             };
@@ -60,7 +82,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void ShippingProfile_ShortcutKeyIsBlank_WhenShortcutIsNull()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity()
+            ShippingProfileEntity profile = new ShippingProfileEntity
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
@@ -72,12 +94,12 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void ShippingProfile_ShipmentTypeDescriptionIsBlank_WhenShipmentTypeIsNull()
         {
-            ShortcutEntity shortcut = new ShortcutEntity()
+            ShortcutEntity shortcut = new ShortcutEntity
             {
                 Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
             };
 
-            ShippingProfileEntity profile = new ShippingProfileEntity()
+            ShippingProfileEntity profile = new ShippingProfileEntity
             {
                 ShipmentType = null
             };
@@ -90,7 +112,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         public void Validate_ReturnsFailure_WhenProfileNameIsEmpty()
         {
             var testObject = CreateShippingProfile(new ShippingProfileEntity(), new ShortcutEntity());
-            var result = testObject.Validate();
+            var result = Validate(testObject);
             
             Assert.True(result.Failure);
             Assert.Equal("Enter a name for the profile.", result.Message);
@@ -99,14 +121,14 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Validate_ReturnsFailure_WhenAProfileWithSameNameExists()
         {
-            mock.Mock<IShippingProfileManager>()
+            shippingProfileManagerMock
                 .SetupGet(m => m.Profiles)
-                .Returns(new[] { new ShippingProfileEntity() { Name = "same" } });
+                .Returns(new[] { new ShippingProfileEntity { Name = "same" } });
             
-            var testObject = CreateShippingProfile(new ShippingProfileEntity() { ShippingProfileID = 5, Name = "same" },
+            var testObject = CreateShippingProfile(new ShippingProfileEntity { ShippingProfileID = 5, Name = "same" },
                 new ShortcutEntity());
             
-            var result = testObject.Validate();
+            var result = Validate(testObject);
             
             Assert.True(result.Failure);
             Assert.Equal("A profile with the chosen name already exists.", result.Message);
@@ -115,14 +137,14 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Validate_ReturnsTrue_WhenBarcodeIsBlank()
         {
-            mock.Mock<IShortcutManager>()
+            shortcutManagerMock
                 .SetupGet(m => m.Shortcuts)
-                .Returns(new[] { new ShortcutEntity() { Barcode = "" } });
+                .Returns(new[] { new ShortcutEntity { Barcode = "" } });
 
-            var testObject = CreateShippingProfile(new ShippingProfileEntity() { ShippingProfileID = 5, Name = "name" },
-                new ShortcutEntity() { Barcode = "" });
+            var testObject = CreateShippingProfile(new ShippingProfileEntity { ShippingProfileID = 5, Name = "name" },
+                new ShortcutEntity { Barcode = "" });
 
-            var result = testObject.Validate();
+            var result = Validate(testObject);
 
             Assert.True(result.Success);
         }
@@ -130,17 +152,17 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Validate_ReturnsFailure_WhenAShortcutWithSameBarcodeExists()
         {
-            mock.Mock<IShortcutManager>()
+            shortcutManagerMock
                 .SetupGet(m => m.Shortcuts)
-                .Returns(new[] { new ShortcutEntity() { Barcode = "same" } });
+                .Returns(new[] { new ShortcutEntity { Barcode = "same" } });
 
-            var testObject = CreateShippingProfile(new ShippingProfileEntity() { Name = "blah" }, new ShortcutEntity()
+            var testObject = CreateShippingProfile(new ShippingProfileEntity { Name = "blah" }, new ShortcutEntity
             {
                 ShortcutID = 42,
                 Barcode = "same"
             });
             
-            var result = testObject.Validate();
+            var result = Validate(testObject);
             
             Assert.True(result.Failure);
             Assert.Equal("The barcode \"same\" is already in use.", result.Message);
@@ -152,7 +174,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [InlineData(ShipmentTypeCode.FedEx, ShipmentTypeCode.UpsOnLineTools)]
         public void ChangeProvider_ChangesShipmentType(ShipmentTypeCode? initialShipmentType, ShipmentTypeCode? newShipmentType)
         {
-            var testObject = CreateShippingProfile(new ShippingProfileEntity() { ShipmentType = initialShipmentType },
+            var testObject = CreateShippingProfile(new ShippingProfileEntity { ShipmentType = initialShipmentType },
                 new ShortcutEntity());
             
             testObject.ChangeProvider(newShipmentType);
@@ -178,16 +200,21 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity();
             ShortcutEntity shortcut = new ShortcutEntity();
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
-            
+
             testObject.ChangeProvider(ShipmentTypeCode.Endicia);
-            
-            mock.Mock<IShippingProfileLoader>().Verify(l=>l.LoadProfileData(profile, true), Times.Once);
+
+            // The constructor will call LoadProfileData the first time
+            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Exactly(2));
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
-                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
+            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+        }
+        
+        private Result Validate(ShippingProfile testObject)
+        {
+            return testObject.Validate(shippingProfileManagerMock.Object, shortcutManagerMock.Object);
         }
 
         public void Dispose()

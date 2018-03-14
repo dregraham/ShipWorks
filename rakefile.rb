@@ -190,7 +190,7 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks and generate a public installer"
-	msbuild :public_installer, [:versionLabel] => "build:restore" do |msb, args|
+	msbuild :public_installer, [:versionLabel] => ["build:clean", "build:restore"] do |msb, args|
 		print "Building an installer for the public release...\r\n\r\n"
 
 		# Default the build label to 0.0.0

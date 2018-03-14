@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Utility;
+using Autofac;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Autofac;
-using ShipWorks.ApplicationCore;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings.Defaults
 {
@@ -23,11 +22,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
     /// </summary>
     public partial class ShippingDefaultsRuleControl : UserControl
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingDefaultsRuleControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShippingDefaultsRuleControl));
         private const long NoFilterSelectedID = long.MinValue;
 
-        ShippingDefaultsRuleEntity rule;
-        int position = 0;
+        private int position;
 
         /// <summary>
         /// User has clicked the delete button on the rule line
@@ -65,21 +63,12 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// The rule that the control has been initialized with
         /// </summary>
-        public ShippingDefaultsRuleEntity Rule
-        {
-            get { return rule; }
-        }
+        public ShippingDefaultsRuleEntity Rule { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is filter disabled.
         /// </summary>
-        public bool IsFilterDisabled
-        {
-            get
-            {
-                return filterCombo.IsSelectedFilterDisabled;
-            }
-        }
+        public bool IsFilterDisabled => filterCombo.IsSelectedFilterDisabled;
 
         /// <summary> 
         /// Gets a value indicating whether this the filter being used for this rule has changed.
@@ -87,17 +76,14 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <value>
         /// <c>true</c> if the filter filter changed; otherwise, <c>false</c>.
         /// </value>
-        public bool HasFilterChanged
-        {
-            get { return originalFilterID != filterCombo.SelectedFilterNode.FilterID; }
-        }
+        public bool HasFilterChanged => originalFilterID != filterCombo.SelectedFilterNode.FilterID;
 
         /// <summary>
         /// Initialize the control to work with the settings of the given rule
         /// </summary>
         public void Initialize(ShippingDefaultsRuleEntity rule)
         {
-            this.rule = rule;
+            Rule = rule;
 
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
@@ -118,10 +104,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Update the displayed profile text
         /// </summary>
-        private void UpdateProfileDisplay(ShippingProfileEntity profile)
+        private void UpdateProfileDisplay(IShippingProfileEntity profile)
         {
-            linkProfile.Text = profile != null ? profile.Name : "(none)";
-            linkProfile.Tag = profile != null ? profile.ShippingProfileID : 0;
+            linkProfile.Text = profile?.Name ?? "(none)";
+            linkProfile.Tag = profile?.ShippingProfileID ?? 0;
         }
 
         /// <summary>
@@ -131,8 +117,8 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             labelIndex.Text = string.Format("{0}.", index);
 
-            buttonMoveUp.Enabled = (index > 1);
-            buttonMoveDown.Enabled = (index < total);
+            buttonMoveUp.Enabled = index > 1;
+            buttonMoveDown.Enabled = index < total;
 
             position = index;
 
@@ -144,10 +130,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            if (DeleteClicked != null)
-            {
-                DeleteClicked(this, EventArgs.Empty);
-            }
+            DeleteClicked?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -155,10 +138,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         private void OnMoveDown(object sender, EventArgs e)
         {
-            if (MoveDownClicked != null)
-            {
-                MoveDownClicked(this, EventArgs.Empty);
-            }
+            MoveDownClicked?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -166,10 +146,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         private void OnMoveUp(object sender, EventArgs e)
         {
-            if (MoveUpClicked != null)
-            {
-                MoveUpClicked(this, EventArgs.Empty);
-            }
+            MoveUpClicked?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -188,74 +165,118 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private ContextMenuStrip CreateProfilesMenu()
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
-            ShippingProfileEntity selected = ShippingProfileManager.GetProfile((long) linkProfile.Tag);
+            IShippingProfileEntity selected = ShippingProfileManager.GetProfile((long) linkProfile.Tag);
 
             if (selected != null)
             {
                 ToolStripMenuItem editProfile = new ToolStripMenuItem("Edit");
                 editProfile.Tag = selected;
-                editProfile.Click += new EventHandler(OnEditProfile);
+                editProfile.Click += OnEditProfile;
                 menuStrip.Items.Add(editProfile);
 
                 menuStrip.Items.Add(new ToolStripSeparator());
             }
 
-            ToolStripMenuItem selectMenu = new ToolStripMenuItem("Select");
-            menuStrip.Items.Add(selectMenu);
-
-            foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles)
-            {
-                if (profile.ShipmentType == (ShipmentTypeCode) rule.ShipmentType && !profile.ShipmentTypePrimary)
-                {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
-                    menuItem.Tag = profile;
-                    menuItem.Click += new EventHandler(OnChooseProfile);
-                    selectMenu.DropDownItems.Add(menuItem);
-                }
-            }
-
-            if (selectMenu.DropDownItems.Count == 0)
-            {
-                selectMenu.DropDownItems.Add(new ToolStripMenuItem("(none)") { Enabled = false });
-            }
-
+            menuStrip.Items.Add(CreateSelectProfileMenu());
             menuStrip.Items.Add(new ToolStripSeparator());
 
             ToolStripMenuItem manageProfiles = new ToolStripMenuItem("Manage Profiles...");
-            manageProfiles.Click += new EventHandler(OnManageProfiles);
+            manageProfiles.Click += OnManageProfiles;
             menuStrip.Items.Add(manageProfiles);
-
+            
             return menuStrip;
+        }
+
+        /// <summary>
+        /// Creates the select profile menu
+        /// </summary>
+        private ToolStripMenuItem CreateSelectProfileMenu()
+        {
+            ToolStripMenuItem selectMenu = new ToolStripMenuItem("Select");
+            
+            List<IShippingProfileEntity> applicableProfiles =
+                ShippingProfileManager.GetProfilesFor(Rule.ShipmentTypeCode, false).ToList();
+            
+            if (applicableProfiles.Any())
+            {
+                // Global profiles
+                List<IShippingProfileEntity> globalProfiles = applicableProfiles
+                                                              .Where(p => p.ShipmentType == null)
+                                                              .OrderBy(p => p.Name).ToList();
+
+                globalProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
+
+                // Carrier Profiles
+                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
+                                                               .Where(p => p.ShipmentType == Rule.ShipmentTypeCode)
+                                                               .OrderBy(p => p.Name).ToList();
+
+                if (globalProfiles.Any() && carrierProfiles.Any())
+                {
+                    selectMenu.DropDownItems.Add(new ToolStripSeparator());
+                }
+
+                if (carrierProfiles.Any())
+                {
+                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(Rule.ShipmentTypeCode))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Margin = new Padding(-4, 2, 2, 2),
+                        Enabled = false
+                    };
+                    selectMenu.DropDownItems.Add(carrierLabel);
+                    carrierProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
+                    
+                    selectMenu.DropDown.PerformLayout();
+                }
+            }
+            else
+            {
+                selectMenu.DropDownItems.Add(new ToolStripMenuItem("(none)") {Enabled = false});
+            }
+            
+            return selectMenu;
+        }
+
+        /// <summary>
+        /// Adds given profile to the given menu
+        /// </summary>
+        private void AddProfileToMenu(IShippingProfileEntity profile, ToolStripMenuItem menu)
+        {
+            ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
+            menuItem.Tag = profile;
+            menuItem.Click += OnChooseProfile;
+            menu.DropDown.Items.Add(menuItem);
         }
 
         /// <summary>
         /// Edit the selected profile
         /// </summary>
-        void OnEditProfile(object sender, EventArgs e)
+        private void OnEditProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
                 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
+                    new TypedParameter(typeof(IShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
                 );
                 profileEditor.ShowDialog(this);
             }
-
+            
             UpdateProfileDisplay(profile);
         }
 
         /// <summary>
         /// set the profile associated with the menu item raising the event
         /// </summary>
-        void OnChooseProfile(object sender, EventArgs e)
+        private void OnChooseProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             UpdateProfileDisplay(profile);
         }
@@ -263,12 +284,9 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Manage profiles
         /// </summary>
-        void OnManageProfiles(object sender, EventArgs e)
+        private void OnManageProfiles(object sender, EventArgs e)
         {
-            if (MangeProfilesClicked != null)
-            {
-                MangeProfilesClicked(this, EventArgs.Empty);
-            }
+            MangeProfilesClicked?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -276,15 +294,15 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         public void SaveSettings()
         {
-            rule.FilterNodeID = filterCombo.SelectedFilterNodeID;
-            rule.ShippingProfileID = (long) linkProfile.Tag;
-            rule.Position = position;
+            Rule.FilterNodeID = filterCombo.SelectedFilterNodeID;
+            Rule.ShippingProfileID = (long) linkProfile.Tag;
+            Rule.Position = position;
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 try
                 {
-                    ShippingDefaultsRuleManager.SaveRule(rule, adapter);
+                    ShippingDefaultsRuleManager.SaveRule(Rule, adapter);
                 }
                 catch (ORMConcurrencyException ex)
                 {
@@ -302,7 +320,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             // this control's remains in memory and the Initialize method is not called 
             // prior to showing the control. This will prevent a false positive in the 
             // HasFilterChanged property.
-            originalFilterID = filterCombo.SelectedFilterNode != null ? filterCombo.SelectedFilterNode.FilterID : NoFilterSelectedID;
+            originalFilterID = filterCombo.SelectedFilterNode?.FilterID ?? NoFilterSelectedID;
         }
     }
 }

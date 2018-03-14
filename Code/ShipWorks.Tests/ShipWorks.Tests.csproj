@@ -543,6 +543,7 @@
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactoryTest.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfileTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />

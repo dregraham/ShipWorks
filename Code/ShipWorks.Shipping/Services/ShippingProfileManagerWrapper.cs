@@ -129,11 +129,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
-        public IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value)
-        {
-            return ShippingProfileManager.Profiles.Where(x => x.ShipmentType == value);
-        }
-
+        public IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentType, bool includeDefaultProfiles) =>
+            ShippingProfileManager.GetProfilesFor(shipmentType, includeDefaultProfiles);
+        
         /// <summary>
         /// Return the active list of all profiles
         /// </summary>

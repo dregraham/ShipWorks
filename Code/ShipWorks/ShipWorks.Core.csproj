@@ -1428,6 +1428,9 @@
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
     <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfile.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileApplicationStrategyFactory.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileLoader.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileService.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfile.cs" />
@@ -5523,7 +5526,6 @@
     <Compile Include="Shipping\Profiles\ShippingProfileEditorDlg.Designer.cs">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingActionUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderControl.cs">
       <SubType>UserControl</SubType>

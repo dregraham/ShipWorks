@@ -26,9 +26,9 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
-        private ShippingProfile selectedShippingProfile;
-        private ObservableCollection<ShippingProfile> shippingProfiles = new ObservableCollection<ShippingProfile>();
-        private readonly Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
+        private IShippingProfile selectedShippingProfile;
+        private ObservableCollection<IShippingProfile> shippingProfiles = new ObservableCollection<IShippingProfile>();
+        private readonly Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Constructor
         /// </summary>
         public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
-            Func<ShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
+            Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
             IMessageHelper messageHelper,
             IShippingSettings shippingSettings,
             IShipmentTypeManager shipmentTypeManager)
@@ -54,36 +54,19 @@ namespace ShipWorks.Shipping.UI.Profiles
             DeleteCommand = new RelayCommand(Delete,
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
 
-            ShippingProfiles = new ObservableCollection<ShippingProfile>(shippingProfileService.GetAll()
+            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetAll()
                 .Where(IncludeProfileInGrid));
         }
 
         /// <summary>
         /// Returns true if should show in grid
         /// </summary>
-        private bool IncludeProfileInGrid(ShippingProfile shippingProfile)
+        private bool IncludeProfileInGrid(IShippingProfile shippingProfile)
         {
             ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
-            // Global shipment types should be included
-            if (!shipmentType.HasValue)
-            {
-                return true;
-            }
-
-            // None shipment type should always be excluded
-            if (shipmentType.Value == ShipmentTypeCode.None)
-            {
-                return false;
-            }
             
-            // Best rate never gets configured, so we include it if it is allowed
-            if (shipmentType.Value == ShipmentTypeCode.BestRate && shipmentTypeManager.ShipmentTypeCodes.Contains(ShipmentTypeCode.BestRate))
-            {
-                return true;
-            }
-
-            // For all other types, include if configured
-            return shippingSettings.IsConfigured(shipmentType.Value);
+            // Return true if glbal profile or the shipment type is configured
+            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
         }
 
         /// <summary>
@@ -108,7 +91,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ShippingProfile> ShippingProfiles
+        public ObservableCollection<IShippingProfile> ShippingProfiles
         {
             get => shippingProfiles;
             private set => handler.Set(nameof(ShippingProfiles), ref shippingProfiles, value);
@@ -118,7 +101,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Currently selected ShippingProfile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfile SelectedShippingProfile
+        public IShippingProfile SelectedShippingProfile
         {
             get => selectedShippingProfile;
             set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
@@ -133,7 +116,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             if (dialogResult == DialogResult.OK)
             {
                 // Unset the profile before deleting so it isnt used in logic after the delete
-                ShippingProfile profileToDelete = SelectedShippingProfile;
+                IShippingProfile profileToDelete = SelectedShippingProfile;
                 selectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
                 shippingProfileService.Delete(profileToDelete);
@@ -145,7 +128,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            ShippingProfile selected = SelectedShippingProfile;
+            IShippingProfile selected = SelectedShippingProfile;
 
             ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(selected);
 
@@ -161,7 +144,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Add()
         {
-            ShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
+            IShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
 
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {

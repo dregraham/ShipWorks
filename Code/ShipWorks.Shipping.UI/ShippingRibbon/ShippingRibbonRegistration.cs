@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI.SandRibbon;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using TD.SandDock;
+using Menu = Divelements.SandRibbon.Menu;
+using MenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -18,19 +22,19 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     [Component]
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
-        readonly ComponentResourceManager resources;
-        readonly IShippingRibbonService shippingRibbonService;
-        readonly IShippingProfileManager profileManager;
-        RibbonButton createLabelButton;
-        RibbonButton voidButton;
-        RibbonButton returnButton;
-        RibbonButton reprintButton;
-        RibbonButton shipAgainButton;
-        ApplyProfileButtonWrapper applyProfileButton;
-        RibbonButton manageProfilesButton;
-        Popup applyProfilePopup;
-        Menu applyProfileMenu;
-        ShipmentTypeCode? currentShipmentType;
+        private readonly ComponentResourceManager resources;
+        private readonly IShippingRibbonService shippingRibbonService;
+        private readonly IShippingProfileManager profileManager;
+        private RibbonButton createLabelButton;
+        private RibbonButton voidButton;
+        private RibbonButton returnButton;
+        private RibbonButton reprintButton;
+        private RibbonButton shipAgainButton;
+        private ApplyProfileButtonWrapper applyProfileButton;
+        private RibbonButton manageProfilesButton;
+        private Popup applyProfilePopup;
+        private Menu applyProfileMenu;
+        private ShipmentTypeCode? currentShipmentType;
 
         public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileManager profileManager)
         {
@@ -96,7 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Items = { applyProfileMenu }
             };
 
-            applyProfilePopup.BeforePopup += new BeforePopupEventHandler(OnApplyProfileBeforePopup);
+            applyProfilePopup.BeforePopup += OnApplyProfileBeforePopup;
 
             RibbonButton actualApplyProfileButton = new RibbonButton
             {
@@ -171,24 +175,49 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 return;
             }
 
-            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value)
-                .OrderBy(x => x.ShipmentTypePrimary)
-                .ThenBy(x => x.Name)
-                .Select(x => CreateMenuItem(x, x.ShipmentTypePrimary ? "Default" : "Custom"))
-                .ToArray();
+            List<WidgetBase> menuItems = new List<WidgetBase>();
+            List<IShippingProfileEntity> applicableProfiles = profileManager.GetProfilesFor(currentShipmentType.Value, true).ToList();
 
-            if (!menuItems.Any())
+            if (applicableProfiles.Any())
             {
-                menuItems = new[] { new MenuItem { Text = "(None)", Enabled = false } };
+                // Global profiles
+                List<IShippingProfileEntity> globalProfiles = applicableProfiles
+                                                              .Where(p => p.ShipmentType == null)
+                                                              .OrderBy(p => p.Name).ToList();
+
+                globalProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Global")));
+
+                // Carrier Profiles
+                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
+                                                               .Where(p => p.ShipmentType == currentShipmentType.Value)
+                                                               .OrderBy(p => p.Name).ToList();
+
+                if (carrierProfiles.Any())
+                {
+                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(currentShipmentType.Value))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Padding = new WidgetEdges(28, -1, 0, -1),
+                        GroupName = "Carrier", 
+                        Enabled = false,
+                    };
+                    
+                    menuItems.Add(carrierLabel);
+                    carrierProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Carrier")));
+                }
+            }
+            else
+            {
+                menuItems = new List<WidgetBase>() { new MenuItem { Text = "(None)", Enabled = false } };
             }
 
-            applyProfileMenu.Items.AddRange(menuItems);
+            applyProfileMenu.Items.AddRange(menuItems.ToArray());
         }
 
         /// <summary>
         /// Create a menu item from the given profile
         /// </summary>
-        private WidgetBase CreateMenuItem(ShippingProfileEntity profile, string groupName)
+        private WidgetBase CreateMenuItem(IShippingProfileEntity profile, string groupName)
         {
             MenuItem menuItem = new MenuItem(profile.Name);
             menuItem.GroupName = groupName;

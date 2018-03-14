@@ -119,10 +119,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                ShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
+                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
                 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfile), shippingProfile)
+                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }
@@ -133,9 +133,11 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Open the profile manager
         /// </summary>
-        void OnManageProfiles(object sender, EventArgs e)
+        private void OnManageProfiles(object sender, EventArgs e)
         {
-            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
+            // We go up the parent chain to get the actual settings dlg so that the manage profile dialog will center
+            // on the settings dlg instead of the profile rule control
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(ParentForm, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
         }
 
         /// <summary>

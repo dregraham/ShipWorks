@@ -6,6 +6,7 @@ using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     public class ApplyProfilePipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IShippingProfileService shippingProfileService;
         private readonly ILog log;
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
@@ -24,12 +25,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// Constructor
         /// </summary>
         public ApplyProfilePipeline(IObservable<IShipWorksMessage> messageStream,
-            IShipmentTypeManager shipmentTypeManager,
+            IShippingProfileService shippingProfileService,
             ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logManager)
         {
             this.messageStream = messageStream;
-            this.shipmentTypeManager = shipmentTypeManager;
+            this.shippingProfileService = shippingProfileService;
             this.schedulerProvider = schedulerProvider;
             log = logManager(typeof(ApplyProfilePipeline));
         }
@@ -43,8 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .Select(x =>
                 {
-                    ShipmentType shipmentType = shipmentTypeManager.Get(viewModel.Shipment);
-                    shipmentType.ApplyProfile(viewModel.Shipment, x.Profile);
+                    shippingProfileService.Get(x.Profile.ShippingProfileID).Apply(viewModel.Shipment);
                     return viewModel.ShipmentAdapter;
                 })
                 .ObserveOn(schedulerProvider.Dispatcher)

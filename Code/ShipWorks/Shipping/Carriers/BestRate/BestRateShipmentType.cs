@@ -65,33 +65,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
-        /// Apply the specified shipment profile to the given shipment.
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            BestRateShipmentEntity bestRateShipment = shipment.BestRate;
-            IBestRateProfileEntity bestRateProfile = profile.BestRate;
-            IPackageProfileEntity packageProfileEntity = profile.Packages.Single();
-
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
-
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ShippingProfile.Insurance, bestRateShipment, BestRateShipmentFields.Insurance);
-
-            if (packageProfileEntity.Weight.HasValue && packageProfileEntity.Weight.Value != 0)
-            {
-                ShippingProfileUtility.ApplyProfileValue(packageProfileEntity.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-        }
-        
-        /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when

@@ -1,34 +1,58 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Shipping.Profiles
 {
     /// <summary>
     /// DTO for ShippingProfileAndShortcut
     /// </summary>
-    public class ShippingProfile
+    [Component]
+    public class ShippingProfile : IShippingProfile
     {
-        private readonly IShippingProfileManager profileManager;
-        private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileLoader profileLoader;
+        private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
 
         /// <summary>
-        /// Constructor
+        /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
+        /// </summary>
+        public ShippingProfile(IShippingProfileLoader profileLoader,
+            IShippingProfileApplicationStrategyFactory strategyFactory)
+        {
+            this.profileLoader = profileLoader;
+            this.strategyFactory = strategyFactory;
+            ShippingProfileEntity = new ShippingProfileEntity
+            {
+                Name = string.Empty,
+                ShipmentTypePrimary = false
+            };
+
+            Shortcut = new ShortcutEntity
+            {
+                Action = (int) KeyboardShortcutCommand.ApplyProfile
+            };
+
+            profileLoader.LoadProfileData(ShippingProfileEntity, false);
+        }
+        
+        /// <summary>
+        /// Constructor used when we have an existing ShippingProfileEntiy and ShortcutEntity
         /// </summary>
         public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
             ShortcutEntity shortcut,
-            IShippingProfileManager profileManager,
-            IShortcutManager shortcutManager, 
-            IShippingProfileLoader profileLoader)
+            IShippingProfileLoader profileLoader,
+            IShippingProfileApplicationStrategyFactory strategyFactory)
         {
-            this.profileManager = profileManager;
-            this.shortcutManager = shortcutManager;
             this.profileLoader = profileLoader;
+            this.strategyFactory = strategyFactory;
             ShippingProfileEntity = shippingProfileEntity;
             Shortcut = shortcut;
+            
+            profileLoader.LoadProfileData(shippingProfileEntity, true);
         }
 
         /// <summary>
@@ -64,7 +88,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Validate that the shippintProfile can be saved
         /// </summary>
-        public Result Validate()
+        public Result Validate(IShippingProfileManager profileManager, IShortcutManager shortcutManager)
         {
             Result result = Result.FromSuccess();
 
@@ -79,7 +103,7 @@ namespace ShipWorks.Shipping.Profiles
                 result = Result.FromError("A profile with the chosen name already exists.");
             }
             else if (!Shortcut.Barcode.IsNullOrWhiteSpace() && shortcutManager.Shortcuts.Any(s =>
-                s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
+                         s.ShortcutID != Shortcut.ShortcutID && s.Barcode == Shortcut.Barcode))
             {
                 result = Result.FromError($"The barcode \"{Shortcut.Barcode}\" is already in use.");
             }
@@ -96,6 +120,15 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity.Packages.Clear();
 
             profileLoader.LoadProfileData(ShippingProfileEntity, true);
+        }
+
+        /// <summary>
+        /// Apply profile to shipment
+        /// </summary>
+        public void Apply(ShipmentEntity shipment)
+        {
+            IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
+            strategy.ApplyProfile(ShippingProfileEntity, shipment);
         }
     }
 }

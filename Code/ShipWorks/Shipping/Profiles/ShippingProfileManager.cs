@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Autofac;
@@ -127,21 +126,22 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ProfilesReadOnly.SingleOrDefault(p => p.ShippingProfileID == profileID);
         }
-
+        
         /// <summary>
-        /// Apply the given profile to the given shipment
+        /// Get profiles for the given shipment type
         /// </summary>
-        public static void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
+        public static IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentTypeCode, 
+                                                                         bool includeDefaultProfiles)
         {
-            if (shipment.Processed)
-            {
-                throw new InvalidOperationException("Cannot apply profile to a processed shipment.");
-            }
+            IEnumerable<IShippingProfileEntity> profiles = ProfilesReadOnly.Where(p => p.ShipmentType == null ||
+                                                                                       p.ShipmentType == shipmentTypeCode);
 
-            if (profile.ShipmentType == shipment.ShipmentTypeCode)
+            if (!includeDefaultProfiles)
             {
-                ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
+                profiles = profiles.Where(p => !p.ShipmentTypePrimary);
             }
+            
+            return profiles;
         }
         
         /// <summary>

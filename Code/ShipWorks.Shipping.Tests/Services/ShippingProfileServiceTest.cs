@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Moq;
@@ -37,12 +38,9 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            var shippingProfiles = mock.Create<ShippingProfileService>().GetAll();
+            mock.Create<ShippingProfileService>().GetAll();
 
-            ShippingProfile shippingProfile = shippingProfiles.Single();
-
-            Assert.Equal(shortcut, shippingProfile.Shortcut);
-            Assert.Equal(profile, shippingProfile.ShippingProfileEntity);
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
         }
 
         [Fact]
@@ -57,23 +55,17 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            ShippingProfile shippingProfile = mock.Create<ShippingProfileService>().Get(42);
+            mock.Create<ShippingProfileService>().Get(42);
 
-            Assert.Equal(shortcut, shippingProfile.Shortcut);
-            Assert.Equal(profile, shippingProfile.ShippingProfileEntity);
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
         }
 
         [Fact]
-        public void Create_ReturnsNewShippingProfile()
+        public void Create_DelegatesToShippingProfileFactoryFuncWithNewEntities()
         {
-            var newProfile = mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
+            mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
             
-            Assert.True(newProfile.Shortcut.IsNew);
-            Assert.Equal((int) KeyboardShortcutCommand.ApplyProfile, newProfile.Shortcut.Action);
-            
-            Assert.True(newProfile.ShippingProfileEntity.IsNew);
-            Assert.Equal(string.Empty, newProfile.ShippingProfileEntity.Name);
-            Assert.False(newProfile.ShippingProfileEntity.ShipmentTypePrimary);
+            mock.Mock<IShippingProfileFactory>().Verify(f=>f.Create(), Times.Once);
         }
 
         [Fact]
@@ -302,8 +294,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return new ShippingProfile(profile, shortcut, mock.Mock<IShippingProfileManager>().Object,
-                mock.Mock<IShortcutManager>().Object, mock.Mock<IShippingProfileLoader>().Object);
+            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
         }
 
         public void Dispose()
