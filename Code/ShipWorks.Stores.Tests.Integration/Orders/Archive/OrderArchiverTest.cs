@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
@@ -47,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             DateTime.Parse("8/1/2017"),
         };
 
-        public void CreateOrderForAllStores()
+        private void CreateOrderForAllStores()
         {
             using (ISqlAdapter sqlAdapter = new SqlAdapter())
             {
@@ -316,9 +317,9 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 
         private byte[] CalculateChecksum(string dataToCalculate)
         {
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            using (SHA256 sha = SHA256.Create())
             {
-                return md5.ComputeHash(Encoding.UTF8.GetBytes(dataToCalculate));
+                return sha.ComputeHash(Encoding.UTF8.GetBytes(dataToCalculate));
             }
         }
 

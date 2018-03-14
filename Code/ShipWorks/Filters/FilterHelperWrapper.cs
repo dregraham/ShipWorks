@@ -48,25 +48,18 @@ namespace ShipWorks.Filters
         /// </summary>
         public void RegenerateFilters(DbConnection con)
         {
-            try
+            // Regenerate the filters
+            using (var sqlAdapter = sqlAdapterFactory.Create(con))
             {
-                // We need to push a new scope for the layout context
-                FilterLayoutContext.PushScope();
-
-                // Regenerate the filters
-                using (var sqlAdapter = sqlAdapterFactory.Create(con))
-                {
-                    FilterLayoutContext.Current.RegenerateAllFilters(sqlAdapter);
-                }
-
-                // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
-                SqlUtility.TruncateTable("FilterNodeContentDirty", con);
-                SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);
+                FilterLayoutContext.Current.RegenerateAllFilters(sqlAdapter);
             }
-            finally
-            {
-                FilterLayoutContext.PopScope();
-            }
+
+            // Delete any filter counts we may have abandoned by regenerating
+            FilterContentManager.DeleteAbandonedFilterCounts();
+
+            // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
+            SqlUtility.TruncateTable("FilterNodeContentDirty", con);
+            SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);
         }
     }
 }

@@ -75,6 +75,9 @@ BEGIN
 			MOVE @SourceDataName TO @DestinationDatabaseDataPathAndFileName,  
 			MOVE @SourceLogName  TO @DestinationDatabaseLogPathAndFileName,  
 			NOUNLOAD,  REPLACE,  STATS = 10;
+
+		EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET MULTI_USER;')
+
 	END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMsg nvarchar(500)
