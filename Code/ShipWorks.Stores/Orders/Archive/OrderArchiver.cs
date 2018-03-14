@@ -6,6 +6,8 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
 
@@ -49,6 +51,8 @@ namespace ShipWorks.Stores.Orders.Archive
         /// as a Func instead of an Action for easier composition.</returns>
         public async Task<Unit> Archive(DateTime cutoffDate)
         {
+            UserEntity loggedInUser = userSession.User;
+
             userSession.Logoff(clearRememberMe: false);
 
             IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
@@ -112,7 +116,7 @@ namespace ShipWorks.Stores.Orders.Archive
             }
             finally
             {
-                userSession.LogonLastUser();
+                userSession.Logon(loggedInUser);
             }
         }
     }

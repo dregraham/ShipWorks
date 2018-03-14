@@ -44,6 +44,10 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Callback((Func<DbConnection, Task<Unit>> x) => x(connectionMock.Object))
                 .ReturnsAsync(Unit.Default);
 
+            mock.Mock<IOrderArchiveDataAccess>()
+                .Setup(x => x.WithMultiUserConnectionAsync(It.IsAny<Action<DbConnection>>()))
+                .Callback((Action<DbConnection> x) => x(connectionMock.Object));
+
             preparingProgress = mock.CreateMock<IProgressReporter>();
             archivingProgress = mock.CreateMock<IProgressReporter>();
             filterProgress = mock.CreateMock<IProgressReporter>();
