@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -50,9 +51,9 @@ namespace ShipWorks.Stores.Orders.Archive
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             handler.Where(x => x == nameof(ArchiveDate))
                 .Select(_ => ArchiveDate)
-                .Gate(handler.Where(x => x == nameof(IsLoadingCounts)).Where(x => IsLoadingCounts == false))
+                .Gate(handler.Where(x => x == nameof(IsLoadingCounts)).Where(x => IsLoadingCounts == false), schedulerProvider.Default)
                 .Do(_ => IsLoadingCounts = true)
-                .SelectMany(dates => Observable.FromAsync(() => dataAccess.GetCountOfOrdersToArchive(dates.First())))
+                .SelectMany(dates => dataAccess.GetCountOfOrdersToArchive(dates.Last()).ToObservable(schedulerProvider.Default))
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Do(x =>
                 {
