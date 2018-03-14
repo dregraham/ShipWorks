@@ -75,6 +75,15 @@ BEGIN
 			MOVE @SourceDataName TO @DestinationDatabaseDataPathAndFileName,  
 			MOVE @SourceLogName  TO @DestinationDatabaseLogPathAndFileName,  
 			NOUNLOAD,  REPLACE,  STATS = 10;
+
+		DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
+		IF @version LIKE '14%'
+		BEGIN
+			EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET TRUSTWORTHY ON')
+		END
+
+		EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET MULTI_USER;')
+
 	END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMsg nvarchar(500)
