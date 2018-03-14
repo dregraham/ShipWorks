@@ -169,17 +169,5 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void CancelArchiveAction() =>
             archiveOrdersDialog.Close();
-
-        /// <summary>
-        /// Update the count of orders that will be archived
-        /// </summary>
-        private async Task UpdateOrderCounts()
-        {
-            IsLoadingCounts = true;
-
-            OrderCounts = await dataAccess.GetCountOfOrdersToArchive(ArchiveDate).ConfigureAwait(false);
-
-            IsLoadingCounts = false;
-        }
     }
 }
