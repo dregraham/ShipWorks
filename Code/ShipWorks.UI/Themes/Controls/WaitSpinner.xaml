@@ -5,6 +5,7 @@
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:WaitSpinner}">
@@ -12,7 +13,8 @@
                             VerticalAlignment="Center"
                             Background="{Binding RelativeSource={RelativeSource TemplatedParent},
                                                  Path=Background}"
-                            BorderBrush="Black"
+                            BorderBrush="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                      Path=BorderBrush}"
                             BorderThickness="{Binding RelativeSource={RelativeSource TemplatedParent},
                                                       Path=BorderThickness}"
                             Padding="8">

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
@@ -37,7 +40,8 @@ namespace ShipWorks.Stores.Orders.Archive
             IAsyncMessageHelper messageHelper,
             IOrderArchiveDialog archiveOrdersDialog,
             IDateTimeProvider dateTimeProvider,
-            IOrderArchiveDataAccess dataAccess)
+            IOrderArchiveDataAccess dataAccess,
+            ISchedulerProvider schedulerProvider)
         {
             this.dataAccess = dataAccess;
             this.archiveOrdersDialog = archiveOrdersDialog;
@@ -45,14 +49,23 @@ namespace ShipWorks.Stores.Orders.Archive
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             handler.Where(x => x == nameof(ArchiveDate))
-                .Where(x => IsLoadingCounts == false)
-                .SelectMany(_ => Observable.FromAsync(() => UpdateOrderCounts()))
+                .Select(_ => ArchiveDate)
+                .Gate(handler.Where(x => x == nameof(IsLoadingCounts)).Where(x => IsLoadingCounts == false))
+                .Do(_ => IsLoadingCounts = true)
+                .SelectMany(dates => Observable.FromAsync(() => dataAccess.GetCountOfOrdersToArchive(dates.First())))
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Do(x =>
+                {
+                    OrderCounts = x;
+                    IsLoadingCounts = false;
+                    ConfirmArchive.RaiseCanExecuteChanged();
+                })
                 .Subscribe();
             handler.Where(x => x == nameof(ArchiveDate))
                 .Do(x => IsDateInFuture = ArchiveDate.Date > dateTimeProvider.Now.Date)
                 .Subscribe();
 
-            ConfirmArchive = new RelayCommand(() => ConfirmArchiveAction());
+            ConfirmArchive = new RelayCommand(() => ConfirmArchiveAction(), CanArchive);
             CancelArchive = new RelayCommand(() => CancelArchiveAction());
 
             ArchiveDate = dateTimeProvider.Now.Subtract(TimeSpan.FromDays(90));
@@ -67,7 +80,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Confirm archive of the orders
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand ConfirmArchive { get; }
+        public RelayCommand ConfirmArchive { get; }
 
         /// <summary>
         /// Cancel archive orders
@@ -144,6 +157,12 @@ namespace ShipWorks.Stores.Orders.Archive
             archiveOrdersDialog.DialogResult = true;
             archiveOrdersDialog.Close();
         }
+
+        /// <summary>
+        /// Can the user start the archive
+        /// </summary>
+        private bool CanArchive() =>
+            OrderCounts > 0 && !IsLoadingCounts;
 
         /// <summary>
         /// Cancel archiving orders

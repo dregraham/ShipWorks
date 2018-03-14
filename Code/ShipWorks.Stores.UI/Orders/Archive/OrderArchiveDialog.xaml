@@ -41,24 +41,31 @@
         <ui:AlignmentWrapPanel Grid.Row="0"
                     VerticalAlignment="Center">
             <TextBlock VerticalAlignment="Center"
-                       Grid.Column="0"
                        FontWeight="Bold">
                 Archive orders older than:
             </TextBlock>
             <DatePicker VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         HorizontalAlignment="Left"
-                       Grid.Column="1"
                         Margin="8,0,12,0"
                         Style="{StaticResource DatePickerStyle.Centered}"
                         SelectedDate="{Binding ArchiveDate}" />
-            <TextBlock Grid.Column="2"
-                       Foreground="Gray"
+            <TextBlock Foreground="Gray"
                        FontSize="7 pt"
+                       Visibility="{Binding IsLoadingCounts, Converter={StaticResource HideWhenTrue}}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center">
-                <Run Text="{Binding OrderCounts,StringFormat={}{0:#,#}}" /> orders will be archived
+                <Run Text="{Binding OrderCounts,StringFormat={}{0:#,0}}" />
+                <Run Text="{Binding OrderCounts, Converter={StaticResource PluralizingValue}, ConverterParameter=order}" />
+                will be archived
             </TextBlock>
+            <ui:WaitSpinner HorizontalAlignment="Left" 
+                            Visibility="{Binding IsLoadingCounts, Converter={StaticResource ShowWhenTrue}}"
+                            BorderBrush="Transparent">
+                <ui:WaitSpinner.LayoutTransform>
+                    <ScaleTransform ScaleX=".5" ScaleY="0.5" />
+                </ui:WaitSpinner.LayoutTransform>
+            </ui:WaitSpinner>
         </ui:AlignmentWrapPanel>
 
         <TextBlock Grid.Row="1"
