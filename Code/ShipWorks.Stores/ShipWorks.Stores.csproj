@@ -167,7 +167,7 @@
     <Compile Include="Communication\SingleScanOnDemandDownloader.cs" />
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
-    <Compile Include="Orders\Archive\Errors\OrderSplitException.cs" />
+    <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveSqlGenerator.cs" />
