@@ -5,10 +5,10 @@ using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IMessenger messenger;
+        private readonly ICarrierShipmentAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
@@ -31,12 +32,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             IShippingProfileService shippingProfileService,
             ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logManager,
-            IMessenger messenger)
+            IMessenger messenger,
+            ICarrierShipmentAdapterFactory adapterFactory)
         {
             this.messageStream = messageStream;
             this.shippingProfileService = shippingProfileService;
             this.schedulerProvider = schedulerProvider;
             this.messenger = messenger;
+            this.adapterFactory = adapterFactory;
             log = logManager(typeof(ApplyProfilePipeline));
         }
 
@@ -47,15 +50,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             subscription = messageStream.OfType<ApplyProfileMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
-                .Select(x =>
+                .Select(x => 
                 {
-                    shippingProfileService.Get(x.Profile.ShippingProfileID).Apply(viewModel.Shipment);
-                    return viewModel.ShipmentAdapter;
+                    return shippingProfileService.Get(x.Profile.ShippingProfileID).Apply(viewModel.Shipment);
                 })
-                .ObserveOn(schedulerProvider.Dispatcher)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
-                .Do(x => messenger.Send(new ShipmentChangedMessage(this, x, ShipmentFields.ShipmentType.Name)))
-                .Subscribe(viewModel.LoadShipment);
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(x => 
+                {
+                    viewModel.LoadShipment(x);
+                    viewModel.SaveToDatabase();
+
+                    messenger.Send(new ShipmentChangedMessage(this, x, nameof(viewModel.ShipmentType)));
+                });
         }
 
         /// <summary>

@@ -6,10 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
 
@@ -25,6 +22,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private ShippingProfileEntity shippingProfileEntity;
 
         /// <summary>
@@ -32,12 +30,14 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public ShippingProfile(IShippingProfileLoader profileLoader,
             IShippingProfileApplicationStrategyFactory strategyFactory,
-            IShippingManager shippingManager, IMessenger messenger)
+            IShippingManager shippingManager, IMessenger messenger,
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.profileLoader = profileLoader;
             this.strategyFactory = strategyFactory;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             ShippingProfileEntity = new ShippingProfileEntity
             {
                 Name = string.Empty,
@@ -130,13 +130,13 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply profile to shipment
         /// </summary>
-        public void Apply(ShipmentEntity shipment)
-            => Apply(new List<ShipmentEntity> { shipment });
+        public ICarrierShipmentAdapter Apply(ShipmentEntity shipment)
+            => Apply(new [] { shipment }).First();
 
         /// <summary>
         /// Apply profile to shipments
         /// </summary>
-        public void Apply(List<ShipmentEntity> shipments)
+        public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> originalShipments = shipments.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
 
@@ -153,6 +153,8 @@ namespace ShipWorks.Shipping.Profiles
             }
 
             messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipments));
+
+            return shipments.Select(s => shipmentAdapterFactory.Get(s));
         }
     }
 }

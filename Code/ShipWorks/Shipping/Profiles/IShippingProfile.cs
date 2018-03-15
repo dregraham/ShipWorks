@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -36,12 +37,12 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply profile to shipments
         /// </summary>
-        void Apply(List<ShipmentEntity> shipment);
+        IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipment);
 
         /// <summary>
         /// Apply profile to shipment
         /// </summary>
-        void Apply(ShipmentEntity shipment);
+        ICarrierShipmentAdapter Apply(ShipmentEntity shipment);
 
         /// <summary>
         /// Change profile to be of specified ShipmentType
