@@ -8,7 +8,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -23,7 +22,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IMessenger messenger;
-        private readonly ICarrierShipmentAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
@@ -32,14 +30,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             IShippingProfileService shippingProfileService,
             ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logManager,
-            IMessenger messenger,
-            ICarrierShipmentAdapterFactory adapterFactory)
+            IMessenger messenger)
         {
             this.messageStream = messageStream;
             this.shippingProfileService = shippingProfileService;
             this.schedulerProvider = schedulerProvider;
             this.messenger = messenger;
-            this.adapterFactory = adapterFactory;
             log = logManager(typeof(ApplyProfilePipeline));
         }
 
