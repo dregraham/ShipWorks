@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Verify(x => x.ExecuteSqlAsync(
                         It.IsAny<DbConnection>(),
                         preparingProgress.Object,
+                        AnyString,
                         AnyString),
                     Times.Once);
 
@@ -76,6 +77,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Verify(x => x.ExecuteSqlAsync(
                         It.IsAny<DbConnection>(),
                         archivingProgress.Object,
+                        AnyString,
                         AnyString),
                     Times.Once);
         }

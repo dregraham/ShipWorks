@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Orders.Archive
             return messageHelper
                 .ShowDialog(SetupDialog)
                 .Bind(x => x == true ?
-                    Task.FromResult(ArchiveDate) :
+                    Task.FromResult(ArchiveDate.ToUniversalTime()) :
                     Task.FromException<DateTime>(Error.Canceled));
         }
 

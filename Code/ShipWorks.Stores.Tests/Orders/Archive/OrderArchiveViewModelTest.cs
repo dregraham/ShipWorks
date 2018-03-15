@@ -80,6 +80,22 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         }
 
         [Theory]
+        [InlineData(DateTimeKind.Utc, "2018-1-1T12:30:00Z", "2018-1-1T12:30:00Z")]
+        [InlineData(DateTimeKind.Local, "2018-1-1T00:30:00-600", "2018-1-1T12:30:00Z")]
+        public async Task GetArchiveDataFromUser_ReturnsSelectedDate(DateTimeKind kind, string selectedDate, string expectedDate)
+        {
+            mock.Mock<IAsyncMessageHelper>()
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
+                .ReturnsAsync(true);
+
+            testObject.ArchiveDate = DateTime.SpecifyKind(DateTime.Parse(selectedDate), kind);
+            var result = await testObject.GetArchiveDateFromUser();
+
+            var expected = DateTime.SpecifyKind(DateTime.Parse(expectedDate), DateTimeKind.Utc);
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         [InlineData(null)]
