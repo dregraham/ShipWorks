@@ -101,19 +101,19 @@ BEGIN
 		ORDER BY t.name;
 
 	/* Disable all triggers */
-    RAISERROR ('Disable all triggers', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Disable all triggers', 0, 1) WITH NOWAIT
 	exec (@DisableAllTriggersSql);
 
 	/* Disable all indexes */
-    RAISERROR ('Disable all indexes', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Disable all indexes', 0, 1) WITH NOWAIT
 	exec (@DisableAllIndexesSql);
 
 	/* Disable all change tracking */
-    RAISERROR ('Disable change tracking', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Disable change tracking', 0, 1) WITH NOWAIT
 	exec (@DisableAllChangeTrackingSql);
 
 	/* Disable all foreign keys */
-    RAISERROR ('Disable all foreign keys', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Disable all foreign keys', 0, 1) WITH NOWAIT
 	exec (@DisableAllForeignKeysSql);
 
 	/*******************************************************************/
@@ -129,7 +129,7 @@ BEGIN
 		FROM dbo.[ShipmentIDsToDelete]
 		ORDER BY EntityID
 		
-    RAISERROR ('10 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:10 percent processed.', 0, 1) WITH NOWAIT
 	/*******************************************************************/
 	/* Delete based on ShipmentIDs.                                    */
 	/*******************************************************************/
@@ -166,7 +166,7 @@ BEGIN
 	exec PurgeEntities 'EmailOutboundRelation', 'ObjectID', 'EmailOutboundRelationID'
 	exec PurgeEntities 'EmailOutbound', 'ContextID', 'EmailOutboundID'
 	exec PurgeEntities 'Shipment', 'ShipmentID', 'ShipmentID'
-    RAISERROR ('20 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:20 percent processed.', 0, 1) WITH NOWAIT
 		
 	/* Now do matching Audit entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
@@ -189,7 +189,7 @@ BEGIN
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-    RAISERROR ('30 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:30 percent processed.', 0, 1) WITH NOWAIT
 
 	/*******************************************************************/
 	/* Populate the list of OrderItemAttributeIDs to delete.           */
@@ -213,7 +213,7 @@ BEGIN
 	exec PurgeEntities 'ObjectReference', 'ConsumerID', 'ObjectReferenceID'
 	exec PurgeEntities 'ObjectReference', 'ObjectID', 'ObjectReferenceID'
 	exec PurgeEntities 'MivaOrderItemAttribute', 'OrderItemAttributeID', 'OrderItemAttributeID'
-    RAISERROR ('40 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:40 percent processed.', 0, 1) WITH NOWAIT
 	
 	/*******************************************************************/
 	/* Populate the list of OrderItemIDs to delete.                    */
@@ -255,7 +255,7 @@ BEGIN
 	exec PurgeEntities 'WalmartOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'YahooOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'OrderItem', 'OrderItemID', 'OrderItemID'
-    RAISERROR ('50 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:50 percent processed.', 0, 1) WITH NOWAIT
 	
 	/*******************************************************************/
 	/* Populate the list of OrderIDs to delete.                        */
@@ -330,7 +330,7 @@ BEGIN
 	exec PurgeEntities 'EmailOutbound', 'ContextID', 'EmailOutboundID'
 	exec PurgeEntities 'DownloadDetail', 'DownloadedDetailID', 'DownloadedDetailID'
 	exec PurgeEntities 'Order', 'OrderID', 'OrderID'
-    RAISERROR ('70 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:70 percent processed.', 0, 1) WITH NOWAIT
 
 	/* Now do matching Audit entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
@@ -342,7 +342,7 @@ BEGIN
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-    RAISERROR ('80 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:80 percent processed.', 0, 1) WITH NOWAIT
 		
 	/* Now do matching AuditChange entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
@@ -354,7 +354,7 @@ BEGIN
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-    RAISERROR ('90 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:90 percent processed.', 0, 1) WITH NOWAIT
 
 	/*************************************/
 	/*   Purge Abandoned Resources       */
@@ -366,22 +366,22 @@ BEGIN
 
 	/* Cleanup */
 	/* Enable all triggers */
-    RAISERROR ('Enable all triggers', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Enable all triggers', 0, 1) WITH NOWAIT
 	exec (@EnableAllTriggersSql);
 
 	/* Enable all indexes */
-    RAISERROR ('Rebuild all indexes', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Rebuild all indexes', 0, 1) WITH NOWAIT
 	exec (@EnableAllIndexesSql);
 
 	/* Enable all change tracking */
-    RAISERROR ('Enable change tracking', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Enable change tracking', 0, 1) WITH NOWAIT
 	exec (@EnableAllChangeTrackingSql);
 
 	/* Enable all foreign keys */
-    RAISERROR ('Enable all foreign keys', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:Enable all foreign keys', 0, 1) WITH NOWAIT
 	exec (@EnableAllForeignKeysSql);
 
-    RAISERROR ('100 percent processed.', 0, 1) WITH NOWAIT
+    RAISERROR ('OrderArchiveInfo:100 percent processed.', 0, 1) WITH NOWAIT
 
 	/* Drop id holding tables */
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'OrderIDsToDelete')

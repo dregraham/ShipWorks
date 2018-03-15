@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Orders.Archive.Errors;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -25,6 +28,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly int commandTimeout = int.MaxValue;
         private bool isRestore = false;
+        private OrderArchiveException orderArchiveException = null;
 
         /// <summary>
         /// Constructor
@@ -70,6 +74,18 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         public async Task ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
         {
+            if (orderArchiveException != null)
+            {
+                if (progressReporter.CanCancel)
+                {
+                    progressReporter.Cancel();
+                }
+
+                progressReporter.Detail = orderArchiveException.Message;
+
+                return;
+            }
+
             using (HandleSqlInfo(connection, progressReporter))
             {
                 var command = connection.CreateCommand();
@@ -79,8 +95,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 progressReporter.PercentComplete = 0;
                 command.CommandText = commandText;
                 await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-                progressReporter.PercentComplete = 100;
-                progressReporter.Completed();
+
+                if (progressReporter.Status == ProgressItemStatus.Running)
+                {
+                    progressReporter.PercentComplete = 100;
+                    progressReporter.Completed();
+                }
             }
         }
 
@@ -105,11 +125,11 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             if (connection is SqlConnection sqlConnection)
             {
-                void infoHandler(object sender, SqlInfoMessageEventArgs e) => UpdateProgress(progressReporter, e.Message);
+                void infoHandler(object sender, SqlInfoMessageEventArgs e) => UpdateProgress(progressReporter, e);
 
                 sqlConnection.FireInfoMessageEventOnUserErrors = true;
                 sqlConnection.InfoMessage += infoHandler;
-
+                
                 return Disposable.Create(() => sqlConnection.InfoMessage -= infoHandler);
             }
 
@@ -119,11 +139,30 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Handle SQL Info Messages and update progress as needed
         /// </summary>
-        private void UpdateProgress(IProgressReporter progressReporter, string message)
+        private void UpdateProgress(IProgressReporter progressReporter, SqlInfoMessageEventArgs sqlInfoMessageEvent)
         {
-            log.Info($"OrderArchive: UpdateProgress SQL Message - {message}");
+            if (orderArchiveException != null || progressReporter.Status != ProgressItemStatus.Running)
+            {
+                return;
+            }
 
-            message = message.Trim();
+            string message = sqlInfoMessageEvent.Message.Trim();
+
+            SqlError error = sqlInfoMessageEvent.Errors.Cast<SqlError>().FirstOrDefault(sqlError => !sqlError.Message.StartsWith("OrderArchiveInfo:"));
+
+            if (error?.Message.IsNullOrWhiteSpace() == false)
+            {
+                message = error.Message;
+                log.Info($"OrderArchive: UpdateProgress SQL ERROR Message - {message}");
+
+                orderArchiveException = new OrderArchiveException(message);
+                progressReporter.Failed(orderArchiveException);
+                return;
+            }
+
+            message = message.Replace("OrderArchiveInfo:", string.Empty);
+
+            log.Info($"OrderArchive: UpdateProgress SQL Message - {message}");
 
             if (message.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0)
             {

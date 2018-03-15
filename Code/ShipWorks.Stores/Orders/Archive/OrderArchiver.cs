@@ -7,6 +7,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
@@ -78,9 +79,12 @@ namespace ShipWorks.Stores.Orders.Archive
                             .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress))
                             .ConfigureAwait(false);
 
-                        // We have to regenerate filters outside of a single user connection, otherwise they all get abandoned.
-                        connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress));
-
+                        if (archiveProgress.Status == ProgressItemStatus.Success)
+						{
+	                        // We have to regenerate filters outside of a single user connection, otherwise they all get abandoned.
+                        	connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress));
+						}
+						
                         return Unit.Default;
                     }
                 }
@@ -102,6 +106,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     prepareProgress.Detail = "Creating Archive Database";
                     await connectionManager.ExecuteSqlAsync(conn, prepareProgress, sqlGenerator.CopyDatabaseSql()).ConfigureAwait(false);
+
+                    if (prepareProgress.Status != ProgressItemStatus.Success)
+                    {
+                        return Unit.Default;
+                    }
+
                     prepareProgress.Detail = "Done";
                 }
 
@@ -110,6 +120,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     archiveProgress.Detail = "Archiving Order and Shipment data";
                     await connectionManager.ExecuteSqlAsync(conn, archiveProgress, sqlGenerator.ArchiveOrderDataSql(cutoffDate)).ConfigureAwait(false);
+
+                    if (archiveProgress.Status != ProgressItemStatus.Success)
+                    {
+                        return Unit.Default;
+                    }
+
                     archiveProgress.Detail = "Done";
                 }
 
