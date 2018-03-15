@@ -49,7 +49,7 @@
                         HorizontalAlignment="Left"
                         Margin="8,0,12,0"
                         Style="{StaticResource DatePickerStyle.Centered}"
-                        SelectedDate="{Binding ArchiveDate}" />
+                        SelectedDate="{Binding ArchiveDate}" DisplayDateStart="1950-01-01" />
             <TextBlock Foreground="Gray"
                        FontSize="7 pt"
                        Visibility="{Binding IsLoadingCounts, Converter={StaticResource HideWhenTrue}}"
