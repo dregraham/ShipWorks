@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 
@@ -16,22 +16,19 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public class ProfileAppliedPipeline : IInitializeForCurrentUISession
     {
-        private readonly IObservable<IShipWorksMessage> messages;
+        private readonly IMessenger messenger;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
-        private readonly IShipmentTypeManager shipmentTypeManager;
 
         IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProfileAppliedPipeline(IObservable<IShipWorksMessage> messages,
-            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            IShipmentTypeManager shipmentTypeManager)
+        public ProfileAppliedPipeline(IMessenger messenger,
+            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange)
         {
-            this.messages = messages;
+            this.messenger = messenger;
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
-            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -44,14 +41,14 @@ namespace ShipWorks.Shipping.Profiles
             Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
-            subscription = messages.OfType<ProfileAppliedMessage>()
+            subscription = messenger.OfType<ProfileAppliedMessage>()
                 .Subscribe(ProcessMessage);
         }
 
         /// <summary>
         /// Compiles original and new insurance selections and uses it to notify a InsuranceBehaviorChange
         /// </summary>
-        public void ProcessMessage(ProfileAppliedMessage message)
+        private void ProcessMessage(ProfileAppliedMessage message)
         {
             IDictionary<long, bool> originalInsuranceSelections = new Dictionary<long, bool>();
             IDictionary<long, bool> updatedInsuranceSelections = new Dictionary<long, bool>();
@@ -62,8 +59,8 @@ namespace ShipWorks.Shipping.Profiles
                 ShipmentEntity updatedShipment = message.UpdatedShipments.Single(s => s.ShipmentID == shipmentID);
                 if (updatedShipment.ShipmentTypeCode != originalShipment.ShipmentTypeCode)
                 {
-                    originalInsuranceSelections.Add(shipmentID, shipmentTypeManager.Get(originalShipment).GetPackageAdapters(originalShipment).Any(p => p.InsuranceChoice?.Insured ?? true));
-                    updatedInsuranceSelections.Add(shipmentID, shipmentTypeManager.Get(updatedShipment).GetPackageAdapters(updatedShipment).Any(p => p.InsuranceChoice?.Insured ?? true));
+                    originalInsuranceSelections.Add(shipmentID, originalShipment.Insurance);
+                    updatedInsuranceSelections.Add(shipmentID, updatedShipment.Insurance);
                 }
             }
 
