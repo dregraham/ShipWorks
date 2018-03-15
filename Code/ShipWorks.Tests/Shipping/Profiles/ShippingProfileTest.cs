@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             testObject.ChangeProvider(ShipmentTypeCode.Endicia);
 
-            // The constructor will call LoadProfileData the first time
+            // The initial set 
             mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Exactly(2));
         }
 

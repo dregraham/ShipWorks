@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
+        private ShippingProfileEntity shippingProfileEntity;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
@@ -49,12 +50,20 @@ namespace ShipWorks.Shipping.Profiles
 
             profileLoader.LoadProfileData(ShippingProfileEntity, false);
         }
-        
+
         /// <summary>
         /// Shipping Profile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfileEntity ShippingProfileEntity { get; set; }
+        public ShippingProfileEntity ShippingProfileEntity
+        {
+            get => shippingProfileEntity;
+            set
+            {
+                profileLoader.LoadProfileData(value, true);
+                shippingProfileEntity = value;
+            }
+        }
 
         /// <summary>
         /// Shortcut

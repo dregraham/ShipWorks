@@ -29,7 +29,6 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public void Delete_DelegatesToManager()
         {
-
             ShortcutEntity shortcut = new ShortcutEntity();
             ShippingProfileEntity profile = new ShippingProfileEntity();
 
