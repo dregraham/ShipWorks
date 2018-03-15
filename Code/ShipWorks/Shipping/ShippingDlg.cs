@@ -1615,42 +1615,39 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        /// <param name="shipmentTypeCode"></param>
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
-            IEnumerable<IShippingProfileEntity> applicableProfiles =
-                ShippingProfileManager.GetProfilesFor(shipmentTypeCode, true);
+            // The where clause filters out global profiles when selected shipment has a provider=none
+            List<IShippingProfileEntity> applicableProfiles = ShippingProfileManager.Profiles
+                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShipmentType.HasValue)
+                .Cast<IShippingProfileEntity>().ToList();
 
             if (applicableProfiles.Any())
             {
-                // Global profiles
-                IEnumerable<IShippingProfileEntity> globalProfiles = applicableProfiles
-                                                              .Where(p => p.ShipmentType == null)
-                                                              .OrderBy(p => p.Name);
+                var profileGroups = applicableProfiles.GroupBy(p => p.ShipmentType)
+                    .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
-                globalProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
-                
-                // Carrier Profiles
-                IEnumerable<IShippingProfileEntity> carrierProfiles = applicableProfiles
-                                                               .Where(p => p.ShipmentType == shipmentTypeCode)
-                                                               .OrderBy(p => p.Name);
-
-                if (globalProfiles.Any() && carrierProfiles.Any())
+                bool firstGroup = true;
+                foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
                 {
-                    contextMenuProfiles.Items.Add(new ToolStripSeparator());
-                }
-
-                if (carrierProfiles.Any())
-                {
-                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(shipmentTypeCode))
+                    if (!firstGroup)
                     {
-                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Margin = new Padding(-4, 2, 2, 2),
-                        Enabled = false
-                    };
-                    contextMenuProfiles.Items.Add(carrierLabel);
+                        contextMenuProfiles.Items.Add(new ToolStripSeparator());
+                    }
+                    firstGroup = false;
 
-                    carrierProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+                    if (profileGroup.Key.HasValue)
+                    {
+                        ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
+                        {
+                            Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                            Margin = new Padding(-4, 2, 2, 2),
+                            Enabled = false
+                        };
+                        contextMenuProfiles.Items.Add(carrierLabel);
+                    }
+
+                    profileGroup.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
                 }
             }
         }
@@ -1688,14 +1685,9 @@ namespace ShipWorks.Shipping
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
 
-            // Apply the profile to each ui displayed shipment
-            foreach (ShipmentEntity shipment in uiDisplayedShipments)
-            {
-                if (!shipment.Processed)
-                {
-                    shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
-                }
-            }
+            shippingProfileService.Get(profile.ShippingProfileID)
+                .Apply(uiDisplayedShipments.Where(s => !s.Processed).ToList());
+            
 
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);

@@ -1,9 +1,9 @@
 ﻿using System;
-using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -40,7 +40,9 @@ namespace ShipWorks.Tests.Shipping.Profiles
         {
             var loaderMock = mock.Mock<IShippingProfileLoader>();
 
-            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object);
+            // Testing 
+            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
+                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object);
             
             loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
         }
@@ -209,7 +211,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+            var shippingProfile = mock.Create<ShippingProfile>();
+            shippingProfile.ShippingProfileEntity = profile;
+            shippingProfile.Shortcut = shortcut;
+            return shippingProfile;
         }
         
         private Result Validate(ShippingProfile testObject)

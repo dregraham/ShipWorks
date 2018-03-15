@@ -1433,6 +1433,7 @@
     <Compile Include="Shipping\Profiles\IShippingProfileApplicationStrategyFactory.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileLoader.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileService.cs" />
+    <Compile Include="Shipping\Profiles\ProfileAppliedMessage.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileLoader.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />

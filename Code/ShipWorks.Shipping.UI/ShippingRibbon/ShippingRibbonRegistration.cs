@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Divelements.SandRibbon;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -22,9 +23,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     [Component]
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
-        private readonly ComponentResourceManager resources;
         private readonly IShippingRibbonService shippingRibbonService;
-        private readonly IShippingProfileManager profileManager;
+        private readonly IShippingProfileService profileService;
         private RibbonButton createLabelButton;
         private RibbonButton voidButton;
         private RibbonButton returnButton;
@@ -36,11 +36,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private Menu applyProfileMenu;
         private ShipmentTypeCode? currentShipmentType;
 
-        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileManager profileManager)
+        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileService profileService)
         {
-            resources = new ComponentResourceManager(typeof(MainForm));
             this.shippingRibbonService = shippingRibbonService;
-            this.profileManager = profileManager;
+            this.profileService = profileService;
         }
 
         /// <summary>
@@ -170,45 +169,40 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             applyProfileMenu.Items.Clear();
 
-            if (!currentShipmentType.HasValue)
-            {
-                return;
-            }
-
             List<WidgetBase> menuItems = new List<WidgetBase>();
-            List<IShippingProfileEntity> applicableProfiles = profileManager.GetProfilesFor(currentShipmentType.Value, true).ToList();
+            List<IShippingProfileEntity> applicableProfiles = profileService.GetConfiguredShipmentTypeProfiles()
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>().ToList();
 
             if (applicableProfiles.Any())
             {
-                // Global profiles
-                List<IShippingProfileEntity> globalProfiles = applicableProfiles
-                                                              .Where(p => p.ShipmentType == null)
-                                                              .OrderBy(p => p.Name).ToList();
-
-                globalProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Global")));
-
-                // Carrier Profiles
-                List<IShippingProfileEntity> carrierProfiles = applicableProfiles
-                                                               .Where(p => p.ShipmentType == currentShipmentType.Value)
-                                                               .OrderBy(p => p.Name).ToList();
-
-                if (carrierProfiles.Any())
+                // The where clause filters out global profiles when selected shipment has a provider=none
+                var profileGroups = applicableProfiles
+                    .Where(p=> currentShipmentType != ShipmentTypeCode.None || p.ShipmentType.HasValue)
+                    .GroupBy(p => p.ShipmentType)
+                    .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
+                
+                foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
                 {
-                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(currentShipmentType.Value))
+                    string groupName = "Global";
+                    if (profileGroup.Key.HasValue)
                     {
-                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Padding = new WidgetEdges(28, -1, 0, -1),
-                        GroupName = "Carrier", 
-                        Enabled = false,
-                    };
-                    
-                    menuItems.Add(carrierLabel);
-                    carrierProfiles.ForEach(p => menuItems.Add(CreateMenuItem(p, "Carrier")));
+                        groupName = profileGroup.ToString();
+                        MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(profileGroup.Key.Value))
+                        {
+                            Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                            Padding = new WidgetEdges(28, -1, 0, -1),
+                            GroupName = groupName,
+                            Enabled = false
+                        };
+                        menuItems.Add(carrierLabel);
+                    }
+
+                    profileGroup.ForEach(p => menuItems.Add(CreateMenuItem(p, groupName)));
                 }
             }
             else
             {
-                menuItems = new List<WidgetBase>() { new MenuItem { Text = "(None)", Enabled = false } };
+                menuItems = new List<WidgetBase> { new MenuItem { Text = "(None)", Enabled = false } };
             }
 
             applyProfileMenu.Items.AddRange(menuItems.ToArray());

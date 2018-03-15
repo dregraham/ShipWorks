@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -31,6 +32,11 @@ namespace ShipWorks.Shipping.Profiles
         /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
         /// </remarks>
         string ShortcutKey { get; }
+
+        /// <summary>
+        /// Apply profile to shipments
+        /// </summary>
+        void Apply(List<ShipmentEntity> shipment);
 
         /// <summary>
         /// Apply profile to shipment
