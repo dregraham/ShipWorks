@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -141,23 +142,14 @@ namespace ShipWorks.Shipping.Profiles
 
             foreach (ShipmentEntity shipment in shipments)
             {
-                bool shipmentTypeChanged = false;
                 if (ShippingProfileEntity.ShipmentType != null &&
                     shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
                 {
                     shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
-                    shipmentTypeChanged = true;
                 }
 
                 IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
                 strategy.ApplyProfile(ShippingProfileEntity, shipment);
-                shippingManager.SaveShipmentToDatabase(shipment, false);
-
-                if (shipmentTypeChanged)
-                {
-                    var shipmentAdapter = shippingManager.GetShipment(shipment.ShipmentID);
-                    messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter, ShipmentFields.ShipmentType.Name));
-                }
             }
 
             messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipments));
