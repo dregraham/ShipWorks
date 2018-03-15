@@ -16,7 +16,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Profiles
 {
-    public class ProfileAppliedPipelineTest
+    public class ProfileAppliedPipelineTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
@@ -51,13 +51,9 @@ namespace ShipWorks.Shipping.Tests.Profiles
             testObject.InitializeForCurrentSession();
             
             var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Amazon, Insurance = true } };
-            originalInsuranceSelection.Add(originalShipments[0].ShipmentID, originalShipments[0].Insurance);
-
             var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false } };
-            newInsuranceSelection.Add(newShipments[0].ShipmentID, newShipments[0].Insurance);
 
-            testMessenger.Send(new ProfileAppliedMessage(this, originalShipments, newShipments));
-            scheduler.Start();
+            SendMessage(originalShipments, newShipments);
 
             insuranceBehaviorChangeViewModel.Verify(i => i.Notify(originalInsuranceSelection, newInsuranceSelection));
         }
@@ -68,15 +64,27 @@ namespace ShipWorks.Shipping.Tests.Profiles
             testObject.InitializeForCurrentSession();
 
             var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false } };
+            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = true} };
+
+            SendMessage(originalShipments, newShipments);
+
+            insuranceBehaviorChangeViewModel.Verify(i => i.Notify(It.IsAny<Dictionary<long, bool>>(), It.IsAny<Dictionary<long, bool>>()), Times.Never);
+        }
+
+        private void SendMessage(ShipmentEntity[] originalShipments, ShipmentEntity[] newShipments)
+        {
             originalInsuranceSelection.Add(originalShipments[0].ShipmentID, originalShipments[0].Insurance);
 
-            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = true} };
             newInsuranceSelection.Add(newShipments[0].ShipmentID, newShipments[0].Insurance);
 
             testMessenger.Send(new ProfileAppliedMessage(this, originalShipments, newShipments));
             scheduler.Start();
+        }
 
-            insuranceBehaviorChangeViewModel.Verify(i => i.Notify(It.IsAny<Dictionary<long, bool>>(), It.IsAny<Dictionary<long, bool>>()), Times.Never);
+        public void Dispose()
+        {
+            testObject?.Dispose();
+            mock?.Dispose();
         }
     }
 }
