@@ -7,6 +7,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
@@ -69,12 +70,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             Mock<ShippingPanelViewModel> viewModel = mock.CreateMock<ShippingPanelViewModel>();
             viewModel.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 12 });
 
+            var adapter = mock.Mock<ICarrierShipmentAdapter>();
+
+            var profile = mock.Mock<IShippingProfile>();
+            profile.Setup(p => p.Apply(It.IsAny<ShipmentEntity>())).Returns(adapter);
+
+            mock.Mock<IShippingProfileService>().Setup(s => s.Get(It.IsAny<long>())).Returns(profile);
+
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
             messenger.OnNext(new ApplyProfileMessage(this, 12, new ShippingProfileEntity()));
 
-            viewModel.Verify(x => x.LoadShipment(viewModel.Object.ShipmentAdapter));
+            viewModel.Verify(x => x.LoadShipment(adapter.Object));
         }
 
         public void Dispose()

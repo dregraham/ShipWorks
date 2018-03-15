@@ -9,6 +9,7 @@ using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -44,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             // Testing 
             new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
-                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object);
+                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ICarrierShipmentAdapterFactory>().Object);
             
             loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
         }
@@ -263,72 +264,20 @@ namespace ShipWorks.Tests.Shipping.Profiles
             
             strategy.Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
         }
-        
+                
         [Fact]
-        public void Apply_SavesShipmentToDatabase()
+        public void Apply_DelegatesToCarrierShipmentAdapterFactory()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
             ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
-            var shippingManager = mock.Mock<IShippingManager>();
-            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
-            
-            testObject.Apply(shipment);
-            
-            shippingManager.Verify(m => m.SaveShipmentToDatabase(shipment, false), Times.Once);
-        }
-        
-        [Fact]
-        public void Apply_GetsShipmentAdapterFromShippingManager_WhenShipmentTypeChanges()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
-            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
-            var shippingManager = mock.Mock<IShippingManager>();
-            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
-            
-            testObject.Apply(shipment);
-            
-            shippingManager.Verify(m => m.GetShipment(shipment.ShipmentID), Times.Once);
-        }
-        
-        [Fact]
-        public void Apply_DoesNotGetShipmentAdapterFromShippingManager_WhenShipmentTypeDoesNotChange()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
-            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.Amazon};
-            var shippingManager = mock.Mock<IShippingManager>();
-            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
-            
-            testObject.Apply(shipment);
-            
-            shippingManager.Verify(m => m.GetShipment(shipment.ShipmentID), Times.Never);
-        }
-        
-        [Fact]
-        public void Apply_SendsShipmentChangedMessage_WhenShipmentTypeChanges()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
-            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
-            var messenger = mock.Mock<IMessenger>();
+
             ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
             
             testObject.Apply(shipment);
 
-            messenger.Verify(m => m.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Once);
+            mock.Mock<ICarrierShipmentAdapterFactory>().Verify(c => c.Get(shipment));
         }
         
-        [Fact]
-        public void Apply_SendsShipmentChangedMessage_WhenShipmentTypeDoesNotChange()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
-            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.Amazon};
-            var messenger = mock.Mock<IMessenger>();
-            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
-            
-            testObject.Apply(shipment);
-
-            messenger.Verify(m => m.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
-        }
-
         [Fact]
         public void Apply_SendsProfileAppliedMessage()
         {
