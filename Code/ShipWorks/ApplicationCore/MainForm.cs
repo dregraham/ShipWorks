@@ -2538,10 +2538,7 @@ namespace ShipWorks
         /// </summary>
         private void UpdateDownloadButtonForStores()
         {
-            List<StoreEntity> stores = StoreManager.GetEnabledStores()
-                .Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed)
-                .Where(x => x.StoreTypeCode != StoreTypeCode.Manual)
-                .ToList();
+            List<StoreEntity> stores = GetDownloadEnabledStores();
 
             // Only enabled if more than one store
             buttonDownload.Enabled = stores.Count > 0;
@@ -2577,11 +2574,7 @@ namespace ShipWorks
         /// </summary>
         private void OnDownloadOrders(object sender, EventArgs e)
         {
-            // Get the list of stores that we will download for.
-            ICollection<StoreEntity> stores = StoreManager.GetAllStores()
-                .Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed)
-                .Where(x => x.StoreTypeCode != StoreTypeCode.Manual)
-                .ToList();
+            List<StoreEntity> stores = GetDownloadEnabledStores();
 
             if (stores.Count > 0)
             {
@@ -2601,6 +2594,20 @@ namespace ShipWorks
             {
                 MessageHelper.ShowWarning(this, "There are no ShipWorks stores enabled for downloading.");
             }
+        }
+
+        /// <summary>
+        /// Get the list of stores that have downloading enabled
+        /// </summary>
+        private List<StoreEntity> GetDownloadEnabledStores()
+        {
+            // Get the list of stores that we will download for.
+            List<StoreEntity> stores = StoreManager.GetEnabledStores()
+                .Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed)
+                .Where(x => x.StoreTypeCode != StoreTypeCode.Manual)
+                .ToList();
+
+            return stores.ToList();
         }
 
         /// <summary>
