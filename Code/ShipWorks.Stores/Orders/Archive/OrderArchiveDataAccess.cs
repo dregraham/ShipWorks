@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a function with a connection in multi user mode
         /// </summary>
-        public void WithMultiUserConnectionAsync(Action<DbConnection> action)
+        public void WithMultiUserConnection(Action<DbConnection> action)
         {
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {

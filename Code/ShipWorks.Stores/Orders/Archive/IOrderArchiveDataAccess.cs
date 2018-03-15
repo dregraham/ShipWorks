@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute an action with a connection in multi user mode
         /// </summary>
-        void WithMultiUserConnectionAsync(Action<DbConnection> action);
+        void WithMultiUserConnection(Action<DbConnection> action);
 
         /// <summary>
         /// Create a SqlAdapter with the given connection
