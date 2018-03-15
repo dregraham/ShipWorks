@@ -1618,8 +1618,9 @@ namespace ShipWorks.Shipping
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
             // The where clause filters out global profiles when selected shipment has a provider=none
-            List<IShippingProfileEntity> applicableProfiles = ShippingProfileManager.Profiles
-                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShipmentType.HasValue)
+            List<IShippingProfileEntity> applicableProfiles = shippingProfileService.GetConfiguredShipmentTypeProfiles()
+                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Select(s => s.ShippingProfileEntity)
                 .Cast<IShippingProfileEntity>().ToList();
 
             if (applicableProfiles.Any())
@@ -1711,13 +1712,13 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
+                if (!shipment.Processed && securityCreateEditProcess)
+                {
+                    canApplyProfile = true;
+                }
+
                 if (shipment.ShipmentTypeCode != ShipmentTypeCode.None)
                 {
-                    if (!shipment.Processed && securityCreateEditProcess)
-                    {
-                        canApplyProfile = true;
-                    }
-
                     if (!shipment.Processed && shipmentTypeManager.Get(shipment).SupportsGetRates)
                     {
                         canGetRates = true;
