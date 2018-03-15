@@ -121,7 +121,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private Task<Unit> ExecuteSqlAsync(IProgressReporter progressItem, DbConnection conn, string message, string sql) =>
             Functional.UsingAsync(
                 new LoggedStopwatch(log, $"OrderArchive: {message} - "),
-                _ => connectionManager.ExecuteSqlAsync(conn, progressItem, sql));
+                _ => connectionManager.ExecuteSqlAsync(conn, progressItem, message, sql));
 
         /// <summary>
         /// Regenerate filters

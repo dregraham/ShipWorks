@@ -73,8 +73,9 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a block of sql on the given transaction
         /// </summary>
-        public Task<Unit> ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
+        public Task<Unit> ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string message, string commandText)
         {
+            progressReporter.Detail = message;
             progressReporter.Starting();
             progressReporter.PercentComplete = 0;
 
