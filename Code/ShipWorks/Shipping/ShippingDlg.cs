@@ -1624,7 +1624,7 @@ namespace ShipWorks.Shipping
 
             if (applicableProfiles.Any())
             {
-                var profileGroups = applicableProfiles.GroupBy(p => p.ShipmentType)
+                IOrderedEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = applicableProfiles.GroupBy(p => p.ShipmentType)
                     .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
                 bool firstGroup = true;

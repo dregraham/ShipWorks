@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             if (applicableProfiles.Any())
             {
                 // The where clause filters out global profiles when selected shipment has a provider=none
-                var profileGroups = applicableProfiles
+                IOrderedEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = applicableProfiles
                     .Where(p=> currentShipmentType != ShipmentTypeCode.None || p.ShipmentType.HasValue)
                     .GroupBy(p => p.ShipmentType)
                     .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
