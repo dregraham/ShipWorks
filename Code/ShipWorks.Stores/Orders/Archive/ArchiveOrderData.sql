@@ -370,7 +370,7 @@ BEGIN
 	exec (@EnableAllTriggersSql);
 
 	/* Enable all indexes */
-    RAISERROR ('Enable all indexes', 0, 1) WITH NOWAIT
+    RAISERROR ('Rebuild all indexes', 0, 1) WITH NOWAIT
 	exec (@EnableAllIndexesSql);
 
 	/* Enable all change tracking */

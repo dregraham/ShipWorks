@@ -101,12 +101,15 @@ namespace ShipWorks.Stores.Orders.Archive
                             using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
                             {
                                 filterProgress.Starting();
-                                filterProgress.Detail = "Regenerating.";
-
+                                filterProgress.Detail = "Regenerating filters...";
+                                filterProgress.PercentComplete = 5;
+                                
                                 filterHelper.RegenerateFilters(conn);
 
+                                filterHelper.CalculateInitialFilterCounts(conn, filterProgress, 10);
+
+                                filterProgress.PercentComplete = 100;
                                 filterProgress.Detail = "Done.";
-                                filterProgress.Completed();
                             }
                         });
 
