@@ -148,7 +148,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             string message = sqlInfoMessageEvent.Message.Trim();
 
-            SqlError error = sqlInfoMessageEvent.Errors.Cast<SqlError>().FirstOrDefault(sqlError => !sqlError.Message.StartsWith("OrderArchiveInfo:"));
+            SqlError error = sqlInfoMessageEvent.Errors.Cast<SqlError>().FirstOrDefault(sqlError => !IgnoreSqlErrorMessage(sqlError.Message));
 
             if (error?.Message.IsNullOrWhiteSpace() == false)
             {
@@ -175,10 +175,7 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 isRestore = true;
             }
-            else if (message.IndexOf("pages for database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                     message.IndexOf("The backup set", StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                     message.IndexOf("Processed ", StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                     message.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0)
+            else if (IgnoreSqlErrorMessage(message))
             {
                 // Nothing to do for these, just continue.   
             }
@@ -186,6 +183,23 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 progressReporter.Detail = message;
             }
+        }
+
+        /// <summary>
+        /// Checks a message to determine if it should be ignored.
+        /// </summary>
+        private static bool IgnoreSqlErrorMessage(string message)
+        {
+            string messageToCheck = message.Trim();
+
+            return messageToCheck.StartsWith("OrderArchiveInfo:") ||
+                   messageToCheck.IndexOf("pages for database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("The backup set", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("Processed ", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("BACKUP DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0 ||
+                   messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > 0;
         }
 
         /// <summary>

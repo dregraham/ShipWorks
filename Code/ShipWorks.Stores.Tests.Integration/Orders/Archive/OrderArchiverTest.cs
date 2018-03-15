@@ -4,10 +4,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
@@ -17,7 +21,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
-    //[Collection("Database collection")]
+    [Collection("Database collection")]
     //[Trait("Category", "ContinuousIntegration")]
     public class OrderArchiverTest
     {
@@ -36,16 +40,34 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
 
             await orderArchiver.Archive(DateTime.Parse("7/1/2018")).ConfigureAwait(false);
+
+            QueryFactory factory = new QueryFactory();
+
+            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                var queryFactory = new QueryFactory();
+                var query = queryFactory.Order.Where(OrderFields.OrderDate < DateTime.Parse("7/1/2018").Date).Select(OrderFields.OrderID.CountBig());
+                long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+
+                Assert.Equal(0, numberOfOrders);
+
+                query = queryFactory.Order.Where(OrderFields.OrderDate >= DateTime.Parse("7/1/2018").Date).Select(OrderFields.OrderID.CountBig());
+                numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+
+                Assert.NotEqual(0, numberOfOrders);
+            }
+
+
         }
 
-        public IEnumerable<DateTime> OrderDates => new[]
+        private IEnumerable<DateTime> OrderDates => new[]
         {
-            DateTime.Parse("5/1/2017"),
-            DateTime.Parse("6/1/2017"),
-            DateTime.Parse("7/1/2017").AddMinutes(-1),
+            //DateTime.Parse("5/1/2017"),
+            //DateTime.Parse("6/1/2017"),
+            //DateTime.Parse("7/1/2017").AddMinutes(-1),
             DateTime.Parse("7/1/2017"),
-            DateTime.Parse("7/1/2017").AddMinutes(1),
-            DateTime.Parse("8/1/2017"),
+            //DateTime.Parse("7/1/2017").AddMinutes(1),
+            //DateTime.Parse("8/1/2017"),
         };
 
         private void CreateOrderForAllStores()
@@ -82,7 +104,9 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 };
                 sqlAdapter.SaveAndRefetch(computer);
 
-                foreach (StoreTypeCode storeTypeCode in EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid))
+                foreach (StoreTypeCode storeTypeCode in EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid)
+                .Take(4)
+                )
                 {
                     StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
                     var store = storeType.CreateStoreInstance();
@@ -171,7 +195,9 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                         orderItemAttribute.OrderItemID = orderItem.OrderItemID;
                         sqlAdapter.SaveEntity(orderItemAttribute);
 
-                        foreach (ShipmentTypeCode shipmentTypeCode in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None))
+                        foreach (ShipmentTypeCode shipmentTypeCode in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None)
+                            .Take(4)
+                        )
                         {
                             var shipment = new ShipmentEntity()
                             {
