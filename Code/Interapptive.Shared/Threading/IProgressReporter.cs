@@ -53,6 +53,11 @@ namespace Interapptive.Shared.Threading
         void Cancel();
 
         /// <summary>
+        /// Called when the item has not yet been run, but won't be run due to a previous error.
+        /// </summary>
+        void Terminate();
+
+        /// <summary>
         /// Name of the progress item
         /// </summary>
         string Name { get; }

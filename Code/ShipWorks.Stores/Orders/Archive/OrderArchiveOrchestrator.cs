@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Display a success message
         /// </summary>
         private Task DisplaySuccess(Unit _) =>
-            messageHelper.ShowMessage("Archive finished");
+            Task.CompletedTask;
 
         /// <summary>
         /// Display an error

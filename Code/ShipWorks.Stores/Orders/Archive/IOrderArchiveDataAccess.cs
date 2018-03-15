@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a block of sql on the given DbConnection
         /// </summary>
-        Task ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string commandText);
+        Task<Unit> ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string commandText);
 
         /// <summary>
         /// Get count of orders that will be archived

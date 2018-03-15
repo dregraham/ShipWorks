@@ -49,7 +49,7 @@ namespace ShipWorks.Common.Threading
         bool uiUpdatePending = false;
         object uiUpdateLock = new object();
 
-        // Indiciates if the last known state of the progress provider was running.  This is just
+        // Indicates if the last known state of the progress provider was running.  This is just
         // so we don't update the header image too much, which screws up the animation.
         bool lastStateComplete = false;
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Controls if the the window behaves like a modal window even if Show is called instead of ShowDialog.  This basically boils down
+        /// Controls if the window behaves like a modal window even if Show is called instead of ShowDialog.  This basically boils down
         /// to the fact that it disables the parent window while it is visible.
         /// </summary>
         [DefaultValue(true)]
@@ -180,7 +180,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Controls if the progress window can be closed before all the progress items are completd, canceled, or errored.
+        /// Controls if the progress window can be closed before all the progress items are completed, canceled, or errored.
         /// </summary>
         [DefaultValue(false)]
         public bool AllowCloseWhenRunning
@@ -444,7 +444,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Update the UI of the overall window to act appropriatly based on the progress
+        /// Update the UI of the overall window to act appropriately based on the progress
         /// </summary>
         private void UpdateProgressUI()
         {
@@ -493,7 +493,7 @@ namespace ShipWorks.Common.Threading
                     ok.Enabled = allowCloseWhenComplete;
                     ok.Text = closeTextWhenComplete;
 
-                    // Error overrides the cance\success images
+                    // Error overrides the cancel\success images
                     if (progressProvider.HasErrors)
                     {
                         headerImage.Image = Resources.error32;
@@ -519,7 +519,7 @@ namespace ShipWorks.Common.Threading
                 }
             }
 
-            // This is so we don't update the animiation image too much
+            // This is so we don't update the animation image too much
             lastStateComplete = progressProvider.IsComplete;
         }
 
@@ -567,7 +567,7 @@ namespace ShipWorks.Common.Threading
                 SandGridUtility.ShowNestedMessage(row, "Canceling...", Color.OrangeRed);
             }
 
-            // Otherwise, shouldnt be showing anything
+            // Otherwise, shouldn't be showing anything
             else
             {
                 row.NestedRows.Clear();
@@ -676,6 +676,8 @@ namespace ShipWorks.Common.Threading
             progressProvider.ProgressItems.CollectionChanged -= OnChangeProgressItems;
 
             ClearRows();
+
+            progressProvider.Terminate();
         }
 
         /// <summary>

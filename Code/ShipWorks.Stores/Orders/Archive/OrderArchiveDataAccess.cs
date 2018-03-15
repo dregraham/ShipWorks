@@ -2,10 +2,12 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -28,7 +30,6 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly int commandTimeout = int.MaxValue;
         private bool isRestore = false;
-        private OrderArchiveException orderArchiveException = null;
 
         /// <summary>
         /// Constructor
@@ -72,50 +73,51 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a block of sql on the given transaction
         /// </summary>
-        public async Task ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
+        public Task<Unit> ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
         {
-            if (orderArchiveException != null)
-            {
-                if (progressReporter.CanCancel)
-                {
-                    progressReporter.Cancel();
-                }
+            progressReporter.Starting();
+            progressReporter.PercentComplete = 0;
 
-                progressReporter.Detail = orderArchiveException.Message;
+            return Functional.UsingAsync(
+                HandleSqlInfo(connection, progressReporter),
+                _ => BuildCommand(connection, commandText)
+                    .ExecuteNonQueryAsync()
+                    .Bind(__ => progressReporter.Status == ProgressItemStatus.Running ?
+                        Task.FromResult(CompleteProgress(progressReporter)) :
+                        Task.FromException<Unit>(Errors.Error.Canceled)));
+        }
 
-                return;
-            }
+        /// <summary>
+        /// Build the command for execution
+        /// </summary>
+        private DbCommand BuildCommand(DbConnection connection, string commandText)
+        {
+            var command = connection.CreateCommand();
+            command.CommandTimeout = commandTimeout;
+            command.CommandText = commandText;
+            return command;
+        }
 
-            using (HandleSqlInfo(connection, progressReporter))
-            {
-                var command = connection.CreateCommand();
-                command.CommandTimeout = commandTimeout;
-
-                progressReporter.Starting();
-                progressReporter.PercentComplete = 0;
-                command.CommandText = commandText;
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-
-                if (progressReporter.Status == ProgressItemStatus.Running)
-                {
-                    progressReporter.PercentComplete = 100;
-                    progressReporter.Completed();
-                }
-            }
+        /// <summary>
+        /// Complete the given progress reporter
+        /// </summary>
+        private Unit CompleteProgress(IProgressReporter progressReporter)
+        {
+            progressReporter.PercentComplete = 100;
+            progressReporter.Detail = "Done";
+            progressReporter.Completed();
+            return Unit.Default;
         }
 
         /// <summary>
         /// Get count of orders that will be archived
         /// </summary>
-        public async Task<long> GetCountOfOrdersToArchive(DateTime archiveDate)
+        public Task<long> GetCountOfOrdersToArchive(DateTime archiveDate)
         {
             var queryFactory = new QueryFactory();
             var query = queryFactory.Order.Where(OrderFields.OrderDate < archiveDate.Date).Select(OrderFields.OrderID.CountBig());
 
-            using (var sqlAdapter = sqlAdapterFactory.Create())
-            {
-                return await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
-            }
+            return Functional.UsingAsync(sqlAdapterFactory.Create(), adapter => adapter.FetchScalarAsync<long>(query));
         }
 
         /// <summary>
@@ -129,7 +131,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
                 sqlConnection.FireInfoMessageEventOnUserErrors = true;
                 sqlConnection.InfoMessage += infoHandler;
-                
+
                 return Disposable.Create(() => sqlConnection.InfoMessage -= infoHandler);
             }
 
@@ -141,7 +143,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void UpdateProgress(IProgressReporter progressReporter, SqlInfoMessageEventArgs sqlInfoMessageEvent)
         {
-            if (orderArchiveException != null || progressReporter.Status != ProgressItemStatus.Running)
+            if (progressReporter.Status != ProgressItemStatus.Running)
             {
                 return;
             }
@@ -155,8 +157,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 message = error.Message;
                 log.Info($"OrderArchive: UpdateProgress SQL ERROR Message - {message}");
 
-                orderArchiveException = new OrderArchiveException(message);
-                progressReporter.Failed(orderArchiveException);
+                progressReporter.Failed(new OrderArchiveException(message));
                 return;
             }
 
