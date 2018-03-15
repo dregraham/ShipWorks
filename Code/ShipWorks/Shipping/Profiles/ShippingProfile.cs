@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public void Apply(List<ShipmentEntity> shipments)
         {
-            List<ShipmentEntity> originalShipments = shipments.Select(s => EntityUtility.CloneEntity(s, true)).ToList();
+            List<ShipmentEntity> originalShipments = shipments.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {

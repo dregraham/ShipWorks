@@ -50,8 +50,8 @@ namespace ShipWorks.Shipping.Tests.Profiles
         {
             testObject.InitializeForCurrentSession();
             
-            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Amazon, Insurance = true } };
-            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false } };
+            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Amazon, Insurance = true, IsNew = false} };
+            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false, IsNew = false } };
 
             SendMessage(originalShipments, newShipments);
 
@@ -59,12 +59,25 @@ namespace ShipWorks.Shipping.Tests.Profiles
         }
 
         [Fact]
-        public void ProcessMessage_DelegatesToInsuranceBehaviorChangeViewModel_WhenOriginalAndNewShipmentsAreTheSame()
+        public void ProcessMessage_DoesNotDelegatesToInsuranceBehaviorChangeViewModel_WhenOriginalAndNewShipmentsAreTheSameShipmentType()
         {
             testObject.InitializeForCurrentSession();
 
-            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false } };
-            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = true} };
+            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false, IsNew = false } };
+            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = true, IsNew = false } };
+
+            SendMessage(originalShipments, newShipments);
+
+            insuranceBehaviorChangeViewModel.Verify(i => i.Notify(It.IsAny<Dictionary<long, bool>>(), It.IsAny<Dictionary<long, bool>>()), Times.Never);
+        }
+
+        [Fact]
+        public void ProcessMessage_DoesNotDelegatesToInsuranceBehaviorChangeViewModel_WhenOriginalShipmentIsNew()
+        {
+            testObject.InitializeForCurrentSession();
+
+            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false, IsNew = true } };
+            var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = true, IsNew = false } };
 
             SendMessage(originalShipments, newShipments);
 

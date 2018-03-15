@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Profiles
             IDictionary<long, bool> originalInsuranceSelections = new Dictionary<long, bool>();
             IDictionary<long, bool> updatedInsuranceSelections = new Dictionary<long, bool>();
 
-            foreach (ShipmentEntity originalShipment in message.OriginalShipments)
+            foreach (ShipmentEntity originalShipment in message.OriginalShipments.Where(s => !s.IsNew))
             {
                 long shipmentID = originalShipment.ShipmentID;
                 ShipmentEntity updatedShipment = message.UpdatedShipments.Single(s => s.ShipmentID == shipmentID);
