@@ -68,16 +68,30 @@
             </ui:WaitSpinner>
         </ui:AlignmentWrapPanel>
 
-        <TextBlock Grid.Row="1"
+        <ScrollViewer Grid.Row="1" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled">
+            <TextBlock
                    TextWrapping="Wrap"
                    Foreground="Gray"
                    Margin="0,8,0,12">
-            <Run>Archiving orders moves order and associated information into a new database.  The order and shipment information is then removed from the current ShipWorks database.</Run>
-            <LineBreak /> 
-            <LineBreak /> 
-            <Run>Once the archive is made, you must connect to the archive database to view the archived order and associated information.</Run> 
+            <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>Archiving orders cannot be undone.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>Archived orders are removed from the current ShipWorks database.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>ShipWorks cannot be used during the archiving process.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run>Want to learn more about archiving?</Run>
             <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
-        </TextBlock>
+            </TextBlock>
+        </ScrollViewer>
 
         <ui:NotificationBorder Grid.Row="2"
                                Margin="0,0,0,12"
