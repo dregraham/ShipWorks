@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
@@ -23,8 +20,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         private readonly TestScheduler scheduler;
         private readonly ProfileAppliedPipeline testObject;
         private readonly Mock<IInsuranceBehaviorChangeViewModel> insuranceBehaviorChangeViewModel;
-        private readonly Dictionary<long, bool> originalInsuranceSelection = new Dictionary<long, bool>();
-        private readonly Dictionary<long, bool> newInsuranceSelection = new Dictionary<long, bool>();
+        private readonly IDictionary<long, (bool before, bool after)> insuranceSelections = new Dictionary<long, (bool before, bool after)>();
 
         public ProfileAppliedPipelineTest()
         {
@@ -55,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
 
             SendMessage(originalShipments, newShipments);
 
-            insuranceBehaviorChangeViewModel.Verify(i => i.Notify(originalInsuranceSelection, newInsuranceSelection));
+            insuranceBehaviorChangeViewModel.Verify(i => i.Notify(insuranceSelections));
         }
 
         [Fact]
@@ -86,9 +82,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
 
         private void SendMessage(ShipmentEntity[] originalShipments, ShipmentEntity[] newShipments)
         {
-            originalInsuranceSelection.Add(originalShipments[0].ShipmentID, originalShipments[0].Insurance);
-
-            newInsuranceSelection.Add(newShipments[0].ShipmentID, newShipments[0].Insurance);
+            insuranceSelections.Add(originalShipments[0].ShipmentID, (originalShipments[0].Insurance, newShipments[0].Insurance));
 
             testMessenger.Send(new ProfileAppliedMessage(this, originalShipments, newShipments));
             scheduler.Start();

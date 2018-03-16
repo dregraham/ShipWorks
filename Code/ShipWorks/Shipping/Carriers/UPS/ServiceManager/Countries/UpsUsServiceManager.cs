@@ -132,8 +132,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// </summary>
         private List<UpsServiceMapping> GetServiceTypes(string countryCode, ShipmentTypeCode shipmentTypeCode)
         {
-            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
-
             // See if the requested country code has specific services defined
             bool hasCountryCode = LoadUpsServiceMappings().Any(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant());
 
@@ -144,7 +142,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                 countryCode = InternationalCountryCode;
             }
 
-            if (shipmentType.IsMailInnovationsEnabled())
+            UpsShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode) as UpsShipmentType;
+            if (shipmentType != null && shipmentType.IsMailInnovationsEnabled())
             {
                 return LoadUpsServiceMappings().Where(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
             }
