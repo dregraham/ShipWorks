@@ -61,5 +61,8 @@ namespace Interapptive.Shared.Threading
         /// Name of the progress item
         /// </summary>
         string Name { get; }
+        
+        // Raised when an of the properties of the item changed
+        event EventHandler Changed;
     }
 }

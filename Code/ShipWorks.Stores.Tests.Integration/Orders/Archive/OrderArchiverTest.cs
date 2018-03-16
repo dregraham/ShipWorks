@@ -5,7 +5,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Moq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
@@ -17,7 +19,11 @@ using ShipWorks.Shipping;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.Database;
+using Interapptive.Shared.Threading;
+using ShipWorks.Common.Threading;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
@@ -26,48 +32,82 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
     public class OrderArchiverTest
     {
         private readonly DataContext context;
+        private Mock<IAsyncMessageHelper> asyncMessageHelper;
+        private IProgressProvider progressProvider;
 
         public OrderArchiverTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
+            {
+                mock.Override<IMessageHelper>();
+                asyncMessageHelper = mock.Override<IAsyncMessageHelper>();
+            });
+
+            progressProvider = new ProgressProvider();
+            progressProvider.ProgressItems.CollectionChanged += OnProgressItemsCollectionChanged;
+
+
+            asyncMessageHelper.Setup(x => x.CreateProgressProvider()).Returns(progressProvider);
+
+            asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString, It.IsAny<IProgressProvider>(), TimeSpan.Zero))
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             CreateOrderForAllStores();
+        }
+
+        private void OnProgressItemsCollectionChanged(object sender, Interapptive.Shared.Collections.CollectionChangedEventArgs<IProgressReporter> e)
+        {
+            e.NewItem.Changed += ProgressItemChanged;
+        }
+
+        private void ProgressItemChanged(object sender, EventArgs e)
+        {
+            if (progressProvider.IsComplete)
+            {
+                progressProvider.Terminate();
+            }
         }
 
         [Fact]
         public async Task OrderArchiver_ArchivesCorrectly()
         {
-            IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
+            var queryFactory = new QueryFactory();
+            var toDeleteQuery = queryFactory.Order.Where(OrderFields.OrderDate < DateTime.Parse("7/1/2017").Date).Select(OrderFields.OrderID.CountBig());
+            var toKeepQuery = queryFactory.Order.Where(OrderFields.OrderDate >= DateTime.Parse("7/1/2017").Date).Select(OrderFields.OrderID.CountBig());
 
-            await orderArchiver.Archive(DateTime.Parse("7/1/2018")).ConfigureAwait(false);
+            long countToDelete = 0;
+            long countToKeep = 0;
 
-            QueryFactory factory = new QueryFactory();
+            //using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            //{
+            //    countToDelete = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
+            //    countToKeep = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+            //}
 
-            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
-            {
-                var queryFactory = new QueryFactory();
-                var query = queryFactory.Order.Where(OrderFields.OrderDate < DateTime.Parse("7/1/2018").Date).Select(OrderFields.OrderID.CountBig());
-                long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+            //IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
 
-                Assert.Equal(0, numberOfOrders);
+            //await orderArchiver.Archive(DateTime.Parse("7/1/2010")).ConfigureAwait(false);
 
-                query = queryFactory.Order.Where(OrderFields.OrderDate >= DateTime.Parse("7/1/2018").Date).Select(OrderFields.OrderID.CountBig());
-                numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+            //QueryFactory factory = new QueryFactory();
 
-                Assert.NotEqual(0, numberOfOrders);
-            }
+            //using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            //{
+            //    long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
+            //    Assert.Equal(countToDelete, numberOfOrders);
 
-
+            //    numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+            //    Assert.Equal(countToKeep, numberOfOrders);
+            //}
         }
 
         private IEnumerable<DateTime> OrderDates => new[]
         {
-            //DateTime.Parse("5/1/2017"),
-            //DateTime.Parse("6/1/2017"),
-            //DateTime.Parse("7/1/2017").AddMinutes(-1),
+            DateTime.Parse("5/1/2017"),
+            DateTime.Parse("6/1/2017"),
+            DateTime.Parse("7/1/2017").AddMinutes(-1),
             DateTime.Parse("7/1/2017"),
-            //DateTime.Parse("7/1/2017").AddMinutes(1),
-            //DateTime.Parse("8/1/2017"),
+            DateTime.Parse("7/1/2017").AddMinutes(1),
+            DateTime.Parse("8/1/2017"),
         };
 
         private void CreateOrderForAllStores()
@@ -105,7 +145,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 sqlAdapter.SaveAndRefetch(computer);
 
                 foreach (StoreTypeCode storeTypeCode in EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid)
-                .Take(4)
+                //.Take(4)
                 )
                 {
                     StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
@@ -196,7 +236,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                         sqlAdapter.SaveEntity(orderItemAttribute);
 
                         foreach (ShipmentTypeCode shipmentTypeCode in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None)
-                            .Take(4)
+                            //.Take(4)
                         )
                         {
                             var shipment = new ShipmentEntity()
@@ -225,7 +265,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                             InsurancePolicyEntity insurancePolicy = new InsurancePolicyEntity();
                             insurancePolicy.InitializeNullsToDefault();
                             insurancePolicy.ShipmentID = shipment.ShipmentID;
-                            sqlAdapter.SaveAndRefetch(shipment);
+                            sqlAdapter.SaveAndRefetch(insurancePolicy);
 
                             ShipmentReturnItemEntity shipmentReturnItem = new ShipmentReturnItemEntity();
                             shipmentReturnItem.InitializeNullsToDefault();
