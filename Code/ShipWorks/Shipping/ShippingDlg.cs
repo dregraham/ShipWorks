@@ -1590,8 +1590,8 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
-                (ShipmentTypeCode)comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
+                (ShipmentTypeCode) comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
@@ -1646,7 +1646,8 @@ namespace ShipWorks.Shipping
                     contextMenuProfiles.Items.Add(carrierLabel);
                 }
 
-                profileGroup.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+                profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
+                    .ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
             }
         }
 

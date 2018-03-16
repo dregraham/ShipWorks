@@ -193,7 +193,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     menuItems.Add(carrierLabel);
                 }
 
-                menuItems.AddRange(profileGroup.Select(profile => CreateMenuItem(profile, groupName)));
+                menuItems.AddRange(profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
+                    .Select(profile => CreateMenuItem(profile, groupName)));
             }
 
             if (menuItems.None())
