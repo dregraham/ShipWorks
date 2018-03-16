@@ -1617,7 +1617,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
-            // The where clause filters out global profiles when selected shipment has a provider=none
+            // The where clause makes sure we can't apply global profiles to none shipments. 
+            // None shipments cannot be configured so we only want profiles applied that will change the shipment type
             List<IShippingProfileEntity> applicableProfiles = shippingProfileService.GetConfiguredShipmentTypeProfiles()
                 .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
                 .Select(s => s.ShippingProfileEntity)
@@ -1687,9 +1688,8 @@ namespace ShipWorks.Shipping
             SaveChangesToUIDisplayedShipments();
 
             shippingProfileService.Get(profile.ShippingProfileID)
-                .Apply(uiDisplayedShipments.Where(s => !s.Processed).ToList());
+                .Apply(uiDisplayedShipments.Where(s => !s.Processed));
             
-
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);
             applyingProfile = false;

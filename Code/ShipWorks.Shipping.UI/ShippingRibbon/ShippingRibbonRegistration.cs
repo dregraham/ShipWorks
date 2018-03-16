@@ -170,37 +170,34 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             applyProfileMenu.Items.Clear();
 
             List<WidgetBase> menuItems = new List<WidgetBase>();
-            List<IShippingProfileEntity> applicableProfiles = profileService.GetConfiguredShipmentTypeProfiles()
-                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>().ToList();
+            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = profileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .Where(p => currentShipmentType != ShipmentTypeCode.None || p.ShipmentType.HasValue)
+                .GroupBy(p => p.ShipmentType)
+                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
-            if (applicableProfiles.Any())
+            // The where clause filters out global profiles when selected shipment has a provider=none
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
             {
-                // The where clause filters out global profiles when selected shipment has a provider=none
-                IOrderedEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = applicableProfiles
-                    .Where(p=> currentShipmentType != ShipmentTypeCode.None || p.ShipmentType.HasValue)
-                    .GroupBy(p => p.ShipmentType)
-                    .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
-                
-                foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
+                string groupName = "Global";
+                if (profileGroup.Key.HasValue)
                 {
-                    string groupName = "Global";
-                    if (profileGroup.Key.HasValue)
+                    groupName = profileGroup.ToString();
+                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(profileGroup.Key.Value))
                     {
-                        groupName = profileGroup.ToString();
-                        MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(profileGroup.Key.Value))
-                        {
-                            Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                            Padding = new WidgetEdges(28, -1, 0, -1),
-                            GroupName = groupName,
-                            Enabled = false
-                        };
-                        menuItems.Add(carrierLabel);
-                    }
-
-                    profileGroup.ForEach(p => menuItems.Add(CreateMenuItem(p, groupName)));
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Padding = new WidgetEdges(28, -1, 0, -1),
+                        GroupName = groupName,
+                        Enabled = false
+                    };
+                    menuItems.Add(carrierLabel);
                 }
+
+                menuItems.AddRange(profileGroup.Select(profile => CreateMenuItem(profile, groupName)));
             }
-            else
+
+            if (menuItems.None())
             {
                 menuItems = new List<WidgetBase> { new MenuItem { Text = "(None)", Enabled = false } };
             }

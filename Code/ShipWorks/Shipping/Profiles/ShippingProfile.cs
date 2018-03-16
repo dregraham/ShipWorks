@@ -130,8 +130,8 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply profile to shipment
         /// </summary>
-        public ICarrierShipmentAdapter Apply(ShipmentEntity shipment)
-            => Apply(new [] { shipment }).First();
+        public ICarrierShipmentAdapter Apply(ShipmentEntity shipment) =>
+            Apply(new[] { shipment }).First();
 
         /// <summary>
         /// Apply profile to shipments
@@ -139,8 +139,10 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
-
+            
             List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
+            IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
+
             foreach (ShipmentEntity shipment in shipmentList)
             {
                 if (ShippingProfileEntity.ShipmentType != null &&
@@ -148,8 +150,6 @@ namespace ShipWorks.Shipping.Profiles
                 {
                     shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
                 }
-
-                IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
                 strategy.ApplyProfile(ShippingProfileEntity, shipment);
             }
 
