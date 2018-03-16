@@ -50,8 +50,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void ProcessMessage(ProfileAppliedMessage message)
         {
-            IDictionary<long, bool> originalInsuranceSelections = new Dictionary<long, bool>();
-            IDictionary<long, bool> updatedInsuranceSelections = new Dictionary<long, bool>();
+            IDictionary<long, (bool before, bool after)> insuranceSelections = new Dictionary<long, (bool before, bool after)>();
 
             foreach (ShipmentEntity originalShipment in message.OriginalShipments.Where(s => !s.IsNew))
             {
@@ -59,14 +58,13 @@ namespace ShipWorks.Shipping.Profiles
                 ShipmentEntity updatedShipment = message.UpdatedShipments.Single(s => s.ShipmentID == shipmentID);
                 if (updatedShipment.ShipmentTypeCode != originalShipment.ShipmentTypeCode)
                 {
-                    originalInsuranceSelections.Add(shipmentID, originalShipment.Insurance);
-                    updatedInsuranceSelections.Add(shipmentID, updatedShipment.Insurance);
+                    insuranceSelections.Add(shipmentID, (originalShipment.Insurance, updatedShipment.Insurance));
                 }
             }
 
-            if (originalInsuranceSelections.Any())
+            if (insuranceSelections.Any())
             {
-                createInsuranceBehaviorChange().Notify(originalInsuranceSelections, updatedInsuranceSelections);
+                createInsuranceBehaviorChange().Notify(insuranceSelections);
             }
         }
         

@@ -16,5 +16,10 @@ namespace ShipWorks.Shipping.Insurance
         /// Notify the user of the change
         /// </summary>
         void Notify(IDictionary<long, bool> originalInsuranceSelection, IDictionary<long, bool> newInsuranceSelection);
+        
+        /// <summary>
+        /// Notify the user of the change
+        /// </summary>
+        void Notify(IDictionary<long, (bool before, bool after)> insuranceSelection);
     }
 }

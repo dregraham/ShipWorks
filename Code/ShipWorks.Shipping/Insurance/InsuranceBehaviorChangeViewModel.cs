@@ -95,6 +95,14 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
+        /// Notify the user of the change
+        /// </summary>
+        public void Notify(IDictionary<long, (bool before, bool after)> insuranceSelection)
+        {
+            Notify(insuranceSelection.ToDictionary(i => i.Key, i => i.Value.before), insuranceSelection.ToDictionary(i => i.Key, i => i.Value.after));
+        }
+
+        /// <summary>
         /// Should the customer be notified
         /// </summary>
         private static bool ShouldBeNotified(bool originalInsuranceSelection, bool newInsuranceSelection) =>
