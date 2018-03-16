@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -19,13 +18,16 @@ namespace ShipWorks.Stores.Platforms.Manual
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Manual, ExternallyOwned = false)]
     public class ManualStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ManualStoreType(StoreEntity store)
+        public ManualStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory)
             : base(store)
         {
+            this.storeWizardFinishPageControlFactory = storeWizardFinishPageControlFactory;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Manual
             return store;
         }
 
-         /// <summary>
+        /// <summary>
         /// Create an identifier that uniquely identifies the order
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
@@ -88,6 +90,14 @@ namespace ShipWorks.Stores.Platforms.Manual
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
             return new ManualAccountSettingsControl();
+        }
+
+        /// <summary>
+        /// Returns messaging to display on the AddStoreWizard finish page
+        /// </summary>
+        public override Control CreateWizardFinishPageControl()
+        {
+            return storeWizardFinishPageControlFactory[StoreTypeCode.Manual].Create(Store);
         }
     }
 }
