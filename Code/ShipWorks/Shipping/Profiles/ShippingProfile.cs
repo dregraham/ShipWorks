@@ -138,9 +138,10 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
-            List<ShipmentEntity> originalShipments = shipments.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
+            List<ShipmentEntity> shipmentList = shipments.ToList();
 
-            foreach (ShipmentEntity shipment in shipments)
+            List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
+            foreach (ShipmentEntity shipment in shipmentList)
             {
                 if (ShippingProfileEntity.ShipmentType != null &&
                     shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
@@ -152,9 +153,9 @@ namespace ShipWorks.Shipping.Profiles
                 strategy.ApplyProfile(ShippingProfileEntity, shipment);
             }
 
-            messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipments));
+            messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
 
-            return shipments.Select(s => shipmentAdapterFactory.Get(s));
+            return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
         }
     }
 }
