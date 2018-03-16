@@ -54,6 +54,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x => 
                 {
+                    // Because now the profile can change the ShipmentType of the shipment 
+                    // we are mimicking the logic found in the ChangeShipmentTypePipeline
+                    // If the user clicks to apply a profile but never gives focus to the 
+                    // shipping panel and the shipping panel never loses focus nothing saves 
+                    // the shipment, this forces the panel to refresh the new shipment and save it.
                     viewModel.LoadShipment(x);
                     viewModel.SaveToDatabase();
 
