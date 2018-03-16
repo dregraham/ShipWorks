@@ -637,16 +637,5 @@ namespace ShipWorks.Stores
         {
             return true;
         }
-
-        /// <summary>
-        /// Returns messaging to display on the AddStoreWizard finish page
-        /// </summary>
-        public virtual Control CreateWizardFinishPageControl()
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
-            }
-        }
     }
 }
