@@ -177,7 +177,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 .GroupBy(p => p.ShipmentType)
                 .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
-            // The where clause filters out global profiles when selected shipment has a provider=none
             foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
             {
                 string groupName = "Global";
@@ -205,6 +204,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             applyProfileMenu.Items.AddRange(menuItems.ToArray());
         }
 
+        /// <summary>
+        /// Return true if applicable to shipment type
+        /// </summary>
         private bool IncludeProfile(IShippingProfileEntity profile)
         {
             switch (currentShipmentType)
