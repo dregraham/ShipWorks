@@ -157,6 +157,7 @@ BEGIN
 	exec PurgeEntities 'ShipmentReturnItem', 'ShipmentID', 'ShipmentReturnItemID'
 	exec PurgeEntities 'WorldShipProcessed', 'ShipmentID', 'WorldShipProcessedID'
 	exec PurgeEntities 'ValidatedAddress', 'ConsumerID', 'ValidatedAddressID'
+	exec PurgeEntities 'Note', 'ObjectID', 'NoteID'
 	exec PurgeEntities 'PrintResult', 'RelatedObjectID', 'PrintResultID'
 	exec PurgeEntities 'PrintResult', 'ContextObjectID', 'PrintResultID'
 	exec PurgeEntities 'ObjectLabel', 'ObjectID', 'ObjectID'

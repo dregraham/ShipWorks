@@ -28,7 +28,7 @@ using ShipWorks.Tests.Shared;
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
     [Collection("Database collection")]
-    //[Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "SmokeTest")]
     public class OrderArchiverTest
     {
         private readonly DataContext context;
@@ -68,36 +68,38 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             }
         }
 
-        [Fact]
-        public async Task OrderArchiver_ArchivesCorrectly()
+        [Theory]
+        [InlineDataAttribute("1950-07-01 00:01:00.000")]
+        [InlineDataAttribute("2017-06-30 23:59:59.000")]
+        [InlineDataAttribute("2017-07-01 00:00:00.000")]
+        [InlineDataAttribute("2017-07-01 00:01:00.000")]
+        [InlineDataAttribute("2027-07-01 00:01:00.000")]
+        public async Task OrderArchiver_ArchivesCorrectly(string orderDate)
         {
+            DateTime maxOrderDate = DateTime.Parse(orderDate);
             var queryFactory = new QueryFactory();
-            var toDeleteQuery = queryFactory.Order.Where(OrderFields.OrderDate < DateTime.Parse("7/1/2017").Date).Select(OrderFields.OrderID.CountBig());
-            var toKeepQuery = queryFactory.Order.Where(OrderFields.OrderDate >= DateTime.Parse("7/1/2017").Date).Select(OrderFields.OrderID.CountBig());
+            var toDeleteQuery = queryFactory.Order.Where(OrderFields.OrderDate < maxOrderDate.Date).Select(OrderFields.OrderID.CountBig());
+            var toKeepQuery = queryFactory.Order.Where(OrderFields.OrderDate >= maxOrderDate.Date).Select(OrderFields.OrderID.CountBig());
 
-            long countToDelete = 0;
             long countToKeep = 0;
 
-            //using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
-            //{
-            //    countToDelete = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
-            //    countToKeep = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
-            //}
+            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                countToKeep = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+            }
 
-            //IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
+            IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
 
-            //await orderArchiver.Archive(DateTime.Parse("7/1/2010")).ConfigureAwait(false);
+            await orderArchiver.Archive(maxOrderDate).ConfigureAwait(false);
 
-            //QueryFactory factory = new QueryFactory();
+            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
+                Assert.Equal(0, numberOfOrders);
 
-            //using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
-            //{
-            //    long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
-            //    Assert.Equal(countToDelete, numberOfOrders);
-
-            //    numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
-            //    Assert.Equal(countToKeep, numberOfOrders);
-            //}
+                numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+                Assert.Equal(countToKeep, numberOfOrders);
+            }
         }
 
         private IEnumerable<DateTime> OrderDates => new[]
@@ -144,9 +146,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 };
                 sqlAdapter.SaveAndRefetch(computer);
 
-                foreach (StoreTypeCode storeTypeCode in EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid)
-                //.Take(4)
-                )
+                foreach (StoreTypeCode storeTypeCode in EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid))
                 {
                     StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
                     var store = storeType.CreateStoreInstance();
@@ -235,9 +235,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                         orderItemAttribute.OrderItemID = orderItem.OrderItemID;
                         sqlAdapter.SaveEntity(orderItemAttribute);
 
-                        foreach (ShipmentTypeCode shipmentTypeCode in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None)
-                            //.Take(4)
-                        )
+                        foreach (ShipmentTypeCode shipmentTypeCode in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None))
                         {
                             var shipment = new ShipmentEntity()
                             {
