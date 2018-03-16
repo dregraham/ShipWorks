@@ -1617,40 +1617,52 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
-            // The where clause makes sure we can't apply global profiles to none shipments. 
-            // None shipments cannot be configured so we only want profiles applied that will change the shipment type
-            List<IShippingProfileEntity> applicableProfiles = shippingProfileService.GetConfiguredShipmentTypeProfiles()
+            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
+                .GetConfiguredShipmentTypeProfiles()
                 .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
-                .Select(s => s.ShippingProfileEntity)
-                .Cast<IShippingProfileEntity>().ToList();
-
-            if (applicableProfiles.Any())
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .Where(profile => IncludeProfile(profile, shipmentTypeCode))
+                .GroupBy(p => p.ShipmentType)
+                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
+            
+            bool firstGroup = true;
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
             {
-                IOrderedEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = applicableProfiles.GroupBy(p => p.ShipmentType)
-                    .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
-
-                bool firstGroup = true;
-                foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
+                if (!firstGroup)
                 {
-                    if (!firstGroup)
-                    {
-                        contextMenuProfiles.Items.Add(new ToolStripSeparator());
-                    }
-                    firstGroup = false;
-
-                    if (profileGroup.Key.HasValue)
-                    {
-                        ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
-                        {
-                            Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                            Margin = new Padding(-4, 2, 2, 2),
-                            Enabled = false
-                        };
-                        contextMenuProfiles.Items.Add(carrierLabel);
-                    }
-
-                    profileGroup.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+                    contextMenuProfiles.Items.Add(new ToolStripSeparator());
                 }
+
+                firstGroup = false;
+
+                if (profileGroup.Key.HasValue)
+                {
+                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Margin = new Padding(-4, 2, 2, 2),
+                        Enabled = false
+                    };
+                    contextMenuProfiles.Items.Add(carrierLabel);
+                }
+
+                profileGroup.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+            }
+        }
+
+        /// <summary>
+        /// Return true if applicable to shipment type
+        /// </summary>
+        private bool IncludeProfile(IShippingProfileEntity profile, ShipmentTypeCode shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.None:
+                    return profile.ShipmentType != null;
+                case ShipmentTypeCode.Amazon:
+                    return profile.ShipmentType == null || profile.ShipmentType == ShipmentTypeCode.Amazon;
+                default:
+                    return profile.ShipmentType != ShipmentTypeCode.Amazon;
             }
         }
 
