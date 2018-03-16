@@ -29,6 +29,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly PropertyChangedHandler handler;
         private readonly IOrderArchiveDataAccess dataAccess;
 
+        private readonly DateTime minimumAllowableDate = new DateTime(1950, 1, 1);
         private DateTime archiveDate;
         private bool isLoadingCounts;
         private long orderCounts;
@@ -90,13 +91,23 @@ namespace ShipWorks.Stores.Orders.Archive
         public ICommand CancelArchive { get; }
 
         /// <summary>
+        /// Minimum allowable date
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public DateTime MinimumAllowableDate => minimumAllowableDate;
+
+        /// <summary>
         /// Selected order archive cutoff date
         /// </summary>
         [Obfuscation(Exclude = true)]
         public DateTime ArchiveDate
         {
             get { return archiveDate; }
-            set { handler.Set(nameof(ArchiveDate), ref archiveDate, value); }
+            set
+            {
+                handler.Set(nameof(ArchiveDate), ref archiveDate,
+                    value.AtLeast(minimumAllowableDate));
+            }
         }
 
         /// <summary>

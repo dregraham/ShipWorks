@@ -49,7 +49,8 @@
                         HorizontalAlignment="Left"
                         Margin="8,0,12,0"
                         Style="{StaticResource DatePickerStyle.Centered}"
-                        SelectedDate="{Binding ArchiveDate}" DisplayDateStart="1950-01-01" />
+                        SelectedDate="{Binding ArchiveDate}" 
+                        DisplayDateStart="{Binding MinimumAllowableDate, Mode=OneTime}" />
             <TextBlock Foreground="Gray"
                        FontSize="7 pt"
                        Visibility="{Binding IsLoadingCounts, Converter={StaticResource HideWhenTrue}}"
@@ -75,21 +76,21 @@
                    TextWrapping="Wrap"
                    Foreground="Gray"
                    Margin="0,8,0,12">
-            <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
-            <LineBreak />
-            <LineBreak />
-            <Run Foreground="Transparent">MM</Run>
-            <Run>Archiving orders cannot be undone.</Run>
-            <LineBreak />
-            <Run Foreground="Transparent">MM</Run>
-            <Run>Archived orders are removed from the current ShipWorks database.</Run>
-            <LineBreak />
-            <Run Foreground="Transparent">MM</Run>
-            <Run>ShipWorks cannot be used during the archiving process.</Run>
-            <LineBreak />
-            <LineBreak />
-            <Run>Want to learn more about archiving?</Run>
-            <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
+                <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
+                <LineBreak />
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>Archiving orders cannot be undone.</Run>
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>Archived orders are removed from the current ShipWorks database.</Run>
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>ShipWorks cannot be used during the archiving process.</Run>
+                <LineBreak />
+                <LineBreak />
+                <Run>Want to learn more about archiving?</Run>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
             </TextBlock>
         </ScrollViewer>
 
