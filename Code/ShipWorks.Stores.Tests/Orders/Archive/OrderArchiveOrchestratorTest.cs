@@ -73,14 +73,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowError("Failed"));
         }
 
-        [Fact]
-        public async Task Archive_ShowsSuccess_WhenProcessSucceeds()
-        {
-            await testObject.Archive().Recover(ex => Unit.Default);
-
-            mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowMessage("Archive finished"));
-        }
-
         public void Dispose()
         {
             mock.Dispose();
