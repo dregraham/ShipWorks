@@ -27,7 +27,6 @@ namespace ShipWorks.Stores.Management
         public void LoadDownloadControl()
         {
             StoreEntity store = GetStore<StoreEntity>();
-            StoreType storeType = StoreTypeManager.GetType(store);
 
             Control finishPageControl = CreateFinishPageControl(store.StoreTypeCode).Create(store);
             addStoreWizardFinishPanel.Controls.Add(finishPageControl);
