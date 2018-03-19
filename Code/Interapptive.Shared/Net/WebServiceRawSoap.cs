@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web.Services.Protocols;
-using System.IO;
-using System.Reflection;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Net
@@ -51,14 +51,14 @@ namespace Interapptive.Shared.Net
 
                 // Read everything that was written
                 string fragment = reader.ReadToEnd();
-                
+
                 // Add the content to the request XML read so far
                 owner.requestXml += fragment;
 
                 // Go back to the beginning, and write it all to the real stream
                 writer.Write(fragment);
                 writer.Flush();
-                
+
                 // Clear it out for the next batch
                 SetLength(0);
             }
@@ -85,12 +85,17 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
-        /// Get the soap xml recieved as a response
+        /// Get the soap xml received as a response
         /// </summary>
         public string ResponseXml
         {
             get { return responseXml; }
         }
+
+        /// <summary>
+        /// Xml Entities that should be stripped from the response
+        /// </summary>
+        public IEnumerable<string> StripXmlEntities { get; set; }
 
         /// <summary>
         /// Read the XML from the outgoing message before it gets sent off
@@ -113,7 +118,13 @@ namespace Interapptive.Shared.Net
                 responseXml = reader.ReadToEnd();
             }
 
-            // Some SOAP endpoints use XML1.1 (or just don't care) and generate responses with whitepace characters not valid in XML1.0 (which .NET uses to deserialize responses).  We clean those
+            // Remove invalid XML entities, if requested
+            foreach (var entity in StripXmlEntities ?? Enumerable.Empty<string>())
+            {
+                responseXml = responseXml.Replace(entity, string.Empty);
+            }
+
+            // Some SOAP endpoints use XML1.1 (or just don't care) and generate responses with whitespace characters not valid in XML1.0 (which .NET uses to deserialize responses).  We clean those
             // out here ensuring a clean response.
             string cleanXml = XmlUtility.StripInvalidXmlCharacters(responseXml);
 
@@ -158,7 +169,7 @@ namespace Interapptive.Shared.Net
                 // (for infopia at least, need to test others)
                 if (encoding == Encoding.UTF8)
                 {
-                    encoding = new UTF8Encoding(false); 
+                    encoding = new UTF8Encoding(false);
                 }
 
                 return encoding;
