@@ -382,6 +382,7 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
+    <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />

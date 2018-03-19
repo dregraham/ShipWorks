@@ -296,8 +296,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private void SetEnabledOnButtons()
         {
             // If the shipment is null or it's a non-supported shipping panel carrier, disable buttons
-            if (currentShipment == null ||
-                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None)
+            if (currentShipment == null)
             {
                 shippingRibbonActions.CreateLabel.Enabled = false;
                 shippingRibbonActions.Void.Enabled = false;
@@ -350,12 +349,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             bool shipmentsCreateEditProcessAllowed = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, currentShipment.OrderID);
             bool shipmentsVoidDelete = securityContext.HasPermission(PermissionType.ShipmentsVoidDelete, currentShipment.OrderID);
+            bool shipmentIsNone = currentShipment.ShipmentTypeCode == ShipmentTypeCode.None;
 
-            shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
-            shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsVoidDelete;
-            shippingRibbonActions.Return.Enabled = currentShipment.Processed && currentShipment.ShipmentTypeCode != ShipmentTypeCode.Amazon && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
-            shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
-            shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+            shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
+            shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsVoidDelete && !shipmentIsNone;
+            shippingRibbonActions.Return.Enabled = currentShipment.Processed && currentShipment.ShipmentTypeCode != ShipmentTypeCode.Amazon && !currentShipment.Voided && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
+            shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided && !shipmentIsNone;
+            shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
         }
 

@@ -1590,8 +1590,8 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
-                (ShipmentTypeCode)comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
+                (ShipmentTypeCode) comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
@@ -1615,43 +1615,55 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        /// <param name="shipmentTypeCode"></param>
         private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
         {
-            IEnumerable<IShippingProfileEntity> applicableProfiles =
-                ShippingProfileManager.GetProfilesFor(shipmentTypeCode, true);
-
-            if (applicableProfiles.Any())
+            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .Where(profile => IncludeProfile(profile, shipmentTypeCode))
+                .GroupBy(p => p.ShipmentType)
+                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
+            
+            bool firstGroup = true;
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
             {
-                // Global profiles
-                IEnumerable<IShippingProfileEntity> globalProfiles = applicableProfiles
-                                                              .Where(p => p.ShipmentType == null)
-                                                              .OrderBy(p => p.Name);
-
-                globalProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
-                
-                // Carrier Profiles
-                IEnumerable<IShippingProfileEntity> carrierProfiles = applicableProfiles
-                                                               .Where(p => p.ShipmentType == shipmentTypeCode)
-                                                               .OrderBy(p => p.Name);
-
-                if (globalProfiles.Any() && carrierProfiles.Any())
+                if (!firstGroup)
                 {
                     contextMenuProfiles.Items.Add(new ToolStripSeparator());
                 }
 
-                if (carrierProfiles.Any())
+                firstGroup = false;
+
+                if (profileGroup.Key.HasValue)
                 {
-                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(shipmentTypeCode))
+                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
                     {
                         Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
                         Margin = new Padding(-4, 2, 2, 2),
                         Enabled = false
                     };
                     contextMenuProfiles.Items.Add(carrierLabel);
-
-                    carrierProfiles.ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
                 }
+
+                profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
+                    .ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+            }
+        }
+
+        /// <summary>
+        /// Return true if applicable to shipment type
+        /// </summary>
+        private bool IncludeProfile(IShippingProfileEntity profile, ShipmentTypeCode shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.None:
+                    return profile.ShipmentType != null;
+                case ShipmentTypeCode.Amazon:
+                    return profile.ShipmentType == null || profile.ShipmentType == ShipmentTypeCode.Amazon;
+                default:
+                    return profile.ShipmentType != ShipmentTypeCode.Amazon;
             }
         }
 
@@ -1688,15 +1700,9 @@ namespace ShipWorks.Shipping
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
 
-            // Apply the profile to each ui displayed shipment
-            foreach (ShipmentEntity shipment in uiDisplayedShipments)
-            {
-                if (!shipment.Processed)
-                {
-                    shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
-                }
-            }
-
+            shippingProfileService.Get(profile.ShippingProfileID)
+                .Apply(uiDisplayedShipments.Where(s => !s.Processed));
+            
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);
             applyingProfile = false;
@@ -1719,13 +1725,13 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
+                if (!shipment.Processed && securityCreateEditProcess)
+                {
+                    canApplyProfile = true;
+                }
+
                 if (shipment.ShipmentTypeCode != ShipmentTypeCode.None)
                 {
-                    if (!shipment.Processed && securityCreateEditProcess)
-                    {
-                        canApplyProfile = true;
-                    }
-
                     if (!shipment.Processed && shipmentTypeManager.Get(shipment).SupportsGetRates)
                     {
                         canGetRates = true;

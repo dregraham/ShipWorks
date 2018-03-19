@@ -159,13 +159,14 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             mock.Mock<IShippingProfileService>().Verify(m => m.Delete(profile), Times.Never);
         }
-        
+
         [Fact]
         public void PrintBarCodes_DelegatesToPrintJobFactory()
         {
             var profileEntity = new ShippingProfileEntity();
-            var profile = CreateShippingProfile(profileEntity, null);
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
+            var profile = CreateShippingProfile(profileEntity, new ShortcutEntity { Barcode = "blah" });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles())
+                .Returns(new List<ShippingProfile>() { profile });
 
             var form = new Form();
 
@@ -176,12 +177,11 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             mock.Mock<IPrintJobFactory>().Verify(p => p.CreateBarcodePrintJob(testObject.ShippingProfiles));
         }
 
-
         [Fact]
         public void PrintBarCodes_DelegatesToIPrintJobForPreview()
         {
             var profileEntity = new ShippingProfileEntity();
-            var profile = CreateShippingProfile(profileEntity, null);
+            var profile = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             var printJob = mock.Mock<IPrintJob>();
             mock.Mock<IPrintJobFactory>().Setup(f => f.CreateBarcodePrintJob(It.IsAny<IEnumerable<IShippingProfile>>())).Returns(printJob);
@@ -196,7 +196,10 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+            var shippingProfile = mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+            shippingProfile.ShippingProfileEntity = profile;
+            shippingProfile.Shortcut = shortcut;
+            return shippingProfile;
         }
 
         public void Dispose()

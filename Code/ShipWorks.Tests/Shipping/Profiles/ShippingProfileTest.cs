@@ -1,12 +1,15 @@
 ﻿using System;
-using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -40,7 +43,9 @@ namespace ShipWorks.Tests.Shipping.Profiles
         {
             var loaderMock = mock.Mock<IShippingProfileLoader>();
 
-            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object);
+            // Testing 
+            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
+                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ICarrierShipmentAdapterFactory>().Object);
             
             loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
         }
@@ -55,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
+                Hotkey = Hotkey.CtrlShift0
             };
 
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
@@ -72,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
+                Hotkey = Hotkey.CtrlShift0
             };
 
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
@@ -96,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         {
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = IO.KeyboardShortcuts.Hotkey.CtrlShift0
+                Hotkey = Hotkey.CtrlShift0
             };
 
             ShippingProfileEntity profile = new ShippingProfileEntity
@@ -203,13 +208,95 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             testObject.ChangeProvider(ShipmentTypeCode.Endicia);
 
-            // The constructor will call LoadProfileData the first time
+            // The initial set 
             mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void Apply_DelegatesToShippingManagerChangeShipmentType_WhenShipmentAndProfilesShipmentTypesDontMatch()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
+            var shippingManager = mock.Mock<IShippingManager>();
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+            
+            shippingManager.Verify(m => m.ChangeShipmentType(ShipmentTypeCode.Amazon, shipment), Times.Once);
+        } 
+        
+        [Fact]
+        public void Apply_DoesNotDelegatesToShippingManagerChangeShipmentType_WhenShipmentAndProfilesShipmentTypesMatch()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.Amazon};
+            var shippingManager = mock.Mock<IShippingManager>();
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+            
+            shippingManager.Verify(m => m.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), shipment), Times.Never);
+        }
+        
+        [Fact]
+        public void Apply_CreatesProfileApplicationStrategyUsingStrategyFactory()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.Amazon};
+            var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+            
+            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.Amazon), Times.Once);
+        }
+        
+        [Fact]
+        public void Apply_UsesStrategyToApplyProfile()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.Amazon};
+            var strategy = mock.Mock<IShippingProfileApplicationStrategy>();
+            mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.Amazon)).Returns(strategy);
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+            
+            strategy.Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
+        }
+                
+        [Fact]
+        public void Apply_DelegatesToCarrierShipmentAdapterFactory()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
+
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+
+            mock.Mock<ICarrierShipmentAdapterFactory>().Verify(c => c.Get(shipment));
+        }
+        
+        [Fact]
+        public void Apply_SendsProfileAppliedMessage()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
+            var messenger = mock.Mock<IMessenger>();
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+            
+            testObject.Apply(shipment);
+
+            messenger.Verify(m => m.Send(It.IsAny<ProfileAppliedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+            var shippingProfile = mock.Create<ShippingProfile>();
+            shippingProfile.ShippingProfileEntity = profile;
+            shippingProfile.Shortcut = shortcut;
+            return shippingProfile;
         }
         
         private Result Validate(ShippingProfile testObject)

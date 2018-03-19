@@ -29,7 +29,6 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public void Delete_DelegatesToManager()
         {
-
             ShortcutEntity shortcut = new ShortcutEntity();
             ShippingProfileEntity profile = new ShippingProfileEntity();
 
@@ -266,7 +265,10 @@ namespace ShipWorks.Shipping.Tests.Services
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
-            return mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
+            var shippingProfile = mock.Create<ShippingProfile>();
+            shippingProfile.Shortcut = shortcut;
+            shippingProfile.ShippingProfileEntity = profile;
+            return shippingProfile;
         }
     }
 }

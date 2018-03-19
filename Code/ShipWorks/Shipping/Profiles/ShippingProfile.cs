@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -16,15 +20,24 @@ namespace ShipWorks.Shipping.Profiles
     {
         private readonly IShippingProfileLoader profileLoader;
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
+        private readonly IShippingManager shippingManager;
+        private readonly IMessenger messenger;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private ShippingProfileEntity shippingProfileEntity;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
         /// </summary>
         public ShippingProfile(IShippingProfileLoader profileLoader,
-            IShippingProfileApplicationStrategyFactory strategyFactory)
+            IShippingProfileApplicationStrategyFactory strategyFactory,
+            IShippingManager shippingManager, IMessenger messenger,
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.profileLoader = profileLoader;
             this.strategyFactory = strategyFactory;
+            this.shippingManager = shippingManager;
+            this.messenger = messenger;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             ShippingProfileEntity = new ShippingProfileEntity
             {
                 Name = string.Empty,
@@ -38,34 +51,26 @@ namespace ShipWorks.Shipping.Profiles
 
             profileLoader.LoadProfileData(ShippingProfileEntity, false);
         }
-        
-        /// <summary>
-        /// Constructor used when we have an existing ShippingProfileEntiy and ShortcutEntity
-        /// </summary>
-        public ShippingProfile(ShippingProfileEntity shippingProfileEntity, 
-            ShortcutEntity shortcut,
-            IShippingProfileLoader profileLoader,
-            IShippingProfileApplicationStrategyFactory strategyFactory)
-        {
-            this.profileLoader = profileLoader;
-            this.strategyFactory = strategyFactory;
-            ShippingProfileEntity = shippingProfileEntity;
-            Shortcut = shortcut;
-            
-            profileLoader.LoadProfileData(shippingProfileEntity, true);
-        }
 
         /// <summary>
         /// Shipping Profile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfileEntity ShippingProfileEntity { get; }
+        public ShippingProfileEntity ShippingProfileEntity
+        {
+            get => shippingProfileEntity;
+            set
+            {
+                profileLoader.LoadProfileData(value, true);
+                shippingProfileEntity = value;
+            }
+        }
 
         /// <summary>
         /// Shortcut
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShortcutEntity Shortcut { get; }
+        public ShortcutEntity Shortcut { get; set; }
 
         /// <summary>
         /// The associated Shortcut 
@@ -125,10 +130,32 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply profile to shipment
         /// </summary>
-        public void Apply(ShipmentEntity shipment)
+        public ICarrierShipmentAdapter Apply(ShipmentEntity shipment) =>
+            Apply(new[] { shipment }).First();
+
+        /// <summary>
+        /// Apply profile to shipments
+        /// </summary>
+        public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
+            List<ShipmentEntity> shipmentList = shipments.ToList();
+            
+            List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
             IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
-            strategy.ApplyProfile(ShippingProfileEntity, shipment);
+
+            foreach (ShipmentEntity shipment in shipmentList)
+            {
+                if (ShippingProfileEntity.ShipmentType != null &&
+                    shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                {
+                    shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                }
+                strategy.ApplyProfile(ShippingProfileEntity, shipment);
+            }
+
+            messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
+
+            return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
         }
     }
 }
