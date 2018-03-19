@@ -1,18 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Metrics;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Templates.Printing
 {
-    public class BarcodePrintJobTest
+    public class BarcodePrintJobTest : IDisposable
     {
         private readonly AutoMock mock;
 
@@ -73,6 +78,103 @@ namespace ShipWorks.Tests.Templates.Printing
             var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
 
             mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:Free 3 of 9 Extended;font-size:36pt;}</style></head><body></body></html>")));
+        }
+
+        [Fact]
+        public void PrintAsync_SendsTelemetryEvent_WhenNotCancelled()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
+
+            TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+
+            trackedEventFunc.Verify(f => f("Shortcuts.Print"), Times.Once);
+        }
+        
+        [Fact]
+        public void PrintAsync_SendsNoTelemetryEvent_WhenCancelled()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
+
+            TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, true, null));
+
+            trackedEventFunc.Verify(f => f(AnyString), Times.Never);
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty(AnyString, AnyString), Times.Never);
+        }
+
+        [Fact]
+        public void PrintAsync_SendsCorrectBarcodeCount()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.Shortcut).Returns(new ShortcutEntity()
+            {
+                Barcode = "blah"
+            });
+
+            TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "25"), Times.Once);
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "0"), Times.Once);
+        }
+
+        [Fact]
+        public void PrintAsync_SendsCorrectHotkeyCount()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.Shortcut).Returns(new ShortcutEntity()
+            {
+                Hotkey = Hotkey.CtrlShift1
+            });
+
+            TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
+        }
+        
+        [Fact]
+        public void PrintAsync_SendsTelemetrySuccessEvent_WhenSuccesfull()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+
+            TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Success"), Times.Once);
+        }
+
+        [Fact]
+        public void PrintAsync_SendsTelemetryFailedEvent_WhenUnsuccessfull()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+
+            TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
+
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Failed"), Times.Once);
+        }
+
+        private void TestTelemetry(IEnumerable<IShippingProfile> profiles,
+            PrintActionCompletedEventArgs printActionCompletedEventArgs)
+        {
+            var printJobFactory = mock.Mock<IPrintJobFactory>();
+            var printJob = mock.Mock<IPrintJob>();
+            printJob.Setup(p => p.PrintAsync())
+                .Raises(p => p.PrintCompleted += null, printActionCompletedEventArgs);
+
+            printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
+
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), profiles));
+
+            testObject.PrintAsync();
+        }
+
+        public void Dispose()
+        {
+            mock?.Dispose();
         }
     }
 }

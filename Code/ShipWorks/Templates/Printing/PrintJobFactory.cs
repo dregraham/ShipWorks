@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Templates.Processing;
 
@@ -12,11 +14,21 @@ namespace ShipWorks.Templates.Printing
     [Component]
     public class PrintJobFactory : IPrintJobFactory
     {
+        private readonly Func<string, ITrackedEvent> telemetryEventFunc;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PrintJobFactory(Func<string, ITrackedEvent> telemetryEventFunc)
+        {
+            this.telemetryEventFunc = telemetryEventFunc;
+        }
+
         /// <summary>
         /// Create a barcode print job
         /// </summary>
         public IPrintJob CreateBarcodePrintJob(IEnumerable<IShippingProfile> shippingProfiles) => 
-            new BarcodePrintJob(this, shippingProfiles);
+            new BarcodePrintJob(this, shippingProfiles, telemetryEventFunc);
 
         /// <summary>
         /// Crate a print job with the given template result

@@ -13,6 +13,11 @@ namespace ShipWorks.Templates.Printing
         event PrintActionCompletedEventHandler PreviewCompleted;
 
         /// <summary>
+        /// Raised when printing is complete.
+        /// </summary>
+        event PrintActionCompletedEventHandler PrintCompleted;
+
+        /// <summary>
         /// Preview the print job
         /// </summary>
         void PreviewAsync(Form parent);
