@@ -157,6 +157,52 @@ namespace ShipWorks.Tests.Templates.Printing
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Failed"), Times.Once);
         }
 
+        [Fact]
+        public void PrintAsync_PrintCompletedIsInvoked()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+
+            var printJobFactory = mock.Mock<IPrintJobFactory>();
+            var printJob = mock.Mock<IPrintJob>();
+            printJob.Setup(p => p.PrintAsync())
+                .Raises(p => p.PrintCompleted += null, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+
+            printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
+
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+
+            var eventWasDispatched = false;
+            testObject.PrintCompleted += (sender, args) => eventWasDispatched = true;
+
+            testObject.PrintAsync();
+
+            Assert.True(eventWasDispatched);
+        }
+
+        [Fact]
+        public void PrintAsync_PreviewCompletedIsInvoked()
+        {
+            var profile = mock.Mock<IShippingProfile>();
+            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+
+            var printJobFactory = mock.Mock<IPrintJobFactory>();
+            var printJob = mock.Mock<IPrintJob>();
+            printJob.Setup(p => p.PreviewAsync(It.IsAny<Form>()))
+                .Raises(p => p.PreviewCompleted += null, new PrintActionCompletedEventArgs(PrintAction.Preview, null, false, null));
+
+            printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
+
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+
+            var eventWasDispatched = false;
+            testObject.PreviewCompleted += (sender, args) => eventWasDispatched = true;
+
+            testObject.PreviewAsync(new Form());
+
+            Assert.True(eventWasDispatched);
+        }
+
         private void TestTelemetry(IEnumerable<IShippingProfile> profiles,
             PrintActionCompletedEventArgs printActionCompletedEventArgs)
         {
