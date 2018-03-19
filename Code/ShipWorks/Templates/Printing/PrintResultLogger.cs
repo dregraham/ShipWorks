@@ -59,7 +59,7 @@ namespace ShipWorks.Templates.Printing
             TemplateInput input = templateResult.XPathSource?.Context.Input;
 
             // XPathSource is null if printing out barcodes
-            if (input!=null)
+            if (input != null)
             {
                 // Log each of the original input keys.  Will only be multiple for reports
                 foreach (long key in input.ContextKeys)
