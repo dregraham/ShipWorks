@@ -23,6 +23,13 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             Modifiers = modifiers;
         }
 
+        public KeyboardShortcutData(ShortcutEntity shortcutEntity)
+        {
+            Command = shortcutEntity.Action;
+            ActionKey = shortcutEntity.VirtualKey;
+            Modifiers = shortcutEntity.ModifierKeys;
+        }
+
         /// <summary>
         /// Keyboard shortcut command
         /// </summary>
@@ -31,12 +38,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Action key for keyboard shortcut
         /// </summary>
-        public VirtualKeys ActionKey { get; }
+        public VirtualKeys? ActionKey { get; }
 
         /// <summary>
         /// Modifiers for the action key
         /// </summary>
-        public KeyboardShortcutModifiers Modifiers { get; }
+        public KeyboardShortcutModifiers? Modifiers { get; }
 
         /// <summary>
         /// Get the shortcut text
@@ -45,10 +52,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             get
             {
-                return (Modifiers.HasFlag(KeyboardShortcutModifiers.Ctrl) ? "Ctrl+" : string.Empty) +
-                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Alt) ? "Alt+" : string.Empty) +
-                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Shift) ? "Shift+" : string.Empty) +
-                    ActionKey.ToString();
+                string shortcutText = string.Empty;
+                
+                if (Modifiers.HasValue)
+                {
+                    shortcutText = (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Ctrl) ? "Ctrl+" : string.Empty) +
+                                   (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Alt) ? "Alt+" : string.Empty) +
+                                   (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Shift) ? "Shift+" : string.Empty) +
+                                   ActionKey;
+                }
+
+                return shortcutText;
             }
         }
     }

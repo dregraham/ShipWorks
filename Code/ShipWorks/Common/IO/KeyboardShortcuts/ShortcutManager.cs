@@ -91,11 +91,22 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get shortcut for given hotkey
         /// </summary>
-        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys)
-        {
-            return Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
-        }
-        
+        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys) => 
+            Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
+
+        /// <summary>
+        /// Get weigh shortcut
+        /// </summary>
+        /// <remarks>
+        /// The first iteration of the weigh shortcut used Ctrl+W, but when other hotkeys were added, we only wanted
+        /// users to use hotkeys with Ctrl+Shift as modifiers, so the shortcut was changed to Ctrl+Shift+W, however,
+        /// for existing users, Ctrl+W will still be in the database. When getting the shortcut, we always want to
+        /// return the Ctrl+Shift+W version. 
+        /// </remarks>
+        public ShortcutEntity GetWeighShortcut() => Shortcuts.FirstOrDefault(
+            s => s.Action == KeyboardShortcutCommand.ApplyWeight &&
+                 s.ModifierKeys == (KeyboardShortcutModifiers.Ctrl & KeyboardShortcutModifiers.Shift));
+
         /// <summary>
         /// Get unused/available hotkeys
         /// </summary>

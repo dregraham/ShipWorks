@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 
@@ -50,12 +51,13 @@ namespace ShipWorks.UI.Controls
 
             if (DesignModeDetector.IsDesignerHosted())
             {
-                SetCurrentValue(ShortcutTextProperty, "Ctrl-W");
+                SetCurrentValue(ShortcutTextProperty, "Ctrl+Shift+W");
                 return;
             }
 
-            var translator = IoC.BeginLifetimeScope().Resolve<IKeyboardShortcutTranslator>();
-            SetCurrentValue(ShortcutTextProperty, translator.GetShortcut(ShortcutCommand));
+            ShortcutEntity shortcut = IoC.BeginLifetimeScope().Resolve<IShortcutManager>().GetWeighShortcut();
+            
+            SetCurrentValue(ShortcutTextProperty, new KeyboardShortcutData(shortcut).ShortcutText);
         }
     }
 }

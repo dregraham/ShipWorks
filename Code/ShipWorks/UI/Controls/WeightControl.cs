@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -16,6 +17,7 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
@@ -57,7 +59,7 @@ namespace ShipWorks.UI.Controls
         public event EventHandler WeightChanged;
 
         private bool showShortcutInfo = false;
-        private IKeyboardShortcutTranslator keyboardShortcutTranslator = null;
+        private IShortcutManager shortcutManager = null;
         private string autoWeighShortcut;
         private string applyWeightShortcutText = string.Empty;
         private IDisposable keyboardShortcutSubscription;
@@ -88,8 +90,8 @@ namespace ShipWorks.UI.Controls
                 displayFormat = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
             }
 
-            keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
-            autoWeighShortcut = "(" + keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) + ")";
+            ShortcutEntity shortcut = IoC.UnsafeGlobalLifetimeScope.Resolve<IShortcutManager>().GetWeighShortcut();
+            autoWeighShortcut = "(" + new KeyboardShortcutData(shortcut).ShortcutText + ")";
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
             weightInfo.Visible = ShowWeighButton;
@@ -533,7 +535,7 @@ namespace ShipWorks.UI.Controls
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
                 invocationMethod == KeyboardShortcutTelemetryKey ?
-                    keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) :
+                    new KeyboardShortcutData(shortcutManager.GetWeighShortcut()).ShortcutText :
                     "N/A");
             telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
             ConfigureTelemetryEntityCounts?.Invoke(telemetryEvent);
@@ -692,7 +694,7 @@ namespace ShipWorks.UI.Controls
             {
                 scaleSubscription?.Dispose();
                 components?.Dispose();
-                keyboardShortcutTranslator = null;
+                shortcutManager = null;
                 keyboardShortcutSubscription?.Dispose();
             }
             base.Dispose(disposing);

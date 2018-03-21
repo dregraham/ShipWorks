@@ -42,5 +42,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Get shortcut for given hotkey
         /// </summary>
         ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys);
+
+        /// <summary>
+        /// Get the weigh shortcut
+        /// </summary>
+        ShortcutEntity GetWeighShortcut();
     }
 }

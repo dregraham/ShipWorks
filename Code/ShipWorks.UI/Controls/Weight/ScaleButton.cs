@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Forms.Integration;
 using System.Windows.Interop;
 using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
@@ -61,7 +59,7 @@ namespace ShipWorks.UI.Controls.Weight
         IDisposable applyWeightSubscription;
         ButtonBase scaleButton;
         TextBlock display;
-        private readonly IKeyboardShortcutTranslator keyboardShortcutTranslator;
+        private readonly IShortcutManager shortcutManager;
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
         private IntPtr ownerHandle;
 
@@ -86,7 +84,7 @@ namespace ShipWorks.UI.Controls.Weight
                 return;
             }
 
-            keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
+            shortcutManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShortcutManager>();
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
             Loaded += OnScaleButtonLoaded;
@@ -219,7 +217,7 @@ namespace ShipWorks.UI.Controls.Weight
                         Focusable &&
                         scaleButton.IsEnabled &&
                         ownerHandle == NativeMethods.GetActiveWindow())
-                    .SelectMany(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
+                    .SelectMany(_ => ApplyWeight(Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
                     .Subscribe();
             }
         }
@@ -271,7 +269,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
-            await ApplyWeight(ShipWorks.UI.Controls.WeightControl.ButtonTelemetryKey);
+            await ApplyWeight(Controls.WeightControl.ButtonTelemetryKey);
         }
 
         /// <summary>
@@ -317,13 +315,13 @@ namespace ShipWorks.UI.Controls.Weight
         private void SetTelemetryProperties(ITrackedDurationEvent telemetryEvent, ScaleReadResult result, string invocationMethod)
         {
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.Source", TelemetrySource);
-            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.ShipmentQuantityTelemetryKey, 1);
-            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.PackageQuantityTelemetryKey, 1);
+            telemetryEvent.AddMetric(Controls.WeightControl.ShipmentQuantityTelemetryKey, 1);
+            telemetryEvent.AddMetric(Controls.WeightControl.PackageQuantityTelemetryKey, 1);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
-                invocationMethod == ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey ?
-                    keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) :
+                invocationMethod == Controls.WeightControl.KeyboardShortcutTelemetryKey ?
+                    new KeyboardShortcutData(shortcutManager.GetWeighShortcut()).ShortcutText :
                     "N/A");
             telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
         }
