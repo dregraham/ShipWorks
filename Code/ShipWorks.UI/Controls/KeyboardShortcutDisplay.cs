@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls

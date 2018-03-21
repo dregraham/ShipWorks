@@ -2,7 +2,7 @@
 using System.Reflection;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {

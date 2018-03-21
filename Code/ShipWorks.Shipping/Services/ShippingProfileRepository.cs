@@ -8,7 +8,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -124,7 +124,7 @@ namespace ShipWorks.Shipping.Services
             {
                 shortcutEntity = new ShortcutEntity
                 {
-                    Action = (int) KeyboardShortcutCommand.ApplyProfile,
+                    Action = KeyboardShortcutCommand.ApplyProfile,
                     RelatedObjectID = shippingProfileEntity.ShippingProfileID
                 };
             }

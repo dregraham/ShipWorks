@@ -7,7 +7,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Profiles
 
             Shortcut = new ShortcutEntity
             {
-                Action = (int) KeyboardShortcutCommand.ApplyProfile
+                Action = KeyboardShortcutCommand.ApplyProfile
             };
 
             profileLoader.LoadProfileData(ShippingProfileEntity, false);

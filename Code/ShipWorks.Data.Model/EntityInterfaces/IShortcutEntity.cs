@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "Shortcut"."Action"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Action { get; }
+        ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand Action { get; }
         /// <summary> The RelatedObjectID property of the Entity Shortcut<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Shortcut"."RelatedObjectID"<br/>

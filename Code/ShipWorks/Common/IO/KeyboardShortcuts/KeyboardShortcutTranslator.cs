@@ -6,7 +6,7 @@ using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Users;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts

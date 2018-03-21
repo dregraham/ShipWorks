@@ -4,7 +4,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;

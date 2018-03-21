@@ -400,9 +400,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."Action"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Action
+		public virtual ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand Action
 		{
-			get { return (System.Int32)GetValue((int)ShortcutFieldIndex.Action, true); }
+			get { return (ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand)GetValue((int)ShortcutFieldIndex.Action, true); }
 			set	{ SetValue((int)ShortcutFieldIndex.Action, value); }
 		}
 

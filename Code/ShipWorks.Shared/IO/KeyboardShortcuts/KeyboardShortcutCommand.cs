@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.Shared.IO.KeyboardShortcuts
+namespace ShipWorks.IO.KeyboardShortcuts
 {
     /// <summary>
     /// List of keyboard shortcut commands

@@ -19,7 +19,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 using WinForms = System.Windows.Forms;
 
