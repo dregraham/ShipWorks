@@ -176,6 +176,7 @@
     <Compile Include="Orders\Archive\OrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\OrderArchiveOrchestrator.cs" />
     <Compile Include="Orders\Archive\OrderArchiver.cs" />
+    <Compile Include="Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
