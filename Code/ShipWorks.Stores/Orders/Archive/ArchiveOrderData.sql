@@ -2,23 +2,25 @@
 DECLARE @SetRecoveryModelSimpleSql nvarchar(255)
 DECLARE @SetRecoveryModelOriginalSql nvarchar(255)
 
+USE [{1}]
+
 SELECT @OriginalRecoveryModel = recovery_model_desc  
    FROM sys.databases  
-   WHERE name = DB_NAME(); 
+   WHERE name = '{1}'; 
 
 SET @SetRecoveryModelSimpleSql = 
 	'USE [master]
 	
-	ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY SIMPLE WITH NO_WAIT
+	ALTER DATABASE [{1}] SET RECOVERY SIMPLE WITH NO_WAIT
 	
-	use ' + DB_NAME() + '';
+	use [{1}]';
 
 SET @SetRecoveryModelOriginalSql = 
 	'USE [master]
 	
-	ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
+	ALTER DATABASE [{1}] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
 	
-	use ' + DB_NAME() + '';
+	use [{1}]';
 	
 EXEC(@SetRecoveryModelSimpleSql)
 
@@ -47,15 +49,16 @@ END
 SELECT DISTINCT o.OrderID as 'EntityID'
 INTO    dbo.[OrderIDsToDelete]
 FROM    dbo.[Order] o
-WHERE   o.OrderDate < '{0}'
+WHERE   o.OrderDate {2} '{0}'
 ORDER BY o.OrderID
 
-IF NOT EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
+--IF NOT EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
+IF EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
 BEGIN
-	RAISERROR('There are no orders older than selected date to archive.', 16, 1)
-END
-ELSE
-BEGIN
+--	RAISERROR('There are no orders older than selected date to archive.', 16, 1)
+--END
+--ELSE
+--BEGIN
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'ShipmentIDsToDelete')
 	BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
@@ -406,3 +409,5 @@ COMMIT TRAN
 /* THIS MUST BE DONE OUTSIDE THE TRAN!!! */
 /* Put the database back in its original recovery model */
 EXEC(@SetRecoveryModelOriginalSql)
+
+EXEC('ALTER DATABASE {1} SET MULTI_USER;')
