@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
@@ -90,21 +91,36 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get shortcut for given hotkey
         /// </summary>
-        public ShortcutEntity GetShortcut(VirtualKeys key, ModifierKeys modifierKeys)
+        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys)
         {
-            throw new NotImplementedException();
+            return Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
         }
         
         /// <summary>
         /// Get unused/available hotkeys
         /// </summary>
-        IEnumerable<KeyboardShortcutData> IShortcutManager.GetAvailableHotkeys()
+        public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys()
         {
-            //EnumHelper.GetEnumList<Hotkey>().Select(h => h.Value)
-            //          .Where(hotkey => Shortcuts.None(s => s.Hotkey == hotkey))
-            //          .ToList();
+            // Create list of keyboard shortcut data with F5-F9 and Ctrl+Shift+A-Z
+            List<KeyboardShortcutData> acceptedShortcuts = new List<KeyboardShortcutData>();
+
+            for (VirtualKeys key = VirtualKeys.F5; key <= VirtualKeys.F9; key++)
+            {
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None));
+            }
             
-            throw new NotImplementedException();
+            for (VirtualKeys key = VirtualKeys.A; key <= VirtualKeys.Z; key++)
+            {
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl & KeyboardShortcutModifiers.Shift));
+            }
+            
+            // Remove existing shortcuts from the list of available ones
+            foreach (ShortcutEntity shortcut in Shortcuts)
+            {
+                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.VirtualKey && s.Modifiers == shortcut.ModifierKeys);
+            }
+            
+            return acceptedShortcuts;
         }
 
         /// <summary>

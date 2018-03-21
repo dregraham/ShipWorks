@@ -15,7 +15,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyboardShortcutData(KeyboardShortcutCommand command,
+        public KeyboardShortcutData(KeyboardShortcutCommand? command,
             VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
         {
             Command = command;
@@ -26,7 +26,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Keyboard shortcut command
         /// </summary>
-        public KeyboardShortcutCommand Command { get; }
+        public KeyboardShortcutCommand? Command { get; }
 
         /// <summary>
         /// Action key for keyboard shortcut

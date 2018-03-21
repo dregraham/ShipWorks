@@ -41,6 +41,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get shortcut for given hotkey
         /// </summary>
-        ShortcutEntity GetShortcut(VirtualKeys key, ModifierKeys modifierKeys);
+        ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys);
     }
 }
