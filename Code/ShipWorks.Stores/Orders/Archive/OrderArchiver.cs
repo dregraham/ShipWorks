@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Data.Common;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
@@ -66,7 +69,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             try
             {
-                using (var progressDialog = await messageHelper.ShowProgressDialog(
+                using (var progress = await messageHelper.ShowProgressDialog(
                     "Archive order and shipment data",
                     "ShipWorks is archiving your orders",
                     progressProvider,
@@ -74,41 +77,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     using (new LoggedStopwatch(log, "OrderArchive: Archive orders - "))
                     {
-                        await connectionManager.WithSingleUserConnectionAsync(async conn =>
-                        {
-                            // Backup/Restore cannot be done in a transaction.
-                            using (new LoggedStopwatch(log, "OrderArchive: Create archive database - "))
-                            {
-                                prepareProgress.Detail = "Creating Archive Database";
-                                await connectionManager.ExecuteSqlAsync(conn, prepareProgress, sqlGenerator.CopyDatabaseSql()).ConfigureAwait(false);
-                                prepareProgress.Detail = "Done";
-                            }
-
-                            // The archive sql handles the transaction
-                            using (new LoggedStopwatch(log, "OrderArchive: Archive order and shipment data - "))
-                            {
-                                archiveProgress.Detail = "Archiving Order and Shipment data";
-                                await connectionManager.ExecuteSqlAsync(conn, archiveProgress, sqlGenerator.ArchiveOrderDataSql(cutoffDate)).ConfigureAwait(false);
-                                archiveProgress.Detail = "Done";
-                            }
-
-                            return Unit.Default;
-                        }).ConfigureAwait(false);
-
-                        // We have to regenerate filters outside of a single user connection, otherwise they all get abandoned.
-                        connectionManager.WithMultiUserConnectionAsync(conn =>
-                        {
-                            using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
-                            {
-                                filterProgress.Starting();
-                                filterProgress.Detail = "Regenerating.";
-
-                                filterHelper.RegenerateFilters(conn);
-
-                                filterProgress.Detail = "Done.";
-                                filterProgress.Completed();
-                            }
-                        });
+                        await connectionManager
+                            .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress))
+                            .Do(_ => connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress)))
+                            .Recover(_ => TerminateNonStartedTasks(new[] { archiveProgress, filterProgress }))
+                            .Bind(_ => progressProvider.Terminated)
+                            .ConfigureAwait(false);
 
                         return Unit.Default;
                     }
@@ -119,5 +93,55 @@ namespace ShipWorks.Stores.Orders.Archive
                 userSession.Logon(loggedInUser);
             }
         }
+
+        /// <summary>
+        /// Terminate all non-started tasks
+        /// </summary>
+        private Unit TerminateNonStartedTasks(IProgressReporter[] progressReporters)
+        {
+            foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Pending))
+            {
+                progressReporter.Terminate();
+            }
+
+            return Unit.Default;
+        }
+
+        /// <summary>
+        /// Perform the archive
+        /// </summary>
+        private Func<DbConnection, Task<Unit>> PerformArchive(DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress) =>
+            (conn) =>
+                ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql())
+                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", sqlGenerator.ArchiveOrderDataSql(cutoffDate)));
+
+        /// <summary>
+        /// Execute the given sql
+        /// </summary>
+        private Task<Unit> ExecuteSqlAsync(IProgressReporter progressItem, DbConnection conn, string message, string sql) =>
+            Functional.UsingAsync(
+                new LoggedStopwatch(log, $"OrderArchive: {message} - "),
+                _ => connectionManager.ExecuteSqlAsync(conn, progressItem, message, sql));
+
+        /// <summary>
+        /// Regenerate filters
+        /// </summary>
+        private Action<DbConnection> RegenerateFilters(IProgressReporter filterProgress) =>
+            (conn) =>
+            {
+                using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
+                {
+                    filterProgress.Starting();
+                    filterProgress.Detail = "Regenerating filters...";
+                    filterProgress.PercentComplete = 5;
+
+                    filterHelper.RegenerateFilters(conn);
+
+                    filterHelper.CalculateInitialFilterCounts(conn, filterProgress, 10);
+
+                    filterProgress.PercentComplete = 100;
+                    filterProgress.Detail = "Done.";
+                }
+            };
     }
 }

@@ -4,41 +4,105 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Moq;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.Database;
+using Interapptive.Shared.Threading;
+using ShipWorks.Common.Threading;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
-    //[Collection("Database collection")]
-    //[Trait("Category", "ContinuousIntegration")]
+    [Collection("Database collection")]
+    [Trait("Category", "SmokeTest")]
     public class OrderArchiverTest
     {
         private readonly DataContext context;
+        private Mock<IAsyncMessageHelper> asyncMessageHelper;
+        private IProgressProvider progressProvider;
 
         public OrderArchiverTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
+            {
+                mock.Override<IMessageHelper>();
+                asyncMessageHelper = mock.Override<IAsyncMessageHelper>();
+            });
+
+            progressProvider = new ProgressProvider();
+            progressProvider.ProgressItems.CollectionChanged += OnProgressItemsCollectionChanged;
+
+
+            asyncMessageHelper.Setup(x => x.CreateProgressProvider()).Returns(progressProvider);
+
+            asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString, It.IsAny<IProgressProvider>(), TimeSpan.Zero))
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             CreateOrderForAllStores();
         }
 
-        [Fact]
-        public async Task OrderArchiver_ArchivesCorrectly()
+        private void OnProgressItemsCollectionChanged(object sender, Interapptive.Shared.Collections.CollectionChangedEventArgs<IProgressReporter> e)
         {
-            IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
-
-            await orderArchiver.Archive(DateTime.Parse("7/1/2018")).ConfigureAwait(false);
+            e.NewItem.Changed += ProgressItemChanged;
         }
 
-        public IEnumerable<DateTime> OrderDates => new[]
+        private void ProgressItemChanged(object sender, EventArgs e)
+        {
+            if (progressProvider.IsComplete)
+            {
+                progressProvider.Terminate();
+            }
+        }
+
+        [Theory]
+        [InlineDataAttribute("1950-07-01 00:01:00.000")]
+        [InlineDataAttribute("2017-06-30 23:59:59.000")]
+        [InlineDataAttribute("2017-07-01 00:00:00.000")]
+        [InlineDataAttribute("2017-07-01 00:01:00.000")]
+        [InlineDataAttribute("2027-07-01 00:01:00.000")]
+        public async Task OrderArchiver_ArchivesCorrectly(string orderDate)
+        {
+            DateTime maxOrderDate = DateTime.Parse(orderDate);
+            var queryFactory = new QueryFactory();
+            var toDeleteQuery = queryFactory.Order.Where(OrderFields.OrderDate < maxOrderDate.Date).Select(OrderFields.OrderID.CountBig());
+            var toKeepQuery = queryFactory.Order.Where(OrderFields.OrderDate >= maxOrderDate.Date).Select(OrderFields.OrderID.CountBig());
+
+            long countToKeep = 0;
+
+            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                countToKeep = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+            }
+
+            IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
+
+            await orderArchiver.Archive(maxOrderDate).ConfigureAwait(false);
+
+            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                long numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toDeleteQuery).ConfigureAwait(false);
+                Assert.Equal(0, numberOfOrders);
+
+                numberOfOrders = await sqlAdapter.FetchScalarAsync<long>(toKeepQuery).ConfigureAwait(false);
+                Assert.Equal(countToKeep, numberOfOrders);
+            }
+        }
+
+        private IEnumerable<DateTime> OrderDates => new[]
         {
             DateTime.Parse("5/1/2017"),
             DateTime.Parse("6/1/2017"),
@@ -199,7 +263,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                             InsurancePolicyEntity insurancePolicy = new InsurancePolicyEntity();
                             insurancePolicy.InitializeNullsToDefault();
                             insurancePolicy.ShipmentID = shipment.ShipmentID;
-                            sqlAdapter.SaveAndRefetch(shipment);
+                            sqlAdapter.SaveAndRefetch(insurancePolicy);
 
                             ShipmentReturnItemEntity shipmentReturnItem = new ShipmentReturnItemEntity();
                             shipmentReturnItem.InitializeNullsToDefault();

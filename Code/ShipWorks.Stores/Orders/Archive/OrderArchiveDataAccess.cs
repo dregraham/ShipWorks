@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Orders.Archive.Errors;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -51,7 +59,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a function with a connection in multi user mode
         /// </summary>
-        public void WithMultiUserConnectionAsync(Action<DbConnection> action)
+        public void WithMultiUserConnection(Action<DbConnection> action)
         {
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
@@ -65,20 +73,52 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a block of sql on the given transaction
         /// </summary>
-        public async Task ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string commandText)
+        public Task<Unit> ExecuteSqlAsync(DbConnection connection, IProgressReporter progressReporter, string message, string commandText)
         {
-            using (HandleSqlInfo(connection, progressReporter))
-            {
-                var command = connection.CreateCommand();
-                command.CommandTimeout = commandTimeout;
+            progressReporter.Detail = message;
+            progressReporter.Starting();
+            progressReporter.PercentComplete = 0;
 
-                progressReporter.Starting();
-                progressReporter.PercentComplete = 0;
-                command.CommandText = commandText;
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-                progressReporter.PercentComplete = 100;
-                progressReporter.Completed();
-            }
+            return Functional.UsingAsync(
+                HandleSqlInfo(connection, progressReporter),
+                _ => BuildCommand(connection, commandText)
+                    .ExecuteNonQueryAsync()
+                    .Bind(__ => progressReporter.Status == ProgressItemStatus.Running ?
+                        Task.FromResult(CompleteProgress(progressReporter)) :
+                        Task.FromException<Unit>(Errors.Error.Canceled)));
+        }
+
+        /// <summary>
+        /// Build the command for execution
+        /// </summary>
+        private DbCommand BuildCommand(DbConnection connection, string commandText)
+        {
+            var command = connection.CreateCommand();
+            command.CommandTimeout = commandTimeout;
+            command.CommandText = commandText;
+            return command;
+        }
+
+        /// <summary>
+        /// Complete the given progress reporter
+        /// </summary>
+        private Unit CompleteProgress(IProgressReporter progressReporter)
+        {
+            progressReporter.PercentComplete = 100;
+            progressReporter.Detail = "Done";
+            progressReporter.Completed();
+            return Unit.Default;
+        }
+
+        /// <summary>
+        /// Get count of orders that will be archived
+        /// </summary>
+        public Task<long> GetCountOfOrdersToArchive(DateTime archiveDate)
+        {
+            var queryFactory = new QueryFactory();
+            var query = queryFactory.Order.Where(OrderFields.OrderDate < archiveDate.Date).Select(OrderFields.OrderID.CountBig());
+
+            return Functional.UsingAsync(sqlAdapterFactory.Create(), adapter => adapter.FetchScalarAsync<long>(query));
         }
 
         /// <summary>
@@ -88,7 +128,7 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             if (connection is SqlConnection sqlConnection)
             {
-                void infoHandler(object sender, SqlInfoMessageEventArgs e) => UpdateProgress(progressReporter, e.Message);
+                void infoHandler(object sender, SqlInfoMessageEventArgs e) => UpdateProgress(progressReporter, e);
 
                 sqlConnection.FireInfoMessageEventOnUserErrors = true;
                 sqlConnection.InfoMessage += infoHandler;
@@ -102,11 +142,29 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Handle SQL Info Messages and update progress as needed
         /// </summary>
-        private void UpdateProgress(IProgressReporter progressReporter, string message)
+        private void UpdateProgress(IProgressReporter progressReporter, SqlInfoMessageEventArgs sqlInfoMessageEvent)
         {
-            log.Info($"OrderArchive: UpdateProgress SQL Message - {message}");
+            if (progressReporter.Status != ProgressItemStatus.Running)
+            {
+                return;
+            }
 
-            message = message.Trim();
+            string message = sqlInfoMessageEvent.Message.Trim();
+
+            SqlError error = sqlInfoMessageEvent.Errors.Cast<SqlError>().FirstOrDefault(sqlError => !IgnoreSqlErrorMessage(sqlError.Message));
+
+            if (error?.Message.IsNullOrWhiteSpace() == false)
+            {
+                message = error.Message;
+                log.Info($"OrderArchive: UpdateProgress SQL ERROR Message - {message}");
+
+                progressReporter.Failed(new OrderArchiveException(message));
+                return;
+            }
+
+            message = message.Replace("OrderArchiveInfo:", string.Empty);
+
+            log.Info($"OrderArchive: UpdateProgress SQL Message - {message}");
 
             if (message.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0)
             {
@@ -119,10 +177,7 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 isRestore = true;
             }
-            else if (message.IndexOf("pages for database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                     message.IndexOf("The backup set", StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                     message.IndexOf("Processed ", StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                     message.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0)
+            else if (IgnoreSqlErrorMessage(message))
             {
                 // Nothing to do for these, just continue.   
             }
@@ -130,6 +185,23 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 progressReporter.Detail = message;
             }
+        }
+
+        /// <summary>
+        /// Checks a message to determine if it should be ignored.
+        /// </summary>
+        private static bool IgnoreSqlErrorMessage(string message)
+        {
+            string messageToCheck = message.Trim();
+
+            return messageToCheck.StartsWith("OrderArchiveInfo:") ||
+                   messageToCheck.IndexOf("pages for database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("The backup set", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("Processed ", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("BACKUP DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                   messageToCheck.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0 ||
+                   messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > -1;
         }
 
         /// <summary>

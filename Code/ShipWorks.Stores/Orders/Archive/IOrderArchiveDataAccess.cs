@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute an action with a connection in multi user mode
         /// </summary>
-        void WithMultiUserConnectionAsync(Action<DbConnection> action);
+        void WithMultiUserConnection(Action<DbConnection> action);
 
         /// <summary>
         /// Create a SqlAdapter with the given connection
@@ -29,6 +30,11 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Execute a block of sql on the given DbConnection
         /// </summary>
-        Task ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string commandText);
+        Task<Unit> ExecuteSqlAsync(DbConnection con, IProgressReporter prepareProgress, string message, string commandText);
+
+        /// <summary>
+        /// Get count of orders that will be archived
+        /// </summary>
+        Task<long> GetCountOfOrdersToArchive(DateTime archiveDate);
     }
 }

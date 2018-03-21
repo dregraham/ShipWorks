@@ -26,9 +26,9 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.RequestPermission(PermissionType.DatabaseArchive, null))
                 .Returns(Result.FromSuccess());
-            mock.Mock<IDateTimeProvider>()
-                .SetupGet(x => x.Now)
-                .Returns(DateTime.Now);
+            mock.Mock<IOrderArchiveViewModel>()
+                .Setup(x => x.GetArchiveDateFromUser())
+                .ReturnsAsync(new DateTime(2018, 3, 13, 12, 30, 00));
 
             testObject = mock.Create<OrderArchiveOrchestrator>();
         }
@@ -45,16 +45,20 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             mock.Mock<IOrderArchiver>().Verify(x => x.Archive(AnyDate), Times.Never);
         }
 
-        [Fact]
-        public async Task Archive_CallsArchiver_WithDate90DaysAgo()
+        [Theory]
+        [InlineData("2018-1-1T12:30:00Z")]
+        [InlineData("2012-12-12T09:30:00Z")]
+        public async Task Archive_CallsArchiver_WithSelectedDate(string cutoffDate)
         {
-            mock.Mock<IDateTimeProvider>()
-                .SetupGet(x => x.Now)
-                .Returns(new DateTime(2018, 3, 8, 12, 30, 0, DateTimeKind.Local));
+            DateTime parsedDate = DateTime.Parse(cutoffDate);
+
+            mock.Mock<IOrderArchiveViewModel>()
+                .Setup(x => x.GetArchiveDateFromUser())
+                .ReturnsAsync(parsedDate);
 
             await testObject.Archive();
 
-            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(new DateTime(2017, 12, 8, 12, 30, 0)));
+            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(parsedDate));
         }
 
         [Fact]
@@ -67,14 +71,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             await testObject.Archive().Recover(ex => Unit.Default);
 
             mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowError("Failed"));
-        }
-
-        [Fact]
-        public async Task Archive_ShowsSuccess_WhenProcessSucceeds()
-        {
-            await testObject.Archive().Recover(ex => Unit.Default);
-
-            mock.Mock<IAsyncMessageHelper>().Verify(x => x.ShowMessage("Archive finished"));
         }
 
         public void Dispose()

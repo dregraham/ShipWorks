@@ -1,4 +1,6 @@
 using System;
+using System.Reactive;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 
@@ -12,6 +14,7 @@ namespace ShipWorks.Common.Threading
         ObservableCollection<IProgressReporter> progressItems = new ObservableCollection<IProgressReporter>();
 
         bool cancelRequested = false;
+        private readonly TaskCompletionSource<Unit> terminatedCompletionSource = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Constructor
@@ -32,7 +35,7 @@ namespace ShipWorks.Common.Threading
         public bool CancelRequested => cancelRequested;
 
         /// <summary>
-        /// Indicates if the current state of the items allows for cancelation.
+        /// Indicates if the current state of the items allows for cancellation.
         /// </summary>
         public bool CanCancel
         {
@@ -56,7 +59,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Request cancelation of the operation in progress
+        /// Request cancellation of the operation in progress
         /// </summary>
         public void Cancel()
         {
@@ -141,6 +144,16 @@ namespace ShipWorks.Common.Threading
 
             return item;
         }
+
+        /// <summary>
+        /// Task that completes when the progress provider is terminated
+        /// </summary>
+        public Task<Unit> Terminated => terminatedCompletionSource.Task;
+
+        /// <summary>
+        /// End the progress provider
+        /// </summary>
+        public void Terminate() => terminatedCompletionSource.SetResult(Unit.Default);
 
         /// <summary>
         /// Called when changes are made to the progress item collection

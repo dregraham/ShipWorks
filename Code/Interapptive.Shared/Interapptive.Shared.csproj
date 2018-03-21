@@ -351,6 +351,7 @@
     <Compile Include="UI\UserConditionalNotificationType.cs" />
     <Compile Include="UI\WpfWindowStateSaver.cs" />
     <Compile Include="Utility\ClrHelper.cs" />
+    <Compile Include="Utility\DateTimeExtensions.cs" />
     <Compile Include="Utility\DecimalExtensions.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />

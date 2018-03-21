@@ -12,6 +12,7 @@ using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
@@ -429,64 +430,18 @@ namespace ShipWorks.Data.Administration
                 progressFunctionality.Detail = "Done";
                 progressFunctionality.Completed();
 
-                CalculateInitialFilterCounts(connection, progressFilterCounts);
+                using (new LoggedStopwatch(log, "Calculate initial filter counts during database upgrade."))
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IFilterHelper filterHelper = scope.Resolve<IFilterHelper>();
+                        filterHelper.CalculateInitialFilterCounts(connection, progressFilterCounts, 0);
+                    }
+                }
             }
             finally
             {
                 FilterLayoutContext.PopScope();
-            }
-        }
-
-        /// <summary>
-        /// Calculate initial filter counts while doing a database upgrade.
-        /// </summary>
-        private static void CalculateInitialFilterCounts(DbConnection connection, ProgressItem progressFilterCounts)
-        {
-            progressFilterCounts.Starting();
-            progressFilterCounts.Detail = "Calculating initial filter counts...";
-
-            // Create a new adapter
-            using (SqlAdapter adapter = new SqlAdapter(connection))
-            {
-                FilterCollection filters = new FilterCollection();
-                adapter.FetchEntityCollection(filters, null);
-                int totalFilters = filters.Count;
-
-                // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
-                // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
-                // give this plenty of time.
-                adapter.CommandTimeOut = int.MaxValue;
-
-                log.DebugFormat("Begin initial filter counts during database upgrade.");
-
-                SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
-                    new SqlAdapterRetry<SqlException>(5, -5, "ActionProcedures.CalculateInitialFilterCounts");
-
-                int nodesUpdated = 1;
-                int iterationNodesUpdated = 1;
-                sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                {
-                    // Keep calculating until no nodes were updated
-                    while (iterationNodesUpdated > 0)
-                    {
-                        ActionProcedures.CalculateInitialFilterCounts(ref iterationNodesUpdated, adapter);
-                        nodesUpdated += iterationNodesUpdated;
-
-                        if (iterationNodesUpdated == 0)
-                        {
-                            progressFilterCounts.PercentComplete = 100;
-                        }
-                        else
-                        {
-                            progressFilterCounts.PercentComplete = (int) (((decimal) nodesUpdated / totalFilters) * 100);
-                        }
-                    }
-                });
-
-                progressFilterCounts.Detail = "Done";
-                progressFilterCounts.Completed();
-
-                log.DebugFormat("Complete initial filter counts during database upgrade.");
             }
         }
 

@@ -140,6 +140,7 @@
     <Compile Include="Collections\CollectionExtensionsTest.cs" />
     <Compile Include="Collections\EnumerableExtensionsTest.cs" />
     <Compile Include="Collections\ObservableExtensionsTest.cs" />
+    <Compile Include="Extensions\DateTimeExtensionsTest.cs" />
     <Compile Include="Extensions\DecimalExtensionsTest.cs" />
     <Compile Include="Extensions\TaskExtensionsTest.cs" />
     <Compile Include="Filters\FilterTestingHelper.cs" />

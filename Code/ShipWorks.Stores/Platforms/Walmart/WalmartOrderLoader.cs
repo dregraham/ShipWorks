@@ -161,6 +161,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </remarks>
         public void LoadItems(IEnumerable<orderLineType> downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
+            // if the walmart items are null dont do anything
+            // this is to fix a bug where walmart gives us an order with no items
+            if (downloadedOrderOrderLines == null)
+            {
+                return;
+            }
+
             foreach (orderLineType orderLine in downloadedOrderOrderLines)
             {
                 LoadItem(orderLine, orderToSave);

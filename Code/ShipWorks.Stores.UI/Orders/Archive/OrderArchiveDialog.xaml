@@ -1,0 +1,129 @@
+﻿<Window x:Class="ShipWorks.Stores.UI.Orders.Archive.OrderArchiveDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Archive"
+        xmlns:ui="http://schemas.shipworks.com/ui"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:DesignModeOrderArchiveViewModel, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+
+        FontFamily="Tahoma"
+        FontSize="8.25 pt"
+        FontStyle="Normal"
+        FontStretch="Normal"
+        FontWeight="Normal"
+
+        Title="Archive Orders"
+        Height="260" Width="450"
+        MinHeight="260" MinWidth="450">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
+            <ui:PluralizingValueConverter x:Key="PluralizingValue" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:AlignmentWrapPanel Grid.Row="0"
+                    VerticalAlignment="Center">
+            <TextBlock VerticalAlignment="Center"
+                       FontWeight="Bold">
+                Archive orders older than:
+            </TextBlock>
+            <DatePicker VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="8,0,12,0"
+                        Style="{StaticResource DatePickerStyle.Centered}"
+                        SelectedDate="{Binding ArchiveDate}" 
+                        DisplayDateStart="{Binding MinimumAllowableDate, Mode=OneTime}" />
+            <TextBlock Foreground="Gray"
+                       FontSize="7 pt"
+                       Visibility="{Binding IsLoadingCounts, Converter={StaticResource HideWhenTrue}}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center">
+                <Run Text="{Binding OrderCounts,StringFormat={}{0:#,0}}" />
+                <Run Text="{Binding OrderCounts, Converter={StaticResource PluralizingValue}, ConverterParameter=order}" />
+                will be archived
+            </TextBlock>
+            <ui:WaitSpinner HorizontalAlignment="Left" 
+                            Visibility="{Binding IsLoadingCounts, Converter={StaticResource ShowWhenTrue}}"
+                            BorderBrush="Transparent">
+                <ui:WaitSpinner.LayoutTransform>
+                    <ScaleTransform ScaleX=".5" ScaleY="0.5" />
+                </ui:WaitSpinner.LayoutTransform>
+            </ui:WaitSpinner>
+        </ui:AlignmentWrapPanel>
+
+        <ScrollViewer Grid.Row="1" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled">
+            <TextBlock
+                   TextWrapping="Wrap"
+                   Foreground="Gray"
+                   Margin="0,8,0,12">
+                <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
+                <LineBreak />
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>Archiving orders cannot be undone.</Run>
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>Archived orders are removed from the current ShipWorks database.</Run>
+                <LineBreak />
+                <Run Foreground="Transparent">MM</Run>
+                <Run>ShipWorks cannot be used during the archiving process.</Run>
+                <LineBreak />
+                <LineBreak />
+                <Run>Want to learn more about archiving?</Run>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
+            </TextBlock>
+        </ScrollViewer>
+
+        <ui:NotificationBorder Grid.Row="2"
+                               Margin="0,0,0,12"
+                                BorderBrush="{StaticResource Yellow}"
+                                Visibility="{Binding IsDateInFuture, Converter={StaticResource ShowWhenTrue}}"
+                                IconControl="!"
+                                IconFontFamily="Tahoma">
+            <TextBlock>The date you selected is in the future. All orders will be archived.</TextBlock>
+        </ui:NotificationBorder>
+        
+        <ui:AlignmentWrapPanel Grid.Row="3">
+            <TextBlock Grid.Row="0"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center" Text="Are you sure you want to archive orders?"/>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Padding="8, 4"
+                        Style="{StaticResource Button.Link}"
+                        Foreground="{StaticResource Blue}"
+                        VerticalAlignment="Center"
+                        IsCancel="True"
+                        Margin="12,0"
+                    Command="{Binding CancelArchive}">Cancel</Button>
+
+                <Button Grid.Row="2"
+                    Padding="8, 4"
+                    IsDefault="True"
+                    Command="{Binding ConfirmArchive}" Content="Confirm Archive"/>
+            </StackPanel>
+        </ui:AlignmentWrapPanel>
+    </Grid>
+</Window>
