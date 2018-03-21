@@ -6,14 +6,12 @@ DECLARE @SourceLogName nvarchar(400)
 DECLARE @DestinationDatabaseDataPathAndFileName nvarchar(400)
 DECLARE @DestinationDatabaseLogPathAndFileName nvarchar(400)
 DECLARE @ErrorMessage nvarchar(255)
-DECLARE @DatabaseNamePostFix NVARCHAR(20)
 DECLARE @DestinationDatabaseName nvarchar(400)
 
-SELECT @DatabaseNamePostFix = '_' + replace(convert(varchar(8),getdate(), 112)+ '_' + convert(varchar(8), getdate(), 114), ':','');
 SELECT @DestinationDatabaseFilesPath = substring(physical_name, 0, LEN(physical_name) - CHARINDEX('\',REVERSE(physical_name)) + 2) FROM sys.database_files WHERE [type] = 0;
 
 SET @SourceDatabaseName = DB_NAME();
-SET @DestinationDatabaseName = @SourceDatabaseName + @DatabaseNamePostFix;
+SET @DestinationDatabaseName = '{0}';
 SET @DestinationDatabaseDataPathAndFileName = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '.mdf'
 SET @DestinationDatabaseLogPathAndFileName  = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '_log.ldf'
 
@@ -82,7 +80,7 @@ BEGIN
 			EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET TRUSTWORTHY ON')
 		END
 
-		EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET MULTI_USER;')
+		--EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET MULTI_USER;')
 
 	END TRY
 	BEGIN CATCH
