@@ -74,8 +74,7 @@
                       HorizontalScrollBarVisibility="Disabled">
             <TextBlock
                    TextWrapping="Wrap"
-                   Foreground="Gray"
-                   Margin="0,8,0,12">
+                   Foreground="Black" Width="416">
                 <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
                 <LineBreak />
                 <LineBreak />
@@ -95,7 +94,7 @@
         </ScrollViewer>
 
         <ui:NotificationBorder Grid.Row="2"
-                               Margin="0,0,0,12"
+                               Margin="0,5,0,7"
                                 BorderBrush="{StaticResource Yellow}"
                                 Visibility="{Binding IsDateInFuture, Converter={StaticResource ShowWhenTrue}}"
                                 IconControl="!"
