@@ -79,7 +79,10 @@ namespace ShipWorks.Shipping.Profiles
         /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
         /// </remarks>
         [Obfuscation(Exclude = true)]
-        public string ShortcutKey => Shortcut?.Hotkey != null ? EnumHelper.GetDescription(Shortcut.Hotkey) : string.Empty;
+        public string ShortcutKey =>
+            Shortcut?.VirtualKey != null && Shortcut.ModifierKeys != null ? 
+                new KeyboardShortcutData(null, Shortcut.VirtualKey.Value, Shortcut.ModifierKeys.Value).ShortcutText :
+                string.Empty;
 
         /// <summary>
         /// The associated ShipmentType description. Blank if global
