@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
 {
@@ -12,16 +12,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
     [KeyedComponent(typeof(IShipWorksMessage), KeyboardShortcutCommand.ApplyWeight)]
     public class KeyboardShortcutMessage : IShipWorksMessage
     {
-        private readonly KeyboardShortcutCommand command;
+        private readonly ShortcutEntity shortcut;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyboardShortcutMessage(object sender, KeyboardShortcutCommand command)
+        public KeyboardShortcutMessage(object sender, ShortcutEntity shortcut)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
-            this.command = command;
+            this.shortcut = shortcut;
         }
 
         /// <summary>
@@ -37,6 +37,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Checks whether this message applies to the given command
         /// </summary>
-        public bool AppliesTo(KeyboardShortcutCommand command) => this.command == command;
+        public bool AppliesTo(KeyboardShortcutCommand command) => (KeyboardShortcutCommand) this.shortcut.Action == command;
+
+        /// <summary>
+        /// Checks whether this message applies to the given shortcut
+        /// </summary>
+        public bool AppliesTo(ShortcutEntity shortcut) => AppliesTo((KeyboardShortcutCommand) shortcut.Action);
     }
 }
