@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile);
+        IEnumerable<KeyboardShortcutData> GetAvailableHotkeys(IShippingProfile shippingProfile);
 
         /// <summary>
         /// Get the configured shipment types profiles

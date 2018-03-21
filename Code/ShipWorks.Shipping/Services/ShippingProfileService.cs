@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using log4net;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -55,12 +56,19 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        public IEnumerable<Hotkey> GetAvailableHotkeys(IShippingProfile shippingProfile)
+        public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys(IShippingProfile shippingProfile)
         {
-            List<Hotkey> availableHotkeys = shortcutManager.GetAvailableHotkeys();
-            if (shippingProfile.Shortcut?.Hotkey.HasValue ?? false)
+            IEnumerable<KeyboardShortcutData> availableHotkeys = shortcutManager.GetAvailableHotkeys().ToList();
+            if (shippingProfile.Shortcut?.VirtualKey.HasValue ?? false)
             {
-                availableHotkeys.Add(shippingProfile.Shortcut.Hotkey.Value);
+
+                List<KeyboardShortcutData> hotKeyList = availableHotkeys.ToList();
+
+                VirtualKeys virtualKey = shippingProfile.Shortcut.VirtualKey.Value;
+                KeyboardShortcutModifiers modifiers = shippingProfile.Shortcut.ModifierKeys.Value;
+
+                hotKeyList.Add(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyProfile, virtualKey, modifiers));
+                availableHotkeys = hotKeyList;
             }
 
             return availableHotkeys;
