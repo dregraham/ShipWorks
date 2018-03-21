@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Profiles
             
             List<KeyValuePair<string, KeyboardShortcutData>> dataSource = new List<KeyValuePair<string, KeyboardShortcutData>>();
             dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>("None", null));
-            foreach (KeyboardShortcutData hotkey in availableHotkeys.OrderBy(k => k))
+            foreach (KeyboardShortcutData hotkey in availableHotkeys.OrderBy(k => k.ShortcutText))
             {                
                 dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>(hotkey.ShortcutText, hotkey));
             }
