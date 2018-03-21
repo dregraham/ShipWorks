@@ -119,6 +119,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         {
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
+            mock.Mock<IShortcutManager>().Setup(x => x.GetShortcut(VirtualKeys.W, None)).Returns((ShortcutEntity) null);
             Assert.False(SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W));
         }
 

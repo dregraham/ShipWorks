@@ -20,10 +20,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Command keys and their generic equivalents
         /// </summary>
         private readonly Dictionary<VirtualKeys, KeyboardShortcutModifiers> commandKeys =
-            new Dictionary<VirtualKeys, KeyboardShortcutModifiers> {
-                {VirtualKeys.Control, KeyboardShortcutModifiers.Ctrl },
-                {VirtualKeys.Shift, KeyboardShortcutModifiers.Shift },
-                {VirtualKeys.Menu, KeyboardShortcutModifiers.Alt }
+            new Dictionary<VirtualKeys, KeyboardShortcutModifiers>
+            {
+                { VirtualKeys.Control, KeyboardShortcutModifiers.Ctrl },
+                { VirtualKeys.Shift, KeyboardShortcutModifiers.Shift },
+                { VirtualKeys.Menu, KeyboardShortcutModifiers.Alt }
             };
 
         private readonly IMessenger messenger;

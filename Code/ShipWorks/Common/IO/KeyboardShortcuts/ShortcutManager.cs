@@ -91,9 +91,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get shortcut for given hotkey
         /// </summary>
-        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys) => 
-            Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
-
+        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys)
+        {
+            key = TranslateKey(key);
+            return Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
+        }
+		
         /// <summary>
         /// Get weigh shortcut
         /// </summary>
@@ -108,6 +111,19 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                  s.ModifierKeys == (KeyboardShortcutModifiers.Ctrl & KeyboardShortcutModifiers.Shift));
 
         /// <summary>
+        /// If a numpad key is padded in, we return the "N" key. else we return the passed in key. 
+        /// </summary>
+        private VirtualKeys TranslateKey(VirtualKeys key)
+        {
+            if (key >= VirtualKeys.Numpad0 && key <= VirtualKeys.Numpad9)
+            {
+                key = VirtualKeys.N0 + (VirtualKeys.Numpad0 - key);
+            }
+
+            return key;
+        }
+
+        /// <summary>
         /// Get unused/available hotkeys
         /// </summary>
         public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys()
@@ -119,10 +135,15 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             {
                 acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None));
             }
-            
+
+            for (VirtualKeys key = VirtualKeys.N0; key <= VirtualKeys.N9; key++)
+            {
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+            }
+
             for (VirtualKeys key = VirtualKeys.A; key <= VirtualKeys.Z; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl & KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
             }
             
             // Remove existing shortcuts from the list of available ones

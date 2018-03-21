@@ -7,7 +7,6 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             };
 
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
-            Assert.Equal("Ctrl + Shift + 0", testObject.ShortcutKey);
+            Assert.Equal("Ctrl+Shift+0", testObject.ShortcutKey);
         }
 
         [Fact]

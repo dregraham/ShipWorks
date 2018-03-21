@@ -59,11 +59,31 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                     shortcutText = (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Ctrl) ? "Ctrl+" : string.Empty) +
                                    (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Alt) ? "Alt+" : string.Empty) +
                                    (Modifiers.Value.HasFlag(KeyboardShortcutModifiers.Shift) ? "Shift+" : string.Empty) +
-                                   ActionKey;
+				                    TranslateActionKey(ActionKey);
                 }
 
                 return shortcutText;
             }
+        }
+
+        /// <summary>
+        /// If actionKey has a letter from the keypad, strip off the 'N' prefix, else return the 
+        /// string value of actionKey
+        /// </summary>
+        private string TranslateActionKey(VirtualKeys? actionKey)
+        {
+            if (actionKey == null)
+            {
+                return string.Empty;
+            }
+
+            string actionKeyString = actionKey.Value.ToString();
+            if (actionKey.Value >= VirtualKeys.N0 && actionKey.Value <= VirtualKeys.N9)
+            {
+                actionKeyString = actionKeyString.Substring(1);
+            }
+
+            return actionKeyString;
         }
     }
 }

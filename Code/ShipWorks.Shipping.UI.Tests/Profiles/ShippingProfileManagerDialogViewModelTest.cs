@@ -7,6 +7,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,15 +49,15 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Constructor_ProfilesAssociatedWithCorrectShortcut_FromShortcutManager()
         {
-            var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };
+            var profileEntity = new ShippingProfileEntity { ShippingProfileID = 42 };
+            var shortcut = new ShortcutEntity { RelatedObjectID = 42, VirtualKey = VirtualKeys.D, ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift };
             var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
             Assert.Equal(1, testObject.ShippingProfiles.Count());
-            Assert.Equal("Ctrl + Shift + D", testObject.ShippingProfiles.Single().ShortcutKey);
+            Assert.Equal("Ctrl+Shift+D", testObject.ShippingProfiles.Single().ShortcutKey);
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private IShippingProfile selectedShippingProfile;
-        private ObservableCollection<IShippingProfile> shippingProfiles = new ObservableCollection<IShippingProfile>();
+        private ObservableCollection<IShippingProfile> shippingProfiles;
         private readonly Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
