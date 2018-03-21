@@ -41,11 +41,11 @@
             // 
             // panelMain
             // 
-            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelMain.Location = new System.Drawing.Point(23, 95);
+            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelMain.Location = new System.Drawing.Point(16, 95);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(477, 59);
+            this.panelMain.Size = new System.Drawing.Size(558, 59);
             this.panelMain.TabIndex = 1;
             // 
             // toolStripAddPrintOutput
@@ -57,7 +57,7 @@
             this.toolStripAddPrintOutput.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripAddPrintOutput.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.add});
-            this.toolStripAddPrintOutput.Location = new System.Drawing.Point(23, 159);
+            this.toolStripAddPrintOutput.Location = new System.Drawing.Point(17, 159);
             this.toolStripAddPrintOutput.Name = "toolStripAddPrintOutput";
             this.toolStripAddPrintOutput.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripAddPrintOutput.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -76,19 +76,19 @@
             // 
             // labelInfo
             // 
-            this.labelInfo.Location = new System.Drawing.Point(24, 74);
+            this.labelInfo.Location = new System.Drawing.Point(17, 74);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(424, 19);
             this.labelInfo.TabIndex = 0;
             this.labelInfo.Text = "ShipWorks will print using the first template in each group that satisfies the co" +
-                "ndition.";
+    "ndition.";
             // 
             // printActionBox
             // 
             this.printActionBox.AutoSize = true;
             this.printActionBox.Checked = true;
             this.printActionBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.printActionBox.Location = new System.Drawing.Point(24, 25);
+            this.printActionBox.Location = new System.Drawing.Point(20, 25);
             this.printActionBox.Name = "printActionBox";
             this.printActionBox.Size = new System.Drawing.Size(230, 17);
             this.printActionBox.TabIndex = 3;
@@ -99,7 +99,7 @@
             // 
             this.labelActionPrinting.AutoSize = true;
             this.labelActionPrinting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelActionPrinting.Location = new System.Drawing.Point(8, 6);
+            this.labelActionPrinting.Location = new System.Drawing.Point(5, 6);
             this.labelActionPrinting.Name = "labelActionPrinting";
             this.labelActionPrinting.Size = new System.Drawing.Size(113, 13);
             this.labelActionPrinting.TabIndex = 4;
@@ -109,7 +109,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 54);
+            this.label1.Location = new System.Drawing.Point(5, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 5;
@@ -121,7 +121,7 @@
             this.installMissingLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.installMissingLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.installMissingLink.ForeColor = System.Drawing.Color.Blue;
-            this.installMissingLink.Location = new System.Drawing.Point(94, 54);
+            this.installMissingLink.Location = new System.Drawing.Point(88, 54);
             this.installMissingLink.Name = "installMissingLink";
             this.installMissingLink.Size = new System.Drawing.Size(116, 13);
             this.installMissingLink.TabIndex = 6;
@@ -141,7 +141,7 @@
             this.Controls.Add(this.toolStripAddPrintOutput);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrintOutputControl";
-            this.Size = new System.Drawing.Size(516, 214);
+            this.Size = new System.Drawing.Size(584, 214);
             this.toolStripAddPrintOutput.ResumeLayout(false);
             this.toolStripAddPrintOutput.PerformLayout();
             this.ResumeLayout(false);

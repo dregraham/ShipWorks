@@ -50,38 +50,36 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(389, 509);
-            this.next.Tag = System.Windows.Forms.DialogResult.OK;
-            this.next.Text = "Finish";
+            this.next.Location = new System.Drawing.Point(399, 509);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(470, 509);
+            this.cancel.Location = new System.Drawing.Point(480, 509);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(308, 509);
+            this.back.Location = new System.Drawing.Point(318, 509);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
-            this.mainPanel.Size = new System.Drawing.Size(557, 437);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Size = new System.Drawing.Size(567, 437);
             // 
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 499);
-            this.etchBottom.Size = new System.Drawing.Size(561, 2);
+            this.etchBottom.Size = new System.Drawing.Size(571, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(389, 3);
+            this.pictureBox.Location = new System.Drawing.Point(399, 3);
             this.pictureBox.Size = new System.Drawing.Size(165, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(557, 56);
+            this.topPanel.Size = new System.Drawing.Size(567, 56);
             // 
             // Instructions
             // 
@@ -102,7 +100,7 @@
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
-            this.wizardPageWelcome.Size = new System.Drawing.Size(557, 437);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(567, 437);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Amazon Shipping";
             // 
@@ -149,8 +147,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 544);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(567, 544);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AmazonShipmentSetupWizard";
             this.NextVisible = true;

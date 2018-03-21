@@ -56,38 +56,38 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(389, 509);
+            this.next.Location = new System.Drawing.Point(399, 509);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(470, 509);
+            this.cancel.Location = new System.Drawing.Point(480, 509);
             this.cancel.TabIndex = 2;
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(308, 509);
+            this.back.Location = new System.Drawing.Point(318, 509);
             this.back.TabIndex = 1;
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
-            this.mainPanel.Size = new System.Drawing.Size(557, 437);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Size = new System.Drawing.Size(567, 437);
             // 
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 499);
-            this.etchBottom.Size = new System.Drawing.Size(561, 2);
+            this.etchBottom.Size = new System.Drawing.Size(571, 2);
             this.etchBottom.TabIndex = 3;
             // 
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.OnTracLogo48;
-            this.pictureBox.Location = new System.Drawing.Point(501, 3);
+            this.pictureBox.Location = new System.Drawing.Point(511, 3);
             this.pictureBox.Size = new System.Drawing.Size(53, 50);
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(557, 56);
+            this.topPanel.Size = new System.Drawing.Size(567, 56);
             // 
             // wizardPageWelcome
             // 
@@ -99,7 +99,7 @@
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
-            this.wizardPageWelcome.Size = new System.Drawing.Size(557, 437);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(567, 437);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup OnTrac Shipping";
             // 
@@ -255,7 +255,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 544);
+            this.ClientSize = new System.Drawing.Size(567, 544);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.LastPageCancelable = true;
             this.Name = "OnTracSetupWizard";

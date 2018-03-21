@@ -1300,7 +1300,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return await FindOrder(identifier, orderPreloads).ConfigureAwait(false);
+            return await FindOrder(identifier).ConfigureAwait(false);
         }
 
         /// <summary>
