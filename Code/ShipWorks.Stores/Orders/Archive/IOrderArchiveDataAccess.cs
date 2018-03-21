@@ -36,5 +36,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Get count of orders that will be archived
         /// </summary>
         Task<long> GetCountOfOrdersToArchive(DateTime archiveDate);
+
+        /// <summary>
+        /// Get the current database name (Not the archive db name)
+        /// </summary>
+        string CurrentDatabaseName { get; }
     }
 }

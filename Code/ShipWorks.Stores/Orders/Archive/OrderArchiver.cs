@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Orders.Archive
             this.connectionManager = connectionManager;
             this.messageHelper = messageHelper;
 
-            currentDatabaseName = SqlSession.Current.Configuration.DatabaseName;
+            currentDatabaseName = connectionManager.CurrentDatabaseName;
             archiveDatabaseName = $"{currentDatabaseName}_{DateTime.Now.ToString("hh_mm_ss")}";
         }
 

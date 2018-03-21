@@ -209,5 +209,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Create a SqlAdapter with the given connection
         /// </summary>
         public ISqlAdapter CreateSqlAdapter(DbConnection con) => sqlAdapterFactory.Create(con);
+
+        /// <summary>
+        /// Get the current database name (Not the archive db name)
+        /// </summary>
+        public string CurrentDatabaseName => SqlSession.Current.Configuration.DatabaseName;
     }
 }
