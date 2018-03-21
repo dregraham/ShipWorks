@@ -10,11 +10,11 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Generate and return SQL for copying a database
         /// </summary>
-        string CopyDatabaseSql();
+        string CopyDatabaseSql(string newDatabasename);
 
         /// <summary>
         /// Generate and return SQL for archiving order data
         /// </summary>
-        string ArchiveOrderDataSql(DateTime maxOrderDate);
+        string ArchiveOrderDataSql(string databasename, DateTime maxOrderDate, OrderArchiverOrderDataComparisonType comparisonType);
     }
 }
