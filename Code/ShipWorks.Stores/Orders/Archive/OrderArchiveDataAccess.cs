@@ -201,7 +201,8 @@ namespace ShipWorks.Stores.Orders.Archive
                    messageToCheck.IndexOf("RESTORE DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
                    messageToCheck.IndexOf("BACKUP DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
                    messageToCheck.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0 ||
-                   messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > -1;
+                   messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("Changed database", StringComparison.InvariantCultureIgnoreCase) > -1;
         }
 
         /// <summary>

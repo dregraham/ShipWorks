@@ -79,9 +79,7 @@ BEGIN
 		BEGIN
 			EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET TRUSTWORTHY ON')
 		END
-
-		--EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET MULTI_USER;')
-
+		
 	END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMsg nvarchar(500)

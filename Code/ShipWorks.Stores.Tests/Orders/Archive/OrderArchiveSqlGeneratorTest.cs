@@ -5,11 +5,13 @@ using System.Reflection;
 using System.Text;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Orders.Archive
 {
@@ -28,20 +30,20 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public void CopyDatabaseSql_ReturnsNonEmptyString()
         {
-            Assert.False(testObject.CopyDatabaseSql().IsNullOrWhiteSpace());
+            Assert.False(testObject.CopyDatabaseSql(AnyString).IsNullOrWhiteSpace());
         }
 
         [Fact]
         public void ArchiveOrderDataSql_ReturnsNonEmptyString()
         {
-            Assert.False(testObject.ArchiveOrderDataSql(DateTime.Now).IsNullOrWhiteSpace());
+            Assert.False(testObject.ArchiveOrderDataSql(AnyString, DateTime.Now, It.IsAny<OrderArchiverOrderDataComparisonType>()).IsNullOrWhiteSpace());
         }
 
         [Fact]
         public void ArchiveOrderDataSql_HasCorrectDate()
         {
             DateTime maxDateTime = DateTime.Now;
-            string archiveSql = testObject.ArchiveOrderDataSql(maxDateTime);
+            string archiveSql = testObject.ArchiveOrderDataSql(AnyString, maxDateTime, It.IsAny<OrderArchiverOrderDataComparisonType>());
 
             Assert.True(archiveSql.Contains(maxDateTime.Date.ToString("yyyy-MM-dd HH:mm:ss")));
         }
@@ -50,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         public void ArchiveOrderDataSql_HasCurrentlySupportedEntities()
         {
             DateTime maxDateTime = DateTime.Now;
-            string archiveSql = testObject.ArchiveOrderDataSql(maxDateTime).ToUpperInvariant();
+            string archiveSql = testObject.ArchiveOrderDataSql(AnyString, maxDateTime, It.IsAny<OrderArchiverOrderDataComparisonType>()).ToUpperInvariant();
 
             foreach (var entityType in CurrentlySupportedEntities)
             {

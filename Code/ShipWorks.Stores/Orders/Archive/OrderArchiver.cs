@@ -10,6 +10,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
@@ -28,6 +29,8 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IFilterHelper filterHelper;
         private readonly IUserSession userSession;
         private readonly IOrderArchiveSqlGenerator sqlGenerator;
+        private readonly string archiveDatabaseName;
+        private readonly string currentDatabaseName;
 
         /// <summary>
         /// Constructor
@@ -44,6 +47,9 @@ namespace ShipWorks.Stores.Orders.Archive
             this.filterHelper = filterHelper;
             this.connectionManager = connectionManager;
             this.messageHelper = messageHelper;
+
+            currentDatabaseName = SqlSession.Current.Configuration.DatabaseName;
+            archiveDatabaseName = $"{currentDatabaseName}_{DateTime.Now.ToString("hh_mm_ss")}";
         }
 
         /// <summary>
@@ -64,6 +70,8 @@ namespace ShipWorks.Stores.Orders.Archive
             prepareProgress.CanCancel = false;
             IProgressReporter archiveProgress = progressProvider.AddItem("Archiving orders");
             archiveProgress.CanCancel = false;
+            IProgressReporter syncProgress = progressProvider.AddItem("Syncing orders");
+            syncProgress.CanCancel = false;
             IProgressReporter filterProgress = progressProvider.AddItem("Regenerating filters");
             filterProgress.CanCancel = false;
 
@@ -78,9 +86,9 @@ namespace ShipWorks.Stores.Orders.Archive
                     using (new LoggedStopwatch(log, "OrderArchive: Archive orders - "))
                     {
                         await connectionManager
-                            .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress))
+                            .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress, syncProgress))
                             .Do(_ => connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress)))
-                            .Recover(_ => TerminateNonStartedTasks(new[] { archiveProgress, filterProgress }))
+                            .Recover(_ => TerminateNonStartedTasks(new[] { archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(false);
 
@@ -110,10 +118,13 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Perform the archive
         /// </summary>
-        private Func<DbConnection, Task<Unit>> PerformArchive(DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress) =>
+        private Func<DbConnection, Task<Unit>> PerformArchive(DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress, IProgressReporter syncProgress) =>
             (conn) =>
-                ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql())
-                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", sqlGenerator.ArchiveOrderDataSql(cutoffDate)));
+                ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql(archiveDatabaseName))
+                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", 
+                                               sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)))
+                    .Bind(_ => ExecuteSqlAsync(syncProgress, conn, "Synching Order and Shipment data", 
+                                               sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan)));
 
         /// <summary>
         /// Execute the given sql
