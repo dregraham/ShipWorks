@@ -6,6 +6,7 @@ using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -26,7 +27,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         [InlineData(None, VirtualKeys.W)]
         [InlineData(Ctrl, VirtualKeys.W, VirtualKeys.Control)]
         [InlineData(Ctrl | Alt, VirtualKeys.W, VirtualKeys.Control, VirtualKeys.Menu)]
-        public void PreFilterMessage_DelegatesKeysToTranslator(KeyboardShortcutModifiers expectedModifiers,
+        public void PreFilterMessage_DelegatesKeysToShortcutManager(KeyboardShortcutModifiers expectedModifiers,
             VirtualKeys actionKey, params VirtualKeys[] keys)
         {
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
@@ -38,12 +39,12 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
 
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, actionKey);
 
-            mock.Mock<IKeyboardShortcutTranslator>()
-                .Verify(x => x.GetCommand(actionKey, expectedModifiers));
+            mock.Mock<IShortcutManager>()
+                .Verify(x => x.GetShortcut(actionKey, expectedModifiers));
         }
 
         [Fact]
-        public void PreFilterMessage_DelegatesKeysToTranslator_WithoutReleasedKey()
+        public void PreFilterMessage_DelegatesKeysToShortcutManager_WithoutReleasedKey()
         {
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
@@ -52,12 +53,12 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             SendKeyboardMessage(testObject, WindowsMessage.KEYLAST, VirtualKeys.Menu);
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
 
-            mock.Mock<IKeyboardShortcutTranslator>()
-                .Verify(x => x.GetCommand(VirtualKeys.W, Ctrl));
+            mock.Mock<IShortcutManager>()
+                .Verify(x => x.GetShortcut(VirtualKeys.W, Ctrl));
         }
 
         [Fact]
-        public void PreFilterMessage_DelegatesKeysToTranslator_WithoutEachActionKey()
+        public void PreFilterMessage_DelegatesKeysToShortcutManager_WithoutEachActionKey()
         {
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
@@ -65,15 +66,15 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.A);
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
 
-            mock.Mock<IKeyboardShortcutTranslator>()
-                .Verify(x => x.GetCommand(VirtualKeys.A, Ctrl));
+            mock.Mock<IShortcutManager>()
+                .Verify(x => x.GetShortcut(VirtualKeys.A, Ctrl));
 
-            mock.Mock<IKeyboardShortcutTranslator>()
-                .Verify(x => x.GetCommand(VirtualKeys.W, Ctrl));
+            mock.Mock<IShortcutManager>()
+                .Verify(x => x.GetShortcut(VirtualKeys.W, Ctrl));
         }
 
         [Fact]
-        public void PreFilterMessage_DelegatesKeysToTranslatorTwice_WithSameKeyBackToBack()
+        public void PreFilterMessage_DelegatesKeysToShortcutManagerTwice_WithSameKeyBackToBack()
         {
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
@@ -82,16 +83,16 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             SendKeyboardMessage(testObject, WindowsMessage.KEYLAST, VirtualKeys.W);
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
 
-            mock.Mock<IKeyboardShortcutTranslator>()
-                .Verify(x => x.GetCommand(VirtualKeys.W, Ctrl), Times.Exactly(2));
+            mock.Mock<IShortcutManager>()
+                .Verify(x => x.GetShortcut(VirtualKeys.W, Ctrl), Times.Exactly(2));
         }
 
         [Fact]
         public void PreFilterMessage_SendsMessage_WhenCommandsAreReturned()
         {
-            mock.Mock<IKeyboardShortcutTranslator>().Setup(x => x.GetCommand(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
-                .Returns(KeyboardShortcutCommand.FocusQuickSearch);
-
+            mock.Mock<IShortcutManager>().Setup(x => x.GetShortcut(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
+                .Returns(new ShortcutEntity(){Action = KeyboardShortcutCommand.FocusQuickSearch});
+ 
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
@@ -103,8 +104,9 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         [Fact]
         public void PreFilterMessage_ReturnsTrue_WhenKeyTriggersCommand()
         {
-            mock.Mock<IKeyboardShortcutTranslator>().Setup(x => x.GetCommand(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
-                .Returns(KeyboardShortcutCommand.ApplyWeight);
+            mock.Mock<IShortcutManager>()
+                .Setup(x => x.GetShortcut(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
+                .Returns(new ShortcutEntity() {Action = KeyboardShortcutCommand.ApplyWeight});
 
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 

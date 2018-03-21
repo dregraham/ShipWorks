@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -27,19 +27,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             };
 
         private readonly IMessenger messenger;
-        private readonly IKeyboardShortcutTranslator shortcutTranslator;
-        private readonly IUser32Input user32Input;
+        private readonly IShortcutManager shortcutManager;
         private KeyboardShortcutModifiers modifiers = KeyboardShortcutModifiers.None;
         private readonly HashSet<VirtualKeys> pressedActionKeys = new HashSet<VirtualKeys>();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyboardShortcutKeyFilter(IMessenger messenger, IUser32Input user32Input,
-            IKeyboardShortcutTranslator shortcutTranslator)
+        public KeyboardShortcutKeyFilter(IMessenger messenger, IShortcutManager shortcutManager)
         {
-            this.user32Input = user32Input;
-            this.shortcutTranslator = shortcutTranslator;
+            this.shortcutManager = shortcutManager;
             this.messenger = messenger;
         }
 
@@ -89,11 +86,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         private bool HandleActionKeyDown(VirtualKeys key)
         {
-            KeyboardShortcutCommand? command = shortcutTranslator.GetCommand(key, modifiers);
+            ShortcutEntity command = shortcutManager.GetShortcut(key, modifiers);
 
-            if (command.HasValue)
+            if (command != null)
             {
-                messenger.Send(new KeyboardShortcutMessage(this, command.Value));
+                messenger.Send(new KeyboardShortcutMessage(this, command));
 
                 pressedActionKeys.Add(key);
                 return true;
