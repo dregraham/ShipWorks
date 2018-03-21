@@ -46,10 +46,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             subscription = messageStream.OfType<ApplyProfileMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
-                .Select(x => 
-                {
-                    return shippingProfileService.Get(x.Profile.ShippingProfileID).Apply(viewModel.Shipment);
-                })
+                .Select(x => shippingProfileService.Get(x.ProfileID).Apply(viewModel.Shipment))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x => 
