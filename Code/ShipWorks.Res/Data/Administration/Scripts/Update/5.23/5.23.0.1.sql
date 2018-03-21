@@ -28,6 +28,12 @@ PRINT N'Altering [dbo].[Shortcut]'
 GO
 ALTER TABLE [dbo].[Shortcut] ENABLE CHANGE_TRACKING
 GO
+INSERT INTO Shortcut
+(ModifierKeys, VirtualKey, Barcode, [Action])
+VALUES
+(3, 87, '', 0),
+(1, 87, '', 0)
+GO
 
 CREATE TABLE dbo.Tmp_ShippingProfile
 	(
