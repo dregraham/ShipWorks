@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -53,14 +55,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         }
 
         /// <summary>
-        /// Get unused/available hotkeys
-        /// </summary>
-        public List<Hotkey> GetAvailableHotkeys() =>
-            EnumHelper.GetEnumList<Hotkey>().Select(h => h.Value)
-                .Where(hotkey => Shortcuts.None(s => s.Hotkey == hotkey))
-                .ToList();
-
-        /// <summary>
         /// Is the barcode already used by a shortcut?
         /// </summary>
         public bool IsBarcodeAvailable(string barcode) =>
@@ -91,6 +85,26 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             {
                 needCheckForChanges = true;
             }
+        }
+
+        /// <summary>
+        /// Get shortcut for given hotkey
+        /// </summary>
+        public ShortcutEntity GetShortcut(VirtualKeys key, ModifierKeys modifierKeys)
+        {
+            throw new NotImplementedException();
+        }
+        
+        /// <summary>
+        /// Get unused/available hotkeys
+        /// </summary>
+        IEnumerable<KeyboardShortcutData> IShortcutManager.GetAvailableHotkeys()
+        {
+            //EnumHelper.GetEnumList<Hotkey>().Select(h => h.Value)
+            //          .Where(hotkey => Shortcuts.None(s => s.Hotkey == hotkey))
+            //          .ToList();
+            
+            throw new NotImplementedException();
         }
 
         /// <summary>

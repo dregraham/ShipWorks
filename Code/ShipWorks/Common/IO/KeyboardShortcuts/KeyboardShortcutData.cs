@@ -10,7 +10,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// Container for shortcut data
     /// </summary>
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
-    internal class KeyboardShortcutData
+    public class KeyboardShortcutData
     {
         /// <summary>
         /// Constructor
