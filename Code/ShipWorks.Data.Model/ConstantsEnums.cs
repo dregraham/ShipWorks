@@ -9796,16 +9796,18 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShortcutID. </summary>
 		ShortcutID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ModifierKeys. </summary>
+		ModifierKeys,
+		///<summary>VirtualKey. </summary>
+		VirtualKey,
 		///<summary>Barcode. </summary>
 		Barcode,
-		///<summary>Hotkey. </summary>
-		Hotkey,
 		///<summary>Action. </summary>
 		Action,
 		///<summary>RelatedObjectID. </summary>
 		RelatedObjectID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}

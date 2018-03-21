@@ -6475,31 +6475,37 @@ GO
 ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
 ON DELETE CASCADE
 GO
+
 PRINT N'Creating [dbo].[Shortcut]'
 GO
-CREATE TABLE [dbo].[Shortcut](
-	[ShortcutID] [bigint] NOT NULL IDENTITY(1105, 1000),
-	[RowVersion] [timestamp] NOT NULL,
-	[Barcode] [nvarchar](50) NOT NULL,
-	[Hotkey] [int] NULL,
-	[Action] [int] NOT NULL,
-	[RelatedObjectID] [bigint] NULL,
- CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED 
+CREATE TABLE [dbo].[Shortcut]
 (
-	[ShortcutID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+[ShortcutID] [bigint] NOT NULL IDENTITY(1105, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ModifierKeys] [int] NULL,
+[VirtualKey] [int] NULL,
+[Barcode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Action] [int] NOT NULL,
+[RelatedObjectID] [bigint] NULL
+)
 GO
-PRINT N'Creating index [IX_Shortcut_Hotkey] on [dbo].[Shortcut]'
+PRINT N'Creating primary key [PK_Shortcut] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Hotkey] ON [dbo].[Shortcut] ([Hotkey]) WHERE ([Shortcut].[Hotkey] IS NOT NULL)
+ALTER TABLE [dbo].[Shortcut] ADD CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED  ([ShortcutID])
+GO
+PRINT N'Creating index [IX_Shortcut_Keys] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey])
 GO
 PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE Barcode != ''
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE ([Barcode]<>'')
+GO
+PRINT N'Altering [dbo].[Shortcut]'
 GO
 ALTER TABLE [dbo].[Shortcut] ENABLE CHANGE_TRACKING
 GO
+
 PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 CREATE NONCLUSTERED INDEX [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])

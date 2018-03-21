@@ -2967,12 +2967,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitShortcutEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ShortcutFieldIndex), "ShortcutEntity");
-			this.AddElementFieldInfo("ShortcutEntity", "ShortcutID", typeof(System.Int64), true, false, false, false,  (int)ShortcutFieldIndex.ShortcutID, 0, 0, 19);
-			this.AddElementFieldInfo("ShortcutEntity", "Barcode", typeof(System.String), false, false, false, false,  (int)ShortcutFieldIndex.Barcode, 50, 0, 0);
-			this.AddElementFieldInfo("ShortcutEntity", "Hotkey", typeof(Nullable<ShipWorks.IO.KeyboardShortcuts.Hotkey>), false, false, false, true,  (int)ShortcutFieldIndex.Hotkey, 0, 0, 10);
-			this.AddElementFieldInfo("ShortcutEntity", "Action", typeof(ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand), false, false, false, false,  (int)ShortcutFieldIndex.Action, 0, 0, 10);
-			this.AddElementFieldInfo("ShortcutEntity", "RelatedObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.RelatedObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ShortcutEntity", "ShortcutID", typeof(System.Int64), true, false, true, false,  (int)ShortcutFieldIndex.ShortcutID, 0, 0, 19);
 			this.AddElementFieldInfo("ShortcutEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ShortcutFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ShortcutEntity", "ModifierKeys", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ShortcutFieldIndex.ModifierKeys, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "VirtualKey", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ShortcutFieldIndex.VirtualKey, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "Barcode", typeof(System.String), false, false, false, false,  (int)ShortcutFieldIndex.Barcode, 50, 0, 0);
+			this.AddElementFieldInfo("ShortcutEntity", "Action", typeof(System.Int32), false, false, false, false,  (int)ShortcutFieldIndex.Action, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "RelatedObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.RelatedObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()

@@ -2621,14 +2621,15 @@
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Shortcut" ObjectID="db397769-930f-4968-8d9b-77d1cbb2ecd6">
+      <EntityDefinition Name="Shortcut" ObjectID="218261e3-dc97-4d48-aa02-61994699f51c">
         <Fields>
-          <Field Name="Action" Type="KeyboardShortcutCommand" FieldIndex="3" />
-          <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="1" />
-          <Field Name="Hotkey" Type="Hotkey" IsOptional="true" FieldIndex="2" />
-          <Field Name="RelatedObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="4" />
-          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="5" />
-          <Field Name="ShortcutID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Action" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="Barcode" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="ModifierKeys" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
+          <Field Name="RelatedObjectID" Type="long" IsOptional="true" Precision="19" FieldIndex="6" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShortcutID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="VirtualKey" Type="int" IsOptional="true" Precision="10" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="SparkPayStore" ObjectID="b4f859d7-ac86-41b0-a433-d34493f23012" InheritanceType="2">
@@ -4214,7 +4215,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-02-27T23:00:31.1529317Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-03-21T14:16:42.718366Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6261,13 +6262,13 @@
                 <Table Name="FilterNodeContentDirty">
                   <PkConstraintName Name="PK_FilterNodeContentDirty" />
                   <Fields>
-                    <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" DbType="0" Precision="19" />
+                    <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ObjectID" Ordinal="3" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="ParentID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="ObjectType" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="ComputerID" Ordinal="6" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="7" IsPrimaryKey="true" DbType="23" Length="100" />
+                    <Field Name="ComputerID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ColumnsUpdated" Ordinal="7" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeRootDirty">
@@ -8101,10 +8102,11 @@
                   <Fields>
                     <Field Name="ShortcutID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="Barcode" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="Hotkey" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="Action" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="RelatedObjectID" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ModifierKeys" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="VirtualKey" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Barcode" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="Action" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="RelatedObjectID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="SparkPayStore">
@@ -9604,9 +9606,9 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:LemonStandStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:MagentoOrder:FK_MagentoOrder_Order">
+            <ForeignKeyConstraint Name="dbo:MagentoOrder:FK_MagentoOrder_GenericModuleOrder" DeleteRuleAction="1">
               <FieldPairs>
-                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:MagentoOrder:OrderID" />
+                <FieldPair PkField="dbo:GenericModuleOrder:OrderID" FkField="dbo:MagentoOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:MagentoOrderSearch:FK_MagentoOrderSearch_MagentoOrder" DeleteRuleAction="1">
@@ -12694,10 +12696,11 @@
           <FieldMappings>
             <FieldMapping FieldName="Action" TargetFieldName="Action" />
             <FieldMapping FieldName="Barcode" TargetFieldName="Barcode" />
-            <FieldMapping FieldName="Hotkey" TargetFieldName="Hotkey" />
+            <FieldMapping FieldName="ModifierKeys" TargetFieldName="ModifierKeys" />
             <FieldMapping FieldName="RelatedObjectID" TargetFieldName="RelatedObjectID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="ShortcutID" TargetFieldName="ShortcutID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="VirtualKey" TargetFieldName="VirtualKey" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":SparkPayStore" TargetName="ShipWorksLocal:dbo:SparkPayStore">
