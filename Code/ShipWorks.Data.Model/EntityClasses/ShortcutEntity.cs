@@ -392,9 +392,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."ModifierKeys"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ModifierKeys
+		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers> ModifierKeys
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ShortcutFieldIndex.ModifierKeys, false); }
+			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers>)GetValue((int)ShortcutFieldIndex.ModifierKeys, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.ModifierKeys, value); }
 		}
 
@@ -402,9 +402,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."VirtualKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> VirtualKey
+		public virtual Nullable<Interapptive.Shared.Win32.Native.VirtualKeys> VirtualKey
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ShortcutFieldIndex.VirtualKey, false); }
+			get { return (Nullable<Interapptive.Shared.Win32.Native.VirtualKeys>)GetValue((int)ShortcutFieldIndex.VirtualKey, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.VirtualKey, value); }
 		}
 
@@ -422,9 +422,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."Action"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Action
+		public virtual ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand Action
 		{
-			get { return (System.Int32)GetValue((int)ShortcutFieldIndex.Action, true); }
+			get { return (ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand)GetValue((int)ShortcutFieldIndex.Action, true); }
 			set	{ SetValue((int)ShortcutFieldIndex.Action, value); }
 		}
 

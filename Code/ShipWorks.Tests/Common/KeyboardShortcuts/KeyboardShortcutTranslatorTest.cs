@@ -8,7 +8,7 @@ using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
-using static ShipWorks.Common.IO.KeyboardShortcuts.KeyboardShortcutModifiers;
+using static ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers;
 
 namespace ShipWorks.Tests.Common.KeyboardShortcuts
 {
