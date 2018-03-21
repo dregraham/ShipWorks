@@ -58,17 +58,10 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys(IShippingProfile shippingProfile)
         {
-            IEnumerable<KeyboardShortcutData> availableHotkeys = shortcutManager.GetAvailableHotkeys().ToList();
-            if (shippingProfile.Shortcut?.VirtualKey.HasValue ?? false)
+            IList<KeyboardShortcutData> availableHotkeys = shortcutManager.GetAvailableHotkeys().ToList();
+            if ((shippingProfile.Shortcut?.ModifierKeys.HasValue ?? false) && (shippingProfile.Shortcut?.VirtualKey.HasValue ?? false))
             {
-
-                List<KeyboardShortcutData> hotKeyList = availableHotkeys.ToList();
-
-                VirtualKeys virtualKey = shippingProfile.Shortcut.VirtualKey.Value;
-                KeyboardShortcutModifiers modifiers = shippingProfile.Shortcut.ModifierKeys.Value;
-
-                hotKeyList.Add(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyProfile, virtualKey, modifiers));
-                availableHotkeys = hotKeyList;
+                availableHotkeys.Add(new KeyboardShortcutData(shippingProfile.Shortcut.Action, shippingProfile.Shortcut.VirtualKey.Value, shippingProfile.Shortcut.ModifierKeys.Value));
             }
 
             return availableHotkeys;

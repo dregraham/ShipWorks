@@ -8,12 +8,14 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -98,6 +100,7 @@ namespace ShipWorks.Shipping
         private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
+        IDisposable keyboardShortcutSubscription;
 
         /// <summary>
         /// Constructor
@@ -256,6 +259,34 @@ namespace ShipWorks.Shipping
             }
 
             UpdateEditControlsSecurity();
+
+            // Start listening for keybaord shortcuts
+            ListenForKeyboardShortcuts();
+        }
+
+        /// <summary>
+        /// Listen for KeyboardShortcutMessage
+        /// </summary>
+        private void ListenForKeyboardShortcuts()
+        {
+            keyboardShortcutSubscription?.Dispose();
+            keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>().Subscribe(async m => await HandleKeyboardShortcut(m));
+        }
+        
+        /// <summary>
+        /// Handle the KeyboardShortcutMessage
+        /// </summary>
+        /// <param name="shortcutMessage"></param>
+        private async Task HandleKeyboardShortcut(KeyboardShortcutMessage shortcutMessage)
+        {
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
+            {
+                long? profileId = shortcutMessage.Shortcut.RelatedObjectID;
+                if (profileId != null)
+                {
+                    await ApplyProfile(profileId.Value);
+                }
+            }
         }
 
         /// <summary>
@@ -1693,16 +1724,24 @@ namespace ShipWorks.Shipping
         /// </remarks>
         private async void OnApplyProfile(object sender, EventArgs e)
         {
-            applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             IShippingProfileEntity profile = (IShippingProfileEntity)menuItem.Tag;
 
+            await ApplyProfile(profile.ShippingProfileID);
+        }
+
+        /// <summary>
+        /// Apply the given profile
+        /// </summary>
+        private async Task ApplyProfile(long profileId)
+        {
+            applyingProfile = true;
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
 
-            shippingProfileService.Get(profile.ShippingProfileID)
+            shippingProfileService.Get(profileId)
                 .Apply(uiDisplayedShipments.Where(s => !s.Processed));
-            
+
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);
             applyingProfile = false;
@@ -2427,6 +2466,8 @@ namespace ShipWorks.Shipping
 
                 // Dispose each of the service controls and clear the cache.
                 DisposeSerivceControlCache();
+
+                keyboardShortcutSubscription?.Dispose();
             }
 
             base.Dispose(disposing);

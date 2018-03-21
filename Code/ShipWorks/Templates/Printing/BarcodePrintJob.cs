@@ -118,7 +118,7 @@ namespace ShipWorks.Templates.Printing
                 }
 
                 int barcodeCount = shippingProfiles.Count(p => !string.IsNullOrWhiteSpace(p.Shortcut.Barcode));
-                int hotkeyCount = shippingProfiles.Count(p => p.Shortcut.VirtualKey != null);
+                int hotkeyCount = shippingProfiles.Count(p => p.Shortcut.VirtualKey != null && p.Shortcut.ModifierKeys != null);
 
                 using (ITrackedEvent telemetryEvent = telemetryEventFunc("Shortcuts.Print"))
                 {

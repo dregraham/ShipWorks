@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Create an empty ShippingProfile
         /// </summary>
         IShippingProfile CreateEmptyShippingProfile();
-        
+
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>

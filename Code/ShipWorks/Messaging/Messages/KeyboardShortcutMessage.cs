@@ -12,8 +12,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
     [KeyedComponent(typeof(IShipWorksMessage), KeyboardShortcutCommand.ApplyWeight)]
     public class KeyboardShortcutMessage : IShipWorksMessage
     {
-        public ShortcutEntity Shortcut { get; }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -23,6 +21,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
             Sender = sender;
             Shortcut = shortcut;
         }
+
+        /// <summary>
+        /// The shortcut 
+        /// </summary>
+        public ShortcutEntity Shortcut { get; }
 
         /// <summary>
         /// Id of the message, used for tracking
@@ -38,5 +41,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// Checks whether this message applies to the given command
         /// </summary>
         public bool AppliesTo(KeyboardShortcutCommand command) => Shortcut.Action == command;
+
+        /// <summary>
+        /// Checks whether this message applies to the given shortcut
+        /// </summary>
+        public bool AppliesTo(ShortcutEntity shortcut) => AppliesTo(shortcut.Action);
     }
 }

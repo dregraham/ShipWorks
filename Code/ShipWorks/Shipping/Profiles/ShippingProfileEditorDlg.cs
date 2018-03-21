@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Settings;
 using System.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -124,7 +125,15 @@ namespace ShipWorks.Shipping.Profiles
         private void OnOk(object sender, EventArgs e)
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
-            profile.Shortcut.Hotkey = (Hotkey?) keyboardShortcut.SelectedValue;
+
+            KeyboardShortcutData shortcutData = keyboardShortcut.SelectedValue as KeyboardShortcutData;
+            if (shortcutData != null)
+            {
+                profile.Shortcut.VirtualKey = shortcutData.ActionKey;
+                profile.Shortcut.ModifierKeys = shortcutData.Modifiers;
+                profile.Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
+            }
+
             profile.Shortcut.Barcode = barcode.Text.Trim();
             
             // Have the profile control save itself
@@ -168,22 +177,23 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadShortcuts()
         {
-            IEnumerable<Hotkey> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
+            IEnumerable<KeyboardShortcutData> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
             
-            List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
-            dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
-            foreach (Hotkey hotkey in availableHotkeys.OrderBy(k => k))
+            List<KeyValuePair<string, KeyboardShortcutData>> dataSource = new List<KeyValuePair<string, KeyboardShortcutData>>();
+            dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>("None", null));
+            foreach (KeyboardShortcutData hotkey in availableHotkeys.OrderBy(k => k))
             {                
-                dataSource.Add(new KeyValuePair<string, Hotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
+                dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>(hotkey.ShortcutText, hotkey));
             }
 
             keyboardShortcut.DisplayMember = "Key";
             keyboardShortcut.ValueMember = "Value";
             keyboardShortcut.DataSource = dataSource;
 
-            if (profile?.Shortcut?.Hotkey != null)
+            if (profile?.Shortcut?.VirtualKey != null && profile?.Shortcut?.ModifierKeys != null)
             {
-                keyboardShortcut.SelectedValue = profile.Shortcut.Hotkey;
+                KeyboardShortcutData selectedValue = availableHotkeys.First(a => a.Modifiers == profile.Shortcut.ModifierKeys && a.ActionKey == profile.Shortcut.VirtualKey);
+                keyboardShortcut.SelectedValue = selectedValue;
             }
         }
 
