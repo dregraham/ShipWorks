@@ -37,11 +37,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Checks whether this message applies to the given command
         /// </summary>
-        public bool AppliesTo(KeyboardShortcutCommand command) => (KeyboardShortcutCommand) this.shortcut.Action == command;
+        public bool AppliesTo(KeyboardShortcutCommand command) => this.shortcut.Action == command;
 
         /// <summary>
         /// Checks whether this message applies to the given shortcut
         /// </summary>
-        public bool AppliesTo(ShortcutEntity shortcut) => AppliesTo((KeyboardShortcutCommand) shortcut.Action);
+        public bool AppliesTo(ShortcutEntity shortcut) => AppliesTo(shortcut.Action);
     }
 }
