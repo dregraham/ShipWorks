@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
@@ -60,7 +61,8 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = Hotkey.CtrlShift0
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
+                VirtualKey = VirtualKeys.N0
             };
 
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
@@ -77,11 +79,12 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = Hotkey.CtrlShift0
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
+                VirtualKey = VirtualKeys.N0
             };
 
             ShippingProfile testObject = CreateShippingProfile(profile, shortcut);
-            Assert.Equal(testObject.ShortcutKey, EnumHelper.GetDescription(shortcut.Hotkey));
+            Assert.Equal("Ctrl + Shift + 0", testObject.ShortcutKey);
         }
 
         [Fact]
@@ -101,7 +104,8 @@ namespace ShipWorks.Tests.Shipping.Profiles
         {
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = Hotkey.CtrlShift0
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
+                VirtualKey = VirtualKeys.N0
             };
 
             ShippingProfileEntity profile = new ShippingProfileEntity

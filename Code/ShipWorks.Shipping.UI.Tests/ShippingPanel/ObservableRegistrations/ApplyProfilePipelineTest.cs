@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(mock.Create<ShippingPanelViewModel>());
 
-            messenger.OnNext(new ApplyProfileMessage(this, 1234, new ShippingProfileEntity()));
+            messenger.OnNext(new ApplyProfileMessage(this, 1234, 0));
 
             mock.Mock<IShippingProfileService>()
                 .Verify(x => x.Get(It.IsAny<long>()), Times.Never);
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
-            messenger.OnNext(new ApplyProfileMessage(this, 12, profile));
+            messenger.OnNext(new ApplyProfileMessage(this, 12, profile.ShippingProfileID));
 
             shippingProfile.Verify(x => x.Apply(shipment));
         }
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
-            messenger.OnNext(new ApplyProfileMessage(this, 12, new ShippingProfileEntity()));
+            messenger.OnNext(new ApplyProfileMessage(this, 12, 0));
 
             viewModel.Verify(x => x.LoadShipment(adapter.Object));
         }

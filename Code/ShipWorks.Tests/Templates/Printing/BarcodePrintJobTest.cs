@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -126,7 +127,8 @@ namespace ShipWorks.Tests.Templates.Printing
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.Shortcut).Returns(new ShortcutEntity()
             {
-                Hotkey = Hotkey.CtrlShift1
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
+                VirtualKey = VirtualKeys.N1
             });
 
             TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
