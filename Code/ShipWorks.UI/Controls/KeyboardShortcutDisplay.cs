@@ -56,8 +56,10 @@ namespace ShipWorks.UI.Controls
             }
 
             ShortcutEntity shortcut = IoC.BeginLifetimeScope().Resolve<IShortcutManager>().GetWeighShortcut();
-            
-            SetCurrentValue(ShortcutTextProperty, new KeyboardShortcutData(shortcut).ShortcutText);
+            if (shortcut != null)
+            {            
+                SetCurrentValue(ShortcutTextProperty, new KeyboardShortcutData(shortcut).ShortcutText);
+            }
         }
     }
 }

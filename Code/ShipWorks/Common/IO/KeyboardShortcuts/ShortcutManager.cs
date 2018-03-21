@@ -108,7 +108,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </remarks>
         public ShortcutEntity GetWeighShortcut() => Shortcuts.FirstOrDefault(
             s => s.Action == KeyboardShortcutCommand.ApplyWeight &&
-                 s.ModifierKeys == (KeyboardShortcutModifiers.Ctrl & KeyboardShortcutModifiers.Shift));
+                 s.ModifierKeys == (KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
 
         /// <summary>
         /// If a numpad key is padded in, we return the "N" key. else we return the passed in key. 
