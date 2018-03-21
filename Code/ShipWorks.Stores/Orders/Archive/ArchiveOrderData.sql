@@ -2,25 +2,25 @@
 DECLARE @SetRecoveryModelSimpleSql nvarchar(255)
 DECLARE @SetRecoveryModelOriginalSql nvarchar(255)
 
-USE [{1}]
+USE [%databaseName%]
 
 SELECT @OriginalRecoveryModel = recovery_model_desc  
    FROM sys.databases  
-   WHERE name = '{1}'; 
+   WHERE name = '%databaseName%'; 
 
 SET @SetRecoveryModelSimpleSql = 
 	'USE [master]
 	
-	ALTER DATABASE [{1}] SET RECOVERY SIMPLE WITH NO_WAIT
+	ALTER DATABASE [%databaseName%] SET RECOVERY SIMPLE WITH NO_WAIT
 	
-	use [{1}]';
+	use [%databaseName%]';
 
 SET @SetRecoveryModelOriginalSql = 
 	'USE [master]
 	
-	ALTER DATABASE [{1}] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
+	ALTER DATABASE [%databaseName%] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
 	
-	use [{1}]';
+	use [%databaseName%]';
 	
 EXEC(@SetRecoveryModelSimpleSql)
 
@@ -49,7 +49,7 @@ END
 SELECT DISTINCT o.OrderID as 'EntityID'
 INTO    dbo.[OrderIDsToDelete]
 FROM    dbo.[Order] o
-WHERE   o.OrderDate {2} '{0}'
+WHERE   o.OrderDate %orderDateComparer% '%orderDate%'
 ORDER BY o.OrderID
 
 --IF NOT EXISTS(SELECT TOP 1 * FROM dbo.[OrderIDsToDelete])
@@ -410,4 +410,4 @@ COMMIT TRAN
 /* Put the database back in its original recovery model */
 EXEC(@SetRecoveryModelOriginalSql)
 
-EXEC('ALTER DATABASE {1} SET MULTI_USER;')
+EXEC('ALTER DATABASE %databaseName% SET MULTI_USER;')

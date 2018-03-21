@@ -11,7 +11,7 @@ DECLARE @DestinationDatabaseName nvarchar(400)
 SELECT @DestinationDatabaseFilesPath = substring(physical_name, 0, LEN(physical_name) - CHARINDEX('\',REVERSE(physical_name)) + 2) FROM sys.database_files WHERE [type] = 0;
 
 SET @SourceDatabaseName = DB_NAME();
-SET @DestinationDatabaseName = '{0}';
+SET @DestinationDatabaseName = '%destinationDatabaseName%';
 SET @DestinationDatabaseDataPathAndFileName = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '.mdf'
 SET @DestinationDatabaseLogPathAndFileName  = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '_log.ldf'
 
