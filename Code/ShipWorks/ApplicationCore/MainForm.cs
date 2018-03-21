@@ -285,8 +285,6 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
-
-            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
@@ -781,6 +779,8 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+
+            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
