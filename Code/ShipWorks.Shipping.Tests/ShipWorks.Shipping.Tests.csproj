@@ -294,6 +294,7 @@
     <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
+    <Compile Include="Carriers\UPS\UpsServicePackageTypeSettingTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />
