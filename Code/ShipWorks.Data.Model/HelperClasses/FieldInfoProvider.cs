@@ -2307,7 +2307,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "RollupItemSKU", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemSKU, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "RollupItemLocation", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemLocation, 255, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "RollupItemQuantity", typeof(Nullable<System.Double>), false, false, true, true,  (int)OrderFieldIndex.RollupItemQuantity, 0, 0, 38);
-			this.AddElementFieldInfo("OrderEntity", "RollupItemTotalWeight", typeof(System.Double), false, false, false, false,  (int)OrderFieldIndex.RollupItemTotalWeight, 0, 0, 38);
+			this.AddElementFieldInfo("OrderEntity", "RollupItemTotalWeight", typeof(System.Double), false, false, false, false,  (int)OrderFieldIndex.RollupItemTotalWeight, 0, 9, 29);
 			this.AddElementFieldInfo("OrderEntity", "RollupNoteCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.RollupNoteCount, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "BillNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillNameParseStatus, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "BillUnparsedName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillUnparsedName, 100, 0, 0);
@@ -2347,8 +2347,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Thumbnail", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Thumbnail, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "UnitPrice", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.UnitPrice, 0, 4, 19);
 			this.AddElementFieldInfo("OrderItemEntity", "UnitCost", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.UnitCost, 0, 4, 19);
-			this.AddElementFieldInfo("OrderItemEntity", "Weight", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 0, 38);
+			this.AddElementFieldInfo("OrderItemEntity", "Weight", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Weight, 0, 9, 29);
+			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 9, 29);
 			this.AddElementFieldInfo("OrderItemEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.LocalStatus, 255, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
@@ -2722,7 +2722,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ShipmentFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipmentType", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipmentType, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentEntity", "ContentWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.ContentWeight, 0, 0, 38);
-			this.AddElementFieldInfo("ShipmentEntity", "TotalWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.TotalWeight, 0, 0, 38);
+			this.AddElementFieldInfo("ShipmentEntity", "TotalWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.TotalWeight, 0, 9, 29);
 			this.AddElementFieldInfo("ShipmentEntity", "Processed", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.Processed, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ProcessedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.ProcessedDate, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)ShipmentFieldIndex.ProcessedUserID, 0, 0, 19);

@@ -414,7 +414,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The RollupItemTotalWeight property of the Entity Order<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Order"."RollupItemTotalWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 18, 9, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double RollupItemTotalWeight { get; }
         /// <summary> The RollupNoteCount property of the Entity Order<br/><br/>

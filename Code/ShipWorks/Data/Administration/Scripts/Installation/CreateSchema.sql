@@ -1,4 +1,5 @@
 
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -506,7 +507,7 @@ CREATE TABLE [dbo].[Order]
 [RollupItemSKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupItemLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupItemQuantity] [float] NULL,
-[RollupItemTotalWeight] [float] NOT NULL,
+[RollupItemTotalWeight] [decimal] (29, 9) NOT NULL,
 [RollupNoteCount] [int] NOT NULL,
 [BillNameParseStatus] [int] NOT NULL,
 [BillUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -770,8 +771,8 @@ CREATE TABLE [dbo].[OrderItem]
 [Thumbnail] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UnitPrice] [money] NOT NULL,
 [UnitCost] [money] NOT NULL,
-[Weight] [float] NOT NULL,
-[Quantity] [float] NOT NULL,
+[Weight] [decimal] (29, 9) NOT NULL,
+[Quantity] [decimal] (29, 9) NOT NULL,
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
 [TotalWeight] AS ([Weight]*[Quantity]),
@@ -1152,7 +1153,7 @@ CREATE TABLE [dbo].[Shipment]
 [OrderID] [bigint] NOT NULL,
 [ShipmentType] [int] NOT NULL,
 [ContentWeight] [float] NOT NULL,
-[TotalWeight] [float] NOT NULL,
+[TotalWeight] [decimal] (29, 9) NOT NULL,
 [Processed] [bit] NOT NULL,
 [ProcessedDate] [datetime] NULL,
 [ProcessedUserID] [bigint] NULL,
