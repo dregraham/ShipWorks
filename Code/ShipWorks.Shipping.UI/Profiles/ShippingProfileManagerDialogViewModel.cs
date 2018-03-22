@@ -26,9 +26,8 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
         private IShippingProfile selectedShippingProfile;
-        private ObservableCollection<IShippingProfile> shippingProfiles;
         private readonly Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private bool AnyShortcutsToPrint() => 
             ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Shortcut.Barcode));
-        
+
         /// <summary>
         /// Print the barcodes
         /// </summary>
@@ -97,11 +96,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IShippingProfile> ShippingProfiles
-        {
-            get => shippingProfiles;
-            private set => handler.Set(nameof(ShippingProfiles), ref shippingProfiles, value);
-        }
+        public ObservableCollection<IShippingProfile> ShippingProfiles { get; }
 
         /// <summary>
         /// Currently selected ShippingProfile
@@ -118,17 +113,18 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Delete()
         {
-            DialogResult dialogResult = messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}?");
+            DialogResult dialogResult =
+                messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}?");
             if (dialogResult == DialogResult.OK)
             {
                 // Unset the profile before deleting so it isnt used in logic after the delete
                 IShippingProfile profileToDelete = SelectedShippingProfile;
-                selectedShippingProfile = null;
+                SelectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
                 shippingProfileService.Delete(profileToDelete);
             }
         }
-        
+
         /// <summary>
         /// Edit a profile
         /// </summary>
