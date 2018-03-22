@@ -132,7 +132,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Create the barcode element
         /// </summary>
-        private static string CreateBarcodeElement(string name, string barcode, string hotkey) =>
-            $"<table><tr><td> {name} </td></tr><tr><td class='barcode'>{barcode}</td></tr><tr><td>{hotkey}</td></tr></table>";
+        private static string CreateBarcodeElement(string name, string barcode, string shortcutKey) =>
+            $"<table><tr><td> {name} </td></tr><tr><td class='barcode'>{barcode}</td></tr><tr><td>{shortcutKey}</td></tr></table>";
     }
 }
