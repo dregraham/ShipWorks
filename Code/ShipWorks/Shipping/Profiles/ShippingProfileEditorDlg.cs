@@ -125,15 +125,7 @@ namespace ShipWorks.Shipping.Profiles
         private void OnOk(object sender, EventArgs e)
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
-
-            KeyboardShortcutData shortcutData = keyboardShortcut.SelectedValue as KeyboardShortcutData;
-            if (shortcutData != null)
-            {
-                profile.Shortcut.VirtualKey = shortcutData.ActionKey;
-                profile.Shortcut.ModifierKeys = shortcutData.Modifiers;
-                profile.Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
-            }
-
+            profile.ChangeKeyboardShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData);
             profile.Shortcut.Barcode = barcode.Text.Trim();
             
             // Have the profile control save itself

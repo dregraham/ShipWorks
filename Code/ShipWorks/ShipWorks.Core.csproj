@@ -955,7 +955,6 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\IKeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\IShortcutManager.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />

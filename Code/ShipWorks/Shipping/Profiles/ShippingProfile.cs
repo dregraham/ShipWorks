@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -159,6 +160,16 @@ namespace ShipWorks.Shipping.Profiles
             messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
 
             return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
+        }
+
+        /// <summary>
+        /// Change the keybaord shortcut
+        /// </summary>
+        public void ChangeKeyboardShortcut(KeyboardShortcutData keyboardShortcut)
+        {
+            Shortcut.VirtualKey = keyboardShortcut?.ActionKey;
+            Shortcut.ModifierKeys = keyboardShortcut?.Modifiers;
+            Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
         }
     }
 }

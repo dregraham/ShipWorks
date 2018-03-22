@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
@@ -43,6 +45,11 @@ namespace ShipWorks.Shipping.Profiles
         /// Apply profile to shipment
         /// </summary>
         ICarrierShipmentAdapter Apply(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Change the keybaord shortcut
+        /// </summary>
+        void ChangeKeyboardShortcut(KeyboardShortcutData keyboardShortcut);
 
         /// <summary>
         /// Change profile to be of specified ShipmentType

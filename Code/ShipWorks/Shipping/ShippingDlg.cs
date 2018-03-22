@@ -1722,12 +1722,12 @@ namespace ShipWorks.Shipping
         /// so we don't overwrite the carrier specific events. However, we can't do that because event handlers can only
         /// be used with -= and += operations outside of their defining class, ServiceControl in this case.
         /// </remarks>
-        private async void OnApplyProfile(object sender, EventArgs e)
+        private void OnApplyProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             IShippingProfileEntity profile = (IShippingProfileEntity)menuItem.Tag;
 
-            await ApplyProfile(profile.ShippingProfileID);
+            ApplyProfile(profile.ShippingProfileID);
         }
 
         /// <summary>
@@ -1743,7 +1743,7 @@ namespace ShipWorks.Shipping
                 .Apply(uiDisplayedShipments.Where(s => !s.Processed));
 
             // Reload the UI to show the changes
-            await LoadSelectedShipments(true);
+            await LoadSelectedShipments(true).ConfigureAwait(true);
             applyingProfile = false;
         }
 
