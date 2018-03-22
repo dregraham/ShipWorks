@@ -37,6 +37,16 @@ namespace ShipWorks.Shipping.Profiles
         string ShortcutKey { get; }
 
         /// <summary>
+        /// The barcode to apply the profile
+        /// </summary>
+        string Barcode { get; }
+
+        /// <summary>
+        /// The profiles keyboard shortcut
+        /// </summary>
+        KeyboardShortcutData KeyboardShortcut { get; }
+
+        /// <summary>
         /// Apply profile to shipments
         /// </summary>
         IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipment);
@@ -50,6 +60,11 @@ namespace ShipWorks.Shipping.Profiles
         /// Change the keybaord shortcut
         /// </summary>
         void ChangeKeyboardShortcut(KeyboardShortcutData keyboardShortcut);
+
+        /// <summary>
+        /// Change the barcode
+        /// </summary>
+        void ChangeBarcode(string barcode);
 
         /// <summary>
         /// Change profile to be of specified ShipmentType

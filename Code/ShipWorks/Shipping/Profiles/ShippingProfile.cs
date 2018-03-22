@@ -86,6 +86,16 @@ namespace ShipWorks.Shipping.Profiles
                 string.Empty;
 
         /// <summary>
+        /// The barcode to apply the profile
+        /// </summary>
+        public string Barcode => Shortcut.Barcode;
+
+        /// <summary>
+        /// The profiles keyboard shortcut
+        /// </summary>
+        public KeyboardShortcutData KeyboardShortcut => new KeyboardShortcutData(Shortcut);
+
+        /// <summary>
         /// The associated ShipmentType description. Blank if global
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -170,6 +180,14 @@ namespace ShipWorks.Shipping.Profiles
             Shortcut.VirtualKey = keyboardShortcut?.ActionKey;
             Shortcut.ModifierKeys = keyboardShortcut?.Modifiers;
             Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
+        }
+        
+        /// <summary>
+        /// Change the keybaord shortcut
+        /// </summary>
+        public void ChangeBarcode(string barcode)
+        {
+            Shortcut.Barcode = barcode;
         }
     }
 }

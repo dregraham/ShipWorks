@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
             profileName.Text = profile.ShippingProfileEntity.Name;
-            barcode.Text = profile.Shortcut.Barcode;
+            barcode.Text = profile.Barcode;
 
             LoadShortcuts();
             LoadProviders();
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
             profile.ChangeKeyboardShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData);
-            profile.Shortcut.Barcode = barcode.Text.Trim();
+            profile.ChangeBarcode(barcode.Text.Trim());
             
             // Have the profile control save itself
             ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
@@ -182,9 +182,10 @@ namespace ShipWorks.Shipping.Profiles
             keyboardShortcut.ValueMember = "Value";
             keyboardShortcut.DataSource = dataSource;
 
-            if (profile?.Shortcut?.VirtualKey != null && profile?.Shortcut?.ModifierKeys != null)
+            KeyboardShortcutData profilesKeyboardShortcut = profile.KeyboardShortcut;
+            if (profilesKeyboardShortcut.ActionKey != null && profilesKeyboardShortcut.Modifiers != null)
             {
-                KeyboardShortcutData selectedValue = availableHotkeys.First(a => a.Modifiers == profile.Shortcut.ModifierKeys && a.ActionKey == profile.Shortcut.VirtualKey);
+                KeyboardShortcutData selectedValue = availableHotkeys.First(a => a.Modifiers == profilesKeyboardShortcut.Modifiers && a.ActionKey == profilesKeyboardShortcut.ActionKey);
                 keyboardShortcut.SelectedValue = selectedValue;
             }
         }

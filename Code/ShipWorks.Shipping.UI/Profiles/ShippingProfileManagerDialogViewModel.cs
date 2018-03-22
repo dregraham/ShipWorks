@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Are there any shortcuts to print
         /// </summary>
         private bool AnyShortcutsToPrint() => 
-            ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Shortcut.Barcode));
+            ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Barcode));
 
         /// <summary>
         /// Print the barcodes
