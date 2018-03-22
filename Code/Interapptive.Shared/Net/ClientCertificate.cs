@@ -87,7 +87,7 @@ namespace Interapptive.Shared.Net
             byte[] seq = new byte[15];
             // ---------  Set up stream to read the asn.1 encoded SubjectPublicKeyInfo blob  ------
             MemoryStream mem = new MemoryStream(pkcs8);
-            int lenstream = (int)mem.Length;
+            int lenstream = (int) mem.Length;
             BinaryReader binr = new BinaryReader(mem);    //wrap Memory Stream with BinaryReader for easy reading
             byte bt = 0;
             ushort twobytes = 0;
@@ -129,7 +129,7 @@ namespace Interapptive.Shared.Net
                     binr.ReadUInt16();
                 //------ at this stage, the remaining sequence should be the RSA private key
 
-                byte[] rsaprivkey = binr.ReadBytes((int)(lenstream - mem.Position));
+                byte[] rsaprivkey = binr.ReadBytes((int) (lenstream - mem.Position));
                 RSACryptoServiceProvider rsacsp = DecodeRSAPrivateKey(rsaprivkey);
                 return rsacsp;
             }
@@ -368,10 +368,7 @@ namespace Interapptive.Shared.Net
             // get the text, contains both the certificate and the private key
             string pemFileText = File.ReadAllText(combinedPemFile);
 
-            string certText = GetCertString(pemFileText, "CERTIFICATE", true);
-            string pkeyPEMText = GetCertString(pemFileText, "RSA PRIVATE KEY", true);
-
-            LoadFromPem(certText, pkeyPEMText);
+            LoadFromPem(pemFileText, pemFileText);
         }
 
         #endregion

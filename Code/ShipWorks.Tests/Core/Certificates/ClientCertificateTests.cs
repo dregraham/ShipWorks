@@ -1,13 +1,13 @@
-﻿using Interapptive.Shared.Net;
-using ShipWorks.Tests.Shared;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using Interapptive.Shared.Net;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Core.Certificates
 {
     /// <summary>
-    /// Fixture for exercising SSL client certificate mangement and conversions.
+    /// Fixture for exercising SSL client certificate management and conversions.
     /// </summary>
     public class ClientCertificateTests
     {
@@ -63,8 +63,7 @@ namespace ShipWorks.Tests.Core.Certificates
                 }
             }
         }
-
-
+        
         [Fact]
         public void FromPemFile()
         {

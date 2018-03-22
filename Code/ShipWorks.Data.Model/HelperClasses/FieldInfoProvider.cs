@@ -1034,7 +1034,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayStoreEntity", "PayPalApiUserName", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiUserName, 255, 0, 0);
 			this.AddElementFieldInfo("EbayStoreEntity", "PayPalApiPassword", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiPassword, 80, 0, 0);
 			this.AddElementFieldInfo("EbayStoreEntity", "PayPalApiSignature", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiSignature, 80, 0, 0);
-			this.AddElementFieldInfo("EbayStoreEntity", "PayPalApiCertificate", typeof(System.Byte[]), false, false, false, true,  (int)EbayStoreFieldIndex.PayPalApiCertificate, 2048, 0, 0);
+			this.AddElementFieldInfo("EbayStoreEntity", "PayPalApiCertificate", typeof(System.Byte[]), false, false, false, true,  (int)EbayStoreFieldIndex.PayPalApiCertificate, 4096, 0, 0);
 			this.AddElementFieldInfo("EbayStoreEntity", "DomesticShippingService", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.DomesticShippingService, 50, 0, 0);
 			this.AddElementFieldInfo("EbayStoreEntity", "InternationalShippingService", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.InternationalShippingService, 50, 0, 0);
 			this.AddElementFieldInfo("EbayStoreEntity", "FeedbackUpdatedThrough", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)EbayStoreFieldIndex.FeedbackUpdatedThrough, 0, 0, 0);
@@ -2460,7 +2460,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PayPalStoreEntity", "ApiUserName", typeof(System.String), false, false, false, false,  (int)PayPalStoreFieldIndex.ApiUserName, 255, 0, 0);
 			this.AddElementFieldInfo("PayPalStoreEntity", "ApiPassword", typeof(System.String), false, false, false, false,  (int)PayPalStoreFieldIndex.ApiPassword, 80, 0, 0);
 			this.AddElementFieldInfo("PayPalStoreEntity", "ApiSignature", typeof(System.String), false, false, false, false,  (int)PayPalStoreFieldIndex.ApiSignature, 80, 0, 0);
-			this.AddElementFieldInfo("PayPalStoreEntity", "ApiCertificate", typeof(System.Byte[]), false, false, false, true,  (int)PayPalStoreFieldIndex.ApiCertificate, 2048, 0, 0);
+			this.AddElementFieldInfo("PayPalStoreEntity", "ApiCertificate", typeof(System.Byte[]), false, false, false, true,  (int)PayPalStoreFieldIndex.ApiCertificate, 4096, 0, 0);
 			this.AddElementFieldInfo("PayPalStoreEntity", "LastTransactionDate", typeof(System.DateTime), false, false, false, false,  (int)PayPalStoreFieldIndex.LastTransactionDate, 0, 0, 0);
 			this.AddElementFieldInfo("PayPalStoreEntity", "LastValidTransactionDate", typeof(System.DateTime), false, false, false, false,  (int)PayPalStoreFieldIndex.LastValidTransactionDate, 0, 0, 0);
 		}

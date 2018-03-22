@@ -689,7 +689,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Weight property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Decimal, 18, 9, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Double Weight
 		{
@@ -699,7 +699,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Quantity property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Quantity"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Decimal, 18, 9, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Double Quantity
 		{

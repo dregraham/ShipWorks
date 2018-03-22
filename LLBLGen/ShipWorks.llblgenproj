@@ -845,7 +845,7 @@
           <Field Name="EBayUserID" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="FeedbackUpdatedThrough" Type="datetime" IsOptional="true" FieldIndex="14" />
           <Field Name="InternationalShippingService" Type="string" MaxLength="50" FieldIndex="13" />
-          <Field Name="PayPalApiCertificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
+          <Field Name="PayPalApiCertificate" Type="byte[]" IsOptional="true" MaxLength="4096" FieldIndex="11" />
           <Field Name="PayPalApiCredentialType" Type="short" FieldIndex="7" />
           <Field Name="PayPalApiPassword" Type="string" MaxLength="80" FieldIndex="9" />
           <Field Name="PayPalApiSignature" Type="string" MaxLength="80" FieldIndex="10" />
@@ -2145,7 +2145,7 @@
       </EntityDefinition>
       <EntityDefinition Name="PayPalStore" ObjectID="ae091968-b676-42d6-a21c-e12321c9953a" InheritanceType="2">
         <Fields>
-          <Field Name="ApiCertificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="4" />
+          <Field Name="ApiCertificate" Type="byte[]" IsOptional="true" MaxLength="4096" FieldIndex="4" />
           <Field Name="ApiCredentialType" Type="short" FieldIndex="0" />
           <Field Name="ApiPassword" Type="string" MaxLength="80" FieldIndex="2" />
           <Field Name="ApiSignature" Type="string" MaxLength="80" FieldIndex="3" />
@@ -4279,7 +4279,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-03-20T17:58:14.7950559Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-03-22T17:28:13.6675903Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5204,7 +5204,7 @@
                     <Field Name="PayPalApiUserName" Ordinal="10" DbType="12" Length="255" />
                     <Field Name="PayPalApiPassword" Ordinal="11" DbType="12" Length="80" />
                     <Field Name="PayPalApiSignature" Ordinal="12" DbType="12" Length="80" />
-                    <Field Name="PayPalApiCertificate" Ordinal="13" IsOptional="true" DbType="23" Length="2048" />
+                    <Field Name="PayPalApiCertificate" Ordinal="13" IsOptional="true" DbType="23" Length="4096" />
                     <Field Name="DomesticShippingService" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="InternationalShippingService" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="FeedbackUpdatedThrough" Ordinal="16" IsOptional="true" DbType="4" />
@@ -7268,7 +7268,7 @@
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
                     <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="29" Scale="9" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7384,7 +7384,7 @@
                     <Field Name="ApiUserName" Ordinal="3" DbType="12" Length="255" />
                     <Field Name="ApiPassword" Ordinal="4" DbType="12" Length="80" />
                     <Field Name="ApiSignature" Ordinal="5" DbType="12" Length="80" />
-                    <Field Name="ApiCertificate" Ordinal="6" IsOptional="true" DbType="23" Length="2048" />
+                    <Field Name="ApiCertificate" Ordinal="6" IsOptional="true" DbType="23" Length="4096" />
                     <Field Name="LastTransactionDate" Ordinal="7" DbType="4" />
                     <Field Name="LastValidTransactionDate" Ordinal="8" DbType="4" />
                   </Fields>
