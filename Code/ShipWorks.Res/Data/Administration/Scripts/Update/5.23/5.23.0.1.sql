@@ -19,6 +19,8 @@ GO
 PRINT N'Creating index [IX_Shortcut_Keys] on [dbo].[Shortcut]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey])
+WHERE [ModifierKeys] IS NOT NULL 
+AND [VirtualKey] IS NOT NULL
 GO
 PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
 GO
