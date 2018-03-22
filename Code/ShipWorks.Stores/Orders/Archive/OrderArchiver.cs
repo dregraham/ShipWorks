@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Orders.Archive
             this.messageHelper = messageHelper;
 
             currentDatabaseName = connectionManager.CurrentDatabaseName;
-            archiveDatabaseName = $"{currentDatabaseName}_{DateTime.Now.ToString("yyyymmdd_HHmmss")}";
+            archiveDatabaseName = $"{currentDatabaseName}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}";
         }
 
         /// <summary>
