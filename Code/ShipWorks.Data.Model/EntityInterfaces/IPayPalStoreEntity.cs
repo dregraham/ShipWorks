@@ -48,7 +48,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The ApiCertificate property of the Entity PayPalStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "PayPalStore"."ApiCertificate"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2048<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 4096<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.Byte[] ApiCertificate { get; }
         /// <summary> The LastTransactionDate property of the Entity PayPalStore<br/><br/>

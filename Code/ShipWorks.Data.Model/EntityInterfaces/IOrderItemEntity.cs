@@ -108,13 +108,13 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Weight property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 18, 9, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double Weight { get; }
         /// <summary> The Quantity property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Quantity"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 18, 9, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double Quantity { get; }
         /// <summary> The LocalStatus property of the Entity OrderItem<br/><br/>

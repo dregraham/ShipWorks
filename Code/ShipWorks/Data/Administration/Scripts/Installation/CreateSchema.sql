@@ -1622,7 +1622,7 @@ CREATE TABLE [dbo].[EbayStore]
 [PayPalApiUserName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayPalApiPassword] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayPalApiSignature] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PayPalApiCertificate] [varbinary] (2048) NULL,
+[PayPalApiCertificate] [varbinary] (4096) NULL,
 [DomesticShippingService] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [InternationalShippingService] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FeedbackUpdatedThrough] [datetime] NULL
@@ -3255,7 +3255,7 @@ CREATE TABLE [dbo].[PayPalStore]
 [ApiUserName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ApiPassword] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ApiSignature] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ApiCertificate] [varbinary] (2048) NULL,
+[ApiCertificate] [varbinary] (4096) NULL,
 [LastTransactionDate] [datetime] NOT NULL,
 [LastValidTransactionDate] [datetime] NOT NULL
 )

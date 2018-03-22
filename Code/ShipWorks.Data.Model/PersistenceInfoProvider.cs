@@ -1079,7 +1079,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiUserName", "PayPalApiUserName", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiPassword", "PayPalApiPassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiSignature", "PayPalApiSignature", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, "VarBinary", 2048, 0, 0, false, "", null, typeof(System.Byte[]), 12);
+			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, "VarBinary", 4096, 0, 0, false, "", null, typeof(System.Byte[]), 12);
 			this.AddElementFieldMapping("EbayStoreEntity", "DomesticShippingService", "DomesticShippingService", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("EbayStoreEntity", "InternationalShippingService", "InternationalShippingService", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("EbayStoreEntity", "FeedbackUpdatedThrough", "FeedbackUpdatedThrough", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
@@ -2594,7 +2594,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiUserName", "ApiUserName", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiPassword", "ApiPassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiSignature", "ApiSignature", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("PayPalStoreEntity", "ApiCertificate", "ApiCertificate", true, "VarBinary", 2048, 0, 0, false, "", null, typeof(System.Byte[]), 5);
+			this.AddElementFieldMapping("PayPalStoreEntity", "ApiCertificate", "ApiCertificate", true, "VarBinary", 4096, 0, 0, false, "", null, typeof(System.Byte[]), 5);
 			this.AddElementFieldMapping("PayPalStoreEntity", "LastTransactionDate", "LastTransactionDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
 			this.AddElementFieldMapping("PayPalStoreEntity", "LastValidTransactionDate", "LastValidTransactionDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 		}
