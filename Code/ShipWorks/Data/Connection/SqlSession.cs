@@ -211,19 +211,37 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public void TestConnection()
+        public bool TestConnection()
         {
-            TestConnection(TimeSpan.FromSeconds(10));
+            return TestConnection(TimeSpan.FromSeconds(10));
         }
 
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public void TestConnection(TimeSpan timeout)
+        public bool TestConnection(TimeSpan timeout)
         {
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
             csb.ConnectTimeout = (int) timeout.TotalSeconds;
 
+            // First check to see if the database is in single user mode
+            string originalDatabaseName = csb.InitialCatalog;
+            csb.InitialCatalog = "master";
+
+            using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
+            {
+                con.Open();
+
+                if (SqlUtility.IsSingleUser(con, originalDatabaseName))
+                {
+                    return false;
+                }
+
+                con.Close();
+            }
+
+            // The db isn't single user, so try connecting to it.
+            csb.InitialCatalog = originalDatabaseName;
             using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
             {
                 con.Open();
@@ -232,6 +250,8 @@ namespace ShipWorks.Data.Connection
 
                 con.Close();
             }
+
+            return true;
         }
 
         /// <summary>
@@ -241,9 +261,7 @@ namespace ShipWorks.Data.Connection
         {
             try
             {
-                TestConnection();
-
-                return true;
+                return TestConnection();
             }
             catch (SqlException)
             {
