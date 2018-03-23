@@ -43,7 +43,7 @@ namespace ShipWorks.SingleScan
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            scanSubscription = messenger.OfType<ScanMessage>()
+            scanSubscription = messenger.OfType<SingleScanMessage>()
                  .Subscribe(ScanDetected);
 
             scannerRegistrationListener.Start();
@@ -106,7 +106,7 @@ namespace ShipWorks.SingleScan
         /// Detects a scan event and saves the result and device handle
         /// </summary>
         /// <param name="scanMessage">The scan message.</param>
-        private void ScanDetected(ScanMessage scanMessage)
+        private void ScanDetected(SingleScanMessage scanMessage)
         {
             ScanResult = scanMessage.ScannedText;
             deviceHandle = scanMessage.DeviceHandle;

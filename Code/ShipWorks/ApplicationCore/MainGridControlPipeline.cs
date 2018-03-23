@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore
         private readonly IOnDemandDownloader onDemandDownloader;
 
         // Debouncing observables for searching
-        private readonly IConnectableObservable<ScanMessage> scanMessages;
+        private readonly IConnectableObservable<SingleScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShipWorks.ApplicationCore
             onDemandDownloader = onDemandDownloaderFactory.CreateOnDemandDownloader();
             this.mainForm = mainForm;
 
-            scanMessages = messenger.OfType<ScanMessage>().Publish();
+            scanMessages = messenger.OfType<SingleScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
         }
 

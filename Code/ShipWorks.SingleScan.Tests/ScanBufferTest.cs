@@ -80,7 +80,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             TestSchedulerProvider testScheduler = new TestSchedulerProvider();
             mock.Provide<ISchedulerProvider>(testScheduler);
-            messenger.Setup(m => m.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>())).Verifiable();
+            messenger.Setup(m => m.Send(It.Is<SingleScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>())).Verifiable();
             ScanBuffer testObject = mock.Create<ScanBuffer>();
 
             testObject.Append(deviceHandle, "1");
@@ -88,7 +88,7 @@ namespace ShipWorks.SingleScan.Tests
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
             testScheduler.WindowsFormsEventLoop.Start();
 
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
+            messenger.Verify(x => x.Send(It.Is<SingleScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace ShipWorks.SingleScan.Tests
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
             testScheduler.WindowsFormsEventLoop.Start();
 
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
+            messenger.Verify(x => x.Send(It.Is<SingleScanMessage>(msg => msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace ShipWorks.SingleScan.Tests
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
             testScheduler.WindowsFormsEventLoop.Start();
 
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
+            messenger.Verify(x => x.Send(It.Is<SingleScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace ShipWorks.SingleScan.Tests
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
             testScheduler.WindowsFormsEventLoop.Start();
 
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
+            messenger.Verify(x => x.Send(It.Is<SingleScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
         }
 
         public void Dispose()

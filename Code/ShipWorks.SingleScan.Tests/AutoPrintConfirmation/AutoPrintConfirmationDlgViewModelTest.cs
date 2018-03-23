@@ -95,7 +95,7 @@ namespace ShipWorks.SingleScan.Tests.AutoPrintConfirmation
 
         private void SendScanMessage(string scannedText)
         {
-            testMessenger.Send(new ScanMessage(this, scannedText, IntPtr.Zero));
+            testMessenger.Send(new SingleScanMessage(this, scannedText, IntPtr.Zero));
         }
 
 
