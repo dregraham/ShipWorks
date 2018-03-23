@@ -270,14 +270,14 @@ namespace ShipWorks.Shipping
         private void ListenForKeyboardShortcuts()
         {
             keyboardShortcutSubscription?.Dispose();
-            keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>().Subscribe(async m => await HandleKeyboardShortcut(m));
+            keyboardShortcutSubscription = Messenger.Current.OfType<ShortcutMessage>().Subscribe(async m => await HandleKeyboardShortcut(m));
         }
         
         /// <summary>
         /// Handle the KeyboardShortcutMessage
         /// </summary>
         /// <param name="shortcutMessage"></param>
-        private async Task HandleKeyboardShortcut(KeyboardShortcutMessage shortcutMessage)
+        private async Task HandleKeyboardShortcut(ShortcutMessage shortcutMessage)
         {
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
             {

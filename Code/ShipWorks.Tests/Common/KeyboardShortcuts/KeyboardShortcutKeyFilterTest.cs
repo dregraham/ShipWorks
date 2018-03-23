@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
 
             mock.Mock<IMessenger>().Verify(x =>
-                x.Send(It.Is<KeyboardShortcutMessage>(m => m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch)), It.IsAny<string>()));
+                x.Send(It.Is<ShortcutMessage>(m => m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch)), It.IsAny<string>()));
         }
 
         [Fact]

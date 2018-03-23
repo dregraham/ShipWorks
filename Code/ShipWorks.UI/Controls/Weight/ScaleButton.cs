@@ -210,7 +210,7 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (visible)
             {
-                applyWeightSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
+                applyWeightSubscription = Messenger.Current.OfType<ShortcutMessage>()
                     .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
                     .ObserveOn(DispatcherScheduler.Current)
                     .Where(_ => AcceptApplyWeightKeyboardShortcut &&

@@ -91,7 +91,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
 
             if (command != null)
             {
-                messenger.Send(new KeyboardShortcutMessage(this, command));
+                messenger.Send(new ShortcutMessage(this, command));
 
                 pressedActionKeys.Add(key);
                 return true;

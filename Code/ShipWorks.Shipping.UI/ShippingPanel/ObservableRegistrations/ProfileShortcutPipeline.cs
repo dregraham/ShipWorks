@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public void Register(ShippingPanelViewModel viewModel)
         {
-            subscription = messenger.OfType<KeyboardShortcutMessage>()
+            subscription = messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
                 .Where(m => viewModel.Shipment != null)
                 .Subscribe(m => messenger.Send(new ApplyProfileMessage(

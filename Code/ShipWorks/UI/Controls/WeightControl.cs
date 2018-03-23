@@ -112,7 +112,7 @@ namespace ShipWorks.UI.Controls
 
             keyboardShortcutSubscription?.Dispose();
 
-            keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
+            keyboardShortcutSubscription = Messenger.Current.OfType<ShortcutMessage>()
                 .Where(m => WeighShortCutsAllowed &&
                             m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
                             Visible &&

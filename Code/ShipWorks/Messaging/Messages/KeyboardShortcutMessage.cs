@@ -1,6 +1,5 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -9,13 +8,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
     /// <summary>
     /// Apply the weight in a weight control
     /// </summary>
-    [KeyedComponent(typeof(IShipWorksMessage), KeyboardShortcutCommand.ApplyWeight)]
-    public class KeyboardShortcutMessage : IShipWorksMessage
+    public class ShortcutMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyboardShortcutMessage(object sender, ShortcutEntity shortcut)
+        public ShortcutMessage(object sender, ShortcutEntity shortcut)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
