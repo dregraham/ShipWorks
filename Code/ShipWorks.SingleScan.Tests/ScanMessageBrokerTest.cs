@@ -60,7 +60,7 @@ namespace ShipWorks.SingleScan.Tests
             testMessenger.Send(new ScanMessage(this, "blah", IntPtr.Zero));
             scheduler.Start();
 
-            ShortcutMessage sentMessage = (ShortcutMessage) testMessenger.SentMessages.Single(m => m.GetType() == typeof(ShortcutMessage));
+            ShortcutMessage sentMessage = (ShortcutMessage) testMessenger.SentMessages.Single(m => m is ShortcutMessage);
 
             Assert.Equal("blah", sentMessage.Shortcut.Barcode);
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.SingleScan.Tests
             testMessenger.Send(new ScanMessage(this, "blah", IntPtr.Zero));
             scheduler.Start();
 
-            SingleScanMessage sentMessage = (SingleScanMessage) testMessenger.SentMessages.Single(m => m.GetType() == typeof(SingleScanMessage));
+            SingleScanMessage sentMessage = (SingleScanMessage) testMessenger.SentMessages.Single(m => m is SingleScanMessage);
 
             Assert.Equal("blah", sentMessage.ScannedText);
         }
