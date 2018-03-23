@@ -294,6 +294,62 @@ namespace ShipWorks.Tests.Shipping.Profiles
             messenger.Verify(m => m.Send(It.IsAny<ProfileAppliedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
+        [Fact]
+        public void ChangeShortcut_SetsShortcutEntityValues()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            testObject.ChangeShortcut(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.A, KeyboardShortcutModifiers.Alt), "abcd");
+
+            Assert.Equal("abcd", testObject.Shortcut.Barcode);
+            Assert.Equal(VirtualKeys.A, testObject.Shortcut.VirtualKey);
+            Assert.Equal(KeyboardShortcutModifiers.Alt, testObject.Shortcut.ModifierKeys);
+            Assert.Equal(KeyboardShortcutCommand.ApplyProfile, testObject.Shortcut.Action);
+        }
+
+        [Fact]
+        public void ChangeShortcut_SetsShortcutEntityValues_WhenKeyboardShortcutValuesAreNull()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            testObject.ChangeShortcut(new KeyboardShortcutData(null, null, null), "abcd");
+
+            Assert.Equal("abcd", testObject.Shortcut.Barcode);
+            Assert.Equal(null, testObject.Shortcut.VirtualKey);
+            Assert.Equal(null, testObject.Shortcut.ModifierKeys);
+            Assert.Equal(KeyboardShortcutCommand.ApplyProfile, testObject.Shortcut.Action);
+        }
+
+        [Fact]
+        public void ChangeShortcut_SetsShortcutEntityValues_WhenKeyboardShortcutIsNull()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            testObject.ChangeShortcut(null, "abcd");
+
+            Assert.Equal("abcd", testObject.Shortcut.Barcode);
+            Assert.Equal(null, testObject.Shortcut.VirtualKey);
+            Assert.Equal(null, testObject.Shortcut.ModifierKeys);
+            Assert.Equal(KeyboardShortcutCommand.ApplyProfile, testObject.Shortcut.Action);
+        }
+
+        [Fact]
+        public void ChangeShortcut_TrimsBarcode()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            testObject.ChangeShortcut(null, "           abcd  ");
+
+            Assert.Equal("abcd", testObject.Shortcut.Barcode);
+            Assert.Equal(null, testObject.Shortcut.VirtualKey);
+            Assert.Equal(null, testObject.Shortcut.ModifierKeys);
+            Assert.Equal(KeyboardShortcutCommand.ApplyProfile, testObject.Shortcut.Action);
+        }
+
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
             var shippingProfile = mock.Create<ShippingProfile>();

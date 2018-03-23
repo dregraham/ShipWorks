@@ -16,7 +16,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Constructor to use when you don't have a shortcut entity
         /// </summary>
         public KeyboardShortcutData(KeyboardShortcutCommand? command,
-            VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
+            VirtualKeys? actionKey, KeyboardShortcutModifiers? modifiers)
         {
             Command = command;
             ActionKey = actionKey;

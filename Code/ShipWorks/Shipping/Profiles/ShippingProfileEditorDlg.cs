@@ -125,8 +125,7 @@ namespace ShipWorks.Shipping.Profiles
         private void OnOk(object sender, EventArgs e)
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
-            profile.ChangeKeyboardShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData);
-            profile.ChangeBarcode(barcode.Text.Trim());
+            profile.ChangeShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData, barcode.Text);
             
             // Have the profile control save itself
             ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0

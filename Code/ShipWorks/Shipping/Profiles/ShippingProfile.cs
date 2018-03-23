@@ -173,21 +173,15 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
-        /// Change the keybaord shortcut
+        /// Change the shortcut for the profile
         /// </summary>
-        public void ChangeKeyboardShortcut(KeyboardShortcutData keyboardShortcut)
+        public void ChangeShortcut(KeyboardShortcutData keyboardShortcut, string barcode)
         {
             Shortcut.VirtualKey = keyboardShortcut?.ActionKey;
             Shortcut.ModifierKeys = keyboardShortcut?.Modifiers;
             Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
-        }
-        
-        /// <summary>
-        /// Change the keybaord shortcut
-        /// </summary>
-        public void ChangeBarcode(string barcode)
-        {
-            Shortcut.Barcode = barcode;
+
+            Shortcut.Barcode = barcode.Trim();
         }
     }
 }

@@ -57,14 +57,9 @@ namespace ShipWorks.Shipping.Profiles
         ICarrierShipmentAdapter Apply(ShipmentEntity shipment);
 
         /// <summary>
-        /// Change the keybaord shortcut
+        /// Change the shortcut for the profile
         /// </summary>
-        void ChangeKeyboardShortcut(KeyboardShortcutData keyboardShortcut);
-
-        /// <summary>
-        /// Change the barcode
-        /// </summary>
-        void ChangeBarcode(string barcode);
+        void ChangeShortcut(KeyboardShortcutData keyboardShortcut, string barcode);
 
         /// <summary>
         /// Change profile to be of specified ShipmentType
