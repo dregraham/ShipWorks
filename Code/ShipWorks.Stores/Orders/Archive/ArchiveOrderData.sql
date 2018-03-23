@@ -170,8 +170,39 @@ BEGIN
 	exec PurgeEntities 'EmailOutboundRelation', 'ObjectID', 'EmailOutboundRelationID'
 	exec PurgeEntities 'EmailOutbound', 'ContextID', 'EmailOutboundID'
 	exec PurgeEntities 'Shipment', 'ShipmentID', 'ShipmentID'
+	DELETE FROM FedExEndOfDayClose WHERE CloseDate %orderDateComparer% '%orderDate%'
     RAISERROR ('OrderArchiveInfo:20 percent processed.', 0, 1) WITH NOWAIT
-		
+	
+	/*******************************************************************/
+	/* Delete ScanForms based on deleted Shipments.                    */
+	/*******************************************************************/
+	DECLARE @ScanFormBatchesToKeep TABLE([ScanFormBatchID] bigint);
+
+	INSERT INTO @ScanFormBatchesToKeep(ScanFormBatchID)
+		SELECT DISTINCT ScanFormBatchID FROM EndiciaShipment WHERE ScanFormBatchID IS NOT NULL
+		UNION ALL
+		SELECT DISTINCT ScanFormBatchID FROM UspsShipment WHERE ScanFormBatchID IS NOT NULL
+
+	DELETE FROM EndiciaScanForm 
+	WHERE ScanFormBatchID NOT IN
+	(
+		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
+	)
+
+	DELETE FROM UspsScanForm 
+	WHERE ScanFormBatchID NOT IN
+	(
+		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
+	)
+
+	DELETE FROM ScanFormBatch 
+	WHERE ScanFormBatchID NOT IN
+	(
+		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
+	)
+
+	DROP TABLE @ScanFormBatchesToKeep
+
 	/* Now do matching Audit entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
 	SELECT DISTINCT a.AuditID as 'EntityID'
@@ -332,7 +363,7 @@ BEGIN
 	exec PurgeEntities 'ObjectReference', 'ObjectID', 'ObjectReferenceID'
 	exec PurgeEntities 'EmailOutboundRelation', 'ObjectID', 'EmailOutboundRelationID'
 	exec PurgeEntities 'EmailOutbound', 'ContextID', 'EmailOutboundID'
-	exec PurgeEntities 'DownloadDetail', 'DownloadedDetailID', 'DownloadedDetailID'
+	exec PurgeEntities 'DownloadDetail', 'OrderID', 'DownloadedDetailID'
 	exec PurgeEntities 'Order', 'OrderID', 'OrderID'
     RAISERROR ('OrderArchiveInfo:70 percent processed.', 0, 1) WITH NOWAIT
 
