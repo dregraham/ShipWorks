@@ -34,13 +34,13 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             subscription = messenger.OfType<ScanMessage>()
-                .Subscribe(HendleScanMessage);
+                .Subscribe(HandleScanMessage);
         }
 
         /// <summary>
         /// Handle the ScanMessage
         /// </summary>
-        public void HendleScanMessage(ScanMessage message)
+        private void HandleScanMessage(ScanMessage message)
         {
             IShortcutEntity shortcut = shortcutManager.Shortcuts.FirstOrDefault(s => s.Barcode == message.ScannedText);
             if (shortcut != null)

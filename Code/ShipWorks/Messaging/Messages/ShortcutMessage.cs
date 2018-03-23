@@ -9,7 +9,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
     /// <summary>
     /// Apply the weight in a weight control
     /// </summary>
-    public class ShortcutMessage : IShipWorksMessage
+    public struct ShortcutMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
