@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -36,31 +34,30 @@ namespace ShipWorks.UI.Controls
         public const string PackageQuantityTelemetryKey = "Shipment.Scale.Weight.Applied.PackageQuantity";
 
         // Display formatting
-        WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
+        private WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
 
         // The last valid weight that was entered
-        double currentWeight = 0.0;
+        private double currentWeight;
 
         // The last display we showed to the user.  Sometimes the display is a rounded (inaccurate)
         // version of the actual.  This allows us to see if the display has not changed, and instead
         // of parsing it (the rounded version) we just keep the accurate version.
-        string lastDisplay = "";
+        private string lastDisplay = "";
 
         // Indicates if the weight control is "cleared", displaying no content
-        bool cleared = false;
+        private bool cleared;
 
         // Controls if the weigh button and live weight display is shown
-        bool showWeighButton = true;
+        private bool showWeighButton = true;
         private bool ignoreWeightChanges;
-        const int weightButtonArea = 123;
+        private const int WeightButtonArea = 123;
         private IDisposable scaleSubscription;
 
         // Raised whenever the value changes
         public event EventHandler WeightChanged;
 
-        private bool showShortcutInfo = false;
-        private IShortcutManager shortcutManager = null;
-        private string autoWeighShortcut;
+        private bool showShortcutInfo;
+        private string weighShortcutText;
         private string applyWeightShortcutText = string.Empty;
         private IDisposable keyboardShortcutSubscription;
         private Func<string, ITrackedDurationEvent> startDurationEvent;
@@ -90,13 +87,18 @@ namespace ShipWorks.UI.Controls
                 displayFormat = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
             }
 
-            ShortcutEntity shortcut = IoC.UnsafeGlobalLifetimeScope.Resolve<IShortcutManager>().GetWeighShortcut();
-            autoWeighShortcut = "(" + new KeyboardShortcutData(shortcut).ShortcutText + ")";
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShortcutManager shortcutManager = lifetimeScope.Resolve<IShortcutManager>();
+                ShortcutEntity weighShortcut = shortcutManager.GetWeighShortcut();
+                weighShortcutText = "(" + new KeyboardShortcutData(weighShortcut).ShortcutText + ")";
+            }
+            
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
             weightInfo.Visible = ShowWeighButton;
 
-            UpdateUiWithAutoWeighShortcuts();
+            UpdateUiWithWeighShortcuts();
 
             weightInfo.Text = applyWeightShortcutText;
 
@@ -111,7 +113,7 @@ namespace ShipWorks.UI.Controls
             keyboardShortcutSubscription?.Dispose();
 
             keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
-                .Where(m => AutoWeighShortCutsAllowed &&
+                .Where(m => WeighShortCutsAllowed &&
                             m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
                             Visible &&
                             Enabled)
@@ -119,17 +121,17 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Updates the UI to display any auto weigh shortcuts
+        /// Updates the UI to display any weigh shortcuts
         /// </summary>
-        private void UpdateUiWithAutoWeighShortcuts()
+        private void UpdateUiWithWeighShortcuts()
         {
             // If we have shortcuts, display them
-            if (AutoWeighShortCutsAllowed)
+            if (WeighShortCutsAllowed)
             {
                 bool wasBlank = applyWeightShortcutText.IsNullOrWhiteSpace();
 
                 // Only display the first shortcut.  The rest will be in a tool tip.
-                applyWeightShortcutText = autoWeighShortcut;
+                applyWeightShortcutText = weighShortcutText;
 
                 if (wasBlank || TopLevelControl == null || !TopLevelControl.Visible)
                 {
@@ -139,9 +141,9 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Should we concern ourselves with autoweigh shortcuts
+        /// Should we concern ourselves with weigh shortcuts
         /// </summary>
-        private bool AutoWeighShortCutsAllowed => !string.IsNullOrEmpty(autoWeighShortcut) && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
+        private bool WeighShortCutsAllowed => !string.IsNullOrEmpty(weighShortcutText) && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
 
         /// <summary>
         /// Get \ set the total weight
@@ -267,10 +269,10 @@ namespace ShipWorks.UI.Controls
                 }
                 else
                 {
-                    textBox.Width = Width - weightButtonArea;
+                    textBox.Width = Width - WeightButtonArea;
                 }
 
-                UpdateUiWithAutoWeighShortcuts();
+                UpdateUiWithWeighShortcuts();
             }
         }
 
@@ -290,7 +292,7 @@ namespace ShipWorks.UI.Controls
 
                 weighButton.Enabled = !value;
 
-                UpdateUiWithAutoWeighShortcuts();
+                UpdateUiWithWeighShortcuts();
             }
         }
 
@@ -308,7 +310,7 @@ namespace ShipWorks.UI.Controls
             {
                 showShortcutInfo = value;
 
-                UpdateUiWithAutoWeighShortcuts();
+                UpdateUiWithWeighShortcuts();
             }
         }
 
@@ -520,7 +522,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private ITrackedDurationEvent StartTrackingApplyWeight()
         {
-            return AutoWeighShortCutsAllowed ?
+            return WeighShortCutsAllowed ?
                 startDurationEvent("Shipment.Scale.Weight.Applied") :
                 TrackedDurationEvent.Dummy;
         }
@@ -533,10 +535,6 @@ namespace ShipWorks.UI.Controls
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.Source", ParentForm?.Name);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
-            telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
-                invocationMethod == KeyboardShortcutTelemetryKey ?
-                    new KeyboardShortcutData(shortcutManager.GetWeighShortcut()).ShortcutText :
-                    "N/A");
             telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
             ConfigureTelemetryEntityCounts?.Invoke(telemetryEvent);
         }
@@ -550,12 +548,10 @@ namespace ShipWorks.UI.Controls
             {
                 return true;
             }
-            else
-            {
-                SetError("The input value was out of range.");
 
-                return false;
-            }
+            SetError("The input value was out of range.");
+
+            return false;
         }
 
         /// <summary>
@@ -640,8 +636,6 @@ namespace ShipWorks.UI.Controls
             {
                 weightInfo.Visible = false;
             }
-
-            return;
         }
 
         /// <summary>
@@ -694,7 +688,6 @@ namespace ShipWorks.UI.Controls
             {
                 scaleSubscription?.Dispose();
                 components?.Dispose();
-                shortcutManager = null;
                 keyboardShortcutSubscription?.Dispose();
             }
             base.Dispose(disposing);
