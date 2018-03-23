@@ -58,7 +58,7 @@ namespace ShipWorks.SingleScan.Tests
         public void DownloadOnDemand_DelegatesToOnDemandDownloaderWithSearchString()
         {
             testObject.Register(mainGridControl.Object);
-            testMessenger.Send(new SingleScanMessage(this, "  foo  ", IntPtr.Zero));
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "  foo  ", IntPtr.Zero)));
             scheduler.Start();
 
             downloader.Verify(d => d.Download("foo"));
@@ -70,7 +70,7 @@ namespace ShipWorks.SingleScan.Tests
             userSettings.SingleScanSettings = (int)SingleScanSettings.Disabled;
 
             testObject.Register(mainGridControl.Object);
-            testMessenger.Send(new SingleScanMessage(this, "  foo  ", IntPtr.Zero));
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "  foo  ", IntPtr.Zero)));
             scheduler.Start();
 
             downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
@@ -80,7 +80,7 @@ namespace ShipWorks.SingleScan.Tests
         public void DownloadOnDemand_DoesNotDelegatesToOnDemandDownloaderWithSearchString_WhenStringIsEmpty()
         {
             testObject.Register(mainGridControl.Object);
-            testMessenger.Send(new SingleScanMessage(this, "    ", IntPtr.Zero));
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "    ", IntPtr.Zero)));
             scheduler.Start();
 
             downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
@@ -90,7 +90,7 @@ namespace ShipWorks.SingleScan.Tests
         public void PerformBarcodeSearchAsync_DelegatesToGridControlWithScannedBarcode()
         {
             testObject.Register(mainGridControl.Object);
-            testMessenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             scheduler.Start();
 
             mainGridControl.Verify(g => g.BeginInvoke((Action<string>)mainGridControl.Object.PerformBarcodeSearch, "foo"));

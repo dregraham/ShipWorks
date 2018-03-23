@@ -61,7 +61,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             defaultScheduler.Start();
 
             Assert.False(testObject.IsListeningForScans);
@@ -74,7 +74,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             defaultScheduler.Start();
 
             Assert.True(testObject.IsListeningForScans);
@@ -87,7 +87,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
             windowsScheduler.Start();
@@ -109,7 +109,7 @@ namespace ShipWorks.SingleScan.Tests
 
             SetupAutoPrintService("foo", 42, string.Empty, true);
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
             windowsScheduler.Start();
 
@@ -151,7 +151,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
             windowsScheduler.Start();
@@ -170,7 +170,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
             
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
             windowsScheduler.Start();
@@ -190,7 +190,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
             Assert.False(testObject.IsListeningForScans);
@@ -206,7 +206,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
             windowsScheduler.Start();
 
@@ -224,7 +224,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
                 .Throws<Exception>();
 
-            messenger.Send(new SingleScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
             Assert.False(testObject.IsListeningForScans);

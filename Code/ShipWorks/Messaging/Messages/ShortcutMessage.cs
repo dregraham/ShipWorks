@@ -2,6 +2,7 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
 {
@@ -13,7 +14,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessage(object sender, ShortcutEntity shortcut)
+        public ShortcutMessage(object sender, IShortcutEntity shortcut)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
@@ -23,7 +24,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// The shortcut 
         /// </summary>
-        public ShortcutEntity Shortcut { get; }
+        public IShortcutEntity Shortcut { get; }
 
         /// <summary>
         /// Id of the message, used for tracking

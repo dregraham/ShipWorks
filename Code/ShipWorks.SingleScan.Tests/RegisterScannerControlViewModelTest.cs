@@ -27,7 +27,7 @@ namespace ShipWorks.SingleScan.Tests
             scannerRegistrationListener = mock.Mock<IScannerRegistrationListener>();
             testObject = mock.Create<ScannerRegistrationControlViewModel>(new TypedParameter(typeof(IMessenger), messenger));
 
-            messenger.Send(new SingleScanMessage(this, "some text", new IntPtr(123)));
+            messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "some text", new IntPtr(123))));
         }
 
         [Fact]
