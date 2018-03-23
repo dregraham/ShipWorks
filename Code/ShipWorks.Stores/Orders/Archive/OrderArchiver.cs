@@ -122,10 +122,10 @@ namespace ShipWorks.Stores.Orders.Archive
             (conn) =>
                 ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql(archiveDatabaseName))
                     .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", 
-                                               sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)))
+                                               sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan)))
                     .Bind(_ => ExecuteSqlAsync(syncProgress, conn, "Synching Order and Shipment data", 
-                                               sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan)));
-
+                                               sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)));
+        
         /// <summary>
         /// Execute the given sql
         /// </summary>

@@ -9,18 +9,10 @@ SELECT @OriginalRecoveryModel = recovery_model_desc
    WHERE name = '%databaseName%'; 
 
 SET @SetRecoveryModelSimpleSql = 
-	'USE [master]
-	
-	ALTER DATABASE [%databaseName%] SET RECOVERY SIMPLE WITH NO_WAIT
-	
-	use [%databaseName%]';
+	'ALTER DATABASE [%databaseName%] SET RECOVERY SIMPLE WITH NO_WAIT';
 
 SET @SetRecoveryModelOriginalSql = 
-	'USE [master]
-	
-	ALTER DATABASE [%databaseName%] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT
-	
-	use [%databaseName%]';
+	'ALTER DATABASE [%databaseName%] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT';
 	
 EXEC(@SetRecoveryModelSimpleSql)
 
@@ -200,8 +192,6 @@ BEGIN
 	(
 		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
 	)
-
-	DROP TABLE @ScanFormBatchesToKeep
 
 	/* Now do matching Audit entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
