@@ -53,7 +53,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void HendleScanMessage_SendsShortcutMessage_WhenScanMessageTextMatchesShortcutBarcode()
+        public void HandleScanMessage_SendsShortcutMessage_WhenScanMessageTextMatchesShortcutBarcode()
         {
             shortcutManager.SetupGet(m => m.Shortcuts).Returns(new[] { new ShortcutEntity(), new ShortcutEntity() { Barcode = "blah"} });
             testObject.InitializeForCurrentSession();
@@ -66,7 +66,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void HendleScanMessage_SendsSingleScanMessage_WhenScanMessageTextDoesNotMatchShortcutBarcode()
+        public void HandleScanMessage_SendsSingleScanMessage_WhenScanMessageTextDoesNotMatchShortcutBarcode()
         {
             shortcutManager.SetupGet(m => m.Shortcuts).Returns(new[] { new ShortcutEntity(), new ShortcutEntity() { Barcode = "nope" } });
             testObject.InitializeForCurrentSession();
