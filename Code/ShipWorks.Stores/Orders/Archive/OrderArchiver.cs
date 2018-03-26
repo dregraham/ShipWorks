@@ -10,7 +10,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users;
@@ -88,7 +87,7 @@ namespace ShipWorks.Stores.Orders.Archive
                         await connectionManager
                             .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress, syncProgress))
                             .Do(_ => connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress)))
-                            .Recover(_ => TerminateNonStartedTasks(new[] { archiveProgress, syncProgress, filterProgress }))
+                            .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(false);
 
@@ -105,8 +104,13 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Terminate all non-started tasks
         /// </summary>
-        private Unit TerminateNonStartedTasks(IProgressReporter[] progressReporters)
+        private Unit TerminateNonStartedTasks(Exception ex, IProgressReporter[] progressReporters)
         {
+            foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Running))
+            {
+                progressReporter.Failed(ex);
+            }
+
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Pending))
             {
                 progressReporter.Terminate();
@@ -121,11 +125,11 @@ namespace ShipWorks.Stores.Orders.Archive
         private Func<DbConnection, Task<Unit>> PerformArchive(DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress, IProgressReporter syncProgress) =>
             (conn) =>
                 ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql(archiveDatabaseName))
-                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", 
+                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data",
                                                sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan)))
-                    .Bind(_ => ExecuteSqlAsync(syncProgress, conn, "Synching Order and Shipment data", 
+                    .Bind(_ => ExecuteSqlAsync(syncProgress, conn, "Syncing Order and Shipment data",
                                                sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)));
-        
+
         /// <summary>
         /// Execute the given sql
         /// </summary>
