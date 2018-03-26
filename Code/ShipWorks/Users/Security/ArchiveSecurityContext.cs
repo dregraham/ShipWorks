@@ -44,7 +44,7 @@ namespace ShipWorks.Users.Security
         /// Determines how many stores the user is allowed to do the given permission for
         /// </summary>
         public override StorePermissionCoverage GetStorePermissionCoverage(PermissionType permissionType) =>
-            baseContext.GetRelatedObjectPermissionCoverage(permissionType);
+            baseContext.GetStorePermissionCoverage(permissionType);
 
         /// <summary>
         /// Clear all the cached permissions

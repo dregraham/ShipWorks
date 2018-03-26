@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -18,6 +19,7 @@ namespace ShipWorks.Users.Security
     /// <summary>
     /// Encapsulates user permission settings and their modifications.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class SecurityContext : BaseSecurityContext
     {
         PermissionSet permissionSet;

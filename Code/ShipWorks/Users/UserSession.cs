@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Security;
@@ -444,7 +445,10 @@ namespace ShipWorks.Users
             loggedInUser = user;
 
             // Load the user's security context
-            securityContext = lifetimeScope.Resolve<ISecurityContextFactory>().Create(user);
+            securityContext = IoC.UnsafeGlobalLifetimeScope
+                .Resolve<Owned<ISecurityContextFactory>>()
+                .Value
+                .Create(user);
 
             // Audit the logon
             if (audit)
