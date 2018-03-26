@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorSoapClient));
+        private static readonly IEnumerable<string> stripXmlEntities = new[] { "&#xFFFF;" };
 
         // Cache of inventory items we've already looked up
         static LruCache<string, caInventoryService.InventoryItemResponse> inventoryItemCache = new LruCache<string, caInventoryService.InventoryItemResponse>(1000);
@@ -110,7 +111,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static caShippingService.ShippingService CreateShippingService(string logName)
         {
-            return new caShippingService.ShippingService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            var service = new caShippingService.ShippingService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            service.RawSoap.StripXmlEntities = stripXmlEntities;
+            return service;
         }
 
         /// <summary>
@@ -118,7 +121,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static caOrderService.OrderService CreateOrderService(string logName)
         {
-            return new caOrderService.OrderService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            var service = new caOrderService.OrderService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            service.RawSoap.StripXmlEntities = stripXmlEntities;
+            return service;
         }
 
         /// <summary>
@@ -126,7 +131,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static caInventoryService.InventoryService CreateInventoryService(string logName)
         {
-            return new caInventoryService.InventoryService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            var service = new caInventoryService.InventoryService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            service.RawSoap.StripXmlEntities = stripXmlEntities;
+            return service;
         }
 
         /// <summary>
@@ -134,7 +141,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static caAdminService.AdminService CreateAdminService(string logName)
         {
-            return new caAdminService.AdminService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            var service = new caAdminService.AdminService(new ApiLogEntry(ApiLogSource.ChannelAdvisor, logName));
+            service.RawSoap.StripXmlEntities = stripXmlEntities;
+            return service;
         }
 
         /// <summary>
