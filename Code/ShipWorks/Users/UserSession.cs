@@ -58,7 +58,7 @@ namespace ShipWorks.Users
 
         // The currently logged in user and his security context
         private static UserEntity loggedInUser;
-        private static SecurityContext securityContext;
+        private static ISecurityContext securityContext;
 
         // The current running computer
         private static ComputerEntity thisComputer;
@@ -176,7 +176,7 @@ namespace ShipWorks.Users
             ShippingPrintOutputManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
-            
+
 
             lifetimeScope?.Dispose();
             lifetimeScope = IoC.BeginLifetimeScope();
@@ -236,7 +236,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// The SecurityContext of the logged on user.  Only valid of IsLoggedOn is true.
         /// </summary>
-        public static SecurityContext Security
+        public static ISecurityContext Security
         {
             get
             {
@@ -444,7 +444,7 @@ namespace ShipWorks.Users
             loggedInUser = user;
 
             // Load the user's security context
-            securityContext = new SecurityContext(user);
+            securityContext = lifetimeScope.Resolve<ISecurityContextFactory>().Create(user);
 
             // Audit the logon
             if (audit)

@@ -620,6 +620,7 @@
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />
     <Compile Include="Users\CurrentUserSettingsTest.cs" />
+    <Compile Include="Users\Security\ArchiveSecurityContextTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
