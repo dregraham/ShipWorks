@@ -42,7 +42,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void HandleScanMessage(ScanMessage message)
         {
-            IShortcutEntity shortcut = shortcutManager.Shortcuts.FirstOrDefault(s => s.Barcode == message.ScannedText);
+            IShortcutEntity shortcut = shortcutManager.Shortcuts
+                .FirstOrDefault(s => s.Barcode.Equals(message.ScannedText, StringComparison.InvariantCultureIgnoreCase));
             if (shortcut != null)
             {
                 messenger.Send(new ShortcutMessage(this, shortcut));
