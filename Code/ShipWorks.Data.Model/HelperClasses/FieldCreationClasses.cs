@@ -4477,6 +4477,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AllowEbayCombineLocally);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.ArchivalSettingsXml field instance</summary>
+		public static EntityField2 ArchivalSettingsXml
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.ArchivalSettingsXml);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

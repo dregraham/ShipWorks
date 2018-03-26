@@ -51,6 +51,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomerKey = source.CustomerKey;
             UseParallelActionQueue = source.UseParallelActionQueue;
             AllowEbayCombineLocally = source.AllowEbayCombineLocally;
+            ArchivalSettingsXml = source.ArchivalSettingsXml;
             
             
             
@@ -149,6 +150,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AllowEbayCombineLocally { get; }
+        /// <summary> The ArchivalSettingsXml property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."ArchivalSettingsXml"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ArchivalSettingsXml { get; }
         
         
         

@@ -1942,6 +1942,8 @@ namespace ShipWorks.Data.Model
 		UseParallelActionQueue,
 		///<summary>AllowEbayCombineLocally. </summary>
 		AllowEbayCombineLocally,
+		///<summary>ArchivalSettingsXml. </summary>
+		ArchivalSettingsXml,
 		/// <summary></summary>
 		AmountOfFields
 	}
