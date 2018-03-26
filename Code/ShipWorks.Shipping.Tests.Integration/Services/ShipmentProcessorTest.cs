@@ -681,9 +681,9 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.Ups.Packages[0].DimsWeight = 0;
 
             shipment.Ups.Packages[0].Weight = int.MaxValue;
-            shipment.TotalWeight = int.MaxValue;
-            shipment.BilledWeight = int.MaxValue;
-            shipment.ContentWeight = int.MaxValue;
+            shipment.TotalWeight = double.MaxValue;
+            shipment.BilledWeight = double.MaxValue;
+            shipment.ContentWeight = double.MaxValue;
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 

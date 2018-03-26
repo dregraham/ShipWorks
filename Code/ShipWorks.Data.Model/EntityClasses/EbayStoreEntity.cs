@@ -607,7 +607,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The PayPalApiCertificate property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiCertificate"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2048<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 4096<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.Byte[] PayPalApiCertificate
 		{

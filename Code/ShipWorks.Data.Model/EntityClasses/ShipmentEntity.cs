@@ -1671,7 +1671,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The TotalWeight property of the Entity Shipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Shipment"."TotalWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Double TotalWeight
 		{
