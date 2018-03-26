@@ -218,14 +218,14 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void Apply_DelegatesToShippingManagerChangeShipmentType_WhenShipmentAndProfilesShipmentTypesDontMatch()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Usps};
             ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
             var shippingManager = mock.Mock<IShippingManager>();
             ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
             
             testObject.Apply(shipment);
             
-            shippingManager.Verify(m => m.ChangeShipmentType(ShipmentTypeCode.Amazon, shipment), Times.Once);
+            shippingManager.Verify(m => m.ChangeShipmentType(ShipmentTypeCode.Usps, shipment), Times.Once);
         } 
         
         [Fact]
@@ -349,6 +349,79 @@ namespace ShipWorks.Tests.Shipping.Profiles
             Assert.Equal(null, testObject.Shortcut.ModifierKeys);
             Assert.Equal(KeyboardShortcutCommand.ApplyProfile, testObject.Shortcut.Action);
         }
+        
+        [Fact]
+        public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsAmazonAndProfileIsAmazon()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsNotAmazonAndProfileIsNotAmazon()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Usps };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.FedEx));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsAmazonAndProfileIsGlobal()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsAmazonAndProfileUsps()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Usps };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.False(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsUspsAndProfileIsAmazon()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.False(testObject.IsApplicable(ShipmentTypeCode.Usps));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsNoneAndProfileIsGlobal()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.False(testObject.IsApplicable(ShipmentTypeCode.None));
+        }
+        
+        [Fact]
+        public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsNoneAndProfileIsNotGlobal()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Usps };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.None));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsNoneAndProfileIsAmazon()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.None));
+        }
+
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {

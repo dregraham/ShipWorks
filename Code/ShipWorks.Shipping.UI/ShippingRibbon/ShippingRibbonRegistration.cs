@@ -172,8 +172,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             List<WidgetBase> menuItems = new List<WidgetBase>();
             IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = profileService
                 .GetConfiguredShipmentTypeProfiles()
+                .Where(p => p.IsApplicable(currentShipmentType))
                 .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
-                .Where(IncludeProfile)
                 .GroupBy(p => p.ShipmentType)
                 .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
@@ -203,22 +203,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             }
 
             applyProfileMenu.Items.AddRange(menuItems.ToArray());
-        }
-
-        /// <summary>
-        /// Return true if applicable to shipment type
-        /// </summary>
-        private bool IncludeProfile(IShippingProfileEntity profile)
-        {
-            switch (currentShipmentType)
-            {
-                case ShipmentTypeCode.None:
-                    return profile.ShipmentType != null;
-                case ShipmentTypeCode.Amazon:
-                    return profile.ShipmentType == null || profile.ShipmentType == ShipmentTypeCode.Amazon;
-                default:
-                    return profile.ShipmentType != ShipmentTypeCode.Amazon;
-            }
         }
 
         /// <summary>

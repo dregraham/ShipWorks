@@ -159,12 +159,15 @@ namespace ShipWorks.Shipping.Profiles
 
             foreach (ShipmentEntity shipment in shipmentList)
             {
-                if (ShippingProfileEntity.ShipmentType != null &&
-                    shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                if (IsApplicable(shipment.ShipmentTypeCode))
                 {
-                    shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                    if (ShippingProfileEntity.ShipmentType != null &&
+                        shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                    {
+                        shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                    }
+                    strategy.ApplyProfile(ShippingProfileEntity, shipment);
                 }
-                strategy.ApplyProfile(ShippingProfileEntity, shipment);
             }
 
             messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
@@ -182,6 +185,22 @@ namespace ShipWorks.Shipping.Profiles
             Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
 
             Shortcut.Barcode = barcode.Trim();
+        }
+
+        /// <summary>
+        /// Isthe profile applicable to the ShipmentTypeCode
+        /// </summary>
+        public bool IsApplicable(ShipmentTypeCode? shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.None:
+                    return ShippingProfileEntity.ShipmentType != null;
+                case ShipmentTypeCode.Amazon:
+                    return ShippingProfileEntity.ShipmentType == null || ShippingProfileEntity.ShipmentType == ShipmentTypeCode.Amazon;
+                default:
+                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
+            }
         }
     }
 }

@@ -52,6 +52,11 @@ namespace ShipWorks.Shipping.Profiles
         IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipment);
 
         /// <summary>
+        /// Is the profile applicable to the given ShipmentTypeCode
+        /// </summary>
+        bool IsApplicable(ShipmentTypeCode? shipmentTypeCode);
+
+        /// <summary>
         /// Apply profile to shipment
         /// </summary>
         ICarrierShipmentAdapter Apply(ShipmentEntity shipment);

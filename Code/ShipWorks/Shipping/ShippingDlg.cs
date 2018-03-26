@@ -1651,8 +1651,8 @@ namespace ShipWorks.Shipping
             IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
                 .GetConfiguredShipmentTypeProfiles()
                 .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Where(p => p.IsApplicable(shipmentTypeCode))
                 .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
-                .Where(profile => IncludeProfile(profile, shipmentTypeCode))
                 .GroupBy(p => p.ShipmentType)
                 .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
             
@@ -1679,22 +1679,6 @@ namespace ShipWorks.Shipping
 
                 profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
                     .ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
-            }
-        }
-
-        /// <summary>
-        /// Return true if applicable to shipment type
-        /// </summary>
-        private bool IncludeProfile(IShippingProfileEntity profile, ShipmentTypeCode shipmentTypeCode)
-        {
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.None:
-                    return profile.ShipmentType != null;
-                case ShipmentTypeCode.Amazon:
-                    return profile.ShipmentType == null || profile.ShipmentType == ShipmentTypeCode.Amazon;
-                default:
-                    return profile.ShipmentType != ShipmentTypeCode.Amazon;
             }
         }
 
