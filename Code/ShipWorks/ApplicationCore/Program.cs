@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +11,7 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -368,6 +371,13 @@ namespace ShipWorks
             if (isCrashing)
             {
                 log.Error("Exception received while already terminating.", ex);
+                return;
+            }
+
+            if (ex.GetAllExceptions().OfType<SqlException>().Any(s =>
+                s.State == 254 && s.Message == "This ShipWorks database is in read only mode"))
+            {
+                log.Error("This ShipWorks database is in read only mode", ex);
                 return;
             }
 
