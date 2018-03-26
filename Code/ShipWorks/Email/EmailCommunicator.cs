@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using HtmlAgilityPack;
@@ -630,8 +631,9 @@ namespace ShipWorks.Email
             AddRecipients(mailMessage.CC, outboxItem.CcList);
             AddRecipients(mailMessage.Bcc, outboxItem.BccList);
 
-            // Subject
-            mailMessage.Subject = outboxItem.Subject;
+            // Subject remove all control characters because that will cause an ArgumentException
+            // see http://forum.rebex.net/1359/invalid-character-position-error-setting-subject-property
+            mailMessage.Subject = Regex.Replace(outboxItem.Subject, @"\p{C}+", string.Empty);
 
             // Date
             mailMessage.Date = new MailDateTime(outboxItem.SentDate.ToLocalTime());
