@@ -75,6 +75,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
+            this.ManualStoreHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -150,6 +151,7 @@ namespace ShipWorks.Stores.Management
             // 
             // skipPanel
             // 
+            this.skipPanel.Controls.Add(this.ManualStoreHelpLinkLabel);
             this.skipPanel.Controls.Add(this.skipButton);
             this.skipPanel.Controls.Add(this.label1);
             this.skipPanel.Location = new System.Drawing.Point(84, 97);
@@ -621,6 +623,17 @@ namespace ShipWorks.Stores.Management
             this.wizardPageActivationError.Title = "Store Setup";
             this.wizardPageActivationError.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageActivationError);
             // 
+            // ManualStoreHelpLinkLabel
+            // 
+            this.ManualStoreHelpLinkLabel.AutoSize = true;
+            this.ManualStoreHelpLinkLabel.Location = new System.Drawing.Point(12, 91);
+            this.ManualStoreHelpLinkLabel.Name = "ManualStoreHelpLinkLabel";
+            this.ManualStoreHelpLinkLabel.Size = new System.Drawing.Size(118, 13);
+            this.ManualStoreHelpLinkLabel.TabIndex = 64;
+            this.ManualStoreHelpLinkLabel.TabStop = true;
+            this.ManualStoreHelpLinkLabel.Text = "Click here for more info";
+            this.ManualStoreHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ManualStoreHelpLinkLabel_LinkClicked);
+            // 
             // AddStoreWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -725,5 +738,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Panel skipPanel;
         private System.Windows.Forms.Button skipButton;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel ManualStoreHelpLinkLabel;
     }
 }
