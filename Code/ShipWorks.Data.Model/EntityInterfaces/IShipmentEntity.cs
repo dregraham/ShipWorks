@@ -54,7 +54,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The TotalWeight property of the Entity Shipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Shipment"."TotalWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double TotalWeight { get; }
         /// <summary> The Processed property of the Entity Shipment<br/><br/>
