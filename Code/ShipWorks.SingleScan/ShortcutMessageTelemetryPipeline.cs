@@ -11,6 +11,9 @@ using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using System.Reactive.Disposables;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using Interapptive.Shared.Utility;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {
@@ -48,7 +51,7 @@ namespace ShipWorks.SingleScan
             messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
                 .Do(m => shortcut = m.Shortcut)
-                .ContinueAfter(messenger.OfType<ProfileAppliedMessage>().Where(m => ((ShippingProfile)m.Sender).Shortcut.Equals(shortcut)), TimeSpan.FromSeconds(5), schedulerProvider.Default,
+                .ContinueAfter(messenger.OfType<ProfileAppliedMessage>().Where(m => ((ShippingProfile) m.Sender).Shortcut.Equals(shortcut)), TimeSpan.FromSeconds(5), schedulerProvider.Default,
                     (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
                 .Subscribe(m => CollectProfileAppliedShortcutTelemetry(m.shortcutMessage, m.profileAppliedMessage)),
 
@@ -63,20 +66,18 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void CollectProfileAppliedShortcutTelemetry(ShortcutMessage shortcutMessage, ProfileAppliedMessage profileAppliedMessage)
         {
-            TimeSpan duration = DateTime.UtcNow - shortcutMessage.CreatedDate;
-            
             using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shortcuts.Applied"))
             {
+                CollectShortcutTelemetry(shortcutMessage, telemetryEvent);
+
                 if (profileAppliedMessage == null)
                 {
-                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "unknown");
+                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "Unknown");
                 }
                 else
                 {
-                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "success");
+                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "Success");
                 }
-
-                CollectShortcutTelemetry(shortcutMessage, telemetryEvent, duration);
             }
         }
 
@@ -85,25 +86,56 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void CollectWeightAppliedShortcutTelemetry(ShortcutMessage shortcutMessage)
         {
-            TimeSpan duration = DateTime.UtcNow - shortcutMessage.CreatedDate;
-
             using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shortcuts.Applied"))
             {
-                CollectShortcutTelemetry(shortcutMessage, telemetryEvent, duration);
+                CollectShortcutTelemetry(shortcutMessage, telemetryEvent);
             }
         }
 
         /// <summary>
         /// Collect telemetry from the shortcut message
         /// </summary>
-        private void CollectShortcutTelemetry(ShortcutMessage shortcutMessage, ITrackedEvent telemetryEvent, TimeSpan duration)
+        private void CollectShortcutTelemetry(ShortcutMessage shortcutMessage, ITrackedEvent telemetryEvent)
         {
-            telemetryEvent.AddProperty("Shortcuts.Applied.Duration", duration.ToString());
-            telemetryEvent.AddProperty("Shortcuts.Applied.Source", shortcutMessage.Source);
+            telemetryEvent.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", (DateTime.UtcNow - shortcutMessage.CreatedDate).TotalMilliseconds);
+            telemetryEvent.AddProperty("Shortcuts.Applied.Source", GetShortcutMessageSource(shortcutMessage));
             telemetryEvent.AddProperty("Shortcuts.Applied.Value", shortcutMessage.Value);
-            telemetryEvent.AddProperty("Shortcuts.Applied.Action", shortcutMessage.Action);
+            telemetryEvent.AddProperty("Shortcuts.Applied.Action", GetShortcutMessageAction(shortcutMessage));
         }
         
+        /// <summary>
+        /// Get the shortcutMessage source
+        /// </summary>
+        private string GetShortcutMessageSource(ShortcutMessage shortcutMessage)
+        {
+            if (shortcutMessage.Sender is KeyboardShortcutKeyFilter)
+            {
+                return "Keyboard";
+            }
+            else if (shortcutMessage.Sender is ScanMessageBroker)
+            {
+                return "Barcode";
+            }
+
+            return shortcutMessage.Sender.GetType().ToString();
+        }
+        
+        /// <summary>
+        /// Get the shortcutMessage action
+        /// </summary>
+        private string GetShortcutMessageAction(ShortcutMessage shortcutMessage)
+        {
+            switch (shortcutMessage.Shortcut.Action)
+            {
+                case KeyboardShortcutCommand.ApplyWeight:
+                    return "ScaleReading";
+                case KeyboardShortcutCommand.ApplyProfile:
+                    return "ShippingProfile";
+                default:
+                    return EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
+            }
+        }
+
         /// <summary>
         /// End the session
         /// </summary>

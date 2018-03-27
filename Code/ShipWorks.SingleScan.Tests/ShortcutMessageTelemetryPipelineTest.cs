@@ -8,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -61,7 +62,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Duration", It.IsAny<string>()));
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ScaleReading"));
@@ -87,8 +88,8 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Duration", It.IsAny<string>()));
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "success"));
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "Success"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
@@ -110,8 +111,8 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Duration", It.IsAny<string>()));
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "unknown"));
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "Unknown"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
@@ -137,8 +138,8 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Duration", It.IsAny<string>()));
-            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "unknown"));
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "Unknown"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));

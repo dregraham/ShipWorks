@@ -8,7 +8,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages.SingleScan;
 
-namespace ShipWorks.SingleScan
+namespace ShipWorks.Messaging.Messages.SingleScan
 {
     /// <summary>
     /// Broker ScanMessages
