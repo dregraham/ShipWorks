@@ -83,6 +83,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Population;
@@ -937,6 +938,7 @@ namespace ShipWorks
             {
                 return values.Union(SqlServerInfo.Fetch())
                     .Union(ShippingSettings.GetTelemetryData())
+                    .Union(ShippingProfileManager.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
             catch (Exception ex)

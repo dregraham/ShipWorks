@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
@@ -21,10 +22,10 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public static class ShippingProfileManager
     {
-        static IEnumerable<IShippingProfileEntity> readOnlyEntities;
-        static TableSynchronizer<ShippingProfileEntity> synchronizer;
-        static bool needCheckForChanges = false;
-        static IShippingProfileLoader shippingProfileLoader;
+        private static IEnumerable<IShippingProfileEntity> readOnlyEntities;
+        private static TableSynchronizer<ShippingProfileEntity> synchronizer;
+        private static bool needCheckForChanges = false;
+        private static IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -249,6 +250,23 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ProfilesReadOnly.FirstOrDefault(p =>
                 p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
+        }
+
+        /// <summary>
+        /// Collect telemetry data for shipping profiles
+        /// </summary>
+        public static IDictionary<string, string> GetTelemetryData()
+        {
+            Dictionary<string, string> telemetryData = new Dictionary<string, string>();
+            telemetryData.Add("Shipping.Profiles.Count", ProfilesReadOnly.Count().ToString());
+
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> carrierProfiles in ProfilesReadOnly.GroupBy(p => p.ShipmentType))
+            {
+                string profileType = carrierProfiles.Key.HasValue ? EnumHelper.GetDescription(carrierProfiles.Key) : "Global";
+                telemetryData.Add($"Shipping.Profiles.{profileType.Replace(" ", string.Empty)}.Count", carrierProfiles.Count().ToString());
+            }
+
+            return telemetryData;
         }
     }
 }
