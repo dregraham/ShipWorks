@@ -139,7 +139,7 @@
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDialog.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintResult.cs" />
-    <Compile Include="ShortcutMessageTelemetryPipeline.cs" />
+    <Compile Include="ScanMessageBroker.cs" />
     <Compile Include="SingleScanAutomationSettings.cs" />
     <Compile Include="AutoPrintService.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDialog.cs">

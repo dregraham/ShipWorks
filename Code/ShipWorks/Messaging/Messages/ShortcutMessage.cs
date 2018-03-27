@@ -1,8 +1,8 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.SingleScan;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
 {
@@ -14,27 +14,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessage(object sender, IShortcutEntity shortcut, string value)
+        public ShortcutMessage(object sender, IShortcutEntity shortcut)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
             Shortcut = shortcut;
-            Value = value;
-
-            if (Sender is KeyboardShortcutKeyFilter)
-            {
-                Source = "Keyboard";
-            }
-            else if (Sender is ScanMessageBroker)
-            {
-                Source = "Barcode";
-            }
-            else
-            {
-                throw new ArgumentException("Unknown Shortcut sender");
-            }
-            
-            CreatedDate = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -51,40 +35,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
-
-        /// <summary>
-        /// The date this message was created
-        /// </summary>
-        public DateTime CreatedDate { get; }
-
-        /// <summary>
-        /// The value that triggered the shortcut
-        /// </summary>
-        public string Value { get; }
-
-        /// <summary>
-        /// The source of the ShortcutMessage
-        /// </summary>
-        public string Source { get; }
-
-        /// <summary>
-        /// The action of the shortcut
-        /// </summary>
-        public string Action
-        {
-            get
-            {
-                switch (Shortcut.Action)
-                {
-                    case KeyboardShortcutCommand.ApplyWeight:
-                        return "ScaleReading";
-                    case KeyboardShortcutCommand.ApplyProfile:
-                        return "ShippingProfile";
-                    default:
-                        throw new ArgumentException("Unknown Shortcut command");
-                }
-            }
-        }
 
         /// <summary>
         /// Checks whether this message applies to the given command
