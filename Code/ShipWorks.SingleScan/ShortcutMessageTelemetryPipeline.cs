@@ -10,7 +10,6 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using System.Reactive.Disposables;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using Interapptive.Shared.Utility;
 using ShipWorks.Messaging.Messages.SingleScan;
@@ -26,7 +25,6 @@ namespace ShipWorks.SingleScan
         private readonly Func<string, ITrackedEvent> telemetryEventFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
-        private IShortcutEntity shortcut;
 
         /// <summary>
         /// Constructor
@@ -50,8 +48,7 @@ namespace ShipWorks.SingleScan
             subscription = new CompositeDisposable(
             messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
-                .Do(m => shortcut = m.Shortcut)
-                .ContinueAfter(messenger.OfType<ProfileAppliedMessage>().Where(m => ((ShippingProfile) m.Sender).Shortcut.Equals(shortcut)), TimeSpan.FromSeconds(5), schedulerProvider.Default,
+                .ContinueAfter(ProfileAppliedSignal, TimeSpan.FromSeconds(5), schedulerProvider.Default,
                     (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
                 .Subscribe(m => CollectProfileAppliedShortcutTelemetry(m.shortcutMessage, m.profileAppliedMessage)),
 
@@ -60,6 +57,14 @@ namespace ShipWorks.SingleScan
                 .Subscribe(CollectWeightAppliedShortcutTelemetry)
             );
         }
+
+        /// <summary>
+        /// Signal that the ShortcutMessages associated profile has been applied
+        /// </summary>
+        private IObservable<ProfileAppliedMessage> ProfileAppliedSignal(ShortcutMessage shortcutMessage) =>
+             messenger.OfType<ProfileAppliedMessage>()
+                .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
+        
 
         /// <summary>
         /// Handle telemetry for a profile being applied via shortcut 
