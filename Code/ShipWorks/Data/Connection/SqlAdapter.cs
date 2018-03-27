@@ -10,7 +10,9 @@ using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -478,8 +480,18 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    TranslateException(ex);
-                    throw;
+                    if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                        x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        log.Error("This ShipWorks database is in read only mode", ex);
+                    }
+                    else
+                    {
+                        TranslateException(ex);
+                        throw;
+                    }
+
+                    return true;
                 }
             }
         }
@@ -497,9 +509,19 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    TranslateException(ex);
-                    throw;
+                    if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                        x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        log.Error("This ShipWorks database is in read only mode", ex);
+                    }
+                    else
+                    {
+                        TranslateException(ex);
+                        throw;
+                    }
                 }
+
+                return true;
             }
         }
 
@@ -603,8 +625,18 @@ namespace ShipWorks.Data.Connection
             }
             catch (ORMQueryExecutionException ex)
             {
-                TranslateException(ex);
-                throw;
+                if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                    x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    log.Error("This ShipWorks database is in read only mode", ex);
+                }
+                else
+                {
+                    TranslateException(ex);
+                    throw;
+                }
+
+                return 0;
             }
         }
 
@@ -619,8 +651,18 @@ namespace ShipWorks.Data.Connection
             }
             catch (SqlException ex)
             {
-                TranslateException(ex);
-                throw;
+                if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                    x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    log.Error("This ShipWorks database is in read only mode", ex);
+                }
+                else
+                {
+                    TranslateException(ex);
+                    throw;
+                }
+
+                return 0;
             }
         }
 
@@ -656,6 +698,7 @@ namespace ShipWorks.Data.Connection
             if (sqlEx == null)
             {
                 ORMQueryExecutionException queryEx = ex as ORMQueryExecutionException;
+
                 if (queryEx != null)
                 {
                     sqlEx = queryEx.InnerException as SqlException;
