@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Management
         {
             this.wizardPageStoreType = new ShipWorks.UI.Wizard.WizardPage();
             this.skipPanel = new System.Windows.Forms.Panel();
+            this.ManualStoreHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.skipButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -75,7 +76,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
-            this.ManualStoreHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -158,6 +158,17 @@ namespace ShipWorks.Stores.Management
             this.skipPanel.Name = "skipPanel";
             this.skipPanel.Size = new System.Drawing.Size(290, 107);
             this.skipPanel.TabIndex = 62;
+            // 
+            // ManualStoreHelpLinkLabel
+            // 
+            this.ManualStoreHelpLinkLabel.AutoSize = true;
+            this.ManualStoreHelpLinkLabel.Location = new System.Drawing.Point(213, 11);
+            this.ManualStoreHelpLinkLabel.Name = "ManualStoreHelpLinkLabel";
+            this.ManualStoreHelpLinkLabel.Size = new System.Drawing.Size(64, 13);
+            this.ManualStoreHelpLinkLabel.TabIndex = 64;
+            this.ManualStoreHelpLinkLabel.TabStop = true;
+            this.ManualStoreHelpLinkLabel.Text = "more info...";
+            this.ManualStoreHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ManualStoreHelpLinkLabel_LinkClicked);
             // 
             // skipButton
             // 
@@ -622,17 +633,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageActivationError.TabIndex = 0;
             this.wizardPageActivationError.Title = "Store Setup";
             this.wizardPageActivationError.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageActivationError);
-            // 
-            // ManualStoreHelpLinkLabel
-            // 
-            this.ManualStoreHelpLinkLabel.AutoSize = true;
-            this.ManualStoreHelpLinkLabel.Location = new System.Drawing.Point(12, 91);
-            this.ManualStoreHelpLinkLabel.Name = "ManualStoreHelpLinkLabel";
-            this.ManualStoreHelpLinkLabel.Size = new System.Drawing.Size(118, 13);
-            this.ManualStoreHelpLinkLabel.TabIndex = 64;
-            this.ManualStoreHelpLinkLabel.TabStop = true;
-            this.ManualStoreHelpLinkLabel.Text = "Click here for more info";
-            this.ManualStoreHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ManualStoreHelpLinkLabel_LinkClicked);
             // 
             // AddStoreWizard
             // 

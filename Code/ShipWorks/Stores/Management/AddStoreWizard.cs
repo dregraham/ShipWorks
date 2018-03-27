@@ -1204,7 +1204,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120069-manual-store-type", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
         }
     }
 }
