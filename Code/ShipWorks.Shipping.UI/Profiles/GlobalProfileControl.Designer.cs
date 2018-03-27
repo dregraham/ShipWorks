@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(439, 500);
-            this.tabControl.TabIndex = 1;
+            this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
             // 
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.origin.Name = "origin";
             this.origin.PromptText = "(Multiple Values)";
             this.origin.Size = new System.Drawing.Size(206, 21);
-            this.origin.TabIndex = 2;
+            this.origin.TabIndex = 1;
             // 
             // originState
             // 
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             this.originState.Location = new System.Drawing.Point(11, 21);
             this.originState.Name = "originState";
             this.originState.Size = new System.Drawing.Size(15, 14);
-            this.originState.TabIndex = 1;
+            this.originState.TabIndex = 0;
             this.originState.Tag = "";
             this.originState.UseVisualStyleBackColor = true;
             // 
