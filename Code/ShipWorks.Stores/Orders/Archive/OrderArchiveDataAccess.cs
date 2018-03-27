@@ -28,15 +28,17 @@ namespace ShipWorks.Stores.Orders.Archive
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OrderArchiveDataAccess));
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IOrderArchiveSqlGenerator orderArchiveSqlGenerator;
         private readonly int commandTimeout = int.MaxValue;
         private bool isRestore = false;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderArchiveDataAccess(ISqlAdapterFactory sqlAdapterFactory)
+        public OrderArchiveDataAccess(ISqlAdapterFactory sqlAdapterFactory, IOrderArchiveSqlGenerator orderArchiveSqlGenerator)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.orderArchiveSqlGenerator = orderArchiveSqlGenerator;
         }
 
         /// <summary>
@@ -214,5 +216,35 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Get the current database name (Not the archive db name)
         /// </summary>
         public string CurrentDatabaseName => SqlSession.Current.Configuration.DatabaseName;
+
+        /// <summary>
+        /// Enable archive triggers, making the database "readonly"
+        /// </summary>
+        public async Task<Unit> EnableArchiveTriggers(DbConnection conn)
+        {
+            using (ISqlAdapter adapter = new SqlAdapter(conn))
+            {
+                string enableTriggerSqls = await orderArchiveSqlGenerator.EnableArchiveTriggersSql(adapter).ConfigureAwait(false);
+
+                await adapter.ExecuteSQLAsync(enableTriggerSqls);
+            }
+
+            return Unit.Default;
+        }
+
+        /// <summary>
+        /// Disable archive triggers, making the database "writable"
+        /// </summary>
+        public async Task<Unit> DisableArchiveTriggers(DbConnection conn)
+        {
+            using (ISqlAdapter adapter = new SqlAdapter(conn))
+            {
+                string disableTriggerSqls = await orderArchiveSqlGenerator.DisableArchiveTriggersSql(adapter).ConfigureAwait(false);
+
+                await adapter.ExecuteSQLAsync(disableTriggerSqls);
+            }
+
+            return Unit.Default;
+        }
     }
 }

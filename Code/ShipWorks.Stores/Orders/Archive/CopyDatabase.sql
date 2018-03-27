@@ -66,7 +66,6 @@ BEGIN
 		if @backupSetId is null begin raiserror(N'Verify failed. Backup information for the database was not found.', 16, 1) end
 		RESTORE VERIFYONLY FROM  DISK = @SourceDatabaseBackupPathAndFileName WITH  FILE = @backupSetId,  NOUNLOAD,  NOREWIND;
 
-		--USE [master]
 		RESTORE DATABASE @DestinationDatabaseName
 			FROM  DISK = @SourceDatabaseBackupPathAndFileName
 			WITH  FILE = 1,  
@@ -80,6 +79,16 @@ BEGIN
 			EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET TRUSTWORTHY ON')
 		END
 		
+		UPDATE [%destinationDatabaseName%]..[Configuration] SET ArchivalSettingsXml = '%archivalSettingsXml%'
+		
+		UPDATE [%destinationDatabaseName%]..[Store] SET AutoDownload = 0
+
+		UPDATE [%destinationDatabaseName%]..[Action] SET Enabled = 0
+
+		UPDATE [%destinationDatabaseName%]..[ShippingSettings] SET AutoCreateShipments = 0
+
+		DELETE FROM [%destinationDatabaseName%]..[ActionQueue]
+
 	END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMsg nvarchar(500)

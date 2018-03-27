@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -20,7 +21,10 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.Database;
 using Interapptive.Shared.Threading;
+using ShipWorks.Actions;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Shipping.Settings;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using ShipWorks.Tests.Shared;
@@ -46,13 +50,26 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             progressProvider = new ProgressProvider();
             progressProvider.ProgressItems.CollectionChanged += OnProgressItemsCollectionChanged;
 
-
             asyncMessageHelper.Setup(x => x.CreateProgressProvider()).Returns(progressProvider);
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString, It.IsAny<IProgressProvider>(), TimeSpan.Zero))
                 .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             CreateOrderForAllStores();
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                var shippingSettings = ShippingSettings.Fetch();
+                shippingSettings.AutoCreateShipments = true;
+                ShippingSettings.Save(shippingSettings);
+
+                ActionManager.Actions.ForEach(a => a.Enabled = true);
+                ActionManager.Actions.ForEach(a => ActionManager.SaveAction(a, sqlAdapter));
+
+                var configData = ConfigurationData.Fetch();
+                configData.ArchivalSettingsXml = "<ArchivalSettings />";
+                ConfigurationData.Save(configData);
+            }
         }
 
         private void OnProgressItemsCollectionChanged(object sender, Interapptive.Shared.Collections.CollectionChangedEventArgs<IProgressReporter> e)
@@ -152,6 +169,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                     var store = storeType.CreateStoreInstance();
                     store.InitializeNullsToDefault();
                     store.StoreName = EnumHelper.GetDescription(storeTypeCode);
+                    store.AutoDownload = true;
                     store.Address.AddressType = (int) AddressType.Residential;
                     store.Address.Street1 = "123 main";
                     store.Address.City = "St. Louis";

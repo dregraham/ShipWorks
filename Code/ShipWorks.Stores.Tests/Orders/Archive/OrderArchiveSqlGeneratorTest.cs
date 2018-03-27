@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public void CopyDatabaseSql_ReturnsNonEmptyString()
         {
-            Assert.False(testObject.CopyDatabaseSql(AnyString).IsNullOrWhiteSpace());
+            Assert.False(testObject.CopyDatabaseSql(AnyString, AnyDate, AnyString).IsNullOrWhiteSpace());
         }
 
         [Fact]

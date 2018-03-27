@@ -41,5 +41,15 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Get the current database name (Not the archive db name)
         /// </summary>
         string CurrentDatabaseName { get; }
+
+        /// <summary>
+        /// Enable archive triggers, making the database "readonly"
+        /// </summary>
+        Task<Unit> EnableArchiveTriggers(DbConnection conn);
+
+        /// <summary>
+        /// Disable archive triggers, making the database "writable"
+        /// </summary>
+        Task<Unit> DisableArchiveTriggers(DbConnection conn);
     }
 }
