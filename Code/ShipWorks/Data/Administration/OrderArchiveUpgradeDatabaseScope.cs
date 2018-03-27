@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
-using Interapptive.Shared.Extensions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Data.Administration
 {
@@ -47,6 +41,7 @@ namespace ShipWorks.Data.Administration
             if (isArchive)
             {
                 connection = connection?.State == ConnectionState.Open ? connection : SqlSession.Current.OpenConnection();
+                orderArchiveDataAccess.DisableAutoProcessingSettings(connection);
                 orderArchiveDataAccess.EnableArchiveTriggers(connection);
             }
 

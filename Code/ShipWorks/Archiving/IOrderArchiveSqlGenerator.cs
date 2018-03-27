@@ -20,7 +20,7 @@ namespace ShipWorks.Archiving
         string ArchiveOrderDataSql(string databasename, DateTime maxOrderDate, OrderArchiverOrderDataComparisonType comparisonType);
 
         /// <summary>
-        /// Enable archive triggers, making the database "readonly"
+        /// Enable archive triggers, making the database "read only"
         /// </summary>
         string EnableArchiveTriggersSql(ISqlAdapter adapter);
 
@@ -28,5 +28,10 @@ namespace ShipWorks.Archiving
         /// Disable archive triggers, making the database "writable"
         /// </summary>
         string DisableArchiveTriggersSql(ISqlAdapter adapter);
+
+        /// <summary>
+        /// Generate SQL for disabling auto processing settings.  (Auto download, auto create shipments, etc...)
+        /// </summary>
+        string DisableAutoProcessingSettingsSql();
     }
 }

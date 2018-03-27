@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         }
 
         [Fact]
-        public async Task EnableArchiveTriggersSql_EnablesTriggers()
+        public void EnableArchiveTriggersSql_EnablesTriggers()
         {
             using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
             {
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         }
 
         [Fact]
-        public async Task DisableArchiveTriggersSql_EnablesTriggers()
+        public void DisableArchiveTriggersSql_EnablesTriggers()
         {
             int actualCount = 0;
             using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         }
 
         /// <summary>
-        /// Tables that should be treated as "readonly" in archive databases
+        /// Tables that should be treated as "read only" in archive databases
         /// </summary>
         public static IEnumerable<string> ReadonlyTableNames => new[]
             {

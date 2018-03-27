@@ -43,7 +43,7 @@ namespace ShipWorks.Archiving
         string CurrentDatabaseName { get; }
 
         /// <summary>
-        /// Enable archive triggers, making the database "readonly"
+        /// Enable archive triggers, making the database "read only"
         /// </summary>
         void EnableArchiveTriggers(DbConnection conn);
 
@@ -51,5 +51,10 @@ namespace ShipWorks.Archiving
         /// Disable archive triggers, making the database "writable"
         /// </summary>
         void DisableArchiveTriggers(DbConnection conn);
+
+        /// <summary>
+        /// Disable auto processing settings in archive databases.  (Auto download, auto create shipments, etc...)
+        /// </summary>
+        void DisableAutoProcessingSettings(DbConnection conn);
     }
 }

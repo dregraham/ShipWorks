@@ -77,6 +77,22 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// Generate SQL for disabling auto processing settings.  (Auto download, auto create shipments, etc...)
+        /// </summary>
+        public string DisableAutoProcessingSettingsSql()
+        {
+            return @"
+		        UPDATE [Store] SET AutoDownload = 0
+
+		        UPDATE [Action] SET Enabled = 0
+
+		        UPDATE [ShippingSettings] SET AutoCreateShipments = 0
+
+		        DELETE FROM [ActionQueue]
+            ";
+        }
+
+        /// <summary>
         /// Generate sql to enable archive triggers, making the database "readonly"
         /// </summary>
         public string EnableArchiveTriggersSql(ISqlAdapter adapter)

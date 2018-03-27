@@ -243,5 +243,16 @@ namespace ShipWorks.Stores.Orders.Archive
                 adapter.ExecuteSQL(disableTriggerSqls);
             }
         }
+
+        /// <summary>
+        /// Disable auto processing settings in archive databases.  (Auto download, auto create shipments, etc...)
+        /// </summary>
+        public void DisableAutoProcessingSettings(DbConnection conn)
+        {
+            using (ISqlAdapter adapter = new SqlAdapter(conn))
+            {
+                adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql());
+            }
+        }
     }
 }
