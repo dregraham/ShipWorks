@@ -1,7 +1,9 @@
-﻿using ShipWorks.Actions;
-using ShipWorks.ApplicationCore;
+﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI;
 
@@ -50,10 +52,22 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Should UI actions be included.  If the UI isn't running somehwere, 
+        /// Should UI actions be included.  If the UI isn't running somewhere, 
         /// and we are the background process, go ahead and do UI actions too since it's not open
         /// </summary>
         public bool IncludeUserInterfaceActions => !Program.ExecutionMode.IsUISupported &&
             !(Program.ExecutionMode is UserInterfaceExecutionMode || SingleInstance.IsAlreadyRunning);
+
+        /// <summary>
+        /// Update the configuration entity
+        /// </summary>
+        public void UpdateConfiguration(Action<ConfigurationEntity> setConfiguration)
+        {
+            var configuration = ConfigurationData.Fetch();
+
+            setConfiguration(configuration);
+
+            ConfigurationData.Save(configuration);
+        }
     }
 }

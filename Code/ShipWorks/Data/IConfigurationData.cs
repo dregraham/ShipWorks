@@ -1,4 +1,6 @@
-﻿using ShipWorks.Actions;
+﻿using System;
+using ShipWorks.Actions;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Data
@@ -8,6 +10,11 @@ namespace ShipWorks.Data
     /// </summary>
     public interface IConfigurationData
     {
+        /// <summary>
+        /// Update the configuration entity
+        /// </summary>
+        void UpdateConfiguration(Action<ConfigurationEntity> setConfiguration);
+
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
