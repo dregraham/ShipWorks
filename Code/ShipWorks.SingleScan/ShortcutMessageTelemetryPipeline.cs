@@ -65,7 +65,6 @@ namespace ShipWorks.SingleScan
              messenger.OfType<ProfileAppliedMessage>()
                 .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
         
-
         /// <summary>
         /// Handle telemetry for a profile being applied via shortcut 
         /// </summary>
