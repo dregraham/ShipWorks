@@ -46,7 +46,7 @@ namespace ShipWorks.SingleScan
                 .FirstOrDefault(s => s?.Barcode != null && s.Barcode.Equals(message.ScannedText, StringComparison.InvariantCultureIgnoreCase));
             if (shortcut != null)
             {
-                messenger.Send(new ShortcutMessage(this, shortcut));
+                messenger.Send(new ShortcutMessage(this, shortcut, message.ScannedText));
             }
             else
             {
