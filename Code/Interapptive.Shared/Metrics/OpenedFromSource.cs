@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Interapptive.Shared.Metrics
 {
@@ -41,6 +36,11 @@ namespace Interapptive.Shared.Metrics
         /// <summary>
         /// Nudge
         /// </summary>
-        Nudge
+        Nudge,
+
+        /// <summary>
+        /// No stores exists
+        /// </summary>
+        NoStores
     }
 }
