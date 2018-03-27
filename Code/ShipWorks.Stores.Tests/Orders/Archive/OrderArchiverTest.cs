@@ -4,11 +4,13 @@ using System.Data.Common;
 using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
 using Moq.Protected;
 using ShipWorks.Archiving;
+using ShipWorks.Data.Administration;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
@@ -89,6 +91,24 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             await testObject.Archive(DateTime.Now);
 
             mock.Mock<IFilterHelper>().Verify(x => x.RegenerateFilters(It.IsAny<DbConnection>()));
+        }
+
+        [Fact]
+        public void ArchivalSettingsXml_VersionIsCorrect()
+        {
+            SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
+            Version version = new Version(0, 0, 0, 0);
+
+            foreach (var script in SqlSchemaUpdater.GetUpdateScripts())
+            {
+                if (sqlLoader[script.ScriptName].Content.Contains("ArchivalSettingsXml"))
+                {
+                    version = script.SchemaVersion;
+                    break;
+                }
+            }
+
+            Assert.Equal(new Version(5, 23, 1, 6), version);
         }
 
         public void Dispose()

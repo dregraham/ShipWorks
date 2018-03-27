@@ -20,7 +20,7 @@ SELECT
 		EXEC dbo.sp_executesql @statement = N''
 			CREATE TRIGGER ' +  TableName + '_EnforceReadonly ON  [dbo].[' +  TableName + '] INSTEAD OF INSERT,DELETE,UPDATE AS 
 			BEGIN
-			  RAISERROR(''''This ShipWorks database is in read only mode.'''', 16, 254)
+			  RAISERROR(''''This ShipWorks database is in read only mode.'''', 16, 254) WITH NOWAIT
 			END
       '''
     ELSE 
@@ -29,7 +29,7 @@ SELECT
 		EXEC dbo.sp_executesql @statement = N''
 			CREATE TRIGGER ' +  TableName + '_EnforceReadonly ON  [dbo].[' +  TableName + '] AFTER INSERT,DELETE,UPDATE AS 
 			BEGIN
-			  RAISERROR(''''This ShipWorks database is in read only mode.'''', 16, 254)
+			  RAISERROR(''''This ShipWorks database is in read only mode.'''', 16, 254) WITH NOWAIT
 			END
       '''
   END

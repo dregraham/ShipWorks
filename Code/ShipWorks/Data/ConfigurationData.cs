@@ -1,8 +1,10 @@
+using System;
 using System.Data.Common;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -130,9 +132,21 @@ namespace ShipWorks.Data
 
             using (ISqlAdapter sqlAdapter = new SqlAdapter(connection))
             {
-                ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
-                sqlAdapter.FetchEntity(configurationEntity);
-                archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
+                try
+                {
+                    if (SqlSchemaUpdater.GetInstalledSchemaVersion(connection) < new Version(5, 23, 1, 6))
+                    {
+                        return false;
+                    }
+
+                    ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
+                    sqlAdapter.FetchEntity(configurationEntity);
+                    archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
+                }
+                catch
+                {
+                    return false;
+                }
             }
 
             if (string.IsNullOrWhiteSpace(archivalSettingsXml))
