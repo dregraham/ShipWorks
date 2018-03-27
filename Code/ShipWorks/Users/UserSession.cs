@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using Autofac;
 using Autofac.Features.OwnedInstances;
@@ -455,42 +454,6 @@ namespace ShipWorks.Users
             if (audit)
             {
                 AuditUtility.Audit(AuditActionType.Logon);
-            }
-
-            GenerateFiltersForArchiveDatabase();
-        }
-
-        /// <summary>
-        /// Regenerate filters on the first login of an archive database
-        /// </summary>
-        private static void GenerateFiltersForArchiveDatabase()
-        {
-            using (var lifetime = IoC.BeginLifetimeScope())
-            {
-                var configurationData = lifetime.Resolve<IConfigurationData>();
-                var configurationEntity = configurationData.FetchReadOnly();
-
-                try
-                {
-                    var document = XDocument.Parse(configurationEntity.ArchivalSettingsXml);
-                    var regenerationRequiredElement = document.Descendants("FilterRegenerationRequired").FirstOrDefault();
-
-                    if (regenerationRequiredElement?.Value != null)
-                    {
-                        var filterHelper = lifetime.Resolve<IFilterHelper>();
-                        using (var connection = SqlSession.Current.OpenConnection())
-                        {
-                            filterHelper.RegenerateFilters(connection);
-                        }
-
-                        regenerationRequiredElement.SetValue(true);
-                        configurationData.UpdateConfiguration(x => x.ArchivalSettingsXml = document.ToString());
-                    }
-                }
-                catch (XmlException ex)
-                {
-
-                }
             }
         }
 

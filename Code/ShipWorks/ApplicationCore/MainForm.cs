@@ -881,6 +881,11 @@ namespace ShipWorks
             {
                 UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    lifetimeScope.Resolve<IOrderArchiveFilterRegenerator>().Regenerate();
+                }
+
                 logonAsyncLoadSuccess = true;
             }
             catch (Exception ex)

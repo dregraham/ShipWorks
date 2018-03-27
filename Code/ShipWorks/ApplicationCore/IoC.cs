@@ -235,6 +235,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ScaleReaderWrapper>()
                 .As<IScaleReader>();
 
+            builder.Register(c => SqlSession.Current)
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
                 new Dictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>>();
 

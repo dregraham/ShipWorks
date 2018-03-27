@@ -44,7 +44,6 @@ namespace ShipWorks.Stores.Orders.Archive
                 "'ClickCartProOrderSearch'",
                 "'CommerceInterfaceOrder'",
                 "'CommerceInterfaceOrderSearch'",
-                "'Configuration'",
                 "'Customer'",
                 "'DhlExpressAccount'",
                 "'DhlExpressPackage'",

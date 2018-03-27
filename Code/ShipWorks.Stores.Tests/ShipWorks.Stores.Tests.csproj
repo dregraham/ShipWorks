@@ -23,6 +23,9 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Orders\Archive\OrderArchiveFilterRegeneratorTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>

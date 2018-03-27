@@ -948,6 +948,8 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
