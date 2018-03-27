@@ -63,9 +63,6 @@ namespace ShipWorks.Shipping.Profiles
 
                 // Configure it as a primary profile
                 shipmentType.ConfigurePrimaryProfile(profile);
-
-                // Save the profile
-                ShippingProfileManager.SaveProfile(profile);
             }
 
             return profile;
