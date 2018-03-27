@@ -6,6 +6,7 @@ using System.Text;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Archiving;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Archive;

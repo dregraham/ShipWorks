@@ -172,29 +172,32 @@ namespace ShipWorks.Data.Administration
                     {
                         using (new ExistingConnectionScope())
                         {
-                            // Update the tables
-                            UpdateScripts(installedSchema, progressScripts);
-
-                            // Functionality starting
-                            progressFunctionality.Starting();
-
-                            // Update the assemblies
-                            UpdateAssemblies(progressFunctionality);
-
-                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                            UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
-                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
-
-                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                            // database upgrade can take time and cause a timeout.
-                            if (singleUserScope != null)
+                            using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
-                            }
+                                // Update the tables
+                                UpdateScripts(installedSchema, progressScripts);
 
-                            ApplyVersionSpecificUpdates(installedAssembly);
+                                // Functionality starting
+                                progressFunctionality.Starting();
+
+                                // Update the assemblies
+                                UpdateAssemblies(progressFunctionality);
+
+                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                                UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
+
+                                // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
+                                SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+
+                                // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                                // database upgrade can take time and cause a timeout.
+                                if (singleUserScope != null)
+                                {
+                                    SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                                }
+
+                                ApplyVersionSpecificUpdates(installedAssembly);
+                            }
                         }
                     }
                 }

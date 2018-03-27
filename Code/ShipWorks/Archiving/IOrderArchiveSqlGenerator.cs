@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Stores.Orders.Archive
+namespace ShipWorks.Archiving
 {
     /// <summary>
     /// Interface used for generating SQL for order archiving
@@ -22,11 +22,11 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Enable archive triggers, making the database "readonly"
         /// </summary>
-        Task<string> EnableArchiveTriggersSql(ISqlAdapter adapter);
+        string EnableArchiveTriggersSql(ISqlAdapter adapter);
 
         /// <summary>
         /// Disable archive triggers, making the database "writable"
         /// </summary>
-        Task<string> DisableArchiveTriggersSql(ISqlAdapter adapter);
+        string DisableArchiveTriggersSql(ISqlAdapter adapter);
     }
 }

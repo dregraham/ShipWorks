@@ -949,7 +949,11 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Archiving\IOrderArchiveDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
+    <Compile Include="Archiving\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Archiving\OrderArchiverOrderDataComparisonType.cs" />
+    <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />

@@ -1,4 +1,7 @@
+using System.Data.Common;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -116,6 +119,35 @@ namespace ShipWorks.Data
             };
 
             adapter.SaveEntity(newConfig);
+        }
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        public static bool IsArchive(DbConnection connection)
+        {
+            string archivalSettingsXml = string.Empty;
+
+            using (ISqlAdapter sqlAdapter = new SqlAdapter(connection))
+            {
+                ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
+                sqlAdapter.FetchEntity(configurationEntity);
+                archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
+            }
+
+            if (string.IsNullOrWhiteSpace(archivalSettingsXml))
+            {
+                return false;
+            }
+
+            try
+            {
+                return XDocument.Parse(archivalSettingsXml)?.Root?.HasElements == true;
+            }
+            catch (XmlException)
+            {
+                return false;
+            }
         }
     }
 }

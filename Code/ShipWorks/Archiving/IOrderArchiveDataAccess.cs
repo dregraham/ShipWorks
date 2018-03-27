@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Stores.Orders.Archive
+namespace ShipWorks.Archiving
 {
     /// <summary>
     /// Connection manager for order archiving
@@ -45,11 +45,11 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Enable archive triggers, making the database "readonly"
         /// </summary>
-        Task<Unit> EnableArchiveTriggers(DbConnection conn);
+        void EnableArchiveTriggers(DbConnection conn);
 
         /// <summary>
         /// Disable archive triggers, making the database "writable"
         /// </summary>
-        Task<Unit> DisableArchiveTriggers(DbConnection conn);
+        void DisableArchiveTriggers(DbConnection conn);
     }
 }

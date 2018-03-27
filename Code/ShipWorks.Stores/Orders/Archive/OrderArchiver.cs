@@ -10,6 +10,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -128,7 +129,7 @@ namespace ShipWorks.Stores.Orders.Archive
             async Task<Unit> Func(DbConnection conn)
             {
                 string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
-                string archiveDbArchiveSql = $"{sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)}{Environment.NewLine}{await sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn)).ConfigureAwait(false)}";
+                string archiveDbArchiveSql = $"{sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)}{Environment.NewLine}{sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn))}";
 
                 return await ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName))
                     .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", currentDbArchiveSql))

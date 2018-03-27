@@ -168,16 +168,13 @@
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
     <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
-    <Compile Include="Orders\Archive\IOrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\IOrderArchiver.cs" />
-    <Compile Include="Orders\Archive\IOrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\OrderArchiveFilterRegenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveOrchestrator.cs" />
     <Compile Include="Orders\Archive\OrderArchiver.cs" />
-    <Compile Include="Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />

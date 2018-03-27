@@ -6,6 +6,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Archiving;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;

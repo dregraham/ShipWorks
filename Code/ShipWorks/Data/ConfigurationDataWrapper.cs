@@ -1,5 +1,4 @@
-﻿using System;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -57,6 +56,11 @@ namespace ShipWorks.Data
         /// </summary>
         public bool IncludeUserInterfaceActions => !Program.ExecutionMode.IsUISupported &&
             !(Program.ExecutionMode is UserInterfaceExecutionMode || SingleInstance.IsAlreadyRunning);
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        public bool IsArchive(DbConnection connection) => ConfigurationData.IsArchive(connection);
 
         /// <summary>
         /// Update the configuration entity

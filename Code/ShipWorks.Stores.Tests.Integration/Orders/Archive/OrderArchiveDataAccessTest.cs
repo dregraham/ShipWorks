@@ -3,27 +3,15 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Autofac;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Email;
-using ShipWorks.Shipping;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.Database;
 using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Common.Threading;
+using ShipWorks.Archiving;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using ShipWorks.Tests.Shared;
@@ -60,11 +48,11 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         {
             using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
             {
-                await testObject.DisableArchiveTriggers(conn);
-                await testObject.EnableArchiveTriggers(conn);
+                testObject.DisableArchiveTriggers(conn);
+                testObject.EnableArchiveTriggers(conn);
 
                 // Run it a second time to make sure that the enabling sql is re-runable.
-                await testObject.EnableArchiveTriggers(conn);
+                testObject.EnableArchiveTriggers(conn);
 
                 string triggerNames = string.Join("_EnforceReadonly', '", ReadonlyTableNames) + "_EnforceReadonly";
                 string sql = $"SELECT COUNT(*) FROM sys.triggers WHERE [name] IN ('{triggerNames}')";
@@ -77,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 
                 Assert.Equal(ReadonlyTableNames.Count(), actualCount);
 
-                await testObject.DisableArchiveTriggers(conn);
+                testObject.DisableArchiveTriggers(conn);
             }
         }
 
@@ -87,11 +75,11 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             int actualCount = 0;
             using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
             {
-                await testObject.EnableArchiveTriggers(conn);
-                await testObject.DisableArchiveTriggers(conn);
+                testObject.EnableArchiveTriggers(conn);
+                testObject.DisableArchiveTriggers(conn);
 
                 // Run it a second time to make sure that the disabling sql is re-runable.
-                await testObject.DisableArchiveTriggers(conn);
+                testObject.DisableArchiveTriggers(conn);
 
                 string triggerNames = string.Join("_EnforceReadonly', '", ReadonlyTableNames) + "_EnforceReadonly";
                 string sql = $"SELECT COUNT(*) FROM sys.triggers WHERE [name] IN ('{triggerNames}')";

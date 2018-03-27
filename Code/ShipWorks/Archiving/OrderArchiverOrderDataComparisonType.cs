@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.Stores.Orders.Archive
+namespace ShipWorks.Archiving
 {
     /// <summary>
     /// Enum for order archiving by order date comparison

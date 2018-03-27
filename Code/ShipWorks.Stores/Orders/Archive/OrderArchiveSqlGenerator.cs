@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -78,14 +79,14 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Generate sql to enable archive triggers, making the database "readonly"
         /// </summary>
-        public async Task<string> EnableArchiveTriggersSql(ISqlAdapter adapter)
+        public string EnableArchiveTriggersSql(ISqlAdapter adapter)
         {
             List<string> enableTriggerSqls = new List<string>();
             string sql = ArchiveTriggersSql();
 
             using (IRetrievalQuery query = new RetrievalQuery(new SqlCommand(sql)))
             {
-                using (IDataReader dataReader = await adapter.FetchDataReaderAsync(query, CommandBehavior.Default, CancellationToken.None).ConfigureAwait(false))
+                using (IDataReader dataReader = adapter.FetchDataReader(query, CommandBehavior.Default))
                 {
                     while (dataReader.Read())
                     {
@@ -100,14 +101,14 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Generate sql to disable archive triggers, making the database "writable"
         /// </summary>
-        public async Task<string> DisableArchiveTriggersSql(ISqlAdapter adapter)
+        public string DisableArchiveTriggersSql(ISqlAdapter adapter)
         {
             List<string> disableTriggerSqls = new List<string>();
             string sql = ArchiveTriggersSql();
 
             using (IRetrievalQuery query = new RetrievalQuery(new SqlCommand(sql)))
             {
-                using (IDataReader dataReader = await adapter.FetchDataReaderAsync(query, CommandBehavior.Default, CancellationToken.None).ConfigureAwait(false))
+                using (IDataReader dataReader = adapter.FetchDataReader(query, CommandBehavior.Default))
                 {
                     while (dataReader.Read())
                     {

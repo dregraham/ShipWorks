@@ -12,6 +12,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -220,31 +221,27 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Enable archive triggers, making the database "readonly"
         /// </summary>
-        public async Task<Unit> EnableArchiveTriggers(DbConnection conn)
+        public void EnableArchiveTriggers(DbConnection conn)
         {
             using (ISqlAdapter adapter = new SqlAdapter(conn))
             {
-                string enableTriggerSqls = await orderArchiveSqlGenerator.EnableArchiveTriggersSql(adapter).ConfigureAwait(false);
+                string enableTriggerSqls = orderArchiveSqlGenerator.EnableArchiveTriggersSql(adapter);
 
-                await adapter.ExecuteSQLAsync(enableTriggerSqls);
+                adapter.ExecuteSQL(enableTriggerSqls);
             }
-
-            return Unit.Default;
         }
 
         /// <summary>
         /// Disable archive triggers, making the database "writable"
         /// </summary>
-        public async Task<Unit> DisableArchiveTriggers(DbConnection conn)
+        public void DisableArchiveTriggers(DbConnection conn)
         {
             using (ISqlAdapter adapter = new SqlAdapter(conn))
             {
-                string disableTriggerSqls = await orderArchiveSqlGenerator.DisableArchiveTriggersSql(adapter).ConfigureAwait(false);
+                string disableTriggerSqls = orderArchiveSqlGenerator.DisableArchiveTriggersSql(adapter);
 
-                await adapter.ExecuteSQLAsync(disableTriggerSqls);
+                adapter.ExecuteSQL(disableTriggerSqls);
             }
-
-            return Unit.Default;
         }
     }
 }

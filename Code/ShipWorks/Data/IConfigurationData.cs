@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.Actions;
+﻿using ShipWorks.Actions;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -31,9 +30,14 @@ namespace ShipWorks.Data
         ActionQueueType ExecutionModeActionQueueType { get; }
 
         /// <summary>
-        /// Should UI actions be included.  If the UI isn't running somehwere, 
+        /// Should UI actions be included.  If the UI isn't running somewhere, 
         /// and we are the background process, go ahead and do UI actions too since it's not open
         /// </summary>
         bool IncludeUserInterfaceActions { get; }
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        bool IsArchive(DbConnection connection);
     }
 }
