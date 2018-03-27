@@ -19,18 +19,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaProfileControl : PostalProfileControlBase
     {
         // the reseller sub-type this profile configures
-        readonly EndiciaReseller endiciaReseller = EndiciaReseller.None;
+        private EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaProfileControl(EndiciaReseller endiciaReseller)
+        public EndiciaProfileControl()
         {
             InitializeComponent();
 
             ResizeGroupBoxes(tabPage);
-
-            this.endiciaReseller = endiciaReseller;
 
             if (!IsScanBasedReturnsEnabled())
             {
@@ -45,6 +43,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override void LoadProfile(ShippingProfileEntity profile)
         {
+            if (profile.ShipmentType == ShipmentTypeCode.Express1Endicia)
+            {
+                endiciaReseller = EndiciaReseller.Express1;
+            }
+
             base.LoadProfile(profile);
 
             if (EndiciaUtility.IsEndiciaInsuranceActive)
