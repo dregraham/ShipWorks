@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Get the ShippingProfileEntities corrisponding ShippingProfile
+        /// Get the ShippingProfileEntities corresponding ShippingProfile
         /// </summary>
         public IShippingProfile Get(long shippingProfileEntityId)
         {
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Services
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    result = Result.FromError("An error ocurred saving your profile.");
+                    result = Result.FromError("An error occurred saving your profile.");
                     log.Error("Error saving shippingProfile", ex);
                 }
             }
@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Services
             catch (ORMException ex)
             {
                 log.Error("Error deleting shipping profile", ex);
-                return Result.FromError("An error occured when deleting the profile.");
+                return Result.FromError("An error occurred when deleting the profile.");
             }
         }
     }
