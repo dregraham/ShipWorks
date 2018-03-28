@@ -374,8 +374,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (ex.GetAllExceptions().OfType<SqlException>().Any(s =>
-                s.State == 254 && s.Message == "This ShipWorks database is in read only mode"))
+            if (ex.IsReadonlyDatabaseException())
             {
                 log.Error("This ShipWorks database is in read only mode", ex);
                 return;

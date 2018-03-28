@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Interapptive.Shared.Utility
@@ -29,6 +30,17 @@ namespace Interapptive.Shared.Utility
                 currentEx = currentEx.InnerException;
                 yield return currentEx;
             }
+        }
+
+        /// <summary>
+        /// Checks to see if exceptions are read only database exceptions
+        /// </summary>
+        public static bool IsReadonlyDatabaseException(this Exception ex)
+        {
+            ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase));
+
+            return true;
         }
     }
 }
