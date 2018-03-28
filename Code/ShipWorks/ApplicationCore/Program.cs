@@ -374,11 +374,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (ex.IsReadonlyDatabaseException())
-            {
-                log.Error("This ShipWorks database is in read only mode", ex);
-                return;
-            }
+            ex.IsReadonlyDatabaseException(log);
 
             isCrashing = true;
 

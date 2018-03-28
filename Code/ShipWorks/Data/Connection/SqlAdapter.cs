@@ -479,17 +479,14 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    if (ex.IsReadonlyDatabaseException())
-                    {
-                        log.Error("This ShipWorks database is in read only mode", ex);
-                    }
-                    else
-                    {
-                        TranslateException(ex);
-                        throw;
-                    }
+                    bool checkException = ex.IsReadonlyDatabaseException(log);
 
-                    return true;
+                    if (checkException.Equals(true))
+                    {
+                        return true;
+                    }
+                    TranslateException(ex);
+                    throw;
                 }
             }
         }
@@ -507,18 +504,15 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    if (ex.IsReadonlyDatabaseException())
-                    {
-                        log.Error("This ShipWorks database is in read only mode", ex);
-                    }
-                    else
-                    {
-                        TranslateException(ex);
-                        throw;
-                    }
-                }
+                    bool checkException = ex.IsReadonlyDatabaseException(log);
 
-                return true;
+                    if (checkException.Equals(true))
+                    {
+                        return true;
+                    }
+                    TranslateException(ex);
+                    throw;
+                }
             }
         }
 
@@ -622,17 +616,14 @@ namespace ShipWorks.Data.Connection
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.IsReadonlyDatabaseException())
-                {
-                    log.Error("This ShipWorks database is in read only mode", ex);
-                }
-                else
-                {
-                    TranslateException(ex);
-                    throw;
-                }
+                bool checkException = ex.IsReadonlyDatabaseException(log);
 
-                return 0;
+                if (checkException.Equals(true))
+                {
+                    return 0;
+                }
+                TranslateException(ex);
+                throw;
             }
         }
 
@@ -647,17 +638,14 @@ namespace ShipWorks.Data.Connection
             }
             catch (SqlException ex)
             {
-                if (ex.IsReadonlyDatabaseException())
-                {
-                    log.Error("This ShipWorks database is in read only mode", ex);
-                }
-                else
-                {
-                    TranslateException(ex);
-                    throw;
-                }
+                bool checkException = ex.IsReadonlyDatabaseException(log);
 
-                return 0;
+                if (checkException.Equals(true))
+                {
+                    return 0;
+                }
+                TranslateException(ex);
+                throw;
             }
         }
 

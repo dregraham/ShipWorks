@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using log4net;
 
 namespace Interapptive.Shared.Utility
 {
@@ -35,10 +36,15 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Checks to see if exceptions are read only database exceptions
         /// </summary>
-        public static bool IsReadonlyDatabaseException(this Exception ex)
+        public static bool IsReadonlyDatabaseException(this Exception ex, ILog log)
         {
-            return ex.GetAllExceptions().OfType<SqlException>().Any(x => 
-            x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase));
+            if (ex.GetAllExceptions().OfType<SqlException>().Any(
+                x => x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                log.Error("This ShipWorks database is in read only mode", ex);
+                return true;
+            }
+            return false;
         }
     }
 }
