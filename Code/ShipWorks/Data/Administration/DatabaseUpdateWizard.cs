@@ -235,11 +235,10 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            string username;
-            string password;
-
             // See if we can try to login automatically
-            if (UserSession.GetSavedUserCredentials(out username, out password))
+            var (autoLogin, username, password) = UserSession.GetSavedUserCredentials();
+
+            if (autoLogin)
             {
                 long userID = UserUtility.GetShipWorksUserID(username, password);
 
@@ -800,10 +799,8 @@ namespace ShipWorks.Data.Administration
             // If skipping then that means we can used the user they already picked \ were logged in as
             if (e.Skipping)
             {
-                string rememberedUsername;
-                string rememberedPassword;
-
-                bool remember = UserSession.GetSavedUserCredentials(out rememberedUsername, out rememberedPassword) && rememberedUsername == logonAfterUsername;
+                var (wasRemembered, rememberedUsername, rememberedPassword) = UserSession.GetSavedUserCredentials();
+                bool remember = wasRemembered && rememberedUsername == logonAfterUsername;
 
                 UserSession.Logon(logonAfterUsername, logonAfterPassword, remember);
                 userID3x = UserSession.User.UserID;

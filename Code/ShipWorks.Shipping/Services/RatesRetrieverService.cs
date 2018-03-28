@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -18,7 +18,8 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service that retrieves rates when shipments change
     /// </summary>
-    public class RatesRetrieverService : IInitializeForCurrentUISession
+    [Component(RegistrationType.Self)]
+    public class RatesRetrieverService : IRatesRetrieverService
     {
         const double ThrottleTime = 250;
         private readonly IMessenger messenger;

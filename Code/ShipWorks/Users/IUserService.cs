@@ -23,5 +23,13 @@ namespace ShipWorks.Users
         /// Logs the user in using their saved credentials
         /// </summary>
         EnumResult<UserServiceLogonResultType> Logon();
+
+        /// <summary>
+        /// Logs the user in with the given UserEntity
+        /// </summary>
+        /// <remarks>
+        /// This method goes through MainForm so that we get the full logon flow
+        /// </remarks>
+        EnumResult<UserServiceLogonResultType> Logon(UserEntity user, bool audit);
     }
 }

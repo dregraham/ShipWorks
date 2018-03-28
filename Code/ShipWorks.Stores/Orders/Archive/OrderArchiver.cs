@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IAsyncMessageHelper messageHelper;
         private readonly IOrderArchiveDataAccess connectionManager;
         private readonly IFilterHelper filterHelper;
-        private readonly IUserSession userSession;
+        private readonly IUserLoginWorkflow userLoginWorkflow;
         private readonly IOrderArchiveSqlGenerator sqlGenerator;
         private readonly string archiveDatabaseName;
         private readonly string currentDatabaseName;
@@ -40,11 +40,11 @@ namespace ShipWorks.Stores.Orders.Archive
             IAsyncMessageHelper messageHelper,
             IOrderArchiveDataAccess connectionManager,
             IFilterHelper filterHelper,
-            IUserSession userSession,
+            IUserLoginWorkflow userLoginWorkflow,
             IOrderArchiveSqlGenerator sqlGenerator)
         {
             this.sqlGenerator = sqlGenerator;
-            this.userSession = userSession;
+            this.userLoginWorkflow = userLoginWorkflow;
             this.filterHelper = filterHelper;
             this.connectionManager = connectionManager;
             this.messageHelper = messageHelper;
@@ -61,9 +61,9 @@ namespace ShipWorks.Stores.Orders.Archive
         /// as a Func instead of an Action for easier composition.</returns>
         public async Task<Unit> Archive(DateTime cutoffDate)
         {
-            UserEntity loggedInUser = userSession.User;
+            UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
-            userSession.Logoff(clearRememberMe: false);
+            userLoginWorkflow.Logoff(clearRememberMe: false);
 
             IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Do(_ => connectionManager.WithMultiUserConnection(RegenerateFilters(filterProgress)))
                             .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
-                            .ConfigureAwait(false);
+                            .ConfigureAwait(true);
 
                         return Unit.Default;
                     }
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Orders.Archive
             }
             finally
             {
-                userSession.Logon(loggedInUser);
+                userLoginWorkflow.Logon(loggedInUser);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 
 namespace Interapptive.Shared.UI
@@ -62,5 +63,10 @@ namespace Interapptive.Shared.UI
         /// Create a progress provider
         /// </summary>
         IProgressProvider CreateProgressProvider();
+
+        /// <summary>
+        /// Get a connection sensitive scope
+        /// </summary>
+        Task<IConnectionSensitiveScope> GetConnectionSensitiveScope(string text);
     }
 }

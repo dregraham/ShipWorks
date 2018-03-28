@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Windows.Forms;
+using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration;
-using System.Diagnostics;
 
 namespace ShipWorks.Data.Connection
 {
@@ -13,8 +12,9 @@ namespace ShipWorks.Data.Connection
     /// An instance of this class should be created before opening a window or doing an action that could change the database connection, restore, or backup the database.
     /// After the constructor finishes, Acquired must be checked to determine if the action can proceed.
     /// </summary>
-    public sealed class ConnectionSensitiveScope : IDisposable
+    public sealed class ConnectionSensitiveScope : IConnectionSensitiveScope
     {
+        private static readonly IConnectionSensitiveScope emptyScope = new EmptyConnectionScope();
         bool acquired = false;
         bool restoreInitiated = false;
         SqlSessionConfiguration originalSqlConfig = null;
@@ -33,14 +33,10 @@ namespace ShipWorks.Data.Connection
 
             if (scopeStack.Count == 0)
             {
-                EventHandler handler = Acquiring;
-                if (handler != null)
-                {
-                    handler(null, EventArgs.Empty);
-                }
+                Acquiring?.Invoke(null, EventArgs.Empty);
             }
 
-            // Have to wait for any pending operations.  Since we havnt pushed this scope on to the stack yet, that means
+            // Have to wait for any pending operations.  Since we haven't pushed this scope on to the stack yet, that means
             // new operations can still come in while we are waiting.
             acquired = ApplicationBusyManager.WaitForOperations(owner, uiUserGoalText, () => scopeStack.Add(this));
 
@@ -62,7 +58,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Indicates if the scope was succesfully entered. If false, the window or action that could potentially affect the data connection
+        /// Indicates if the scope was successfully entered. If false, the window or action that could potentially affect the data connection
         /// must not proceed.
         /// </summary>
         public bool Acquired
@@ -75,13 +71,18 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool DatabaseChanged
         {
-            get 
+            get
             {
                 SqlSessionConfiguration currentSqlConfig = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
 
                 return originalSqlConfig != currentSqlConfig || restoreInitiated;
             }
         }
+
+        /// <summary>
+        /// Empty implementation of the connection sensitive scope
+        /// </summary>
+        public static IConnectionSensitiveScope Empty => emptyScope;
 
         /// <summary>
         /// A restore is starting

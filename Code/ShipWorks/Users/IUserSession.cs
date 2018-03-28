@@ -31,9 +31,9 @@ namespace ShipWorks.Users
         bool Logon(LogonCredentials credentials);
 
         /// <summary>
-        /// Logs the user in with the given UserEntity
+        /// Log in the specified user
         /// </summary>
-        void Logon(UserEntity user);
+        bool Logon(UserEntity user, bool audit);
 
         /// <summary>
         /// Logs in using the last logged in user
@@ -49,10 +49,5 @@ namespace ShipWorks.Users
         /// Update the current user's settings
         /// </summary>
         void UpdateSettings(Action<UserSettingsEntity> updateAction);
-
-        /// <summary>
-        /// Logoff the currently logged on user.
-        /// </summary>
-        void Logoff(bool clearRememberMe);
     }
 }

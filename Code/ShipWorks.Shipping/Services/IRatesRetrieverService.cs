@@ -1,16 +1,14 @@
 ﻿using System;
-using Interapptive.Shared.ComponentRegistration;
 
-namespace ShipWorks.ApplicationCore
+namespace ShipWorks.Shipping.Services
 {
     /// <summary>
-    /// Service initialization for UI sessions
+    /// Service that retrieves rates when shipments change
     /// </summary>
-    [Service]
-    public interface IInitializeForCurrentUISession : IDisposable
+    public interface IRatesRetrieverService : IDisposable
     {
         /// <summary>
-        /// Initialize for the current session
+        /// Initialize the service for the current session
         /// </summary>
         void InitializeForCurrentSession();
 

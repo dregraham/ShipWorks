@@ -222,10 +222,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ConfigurationDataWrapper>()
                 .As<IConfigurationData>();
 
-            builder.RegisterAssemblyTypes(allAssemblies)
-                .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
-                .AsImplementedInterfaces();
-
             builder.RegisterGeneric(typeof(OrderedCompositeManipulator<,>))
                 .As(typeof(IOrderedCompositeManipulator<,>));
 

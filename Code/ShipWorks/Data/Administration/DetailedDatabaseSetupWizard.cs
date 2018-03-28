@@ -1844,12 +1844,11 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
-                    string username;
-                    string password;
                     long userID = -1;
 
                     // See if we can try to login automatically
-                    if (UserSession.GetSavedUserCredentials(out username, out password))
+                    var (remembered, username, password) = UserSession.GetSavedUserCredentials();
+                    if (remembered)
                     {
                         userID = UserUtility.GetShipWorksUserID(username, password);
                     }

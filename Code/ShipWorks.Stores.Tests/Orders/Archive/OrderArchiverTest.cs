@@ -55,6 +55,13 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             archivingProgress = mock.CreateMock<IProgressReporter>();
             filterProgress = mock.CreateMock<IProgressReporter>();
 
+            var scope = mock.Mock<IConnectionSensitiveScope>();
+            scope.SetupGet(x => x.Acquired).Returns(true);
+
+            mock.Mock<IAsyncMessageHelper>()
+                .Setup(x => x.GetConnectionSensitiveScope(AnyString))
+                .ReturnsAsync(scope.Object);
+
             var progressProvider = mock.FromFactory<IAsyncMessageHelper>()
                 .Mock(x => x.CreateProgressProvider());
 

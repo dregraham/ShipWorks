@@ -437,7 +437,12 @@ namespace ShipWorks
         /// <summary>
         /// Initiate the process of logging on to the system
         /// </summary>
-        private void InitiateLogon()
+        public void InitiateLogon() => InitiateLogon(null);
+
+        /// <summary>
+        /// Initiate the process of logging on to the system
+        /// </summary>
+        public void InitiateLogon(UserEntity user)
         {
             if (!SqlSession.IsConfigured)
             {
@@ -452,7 +457,7 @@ namespace ShipWorks
                 SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
                 sqlChangeTracking.Enable();
 
-                LogonToShipWorks();
+                LogonToShipWorks(user);
 
                 ShipSenseLoader.LoadDataAsync();
             }
@@ -465,7 +470,7 @@ namespace ShipWorks
         /// <summary>
         /// Initiate the process of logging off the system.
         /// </summary>
-        private void InitiateLogoff(bool clearRememberMe)
+        public void InitiateLogoff(bool clearRememberMe)
         {
             // Don't need a scope if we're already in one
             using (ConnectionSensitiveScope scope = (ConnectionSensitiveScope.IsActive ? null : new ConnectionSensitiveScope("log off", this)))
@@ -601,7 +606,7 @@ namespace ShipWorks
         /// Log on to ShipWorks as a ShipWorks user.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LogonToShipWorks()
+        private void LogonToShipWorks(UserEntity logonAsUser)
         {
             UserManager.InitializeForCurrentUser();
 
@@ -610,7 +615,6 @@ namespace ShipWorks
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-
                     IUserService userService = lifetimeScope.Resolve<IUserService>();
                     EnumResult<UserServiceLogonResultType> logonResult;
 
@@ -641,6 +645,11 @@ namespace ShipWorks
                     {
                         MessageHelper.ShowError(this, logonResult.Message);
                         return;
+                    }
+
+                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
+                    {
+                        logonResult = userService.Logon(logonAsUser, true);
                     }
 
                     if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)

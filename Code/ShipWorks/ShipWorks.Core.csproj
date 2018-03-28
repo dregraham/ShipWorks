@@ -948,6 +948,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Archiving\IOrderArchiveDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
@@ -8607,6 +8608,7 @@
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />
+    <Compile Include="Users\IUserLoginWorkflow.cs" />
     <Compile Include="Users\Security\ISecurityContextFactory.cs" />
     <Compile Include="Users\IUserConditionalNotification.cs" />
     <Compile Include="Users\IUserService.cs" />
@@ -8666,6 +8668,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
     <Compile Include="Users\UserServiceLogonResultType.cs" />
@@ -11119,7 +11122,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Archiving\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
