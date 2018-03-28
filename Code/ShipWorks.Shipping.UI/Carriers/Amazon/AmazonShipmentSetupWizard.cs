@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     adapter.SaveAndRefetch(origin);
 
                     // Get the default amazon profile and set its origin to the new origin address
-                    ShippingProfileEntity profile = ShippingProfileManager.GetDefaultProfile(ShipmentTypeCode.Amazon);
+                    ShippingProfileEntity profile = new ShippingProfileManagerWrapper().GetOrCreatePrimaryProfile(shipmentType);
                     profile.OriginID = origin.ShippingOriginID;
                     adapter.SaveAndRefetch(profile);
                 }
