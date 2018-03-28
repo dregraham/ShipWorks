@@ -3,8 +3,10 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Transactions;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -171,7 +173,11 @@ namespace ShipWorks.Data.Connection
 
             log.InfoFormat("About to show connection lost window (InvokeRequired = {0})", Program.MainForm.InvokeRequired.ToString());
 
-            if (Program.ExecutionMode.IsUIDisplayed)
+            // There was an issue where the dialog would immediately see the connection as lost, which would cause this method to be called.
+            // That would recurse until we ran out of window handles and crashed with a Win32 exception. Not showing the dialog if it is already
+            // open should fix the symptom, but not the underlying cause of why the reconnect immediately failed.
+            if (Program.ExecutionMode.IsUIDisplayed &&
+                Application.OpenForms.OfType<ConnectionLostDlg>().None())
             {
                 // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be
                 // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.

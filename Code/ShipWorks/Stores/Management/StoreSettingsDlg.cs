@@ -152,6 +152,32 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
+        /// Checks the store to determine whether or not to display the store connection tab
+        /// </summary>
+        public void StoreHasConnectionString(StoreEntity storeEntity)
+        {
+            if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
+            {
+                downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+                downloadSettingsControl.LoadStore(store);
+                optionControl.Controls.Remove(optionPageOnlineAccount);
+                sectionAutoDownloads.Visible = false;
+
+                manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
+                manualOrderSettingsControl.Location = new Point(32, 45);
+                manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                optionPageSettings.Controls.Add(manualOrderSettingsControl);
+                sectionTitleManualOrders.Location = new Point(15, 15);
+            }
+            else
+            {
+                ConfigureDownloadSettingsControl();
+                ConfigureManualOrderSettingsControl();
+            }
+        }
+
+        /// <summary>
         /// Update the enabled\disabled display of the store
         /// </summary>
         private void UpdateStoreEnabledDisplay()
@@ -286,8 +312,7 @@ namespace ShipWorks.Stores.Management
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
             EnumHelper.BindComboBox<AddressValidationStoreSettingType>(internationalAddressValidationSetting);
 
-            ConfigureDownloadSettingsControl();
-            ConfigureManualOrderSettingsControl();
+            StoreHasConnectionString(store);
 
             // store-specific settings control
             storeSettingsControl = storeType.CreateStoreSettingsControl();

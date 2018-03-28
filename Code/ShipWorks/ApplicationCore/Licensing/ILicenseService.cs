@@ -12,6 +12,13 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ILicenseService
     {
         /// <summary>
+        /// True if Legacy Customer
+        /// </summary>
+        /// <remarks>True if CustomerKey is null or empty</remarks>
+        /// <exception cref="EncryptionException" />
+        bool IsLegacy { get; }
+
+        /// <summary>
         /// Gets all licenses for ShipWorks
         /// </summary>
         /// <returns></returns>

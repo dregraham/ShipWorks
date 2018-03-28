@@ -37,7 +37,7 @@
             // 
             // upgradeButton
             // 
-            this.upgradeButton.Location = new System.Drawing.Point(108, 89);
+            this.upgradeButton.Location = new System.Drawing.Point(327, 31);
             this.upgradeButton.Name = "upgradeButton";
             this.upgradeButton.Size = new System.Drawing.Size(134, 23);
             this.upgradeButton.TabIndex = 1;

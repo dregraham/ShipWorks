@@ -701,7 +701,7 @@ namespace ShipWorks
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.InitialSetup))
+                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.NoStores))
                 {
                     UserSession.Logoff(false);
                     UserSession.Reset();
@@ -2566,7 +2566,7 @@ namespace ShipWorks
         /// </summary>
         private void UpdateDownloadButtonForStores()
         {
-            List<StoreEntity> stores = StoreManager.GetEnabledStores().Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed).ToList();
+            List<StoreEntity> stores = GetDownloadEnabledStores().ToList();
 
             // Only enabled if more than one store
             buttonDownload.Enabled = stores.Count > 0;
@@ -2602,8 +2602,7 @@ namespace ShipWorks
         /// </summary>
         private void OnDownloadOrders(object sender, EventArgs e)
         {
-            // Get the list of stores that we will download for.
-            ICollection<StoreEntity> stores = StoreManager.GetAllStores().Where(s => s.Enabled && ComputerDownloadPolicy.Load(s).IsThisComputerAllowed).ToList();
+            List<StoreEntity> stores = GetDownloadEnabledStores().ToList();
 
             if (stores.Count > 0)
             {
@@ -2623,6 +2622,17 @@ namespace ShipWorks
             {
                 MessageHelper.ShowWarning(this, "There are no ShipWorks stores enabled for downloading.");
             }
+        }
+
+        /// <summary>
+        /// Get the list of stores that have downloading enabled
+        /// </summary>
+        private IEnumerable<StoreEntity> GetDownloadEnabledStores()
+        {
+            // Get the list of stores that we will download for.
+            return StoreManager.GetEnabledStores()
+                .Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed)
+                .Where(x => x.StoreTypeCode != StoreTypeCode.Manual);
         }
 
         /// <summary>

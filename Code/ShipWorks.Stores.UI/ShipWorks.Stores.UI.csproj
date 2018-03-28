@@ -334,6 +334,13 @@
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Manual\Controls\ManualWizardFinishPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Manual\Controls\ManualWizardFinishPageControl.Designer.cs">
+      <DependentUpon>ManualWizardFinishPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Manual\Controls\ManualWizardFinishPageControlFactory.cs" />
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
       <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
     </Compile>
@@ -537,6 +544,11 @@
     <Compile Include="Platforms\Yahoo\YahooStoreModule.cs" />
     <Compile Include="Platforms\Yahoo\YahooOrderNumberValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StoreModule.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +614,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.resx">
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Manual\Controls\ManualWizardFinishPageControl.resx">
+      <DependentUpon>ManualWizardFinishPageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.resx">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
@@ -676,6 +691,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.resx">
       <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
