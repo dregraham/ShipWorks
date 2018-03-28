@@ -466,6 +466,14 @@ namespace ShipWorks.Data.Connection
             return entitySaved;
         }
 
+        private bool ArchiveExceptionHandler(Exception ex)
+        {
+            ex.GetAllExceptions().OfType<SqlException>().Any(x =>
+                x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase));
+
+            return true;
+        }
+
         /// <summary>
         /// Override of the SaveEntity method to wrap exceptions.
         /// </summary>
@@ -479,8 +487,7 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
-                        x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                    if (ArchiveExceptionHandler(ex))
                     {
                         log.Error("This ShipWorks database is in read only mode", ex);
                     }
@@ -508,8 +515,7 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
-                        x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                    if (ArchiveExceptionHandler(ex))
                     {
                         log.Error("This ShipWorks database is in read only mode", ex);
                     }
@@ -624,8 +630,7 @@ namespace ShipWorks.Data.Connection
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
-                    x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                if (ArchiveExceptionHandler(ex))
                 {
                     log.Error("This ShipWorks database is in read only mode", ex);
                 }
@@ -650,8 +655,7 @@ namespace ShipWorks.Data.Connection
             }
             catch (SqlException ex)
             {
-                if (ex.GetAllExceptions().OfType<SqlException>().Any(x =>
-                    x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase)))
+                if (ArchiveExceptionHandler(ex))
                 {
                     log.Error("This ShipWorks database is in read only mode", ex);
                 }
