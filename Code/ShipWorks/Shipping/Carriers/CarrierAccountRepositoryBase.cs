@@ -109,14 +109,14 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Get the primary profile
         /// </summary>
-        protected ShippingProfileEntity GetPrimaryProfile(ShipmentTypeCode shipmentTypeCode)
+        protected IShippingProfileEntity GetPrimaryProfile(ShipmentTypeCode shipmentTypeCode)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ShipmentType shipmentType = lifetimeScope.ResolveKeyed<ShipmentType>(shipmentTypeCode);
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
 
-                return shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+                return shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(shipmentType);
             }
         }
 
