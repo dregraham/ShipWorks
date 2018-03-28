@@ -11,6 +11,9 @@ using System.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -21,7 +24,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly IProfileControlFactory profileControlFactory;
-        private readonly IShippingProfile profile;
+        private IShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IMessenger messenger;
@@ -157,12 +160,15 @@ namespace ShipWorks.Shipping.Profiles
                 if (profileControl != null)
                 {
                     profileControl.CancelChanges();
+
+                    profile.ShippingProfileEntity.ResetDirtyFieldsToDbValues();
+                    profile.Shortcut.ResetDirtyFieldsToDbValues();
                 }
             }
             
             messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
-
+        
         /// <summary>
         /// Load list of available shortcuts to populated the shortcut combo box
         /// </summary>

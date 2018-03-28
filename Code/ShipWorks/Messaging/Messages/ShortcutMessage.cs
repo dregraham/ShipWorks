@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
@@ -14,11 +13,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessage(object sender, IShortcutEntity shortcut)
+        public ShortcutMessage(object sender, IShortcutEntity shortcut, string value)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
             Shortcut = shortcut;
+            Value = value;
+            
+            CreatedDate = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -36,6 +38,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// </summary>
         public object Sender { get; }
 
+        /// <summary>
+        /// The date this message was created
+        /// </summary>
+        public DateTime CreatedDate { get; }
+
+        /// <summary>
+        /// The value that triggered the shortcut
+        /// </summary>
+        public string Value { get; }
+        
         /// <summary>
         /// Checks whether this message applies to the given command
         /// </summary>

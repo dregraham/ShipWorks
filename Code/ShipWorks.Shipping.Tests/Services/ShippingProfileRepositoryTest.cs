@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var result = testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
-            Assert.Equal("An error occured when deleting the profile.", result.Message);
+            Assert.Equal("An error occurred when deleting the profile.", result.Message);
         }
 
         [Fact]
@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var result = testObject.Save(shippingProfile);
 
             Assert.True(result.Failure);
-            Assert.Equal("An error ocurred saving your profile.", result.Message);
+            Assert.Equal("An error occurred saving your profile.", result.Message);
         }
 
         [Fact]
