@@ -37,10 +37,8 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static bool IsReadonlyDatabaseException(this Exception ex)
         {
-            ex.GetAllExceptions().OfType<SqlException>().Any(x =>
-                x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase));
-
-            return true;
+            return ex.GetAllExceptions().OfType<SqlException>().Any(x => 
+            x.State == 254 && x.Message.Contains("This ShipWorks database is in read only mode.", StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
