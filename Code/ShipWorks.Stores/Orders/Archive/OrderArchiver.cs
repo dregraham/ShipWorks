@@ -129,7 +129,12 @@ namespace ShipWorks.Stores.Orders.Archive
             async Task<Unit> Func(DbConnection conn)
             {
                 string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
-                string archiveDbArchiveSql = $"{sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual)}{Environment.NewLine}{sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn))}";
+                string archiveDbArchiveSql = string.Format("{0}{1}{2}{3}{4}", 
+                    sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual), 
+                    Environment.NewLine,
+                    sqlGenerator.DisableAutoProcessingSettingsSql(), 
+                    Environment.NewLine,
+                    sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn)));
 
                 return await ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName))
                     .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", currentDbArchiveSql))

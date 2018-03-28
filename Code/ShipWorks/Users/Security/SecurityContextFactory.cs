@@ -56,6 +56,5 @@ namespace ShipWorks.Users.Security
                 return false;
             }
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.Orders.Archive
     /// <summary>
     /// Order Archive Filter Regeneration
     /// </summary>
+    [Component]
     public class OrderArchiveFilterRegenerator : IOrderArchiveFilterRegenerator
     {
         private readonly IConfigurationData configurationData;

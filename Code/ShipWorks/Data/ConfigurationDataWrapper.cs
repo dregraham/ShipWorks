@@ -1,7 +1,10 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Data.Common;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI;
@@ -61,6 +64,11 @@ namespace ShipWorks.Data
         /// Are we currently in an archive database?
         /// </summary>
         public bool IsArchive(DbConnection connection) => ConfigurationData.IsArchive(connection);
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        public bool IsArchive() => ConfigurationData.IsArchive(SqlSession.Current.OpenConnection());
 
         /// <summary>
         /// Update the configuration entity

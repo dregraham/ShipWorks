@@ -10,7 +10,6 @@ using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;

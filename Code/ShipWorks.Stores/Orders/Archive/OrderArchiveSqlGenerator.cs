@@ -83,10 +83,25 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             return @"
 		        UPDATE [Store] SET AutoDownload = 0
+		        UPDATE [Store] SET DomesticAddressValidationSetting = 3
+		        UPDATE [Store] SET InternationalAddressValidationSetting = 3
+                UPDATE [Store] SET ComputerDownloadPolicy = '<ComputerDownloadPolicy><DefaultToYes>false</DefaultToYes><Computers /></ComputerDownloadPolicy>'
 
 		        UPDATE [Action] SET Enabled = 0
 
 		        UPDATE [ShippingSettings] SET AutoCreateShipments = 0
+		        UPDATE [ShippingSettings] SET ShipSenseEnabled = 0
+
+		        UPDATE [UserSettings] SET SingleScanSettings = 0
+		        UPDATE [UserSettings] SET AutoWeigh = 0
+
+                UPDATE [Configuration] SET CustomerUpdateBilling = 0
+                UPDATE [Configuration] SET CustomerUpdateShipping = 0
+                UPDATE [Configuration] SET CustomerUpdateModifiedBilling = 0
+                UPDATE [Configuration] SET CustomerUpdateModifiedShipping = 0
+                UPDATE [Configuration] SET AllowEbayCombineLocally = 0
+
+                UPDATE [EmailAccount] SET AutoSend = 0
 
 		        DELETE FROM [ActionQueue]
             ";

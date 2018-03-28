@@ -1,4 +1,6 @@
-﻿using ShipWorks.Actions;
+﻿using System;
+using System.Data.Common;
+using ShipWorks.Actions;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -39,5 +41,10 @@ namespace ShipWorks.Data
         /// Are we currently in an archive database?
         /// </summary>
         bool IsArchive(DbConnection connection);
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        bool IsArchive();
     }
 }

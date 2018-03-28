@@ -80,14 +80,6 @@ BEGIN
 		END
 		
 		UPDATE [%destinationDatabaseName%]..[Configuration] SET ArchivalSettingsXml = '%archivalSettingsXml%'
-		
-		UPDATE [%destinationDatabaseName%]..[Store] SET AutoDownload = 0
-
-		UPDATE [%destinationDatabaseName%]..[Action] SET Enabled = 0
-
-		UPDATE [%destinationDatabaseName%]..[ShippingSettings] SET AutoCreateShipments = 0
-
-		DELETE FROM [%destinationDatabaseName%]..[ActionQueue]
 
 	END TRY
 	BEGIN CATCH
