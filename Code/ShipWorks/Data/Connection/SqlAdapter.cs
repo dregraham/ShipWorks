@@ -479,9 +479,7 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    bool checkException = ex.IsReadonlyDatabaseException(log);
-
-                    if (checkException.Equals(true))
+                    if (ex.IsReadonlyDatabaseException(log))
                     {
                         return true;
                     }
@@ -504,9 +502,7 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    bool checkException = ex.IsReadonlyDatabaseException(log);
-
-                    if (checkException.Equals(true))
+                    if (ex.IsReadonlyDatabaseException(log))
                     {
                         return true;
                     }
@@ -616,9 +612,7 @@ namespace ShipWorks.Data.Connection
             }
             catch (ORMQueryExecutionException ex)
             {
-                bool checkException = ex.IsReadonlyDatabaseException(log);
-
-                if (checkException.Equals(true))
+                if (ex.IsReadonlyDatabaseException(log))
                 {
                     return 0;
                 }
@@ -638,9 +632,7 @@ namespace ShipWorks.Data.Connection
             }
             catch (SqlException ex)
             {
-                bool checkException = ex.IsReadonlyDatabaseException(log);
-
-                if (checkException.Equals(true))
+                if (ex.IsReadonlyDatabaseException(log))
                 {
                     return 0;
                 }

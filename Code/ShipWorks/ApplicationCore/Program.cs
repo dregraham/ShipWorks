@@ -374,7 +374,10 @@ namespace ShipWorks
                 return;
             }
 
-            ex.IsReadonlyDatabaseException(log);
+            if (ex.IsReadonlyDatabaseException(log))
+            {
+                return;
+            }
 
             isCrashing = true;
 
