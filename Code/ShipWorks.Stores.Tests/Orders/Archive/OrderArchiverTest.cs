@@ -14,6 +14,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -55,12 +56,8 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             archivingProgress = mock.CreateMock<IProgressReporter>();
             filterProgress = mock.CreateMock<IProgressReporter>();
 
-            var scope = mock.Mock<IConnectionSensitiveScope>();
-            scope.SetupGet(x => x.Acquired).Returns(true);
-
-            mock.Mock<IAsyncMessageHelper>()
-                .Setup(x => x.GetConnectionSensitiveScope(AnyString))
-                .ReturnsAsync(scope.Object);
+            var scope = mock.Mock<IUserLoginWorkflow>();
+            scope.Setup(x => x.Logoff(AnyBool)).Returns(true);
 
             var progressProvider = mock.FromFactory<IAsyncMessageHelper>()
                 .Mock(x => x.CreateProgressProvider());
