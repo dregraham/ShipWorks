@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
@@ -15,7 +13,6 @@ using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
 using ShipWorks.UI.Wizard;
 using Autofac;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -28,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonShipmentType shipmentType;
         private readonly IShippingSettings shippingSettings;
         private readonly IStoreManager storeManager;
+        private readonly IShippingProfileManager shippingProfileManager;
         private ShippingWizardPageFinish shippingWizardPageFinish;
 
         /// <summary>
@@ -41,11 +39,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, IShippingSettings shippingSettings, IStoreManager storeManager) : this()
+        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, 
+            IShippingSettings shippingSettings, 
+            IStoreManager storeManager, 
+            IShippingProfileManager shippingProfileManager) 
+            : this()
         {
             this.shipmentType = shipmentType;
             this.shippingSettings = shippingSettings;
             this.storeManager = storeManager;
+            this.shippingProfileManager = shippingProfileManager;
         }
 
         /// <summary>
@@ -102,16 +105,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     // Save the new ShippingOriginEntity
                     adapter.SaveAndRefetch(origin);
-                    
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
 
-                        // Get the default amazon profile and set its origin to the new origin address
-                        ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
-                        profile.OriginID = origin.ShippingOriginID;
-                        shippingProfileManager.SaveProfile(profile);
-                    }
+                    // Get the default amazon profile and set its origin to the new origin address
+                    ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+                    profile.OriginID = origin.ShippingOriginID;
+                    shippingProfileManager.SaveProfile(profile);
                 }
                 catch (ORMQueryExecutionException ex)
                 {
