@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// UserControl for editing Endicia profiles
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Express1Endicia)]
     [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Endicia)]
     public partial class EndiciaProfileControl : PostalProfileControlBase
     {
