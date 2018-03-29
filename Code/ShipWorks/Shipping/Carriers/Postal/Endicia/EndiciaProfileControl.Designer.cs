@@ -92,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupBoxFrom.Controls.Add(this.endiciaAccount);
             this.groupBoxFrom.Controls.Add(this.stateAccount);
             this.groupBoxFrom.Size = new System.Drawing.Size(411, 82);
-            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.Controls.SetChildIndex(this.stateAccount, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.senderState, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.endiciaAccount, 0);
@@ -111,7 +110,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 94);
             this.groupShipment.Size = new System.Drawing.Size(411, 264);
-            this.groupShipment.TabIndex = 1;
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
@@ -123,6 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // senderState
             // 
             this.senderState.Location = new System.Drawing.Point(9, 47);
+            this.senderState.TabIndex = 2;
             // 
             // labelSender
             // 
@@ -162,16 +161,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.tabPage.Controls.SetChildIndex(this.groupShipment, 0);
             this.tabPage.Controls.SetChildIndex(this.groupBoxFrom, 0);
             // 
-            // returnShipment
-            // 
-            this.returnShipment.TabIndex = 1;
-            // 
             // groupReturns
             // 
             this.groupReturns.Controls.Add(this.scanBasedPaymentState);
             this.groupReturns.Controls.Add(this.scanBasedPayment);
             this.groupReturns.Location = new System.Drawing.Point(8, 923);
             this.groupReturns.Size = new System.Drawing.Size(417, 76);
+            this.groupReturns.TabIndex = 8;
             this.groupReturns.Controls.SetChildIndex(this.returnShipment, 0);
             this.groupReturns.Controls.SetChildIndex(this.scanBasedPayment, 0);
             this.groupReturns.Controls.SetChildIndex(this.scanBasedPaymentState, 0);
@@ -186,10 +182,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.groupExpressMail.Location = new System.Drawing.Point(8, 761);
             this.groupExpressMail.TabIndex = 6;
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.TabIndex = 1;
             // 
             // labelAccount
             // 
@@ -224,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.stateStealth.Location = new System.Drawing.Point(9, 213);
             this.stateStealth.Name = "stateStealth";
             this.stateStealth.Size = new System.Drawing.Size(15, 14);
-            this.stateStealth.TabIndex = 0;
+            this.stateStealth.TabIndex = 13;
             this.stateStealth.UseVisualStyleBackColor = true;
             // 
             // hidePostage
@@ -234,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.hidePostage.Location = new System.Drawing.Point(110, 213);
             this.hidePostage.Name = "hidePostage";
             this.hidePostage.Size = new System.Drawing.Size(89, 17);
-            this.hidePostage.TabIndex = 1;
+            this.hidePostage.TabIndex = 14;
             this.hidePostage.Text = "Hide Postage";
             this.hidePostage.UseVisualStyleBackColor = false;
             // 
@@ -255,7 +247,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.noPostage.Location = new System.Drawing.Point(110, 236);
             this.noPostage.Name = "noPostage";
             this.noPostage.Size = new System.Drawing.Size(214, 17);
-            this.noPostage.TabIndex = 3;
+            this.noPostage.TabIndex = 16;
             this.noPostage.Text = "Generate label that is not postage-paid";
             this.noPostage.UseVisualStyleBackColor = false;
             // 
@@ -275,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.stateNoPostage.Location = new System.Drawing.Point(9, 237);
             this.stateNoPostage.Name = "stateNoPostage";
             this.stateNoPostage.Size = new System.Drawing.Size(15, 14);
-            this.stateNoPostage.TabIndex = 2;
+            this.stateNoPostage.TabIndex = 15;
             this.stateNoPostage.UseVisualStyleBackColor = true;
             // 
             // groupBoxRubberStamps
