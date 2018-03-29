@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             {
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
 
-                linkCommonProfile.Text = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType).Name;
+                linkCommonProfile.Text = shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(shipmentType).Name;
             }
 
             LoadRules();
