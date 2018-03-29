@@ -115,6 +115,9 @@ namespace ShipWorks.Shipping.Services
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
+
+            // Clear the Rates UI after login
+            messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
         }
 
         /// <summary>
