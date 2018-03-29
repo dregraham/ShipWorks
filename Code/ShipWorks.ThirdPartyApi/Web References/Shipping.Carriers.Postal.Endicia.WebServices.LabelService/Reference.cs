@@ -18713,6 +18713,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
                 this.includePostageField = value;
             }
         }
+        
+        /// <remarks/>
+        public string ReplyPostage
+        {
+            get
+            {
+                return this.replyPostageField;
+            }
+            set
+            {
+                this.replyPostageField = value;
+            }
+        }
 
         /// <remarks/>
         public string Stealth
@@ -19272,20 +19285,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
                 this.sortTypeField = value;
             }
         }
-
-        /// <remarks/>
-        public string ReplyPostage
-        {
-            get
-            {
-                return this.replyPostageField;
-            }
-            set
-            {
-                this.replyPostageField = value;
-            }
-        }
-
+        
         /// <remarks/>
         public string ShowReturnAddress
         {
