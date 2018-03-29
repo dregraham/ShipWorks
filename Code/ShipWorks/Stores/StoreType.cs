@@ -76,9 +76,9 @@ namespace ShipWorks.Stores
             store.TypeCode = (int) TypeCode;
             store.CountryCode = "US";
 
-            store.AutoDownload = false;
-            store.AutoDownloadMinutes = Math.Max(10, AutoDownloadMinimumMinutes);
-            store.AutoDownloadOnlyAway = true;
+            store.AutoDownload = true;
+            store.AutoDownloadMinutes = 15;
+            store.AutoDownloadOnlyAway = false;
 
             store.ComputerDownloadPolicy = "";
 
@@ -636,17 +636,6 @@ namespace ShipWorks.Stores
         public virtual bool ShowTaskWizardPage()
         {
             return true;
-        }
-
-        /// <summary>
-        /// Returns messaging to display on the AddStoreWizard finish page
-        /// </summary>
-        public virtual Control CreateWizardFinishPageControl()
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
-            }
         }
     }
 }

@@ -91,29 +91,37 @@ namespace Interapptive.Shared.Utility
         /// Return a friendly formatted date
         /// </summary>
         public static string FormatFriendlyDate(this DateTime dateTime) =>
-            FormatFriendlyDate(dateTime, "d");
+            FormatFriendlyDate(dateTime, "d", DateTime.Now);
 
         /// <summary>
         /// Return a friendly formatted date
         /// </summary>
-        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat)
+        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat) =>
+            FormatFriendlyDate(dateTime, defaultFormat, DateTime.Now);
+
+        /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat, DateTime now)
         {
-            if (dateTime.Date == DateTime.Now.Date)
+            var localDate = dateTime.ToLocalTime().Date;
+
+            if (localDate == now.Date)
             {
                 return "Today";
             }
 
-            if (dateTime.Date == DateTime.Now.AddDays(-1).Date)
+            if (localDate == now.AddDays(-1).Date)
             {
                 return "Yesterday";
             }
 
-            if (dateTime.Date == DateTime.Now.AddDays(1).Date)
+            if (localDate == now.AddDays(1).Date)
             {
                 return "Tomorrow";
             }
 
-            return dateTime.ToString(defaultFormat);
+            return localDate.ToString(defaultFormat);
         }
 
         /// <summary>

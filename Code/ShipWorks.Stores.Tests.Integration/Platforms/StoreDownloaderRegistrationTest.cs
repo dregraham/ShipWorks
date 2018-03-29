@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         [Fact]
         public void EnsureNonSpecificStoreTypesHaveGenericModuleDownloaderRegistered()
         {
-            var storesToSkip = specificDownloaders.Select(x => x.Key).Concat(new[] { StoreTypeCode.Invalid });
+            var storesToSkip = specificDownloaders.Select(x => x.Key).Concat(new[] { StoreTypeCode.Invalid, StoreTypeCode.Manual });
             var storesToTest = Enum.GetValues(typeof(StoreTypeCode)).OfType<StoreTypeCode>().Except(storesToSkip);
 
             foreach (var storeTypeCode in storesToTest)

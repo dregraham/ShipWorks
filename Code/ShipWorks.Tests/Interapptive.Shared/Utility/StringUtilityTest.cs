@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Interapptive.Shared.Utility;
 using Xunit;
 
@@ -36,31 +36,56 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         }
 
         [Fact]
-        public void FormatFriendlyCurrenty_ReturnsCurrencyString_WhenCentsAreWhole()
+        public void FormatFriendlyCurrency_ReturnsCurrencyString_WhenCentsAreWhole()
         {
             string result = StringUtility.FormatFriendlyCurrency(.45M);
             Assert.Equal("$0.45", result);
         }
 
         [Fact]
-        public void FormatFriendlyCurrenty_ReturnsCurrencyStringWithHalf_WhenCentsHaveHalfValue()
+        public void FormatFriendlyCurrency_ReturnsCurrencyStringWithHalf_WhenCentsHaveHalfValue()
         {
             string result = StringUtility.FormatFriendlyCurrency(.455M);
             Assert.Equal("$0.45\u00bd", result);
         }
 
         [Fact]
-        public void FormatFriendlyCurrenty_ReturnsRoundedUpCent_WhenCentsHaveOverHalfCent()
+        public void FormatFriendlyCurrency_ReturnsRoundedUpCent_WhenCentsHaveOverHalfCent()
         {
             string result = StringUtility.FormatFriendlyCurrency(.456M);
             Assert.Equal("$0.46", result);
         }
 
         [Fact]
-        public void FormatFriendlyCurrenty_ReturnsRoundedDownCent_WhenCentsHaveLessHalfCent()
+        public void FormatFriendlyCurrency_ReturnsRoundedDownCent_WhenCentsHaveLessHalfCent()
         {
             string result = StringUtility.FormatFriendlyCurrency(.452M);
             Assert.Equal("$0.45", result);
+        }
+
+        [Fact]
+        public void FormatFriendlyDate_ReturnsToday_WhenDateTimeIsLocal()
+        {
+            var now = DateTime.SpecifyKind(new DateTime(2018, 3, 10, 12, 30, 00), DateTimeKind.Local);
+            var dateTime = DateTime.SpecifyKind(new DateTime(2018, 3, 10, 1, 0, 0), DateTimeKind.Local);
+
+            var result = dateTime.FormatFriendlyDate("d", now);
+
+            Assert.Equal("Today", result);
+        }
+
+        [Theory]
+        [InlineData("2018-03-05T12:00:00", "2018-03-05T12:00:00Z", "Today")]
+        [InlineData("2018-03-06T01:00:00", "2018-03-05T22:00:00-600", "Today")]
+        [InlineData("2018-03-04T22:00:00", "2018-03-05T22:00:00-600", "Yesterday")]
+        public void FormatFriendlyDate_ReturnsFriendlyValue(string dateTimeValue, string nowValue, string expected)
+        {
+            var now = DateTime.SpecifyKind(DateTime.Parse(nowValue), DateTimeKind.Local);
+            var dateTime = DateTime.SpecifyKind(DateTime.Parse(dateTimeValue), DateTimeKind.Unspecified);
+
+            var result = dateTime.FormatFriendlyDate("d", now);
+
+            Assert.Equal(expected, result);
         }
 
         [Theory]

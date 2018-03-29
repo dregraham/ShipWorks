@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         {
             var identifiers = Enum.GetValues(typeof(StoreTypeCode))
                 .OfType<StoreTypeCode>()
-                .Except(new[] { StoreTypeCode.Invalid })
+                .Except(new[] { StoreTypeCode.Invalid, StoreTypeCode.Manual })
                 .Select(x => context.Mock.Container.ResolveKeyed<StoreType>(x, TypedParameter.From<StoreEntity>(null)))
                 .Select(x => new
                 {
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             {
                 var storeTypes = Enum.GetValues(typeof(StoreTypeCode))
                     .OfType<StoreTypeCode>()
-                    .Except(new[] { StoreTypeCode.Invalid })
+                    .Except(new[] { StoreTypeCode.Invalid, StoreTypeCode.Manual })
                     .Select(x => context.Mock.Container.ResolveKeyed<StoreType>(x, TypedParameter.From<StoreEntity>(null)))
                     .Select(x => TestCreateCombinedSearchQuery(sqlAdapter, factory, x))
                     .Where(x => x.Failure)

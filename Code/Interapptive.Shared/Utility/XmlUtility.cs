@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.XmlDiffPatch;
 using log4net;
-using System.Diagnostics;
+using Microsoft.XmlDiffPatch;
 
 namespace Interapptive.Shared.Utility
 {
@@ -63,7 +59,7 @@ namespace Interapptive.Shared.Utility
                 return null;
             }
 
-           StringBuilder outputXml = new StringBuilder(inputXml.Length);
+            StringBuilder outputXml = new StringBuilder(inputXml.Length);
 
             foreach (char inputChar in inputXml)
             {

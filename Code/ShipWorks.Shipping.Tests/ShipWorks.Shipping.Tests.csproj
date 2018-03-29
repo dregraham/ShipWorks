@@ -305,6 +305,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\UPS\UpsShippingProfileApplicationStrategyTest.cs" />
+    <Compile Include="Carriers\UPS\UpsServicePackageTypeSettingTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />

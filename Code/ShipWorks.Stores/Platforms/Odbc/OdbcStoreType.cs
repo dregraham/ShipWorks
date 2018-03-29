@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -27,19 +25,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
-        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory;
         private readonly OdbcStoreEntity odbcStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OdbcStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory,
-            IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory)
+            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory)
             : base(store)
         {
             this.downloadSettingsFactory = downloadSettingsFactory;
-            this.storeWizardFinishPageControlFactory = storeWizardFinishPageControlFactory;
             odbcStore = (OdbcStoreEntity) store;
         }
 
@@ -185,13 +180,5 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the online store's order identifier
         /// </summary>
         public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
-
-        /// <summary>
-        /// Returns messaging to display on the AddStoreWizard finish page
-        /// </summary>
-        public override Control CreateWizardFinishPageControl()
-        {
-            return storeWizardFinishPageControlFactory[StoreTypeCode.Odbc].Create(odbcStore);
-        }
     }
 }

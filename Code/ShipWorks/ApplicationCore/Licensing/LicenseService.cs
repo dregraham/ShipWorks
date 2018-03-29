@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -63,7 +63,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <remarks>True if CustomerKey is null or empty</remarks>
         /// <exception cref="EncryptionException" />
-        private bool IsLegacy
+        public bool IsLegacy
         {
             get
             {

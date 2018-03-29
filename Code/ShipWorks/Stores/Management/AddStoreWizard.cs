@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -48,6 +48,7 @@ namespace ShipWorks.Stores.Management
 
         // The store that is being created
         StoreEntity store;
+        StoreType storeOverride;
 
         // All of the store specific wizard pages currently added.
         List<WizardPage> storePages = new List<WizardPage>();
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Management
         /// Indicates if we show the activation page.
         /// </summary>
         private bool showActivationError = false;
-
+        private bool wasStoreSelectionSkipped;
         private readonly ILicenseService licenseService;
         private readonly Func<IChannelLimitFactory> channelLimitFactory;
 
@@ -271,11 +272,20 @@ namespace ShipWorks.Stores.Management
         public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
+        /// Can the setup be skipped
+        /// </summary>
+        private bool CanSkipStoreSelection =>
+            !licenseService.IsLegacy &&
+            (OpenedFrom == OpenedFromSource.InitialSetup || OpenedFrom == OpenedFromSource.NoStores);
+
+        /// <summary>
         /// Wizard is loading
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
+
+            skipPanel.Visible = CanSkipStoreSelection;
 
             LoadStoreTypes();
 
@@ -347,6 +357,9 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
         {
+            wasStoreSelectionSkipped = false;
+            storeOverride = null;
+
             UpdateStoreConnectionUI();
         }
 
@@ -371,15 +384,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void UpdateStoreConnectionUI()
         {
-            NextEnabled = SelectedStoreType != null || radioStoreSamples.Checked;
-
-            comboStoreType.Enabled = radioStoreConnect.Checked;
-
-            if (radioStoreSamples.Checked)
-            {
-                // Index zero is the choose option
-                comboStoreType.SelectedIndex = 0;
-            }
+            NextEnabled = SelectedStoreType != null;
         }
 
         /// <summary>
@@ -389,6 +394,11 @@ namespace ShipWorks.Stores.Management
         {
             get
             {
+                if (storeOverride != null)
+                {
+                    return storeOverride;
+                }
+
                 if (comboStoreType.SelectedIndex > 0)
                 {
                     ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
@@ -405,30 +415,22 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
-            if (radioStoreSamples.Checked)
+            StoreType storeType = SelectedStoreType;
+
+            if (storeType == null)
             {
-                MessageHelper.ShowError(this, "Not done.");
+                MessageHelper.ShowInformation(this, "Please select the online platform that you use.");
+
                 e.NextPage = CurrentPage;
+                return;
             }
-            else
-            {
-                StoreType storeType = SelectedStoreType;
 
-                if (storeType == null)
-                {
-                    MessageHelper.ShowInformation(this, "Please select the online platform that you use.");
+            // Setup for the selected\licensed storetype
+            SetupForStoreType(storeType);
+            store.License = "";
 
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                // Setup for the selected\licensed storetype
-                SetupForStoreType(storeType);
-                store.License = "";
-
-                // Move to the now newly inserted next page
-                e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
-            }
+            // Move to the now newly inserted next page
+            e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
         }
 
         /// <summary>
@@ -992,23 +994,7 @@ namespace ShipWorks.Stores.Management
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    // Create the default presets
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
-
-                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                    storeFilterRepository.Save(true);
-
-                    AdjustShipmentType();
-
-                    // By default we auto-download every 15 minutes
-                    store.AutoDownload = true;
-                    store.AutoDownloadMinutes = 15;
-                    store.AutoDownloadOnlyAway = false;
-
-                    // Mark that this store is now ready
-                    store.SetupComplete = true;
-                    StoreManager.SaveStore(store, adapter);
+                    SaveStore(adapter);
 
                     adapter.Commit();
                 }
@@ -1033,6 +1019,64 @@ namespace ShipWorks.Stores.Management
             finally
             {
                 FilterLayoutContext.PopScope();
+            }
+        }
+
+        /// <summary>
+        /// Save the store using the given adapter
+        /// </summary>
+        private void SaveStore(SqlAdapter adapter)
+        {
+            // Create the default presets
+            CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
+            CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
+
+            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+            storeFilterRepository.Save(true);
+
+            AdjustShipmentType();
+
+            // Mark that this store is now ready
+            store.SetupComplete = true;
+            StoreManager.SaveStore(store, adapter);
+
+            if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
+            {
+                var origin = new ShippingOriginEntity();
+                origin.InitializeNullsToDefault();
+                origin.Description = store.StoreName;
+
+                new PersonAdapter(store, string.Empty).CopyTo(origin, string.Empty);
+
+                var value = store.StoreName;
+
+                PersonName name = PersonName.Parse(value);
+
+                int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
+                if (name.First.Length > maxFirst)
+                {
+                    name.Middle = name.First.Substring(maxFirst) + name.Middle;
+                    name.First = name.First.Substring(0, maxFirst);
+                }
+
+                int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
+                if (name.Middle.Length > maxMiddle)
+                {
+                    name.Last = name.Middle.Substring(maxMiddle) + name.Last;
+                    name.Middle = name.Middle.Substring(0, maxMiddle);
+                }
+
+                int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
+                if (name.Last.Length > maxLast)
+                {
+                    name.Last = name.Last.Substring(0, maxLast);
+                }
+
+                origin.FirstName = name.First;
+                origin.MiddleName = name.Middle;
+                origin.LastName = name.Last;
+
+                adapter.SaveEntity(origin);
             }
         }
 
@@ -1135,6 +1179,32 @@ namespace ShipWorks.Stores.Management
             BackEnabled = false;
             e.Skip = !showActivationError;
             showActivationError = false;
+        }
+
+        /// <summary>
+        /// Skip the store setup
+        /// </summary>
+        private void OnSkipButtonClick(object sender, EventArgs e)
+        {
+            var manualStoreType = comboStoreType.Items
+                .OfType<ImageComboBoxItem>()
+                .Select(x => x.Value)
+                .OfType<StoreType>()
+                .FirstOrDefault(x => x.TypeCode == StoreTypeCode.Manual);
+
+            if (manualStoreType != null)
+            {
+                storeOverride = manualStoreType;
+                MoveNext();
+                wasStoreSelectionSkipped = true;
+            }
+        }
+        /// <summary>
+        /// Help link for Manual Store
+        /// </summary>
+        private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
         }
     }
 }
