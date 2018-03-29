@@ -153,7 +153,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// End the progress provider
         /// </summary>
-        public void Terminate() => terminatedCompletionSource.SetResult(Unit.Default);
+        public void Terminate() => terminatedCompletionSource.TrySetResult(Unit.Default);
 
         /// <summary>
         /// Called when changes are made to the progress item collection
