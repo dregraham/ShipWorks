@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<OtherShipmentType>());
 
             Assert.Equal("Defaults - Other", profile.Name);
-            Assert.Equal(ShipmentTypeCode.Other, profile.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Other, profile.ShipmentType);
             Assert.True(profile.ShipmentTypePrimary);
         }
 
