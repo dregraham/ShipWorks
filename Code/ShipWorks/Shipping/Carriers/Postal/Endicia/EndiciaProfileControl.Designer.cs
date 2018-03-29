@@ -92,6 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupBoxFrom.Controls.Add(this.endiciaAccount);
             this.groupBoxFrom.Controls.Add(this.stateAccount);
             this.groupBoxFrom.Size = new System.Drawing.Size(411, 82);
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.Controls.SetChildIndex(this.stateAccount, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.senderState, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.endiciaAccount, 0);
@@ -110,6 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 94);
             this.groupShipment.Size = new System.Drawing.Size(411, 264);
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
@@ -134,14 +136,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // kryptonBorderEdge1
             // 
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(1, 54);
+			// 
+            // kryptonBorderEdge
+            // 
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 232);
             // 
             // groupBoxCustoms
             // 
             this.groupBoxCustoms.Location = new System.Drawing.Point(8, 514);
-            // 
-            // kryptonBorderEdge
-            // 
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 232);
+            this.groupBoxCustoms.TabIndex = 4;
             // 
             // tabPage
             // 
@@ -176,11 +179,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // groupInsurance
             // 
             this.groupInsurance.Location = new System.Drawing.Point(8, 427);
+            this.groupInsurance.TabIndex = 3;
             this.groupInsurance.Controls.SetChildIndex(this.insuranceControl, 0);
             // 
             // groupExpressMail
             // 
             this.groupExpressMail.Location = new System.Drawing.Point(8, 761);
+            this.groupExpressMail.TabIndex = 6;
             // 
             // insuranceControl
             // 
@@ -295,7 +300,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupBoxRubberStamps.Location = new System.Drawing.Point(8, 574);
             this.groupBoxRubberStamps.Name = "groupBoxRubberStamps";
             this.groupBoxRubberStamps.Size = new System.Drawing.Size(411, 180);
-            this.groupBoxRubberStamps.TabIndex = 4;
+            this.groupBoxRubberStamps.TabIndex = 5;
             this.groupBoxRubberStamps.TabStop = false;
             this.groupBoxRubberStamps.Text = "Rubber Stamps";
             // 
@@ -462,7 +467,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupParcelSelect.Location = new System.Drawing.Point(8, 822);
             this.groupParcelSelect.Name = "groupParcelSelect";
             this.groupParcelSelect.Size = new System.Drawing.Size(417, 90);
-            this.groupParcelSelect.TabIndex = 10;
+            this.groupParcelSelect.TabIndex = 7;
             this.groupParcelSelect.TabStop = false;
             this.groupParcelSelect.Text = "Parcel Select";
             // 
@@ -558,10 +563,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
             this.groupLabels.Controls.Add(this.requestedLabelFormatState);
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
-            this.groupLabels.Name = "groupLabels";
             this.groupLabels.Location = new System.Drawing.Point(8, 364);
+            this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(411, 58);
-            this.groupLabels.TabIndex = 13;
+            this.groupLabels.TabIndex = 2;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
             // 
