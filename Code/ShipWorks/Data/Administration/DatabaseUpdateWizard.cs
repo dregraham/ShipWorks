@@ -846,12 +846,7 @@ namespace ShipWorks.Data.Administration
                     // Now we can move on
                     e.NextPage = nextPage;
                 }
-                catch (SqlException ex)
-                {
-                    MessageHelper.ShowMessage(this, ex.Message);
-                    return;
-                }
-                catch (DuplicateNameException ex)
+                catch (Exception ex) when (ex is SqlException || ex is DuplicateNameException)
                 {
                     MessageHelper.ShowMessage(this, ex.Message);
                     return;
