@@ -4148,8 +4148,14 @@ namespace ShipWorks
 
             if (e.SecurityDenials > 0)
             {
-                MessageHelper.ShowInformation(this,
-                    string.Format("{0} messages were not sent due to insufficient permissions to send email.", e.SecurityDenials));
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    string message = lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                        "Feature is not available in archives" :
+                        string.Format("{0} messages were not sent due to insufficient permissions to send email.", e.SecurityDenials);
+
+                    lifetimeScope.Resolve<IMessageHelper>().ShowInformation(this, message);
+                }
             }
         }
 

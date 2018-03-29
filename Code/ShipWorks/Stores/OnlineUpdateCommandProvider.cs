@@ -124,7 +124,7 @@ namespace ShipWorks.Stores
 
                     if (permissionWarning)
                     {
-                        string message = "Some orders were not updated due to insufficient permission.";
+                        string message = GetPermissionMessage();
 
                         if (e.Result == MenuCommandResult.Success)
                         {
@@ -138,6 +138,19 @@ namespace ShipWorks.Stores
 
                     callback(sender, finalArgs);
                 }).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get a permission error message
+        /// </summary>
+        private static string GetPermissionMessage()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                    "Feature is not available in archives." :
+                    "Some orders were not updated due to insufficient permission.";
+            }
         }
 
         /// <summary>
