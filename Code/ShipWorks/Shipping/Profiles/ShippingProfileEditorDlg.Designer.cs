@@ -148,6 +148,8 @@
             this.profileName.Name = "profileName";
             this.profileName.Size = new System.Drawing.Size(165, 21);
             this.profileName.TabIndex = 0;
+            this.profileName.Enter += OnEnterBarcode;
+            this.profileName.Leave += OnLeaveBarcode;
             // 
             // ShippingProfileEditorDlg
             // 

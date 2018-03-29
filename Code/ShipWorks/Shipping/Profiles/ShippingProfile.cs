@@ -3,11 +3,12 @@ using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Profiles
 
             Shortcut = new ShortcutEntity
             {
-                Action = (int) KeyboardShortcutCommand.ApplyProfile
+                Action = KeyboardShortcutCommand.ApplyProfile
             };
 
             profileLoader.LoadProfileData(ShippingProfileEntity, false);
@@ -79,7 +80,20 @@ namespace ShipWorks.Shipping.Profiles
         /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
         /// </remarks>
         [Obfuscation(Exclude = true)]
-        public string ShortcutKey => Shortcut?.Hotkey != null ? EnumHelper.GetDescription(Shortcut.Hotkey) : string.Empty;
+        public string ShortcutKey =>
+            Shortcut?.VirtualKey != null && Shortcut.ModifierKeys != null ? 
+                new KeyboardShortcutData(null, Shortcut.VirtualKey.Value, Shortcut.ModifierKeys.Value).ShortcutText :
+                string.Empty;
+
+        /// <summary>
+        /// The barcode to apply the profile
+        /// </summary>
+        public string Barcode => Shortcut.Barcode;
+
+        /// <summary>
+        /// The profiles keyboard shortcut
+        /// </summary>
+        public KeyboardShortcutData KeyboardShortcut => new KeyboardShortcutData(Shortcut);
 
         /// <summary>
         /// The associated ShipmentType description. Blank if global
@@ -145,17 +159,48 @@ namespace ShipWorks.Shipping.Profiles
 
             foreach (ShipmentEntity shipment in shipmentList)
             {
-                if (ShippingProfileEntity.ShipmentType != null &&
-                    shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                if (IsApplicable(shipment.ShipmentTypeCode))
                 {
-                    shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                    if (ShippingProfileEntity.ShipmentType != null &&
+                        shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                    {
+                        shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                    }
+                    strategy.ApplyProfile(ShippingProfileEntity, shipment);
                 }
-                strategy.ApplyProfile(ShippingProfileEntity, shipment);
             }
 
             messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
 
             return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
+        }
+
+        /// <summary>
+        /// Change the shortcut for the profile
+        /// </summary>
+        public void ChangeShortcut(KeyboardShortcutData keyboardShortcut, string barcode)
+        {
+            Shortcut.VirtualKey = keyboardShortcut?.ActionKey;
+            Shortcut.ModifierKeys = keyboardShortcut?.Modifiers;
+            Shortcut.Action = KeyboardShortcutCommand.ApplyProfile;
+
+            Shortcut.Barcode = barcode.Trim();
+        }
+
+        /// <summary>
+        /// Isthe profile applicable to the ShipmentTypeCode
+        /// </summary>
+        public bool IsApplicable(ShipmentTypeCode? shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.None:
+                    return ShippingProfileEntity.ShipmentType != null;
+                case ShipmentTypeCode.Amazon:
+                    return ShippingProfileEntity.ShipmentType == null || ShippingProfileEntity.ShipmentType == ShipmentTypeCode.Amazon;
+                default:
+                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
+            }
         }
     }
 }

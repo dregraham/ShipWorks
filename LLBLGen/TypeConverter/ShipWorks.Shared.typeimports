@@ -9,5 +9,7 @@
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.Hotkey"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>   
+    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>        
     <typeImport typeName="ShipWorks.Shipping.ShipmentTypeCode"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>    
 </typeImports>

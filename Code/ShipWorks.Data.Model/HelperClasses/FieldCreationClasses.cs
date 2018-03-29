@@ -22752,15 +22752,25 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.ShortcutID);}
 		}
+		/// <summary>Creates a new ShortcutEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ShortcutEntity.ModifierKeys field instance</summary>
+		public static EntityField2 ModifierKeys
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.ModifierKeys);}
+		}
+		/// <summary>Creates a new ShortcutEntity.VirtualKey field instance</summary>
+		public static EntityField2 VirtualKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.VirtualKey);}
+		}
 		/// <summary>Creates a new ShortcutEntity.Barcode field instance</summary>
 		public static EntityField2 Barcode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Barcode);}
-		}
-		/// <summary>Creates a new ShortcutEntity.Hotkey field instance</summary>
-		public static EntityField2 Hotkey
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.Hotkey);}
 		}
 		/// <summary>Creates a new ShortcutEntity.Action field instance</summary>
 		public static EntityField2 Action
@@ -22771,11 +22781,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RelatedObjectID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RelatedObjectID);}
-		}
-		/// <summary>Creates a new ShortcutEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShortcutFieldIndex.RowVersion);}
 		}
 	}
 

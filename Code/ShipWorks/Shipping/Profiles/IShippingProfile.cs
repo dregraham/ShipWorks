@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Profiles
@@ -35,14 +37,34 @@ namespace ShipWorks.Shipping.Profiles
         string ShortcutKey { get; }
 
         /// <summary>
+        /// The barcode to apply the profile
+        /// </summary>
+        string Barcode { get; }
+
+        /// <summary>
+        /// The profiles keyboard shortcut
+        /// </summary>
+        KeyboardShortcutData KeyboardShortcut { get; }
+
+        /// <summary>
         /// Apply profile to shipments
         /// </summary>
         IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipment);
 
         /// <summary>
+        /// Is the profile applicable to the given ShipmentTypeCode
+        /// </summary>
+        bool IsApplicable(ShipmentTypeCode? shipmentTypeCode);
+
+        /// <summary>
         /// Apply profile to shipment
         /// </summary>
         ICarrierShipmentAdapter Apply(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Change the shortcut for the profile
+        /// </summary>
+        void ChangeShortcut(KeyboardShortcutData keyboardShortcut, string barcode);
 
         /// <summary>
         /// Change profile to be of specified ShipmentType

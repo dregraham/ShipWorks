@@ -27,7 +27,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        public bool AllowAutoPrint(ScanMessage scanMessage)
+        public bool AllowAutoPrint(SingleScanMessage scanMessage)
         {
             return autoPrintService.AllowAutoPrint(scanMessage);
         }

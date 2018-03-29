@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             if (currentShipment != null && !currentShipment.Processed && profile != null)
             {
-                messages.Send(new ApplyProfileMessage(this, currentShipment.ShipmentID, profile));
+                messages.Send(new ApplyProfileMessage(this, currentShipment.ShipmentID, profile.ShippingProfileID));
             }
         }
 

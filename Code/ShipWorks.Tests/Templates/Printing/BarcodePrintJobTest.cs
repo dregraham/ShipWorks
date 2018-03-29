@@ -5,7 +5,9 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Win32.Native;
 using Moq;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
@@ -85,6 +87,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
             var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
@@ -113,11 +116,12 @@ namespace ShipWorks.Tests.Templates.Printing
             {
                 Barcode = "blah"
             });
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
 
             TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "25"), Times.Once);
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "0"), Times.Once);
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
+            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
         }
 
         [Fact]
@@ -126,8 +130,10 @@ namespace ShipWorks.Tests.Templates.Printing
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.Shortcut).Returns(new ShortcutEntity()
             {
-                Hotkey = Hotkey.CtrlShift1
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
+                VirtualKey = VirtualKeys.N1
             });
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
 
             TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
@@ -140,6 +146,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
@@ -151,6 +158,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
 
@@ -162,6 +170,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
 
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();

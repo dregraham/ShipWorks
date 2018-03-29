@@ -7,6 +7,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,15 +49,15 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         [Fact]
         public void Constructor_ProfilesAssociatedWithCorrectShortcut_FromShortcutManager()
         {
-            var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = Hotkey.CtrlShiftD };
+            var profileEntity = new ShippingProfileEntity { ShippingProfileID = 42 };
+            var shortcut = new ShortcutEntity { RelatedObjectID = 42, VirtualKey = VirtualKeys.D, ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift };
             var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
 
             Assert.Equal(1, testObject.ShippingProfiles.Count());
-            Assert.Equal(EnumHelper.GetDescription(Hotkey.CtrlShiftD), testObject.ShippingProfiles.Single().ShortcutKey);
+            Assert.Equal("Ctrl+Shift+D", testObject.ShippingProfiles.Single().ShortcutKey);
         }
 
         [Fact]
@@ -77,7 +78,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
         public void Constructor_ProfileShortcutKeyIsBlank_WhenAssociatedShortutKeyIsNull()
         {
             var profileEntity = new ShippingProfileEntity() { ShippingProfileID = 42 };
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, ModifierKeys = null, VirtualKey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             
@@ -96,7 +97,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
                 ShipmentType = null
             };
 
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
@@ -115,7 +116,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
                 ShipmentType = ShipmentTypeCode.BestRate
             };
 
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, ModifierKeys = null, VirtualKey = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile> { profile });
@@ -192,6 +193,31 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             testObject.PrintBarcodesCommand.Execute(null);
 
             printJob.Verify(p => p.PreviewAsync(form));
+        }
+
+        [Fact]
+        public void AnyShortcutsToPrint_ReturnsFalseAfterDelete()
+        {
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
+
+            var profileEntity = new ShippingProfileEntity();
+            var anotherProfile = CreateShippingProfile(new ShippingProfileEntity(), new ShortcutEntity());
+            var profileToDelete = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
+            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles())
+                .Returns(new List<ShippingProfile>()
+                {
+                    anotherProfile,
+                    profileToDelete
+                });
+
+            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
+            testObject.SelectedShippingProfile = profileToDelete;
+
+            Assert.True(testObject.PrintBarcodesCommand.CanExecute(null));
+
+            testObject.DeleteCommand.Execute(null);
+            
+            Assert.False(testObject.PrintBarcodesCommand.CanExecute(null));
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)

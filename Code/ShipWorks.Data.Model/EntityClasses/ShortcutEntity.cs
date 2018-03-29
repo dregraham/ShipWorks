@@ -299,15 +299,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShortcutID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Barcode", fieldHashtable);
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Hotkey", fieldHashtable);
+			_fieldsCustomProperties.Add("ModifierKeys", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("VirtualKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Barcode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Action", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RelatedObjectID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -376,6 +378,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShortcutFieldIndex.ShortcutID, value); }
 		}
 
+		/// <summary> The RowVersion property of the Entity Shortcut<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shortcut"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte[] RowVersion
+		{
+			get { return (System.Byte[])GetValue((int)ShortcutFieldIndex.RowVersion, true); }
+
+		}
+
+		/// <summary> The ModifierKeys property of the Entity Shortcut<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shortcut"."ModifierKeys"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers> ModifierKeys
+		{
+			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers>)GetValue((int)ShortcutFieldIndex.ModifierKeys, false); }
+			set	{ SetValue((int)ShortcutFieldIndex.ModifierKeys, value); }
+		}
+
+		/// <summary> The VirtualKey property of the Entity Shortcut<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shortcut"."VirtualKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<Interapptive.Shared.Win32.Native.VirtualKeys> VirtualKey
+		{
+			get { return (Nullable<Interapptive.Shared.Win32.Native.VirtualKeys>)GetValue((int)ShortcutFieldIndex.VirtualKey, false); }
+			set	{ SetValue((int)ShortcutFieldIndex.VirtualKey, value); }
+		}
+
 		/// <summary> The Barcode property of the Entity Shortcut<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Shortcut"."Barcode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
@@ -386,23 +418,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShortcutFieldIndex.Barcode, value); }
 		}
 
-		/// <summary> The Hotkey property of the Entity Shortcut<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Shortcut"."Hotkey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.Hotkey> Hotkey
-		{
-			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.Hotkey>)GetValue((int)ShortcutFieldIndex.Hotkey, false); }
-			set	{ SetValue((int)ShortcutFieldIndex.Hotkey, value); }
-		}
-
 		/// <summary> The Action property of the Entity Shortcut<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Shortcut"."Action"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Action
+		public virtual ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand Action
 		{
-			get { return (System.Int32)GetValue((int)ShortcutFieldIndex.Action, true); }
+			get { return (ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand)GetValue((int)ShortcutFieldIndex.Action, true); }
 			set	{ SetValue((int)ShortcutFieldIndex.Action, value); }
 		}
 
@@ -414,16 +436,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShortcutFieldIndex.RelatedObjectID, false); }
 			set	{ SetValue((int)ShortcutFieldIndex.RelatedObjectID, value); }
-		}
-
-		/// <summary> The RowVersion property of the Entity Shortcut<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Shortcut"."RowVersion"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte[] RowVersion
-		{
-			get { return (System.Byte[])GetValue((int)ShortcutFieldIndex.RowVersion, true); }
-
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

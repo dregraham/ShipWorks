@@ -75,9 +75,9 @@ namespace ShipWorks.Templates.Printing
         private IList<TemplateResult> CreateTemplateResults()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (IShippingProfile profile in shippingProfiles.Where(p => !string.IsNullOrWhiteSpace(p.ShortcutKey) || !string.IsNullOrWhiteSpace(p.Shortcut.Barcode)))
+            foreach (IShippingProfile profile in shippingProfiles.Where(p => !string.IsNullOrWhiteSpace(p.ShortcutKey) || !string.IsNullOrWhiteSpace(p.Barcode)))
             {
-                string barcode = string.IsNullOrWhiteSpace(profile.Shortcut.Barcode) ? string.Empty : $"*{profile.Shortcut.Barcode}*";
+                string barcode = string.IsNullOrWhiteSpace(profile.Barcode) ? string.Empty : $"*{profile.Barcode}*";
                 builder.AppendLine(CreateBarcodeElement(profile.ShippingProfileEntity.Name, barcode.ToUpper(), profile.ShortcutKey));
             }
 
@@ -117,8 +117,8 @@ namespace ShipWorks.Templates.Printing
                     result = "Failed";
                 }
 
-                int barcodeCount = shippingProfiles.Count(p => !string.IsNullOrWhiteSpace(p.Shortcut.Barcode));
-                int hotkeyCount = shippingProfiles.Count(p => p.Shortcut.Hotkey != null);
+                int barcodeCount = shippingProfiles.Count(p => !string.IsNullOrWhiteSpace(p.Barcode));
+                int hotkeyCount = shippingProfiles.Count(p => p.KeyboardShortcut.ActionKey != null && p.KeyboardShortcut.Modifiers != null);
 
                 using (ITrackedEvent telemetryEvent = telemetryEventFunc("Shortcuts.Print"))
                 {
@@ -132,7 +132,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Create the barcode element
         /// </summary>
-        private static string CreateBarcodeElement(string name, string barcode, string hotkey) =>
-            $"<table><tr><td> {name} </td></tr><tr><td class='barcode'>{barcode}</td></tr><tr><td>{hotkey}</td></tr></table>";
+        private static string CreateBarcodeElement(string name, string barcode, string shortcutKey) =>
+            $"<table><tr><td> {name} </td></tr><tr><td class='barcode'>{barcode}</td></tr><tr><td>{shortcutKey}</td></tr></table>";
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,20 +29,24 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock.Mock<IShortcutManager>()
                 .Setup(m => m.GetAvailableHotkeys())
-                .Returns(new List<Hotkey> { Hotkey.CtrlShift0 });
+                .Returns(new List<KeyboardShortcutData>
+                {
+                    new KeyboardShortcutData(null, VirtualKeys.A,
+                        KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift)
+                });
 
             ShortcutEntity shortcut = new ShortcutEntity
             {
-                Hotkey = Hotkey.CtrlShift1
+                VirtualKey = VirtualKeys.B,
+                ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift
             };
-
-
+            
             var testObject = mock.Create<ShippingProfileService>();
-            var result = testObject.GetAvailableHotkeys(CreateShippingProfile(null, shortcut));
+            var result = testObject.GetAvailableHotkeys(CreateShippingProfile(null, shortcut)).ToList();
 
             Assert.Equal(2, result.Count());
-            Assert.Contains(Hotkey.CtrlShift0, result);
-            Assert.Contains(Hotkey.CtrlShift1, result);
+            Assert.Contains(VirtualKeys.A, result.Select(r=>r.ActionKey));
+            Assert.Contains(VirtualKeys.B, result.Select(r => r.ActionKey));
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
@@ -50,7 +55,6 @@ namespace ShipWorks.Shipping.Tests.Services
             shippingProfile.ShippingProfileEntity = profile;
             shippingProfile.Shortcut = shortcut;
             return shippingProfile;
-
         }
 
         [Theory]
@@ -64,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 ShipmentType = ShipmentTypeCode.Amazon
             };
 
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
             mock.Mock<IShippingProfileRepository>().Setup(s => s.GetAll()).Returns(new List<ShippingProfile>() { profile });
@@ -86,7 +90,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 ShipmentType = ShipmentTypeCode.BestRate
             };
 
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
@@ -108,7 +112,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 ShipmentType = ShipmentTypeCode.None
             };
 
-            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, Hotkey = null };
+            var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };
             var profile = CreateShippingProfile(profileEntity, shortcut);
 
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });

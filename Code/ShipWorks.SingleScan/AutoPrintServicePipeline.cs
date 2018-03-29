@@ -30,7 +30,7 @@ namespace ShipWorks.SingleScan
         private const int ShipmentsProcessedMessageTimeoutInMinutes = 5;
 
         private readonly ILog log;
-        private readonly IConnectableObservable<ScanMessage> scanMessages;
+        private readonly IConnectableObservable<SingleScanMessage> scanMessages;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -49,7 +49,7 @@ namespace ShipWorks.SingleScan
             this.schedulerProvider = schedulerProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
 
-            scanMessages = messenger.OfType<ScanMessage>().Publish();
+            scanMessages = messenger.OfType<SingleScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
             this.autoPrintService = autoPrintService;
             log = logFactory(typeof(AutoPrintServicePipeline));

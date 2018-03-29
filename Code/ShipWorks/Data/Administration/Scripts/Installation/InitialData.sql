@@ -282,3 +282,11 @@ VALUES
 ('UPS_PTP_NEXT_DAY_AIR_SAVER', 'UPS Next Day Air Saver'),
 ('UPS_PTP_NEXT_DAY_AIR', 'UPS Next Day Air');
 GO
+
+PRINT N'Add weight HotKey'
+GO
+INSERT INTO Shortcut
+(ModifierKeys, VirtualKey, Barcode, [Action])
+VALUES
+(3, 87, '', 0)
+GO

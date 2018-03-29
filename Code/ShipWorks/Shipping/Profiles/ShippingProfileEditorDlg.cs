@@ -10,6 +10,10 @@ using ShipWorks.Shipping.Settings;
 using System.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -20,7 +24,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly IProfileControlFactory profileControlFactory;
-        private readonly IShippingProfile profile;
+        private IShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IMessenger messenger;
@@ -52,7 +56,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
             profileName.Text = profile.ShippingProfileEntity.Name;
-            barcode.Text = profile.Shortcut.Barcode;
+            barcode.Text = profile.Barcode;
 
             LoadShortcuts();
             LoadProviders();
@@ -124,8 +128,7 @@ namespace ShipWorks.Shipping.Profiles
         private void OnOk(object sender, EventArgs e)
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
-            profile.Shortcut.Hotkey = (Hotkey?) keyboardShortcut.SelectedValue;
-            profile.Shortcut.Barcode = barcode.Text.Trim();
+            profile.ChangeShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData, barcode.Text);
             
             // Have the profile control save itself
             ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
@@ -157,33 +160,38 @@ namespace ShipWorks.Shipping.Profiles
                 if (profileControl != null)
                 {
                     profileControl.CancelChanges();
+
+                    profile.ShippingProfileEntity.ResetDirtyFieldsToDbValues();
+                    profile.Shortcut.ResetDirtyFieldsToDbValues();
                 }
             }
             
             messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
-
+        
         /// <summary>
         /// Load list of available shortcuts to populated the shortcut combo box
         /// </summary>
         private void LoadShortcuts()
         {
-            IEnumerable<Hotkey> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
+            IEnumerable<KeyboardShortcutData> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
             
-            List<KeyValuePair<string, Hotkey?>> dataSource = new List<KeyValuePair<string, Hotkey?>>();
-            dataSource.Add(new KeyValuePair<string, Hotkey?>("None", null));
-            foreach (Hotkey hotkey in availableHotkeys.OrderBy(k => k))
+            List<KeyValuePair<string, KeyboardShortcutData>> dataSource = new List<KeyValuePair<string, KeyboardShortcutData>>();
+            dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>("None", null));
+            foreach (KeyboardShortcutData hotkey in availableHotkeys.OrderBy(k => k.ShortcutText))
             {                
-                dataSource.Add(new KeyValuePair<string, Hotkey?>(EnumHelper.GetDescription(hotkey), hotkey));
+                dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>(hotkey.ShortcutText, hotkey));
             }
 
             keyboardShortcut.DisplayMember = "Key";
             keyboardShortcut.ValueMember = "Value";
             keyboardShortcut.DataSource = dataSource;
 
-            if (profile?.Shortcut?.Hotkey != null)
+            KeyboardShortcutData profilesKeyboardShortcut = profile.KeyboardShortcut;
+            if (profilesKeyboardShortcut.ActionKey != null && profilesKeyboardShortcut.Modifiers != null)
             {
-                keyboardShortcut.SelectedValue = profile.Shortcut.Hotkey;
+                KeyboardShortcutData selectedValue = availableHotkeys.First(a => a.Modifiers == profilesKeyboardShortcut.Modifiers && a.ActionKey == profilesKeyboardShortcut.ActionKey);
+                keyboardShortcut.SelectedValue = selectedValue;
             }
         }
 

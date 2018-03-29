@@ -67,7 +67,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         {
             DisplayText = displayText;
             ContinueText = continueText;
-            barcodeAcceptanceMessageSubscription = messenger.OfType<ScanMessage>()
+            barcodeAcceptanceMessageSubscription = messenger.OfType<SingleScanMessage>()
                 .Where(x => x.ScannedText == barcodeAcceptanceText)
                 .Subscribe(x => Accept());
         }

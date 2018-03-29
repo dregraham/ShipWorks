@@ -955,12 +955,9 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\IKeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\IShortcutManager.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutManager.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Net\IJsonRequest.cs" />
@@ -1074,10 +1071,12 @@
     <Compile Include="Filters\Search\SingleScanSearchCondition.cs" />
     <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Messaging\Messages\KeyboardShortcutMessage.cs" />
+    <Compile Include="Messaging\Messages\ShortcutMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\DisableSingleScanInputFilterMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\EnableSingleScanInputFilterMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\ScanMessage.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\ScanMessageBroker.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\SingleScanMessage.cs" />
     <Compile Include="Messaging\Messages\Filters\SingleScanFilterUpdateCompleteMessage.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />

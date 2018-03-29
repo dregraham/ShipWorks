@@ -83,6 +83,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Population;
@@ -142,6 +143,8 @@ namespace ShipWorks
         readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
 
+        private IMessageFilter keyboardShortcutFilter;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -162,6 +165,8 @@ namespace ShipWorks
             // Persist size\position of the window
             WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
+
+            keyboardShortcutFilter = IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>();
 
             InitializeCustomEnablerComponents();
         }
@@ -285,8 +290,6 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
-
-            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
@@ -477,6 +480,8 @@ namespace ShipWorks
 
                 UserSession.Logoff(clearRememberMe);
             }
+
+            Application.RemoveMessageFilter(keyboardShortcutFilter);
 
             // Can't do anything when logged off
             ShowBlankUI();
@@ -781,6 +786,7 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+            Application.AddMessageFilter(keyboardShortcutFilter);
         }
 
         /// <summary>
@@ -932,6 +938,7 @@ namespace ShipWorks
             {
                 return values.Union(SqlServerInfo.Fetch())
                     .Union(ShippingSettings.GetTelemetryData())
+                    .Union(ShippingProfileManager.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
             catch (Exception ex)
