@@ -376,7 +376,7 @@ namespace ShipWorks.Users
                 {
                     string password = SecureText.Decrypt(XPathUtility.Evaluate(xpath, "//Password", ""), username);
 
-                    return (false, username, password);
+                    return (true, username, password);
                 }
                 else
                 {
