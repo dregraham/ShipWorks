@@ -614,7 +614,7 @@ namespace ShipWorks.Data.Connection
             {
                 if (ex.IsReadonlyDatabaseException(log))
                 {
-                    return 0;
+                    return 1;
                 }
                 TranslateException(ex);
                 throw;
@@ -634,7 +634,7 @@ namespace ShipWorks.Data.Connection
             {
                 if (ex.IsReadonlyDatabaseException(log))
                 {
-                    return 0;
+                    return 1;
                 }
                 TranslateException(ex);
                 throw;
