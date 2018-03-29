@@ -26,6 +26,6 @@ namespace ShipWorks.Users
         /// <remarks>
         /// This method goes through MainForm so that we get the full logoff flow
         /// </remarks>
-        void Logoff(bool clearRememberMe);
+        bool Logoff(bool clearRememberMe);
     }
 }

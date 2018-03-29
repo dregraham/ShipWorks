@@ -470,14 +470,14 @@ namespace ShipWorks
         /// <summary>
         /// Initiate the process of logging off the system.
         /// </summary>
-        public void InitiateLogoff(bool clearRememberMe)
+        public bool InitiateLogoff(bool clearRememberMe)
         {
             // Don't need a scope if we're already in one
             using (ConnectionSensitiveScope scope = (ConnectionSensitiveScope.IsActive ? null : new ConnectionSensitiveScope("log off", this)))
             {
                 if (scope != null && !scope.Acquired)
                 {
-                    return;
+                    return false;
                 }
 
                 SaveCurrentUserSettings();
@@ -487,6 +487,8 @@ namespace ShipWorks
 
             // Can't do anything when logged off
             ShowBlankUI();
+
+            return true;
         }
 
         /// <summary>

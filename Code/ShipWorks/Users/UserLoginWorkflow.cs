@@ -38,6 +38,6 @@ namespace ShipWorks.Users
         /// <remarks>
         /// This method goes through MainForm so that we get the full logoff flow
         /// </remarks>
-        public void Logoff(bool clearRememberMe) => Program.MainForm.InitiateLogoff(clearRememberMe);
+        public bool Logoff(bool clearRememberMe) => Program.MainForm.InitiateLogoff(clearRememberMe);
     }
 }

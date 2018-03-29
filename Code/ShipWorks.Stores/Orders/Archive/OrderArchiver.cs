@@ -63,7 +63,10 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
-            userLoginWorkflow.Logoff(clearRememberMe: false);
+            if (!userLoginWorkflow.Logoff(clearRememberMe: false))
+            {
+                return Unit.Default;
+            }
 
             IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
 
@@ -129,10 +132,10 @@ namespace ShipWorks.Stores.Orders.Archive
             async Task<Unit> Func(DbConnection conn)
             {
                 string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
-                string archiveDbArchiveSql = string.Format("{0}{1}{2}{3}{4}", 
-                    sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual), 
+                string archiveDbArchiveSql = string.Format("{0}{1}{2}{3}{4}",
+                    sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual),
                     Environment.NewLine,
-                    sqlGenerator.DisableAutoProcessingSettingsSql(), 
+                    sqlGenerator.DisableAutoProcessingSettingsSql(),
                     Environment.NewLine,
                     sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn)));
 
