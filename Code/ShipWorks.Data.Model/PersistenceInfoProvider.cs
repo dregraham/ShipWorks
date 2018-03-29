@@ -1043,7 +1043,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiUserName", "PayPalApiUserName", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiPassword", "PayPalApiPassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiSignature", "PayPalApiSignature", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, "VarBinary", 2048, 0, 0, false, "", null, typeof(System.Byte[]), 12);
+			this.AddElementFieldMapping("EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, "VarBinary", 4096, 0, 0, false, "", null, typeof(System.Byte[]), 12);
 			this.AddElementFieldMapping("EbayStoreEntity", "DomesticShippingService", "DomesticShippingService", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("EbayStoreEntity", "InternationalShippingService", "InternationalShippingService", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("EbayStoreEntity", "FeedbackUpdatedThrough", "FeedbackUpdatedThrough", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
@@ -2362,7 +2362,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "RollupItemSKU", "RollupItemSKU", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 62);
 			this.AddElementFieldMapping("OrderEntity", "RollupItemLocation", "RollupItemLocation", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 63);
 			this.AddElementFieldMapping("OrderEntity", "RollupItemQuantity", "RollupItemQuantity", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 64);
-			this.AddElementFieldMapping("OrderEntity", "RollupItemTotalWeight", "RollupItemTotalWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 65);
+			this.AddElementFieldMapping("OrderEntity", "RollupItemTotalWeight", "RollupItemTotalWeight", false, "Decimal", 0, 29, 9, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.DoubleDecimalConverter(), typeof(System.Decimal), 65);
 			this.AddElementFieldMapping("OrderEntity", "RollupNoteCount", "RollupNoteCount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 66);
 			this.AddElementFieldMapping("OrderEntity", "BillNameParseStatus", "BillNameParseStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 67);
 			this.AddElementFieldMapping("OrderEntity", "BillUnparsedName", "BillUnparsedName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 68);
@@ -2404,8 +2404,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "Thumbnail", "Thumbnail", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
 			this.AddElementFieldMapping("OrderItemEntity", "UnitPrice", "UnitPrice", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
 			this.AddElementFieldMapping("OrderItemEntity", "UnitCost", "UnitCost", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 13);
-			this.AddElementFieldMapping("OrderItemEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 14);
-			this.AddElementFieldMapping("OrderItemEntity", "Quantity", "Quantity", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 15);
+			this.AddElementFieldMapping("OrderItemEntity", "Weight", "Weight", false, "Decimal", 0, 29, 9, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.DoubleDecimalConverter(), typeof(System.Decimal), 14);
+			this.AddElementFieldMapping("OrderItemEntity", "Quantity", "Quantity", false, "Decimal", 0, 29, 9, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.DoubleDecimalConverter(), typeof(System.Decimal), 15);
 			this.AddElementFieldMapping("OrderItemEntity", "LocalStatus", "LocalStatus", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("OrderItemEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
@@ -2543,7 +2543,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiUserName", "ApiUserName", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiPassword", "ApiPassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("PayPalStoreEntity", "ApiSignature", "ApiSignature", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("PayPalStoreEntity", "ApiCertificate", "ApiCertificate", true, "VarBinary", 2048, 0, 0, false, "", null, typeof(System.Byte[]), 5);
+			this.AddElementFieldMapping("PayPalStoreEntity", "ApiCertificate", "ApiCertificate", true, "VarBinary", 4096, 0, 0, false, "", null, typeof(System.Byte[]), 5);
 			this.AddElementFieldMapping("PayPalStoreEntity", "LastTransactionDate", "LastTransactionDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
 			this.AddElementFieldMapping("PayPalStoreEntity", "LastValidTransactionDate", "LastValidTransactionDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 		}
@@ -2816,7 +2816,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipmentType", "ShipmentType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("ShipmentEntity", "ContentWeight", "ContentWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("ShipmentEntity", "TotalWeight", "TotalWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("ShipmentEntity", "TotalWeight", "TotalWeight", false, "Decimal", 0, 29, 9, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.DoubleDecimalConverter(), typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("ShipmentEntity", "Processed", "Processed", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 			this.AddElementFieldMapping("ShipmentEntity", "ProcessedDate", "ProcessedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 			this.AddElementFieldMapping("ShipmentEntity", "ProcessedUserID", "ProcessedUserID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 8);

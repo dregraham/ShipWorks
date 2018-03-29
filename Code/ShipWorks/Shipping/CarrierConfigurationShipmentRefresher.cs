@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping
                 .Except(shipmentsProcessing, x => x.ShipmentID)
                 .Where(s => !s.Processed && !errorManager.ShipmentHasError(s.ShipmentID));
 
-            int? requestedLabelFormat = shippingProfileManager.GetDefaultProfile(message.ShipmentTypeCode).RequestedLabelFormat;
+            int? requestedLabelFormat = shippingProfileManager.GetDefaultProfile(message.ShipmentTypeCode)?.RequestedLabelFormat;
             if (!requestedLabelFormat.HasValue)
             {
                 return;

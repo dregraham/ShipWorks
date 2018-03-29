@@ -65,101 +65,47 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// UpsServiceType for this UpsServicePackageTypeSetting
         /// </summary>
-        public UpsServiceType ServiceType
-        {
-            get
-            {
-                return serviceType;
-            }
-        }
+        public UpsServiceType ServiceType => serviceType;
 
         /// <summary>
         /// UpsPackagingType for this UpsServicePackageTypeSetting
         /// </summary>
-        public UpsPackagingType PackageType
-        {
-            get
-            {
-                return packageType;
-            }
-        }
+        public UpsPackagingType PackageType => packageType;
 
         /// <summary>
         /// WeightUnitOfMeasure for this UpsServicePackageTypeSetting weights
         /// </summary>
-        public WeightUnitOfMeasure WeightUnitOfMeasure
-        {
-            get
-            {
-                return weightUnitOfMeasure;
-            }
-        }
+        public WeightUnitOfMeasure WeightUnitOfMeasure => weightUnitOfMeasure;
 
         /// <summary>
         /// Minimum weight allowed for this UpsServicePackageTypeSetting weights
         /// </summary>
-        public float MinimumWeight
-        {
-            get
-            {
-                return minWeight;
-            }
-        }
+        public float MinimumWeight => minWeight;
 
         /// <summary>
         /// Maximum weight allowed for this UpsServicePackageTypeSetting weights
         /// </summary>
-        public float MaximumWeight
-        {
-            get
-            {
-                return maxWeight;
-            }
-        }
+        public float MaximumWeight => maxWeight;
 
         /// <summary>
         /// Minimum number of packages on a single shipment allowed for this UpsServicePackageTypeSetting weights
         /// </summary>
-        public float MaximumNumberOfPackages
-        {
-            get
-            {
-                return maxPackages;
-            }
-        }
+        public float MaximumNumberOfPackages => maxPackages;
 
         /// <summary>
         /// Bool that represents whether Declared Value is allowed to be set.  For example, MI does not allow it.
         /// </summary>
-        public bool DeclaredValueAllowed
-        {
-            get
-            {
-                return declaredValueAllowed;
-            }
-        }
+        public bool DeclaredValueAllowed => declaredValueAllowed;
 
         /// <summary>
         /// Bool that represents whether dry ice is allowed.  For example, Ground does not allow it.
         /// </summary>
-        public bool DryIceAllowed
-        {
-            get
-            {
-                return dryIceAllowed;
-            }
-        }
+        public bool DryIceAllowed => dryIceAllowed;
 
         /// <summary>
         /// Bool that represents whether verbal confirmation is allowed.  For example, Ground does not allow it.
         /// </summary>
-        public bool VerbalConfirmationAllowed
-        {
-            get
-            {
-                return verbalConfirmationAllowed;
-            }
-        }
+        public bool VerbalConfirmationAllowed => verbalConfirmationAllowed;
 
         /// <summary>
         /// Method to validate a shipment against all defined UpsServicePackageTypeSetting entries
@@ -430,6 +376,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, true));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
@@ -445,6 +393,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -462,6 +412,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
@@ -478,6 +430,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.Ups2DayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.Ups2DayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
@@ -493,6 +447,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.Ups2DayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -522,7 +478,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -534,7 +490,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -546,7 +502,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -558,12 +514,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpedited, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsExpedited, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsExpedited, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpedited, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsExpedited, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
 
             // UpsCAWorldWideExpressSaver
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -571,12 +526,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
 
             // UpsCaWorldWideExpressPlus
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -584,12 +538,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
 
             // UpsCaWorldWideExpress
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
@@ -597,12 +550,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 0.5f, 1, false, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
                 UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
 
             return localServicePackageSettings;
         }
@@ -614,9 +566,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <value>
         /// The service package validation settings.
         /// </value>
-        public static List<UpsServicePackageTypeSetting> ServicePackageValidationSettings
-        {
-            get { return servicePackageSettings.Value; }
-        }
+        public static List<UpsServicePackageTypeSetting> ServicePackageValidationSettings => servicePackageSettings.Value;
     }
 }
