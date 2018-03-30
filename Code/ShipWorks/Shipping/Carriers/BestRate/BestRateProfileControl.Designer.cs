@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(439, 500);
-            this.tabControl.TabIndex = 1;
+            this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
             // 
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.groupBoxFrom.Location = new System.Drawing.Point(3, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
             this.groupBoxFrom.Size = new System.Drawing.Size(419, 51);
-            this.groupBoxFrom.TabIndex = 12;
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
             // 
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.origin.Name = "origin";
             this.origin.PromptText = "(Multiple Values)";
             this.origin.Size = new System.Drawing.Size(206, 21);
-            this.origin.TabIndex = 3;
+            this.origin.TabIndex = 1;
             // 
             // originState
             // 
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.originState.Location = new System.Drawing.Point(11, 21);
             this.originState.Name = "originState";
             this.originState.Size = new System.Drawing.Size(15, 14);
-            this.originState.TabIndex = 2;
+            this.originState.TabIndex = 0;
             this.originState.Tag = "";
             this.originState.UseVisualStyleBackColor = true;
             // 
@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.groupInsurance.Location = new System.Drawing.Point(3, 235);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(419, 82);
-            this.groupInsurance.TabIndex = 11;
+            this.groupInsurance.TabIndex = 2;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.insuranceControl.Location = new System.Drawing.Point(42, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.groupShipment.Location = new System.Drawing.Point(3, 67);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(419, 158);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.transitTime.Name = "transitTime";
             this.transitTime.PromptText = "(Multiple Values)";
             this.transitTime.Size = new System.Drawing.Size(121, 21);
-            this.transitTime.TabIndex = 75;
+            this.transitTime.TabIndex = 1;
             // 
             // transitTimeState
             // 
@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.transitTimeState.Location = new System.Drawing.Point(11, 21);
             this.transitTimeState.Name = "transitTimeState";
             this.transitTimeState.Size = new System.Drawing.Size(15, 14);
-            this.transitTimeState.TabIndex = 74;
+            this.transitTimeState.TabIndex = 0;
             this.transitTimeState.Tag = "";
             this.transitTimeState.UseVisualStyleBackColor = true;
             // 
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsState.Location = new System.Drawing.Point(11, 77);
             this.dimensionsState.Name = "dimensionsState";
             this.dimensionsState.Size = new System.Drawing.Size(15, 14);
-            this.dimensionsState.TabIndex = 73;
+            this.dimensionsState.TabIndex = 4;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
             // 
@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsControl.Location = new System.Drawing.Point(125, 69);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 72;
+            this.dimensionsControl.TabIndex = 5;
             // 
             // labelDimensions
             // 
@@ -275,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weightState.Location = new System.Drawing.Point(11, 49);
             this.weightState.Name = "weightState";
             this.weightState.Size = new System.Drawing.Size(15, 14);
-            this.weightState.TabIndex = 70;
+            this.weightState.TabIndex = 2;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
             // 
@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(269, 24);
-            this.weight.TabIndex = 68;
+            this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
             // 
             // labelWeight

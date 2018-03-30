@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void InitializeComponent()
         {
             this.unit = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.quantity = new DecimalTextBox();
+            this.quantity = new ShipWorks.UI.Controls.DecimalTextBox();
             this.SuspendLayout();
             // 
             // unit
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.unit.Name = "unit";
             this.unit.PromptText = "(Multiple Values)";
             this.unit.Size = new System.Drawing.Size(76, 21);
-            this.unit.TabIndex = 107;
+            this.unit.TabIndex = 1;
             // 
             // quantity
             // 
@@ -51,8 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.quantity.Location = new System.Drawing.Point(0, 0);
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(89, 21);
-            this.quantity.TabIndex = 106;
-
+            this.quantity.TabIndex = 0;
             // 
             // FedExProfilePackageHazardousQuantityControl
             // 
