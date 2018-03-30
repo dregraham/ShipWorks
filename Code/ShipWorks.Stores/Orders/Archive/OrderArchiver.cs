@@ -68,8 +68,8 @@ namespace ShipWorks.Stores.Orders.Archive
                     var (totalOrderCount, ordersToPurgeCount) = await orderArchiveDataAccess.GetOrderCountsForTelemetry(cutoffDate);
 
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(_ => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, true),
-                            _ => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, false));
+                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result))
+                        .Map(_ => Unit.Default);
                 });
         }
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        public async Task<Unit> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
+        public async Task<bool> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
         {
             UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return Unit.Default;
+                        return progressProvider.HasErrors;
                     }
                 }
             }
