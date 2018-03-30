@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 
@@ -162,15 +163,20 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the total space used by the database
         /// </summary>
-        private static long GetDatabaseSpaceUsed()
+        public static long GetDatabaseSpaceUsed(string databaseName = "")
         {
+            if (databaseName.IsNullOrWhiteSpace())
+            {
+                databaseName = SqlSession.Current.Configuration.DatabaseName;
+            }
+
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                string sql = @"IF OBJECT_ID('tempdb..#RowCountsAndSizes') IS NOT NULL
+                string sql = $@"IF OBJECT_ID('tempdb..#RowCountsAndSizes') IS NOT NULL
                                 DROP TABLE #RowCountsAndSizes
 
                               CREATE TABLE #RowCountsAndSizes (TableName NVARCHAR(128), [rows] CHAR(11), [reserved] VARCHAR(18), [data] VARCHAR(18), [index_size] VARCHAR(18), [unused] VARCHAR(18))
-                              EXEC       sp_MSForEachTable 'INSERT INTO #RowCountsAndSizes EXEC sp_spaceused ''?'' '
+                              EXEC       sp_MSForEachTable 'INSERT INTO #RowCountsAndSizes EXEC {databaseName}..sp_spaceused ''?'' '
                               select sum(CONVERT(bigint,left(reserved,len(reserved)-3))) from #RowCountsAndSizes";
 
                 long size = (long) DbCommandProvider.ExecuteScalar(con, sql);
