@@ -515,7 +515,12 @@ namespace ShipWorks.Shipping
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
                 
                 // First apply the base profile
-                IShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this);
+                ShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfile(this);
+                if (primaryProfile.IsNew)
+                {
+                    shippingProfileManager.SaveProfile(primaryProfile);
+                }
+
                 IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
                 shippingProfile.Apply(shipment);
 
