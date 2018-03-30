@@ -9,6 +9,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Users.Security
 {
@@ -79,7 +80,7 @@ namespace ShipWorks.Users.Security
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
                         string permissionMessage = lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
-                            "Feature is not available in archives" :
+                            ArchiveConstants.InvalidActionInArchiveMessage :
                             string.Format("Some {0} were not deleted due to insufficient permission.", name.ToLowerInvariant());
 
                         lifetimeScope.Resolve<IMessageHelper>().ShowInformation(owner, permissionMessage);

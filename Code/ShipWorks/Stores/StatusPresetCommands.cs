@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -223,7 +224,7 @@ namespace ShipWorks.Stores
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 return lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
-                    "Feature is not available in archives." :
+                    ArchiveConstants.InvalidActionInArchiveMessage :
                     "The status of some orders were not set due to insufficient permission.";
             }
         }

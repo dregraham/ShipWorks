@@ -8,6 +8,7 @@ using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Services
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x)))
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, "Rates are not retrieved in archives.")))
+                .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, ArchiveConstants.RatesNotRetrievedInArchiveMessage)))
                 .Subscribe();
 
             // Clear the Rates UI after login

@@ -5,6 +5,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Users.Security
 {
@@ -84,7 +85,7 @@ namespace ShipWorks.Users.Security
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 return lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
-                    "Feature is not available in archives." :
+                    ArchiveConstants.InvalidActionInArchiveMessage :
                     permissionMessage;
             }
         }
