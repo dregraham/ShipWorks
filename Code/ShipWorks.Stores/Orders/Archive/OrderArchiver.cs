@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors;
+                        return !progressProvider.HasErrors;
                     }
                 }
             }
