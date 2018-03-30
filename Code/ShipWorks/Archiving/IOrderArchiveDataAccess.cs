@@ -56,5 +56,10 @@ namespace ShipWorks.Archiving
         /// Disable auto processing settings in archive databases.  (Auto download, auto create shipments, etc...)
         /// </summary>
         void DisableAutoProcessingSettings(DbConnection conn);
+
+        /// <summary>
+        /// Get order counts for telemetry
+        /// </summary>
+        Task<(long totalOrders, long purgedOrders)> GetOrderCountsForTelemetry(DateTime cutoffDate);
     }
 }

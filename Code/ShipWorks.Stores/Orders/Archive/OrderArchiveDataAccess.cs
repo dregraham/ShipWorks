@@ -32,12 +32,17 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IOrderArchiveSqlGenerator orderArchiveSqlGenerator;
         private readonly int commandTimeout = int.MaxValue;
         private bool isRestore = false;
+        readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderArchiveDataAccess(ISqlAdapterFactory sqlAdapterFactory, IOrderArchiveSqlGenerator orderArchiveSqlGenerator)
+        public OrderArchiveDataAccess(
+            ISqlAdapterFactory sqlAdapterFactory,
+            IOrderArchiveSqlGenerator orderArchiveSqlGenerator,
+            IDateTimeProvider dateTimeProvider)
         {
+            this.dateTimeProvider = dateTimeProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderArchiveSqlGenerator = orderArchiveSqlGenerator;
         }
@@ -254,5 +259,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql());
             }
         }
+
+        /// <summary>
+        /// Get order counts for telemetry
+        /// </summary>
+        public Task<(long totalOrders, long purgedOrders)> GetOrderCountsForTelemetry(DateTime cutoffDate) =>
+            GetCountOfOrdersToArchive(dateTimeProvider.Now.AddDays(1))
+                .Bind(totalOrders => GetCountOfOrdersToArchive(cutoffDate).Map(purgedOrders => (totalOrders, purgedOrders)));
     }
 }

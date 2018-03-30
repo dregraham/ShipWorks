@@ -77,11 +77,11 @@ namespace ShipWorks.Data
             {
                 return XDocument.Parse(configurationEntity.ArchivalSettingsXml)?.Root?.HasElements ?? false;
             }
-            catch (XmlException ex)
+            catch (XmlException)
             {
                 return false;
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 return false;
             }
