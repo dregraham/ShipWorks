@@ -23,6 +23,7 @@
     <None Remove="obj\**" />
   </ItemGroup>
  <ItemGroup>
+    <None Remove="Platforms\Manual\ManualStoreTypeTest.cs" />
 <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
   </ItemGroup>
   <ItemGroup>

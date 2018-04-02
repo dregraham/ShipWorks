@@ -32,9 +32,9 @@
             this.delete = new System.Windows.Forms.ToolStripButton();
             this.labelPrint = new System.Windows.Forms.Label();
             this.labelShipment = new System.Windows.Forms.Label();
+            this.linkAlwaysOption = new ShipWorks.UI.Controls.LinkControl();
             this.templateCombo = new ShipWorks.Templates.Controls.TemplateComboBox();
             this.filterCombo = new ShipWorks.Filters.Controls.FilterComboBox();
-            this.linkAlwaysOption = new ShipWorks.UI.Controls.LinkControl();
             this.toolStripDelete.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +47,7 @@
             this.toolStripDelete.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripDelete.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.delete});
-            this.toolStripDelete.Location = new System.Drawing.Point(2, 1);
+            this.toolStripDelete.Location = new System.Drawing.Point(0, 1);
             this.toolStripDelete.Name = "toolStripDelete";
             this.toolStripDelete.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripDelete.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -68,7 +68,7 @@
             // labelPrint
             // 
             this.labelPrint.AutoSize = true;
-            this.labelPrint.Location = new System.Drawing.Point(356, 6);
+            this.labelPrint.Location = new System.Drawing.Point(354, 6);
             this.labelPrint.Name = "labelPrint";
             this.labelPrint.Size = new System.Drawing.Size(52, 13);
             this.labelPrint.TabIndex = 3;
@@ -77,33 +77,11 @@
             // labelShipment
             // 
             this.labelShipment.AutoSize = true;
-            this.labelShipment.Location = new System.Drawing.Point(28, 6);
+            this.labelShipment.Location = new System.Drawing.Point(26, 6);
             this.labelShipment.Name = "labelShipment";
             this.labelShipment.Size = new System.Drawing.Size(101, 13);
             this.labelShipment.TabIndex = 1;
             this.labelShipment.Text = "If the shipment is in";
-            // 
-            // templateCombo
-            // 
-            this.templateCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.templateCombo.FormattingEnabled = true;
-            this.templateCombo.Location = new System.Drawing.Point(409, 3);
-            this.templateCombo.Name = "templateCombo";
-            this.templateCombo.Size = new System.Drawing.Size(140, 21);
-            this.templateCombo.SizeToContent = true;
-            this.templateCombo.TabIndex = 4;
-            // 
-            // filterCombo
-            // 
-            this.filterCombo.AllowQuickFilter = true;
-            this.filterCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.filterCombo.FormattingEnabled = true;
-            this.filterCombo.Location = new System.Drawing.Point(208, 3);
-            this.filterCombo.Name = "filterCombo";
-            this.filterCombo.Size = new System.Drawing.Size(140, 21);
-            this.filterCombo.SizeToContent = true;
-            this.filterCombo.TabIndex = 2;
-            this.filterCombo.SizeChanged += new System.EventHandler(this.OnFilterComboSizeChanged);
             // 
             // linkAlwaysOption
             // 
@@ -111,12 +89,30 @@
             this.linkAlwaysOption.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkAlwaysOption.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkAlwaysOption.ForeColor = System.Drawing.Color.Blue;
-            this.linkAlwaysOption.Location = new System.Drawing.Point(135, 6);
+            this.linkAlwaysOption.Location = new System.Drawing.Point(133, 6);
             this.linkAlwaysOption.Name = "linkAlwaysOption";
             this.linkAlwaysOption.Size = new System.Drawing.Size(41, 13);
             this.linkAlwaysOption.TabIndex = 5;
             this.linkAlwaysOption.Text = "Always";
             this.linkAlwaysOption.Click += new System.EventHandler(this.OnClickAlwaysOption);
+            // 
+            // templateCombo
+            // 
+            this.templateCombo.FormattingEnabled = true;
+            this.templateCombo.Location = new System.Drawing.Point(407, 3);
+            this.templateCombo.Name = "templateCombo";
+            this.templateCombo.Size = new System.Drawing.Size(144, 21);
+            this.templateCombo.TabIndex = 4;
+            // 
+            // filterCombo
+            // 
+            this.filterCombo.AllowQuickFilter = true;
+            this.filterCombo.FormattingEnabled = true;
+            this.filterCombo.Location = new System.Drawing.Point(206, 3);
+            this.filterCombo.Name = "filterCombo";
+            this.filterCombo.Size = new System.Drawing.Size(140, 21);
+            this.filterCombo.TabIndex = 2;
+            this.filterCombo.SizeChanged += new System.EventHandler(this.OnFilterComboSizeChanged);
             // 
             // PrintOutputRuleControl
             // 
@@ -128,9 +124,9 @@
             this.Controls.Add(this.labelPrint);
             this.Controls.Add(this.filterCombo);
             this.Controls.Add(this.labelShipment);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrintOutputRuleControl";
-            this.Size = new System.Drawing.Size(558, 28);
+            this.Size = new System.Drawing.Size(556, 28);
             this.toolStripDelete.ResumeLayout(false);
             this.toolStripDelete.PerformLayout();
             this.ResumeLayout(false);

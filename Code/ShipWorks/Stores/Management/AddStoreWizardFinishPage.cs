@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
@@ -25,14 +27,26 @@ namespace ShipWorks.Stores.Management
         public void LoadDownloadControl()
         {
             StoreEntity store = GetStore<StoreEntity>();
-            StoreType storeType = StoreTypeManager.GetType(store);
 
-            Control finishPageControl = storeType.CreateWizardFinishPageControl();
+            Control finishPageControl = CreateFinishPageControl(store.StoreTypeCode).Create(store);
             addStoreWizardFinishPanel.Controls.Add(finishPageControl);
             addStoreWizardFinishPanel.Size = finishPageControl.Size;
 
             otherMessagingPanel.Location = new Point(addStoreWizardFinishPanel.Location.X,
                     addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
+        }
+
+        /// <summary>
+        /// Get the control to display at the top of the page
+        /// </summary>
+        private IStoreWizardFinishPageControlFactory CreateFinishPageControl(StoreTypeCode storeTypeCode)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                return scope.IsRegisteredWithKey<IStoreWizardFinishPageControlFactory>(storeTypeCode) ?
+                    scope.ResolveKeyed<IStoreWizardFinishPageControlFactory>(storeTypeCode) :
+                    scope.Resolve<IStoreWizardFinishPageControlFactory>();
+            }
         }
 
         /// <summary>

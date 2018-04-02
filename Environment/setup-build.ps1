@@ -10,6 +10,9 @@ choco install visualstudio2017buildtools `
     --version 15.2.26430.20170605
 choco install msaccess2010-redist-x86 --version 1.2
 choco install sqlserverlocaldb --version 11.0.2318.0 --allow-empty-checksums
+choco install jdk8 --version 8.0.162
+choco install firefox
+choco install notepadplusplus
 
 & "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe" modify `
     --installPath "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\BuildTools" `
@@ -21,7 +24,6 @@ choco install sqlserverlocaldb --version 11.0.2318.0 --allow-empty-checksums
     --passive `
     --noUpdateInstaller `
     --wait
-
 
 Write-Host "Press any key to continue..."
 [void][System.Console]::ReadKey($true)

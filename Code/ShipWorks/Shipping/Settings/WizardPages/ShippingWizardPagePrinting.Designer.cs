@@ -33,14 +33,14 @@
             // 
             // printOutputControl
             // 
-            this.printOutputControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.printOutputControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.printOutputControl.AutoScroll = true;
-            this.printOutputControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.printOutputControl.Location = new System.Drawing.Point(16, 6);
+            this.printOutputControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.printOutputControl.Location = new System.Drawing.Point(16, 0);
             this.printOutputControl.Name = "printOutputControl";
-            this.printOutputControl.Size = new System.Drawing.Size(515, 386);
+            this.printOutputControl.Size = new System.Drawing.Size(584, 412);
             this.printOutputControl.TabIndex = 1;
             // 
             // ShippingWizardPagePrinting
@@ -50,10 +50,10 @@
             this.Controls.Add(this.printOutputControl);
             this.Description = "Configure what to print when printing shipments.";
             this.Name = "ShippingWizardPagePrinting";
-            this.Size = new System.Drawing.Size(563, 412);
+            this.Size = new System.Drawing.Size(600, 412);
             this.Title = "Printing Setup";
-            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnPageShown);
             this.ResumeLayout(false);
 
