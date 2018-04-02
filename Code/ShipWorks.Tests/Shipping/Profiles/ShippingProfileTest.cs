@@ -11,6 +11,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users.Security;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Profiles
@@ -20,12 +21,16 @@ namespace ShipWorks.Tests.Shipping.Profiles
         private readonly AutoMock mock;
         private readonly Mock<IShippingProfileManager> shippingProfileManagerMock;
         private readonly Mock<IShortcutManager> shortcutManagerMock;
+        Mock<ISecurityContext> securityContext;
 
         public ShippingProfileTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shippingProfileManagerMock = mock.Mock<IShippingProfileManager>();
             shortcutManagerMock = mock.Mock<IShortcutManager>();
+
+            securityContext = mock.Mock<ISecurityContext>();
+            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess)).Returns(true);
         }
 
         [Fact]
@@ -45,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             // Testing 
             new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
-                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ICarrierShipmentAdapterFactory>().Object);
+                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ISecurityContext>().Object);
             
             loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
         }
@@ -226,8 +231,23 @@ namespace ShipWorks.Tests.Shipping.Profiles
             testObject.Apply(shipment);
             
             shippingManager.Verify(m => m.ChangeShipmentType(ShipmentTypeCode.Usps, shipment), Times.Once);
-        } 
-        
+        }
+
+        [Fact]
+        public void Apply_DoesNotCreateProfileApplicationStrategyUsingStrategyFactory_WhenUserDoesNotHavePermission()
+        {
+            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess)).Returns(false);
+
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
+            var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
+            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            testObject.Apply(shipment);
+
+            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.Amazon), Times.Never);
+        }
+
         [Fact]
         public void Apply_DoesNotDelegatesToShippingManagerChangeShipmentType_WhenShipmentAndProfilesShipmentTypesMatch()
         {
@@ -266,19 +286,6 @@ namespace ShipWorks.Tests.Shipping.Profiles
             testObject.Apply(shipment);
             
             strategy.Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
-        }
-                
-        [Fact]
-        public void Apply_DelegatesToCarrierShipmentAdapterFactory()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
-            ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
-
-            ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
-            
-            testObject.Apply(shipment);
-
-            mock.Mock<ICarrierShipmentAdapterFactory>().Verify(c => c.Get(shipment));
         }
         
         [Fact]
