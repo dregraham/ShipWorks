@@ -21,8 +21,8 @@ namespace ShipWorks.Shipping.Services
     {
         private readonly IShippingProfileManager profileManager;
         private readonly IShortcutManager shortcutManager;
-        private readonly Func<IShippingProfile> shippingProfileFactory;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IShippingProfileFactory shippingProfileFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -30,14 +30,14 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShippingProfileRepository(IShippingProfileManager profileManager, 
             IShortcutManager shortcutManager, 
-            Func<IShippingProfile> shippingProfileFactory,
             ISqlAdapterFactory sqlAdapterFactory, 
+            IShippingProfileFactory shippingProfileFactory,
             Func<Type, ILog> createLogger)
         {
             this.profileManager = profileManager;
             this.shortcutManager = shortcutManager;
-            this.shippingProfileFactory = shippingProfileFactory;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.shippingProfileFactory = shippingProfileFactory;
             log = createLogger(GetType());
         }
 
@@ -129,11 +129,7 @@ namespace ShipWorks.Shipping.Services
                 };
             }
 
-            IShippingProfile profile = shippingProfileFactory();
-            profile.ShippingProfileEntity = shippingProfileEntity;
-            profile.Shortcut = shortcutEntity;
-
-            return profile;
+            return shippingProfileFactory.Create(shippingProfileEntity, shortcutEntity);
         }
             
         /// <summary>

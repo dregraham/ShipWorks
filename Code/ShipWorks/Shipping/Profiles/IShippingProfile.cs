@@ -21,12 +21,12 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Shipping Profile
         /// </summary>
-        ShippingProfileEntity ShippingProfileEntity { get; set; }
+        ShippingProfileEntity ShippingProfileEntity { get; }
 
         /// <summary>
         /// Shortcut
         /// </summary>
-        ShortcutEntity Shortcut { get; set; }
+        ShortcutEntity Shortcut { get; }
 
         /// <summary>
         /// The associated Shortcut 
