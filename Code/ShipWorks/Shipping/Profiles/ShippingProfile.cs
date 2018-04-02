@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
 
-            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess))
+            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipmentList.First()?.ShipmentID))
             {
                 List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
                 IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
