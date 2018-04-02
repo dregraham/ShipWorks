@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Interapptive.Shared.Data;
@@ -12,12 +13,45 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class DatabaseIdentifier : IDatabaseIdentifier
     {
+        private Guid databaseId = Guid.Empty;
+
         /// <summary>
         /// Returns DatabaseGuid of database.
         /// </summary>
         public Guid Get()
         {
-            return SqlSession.Current.DatabaseIdentifier;
+            if (databaseId == Guid.Empty)
+            {
+                databaseId = GetDatabaseId();
+            }
+
+            return databaseId;
+        }
+
+        /// <summary>
+        /// Returns DatabaseGuid of database.
+        /// </summary>
+        private static Guid GetDatabaseId()
+        {
+            try
+            {
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    return DbCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseIdentifierException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Reset the cached databaseId
+        /// </summary>
+        public void Reset()
+        {
+            databaseId = Guid.Empty;
         }
     }
 }

@@ -28,9 +28,7 @@ namespace ShipWorks.Data.Connection
         // Cached properties of the server
         string serverMachineName;
         Version serverVersion;
-
-        private Guid databaseId = Guid.Empty;
-
+        
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -132,40 +130,6 @@ namespace ShipWorks.Data.Connection
 
                 current = value;
                 current.Configuration.Freeze();
-            }
-        }
-
-        /// <summary>
-        /// Returns DatabaseGuid of database.
-        /// </summary>
-        public Guid DatabaseIdentifier
-        {
-            get
-            {
-                if (databaseId == Guid.Empty)
-                {
-                    databaseId = GetDatabaseId();
-                }
-
-                return databaseId;
-            }
-        }
-
-        /// <summary>
-        /// Returns DatabaseGuid of database.
-        /// </summary>
-        private static Guid GetDatabaseId()
-        {
-            try
-            {
-                using (DbConnection con = Current.OpenConnection())
-                {
-                    return DbCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseIdentifierException(ex);
             }
         }
 
