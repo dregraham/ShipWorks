@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly IShippingProfileFactory shippingProfileFactory;
+        private readonly Func<IShippingProfile> shippingProfileFactory;
 
         /// <summary>
         /// Constructor
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Services
         public ShippingProfileService(IShortcutManager shortcutManager,
             IShippingProfileRepository shippingProfileRepository,
             IShipmentTypeManager shipmentTypeManager,
-            IShippingProfileFactory shippingProfileFactory)
+            Func<IShippingProfile> shippingProfileFactory)
         {
             this.shortcutManager = shortcutManager;
             this.shippingProfileRepository = shippingProfileRepository;
@@ -90,6 +90,6 @@ namespace ShipWorks.Shipping.Services
         /// Create an empty ShippingProfile
         /// </summary>
         public IShippingProfile CreateEmptyShippingProfile() =>
-            shippingProfileFactory.Create();
+            shippingProfileFactory();
     }
 }

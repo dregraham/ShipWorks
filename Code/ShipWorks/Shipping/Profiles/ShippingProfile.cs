@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly ISecurityContext securityContext;
         private ShippingProfileEntity shippingProfileEntity;
 
         /// <summary>
@@ -31,14 +32,15 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public ShippingProfile(IShippingProfileLoader profileLoader,
             IShippingProfileApplicationStrategyFactory strategyFactory,
-            IShippingManager shippingManager, IMessenger messenger,
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+            IShippingManager shippingManager, 
+            IMessenger messenger,
+            ISecurityContext securityContext)
         {
             this.profileLoader = profileLoader;
             this.strategyFactory = strategyFactory;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
-            this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.securityContext = securityContext;
             ShippingProfileEntity = new ShippingProfileEntity
             {
                 Name = string.Empty,
@@ -153,26 +155,28 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
-            
-            List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
-            IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
 
-            foreach (ShipmentEntity shipment in shipmentList)
+            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess))
             {
-                if (IsApplicable(shipment.ShipmentTypeCode))
+                List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
+                IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
+
+                foreach (ShipmentEntity shipment in shipmentList)
                 {
-                    if (ShippingProfileEntity.ShipmentType != null &&
-                        shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                    if (IsApplicable(shipment.ShipmentTypeCode))
                     {
-                        shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                        if (ShippingProfileEntity.ShipmentType != null &&
+                            shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
+                        {
+                            shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
+                        }
+                        strategy.ApplyProfile(ShippingProfileEntity, shipment);
                     }
-                    strategy.ApplyProfile(ShippingProfileEntity, shipment);
                 }
+                messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
             }
-
-            messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
-
-            return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
+            
+            return shipmentList.Select(s => shippingManager.GetShipmentAdapter(s));
         }
 
         /// <summary>

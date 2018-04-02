@@ -91,10 +91,13 @@ namespace ShipWorks.Shipping.Tests.Services
 
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
-
+            var newShippingProfile = mock.Mock<IShippingProfile>();
+            mock.MockFunc<IShippingProfile>(newShippingProfile);
+            
             mock.Create<ShippingProfileRepository>().GetAll();
 
-            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
+            newShippingProfile.VerifySet(p => p.ShippingProfileEntity = profile);
+            newShippingProfile.VerifySet(p => p.Shortcut = shortcut);
         }
 
         [Fact]
@@ -108,10 +111,13 @@ namespace ShipWorks.Shipping.Tests.Services
 
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
+            var newShippingProfile = mock.Mock<IShippingProfile>();
+            mock.MockFunc<IShippingProfile>(newShippingProfile);
 
             mock.Create<ShippingProfileRepository>().Get(42);
-
-            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
+            
+            newShippingProfile.VerifySet(p => p.ShippingProfileEntity = profile);
+            newShippingProfile.VerifySet(p => p.Shortcut = shortcut);
         }
 
         [Fact]

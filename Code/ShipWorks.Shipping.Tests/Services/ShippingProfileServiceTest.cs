@@ -145,13 +145,6 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShippingProfileRepository>().Verify(s => s.Save(profile.Object));
         }
 
-        [Fact]
-        public void CreateEmptyShippingProfile_DelegatesToShippingProfileFactory()
-        {
-            var testObject = mock.Create<ShippingProfileService>().CreateEmptyShippingProfile();
-            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(), Times.Once);
-        }
-
         public void Dispose()
         {
             mock.Dispose();
