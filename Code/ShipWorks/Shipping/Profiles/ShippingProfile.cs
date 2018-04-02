@@ -155,8 +155,8 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
-
-            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipmentList.First()?.ShipmentID))
+            
+            if (HasPermissionToModifyShipments())
             {
                 List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
                 IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
@@ -178,6 +178,18 @@ namespace ShipWorks.Shipping.Profiles
 
             return shipmentList.Select(s => shippingManager.GetShipmentAdapter(s));
         }
+
+        /// <summary>
+        /// Check to see if we have permissions to modify shipments
+        /// </summary>
+        /// <remarks>
+        /// This is a little hacky but we check to see if we have permissions to modify a shipment by passing in the shipment seed
+        /// If we can modify a shipment we can modify any shipment so we dont really need to pass a specific ShipmentId
+        /// We do this because sometimes we apply profiles to shipments that havent yet been saved to the database and therefor dont have an id
+        /// </remarks>
+        /// <returns></returns>
+        private bool HasPermissionToModifyShipments() =>
+            securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, 31);
 
         /// <summary>
         /// Change the shortcut for the profile
