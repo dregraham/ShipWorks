@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             shortcutManagerMock = mock.Mock<IShortcutManager>();
 
             securityContext = mock.Mock<ISecurityContext>();
-            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 31)).Returns(true);
+            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(true);
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void Apply_DoesNotCreateProfileApplicationStrategyUsingStrategyFactory_WhenUserDoesNotHavePermission()
         {
-            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 31)).Returns(false);
+            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(false);
 
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void Apply_SendsProfileAppliedMessage()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon};
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.FedEx};
             ShipmentEntity shipment = new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.FedEx};
             var messenger = mock.Mock<IMessenger>();
             ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());

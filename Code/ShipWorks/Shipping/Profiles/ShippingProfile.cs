@@ -155,41 +155,26 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
-            
-            if (HasPermissionToModifyShipments())
+
+            if (CanApply(shipmentList))
             {
                 List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
                 IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
-
                 foreach (ShipmentEntity shipment in shipmentList)
                 {
-                    if (IsApplicable(shipment.ShipmentTypeCode))
+
+                    if (ShippingProfileEntity.ShipmentType != null &&
+                        shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
                     {
-                        if (ShippingProfileEntity.ShipmentType != null &&
-                            shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
-                        {
-                            shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
-                        }
-                        strategy.ApplyProfile(ShippingProfileEntity, shipment);
+                        shippingManager.ChangeShipmentType(ShippingProfileEntity.ShipmentType.Value, shipment);
                     }
+                    strategy.ApplyProfile(ShippingProfileEntity, shipment);
                 }
                 messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
             }
-
+            
             return shipmentList.Select(s => shippingManager.GetShipmentAdapter(s));
         }
-
-        /// <summary>
-        /// Check to see if we have permissions to modify shipments
-        /// </summary>
-        /// <remarks>
-        /// This is a little hacky but we check to see if we have permissions to modify a shipment by passing in the shipment seed
-        /// If we can modify a shipment we can modify any shipment so we dont really need to pass a specific ShipmentId
-        /// We do this because sometimes we apply profiles to shipments that havent yet been saved to the database and therefor dont have an id
-        /// </remarks>
-        /// <returns></returns>
-        private bool HasPermissionToModifyShipments() =>
-            securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, 31);
 
         /// <summary>
         /// Change the shortcut for the profile
@@ -204,7 +189,7 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
-        /// Isthe profile applicable to the ShipmentTypeCode
+        /// Is the profile applicable to the Shipment
         /// </summary>
         public bool IsApplicable(ShipmentTypeCode? shipmentTypeCode)
         {
@@ -218,5 +203,12 @@ namespace ShipWorks.Shipping.Profiles
                     return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
             }
         }
+
+        /// <summary>
+        /// Check to see if the profile can be applied
+        /// </summary>
+        private bool CanApply(IEnumerable<ShipmentEntity> shipments)
+            => shipments.All(s => securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
+                shipments.All(s => IsApplicable(s.ShipmentTypeCode));
     }
 }
