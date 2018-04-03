@@ -78,6 +78,7 @@ namespace ShipWorks
             this.buttonSplit = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
+            this.panelArchiveNotification = new System.Windows.Forms.Panel();
             this.panelDockingArea = new System.Windows.Forms.Panel();
             this.gridControl = new ShipWorks.ApplicationCore.MainGridControl();
             this.dockContainer1 = new TD.SandDock.DockContainer();
@@ -2736,6 +2737,17 @@ namespace ShipWorks
             this.pictureBox8.TabIndex = 0;
             this.pictureBox8.TabStop = false;
             //
+            // panelArchiveNotification
+            //
+            this.panelArchiveNotification.Visible = false;
+            this.panelArchiveNotification.BackColor = System.Drawing.Color.Transparent;
+            this.panelArchiveNotification.Controls.Add(this.dashboardBarSample);
+            this.panelArchiveNotification.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelArchiveNotification.Location = new System.Drawing.Point(3, 149);
+            this.panelArchiveNotification.Name = "panelArchiveNotification";
+            this.panelArchiveNotification.Size = new System.Drawing.Size(969, 52);
+            this.panelArchiveNotification.TabIndex = 6;
+            //
             // dashboardArea
             //
             this.dashboardArea.BackColor = System.Drawing.Color.Transparent;
@@ -2778,6 +2790,7 @@ namespace ShipWorks
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 750);
             this.Controls.Add(this.panelDockingArea);
+            this.Controls.Add(this.panelArchiveNotification);
             this.Controls.Add(this.dashboardArea);
             this.Controls.Add(this.ribbon);
             this.Controls.Add(this.statusBar);
@@ -2844,6 +2857,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popupShowPanels;
         private Divelements.SandRibbon.MenuItem menuItemShowFiltersPanel;
         private Divelements.SandRibbon.Menu menuShowPanels;
+        private System.Windows.Forms.Panel panelArchiveNotification;
         private System.Windows.Forms.Panel panelDockingArea;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip notifyIconMenuStrip;

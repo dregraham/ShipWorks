@@ -153,6 +153,9 @@
     <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
     <Compile Include="Controls\AnimatedContentControl.cs" />
+    <Compile Include="Controls\ArchiveNotification.xaml.cs">
+      <DependentUpon>ArchiveNotification.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -315,6 +318,10 @@
     <Page Include="Controls\AddressControl\Address.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ArchiveNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml">
       <SubType>Designer</SubType>
