@@ -21,6 +21,13 @@ namespace ShipWorks.Data
         static IConfigurationEntity configReadOnly;
         static bool needCheckForChanges;
 
+        private static Version archiveVersion = new Version(5, 23, 1, 6);
+
+        /// <summary>
+        /// Which version was archive functionality introduced
+        /// </summary>
+        public static Version ArchiveVersion => archiveVersion;
+
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
@@ -134,7 +141,7 @@ namespace ShipWorks.Data
             {
                 try
                 {
-                    if (SqlSchemaUpdater.GetInstalledSchemaVersion(connection) < new Version(5, 23, 1, 6))
+                    if (SqlSchemaUpdater.GetInstalledSchemaVersion(connection) < ArchiveVersion)
                     {
                         return false;
                     }
