@@ -29,8 +29,10 @@ namespace ShipWorks.ApplicationCore.Options
             messenger = scope.Resolve<IMessenger>();
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
 
-            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this, scope));
+            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data));
+
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
+            optionPages["Keyboard & Barcode Shortcuts"] = InitializeOptionPage(new OptionPageShortcuts(this, scope));
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {

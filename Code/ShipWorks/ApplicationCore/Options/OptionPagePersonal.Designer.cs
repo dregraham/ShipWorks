@@ -48,14 +48,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.filterInitialSort = new System.Windows.Forms.ComboBox();
             this.infotipWeightFormat = new ShipWorks.UI.Controls.InfoTip();
             this.infotipMinimizeRibbon = new ShipWorks.UI.Controls.InfoTip();
-            this.singleScan = new System.Windows.Forms.CheckBox();
-            this.autoPrint = new System.Windows.Forms.CheckBox();
-            this.registerScannerButton = new System.Windows.Forms.Button();
-            this.registerScannerLabel = new System.Windows.Forms.Label();
-            this.autoWeigh = new System.Windows.Forms.CheckBox();
-            this.infoTipAutoWeigh = new ShipWorks.UI.Controls.InfoTip();
-            this.infoTipAutoPrint = new ShipWorks.UI.Controls.InfoTip();
-            this.infoTipSingleScan = new ShipWorks.UI.Controls.InfoTip();
             this.panelInitialFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -261,88 +253,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.infotipMinimizeRibbon.TabIndex = 21;
             this.infotipMinimizeRibbon.Title = "Minimize the Ribbon";
             // 
-            // singleScan
-            // 
-            this.singleScan.AutoSize = true;
-            this.singleScan.Location = new System.Drawing.Point(28, 377);
-            this.singleScan.Name = "singleScan";
-            this.singleScan.Size = new System.Drawing.Size(175, 17);
-            this.singleScan.TabIndex = 22;
-            this.singleScan.Text = "Search orders by barcode scan";
-            this.singleScan.UseVisualStyleBackColor = true;
-            this.singleScan.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
-            // 
-            // autoPrint
-            // 
-            this.autoPrint.AutoSize = true;
-            this.autoPrint.Location = new System.Drawing.Point(47, 425);
-            this.autoPrint.Name = "autoPrint";
-            this.autoPrint.Size = new System.Drawing.Size(227, 17);
-            this.autoPrint.TabIndex = 23;
-            this.autoPrint.Text = "Automatically print labels on barcode scan";
-            this.autoPrint.UseVisualStyleBackColor = true;
-            this.autoPrint.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
-            // 
-            // registerScannerButton
-            // 
-            this.registerScannerButton.Location = new System.Drawing.Point(258, 373);
-            this.registerScannerButton.Name = "registerScannerButton";
-            this.registerScannerButton.Size = new System.Drawing.Size(100, 23);
-            this.registerScannerButton.TabIndex = 26;
-            this.registerScannerButton.Text = "Pair Scanner...";
-            this.registerScannerButton.UseVisualStyleBackColor = true;
-            this.registerScannerButton.Click += new System.EventHandler(this.OnClickRegisterScanner);
-            // 
-            // registerScannerLabel
-            // 
-            this.registerScannerLabel.AutoSize = true;
-            this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(360, 378);
-            this.registerScannerLabel.Name = "registerScannerLabel";
-            this.registerScannerLabel.Size = new System.Drawing.Size(98, 13);
-            this.registerScannerLabel.TabIndex = 28;
-            this.registerScannerLabel.Text = "Scanner not paired";
-            // 
-            // autoWeigh
-            // 
-            this.autoWeigh.AutoSize = true;
-            this.autoWeigh.Location = new System.Drawing.Point(47, 402);
-            this.autoWeigh.Name = "autoWeigh";
-            this.autoWeigh.Size = new System.Drawing.Size(251, 17);
-            this.autoWeigh.TabIndex = 29;
-            this.autoWeigh.Text = "Automatically weigh packages on barcode scan";
-            this.autoWeigh.UseVisualStyleBackColor = true;
-            // 
-            // infoTipAutoWeigh
-            // 
-            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically on a barcode scan.\r\n\r\nThe weight " +
-    "is imported if the scale registers a weight greater than 0.";
-            this.infoTipAutoWeigh.Location = new System.Drawing.Point(297, 404);
-            this.infoTipAutoWeigh.Name = "infoTipAutoWeigh";
-            this.infoTipAutoWeigh.Size = new System.Drawing.Size(13, 12);
-            this.infoTipAutoWeigh.TabIndex = 30;
-            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages on Barcode Scan";
-            // 
-            // infoTipAutoPrint
-            // 
-            this.infoTipAutoPrint.Caption = "Labels print automatically when a barcode is scanned.\r\n\r\nLabels are generated usi" +
-    "ng the currently configured shipping rules.";
-            this.infoTipAutoPrint.Location = new System.Drawing.Point(273, 427);
-            this.infoTipAutoPrint.Name = "infoTipAutoPrint";
-            this.infoTipAutoPrint.Size = new System.Drawing.Size(12, 12);
-            this.infoTipAutoPrint.TabIndex = 31;
-            this.infoTipAutoPrint.Title = "Automatically Print Labels on Barcode Scan";
-            // 
-            // infoTipSingleScan
-            // 
-            this.infoTipSingleScan.Caption = "Quickly locate orders by scanning a barcode.\r\n\r\nClick the \'Pair Scanner\' button t" +
-    "o get started.";
-            this.infoTipSingleScan.Location = new System.Drawing.Point(202, 379);
-            this.infoTipSingleScan.Name = "infoTipSingleScan";
-            this.infoTipSingleScan.Size = new System.Drawing.Size(12, 12);
-            this.infoTipSingleScan.TabIndex = 32;
-            this.infoTipSingleScan.Title = "Search Orders by Barcode Scan";
-            // 
             // OptionPagePersonal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -350,14 +260,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(0, 15);
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.infoTipSingleScan);
-            this.Controls.Add(this.infoTipAutoPrint);
-            this.Controls.Add(this.infoTipAutoWeigh);
-            this.Controls.Add(this.autoWeigh);
-            this.Controls.Add(this.registerScannerLabel);
-            this.Controls.Add(this.registerScannerButton);
-            this.Controls.Add(this.autoPrint);
-            this.Controls.Add(this.singleScan);
             this.Controls.Add(this.infotipMinimizeRibbon);
             this.Controls.Add(this.infotipWeightFormat);
             this.Controls.Add(this.filterInitialSort);
@@ -408,13 +310,5 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.ComboBox filterInitialSort;
         private UI.Controls.InfoTip infotipWeightFormat;
         private UI.Controls.InfoTip infotipMinimizeRibbon;
-        private System.Windows.Forms.CheckBox singleScan;
-        private System.Windows.Forms.CheckBox autoPrint;
-        private System.Windows.Forms.Button registerScannerButton;
-        private System.Windows.Forms.Label registerScannerLabel;
-        private System.Windows.Forms.CheckBox autoWeigh;
-        private UI.Controls.InfoTip infoTipAutoWeigh;
-        private UI.Controls.InfoTip infoTipAutoPrint;
-        private UI.Controls.InfoTip infoTipSingleScan;
     }
 }
