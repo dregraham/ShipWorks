@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly ISecurityContext securityContext;
         private ShippingProfileEntity shippingProfileEntity;
 
         /// <summary>
@@ -31,14 +32,15 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         public ShippingProfile(IShippingProfileLoader profileLoader,
             IShippingProfileApplicationStrategyFactory strategyFactory,
-            IShippingManager shippingManager, IMessenger messenger,
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+            IShippingManager shippingManager,
+            IMessenger messenger,
+            ISecurityContext securityContext)
         {
             this.profileLoader = profileLoader;
             this.strategyFactory = strategyFactory;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
-            this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.securityContext = securityContext;
             ShippingProfileEntity = new ShippingProfileEntity
             {
                 Name = string.Empty,
@@ -81,7 +83,7 @@ namespace ShipWorks.Shipping.Profiles
         /// </remarks>
         [Obfuscation(Exclude = true)]
         public string ShortcutKey =>
-            Shortcut?.VirtualKey != null && Shortcut.ModifierKeys != null ? 
+            Shortcut?.VirtualKey != null && Shortcut.ModifierKeys != null ?
                 new KeyboardShortcutData(null, Shortcut.VirtualKey.Value, Shortcut.ModifierKeys.Value).ShortcutText :
                 string.Empty;
 
@@ -99,7 +101,7 @@ namespace ShipWorks.Shipping.Profiles
         /// The associated ShipmentType description. Blank if global
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ShipmentTypeDescription => 
+        public string ShipmentTypeDescription =>
             ShippingProfileEntity?.ShipmentType != null ?
                 EnumHelper.GetDescription(ShippingProfileEntity.ShipmentType) :
                 string.Empty;
@@ -153,14 +155,14 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ICarrierShipmentAdapter> Apply(IEnumerable<ShipmentEntity> shipments)
         {
             List<ShipmentEntity> shipmentList = shipments.ToList();
-            
-            List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
-            IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
 
-            foreach (ShipmentEntity shipment in shipmentList)
+            if (CanApply(shipmentList))
             {
-                if (IsApplicable(shipment.ShipmentTypeCode))
+                List<ShipmentEntity> originalShipments = shipmentList.Select(s => EntityUtility.CloneEntity(s, false)).ToList();
+                IShippingProfileApplicationStrategy strategy = strategyFactory.Create(ShippingProfileEntity.ShipmentType);
+                foreach (ShipmentEntity shipment in shipmentList)
                 {
+
                     if (ShippingProfileEntity.ShipmentType != null &&
                         shipment.ShipmentTypeCode != ShippingProfileEntity.ShipmentType.Value)
                     {
@@ -168,11 +170,10 @@ namespace ShipWorks.Shipping.Profiles
                     }
                     strategy.ApplyProfile(ShippingProfileEntity, shipment);
                 }
+                messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
             }
-
-            messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
-
-            return shipmentList.Select(s => shipmentAdapterFactory.Get(s));
+            
+            return shipmentList.Select(s => shippingManager.GetShipmentAdapter(s));
         }
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
-        /// Isthe profile applicable to the ShipmentTypeCode
+        /// Is the profile applicable to the Shipment
         /// </summary>
         public bool IsApplicable(ShipmentTypeCode? shipmentTypeCode)
         {
@@ -202,5 +203,12 @@ namespace ShipWorks.Shipping.Profiles
                     return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
             }
         }
+
+        /// <summary>
+        /// Check to see if the profile can be applied
+        /// </summary>
+        private bool CanApply(IEnumerable<ShipmentEntity> shipments)
+            => shipments.All(s => securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
+                shipments.All(s => IsApplicable(s.ShipmentTypeCode));
     }
 }
