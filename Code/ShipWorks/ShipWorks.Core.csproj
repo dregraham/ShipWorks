@@ -948,6 +948,9 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Archiving\ArchiveNotificationViewModel.cs" />
+    <Compile Include="Archiving\IArchiveNotification.cs" />
+    <Compile Include="Archiving\IArchiveNotificationViewModel.cs" />
     <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Archiving\IOrderArchiveDataAccess.cs" />

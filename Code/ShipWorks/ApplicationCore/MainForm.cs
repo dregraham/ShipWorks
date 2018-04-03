@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Xml;
 using System.Xml.Linq;
 using Autofac;
@@ -48,6 +50,7 @@ using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Archiving;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
@@ -895,6 +898,8 @@ namespace ShipWorks
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     lifetimeScope.Resolve<IOrderArchiveFilterRegenerator>().Regenerate();
+
+                    ShowArchiveNotificationIfNecessary(lifetimeScope, IoC.UnsafeGlobalLifetimeScope.Resolve<IArchiveNotificationViewModel>);
                 }
 
                 logonAsyncLoadSuccess = true;
@@ -908,6 +913,44 @@ namespace ShipWorks
             finally
             {
                 loadedEvent.Set();
+            }
+        }
+
+        /// <summary>
+        /// Show the archive notification banner, if necessary
+        /// </summary>
+        /// <param name="lifetimeScope">Transient lifetime scope</param>
+        /// <param name="createViewModel">This needs to come from the root lifetime scope, since it will live forever</param>
+        private void ShowArchiveNotificationIfNecessary(ILifetimeScope lifetimeScope, Func<IArchiveNotificationViewModel> createViewModel)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(
+                    (Action<ILifetimeScope, Func<IArchiveNotificationViewModel>>) ShowArchiveNotificationIfNecessary,
+                    new object[] { lifetimeScope, createViewModel });
+            }
+            else
+            {
+                if (lifetimeScope.Resolve<IConfigurationData>().IsArchive())
+                {
+                    dashboardArea.Top += panelArchiveNotification.Height;
+
+                    var host = new ElementHost
+                    {
+                        Dock = DockStyle.Fill,
+                        BackColor = Color.Transparent
+                    };
+
+                    createViewModel().Show(host);
+
+                    panelArchiveNotification.Controls.Add(host);
+                    panelArchiveNotification.Visible = true;
+
+                }
+                else
+                {
+                    panelArchiveNotification.Visible = false;
+                }
             }
         }
 
@@ -2166,9 +2209,9 @@ namespace ShipWorks
             // due to one of our own modal dialog's returning, the heartbeat will not occur until after the method that called
             // the modal window returns.
             BeginInvoke(new MethodInvoker(() =>
-                {
-                    ForceHeartbeat(HeartbeatOptions.None);
-                }));
+            {
+                ForceHeartbeat(HeartbeatOptions.None);
+            }));
         }
 
         /// <summary>
@@ -3144,9 +3187,9 @@ namespace ShipWorks
 
                 PermissionAwareDeleter deleter = new PermissionAwareDeleter(this, PermissionType.OrdersModify);
                 deleter.ExecuteCompleted += (s, a) =>
-                    {
-                        ForceHeartbeat(HeartbeatOptions.ChangesExpected);
-                    };
+                {
+                    ForceHeartbeat(HeartbeatOptions.ChangesExpected);
+                };
 
                 deleter.DeleteAsync(keysToDelete);
             }
@@ -3482,17 +3525,17 @@ namespace ShipWorks
 
             // Initialize the note panel
             panelNotes.Initialize(new Guid("{FBE6CCDC-B822-45e2-813C-4AF64AE58657}"), GridColumnDefinitionSet.Notes, (GridColumnLayout noteLayout) =>
-                {
-                    noteLayout.DefaultSortColumnGuid = noteLayout.AllColumns[NoteFields.Edited].Definition.ColumnGuid;
-                    noteLayout.DefaultSortOrder = ListSortDirection.Descending;
+            {
+                noteLayout.DefaultSortColumnGuid = noteLayout.AllColumns[NoteFields.Edited].Definition.ColumnGuid;
+                noteLayout.DefaultSortOrder = ListSortDirection.Descending;
 
-                    // Turn off all columns except the object and the note
-                    foreach (GridColumnPosition position in noteLayout.AllColumns
-                        .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
-                    {
-                        position.Visible = false;
-                    }
-                });
+                // Turn off all columns except the object and the note
+                foreach (GridColumnPosition position in noteLayout.AllColumns
+                    .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
+                {
+                    position.Visible = false;
+                }
+            });
 
             // Initialize the orders panel
             panelOrders.Initialize(new Guid("{06878FA9-7A6D-442c-B4F8-357C1B3F6A45}"), GridColumnDefinitionSet.OrderPanel, layout =>
@@ -3516,47 +3559,47 @@ namespace ShipWorks
 
             // Initialize the items panel
             panelItems.Initialize(new Guid("{E102F97E-5C0F-4fa2-A0CF-47FC852C0B57}"), GridColumnDefinitionSet.OrderItems, (GridColumnLayout layout) =>
-                {
-                    // Adjust to fit for default panel size
-                    layout.AllColumns[OrderItemFields.Name].Width = 120;
-                    layout.AllColumns[OrderItemFields.Quantity].Width = 30;
-                    layout.AllColumns[OrderItemFields.UnitPrice].Width = 50;
-                    layout.AllColumns[OrderItemFields.LocalStatus].Width = 60;
+            {
+                // Adjust to fit for default panel size
+                layout.AllColumns[OrderItemFields.Name].Width = 120;
+                layout.AllColumns[OrderItemFields.Quantity].Width = 30;
+                layout.AllColumns[OrderItemFields.UnitPrice].Width = 50;
+                layout.AllColumns[OrderItemFields.LocalStatus].Width = 60;
 
-                    // Hide all the store specific columns
-                    foreach (GridColumnPosition column in layout.AllColumns.Where(c => c.Definition.StoreTypeCode != null))
-                    {
-                        column.Visible = false;
-                    }
-                });
+                // Hide all the store specific columns
+                foreach (GridColumnPosition column in layout.AllColumns.Where(c => c.Definition.StoreTypeCode != null))
+                {
+                    column.Visible = false;
+                }
+            });
 
             // Initialize the charges panel
             panelCharges.Initialize(new Guid("{E604A11A-2B98-4186-9814-644EB8F58204}"), GridColumnDefinitionSet.Charges, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[OrderChargeFields.Type].Width = 70;
-                });
+            {
+                layout.AllColumns[OrderChargeFields.Type].Width = 70;
+            });
 
             // Initialize the shipments panel
             panelShipments.Initialize(new Guid("{C5FFA0CC-3AD2-485a-BC26-1E6072636116}"), GridColumnDefinitionSet.ShipmentPanel, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[new Guid("{98038AB5-AA95-4778-9801-574C2B723DD4}")].Visible = false;
-                });
+            {
+                layout.AllColumns[new Guid("{98038AB5-AA95-4778-9801-574C2B723DD4}")].Visible = false;
+            });
 
             // Initialize the email control
             panelEmail.Initialize(new Guid("{F0C792D7-90F5-4eab-9EF0-ADCEC49AC167}"), GridColumnDefinitionSet.EmailOutboundPanel, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[EmailOutboundFields.AccountID].Visible = false;
-                    layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
-                    layout.AllColumns[EmailOutboundFields.Subject].Visible = false;
-                });
+            {
+                layout.AllColumns[EmailOutboundFields.AccountID].Visible = false;
+                layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
+                layout.AllColumns[EmailOutboundFields.Subject].Visible = false;
+            });
 
             // Initialize the print control
             panelPrinted.Initialize(new Guid("{AEEDA4AE-5D84-447d-90BA-92AFCD0D4BD4}"), GridColumnDefinitionSet.PrintResult, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[PrintResultFields.PrintDate].Visible = false;
-                    layout.AllColumns[PrintResultFields.PaperSourceName].Visible = false;
-                    layout.AllColumns[PrintResultFields.Copies].Visible = false;
-                });
+            {
+                layout.AllColumns[PrintResultFields.PrintDate].Visible = false;
+                layout.AllColumns[PrintResultFields.PaperSourceName].Visible = false;
+                layout.AllColumns[PrintResultFields.Copies].Visible = false;
+            });
 
             // Initialize the payment details panel
             panelPaymentDetail.Initialize(new Guid("{1C5FD43A-E357-462b-A2BC-CF458E2EE45D}"), GridColumnDefinitionSet.PaymentDetails, null);
