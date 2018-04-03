@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -195,7 +196,7 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
-            gridDatabses.Rows.Clear();
+            gridDatabases.Rows.Clear();
 
             StartSearchingSqlServers();
 
@@ -955,7 +956,7 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
         {
             labelDatabaseSelect.Text = sqlInstanceChooseDatabase ? "Select your ShipWorks database" : "Connection Check";
-            gridDatabses.Visible = sqlInstanceChooseDatabase;
+            gridDatabases.Visible = sqlInstanceChooseDatabase;
 
             if (e.FirstTime)
             {
@@ -1089,8 +1090,8 @@ namespace ShipWorks.Data.Administration
             // If there is no selected instance name, we just clear everything out. And get out.
             if (string.IsNullOrWhiteSpace(selectedInstance))
             {
-                gridDatabses.Rows.Clear();
-                gridDatabses.EmptyText = "";
+                gridDatabases.Rows.Clear();
+                gridDatabases.EmptyText = "";
 
                 panelSelectedInstance.Visible = false;
 
@@ -1106,9 +1107,9 @@ namespace ShipWorks.Data.Administration
             }
 
             // Clear the database list
-            gridDatabses.Rows.Clear();
-            gridDatabses.EmptyText = "";
-            gridDatabses.Visible = false;
+            gridDatabases.Rows.Clear();
+            gridDatabases.EmptyText = "";
+            gridDatabases.Visible = false;
 
             pictureSqlConnection.Image = Resources.arrows_greengray;
             pictureSqlConnection.Visible = true;
@@ -1162,8 +1163,8 @@ namespace ShipWorks.Data.Administration
                     labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
                     linkSqlInstanceAccount.Text = "Try changing the account";
 
-                    gridDatabses.EmptyText = "";
-                    gridDatabses.Visible = false;
+                    gridDatabases.EmptyText = "";
+                    gridDatabases.Visible = false;
                 }
                 else
                 {
@@ -1174,8 +1175,8 @@ namespace ShipWorks.Data.Administration
                     labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
                     linkSqlInstanceAccount.Text = "Change";
 
-                    gridDatabses.EmptyText = "No databases were found.";
-                    gridDatabses.Visible = sqlInstanceChooseDatabase;
+                    gridDatabases.EmptyText = "No databases were found.";
+                    gridDatabases.Visible = sqlInstanceChooseDatabase;
 
                     // Save the credentials
                     sqlSession.Configuration.Username = configuration.Username;
@@ -1202,11 +1203,12 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void LoadDatabaseList(List<SqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
         {
-            gridDatabses.Rows.Clear();
+            gridDatabases.Rows.Clear();
 
             // Add a row for each database
             foreach (SqlDatabaseDetail database in databases.OrderBy(d => d.Name))
             {
+                Bitmap icon;
                 string status;
                 string activity = "";
                 string order = "";
@@ -1219,10 +1221,12 @@ namespace ShipWorks.Data.Administration
                 if (isCurrent)
                 {
                     status = "(Active)";
+                    icon = Resources.data_ok_16;
                 }
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
                 else if (database.Status == SqlDatabaseStatus.ShipWorks)
                 {
+                    icon = database.IsArchive ? Resources.data_time_16 : Resources.data_16;
                     if (database.SchemaVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
                         status = "Newer";
@@ -1239,12 +1243,19 @@ namespace ShipWorks.Data.Administration
                 // Not a ShipWorks database
                 else if (database.Status == SqlDatabaseStatus.NonShipWorks)
                 {
+                    icon = Resources.data_unknown_16;
                     status = "Non-ShipWorks";
                 }
                 // Couldn't connect for some reason
                 else
                 {
+                    icon = Resources.data_error_16;
                     status = "Couldn't Connect";
+                }
+
+                if (database.IsArchive)
+                {
+                    status += " [Archive]";
                 }
 
                 // See if we have info on the last logged in user
@@ -1279,11 +1290,18 @@ namespace ShipWorks.Data.Administration
                 // Only create the row if it wasn't nulled out on purpose to skip showing it
                 if (name != null)
                 {
-                    gridDatabses.Rows.Add(new GridRow(new string[] { name, status, activity, order }) { Tag = database });
+                    var gridCells = new GridCell[] {
+                        new GridCell("", icon),
+                        new GridCell(name),
+                        new GridCell(status),
+                        new GridCell(activity),
+                        new GridCell(order)
+                    };
+                    gridDatabases.Rows.Add(new GridRow(gridCells) { Tag = database });
 
                     if (isCurrent)
                     {
-                        gridDatabses.Rows[gridDatabses.Rows.Count - 1].Selected = true;
+                        gridDatabases.Rows[gridDatabases.Rows.Count - 1].Selected = true;
                     }
                 }
             }
@@ -1390,7 +1408,7 @@ namespace ShipWorks.Data.Administration
             // Connected to SQL Server, now see if we need to validate the database
             if (sqlInstanceChooseDatabase)
             {
-                if (gridDatabses.SelectedElements.Count == 0)
+                if (gridDatabases.SelectedElements.Count == 0)
                 {
                     MessageHelper.ShowInformation(this, "Please select a database before continuing.");
                     e.NextPage = CurrentPage;
@@ -1398,7 +1416,7 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                string database = ((SqlDatabaseDetail) gridDatabses.SelectedElements[0].Tag).Name;
+                string database = ((SqlDatabaseDetail) gridDatabases.SelectedElements[0].Tag).Name;
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {

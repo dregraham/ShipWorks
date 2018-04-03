@@ -1582,4 +1582,19 @@
   <data name="data_time" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\data_time.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="data_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_error_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_error_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_ok_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_ok_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_time_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_time_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_unknown_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_unknown_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

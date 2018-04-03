@@ -10717,7 +10717,12 @@
     <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
+    <Content Include="Resources\data_16.png" />
+    <Content Include="Resources\data_error_16.png" />
+    <Content Include="Resources\data_ok_16.png" />
     <Content Include="Resources\data_time.png" />
+    <Content Include="Resources\data_time_16.png" />
+    <Content Include="Resources\data_unknown_16.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />
