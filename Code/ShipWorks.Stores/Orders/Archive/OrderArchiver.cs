@@ -79,11 +79,14 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        public async Task<bool> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
+        public async Task<OrderArchiveReturnType> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
         {
             UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
-            userLoginWorkflow.Logoff(clearRememberMe: false);
+            if (!userLoginWorkflow.Logoff(clearRememberMe: false))
+            {
+                return OrderArchiveReturnType.Cancel;
+            }
 
             IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
 
@@ -114,7 +117,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return !progressProvider.HasErrors;
+                        return OrderArchiveReturnType.Success;
                     }
                 }
             }
@@ -127,7 +130,8 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Add telemetry properties
         /// </summary>
-        private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount, long ordersToPurgeCount, bool result)
+        private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount, 
+            long ordersToPurgeCount, OrderArchiveReturnType result)
         {
             var megabyte = (1024 * 1024);
 
@@ -135,7 +139,7 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 int retentionPeriodInDays = DateTime.UtcNow.Subtract(cutoffDate).Days;
 
-                trackedDurationEvent.AddProperty("Orders.Archiving.Result", result ? "Success" : "Failed");
+                trackedDurationEvent.AddProperty("Orders.Archiving.Result", result.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.Type", "Manual");
                 trackedDurationEvent.AddProperty("Orders.Archiving.RetentionPeriodInDays", retentionPeriodInDays.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersArchived", ordersToPurgeCount.ToString());
