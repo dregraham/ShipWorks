@@ -90,5 +90,10 @@ namespace ShipWorks.Data.Connection
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
         bool TestConnection(TimeSpan timeout);
+
+        /// <summary>
+        /// Create a copy of the current SqlSession
+        /// </summary>
+        ISqlSession CreateCopy();
     }
 }

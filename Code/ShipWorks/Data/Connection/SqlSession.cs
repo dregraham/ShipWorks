@@ -532,6 +532,12 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Create a copy of the current SqlSession
+        /// </summary>
+        public ISqlSession CreateCopy() =>
+            new SqlSession(new SqlSessionConfiguration(Configuration));
+
+        /// <summary>
         /// Gets a connection string, based on specified ConnectionString, and modifies it to have a new
         /// number of minutes for the timeout.
         /// </summary>
