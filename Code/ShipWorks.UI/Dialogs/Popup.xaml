@@ -32,6 +32,7 @@
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <FontFamily x:Key="FontAwesome">/ShipWorks.Core;component/Resources/Font Awesome 5 Free-Solid-900.otf#Font Awesome 5 Free Solid</FontFamily>
     </Window.Resources>
     <Border 
         CornerRadius="8"
@@ -42,17 +43,21 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" 
-                   Height="32" Width="32"
-                   VerticalAlignment="Center"
-                   Source="{Binding ImagePath}"/>
+            <TextBlock  Grid.Column="0" Text="{Binding FontAwesomeIcon}"
+                        Padding="5 0 5 0"
+                        FontFamily="{StaticResource FontAwesome}" 
+                        Foreground="Black" 
+                        Background="White" 
+                        FontSize="30" Margin="10"
+                        VerticalAlignment="Center"></TextBlock>
             <TextBlock Grid.Column="1"
                        Foreground="White" 
                        Margin="4,0" 
                        FontSize="30"
                        Text="{Binding Message}"
                        TextWrapping="Wrap"
-                       MaxWidth="1000"/>
+                       MaxWidth="1000"
+                       VerticalAlignment="Center"/>
         </Grid>
     </Border>
 </ui:InteropWindow>

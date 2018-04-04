@@ -15,6 +15,6 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Shows the popup
         /// </summary>
-        void Show(string message, IWin32Window owner, string imagePath);
+        void Show(string message, IWin32Window owner, char fontAwesomeIconText);
     }
 }

@@ -52,7 +52,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a popup message with an image
         /// </summary>
-        void ShowPopup(string message, string imagePath);
+        void ShowPopup(string message, char fontAwesomeIcon);
 
         /// <summary>
         /// Show a dialog and get the results

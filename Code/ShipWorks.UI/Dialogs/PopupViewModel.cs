@@ -19,7 +19,7 @@ namespace ShipWorks.UI.Dialogs
         private readonly Lazy<IPopup> popup;
 
         private string message;
-        private string imagePath;
+        private char fontAwesomeIcon;
 
         /// <summary>
         /// Constructor
@@ -54,9 +54,9 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Shows the popup with the given message and image
         /// </summary>
-        public void Show(string message, IWin32Window owner, string imagePath)
+        public void Show(string message, IWin32Window owner, char fontAwesomeIcon)
         {
-            ImagePath = imagePath;
+            FontAwesomeIcon = fontAwesomeIcon;
 
             Show(message, owner);
         }
@@ -67,18 +67,18 @@ namespace ShipWorks.UI.Dialogs
         [Obfuscation(Exclude=true)]
         public string Message
         {
-            get { return message; }
-            set { handler.Set(nameof(Message), ref message, value); }
+            get => message;
+            set => handler.Set(nameof(Message), ref message, value);
         }
 
         /// <summary>
         /// The actual message text we want to display
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ImagePath
+        public char FontAwesomeIcon
         {
-            get { return imagePath; }
-            set { handler.Set(nameof(ImagePath), ref imagePath, value); }
+            get => fontAwesomeIcon;
+            set => handler.Set(nameof(FontAwesomeIcon), ref fontAwesomeIcon, value);
         }
     }
 }
