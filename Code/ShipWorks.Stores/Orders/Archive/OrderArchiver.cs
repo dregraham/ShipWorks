@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             if (!userLoginWorkflow.Logoff(clearRememberMe: false))
             {
-                return OrderArchiveResult.Cancel;
+                return OrderArchiveResult.Cancelled;
             }
 
             IProgressProvider progressProvider = messageHelper.CreateProgressProvider();
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? OrderArchiveResult.Fail : OrderArchiveResult.Success; 
+                        return progressProvider.HasErrors ? OrderArchiveResult.Failed : OrderArchiveResult.Succeeded; 
                     }
                 }
             }
