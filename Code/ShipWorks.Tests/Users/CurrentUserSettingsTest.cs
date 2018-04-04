@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
@@ -126,6 +127,34 @@ namespace ShipWorks.Tests.Users
 
             Assert.Equal(new[] { UserConditionalNotificationType.CombineOrders, UserConditionalNotificationType.SplitOrders },
                 settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new[] { UserConditionalNotificationType.SplitOrders }
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings_WhenDialogSettingsIsEmpty()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new UserConditionalNotificationType[0]
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
         }
 
         public void Dispose()

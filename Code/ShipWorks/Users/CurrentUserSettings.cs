@@ -38,9 +38,8 @@ namespace ShipWorks.Users
         public void StartShowingNotification(UserConditionalNotificationType notificationType)
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
-
             settings.DismissedNotifications = settings.DismissedNotifications.Except(new[] { notificationType }).ToArray();
-
+            
             userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
         }
 

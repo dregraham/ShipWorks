@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Tests.Shared;
@@ -18,6 +19,16 @@ namespace ShipWorks.Tests.Templates.Printing
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
+        [Fact]
+        public void CreateBarcodePrintJob_DelegatesToShippingProfileRepository()
+        {
+            var testObject = mock.Create<PrintJobFactory>();
+
+            IPrintJob result = testObject.CreateBarcodePrintJob();
+
+            mock.Mock<IShippingProfileRepository>().Verify(s => s.GetAll());
+        }
+        
         [Fact]
         public void CreateBarcodePrintJob_ReturnsBarcodePrintJob()
         {
