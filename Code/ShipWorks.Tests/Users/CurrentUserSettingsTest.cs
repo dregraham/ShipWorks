@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Users
     public class CurrentUserSettingsTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly UserSettingsEntity settings;
+        private UserSettingsEntity settings;
 
         public CurrentUserSettingsTest()
         {
@@ -155,6 +155,16 @@ namespace ShipWorks.Tests.Users
             testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
 
             Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void ShouldShowNotification_ReturnsTrue_WhenUserSettingsIsNull()
+        {
+            settings = null;
+            var testObject = mock.Create<CurrentUserSettings>();
+            Assert.True(testObject.ShouldShowNotification(UserConditionalNotificationType.CombineOrders));
+
+            settings = new UserSettingsEntity();
         }
 
         public void Dispose()

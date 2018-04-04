@@ -20,13 +20,13 @@ namespace ShipWorks.Tests.Templates.Printing
         }
 
         [Fact]
-        public void CreateBarcodePrintJob_DelegatesToShippingProfileRepository()
+        public void CreateBarcodePrintJob_DelegatesToShippingProfileService()
         {
             var testObject = mock.Create<PrintJobFactory>();
 
             IPrintJob result = testObject.CreateBarcodePrintJob();
 
-            mock.Mock<IShippingProfileRepository>().Verify(s => s.GetAll());
+            mock.Mock<IShippingProfileService>().Verify(s => s.GetConfiguredShipmentTypeProfiles());
         }
         
         [Fact]

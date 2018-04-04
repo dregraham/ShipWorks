@@ -27,8 +27,8 @@ namespace ShipWorks.Users
         /// </summary>
         public bool ShouldShowNotification(UserConditionalNotificationType notificationType)
         {
-            return userSession.Settings?.DialogSettingsObject
-                .DismissedNotifications
+            return userSession.Settings?.DialogSettingsObject?
+                .DismissedNotifications?
                 .None(x => x == notificationType) != false;
         }
 
@@ -38,9 +38,12 @@ namespace ShipWorks.Users
         public void StartShowingNotification(UserConditionalNotificationType notificationType)
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
-            settings.DismissedNotifications = settings.DismissedNotifications.Except(new[] { notificationType }).ToArray();
-            
-            userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+
+            if (settings != null)
+            {
+                settings.DismissedNotifications = settings.DismissedNotifications.Except(new[] { notificationType }).ToArray();
+                userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+            }
         }
 
         /// <summary>
@@ -50,13 +53,16 @@ namespace ShipWorks.Users
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
 
-            settings.DismissedNotifications = settings.DismissedNotifications
-                .Concat(new[] { notificationType })
-                .Distinct()
-                .OrderBy(x => x)
-                .ToArray();
+            if (settings != null)
+            {
+                settings.DismissedNotifications = settings.DismissedNotifications
+                    .Concat(new[] { notificationType })
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToArray();
 
-            userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+                userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+            }
         }
     }
 }
