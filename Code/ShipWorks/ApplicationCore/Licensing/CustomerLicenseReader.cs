@@ -12,15 +12,18 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
         private readonly IConfigurationData configurationData;
+        private readonly IDatabaseIdentifier databaseIdentifier;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory,
-            IConfigurationData configurationData)
+            IConfigurationData configurationData,
+            IDatabaseIdentifier databaseIdentifier)
         {
             this.configurationData = configurationData;
+            this.databaseIdentifier = databaseIdentifier;
             this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
@@ -32,11 +35,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
             IConfigurationEntity config = configurationData.FetchReadOnly();
 
-                // This exception was rarely thrown by config.CustomerKey, but it did happen. Hopefully this will 
-                // keep it from hapenning again... I could also putting some sort of sleep in here (a couple of seconds)
-                // This was hapenning when the key and the databaseid didn't match. This would happen when switching 
-                // I don't know if it is hapenning anymore...
-            return encryptionProvider.Decrypt(config.CustomerKey);
+            // try to decrypt the key, if we get an ExcryptionException try setting the cached database identifier
+            // and try again. This happens when switching between databases or restoring a database with a different database identifier
+            try
+            {
+                return encryptionProvider.Decrypt(config.CustomerKey);
+            }
+            catch (EncryptionException)
+            {
+                databaseIdentifier.Reset();
+                return encryptionProvider.Decrypt(config.CustomerKey);
+            }
         }
     }
 }

@@ -11,5 +11,10 @@ namespace ShipWorks.Data
         /// Gets the database identifier
         /// </summary>
         Guid Get();
+
+        /// <summary>
+        /// Reset the cached database identifier
+        /// </summary>
+        void Reset();
     }
 }
