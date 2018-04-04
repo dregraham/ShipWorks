@@ -24,11 +24,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <local:NotificationBorder BorderBrush="{StaticResource Yellow}"
-                              Margin="2"
+                              Margin="4,2"
                               Background="White"
-Padding="8,4"
-                            IconControl="!"
-                            IconFontFamily="Tahoma">
+                              Padding="8,4"
+                              IconControl="!"
+                              IconFontFamily="Tahoma">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />

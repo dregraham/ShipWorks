@@ -6,7 +6,6 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -15,7 +14,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 using System.Xml;
 using System.Xml.Linq;
 using Autofac;
@@ -146,6 +144,7 @@ namespace ShipWorks
 
         readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
+        private IArchiveNotificationManager archiveNotificationManager;
 
         /// <summary>
         /// Constructor
@@ -258,6 +257,7 @@ namespace ShipWorks
 
             // Prepare app level initialization
             DashboardManager.InitializeForApplication(dashboardArea);
+            archiveNotificationManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IArchiveNotificationManager>(TypedParameter.From(panelArchiveNotification));
             AuditProcessor.InitializeForApplication();
 
             // We need to know what the download is doing
@@ -766,6 +766,8 @@ namespace ShipWorks
             // Start the dashboard.  Has to be before updating store depending UI - as that affects dashboard display.
             DashboardManager.OpenDashboard();
 
+            archiveNotificationManager.ShowIfNecessary();
+
             // Get all new\edited templates are installed
             BuiltinTemplates.UpdateTemplates(this);
 
@@ -898,8 +900,6 @@ namespace ShipWorks
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     lifetimeScope.Resolve<IOrderArchiveFilterRegenerator>().Regenerate();
-
-                    ShowArchiveNotificationIfNecessary(lifetimeScope, IoC.UnsafeGlobalLifetimeScope.Resolve<IArchiveNotificationViewModel>);
                 }
 
                 logonAsyncLoadSuccess = true;
@@ -913,44 +913,6 @@ namespace ShipWorks
             finally
             {
                 loadedEvent.Set();
-            }
-        }
-
-        /// <summary>
-        /// Show the archive notification banner, if necessary
-        /// </summary>
-        /// <param name="lifetimeScope">Transient lifetime scope</param>
-        /// <param name="createViewModel">This needs to come from the root lifetime scope, since it will live forever</param>
-        private void ShowArchiveNotificationIfNecessary(ILifetimeScope lifetimeScope, Func<IArchiveNotificationViewModel> createViewModel)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(
-                    (Action<ILifetimeScope, Func<IArchiveNotificationViewModel>>) ShowArchiveNotificationIfNecessary,
-                    new object[] { lifetimeScope, createViewModel });
-            }
-            else
-            {
-                if (lifetimeScope.Resolve<IConfigurationData>().IsArchive())
-                {
-                    dashboardArea.Top += panelArchiveNotification.Height;
-
-                    var host = new ElementHost
-                    {
-                        Dock = DockStyle.Fill,
-                        BackColor = Color.Transparent
-                    };
-
-                    createViewModel().Show(host);
-
-                    panelArchiveNotification.Controls.Add(host);
-                    panelArchiveNotification.Visible = true;
-
-                }
-                else
-                {
-                    panelArchiveNotification.Visible = false;
-                }
             }
         }
 
@@ -1078,6 +1040,8 @@ namespace ShipWorks
             heartBeat.Stop();
 
             ApplicationText = "";
+
+            archiveNotificationManager.Reset();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
@@ -1343,6 +1307,8 @@ namespace ShipWorks
             kryptonManager.GlobalPaletteMode = AppearanceHelper.GetKryptonPaletteMode();
 
             ApplySystemTrayProperties();
+
+            archiveNotificationManager.RefreshUI();
         }
 
         /// <summary>
