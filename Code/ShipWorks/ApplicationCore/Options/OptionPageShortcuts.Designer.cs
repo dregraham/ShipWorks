@@ -47,13 +47,13 @@
             // 
             // infoTipSingleScan
             // 
-            this.infoTipSingleScan.Caption = "Quickly locate orders by scanning a barcode.\r\n\r\nClick the \'Pair Scanner\' button t" +
+            this.infoTipSingleScan.Caption = "Quickly locate orders, apply Shipping Profiles, and more by scanning barcodes.\r\n\r\nClick the \'Pair Scanner\' button t" +
     "o get started.";
             this.infoTipSingleScan.Location = new System.Drawing.Point(165, 107);
             this.infoTipSingleScan.Name = "infoTipSingleScan";
             this.infoTipSingleScan.Size = new System.Drawing.Size(12, 12);
             this.infoTipSingleScan.TabIndex = 40;
-            this.infoTipSingleScan.Title = "Search Orders by Barcode Scan";
+            this.infoTipSingleScan.Title = "Enable Barcode Scanner";
             // 
             // infoTipAutoPrint
             // 
