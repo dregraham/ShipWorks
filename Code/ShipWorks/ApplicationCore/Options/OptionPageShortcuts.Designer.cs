@@ -47,8 +47,8 @@
             // 
             // infoTipSingleScan
             // 
-            this.infoTipSingleScan.Caption = "Quickly locate orders, apply Shipping Profiles, and more by scanning barcodes.\r\n\r\nClick the \'Pair Scanner\' button t" +
-    "o get started.";
+            this.infoTipSingleScan.Caption = "Quickly locate orders, apply Shipping Profiles, and more by scanning barcodes.\r\n\r" +
+    "\nClick the \'Pair Scanner\' button to get started.";
             this.infoTipSingleScan.Location = new System.Drawing.Point(165, 107);
             this.infoTipSingleScan.Name = "infoTipSingleScan";
             this.infoTipSingleScan.Size = new System.Drawing.Size(12, 12);
@@ -57,32 +57,33 @@
             // 
             // infoTipAutoPrint
             // 
-            this.infoTipAutoPrint.Caption = "Labels print automatically when a barcode is scanned.\r\n\r\nLabels are generated usi" +
-    "ng the currently configured shipping rules.";
-            this.infoTipAutoPrint.Location = new System.Drawing.Point(265, 155);
+            this.infoTipAutoPrint.Caption = "Automatically print a label when you search for an order using a barcode scan.\r\n\r" +
+    "\nLabels are generated using the currently configured shipping rules.";
+            this.infoTipAutoPrint.Location = new System.Drawing.Point(300, 155);
             this.infoTipAutoPrint.Name = "infoTipAutoPrint";
             this.infoTipAutoPrint.Size = new System.Drawing.Size(12, 12);
             this.infoTipAutoPrint.TabIndex = 39;
-            this.infoTipAutoPrint.Title = "Automatically Print Labels on Barcode Scan";
+            this.infoTipAutoPrint.Title = "Automatically Print Labels on Barcode Scan Search";
             // 
             // infoTipAutoWeigh
             // 
-            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically on a barcode scan.\r\n\r\nThe weight " +
-    "is imported if the scale registers a weight greater than 0.";
-            this.infoTipAutoWeigh.Location = new System.Drawing.Point(293, 132);
+            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically when you search for an order usin" +
+    "g a barcode scan.\r\n\r\nThe weight is imported if the scale registers a weight grea" +
+    "ter than 0.";
+            this.infoTipAutoWeigh.Location = new System.Drawing.Point(328, 132);
             this.infoTipAutoWeigh.Name = "infoTipAutoWeigh";
             this.infoTipAutoWeigh.Size = new System.Drawing.Size(13, 12);
             this.infoTipAutoWeigh.TabIndex = 38;
-            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages on Barcode Scan";
+            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages on Barcode Scan Search";
             // 
             // autoWeigh
             // 
             this.autoWeigh.AutoSize = true;
             this.autoWeigh.Location = new System.Drawing.Point(39, 130);
             this.autoWeigh.Name = "autoWeigh";
-            this.autoWeigh.Size = new System.Drawing.Size(252, 17);
+            this.autoWeigh.Size = new System.Drawing.Size(287, 17);
             this.autoWeigh.TabIndex = 37;
-            this.autoWeigh.Text = "Automatically weigh packages on barcode scan";
+            this.autoWeigh.Text = "Automatically weigh packages on barcode scan search";
             this.autoWeigh.UseVisualStyleBackColor = true;
             this.autoWeigh.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
             // 
@@ -111,9 +112,9 @@
             this.autoPrint.AutoSize = true;
             this.autoPrint.Location = new System.Drawing.Point(39, 153);
             this.autoPrint.Name = "autoPrint";
-            this.autoPrint.Size = new System.Drawing.Size(224, 17);
+            this.autoPrint.Size = new System.Drawing.Size(259, 17);
             this.autoPrint.TabIndex = 34;
-            this.autoPrint.Text = "Automatically print labels on barcode scan";
+            this.autoPrint.Text = "Automatically print labels on barcode scan search";
             this.autoPrint.UseVisualStyleBackColor = true;
             this.autoPrint.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
             // 
