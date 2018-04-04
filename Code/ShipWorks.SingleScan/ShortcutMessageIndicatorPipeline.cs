@@ -24,6 +24,9 @@ namespace ShipWorks.SingleScan
         private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
 
+        private const string BarcodeIconPath = "/ShipWorks.Core;component/Resources/barcode2.png";
+        private const string KeyboardIconPath = "/ShipWorks.Core;component/Resources/keyboard.png";
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -67,8 +70,9 @@ namespace ShipWorks.SingleScan
                 StringBuilder builder = new StringBuilder();
                 string action = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? shortcutMessage.Value : "Barcode";
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
+                string iconPath = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? KeyboardIconPath : BarcodeIconPath;
 
-                messageHelper.ShowPopup($"{action}: {name}");
+                messageHelper.ShowPopup($"{action}: {name}", iconPath);
             }
         }
 

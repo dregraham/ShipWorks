@@ -10719,8 +10719,10 @@
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <Content Include="Resources\barcode.svg" />
+    <Resource Include="Resources\barcode2.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
+    <Resource Include="Resources\keyboard.png" />
     <Content Include="Resources\keyboard.svg" />
     <Content Include="Resources\merge_icon_16x16.png" />
     <Content Include="Resources\merge_icon_32x32.png" />
