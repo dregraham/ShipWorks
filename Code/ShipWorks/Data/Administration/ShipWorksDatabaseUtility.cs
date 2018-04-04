@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -284,7 +285,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
-        public static List<SqlDatabaseDetail> GetDatabaseDetails(DbConnection con)
+        public static async Task<IEnumerable<SqlDatabaseDetail>> GetDatabaseDetails(DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
@@ -304,7 +305,7 @@ namespace ShipWorks.Data.Administration
             // Go through each database loading ShipWorks info about it
             foreach (string name in names)
             {
-                details.Add(GetDatabaseDetail(name, con));
+                details.Add(await GetDatabaseDetail(name, con).ConfigureAwait(false));
             }
 
             return details;
@@ -313,20 +314,19 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get detailed information about the given database
         /// </summary>
-        public static SqlDatabaseDetail GetDatabaseDetail(string database, DbConnection con)
-        {
-            return SqlDatabaseDetail.Load(database, con);
-        }
+        public static Task<SqlDatabaseDetail> GetDatabaseDetail(string database, DbConnection con) =>
+            SqlDatabaseDetail.Load(database, con);
 
         /// <summary>
         /// Get the first available database name that doesn't conflict with any other databases on the server represented by the given connection
         /// </summary>
-        public static string GetFirstAvailableDatabaseName(DbConnection con)
+        public static async Task<string> GetFirstAvailableDatabaseName(DbConnection con)
         {
             string baseName = "ShipWorks";
             string databaseName = baseName;
 
-            List<string> existingNames = ShipWorksDatabaseUtility.GetDatabaseDetails(con).Select(d => d.Name).ToList();
+            var databases = await ShipWorksDatabaseUtility.GetDatabaseDetails(con).ConfigureAwait(false);
+            List<string> existingNames = databases.Select(d => d.Name).ToList();
 
             int index = 1;
             while (existingNames.Contains(databaseName))

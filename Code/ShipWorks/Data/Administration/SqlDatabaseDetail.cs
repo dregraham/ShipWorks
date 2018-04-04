@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Data;
 using log4net;
@@ -18,27 +20,30 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
-        public static SqlDatabaseDetail Load(string database, DbConnection con)
+        public static async Task<SqlDatabaseDetail> Load(string database, DbConnection con)
         {
-            SqlDatabaseDetail detail = new SqlDatabaseDetail();
-            detail.Name = database;
+            SqlDatabaseDetail detail = new SqlDatabaseDetail
+            {
+                Name = database
+            };
 
             try
             {
                 con.ChangeDatabase(database);
 
-                bool isShipWorksDb = (int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('GetSchemaVersion'), 0)") > 0;
+                var command = con.CreateCommand("SELECT COALESCE(OBJECT_ID('GetSchemaVersion'), 0)");
+                bool isShipWorksDb = (int) await command.ExecuteScalarAsync().ConfigureAwait(false) > 0;
                 if (!isShipWorksDb)
                 {
                     detail.Status = SqlDatabaseStatus.NonShipWorks;
                 }
                 else
                 {
-                    LoadSchemaVersion(detail, con);
-                    LoadLastUsedBy(detail, con);
-                    LoadLastOrderNumber(detail, con);
-                    LoadArchiveDetails(detail, con);
-                    LoadDatabaseGuid(detail, con);
+                    await LoadSchemaVersion(detail, con).ConfigureAwait(false);
+                    await LoadLastUsedBy(detail, con).ConfigureAwait(false);
+                    await LoadLastOrderNumber(detail, con).ConfigureAwait(false);
+                    await LoadArchiveDetails(detail, con).ConfigureAwait(false);
+                    await LoadDatabaseGuid(detail, con).ConfigureAwait(false);
                 }
             }
             catch (SqlException ex)
@@ -61,19 +66,22 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the database GUID
         /// </summary>
-        private static void LoadDatabaseGuid(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadDatabaseGuid(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetDatabaseGuid";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.Guid = (Guid) DbCommandProvider.ExecuteScalar(cmd);
+            detail.Guid = (Guid) await cmd.ExecuteScalarAsync().ConfigureAwait(false);
         }
 
         /// <summary>
         /// Load whether the database is an archive
         /// </summary>
-        private static void LoadArchiveDetails(SqlDatabaseDetail detail, DbConnection con)
+        [SuppressMessage("Recommendations",
+            "RECS0022: Empty general catch clause suppresses any error",
+            Justification = "A failure when checking for whether the database is an archive should not be considered a major failure")]
+        private static async Task LoadArchiveDetails(SqlDatabaseDetail detail, DbConnection con)
         {
             if (detail.SchemaVersion < ConfigurationData.ArchiveVersion)
             {
@@ -85,7 +93,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                var archivalSettingsXml = (string) cmd.ExecuteScalar();
+                var archivalSettingsXml = (string) await cmd.ExecuteScalarAsync().ConfigureAwait(false);
                 detail.IsArchive = XDocument.Parse(archivalSettingsXml)?.Root?.HasElements == true;
             }
             catch (Exception)
@@ -97,26 +105,26 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the schema version of the ShipWorks database associated with the given connection
         /// </summary>
-        private static void LoadSchemaVersion(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadSchemaVersion(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.SchemaVersion = new Version((string) DbCommandProvider.ExecuteScalar(cmd));
+            detail.SchemaVersion = new Version((string) await cmd.ExecuteScalarAsync().ConfigureAwait(false));
             detail.Status = SqlDatabaseStatus.ShipWorks;
         }
 
         /// <summary>
         /// Load the last user to use the given ShipWorsk database
         /// </summary>
-        private static void LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con)
         {
             detail.LastUsedBy = "";
             detail.LastUsedOn = DateTime.MinValue;
 
             // We can only load this if the Audit table exists (it wont for 2.x databases)
-            if ((int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('Audit'), 0)") > 0)
+            if (await IsNewerThanShipWorks2(con).ConfigureAwait(false))
             {
                 DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText =
@@ -125,9 +133,9 @@ namespace ShipWorks.Data.Administration
                     "  WHERE a.UserID != 1027309002 " +
                     "  ORDER BY a.AuditID DESC";
 
-                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                using (DbDataReader reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync().ConfigureAwait(false))
                     {
                         detail.LastUsedBy = reader.GetString(0);
                         detail.LastUsedOn = reader.GetDateTime(1);
@@ -139,12 +147,12 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last order found in the given ShipWorks database
         /// </summary>
-        private static void LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
 
             // 2x and 3x store it differently
-            if ((int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('[Order]'), 0)") > 0)
+            if (await IsNewerThanShipWorks2(con).ConfigureAwait(false))
             {
                 cmd.CommandText =
                     "SELECT TOP (1) OrderNumberComplete as OrderNumber, OrderDate " +
@@ -159,14 +167,25 @@ namespace ShipWorks.Data.Administration
                     "  ORDER BY OrderID DESC";
             }
 
-            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                if (reader.Read())
+                if (await reader.ReadAsync().ConfigureAwait(false))
                 {
                     detail.LastOrderNumber = reader.GetString(0);
                     detail.LastOrderDate = reader.GetDateTime(1);
                 }
             }
+        }
+
+        /// <summary>
+        /// Is the database ShipWorks 3 or newer
+        /// </summary>
+        private static async Task<bool> IsNewerThanShipWorks2(DbConnection con)
+        {
+            var command = con.CreateCommand();
+            command.CommandText = "SELECT COALESCE(OBJECT_ID('[Order]'), 0)";
+            var result = (int) await command.ExecuteScalarAsync().ConfigureAwait(false);
+            return result > 0;
         }
 
         /// <summary>
