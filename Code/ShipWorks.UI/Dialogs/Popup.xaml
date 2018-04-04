@@ -38,7 +38,16 @@
         Background="Black"
         Padding="6">
         <Grid>
-            <TextBlock Foreground="White" 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" 
+                   Height="32" Width="32"
+                   VerticalAlignment="Center"
+                   Source="{Binding ImagePath}"/>
+            <TextBlock Grid.Column="1"
+                       Foreground="White" 
                        Margin="4,0" 
                        FontSize="30"
                        Text="{Binding Message}"
