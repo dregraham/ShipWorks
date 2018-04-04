@@ -6,8 +6,8 @@ namespace ShipWorks.Stores.Orders.Archive
     /// <summary>
     /// Valid archive return types
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum OrderArchiveReturnType
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
+    public enum OrderArchiveResult
     {
         [Description("Success")]
         Success = 0,

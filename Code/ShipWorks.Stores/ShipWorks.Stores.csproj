@@ -175,7 +175,7 @@
     <Compile Include="Orders\Archive\OrderArchiveFilterRegenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveOrchestrator.cs" />
     <Compile Include="Orders\Archive\OrderArchiver.cs" />
-    <Compile Include="Orders\Archive\OrderArchiveReturnType.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveResult.cs" />
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
