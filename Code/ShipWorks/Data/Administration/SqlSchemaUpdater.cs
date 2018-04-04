@@ -4,8 +4,8 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 using log4net;
@@ -14,11 +14,8 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 
@@ -476,7 +473,7 @@ namespace ShipWorks.Data.Administration
             /// <summary>
             /// Run the command with the given arguments
             /// </summary>
-            public void Execute(List<string> args)
+            public Task Execute(List<string> args)
             {
                 string type = null;
 
@@ -502,7 +499,7 @@ namespace ShipWorks.Data.Administration
                             // a new int from the schema id
                             int schemaID = GetSchemaID(GetRequiredSchemaVersion());
 
-                            log.InfoFormat("Required shcema version: {0}", schemaID);
+                            log.InfoFormat("Required schema version: {0}", schemaID);
                             Environment.ExitCode = schemaID;
 
                             break;
@@ -546,6 +543,8 @@ namespace ShipWorks.Data.Administration
                             throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
                         }
                 }
+
+                return Task.CompletedTask;
             }
         }
 

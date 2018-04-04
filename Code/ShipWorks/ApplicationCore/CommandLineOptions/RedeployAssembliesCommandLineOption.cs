@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration;
@@ -27,7 +28,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Execute the command
         /// </summary>
-        public void Execute(List<string> args)
+        public Task Execute(List<string> args)
         {
             try
             {
@@ -52,6 +53,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 log.Error("Failed to redeploy assemblies.", ex);
                 Environment.ExitCode = ex.ErrorCode;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

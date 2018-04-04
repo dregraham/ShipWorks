@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Sql;
-using System.Linq;
-using Microsoft.Win32;
-using Interapptive.Shared.Utility;
-using log4net;
-using Interapptive.Shared;
-using Interapptive.Shared.Win32;
-using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
+using System.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
+using log4net;
+using Microsoft.Win32;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -98,10 +98,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public static string ExtractServerName(string serverInstance)
         {
-            if (serverInstance == null)
-            {
-                throw new ArgumentNullException("serverInstance");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(serverInstance, nameof(serverInstance));
 
             string server;
 
@@ -125,10 +122,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public static string ExtractInstanceName(string serverInstance)
         {
-            if (serverInstance == null)
-            {
-                throw new ArgumentNullException("serverInstance");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(serverInstance, nameof(serverInstance));
 
             string instance;
 
@@ -261,7 +255,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
 
             // If firstTry was given, and we are connecting to the same instance it represents, use it's config first as it will likely work.
-            if ((firstTry != null) && 
+            if ((firstTry != null) &&
                 (firstTry.WindowsAuth || !string.IsNullOrWhiteSpace(firstTry.Username)) &&
                 (firstTry.ServerInstance == instance))
             {
@@ -270,18 +264,18 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             // Then we'll try the sa account with the password we create - we know that'd be an admin
             configsToTry.Add(new SqlSessionConfiguration()
-                {
-                    Username = "sa",
-                    Password = SqlInstanceUtility.ShipWorksSaPassword,
-                    WindowsAuth = false
-                });
+            {
+                Username = "sa",
+                Password = SqlInstanceUtility.ShipWorksSaPassword,
+                WindowsAuth = false
+            });
 
 
             // Then we'll try windows auth
             configsToTry.Add(new SqlSessionConfiguration()
-                {
-                    WindowsAuth = true
-                });
+            {
+                WindowsAuth = true
+            });
 
             foreach (SqlSessionConfiguration config in configsToTry)
             {

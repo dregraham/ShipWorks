@@ -190,6 +190,7 @@
     <Compile Include="ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\IConnectionSensitiveScope.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />

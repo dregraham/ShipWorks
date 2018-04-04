@@ -523,13 +523,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// The state of the configuration used to connect to SQL Server
         /// </summary>
-        public static bool IsConfigured
-        {
-            get
-            {
-                return SqlSession.Current != null;
-            }
-        }
+        public static bool IsConfigured => Current != null;
 
         /// <summary>
         /// Create a copy of the current SqlSession

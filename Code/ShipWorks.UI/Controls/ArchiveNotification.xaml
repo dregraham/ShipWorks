@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.UI.Controls"
+             xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
              
              FontFamily="Tahoma"
              FontSize="8.25 pt"
@@ -21,6 +22,9 @@
 
             <Style TargetType="Expander" BasedOn="{StaticResource Expander.Style}" />
             <Style TargetType="Border" BasedOn="{StaticResource Border.Expander}" />
+
+            <vc:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <vc:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
         </ResourceDictionary>
     </UserControl.Resources>
     <local:NotificationBorder BorderBrush="{StaticResource Yellow}"
@@ -48,9 +52,29 @@
                     FontSize="16" Grid.ColumnSpan="2" Margin="0,3" />
             <Button Grid.Column="3" 
                     Padding="4"
+                    Margin="0,2"
                     VerticalAlignment="Center" 
                     Command="{Binding ConnectToLiveDatabase}"
-                    Margin="0,2">Return to live database</Button>
+                    Visibility="{Binding IsConnecting, Converter={StaticResource ShowWhenFalse}}">
+                Return to live database</Button>
+            <Border Grid.Column="3" 
+                    Padding="4"
+                    Margin="0,2"
+                    VerticalAlignment="Center" 
+                    Visibility="{Binding IsConnecting, Converter={StaticResource ShowWhenTrue}}">
+                <StackPanel VerticalAlignment="Center" 
+                            Orientation="Horizontal">
+                    <local:WaitSpinner BorderBrush="Transparent"
+                                       VerticalAlignment="Center"
+                                       Padding="0">
+                        <local:WaitSpinner.LayoutTransform>
+                            <ScaleTransform ScaleX=".5" ScaleY="0.5" />
+                        </local:WaitSpinner.LayoutTransform>
+                    </local:WaitSpinner>
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="4,0,0,0">Connecting...</TextBlock>
+                </StackPanel>
+            </Border>
         </Grid>
     </local:NotificationBorder>
 </UserControl>

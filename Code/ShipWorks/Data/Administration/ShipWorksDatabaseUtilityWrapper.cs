@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Data.Administration
@@ -13,7 +14,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
-        public IEnumerable<SqlDatabaseDetail> GetDatabaseDetails(DbConnection con) =>
+        public Task<IEnumerable<SqlDatabaseDetail>> GetDatabaseDetails(DbConnection con) =>
             ShipWorksDatabaseUtility.GetDatabaseDetails(con);
     }
 }

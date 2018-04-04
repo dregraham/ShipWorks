@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
-using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -8,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
@@ -18,13 +22,18 @@ namespace ShipWorks.Archiving
     /// View Model for the Archive Notification View Model
     /// </summary>
     [Component]
-    public class ArchiveNotificationViewModel : IArchiveNotificationViewModel
+    public class ArchiveNotificationViewModel : IArchiveNotificationViewModel, INotifyPropertyChanged
     {
         private readonly Func<IArchiveNotification> createControl;
         private readonly IUserLoginWorkflow loginWorkflow;
         private readonly ISqlSession sqlSession;
         private readonly IShipWorksDatabaseUtility databaseUtility;
         private readonly IMessageHelper messageHelper;
+        private readonly PropertyChangedHandler handler;
+
+        private bool isConnecting = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
@@ -42,13 +51,26 @@ namespace ShipWorks.Archiving
             this.sqlSession = sqlSession;
             this.createControl = createControl;
 
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
             ConnectToLiveDatabase = new RelayCommand(() => ConnectToLiveDatabaseAction());
         }
 
         /// <summary>
         /// Command to connect to the live database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ConnectToLiveDatabase { get; set; }
+
+        /// <summary>
+        /// Is the panel connecting to the live database
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsConnecting
+        {
+            get => isConnecting;
+            set => handler.Set(nameof(IsConnecting), ref isConnecting, value);
+        }
 
         /// <summary>
         /// Show the archive notification
@@ -62,20 +84,32 @@ namespace ShipWorks.Archiving
         /// Connect to the live database
         /// </summary>
         private void ConnectToLiveDatabaseAction() =>
-            GetLiveDatabase()
-                .Match(ChangeDatabase, ShowError);
+            Functional.UsingAsync(
+                StartConnecting(),
+                _ => GetLiveDatabase()
+                    .Do((Action<SqlDatabaseDetail>) ChangeDatabase, ShowError, ContinueOn.CurrentThread));
+
+        /// <summary>
+        /// Start the connection process
+        /// </summary>
+        private IDisposable StartConnecting()
+        {
+            IsConnecting = true;
+            return Disposable.Create(() => IsConnecting = false);
+        }
 
         /// <summary>
         /// Get the live database
         /// </summary>
-        private GenericResult<SqlDatabaseDetail> GetLiveDatabase() =>
-            Functional.Using(
+        private Task<SqlDatabaseDetail> GetLiveDatabase() =>
+            Functional.UsingAsync(
                 sqlSession.OpenConnection(),
                 con => databaseUtility
                     .GetDatabaseDetails(con)
-                    .Where(IsLiveDatabase)
-                    .FirstOrDefault()
-                    .ToResult(() => new InvalidOperationException("Could not find live database")));
+                    .Map(x => x.Where(IsLiveDatabase).FirstOrDefault())
+                    .Bind(x => x != null ?
+                        Task.FromResult(x) :
+                        Task.FromException<SqlDatabaseDetail>(new InvalidOperationException("Could not find live database"))));
 
         /// <summary>
         /// Is the given database the live database for this archive
@@ -89,7 +123,7 @@ namespace ShipWorks.Archiving
         /// <summary>
         /// Change to the given database
         /// </summary>
-        private Unit ChangeDatabase(SqlDatabaseDetail database)
+        private void ChangeDatabase(SqlDatabaseDetail database)
         {
             if (loginWorkflow.Logoff(false))
             {
@@ -99,17 +133,12 @@ namespace ShipWorks.Archiving
 
                 loginWorkflow.Logon(null);
             }
-
-            return Unit.Default;
         }
 
         /// <summary>
         /// Show an error message
         /// </summary>
-        private Unit ShowError(Exception arg)
-        {
+        private void ShowError(Exception arg) =>
             messageHelper.ShowError(arg.Message);
-            return Unit.Default;
-        }
     }
 }

@@ -9,17 +9,15 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Core.Lifetime;
 using Interapptive.Shared;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
@@ -66,7 +64,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// Raised when the installation executable has exited
         /// </summary>
         public event EventHandler Exited;
-        
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -179,7 +177,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         public string GetInstallerLocalFilePath(ISqlInstallerInfo sqlInstallerInfo)
         {
             ValidateInitialized(sqlInstallerInfo);
-            
+
             return sqlInstallerInfo.LocalFilePath;
         }
 
@@ -467,9 +465,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// The actual installation that occurs in a seperate elevated process
+        /// The actual installation that occurs in a separate elevated process
         /// </summary>
-        private void UpgradeLocalDbInternal(string instanceName)
+        private async Task UpgradeLocalDbInternal(string instanceName)
         {
             int exitCode = 0;
 
@@ -479,9 +477,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 EnsureSqlInstanceInstalled(instanceName);
 
                 //
-                // At this point, SQL Server should be succesfully installed and running.  Now we need to move the mdf\ldf
+                // At this point, SQL Server should be successfully installed and running.  Now we need to move the mdf\ldf
                 //
-                
+
                 // Old LocalDb session
                 SqlSession localDbSession = SqlSession.Current;
                 if (localDbSession.Configuration.ServerInstance != SqlInstanceUtility.LocalDbServerInstance)
@@ -499,7 +497,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 DatabaseFileInfo fileInfo = DetachDatabase(localDbSession);
 
                 // Get the next available database name to use
-                string databaseName = AssignAutomaticDatabaseNameInternal();
+                string databaseName = await AssignAutomaticDatabaseNameInternal().ConfigureAwait(false);
 
                 // If it returned nul, there was an error and Environment.ExitCode is already set.
                 if (databaseName == null)
@@ -675,9 +673,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Excecutes in an elevated process to assign the name to use for the database in the full version of sql server that LocalDb was upgraded to
+        /// Executes in an elevated process to assign the name to use for the database in the full version of sql server that LocalDb was upgraded to
         /// </summary>
-        private string AssignAutomaticDatabaseNameInternal()
+        private async Task<string> AssignAutomaticDatabaseNameInternal()
         {
             int exitCode = 0;
 
@@ -693,7 +691,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 using (DbConnection con = session.OpenConnection())
                 {
-                    string databaseName = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
+                    string databaseName = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con).ConfigureAwait(false);
 
                     // Now record that this is the database that is to be used for full instances for this path by default
                     using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
@@ -1013,7 +1011,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         #region Common and Command Line
 
         /// <summary>
-        /// Handle commands comming in from the command line for sql server
+        /// Handle commands coming in from the command line for sql server
         /// </summary>
         /// <remarks>
         /// This is marked as unused but is used by reflection to install/upgrade SQL Server
@@ -1031,7 +1029,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             /// <summary>
             /// Execute the command
             /// </summary>
-            public void Execute(List<string> args)
+            public async Task Execute(List<string> args)
             {
                 string action = null;
                 string instance = null;
@@ -1055,14 +1053,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    ExecuteInternal(action, instance, sapassword, lifetimeScope);
+                    await ExecuteInternal(action, instance, sapassword, lifetimeScope).ConfigureAwait(true);
                 }
             }
 
             /// <summary>
             /// Execute the actual work for the command.
             /// </summary>
-            void ExecuteInternal(string action, string instance, string sapassword, ILifetimeScope lifetimeScope)
+            async Task ExecuteInternal(string action, string instance, string sapassword, ILifetimeScope lifetimeScope)
             {
                 ValidateArguments(action, instance, sapassword);
 
@@ -1076,63 +1074,63 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     switch (action)
                     {
                         case "upgrade":
-                        {
-                            log.InfoFormat("Processing request to upgrade SQL Sever");
+                            {
+                                log.InfoFormat("Processing request to upgrade SQL Sever");
 
-                            // We need to initialize an installer to get the correct installer package exe's
-                            ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
+                                // We need to initialize an installer to get the correct installer package exe's
+                                ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
 
-                            UpgradeSqlServerInternal(
-                                installer.GetInstallerLocalFilePath(sqlInstallerInfo),
-                                SqlSession.Current);
+                                UpgradeSqlServerInternal(
+                                    installer.GetInstallerLocalFilePath(sqlInstallerInfo),
+                                    SqlSession.Current);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case "install":
-                        {
-                            log.InfoFormat("Processing request to install sql server. {0}", instance);
+                            {
+                                log.InfoFormat("Processing request to install sql server. {0}", instance);
 
-                            // We need to initialize an installer to get the correct installer package exe's
-                            installer.InstallSqlServerInternal(instance, sapassword);
+                                // We need to initialize an installer to get the correct installer package exe's
+                                installer.InstallSqlServerInternal(instance, sapassword);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case "localdb":
-                        {
-                            log.InfoFormat("Processing request to install LocalDB.");
+                            {
+                                log.InfoFormat("Processing request to install LocalDB.");
 
-                            // We need to initialize an installer to get the correct installer package exe's
-                            installer.InstallLocalDbInternal();
+                                // We need to initialize an installer to get the correct installer package exe's
+                                installer.InstallLocalDbInternal();
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case "upgradelocaldb":
-                        {
-                            log.InfoFormat("Processing request to upgrade local db. {0}", instance);
+                            {
+                                log.InfoFormat("Processing request to upgrade local db. {0}", instance);
 
-                            // We need to initialize an installer to get the correct installer package exe's
-                            installer.UpgradeLocalDbInternal(instance);
+                                // We need to initialize an installer to get the correct installer package exe's
+                                await installer.UpgradeLocalDbInternal(instance).ConfigureAwait(true);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         case "assignautomaticdbname":
-                        {
-                            log.InfoFormat("Processing request to assign automatic database name.");
+                            {
+                                log.InfoFormat("Processing request to assign automatic database name.");
 
-                            // We need to initialize an installer to get the correct installer package exe's
-                            installer.AssignAutomaticDatabaseNameInternal();
+                                // We need to initialize an installer to get the correct installer package exe's
+                                await installer.AssignAutomaticDatabaseNameInternal().ConfigureAwait(true);
 
-                            break;
-                        }
+                                break;
+                            }
 
                         default:
-                        {
-                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
-                        }
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                            }
                     }
                 }
                 catch (Win32Exception ex)
@@ -1171,7 +1169,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                             {
                                 throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
                             }
-                                
+
                             break;
                         }
 

@@ -504,7 +504,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.Size = new System.Drawing.Size(548, 307);
             this.wizardPageSelectSqlServerInstance.TabIndex = 0;
             this.wizardPageSelectSqlServerInstance.Title = "Connect to ShipWorks";
-            this.wizardPageSelectSqlServerInstance.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSelectSqlInstance);
             this.wizardPageSelectSqlServerInstance.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSelectSqlInstance);
             // 
             // panelSearchSqlServers
@@ -746,7 +745,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageDatabaseName.TabIndex = 0;
             this.wizardPageDatabaseName.Title = "Database Name";
             this.wizardPageDatabaseName.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCreateDatabase);
-            this.wizardPageDatabaseName.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoCreateDatabase);
             // 
             // panelDatabaseGivenName
             // 

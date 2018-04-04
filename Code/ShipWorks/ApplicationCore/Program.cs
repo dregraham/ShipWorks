@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -127,7 +125,7 @@ namespace ShipWorks
                     return;
                 }
 
-                ExecutionMode.Execute();
+                await ExecutionMode.Execute().ConfigureAwait(true);
 
                 // Log total connections made
                 log.InfoFormat("Total connections: {0}", ConnectionMonitor.TotalConnectionCount);
