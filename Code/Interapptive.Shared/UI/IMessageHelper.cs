@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 
@@ -52,7 +53,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a popup message with an image
         /// </summary>
-        void ShowPopup(string message, char fontAwesomeIcon);
+        void ShowPopup(string message, char fontAwesomeIcon, int fadeTimeInSeconds);
 
         /// <summary>
         /// Show a dialog and get the results

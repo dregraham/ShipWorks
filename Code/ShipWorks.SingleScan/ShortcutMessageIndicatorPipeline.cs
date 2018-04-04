@@ -25,7 +25,7 @@ namespace ShipWorks.SingleScan
 
         private const char BarcodeIconText = (char) 0xf02a;
         private const char KeyboardIconText = (char) 0xf11c;
-
+        private const int shortcutIndicatorFadeTime = 2;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.SingleScan
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
                 char fontAwesomeIcon = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? KeyboardIconText : BarcodeIconText;
 
-                messageHelper.ShowPopup($"{action}: {name}", fontAwesomeIcon);
+                messageHelper.ShowPopup($"{action}: {name}", fontAwesomeIcon, shortcutIndicatorFadeTime);
             }
         }
 

@@ -90,17 +90,17 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a popup message
         /// </summary>
-        public void ShowPopup(string message, char fontAwesomeIcon)
+        public void ShowPopup(string message, char fontAwesomeIcon, int fadeTimeInSeconds)
         {
             Control owner = ownerFactory();
 
             if (owner.InvokeRequired)
             {
-                owner.Invoke((Action<string>) ShowPopup, message, fontAwesomeIcon);
+                owner.Invoke((Action<string>) ShowPopup, message, fontAwesomeIcon, fadeTimeInSeconds);
             }
             else
             {
-                popupViewModelFactory().Show(message, owner, fontAwesomeIcon);
+                popupViewModelFactory().Show(message, owner, fontAwesomeIcon, fadeTimeInSeconds);
             }
         }
 
