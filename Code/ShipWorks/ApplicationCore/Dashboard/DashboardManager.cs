@@ -17,6 +17,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -129,6 +130,15 @@ namespace ShipWorks.ApplicationCore.Dashboard
             dashboardItems.Clear();
 
             UpdateLayout();
+
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.Resolve<IConfigurationData>().IsArchive())
+                {
+                    return;
+                }
+            }
+
             panel.Visible = true;
 
             // Don't wait for idle - do these right away
