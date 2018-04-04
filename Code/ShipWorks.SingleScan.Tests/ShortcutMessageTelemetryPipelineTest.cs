@@ -4,6 +4,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
 using Moq;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -57,7 +58,7 @@ namespace ShipWorks.SingleScan.Tests
                 Action = KeyboardShortcutCommand.ApplyWeight
             };
 
-            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, "abcd");
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode,"abcd");
             testMessenger.Send(shortcutMessage);
 
             scheduler.Start();
@@ -78,7 +79,7 @@ namespace ShipWorks.SingleScan.Tests
                 Action = KeyboardShortcutCommand.ApplyProfile
             };
 
-            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, "abcd");
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
             ShippingProfile profile = mock.Create<ShippingProfile>();
@@ -106,7 +107,7 @@ namespace ShipWorks.SingleScan.Tests
                 Action = KeyboardShortcutCommand.ApplyProfile
             };
 
-            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, "abcd");
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
             scheduler.Start();
@@ -128,7 +129,7 @@ namespace ShipWorks.SingleScan.Tests
                 Action = KeyboardShortcutCommand.ApplyProfile
             };
 
-            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, "abcd");
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
             ShippingProfile profile = mock.Create<ShippingProfile>();

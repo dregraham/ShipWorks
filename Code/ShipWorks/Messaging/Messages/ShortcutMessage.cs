@@ -13,11 +13,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessage(object sender, IShortcutEntity shortcut, string value)
+        public ShortcutMessage(object sender, IShortcutEntity shortcut, ShortcutTriggerType trigger ,string value)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
             Shortcut = shortcut;
+            Trigger = trigger;
             Value = value;
             
             CreatedDate = DateTime.UtcNow;
@@ -27,6 +28,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// The shortcut 
         /// </summary>
         public IShortcutEntity Shortcut { get; }
+
+        /// <summary>
+        /// The shortcuts trigger
+        /// </summary>
+        public ShortcutTriggerType Trigger { get; }
 
         /// <summary>
         /// Id of the message, used for tracking
