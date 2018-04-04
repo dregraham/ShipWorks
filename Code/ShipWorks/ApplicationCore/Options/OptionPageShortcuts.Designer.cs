@@ -153,16 +153,16 @@
             this.displayShortcutIndicator.AutoSize = true;
             this.displayShortcutIndicator.Location = new System.Drawing.Point(20, 42);
             this.displayShortcutIndicator.Name = "displayShortcutIndicator";
-            this.displayShortcutIndicator.Size = new System.Drawing.Size(247, 17);
+            this.displayShortcutIndicator.Size = new System.Drawing.Size(240, 17);
             this.displayShortcutIndicator.TabIndex = 43;
-            this.displayShortcutIndicator.Text = "Show keyboard and barcode shortcut indicator";
+            this.displayShortcutIndicator.Text = "Show Keyboard && Barcode Shortcut Indicator";
             this.displayShortcutIndicator.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(17, 180);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(511, 43);
+            this.label1.Size = new System.Drawing.Size(523, 50);
             this.label1.TabIndex = 44;
             this.label1.Text = resources.GetString("label1.Text");
             // 
@@ -180,9 +180,9 @@
             // 
             this.button2.Location = new System.Drawing.Point(130, 233);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 23);
+            this.button2.Size = new System.Drawing.Size(212, 23);
             this.button2.TabIndex = 46;
-            this.button2.Text = "Print Barcodes";
+            this.button2.Text = "Print All Keyboard && Barcode Shortcuts";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.OnClickPrintShortcuts);
             // 

@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Options
             optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data));
 
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
-            optionPages["Keyboard and Barcode Shortcuts"] = InitializeOptionPage(new OptionPageShortcuts(this, scope));
+            optionPages["Keyboard && Barcode Shortcuts"] = InitializeOptionPage(new OptionPageShortcuts(this, scope));
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
