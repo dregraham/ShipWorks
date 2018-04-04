@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.Common.IO.Hardware.Scanner;
@@ -24,6 +17,9 @@ using ShipWorks.Templates.Printing;
 
 namespace ShipWorks.ApplicationCore.Options
 {
+    /// <summary>
+    /// Option page for keyboard and barcode shortcuts
+    /// </summary>
     public partial class OptionPageShortcuts : OptionPageBase
     {
         private readonly IScannerConfigurationRepository scannerRepo;
@@ -37,7 +33,9 @@ namespace ShipWorks.ApplicationCore.Options
         private SingleScanSettings singleScanSettingsOnLoad;
         private IPrintJobFactory pringJobFactory;
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OptionPageShortcuts(IWin32Window owner, ILifetimeScope scope)
         {
             InitializeComponent();
@@ -52,6 +50,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.owner = owner;
         }
 
+        /// <summary>
+        /// Save the selected settings
+        /// </summary>
         public override void Save()
         {
             if (userSession.IsLoggedOn)
@@ -89,6 +90,9 @@ namespace ShipWorks.ApplicationCore.Options
             }
         }
 
+        /// <summary>
+        /// Load settings and populate controls
+        /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             if (userSession.IsLoggedOn)

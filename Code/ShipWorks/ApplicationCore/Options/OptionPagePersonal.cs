@@ -1,17 +1,11 @@
 using System;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
-using Autofac;
-using Interapptive.Shared.Metrics;
-using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
 using ShipWorks.Filters;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
-using Microsoft.ApplicationInsights.DataContracts;
-using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Data.Connection;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
