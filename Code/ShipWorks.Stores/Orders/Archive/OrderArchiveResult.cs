@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.ComponentModel;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -9,13 +10,16 @@ namespace ShipWorks.Stores.Orders.Archive
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum OrderArchiveResult
     {
-        [Description("Success")]
-        Success = 0,
+        [Description("Succeeded")]
+        [ApiValue("Success")]
+        Succeeded = 0,
 
         [Description("Failed")]
-        Fail = 1,
+        [ApiValue("Failed")]
+        Failed = 1,
 
         [Description("Cancelled")]
-        Cancel = 2
+        [ApiValue("Cancelled")]
+        Cancelled = 2
     }
 }

@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 int retentionPeriodInDays = DateTime.UtcNow.Subtract(cutoffDate).Days;
 
-                trackedDurationEvent.AddProperty("Orders.Archiving.Result", EnumHelper.GetDescription(result));
+                trackedDurationEvent.AddProperty("Orders.Archiving.Result", EnumHelper.GetApiValue(result));
                 trackedDurationEvent.AddProperty("Orders.Archiving.Type", "Manual");
                 trackedDurationEvent.AddProperty("Orders.Archiving.RetentionPeriodInDays", retentionPeriodInDays.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersArchived", ordersToPurgeCount.ToString());
