@@ -50,6 +50,11 @@ namespace Interapptive.Shared.UI
         void ShowPopup(string message);
 
         /// <summary>
+        /// Show a popup message with an image
+        /// </summary>
+        void ShowPopup(string message, string imagePath);
+
+        /// <summary>
         /// Show a dialog and get the results
         /// </summary>
         DialogResult ShowDialog(Func<IForm> createDialog);

@@ -88,6 +88,23 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message, string imagePath)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string>) ShowPopup, message, imagePath);
+            }
+            else
+            {
+                popupViewModelFactory().Show(message, owner, imagePath);
+            }
+        }
+
+        /// <summary>
         /// Show a new progress dialog
         /// </summary>
         public ISingleItemProgressDialog ShowProgressDialog(string title, string description)
