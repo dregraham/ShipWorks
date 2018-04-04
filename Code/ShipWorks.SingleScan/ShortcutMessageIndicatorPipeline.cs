@@ -9,7 +9,6 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
-using System.Text;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 
 namespace ShipWorks.SingleScan
@@ -67,7 +66,6 @@ namespace ShipWorks.SingleScan
         {
             if (profileAppliedMessage != null)
             {
-                StringBuilder builder = new StringBuilder();
                 string action = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? shortcutMessage.Value : "Barcode";
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
                 string iconPath = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? KeyboardIconPath : BarcodeIconPath;
