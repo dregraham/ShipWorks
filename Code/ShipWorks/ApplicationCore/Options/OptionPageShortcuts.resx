@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>You can create custom keyboard and barcode shortcuts for your shipping profiles to apply shipping settings easily. ShipWorks also has several preconfigured keyboard and barcode shortcuts to speed up your shipping process. For example, there are shortcuts for reading a scale's weight, creating a label, and more.</value>
+    <value>You can create custom keyboard and barcode shortcuts for your Shipping Profiles to apply shipping settings easily. ShipWorks also has several preconfigured keyboard and barcode shortcuts to speed up your shipping process. </value>
   </data>
 </root>
