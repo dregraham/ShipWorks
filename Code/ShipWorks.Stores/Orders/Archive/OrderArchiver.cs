@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -111,7 +112,7 @@ namespace ShipWorks.Stores.Orders.Archive
                     {
 
                         await orderArchiveDataAccess
-                            .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress, syncProgress, trackedDurationEvent))
+                            .WithMultiUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress, syncProgress, trackedDurationEvent))
                             .Do(_ => orderArchiveDataAccess.WithMultiUserConnection(RegenerateFilters(filterProgress)))
                             .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
@@ -178,7 +179,10 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             async Task<Unit> Func(DbConnection conn)
             {
-                string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
+                string archivingDbName = SqlUtility.GetArchivingDatabasename(currentDatabaseName);
+                string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(archivingDbName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
+                currentDbArchiveSql += $"{Environment.NewLine}ALTER DATABASE [{archivingDbName}] MODIFY NAME = [{currentDatabaseName}]";
+
                 string archiveDbArchiveSql = string.Format("{0}{1}{2}{3}{4}",
                     sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual),
                     Environment.NewLine,

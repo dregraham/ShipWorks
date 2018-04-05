@@ -10,7 +10,7 @@ DECLARE @DestinationDatabaseName nvarchar(400)
 
 SELECT @DestinationDatabaseFilesPath = substring(physical_name, 0, LEN(physical_name) - CHARINDEX('\',REVERSE(physical_name)) + 2) FROM sys.database_files WHERE [type] = 0;
 
-SET @SourceDatabaseName = DB_NAME();
+SET @SourceDatabaseName = '%sourceDatabaseName%';
 SET @DestinationDatabaseName = '%destinationDatabaseName%';
 SET @DestinationDatabaseDataPathAndFileName = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '.mdf'
 SET @DestinationDatabaseLogPathAndFileName  = @DestinationDatabaseFilesPath + '\' + @DestinationDatabaseName + '_log.ldf'
@@ -93,7 +93,8 @@ BEGIN
 
 		raiserror(@ErrorMsg, @ErrorSeverity, @ErrorState)
 	END CATCH
-
+	
+	BEGIN TRY
 		/*  Delete the backup */
 		DECLARE @FileExists int
 		EXEC master..xp_FileExist @SourceDatabaseBackupPathAndFileName, @FileExists out
@@ -101,4 +102,13 @@ BEGIN
 			BEGIN
 				execute master.dbo.xp_delete_file 0, @SourceDatabaseBackupPathAndFileName
 			END
+	END TRY
+	BEGIN CATCH
+		-- Just ignore it.
+	END CATCH
+		
+	ALTER DATABASE [%sourceDatabaseName%] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+	ALTER DATABASE [%sourceDatabaseName%] MODIFY NAME = [%archivingDatabaseName%]
+	ALTER DATABASE [%archivingDatabaseName%] SET MULTI_USER
+
 END

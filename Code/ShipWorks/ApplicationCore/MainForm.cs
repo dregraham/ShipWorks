@@ -514,7 +514,12 @@ namespace ShipWorks
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        if (SqlUtility.RenameArchvingDbIfNeeded(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        {
+                            canConnect = SqlSession.Current.CanConnect();
+                        }
+
+                        if (!canConnect && SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
                         {
                             using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {
