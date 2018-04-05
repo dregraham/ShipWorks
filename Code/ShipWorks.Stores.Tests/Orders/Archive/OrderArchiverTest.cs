@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Returns(transactionMock);
 
             mock.Mock<IOrderArchiveDataAccess>()
-                .Setup(x => x.WithSingleUserConnectionAsync(It.IsAny<Func<DbConnection, Task<Unit>>>()))
+                .Setup(x => x.WithMultiUserConnectionAsync(It.IsAny<Func<DbConnection, Task<Unit>>>()))
                 .Callback((Func<DbConnection, Task<Unit>> x) => x(connectionMock.Object))
                 .ReturnsAsync(Unit.Default);
 

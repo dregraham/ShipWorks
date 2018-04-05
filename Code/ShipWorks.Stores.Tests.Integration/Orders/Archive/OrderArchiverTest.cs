@@ -28,6 +28,7 @@ using ShipWorks.Shipping.Settings;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
@@ -37,6 +38,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
     {
         private readonly DataContext context;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
+        private Mock<IUserLoginWorkflow> userLoginWorkflow;
         private IProgressProvider progressProvider;
 
         public OrderArchiverTest(DatabaseFixture db)
@@ -45,6 +47,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
             {
                 mock.Override<IMessageHelper>();
                 asyncMessageHelper = mock.Override<IAsyncMessageHelper>();
+                userLoginWorkflow = mock.Override<IUserLoginWorkflow>();
             });
 
             progressProvider = new ProgressProvider();
@@ -54,6 +57,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString, It.IsAny<IProgressProvider>(), TimeSpan.Zero))
                 .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
+
+            userLoginWorkflow.Setup(x => x.Logoff(AnyBool)).Returns(true);
 
             CreateOrderForAllStores();
 
