@@ -41,7 +41,7 @@ namespace ShipWorks.UI.Dialogs
             // Default fade behavior is to show the popup for 4 seconds and fade away in .3 seconds
             fadeStartKeyTime = KeyTime.FromTimeSpan(defaultFadeStartTimeSpan);
             fadeEndKeyTime = KeyTime.FromTimeSpan(defaultFadeEndTimeSpan);
-            
+            fontAwesomeIcon = ' ';
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
