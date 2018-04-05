@@ -9,7 +9,6 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
 using Moq.Protected;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Administration;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Orders.Archive;

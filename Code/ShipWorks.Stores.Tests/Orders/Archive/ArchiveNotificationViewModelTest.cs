@@ -3,15 +3,15 @@ using System.Data.Common;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Tests.Archiving
+namespace ShipWorks.Stores.Tests.Orders.Archive
 {
     public class ArchiveNotificationViewModelTest : IDisposable
     {

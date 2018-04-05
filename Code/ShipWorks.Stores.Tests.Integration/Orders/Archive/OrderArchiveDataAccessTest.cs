@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Startup;
+using ShipWorks.Stores.Orders.Archive;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Interapptive.Shared.Threading;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Archiving;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {

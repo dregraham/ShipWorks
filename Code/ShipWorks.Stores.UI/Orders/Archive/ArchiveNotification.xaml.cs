@@ -6,12 +6,12 @@ using ShipWorks.Stores.Orders.Archive;
 namespace ShipWorks.Stores.UI.Orders.Archive
 {
     /// <summary>
-    /// Interaction logic for ArchiveNotificationControl.xaml
+    /// Interaction logic for ArchiveNotification.xaml
     /// </summary>
     [Component]
-    public partial class ArchiveNotificationControl : UserControl, IArchiveNotification
+    public partial class ArchiveNotification : UserControl, IArchiveNotification
     {
-        public ArchiveNotificationControl()
+        public ArchiveNotification()
         {
             InitializeComponent();
         }
