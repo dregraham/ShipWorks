@@ -22,7 +22,6 @@ namespace ShipWorks.SingleScan.Tests
         private readonly TestMessenger testMessenger;
         private readonly TestScheduler scheduler;
         private readonly ShortcutMessageTelemetryPipeline testObject;
-        private readonly Mock<Func<string, ITrackedEvent>> telemetryEventFactory;
         private readonly Mock<ITrackedEvent> telemetryEvent;
 
         private readonly ScanMessageBroker scanMessageBroker = new ScanMessageBroker(null, null);
@@ -42,7 +41,7 @@ namespace ShipWorks.SingleScan.Tests
 
             telemetryEvent = mock.Mock<ITrackedEvent>();
 
-            telemetryEventFactory = mock.MockFunc<string, ITrackedEvent>();
+            Mock<Func<string, ITrackedEvent>> telemetryEventFactory = mock.MockFunc<string, ITrackedEvent>();
             telemetryEventFactory.Setup(t => t("Shortcuts.Applied")).Returns(telemetryEvent);
 
             testObject = mock.Create<ShortcutMessageTelemetryPipeline>();
