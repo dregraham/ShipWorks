@@ -21,6 +21,11 @@ namespace ShipWorks.Data.Connection
         Guid DatabaseIdentifier { get; }
 
         /// <summary>
+        /// Name of the database this session is for
+        /// </summary>
+        string DatabaseName { get; set; }
+
+        /// <summary>
         /// Returns a flag indicating if a connection can be made to SQL Server.
         /// </summary>
         bool CanConnect();

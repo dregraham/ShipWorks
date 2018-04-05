@@ -55,7 +55,11 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         public void Dispose()
         {
-            ProgressItem.Completed();
+            if (ProgressItem.Status == ProgressItemStatus.Running)
+            {
+                ProgressItem.Completed();
+            }
+
             disposableDialog.Dispose();
         }
     }
