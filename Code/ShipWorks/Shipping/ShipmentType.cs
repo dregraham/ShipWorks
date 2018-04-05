@@ -513,16 +513,6 @@ namespace ShipWorks.Shipping
                 ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                
-                // First apply the base profile
-                ShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfile(this);
-                if (primaryProfile.IsNew)
-                {
-                    shippingProfileManager.SaveProfile(primaryProfile);
-                }
-
-                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
-                shippingProfile.Apply(shipment);
 
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
@@ -532,6 +522,16 @@ namespace ShipWorks.Shipping
                     shipment.CustomsGenerated = !IsCustomsRequired(shipment);
                 }
                 customsManager.GenerateCustomsItems(shipment);
+
+                // First apply the base profile
+                ShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfile(this);
+                if (primaryProfile.IsNew)
+                {
+                    shippingProfileManager.SaveProfile(primaryProfile);
+                }
+
+                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                shippingProfile.Apply(shipment);
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
