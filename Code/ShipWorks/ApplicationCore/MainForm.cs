@@ -1208,7 +1208,11 @@ namespace ShipWorks
             UserEntity user = UserSession.User;
 
             // Update title
-            ApplicationText = user.Username;
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var configurationData = lifetimeScope.Resolve<IConfigurationData>();
+                ApplicationText = user.Username + (configurationData.IsArchive() ? " [Archive]" : string.Empty);
+            }
 
             // Load display from user settings
             ShipWorksDisplay.ColorScheme = (ColorScheme) user.Settings.DisplayColorScheme;
