@@ -6,7 +6,7 @@ using System.Windows.Forms.Integration;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Manage the archive notification

@@ -48,7 +48,6 @@ using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Archiving;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;

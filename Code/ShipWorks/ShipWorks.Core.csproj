@@ -948,21 +948,19 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
-    <Compile Include="Archiving\ArchiveNotificationManager.cs" />
-    <Compile Include="Archiving\ArchiveNotificationViewModel.cs" />
-    <Compile Include="Archiving\IArchiveNotification.cs" />
-    <Compile Include="Archiving\IArchiveNotificationManager.cs" />
-    <Compile Include="Archiving\IArchiveNotificationViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotification.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationManager.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationViewModel.cs" />
     <Compile Include="Data\Administration\IShipWorksDatabaseUtility.cs" />
     <Compile Include="Data\Administration\ISqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\ShipWorksDatabaseUtilityWrapper.cs" />
     <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
-    <Compile Include="Archiving\IOrderArchiveDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\ArchiveConstants.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
-    <Compile Include="Archiving\IOrderArchiveSqlGenerator.cs" />
-    <Compile Include="Archiving\OrderArchiverOrderDataComparisonType.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
     <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
@@ -11139,6 +11137,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Archiving\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>

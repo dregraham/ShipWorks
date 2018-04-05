@@ -143,6 +143,12 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Orders\Archive\ArchiveManager.xaml.cs">
+      <DependentUpon>ArchiveManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Orders\Archive\ArchiveNotification.xaml.cs">
+      <DependentUpon>ArchiveNotification.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Orders\Archive\DesignModeOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveDialog.xaml.cs">
       <DependentUpon>OrderArchiveDialog.xaml</DependentUpon>
@@ -734,6 +740,14 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Orders\Archive\ArchiveManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Orders\Archive\ArchiveNotification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Orders\Archive\OrderArchiveDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

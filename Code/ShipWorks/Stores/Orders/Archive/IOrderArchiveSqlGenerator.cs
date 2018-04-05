@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Interface used for generating SQL for order archiving

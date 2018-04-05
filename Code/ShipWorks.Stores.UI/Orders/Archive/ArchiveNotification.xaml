@@ -1,11 +1,9 @@
-﻿<UserControl x:Class="ShipWorks.UI.Controls.ArchiveNotificationControl"
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Orders.Archive"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShipWorks.UI.Controls"
-             xmlns:ap="clr-namespace:ShipWorks.UI.AttachedProperties"
-             xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              
              FontFamily="Tahoma"
              FontSize="8.25 pt"
@@ -24,11 +22,11 @@
             <Style TargetType="Expander" BasedOn="{StaticResource Expander.Style}" />
             <Style TargetType="Border" BasedOn="{StaticResource Border.Expander}" />
 
-            <vc:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
-            <vc:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <local:NotificationBorder BorderBrush="{StaticResource Yellow}"
+    <ui:NotificationBorder BorderBrush="{StaticResource Yellow}"
                               Margin="4,2"
                               Background="White"
                               Padding="8,4"
@@ -53,7 +51,7 @@
                        Grid.ColumnSpan="2" 
                        Margin="0,3">
                 <Run>Most information is read-only.</Run>
-                <Hyperlink ap:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000120591-working-in-a-shipworks-archive">More info...</Hyperlink>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000120591-working-in-a-shipworks-archive">More info...</Hyperlink>
             </TextBlock>
             <Button Grid.Column="3" 
                     Padding="4"
@@ -69,17 +67,17 @@
                     Visibility="{Binding IsConnecting, Converter={StaticResource ShowWhenTrue}}">
                 <StackPanel VerticalAlignment="Center" 
                             Orientation="Horizontal">
-                    <local:WaitSpinner BorderBrush="Transparent"
+                    <ui:WaitSpinner BorderBrush="Transparent"
                                        VerticalAlignment="Center"
                                        Padding="0">
-                        <local:WaitSpinner.LayoutTransform>
+                        <ui:WaitSpinner.LayoutTransform>
                             <ScaleTransform ScaleX=".5" ScaleY="0.5" />
-                        </local:WaitSpinner.LayoutTransform>
-                    </local:WaitSpinner>
+                        </ui:WaitSpinner.LayoutTransform>
+                    </ui:WaitSpinner>
                     <TextBlock VerticalAlignment="Center"
                                Margin="4,0,0,0">Connecting...</TextBlock>
                 </StackPanel>
             </Border>
         </Grid>
-    </local:NotificationBorder>
+    </ui:NotificationBorder>
 </UserControl>

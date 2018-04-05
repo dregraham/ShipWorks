@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.Common;
 using Autofac;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Data.Administration
 {

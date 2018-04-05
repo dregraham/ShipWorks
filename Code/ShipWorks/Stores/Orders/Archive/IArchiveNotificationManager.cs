@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Archiving
+﻿namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Manage the archive notification

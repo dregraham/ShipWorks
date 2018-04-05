@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -82,18 +79,18 @@ namespace ShipWorks.Stores.Orders.Archive
         public string DisableAutoProcessingSettingsSql()
         {
             return @"
-		        UPDATE [Store] SET AutoDownload = 0
-		        UPDATE [Store] SET DomesticAddressValidationSetting = 3
-		        UPDATE [Store] SET InternationalAddressValidationSetting = 3
+                UPDATE [Store] SET AutoDownload = 0
+                UPDATE [Store] SET DomesticAddressValidationSetting = 3
+                UPDATE [Store] SET InternationalAddressValidationSetting = 3
                 UPDATE [Store] SET ComputerDownloadPolicy = '<ComputerDownloadPolicy><DefaultToYes>false</DefaultToYes><Computers /></ComputerDownloadPolicy>'
 
-		        UPDATE [Action] SET Enabled = 0
+                UPDATE [Action] SET Enabled = 0
 
-		        UPDATE [ShippingSettings] SET AutoCreateShipments = 0
-		        UPDATE [ShippingSettings] SET ShipSenseEnabled = 0
+                UPDATE [ShippingSettings] SET AutoCreateShipments = 0
+                UPDATE [ShippingSettings] SET ShipSenseEnabled = 0
 
-		        UPDATE [UserSettings] SET SingleScanSettings = 0
-		        UPDATE [UserSettings] SET AutoWeigh = 0
+                UPDATE [UserSettings] SET SingleScanSettings = 0
+                UPDATE [UserSettings] SET AutoWeigh = 0
 
                 UPDATE [Configuration] SET CustomerUpdateBilling = 0
                 UPDATE [Configuration] SET CustomerUpdateShipping = 0
@@ -103,7 +100,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
                 UPDATE [EmailAccount] SET AutoSend = 0
 
-		        DELETE FROM [ActionQueue]
+                DELETE FROM [ActionQueue]
             ";
         }
 

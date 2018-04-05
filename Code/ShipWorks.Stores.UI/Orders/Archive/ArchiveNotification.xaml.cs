@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Forms.Integration;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Archiving;
+using ShipWorks.Stores.Orders.Archive;
 
-namespace ShipWorks.UI.Controls
+namespace ShipWorks.Stores.UI.Orders.Archive
 {
     /// <summary>
     /// Interaction logic for ArchiveNotificationControl.xaml

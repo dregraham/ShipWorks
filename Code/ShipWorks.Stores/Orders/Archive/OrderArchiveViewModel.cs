@@ -13,7 +13,6 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Archiving;
 using ShipWorks.Core.UI;
 using ShipWorks.Stores.Orders.Archive.Errors;
 

@@ -16,7 +16,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// View Model for the Archive Notification View Model

@@ -12,7 +12,6 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Archiving;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;

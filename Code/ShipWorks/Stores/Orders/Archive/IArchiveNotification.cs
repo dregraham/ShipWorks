@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms.Integration;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// Control to show an archive notification

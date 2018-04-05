@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms.Integration;
 
-namespace ShipWorks.Archiving
+namespace ShipWorks.Stores.Orders.Archive
 {
     /// <summary>
     /// View Model for the Archive Notification View Model
