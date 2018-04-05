@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
@@ -149,6 +150,15 @@ namespace ShipWorks.Data.Connection
 
                 return databaseId;
             }
+        }
+
+        /// <summary>
+        /// Name of the database this session is for
+        /// </summary>
+        public string DatabaseName
+        {
+            get => Configuration?.DatabaseName;
+            set => Configuration.ToResult().Do(x => x.DatabaseName = value);
         }
 
         /// <summary>

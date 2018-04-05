@@ -12,6 +12,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
-        Task<IEnumerable<SqlDatabaseDetail>> GetDatabaseDetails(DbConnection con);
+        Task<IEnumerable<ISqlDatabaseDetail>> GetDatabaseDetails(DbConnection con);
     }
 }

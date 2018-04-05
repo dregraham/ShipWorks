@@ -13,14 +13,14 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Detailed information about a single ShipWorks database
     /// </summary>
-    public class SqlDatabaseDetail
+    public class SqlDatabaseDetail : ISqlDatabaseDetail
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlDatabaseDetail));
 
         /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
-        public static async Task<SqlDatabaseDetail> Load(string database, DbConnection con)
+        public static async Task<ISqlDatabaseDetail> Load(string database, DbConnection con)
         {
             SqlDatabaseDetail detail = new SqlDatabaseDetail
             {

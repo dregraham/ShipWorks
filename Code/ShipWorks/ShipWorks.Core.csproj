@@ -954,6 +954,7 @@
     <Compile Include="Archiving\IArchiveNotificationManager.cs" />
     <Compile Include="Archiving\IArchiveNotificationViewModel.cs" />
     <Compile Include="Data\Administration\IShipWorksDatabaseUtility.cs" />
+    <Compile Include="Data\Administration\ISqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\ShipWorksDatabaseUtilityWrapper.cs" />
     <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />

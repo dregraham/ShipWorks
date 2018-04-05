@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
@@ -9,6 +8,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
@@ -26,7 +26,7 @@ namespace ShipWorks.Archiving
     {
         private readonly Func<IArchiveNotification> createControl;
         private readonly IUserLoginWorkflow loginWorkflow;
-        private readonly ISqlSession sqlSession;
+        private readonly Func<ISqlSession> getSqlSession;
         private readonly IShipWorksDatabaseUtility databaseUtility;
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
@@ -41,19 +41,19 @@ namespace ShipWorks.Archiving
         public ArchiveNotificationViewModel(
             Func<IArchiveNotification> createControl,
             IUserLoginWorkflow loginWorkflow,
-            ISqlSession sqlSession,
+            Func<ISqlSession> getSqlSession,
             IShipWorksDatabaseUtility databaseUtility,
             IMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
             this.databaseUtility = databaseUtility;
             this.loginWorkflow = loginWorkflow;
-            this.sqlSession = sqlSession;
+            this.getSqlSession = getSqlSession;
             this.createControl = createControl;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            ConnectToLiveDatabase = new RelayCommand(() => ConnectToLiveDatabaseAction());
+            ConnectToLiveDatabase = new RelayCommand(() => ConnectToLiveDatabaseAction(getSqlSession()));
         }
 
         /// <summary>
@@ -75,70 +75,75 @@ namespace ShipWorks.Archiving
         /// <summary>
         /// Show the archive notification
         /// </summary>
-        public void Show(ElementHost host)
-        {
+        public void Show(ElementHost host) =>
             createControl().AddTo(host, this);
-        }
 
         /// <summary>
         /// Connect to the live database
         /// </summary>
-        private void ConnectToLiveDatabaseAction() =>
-            Functional.UsingAsync(
-                StartConnecting(),
-                _ => GetLiveDatabase()
-                    .Do((Action<SqlDatabaseDetail>) ChangeDatabase, ShowError, ContinueOn.CurrentThread));
+        private void ConnectToLiveDatabaseAction(ISqlSession sqlSession) =>
+            Functional.UsingAsync(StartConnecting(), progress => GetLiveDatabase(sqlSession))
+                .Do(ChangeDatabase(sqlSession), ShowError, ContinueOn.CurrentThread);
 
         /// <summary>
         /// Start the connection process
         /// </summary>
-        private IDisposable StartConnecting()
+        private ISingleItemProgressDialog StartConnecting()
         {
-            IsConnecting = true;
-            return Disposable.Create(() => IsConnecting = false);
+            var dialog = messageHelper.ShowProgressDialog("Reconnect to Live Database", "Reconnecting to the live ShipWorks database");
+            dialog.ProgressItem.CanCancel = false;
+            return dialog;
         }
 
         /// <summary>
         /// Get the live database
         /// </summary>
-        private Task<SqlDatabaseDetail> GetLiveDatabase() =>
+        private Task<ISqlDatabaseDetail> GetLiveDatabase(ISqlSession sqlSession) =>
             Functional.UsingAsync(
                 sqlSession.OpenConnection(),
                 con => databaseUtility
                     .GetDatabaseDetails(con)
-                    .Map(x => x.Where(IsLiveDatabase).FirstOrDefault())
-                    .Bind(x => x != null ?
-                        Task.FromResult(x) :
-                        Task.FromException<SqlDatabaseDetail>(new InvalidOperationException("Could not find live database"))));
+                    .Map(databases => databases.FirstOrDefault(IsLiveDatabase(sqlSession)))
+                    .Bind(EnsureDatabaseExists));
+
+        /// <summary>
+        /// Ensure that the live database was found
+        /// </summary>
+        private Task<ISqlDatabaseDetail> EnsureDatabaseExists(ISqlDatabaseDetail database) =>
+            database != null ?
+                Task.FromResult(database) :
+                Task.FromException<ISqlDatabaseDetail>(new InvalidOperationException("Unable to locate live database"));
 
         /// <summary>
         /// Is the given database the live database for this archive
         /// </summary>
-        private bool IsLiveDatabase(SqlDatabaseDetail database) =>
-            database.Status == SqlDatabaseStatus.ShipWorks &&
-            !database.IsArchive &&
-            database.Guid == sqlSession.DatabaseIdentifier &&
-            database.Name != sqlSession.Configuration.DatabaseName;
+        public static Func<ISqlDatabaseDetail, bool> IsLiveDatabase(ISqlSession sqlSession) =>
+            database =>
+                database.Status == SqlDatabaseStatus.ShipWorks &&
+                !database.IsArchive &&
+                database.Guid == sqlSession.DatabaseIdentifier &&
+                database.Name != sqlSession.DatabaseName;
 
         /// <summary>
         /// Change to the given database
         /// </summary>
-        private void ChangeDatabase(SqlDatabaseDetail database)
-        {
-            if (loginWorkflow.Logoff(false))
+        private Action<ISqlDatabaseDetail> ChangeDatabase(ISqlSession sqlSession) =>
+            database =>
             {
-                var newSession = sqlSession.CreateCopy();
-                newSession.Configuration.DatabaseName = database.Name;
-                newSession.SaveAsCurrent();
+                if (loginWorkflow.Logoff(false))
+                {
+                    var newSession = getSqlSession().CreateCopy();
+                    newSession.DatabaseName = database.Name;
+                    newSession.SaveAsCurrent();
 
-                loginWorkflow.Logon(null);
-            }
-        }
+                    loginWorkflow.Logon(null);
+                }
+            };
 
         /// <summary>
         /// Show an error message
         /// </summary>
-        private void ShowError(Exception arg) =>
-            messageHelper.ShowError(arg.Message);
+        private void ShowError(Exception ex) =>
+            messageHelper.ShowError(ex.Message);
     }
 }

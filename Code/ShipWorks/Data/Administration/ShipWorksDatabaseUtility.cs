@@ -285,7 +285,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
-        public static async Task<IEnumerable<SqlDatabaseDetail>> GetDatabaseDetails(DbConnection con)
+        public static async Task<IEnumerable<ISqlDatabaseDetail>> GetDatabaseDetails(DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
@@ -300,7 +300,7 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
-            List<SqlDatabaseDetail> details = new List<SqlDatabaseDetail>();
+            List<ISqlDatabaseDetail> details = new List<ISqlDatabaseDetail>();
 
             // Go through each database loading ShipWorks info about it
             foreach (string name in names)
@@ -314,7 +314,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get detailed information about the given database
         /// </summary>
-        public static Task<SqlDatabaseDetail> GetDatabaseDetail(string database, DbConnection con) =>
+        public static Task<ISqlDatabaseDetail> GetDatabaseDetail(string database, DbConnection con) =>
             SqlDatabaseDetail.Load(database, con);
 
         /// <summary>

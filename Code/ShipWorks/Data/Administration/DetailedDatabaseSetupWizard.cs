@@ -1139,7 +1139,7 @@ namespace ShipWorks.Data.Administration
 
             // Start the background task to try to log in and figure out the background databases...
             SqlSessionConfiguration configuration = await Task.Run(() => SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration)).ConfigureAwait(true);
-            IEnumerable<SqlDatabaseDetail> databases = null;
+            IEnumerable<ISqlDatabaseDetail> databases = null;
 
             if (configuration != null)
             {
@@ -1191,7 +1191,7 @@ namespace ShipWorks.Data.Administration
                 connectionSession.Configuration.Password = configuration.Password;
                 connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
-                LoadDatabaseList(databases.ToList(), configuration);
+                LoadDatabaseList(databases, configuration);
             }
 
             linkSqlInstanceAccount.Left = labelSqlConnection.Right;
@@ -1202,7 +1202,7 @@ namespace ShipWorks.Data.Administration
         /// Load the database grid
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadDatabaseList(List<SqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
+        private void LoadDatabaseList(IEnumerable<ISqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
         {
             gridDatabases.Rows.Clear();
 
@@ -1417,11 +1417,11 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                string database = ((SqlDatabaseDetail) gridDatabases.SelectedElements[0].Tag).Name;
+                string database = ((ISqlDatabaseDetail) gridDatabases.SelectedElements[0].Tag).Name;
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseDetail detail = await ShipWorksDatabaseUtility.GetDatabaseDetail(database, con).ConfigureAwait(false);
+                    ISqlDatabaseDetail detail = await ShipWorksDatabaseUtility.GetDatabaseDetail(database, con).ConfigureAwait(true);
 
                     if (detail.Status == SqlDatabaseStatus.ShipWorks)
                     {
@@ -1669,7 +1669,7 @@ namespace ShipWorks.Data.Administration
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
-                    givenDatabaseName.Text = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con).ConfigureAwait(false);
+                    givenDatabaseName.Text = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con).ConfigureAwait(true);
                     databaseName.Text = givenDatabaseName.Text;
 
                     linkEditGivenDatabaseName.Left = givenDatabaseName.Right + 1;
