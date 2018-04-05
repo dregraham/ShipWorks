@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 
@@ -21,10 +21,8 @@ namespace ShipWorks.UI.Dialogs
 
         private string message;
         private char fontAwesomeIcon;
-        private KeyTime fadeStartKeyTime;
-        private KeyTime fadeEndKeyTime;
         private readonly TimeSpan defaultFadeStartTimeSpan = new TimeSpan(0, 0, 0, 4, 0);
-        private readonly TimeSpan defaultFadeEndTimeSpan = new TimeSpan(0, 0, 0, 4, 300);
+        private Duration duration;
 
         /// <summary>
         /// Constructor
@@ -38,9 +36,8 @@ namespace ShipWorks.UI.Dialogs
                 return newPopup;
             });
 
-            // Default fade behavior is to show the popup for 4 seconds and fade away in .3 seconds
-            fadeStartKeyTime = KeyTime.FromTimeSpan(defaultFadeStartTimeSpan);
-            fadeEndKeyTime = KeyTime.FromTimeSpan(defaultFadeEndTimeSpan);
+            // Default fade behavior is to show the popup for 4 seconds
+            duration = new Duration(defaultFadeStartTimeSpan);
             fontAwesomeIcon = ' ';
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -66,8 +63,7 @@ namespace ShipWorks.UI.Dialogs
         public void Show(string message, IWin32Window owner, char fontAwesomeIcon, int fadeTimeInSeconds)
         {
             FontAwesomeIcon = fontAwesomeIcon;
-            FadeStartKeyTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, fadeTimeInSeconds, 0));
-            FadeEndKeyTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, fadeTimeInSeconds, 300));
+            Duration = new Duration(new TimeSpan(0, 0, 0, fadeTimeInSeconds));
             
             Show(message, owner); 
         }
@@ -91,25 +87,15 @@ namespace ShipWorks.UI.Dialogs
             get => fontAwesomeIcon;
             set => handler.Set(nameof(FontAwesomeIcon), ref fontAwesomeIcon, value);
         }
-        
+
         /// <summary>
-        /// When the popup should start to fade away
+        /// How long the popup will be displayed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public KeyTime FadeStartKeyTime
+        public Duration Duration
         {
-            get { return fadeStartKeyTime; }
-            set { handler.Set(nameof(FadeStartKeyTime), ref fadeStartKeyTime, value); }
-        }
-        
-        /// <summary>
-        /// When the popup should end fading away
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public KeyTime FadeEndKeyTime
-        {
-            get { return fadeEndKeyTime; }
-            set { handler.Set(nameof(FadeEndKeyTime), ref fadeEndKeyTime, value); }
+            get => duration;
+            set => handler.Set(nameof(Duration), ref duration, value);
         }
     }
 }

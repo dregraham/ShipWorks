@@ -25,12 +25,12 @@
     <Window.Resources>
         <vc:CharToVisibilityConverter x:Key="CharToVisibilityConverter" />
         <Storyboard x:Key="storyBoard" TargetProperty="Opacity" TargetName="This" Completed="OnStoryboardCompleted">
-            <DoubleAnimationUsingKeyFrames>
-                <DiscreteDoubleKeyFrame Value=".6" KeyTime="0" />
-                <DiscreteDoubleKeyFrame Value=".6" KeyTime="{Binding FadeStartKeyTime}" />
-                <EasingDoubleKeyFrame Value="0" KeyTime="{Binding FadeEndKeyTime}">
+            <DoubleAnimationUsingKeyFrames Duration="{Binding Duration}">
+                <LinearDoubleKeyFrame Value=".6" KeyTime="0%"/>
+                <LinearDoubleKeyFrame Value=".6" KeyTime="90%" />
+                <EasingDoubleKeyFrame Value="0" KeyTime="100%">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <QuadraticEase EasingMode="EaseIn"></QuadraticEase>
+                        <QuadraticEase EasingMode="EaseIn"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
