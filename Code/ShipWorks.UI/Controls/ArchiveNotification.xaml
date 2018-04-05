@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.UI.Controls"
+             xmlns:ap="clr-namespace:ShipWorks.UI.AttachedProperties"
              xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
              
              FontFamily="Tahoma"
@@ -47,9 +48,13 @@
                     Margin="0,3,8,3">
             </TextBlock>
             <TextBlock Grid.Column="1"
-                    Text="This is an archive database"
                        VerticalAlignment="Center"
-                    FontSize="16" Grid.ColumnSpan="2" Margin="0,3" />
+                       FontSize="16" 
+                       Grid.ColumnSpan="2" 
+                       Margin="0,3">
+                <Run>Most information is read-only.</Run>
+                <Hyperlink ap:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000120591-working-in-a-shipworks-archive">More info...</Hyperlink>
+            </TextBlock>
             <Button Grid.Column="3" 
                     Padding="4"
                     Margin="0,2"
