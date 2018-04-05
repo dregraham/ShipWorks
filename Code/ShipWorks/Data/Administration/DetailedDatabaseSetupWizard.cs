@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,6 +24,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
@@ -958,9 +958,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the SQL instance window
         /// </summary>
-        [SuppressMessage("CSharp.Analyzers",
-            "CS4014: Because this call is not awaited, execution of the current method continues before the call is completed",
-            Justification = "This is meant to be treated like a fire and forget method")]
         private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
         {
             labelDatabaseSelect.Text = sqlInstanceChooseDatabase ? "Select your ShipWorks database" : "Connection Check";
@@ -984,7 +981,7 @@ namespace ShipWorks.Data.Administration
                 }
 
                 // This function handles a selected instance or blank
-                ConnectToSelectedServerInstance();
+                ConnectToSelectedServerInstance().Forget();
             }
             else
             {
@@ -1007,25 +1004,19 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Leaving focus from the SQL instance combo
         /// </summary>
-        [SuppressMessage("CSharp.Analyzers",
-            "CS4014: Because this call is not awaited, execution of the current method continues before the call is completed",
-            Justification = "This is meant to be treated like a fire and forget method")]
         private void OnLeaveSqlInstance(object sender, EventArgs e)
         {
-            ConnectToSelectedServerInstance();
+            ConnectToSelectedServerInstance().Forget();
         }
 
         /// <summary>
         /// Custom command key processing for hitting enter in the combo box
         /// </summary>
-        [SuppressMessage("CSharp.Analyzers",
-            "CS4014: Because this call is not awaited, execution of the current method continues before the call is completed",
-            Justification = "This is meant to be treated like a fire and forget method")]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (comboSqlServers.Focused && keyData == Keys.Return)
             {
-                ConnectToSelectedServerInstance();
+                ConnectToSelectedServerInstance().Forget();
                 return true;
             }
             else
