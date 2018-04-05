@@ -192,7 +192,6 @@ namespace ShipWorks.Data.Administration
 
             wizardPageSelectSqlServerInstance.StepNextAsync = OnStepNextSelectSqlInstance;
             wizardPageDatabaseName.SteppingIntoAsync = OnSteppingIntoCreateDatabase;
-            //wizardPageSelectSqlServerInstance.SteppingIntoAsync = OnSteppingIntoSelectSqlInstance;
         }
 
         /// <summary>
