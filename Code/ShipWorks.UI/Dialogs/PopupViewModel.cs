@@ -60,10 +60,10 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Shows the popup with the given message and image
         /// </summary>
-        public void Show(string message, IWin32Window owner, char fontAwesomeIcon, int fadeTimeInSeconds)
+        public void Show(string message, IWin32Window owner, char fontAwesomeIcon, TimeSpan fadeTime)
         {
             FontAwesomeIcon = fontAwesomeIcon;
-            Duration = new Duration(new TimeSpan(0, 0, 0, fadeTimeInSeconds));
+            Duration = new Duration(fadeTime);
             
             Show(message, owner); 
         }

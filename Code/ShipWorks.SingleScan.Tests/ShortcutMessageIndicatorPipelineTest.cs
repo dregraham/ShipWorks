@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Microsoft.Reactive.Testing;
@@ -63,7 +64,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup("Barcode: FooBar", (char) 0xf02a, 2));
+            messageHelper.Verify(m => m.ShowPopup("Barcode: FooBar", (char) 0xf02a, TimeSpan.FromSeconds(2)));
         }
 
         [Fact]
@@ -87,7 +88,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup("F5: FooBar", (char) 0xf11c, 2));
+            messageHelper.Verify(m => m.ShowPopup("F5: FooBar", (char) 0xf11c, TimeSpan.FromSeconds(2)));
         }
 
         [Fact]
@@ -105,7 +106,7 @@ namespace ShipWorks.SingleScan.Tests
                         
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<int>()), Times.Never);
+            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<TimeSpan>()), Times.Never);
         }
 
         [Fact]
@@ -123,7 +124,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<int>()), Times.Never);
+            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<TimeSpan>()), Times.Never);
         }
     }
 }

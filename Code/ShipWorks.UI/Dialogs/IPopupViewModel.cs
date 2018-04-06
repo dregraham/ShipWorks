@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.UI.Dialogs
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Shows the popup
         /// </summary>
-        void Show(string message, IWin32Window owner, char fontAwesomeIconText, int shortcutIndicatorFadeTime);
+        void Show(string message, IWin32Window owner, char fontAwesomeIconText, TimeSpan fadeTime);
     }
 }
