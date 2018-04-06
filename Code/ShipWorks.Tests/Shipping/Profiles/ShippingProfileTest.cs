@@ -44,18 +44,6 @@ namespace ShipWorks.Tests.Shipping.Profiles
         }
 
         [Fact]
-        public void Constructor_LoadProfileDataIsCalledWithFalse_WhenNoProfileEntityPassedIn()
-        {
-            var loaderMock = mock.Mock<IShippingProfileLoader>();
-
-            // Testing 
-            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
-                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ISecurityContext>().Object);
-            
-            loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
-        }
-
-        [Fact]
         public void ShippingProfile_ShipmentTypeDescriptionIsShipmentTypeDescription()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity

@@ -157,5 +157,13 @@ namespace ShipWorks.Shipping.Services
         {
             ShippingProfileManager.SaveProfile(profile, adapter);
         }
+
+        /// <summary>
+        /// Load the ShippingProfileEntity
+        /// </summary>
+        public void LoadProfileData(ShippingProfileEntity shippingProfileEntity, bool refreshIfPresent)
+        {
+            shippingProfileLoader.LoadProfileData(shippingProfileEntity, refreshIfPresent);
+        }
     }
 }

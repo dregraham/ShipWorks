@@ -155,5 +155,13 @@ namespace ShipWorks.Shipping.Services
                 return Result.FromError("An error occurred when deleting the profile.");
             }
         }
+
+        /// <summary>
+        /// Load the shipping profile
+        /// </summary>
+        public void Load(IShippingProfile profile, bool refreshIfPresent)
+        {
+            profileManager.LoadProfileData(profile.ShippingProfileEntity, refreshIfPresent);
+        }
     }
 }
