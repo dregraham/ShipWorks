@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
@@ -19,6 +20,7 @@ namespace ShipWorks.SingleScan
     public class ShortcutMessageIndicatorPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
+        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
@@ -27,10 +29,12 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public ShortcutMessageIndicatorPipeline(IMessenger messenger, 
+            ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
             ISchedulerProvider schedulerProvider)
         {
             this.messenger = messenger;
+            this.currentUserSettings = currentUserSettings;
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
         }
@@ -43,7 +47,8 @@ namespace ShipWorks.SingleScan
             EndSession();
 
             subscription = messenger.OfType<ShortcutMessage>()
-                            .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
+                            .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile) && 
+                                currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
                             .ContinueAfter(ProfileAppliedSignal, TimeSpan.FromSeconds(1), schedulerProvider.Default,
                                 (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
                             .Subscribe(m => ShowProfileAppliedIndicator(m.shortcutMessage, m.profileAppliedMessage));
