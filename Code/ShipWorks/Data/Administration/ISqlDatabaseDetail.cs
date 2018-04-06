@@ -60,6 +60,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The oldest order downloaded into the database
         /// </summary>
-        DateTime FirstOrderDate { get; }
+        DateTime OldestOrderDate { get; }
     }
 }

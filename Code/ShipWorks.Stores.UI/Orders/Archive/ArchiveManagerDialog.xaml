@@ -68,7 +68,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Oldest Order" 
                                         Width="*" 
-                                        Binding="{Binding FirstOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
+                                        Binding="{Binding OldestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -78,7 +78,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Newest Order" 
                                         Width="*" 
-                                        Binding="{Binding LastOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
+                                        Binding="{Binding NewestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>

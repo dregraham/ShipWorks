@@ -18,61 +18,6 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SqlDatabaseDetail));
 
         /// <summary>
-        /// The name of the database
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// The status of the database, as it related to ShipWorks
-        /// </summary>
-        public SqlDatabaseStatus Status { get; private set; }
-
-        /// <summary>
-        /// The total number of orders in the database
-        /// </summary>
-        public int OrderCount { get; private set; }
-
-        /// <summary>
-        /// The oldest order downloaded into the database
-        /// </summary>
-        public DateTime FirstOrderDate { get; private set; }
-
-        /// <summary>
-        /// ShipWorks schema version of the database
-        /// </summary>
-        public Version SchemaVersion { get; private set; }
-
-        /// <summary>
-        /// The last ShipWorks user to log in to the database
-        /// </summary>
-        public string LastUsedBy { get; private set; }
-
-        /// <summary>
-        /// The date/time the last ShipWorks user logged in to the database
-        /// </summary>
-        public DateTime LastUsedOn { get; private set; }
-
-        /// <summary>
-        /// The last order number to be downloaded into the database
-        /// </summary>
-        public string LastOrderNumber { get; private set; }
-
-        /// <summary>
-        /// The date of the last order to be downloaded into the database
-        /// </summary>
-        public DateTime LastOrderDate { get; private set; }
-
-        /// <summary>
-        /// Is the database an archive
-        /// </summary>
-        public bool IsArchive { get; private set; }
-
-        /// <summary>
-        /// GUID of the database
-        /// </summary>
-        public Guid Guid { get; private set; }
-
-        /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
         public static async Task<ISqlDatabaseDetail> Load(string database, DbConnection con)
@@ -94,13 +39,14 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
+                    var isShipWorks3Plus = await IsNewerThanShipWorks2(con).ConfigureAwait(false);
+
                     await LoadSchemaVersion(detail, con).ConfigureAwait(false);
-                    await LoadLastUsedBy(detail, con).ConfigureAwait(false);
-                    await LoadLastOrderNumber(detail, con).ConfigureAwait(false);
+                    await LoadLastUsedBy(detail, con, isShipWorks3Plus).ConfigureAwait(false);
+                    await LoadLastOrderNumber(detail, con, isShipWorks3Plus).ConfigureAwait(false);
                     await LoadArchiveDetails(detail, con).ConfigureAwait(false);
                     await LoadDatabaseGuid(detail, con).ConfigureAwait(false);
-                    await LoadOrderCount(detail, con).ConfigureAwait(false);
-                    await LoadOldestOrderDate(detail, con).ConfigureAwait(false);
+                    await LoadOrderDetails(detail, con, isShipWorks3Plus).ConfigureAwait(false);
                 }
             }
             catch (SqlException ex)
@@ -175,13 +121,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last user to use the given ShipWorsk database
         /// </summary>
-        private static async Task LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con, bool isShipWorks3Plus)
         {
             detail.LastUsedBy = "";
             detail.LastUsedOn = DateTime.MinValue;
 
             // We can only load this if the Audit table exists (it wont for 2.x databases)
-            if (await IsNewerThanShipWorks2(con).ConfigureAwait(false))
+            if (isShipWorks3Plus)
             {
                 DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText =
@@ -204,12 +150,12 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last order found in the given ShipWorks database
         /// </summary>
-        private static async Task LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con, bool isShipWorks3Plus)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
 
             // 2x and 3x store it differently
-            if (await IsNewerThanShipWorks2(con).ConfigureAwait(false))
+            if (isShipWorks3Plus)
             {
                 cmd.CommandText =
                     "SELECT TOP (1) OrderNumberComplete as OrderNumber, OrderDate " +
@@ -246,23 +192,86 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Returns the total number of orders in database
+        /// Returns the oldest order date in the database
         /// </summary>
-        private static async Task LoadOrderCount(SqlDatabaseDetail detail, DbConnection con)
+        private static async Task LoadOrderDetails(SqlDatabaseDetail detail, DbConnection con, bool isShipWorks3Plus)
         {
-            DbCommand command = con.CreateCommand();
-            command.CommandText = "SELECT COUNT(*) FROM [Order]";
-            detail.OrderCount = (int) await command.ExecuteScalarAsync().ConfigureAwait(false);
+            if (!isShipWorks3Plus)
+            {
+                return;
+            }
+
+            var cmd = con.CreateCommand("SELECT COUNT(*), MIN(OrderDate), MAX(OrderDate) FROM [Order]");
+
+            using (DbDataReader reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+            {
+                if (await reader.ReadAsync().ConfigureAwait(false))
+                {
+                    detail.OrderCount = reader.GetInt32(0);
+                    detail.OldestOrderDate = reader.GetDateTime(1);
+                    detail.NewestOrderDate = reader.GetDateTime(2);
+                }
+            }
         }
 
         /// <summary>
-        /// Returns the oldest order date in the database
+        /// The name of the database
         /// </summary>
-        private static async Task LoadOldestOrderDate(SqlDatabaseDetail detail, DbConnection con)
-        {
-            DbCommand command = con.CreateCommand();
-            command.CommandText = "SELECT MIN(OrderDate) FROM [Order]";
-            detail.FirstOrderDate = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
-        }
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// The status of the database, as it related to ShipWorks
+        /// </summary>
+        public SqlDatabaseStatus Status { get; private set; }
+
+        /// <summary>
+        /// The total number of orders in the database
+        /// </summary>
+        public int OrderCount { get; private set; }
+
+        /// <summary>
+        /// The oldest order to be downloaded into the database
+        /// </summary>
+        public DateTime OldestOrderDate { get; private set; }
+
+        /// <summary>
+        /// The newest order to be downloaded into the database
+        /// </summary>
+        public DateTime NewestOrderDate { get; private set; }
+
+        /// <summary>
+        /// ShipWorks schema version of the database
+        /// </summary>
+        public Version SchemaVersion { get; private set; }
+
+        /// <summary>
+        /// The last ShipWorks user to log in to the database
+        /// </summary>
+        public string LastUsedBy { get; private set; }
+
+        /// <summary>
+        /// The date/time the last ShipWorks user logged in to the database
+        /// </summary>
+        public DateTime LastUsedOn { get; private set; }
+
+        /// <summary>
+        /// The last order number to be downloaded into the database
+        /// </summary>
+        public string LastOrderNumber { get; private set; }
+
+        /// <summary>
+        /// The date of the last order to be downloaded into the database
+        /// </summary>
+        public DateTime LastOrderDate { get; private set; }
+
+        /// <summary>
+        /// Is the database an archive
+        /// </summary>
+        public bool IsArchive { get; private set; }
+
+        /// <summary>
+        /// GUID of the database
+        /// </summary>
+        public Guid Guid { get; private set; }
     }
 }
