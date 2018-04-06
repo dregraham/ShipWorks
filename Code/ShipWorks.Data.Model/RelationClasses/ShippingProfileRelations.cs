@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.PackageProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.AmazonProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.AsendiaProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.BestRateProfileEntityUsingShippingProfileID);
@@ -45,6 +46,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 		#region Class Property Declarations
 
+		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and PackageProfileEntity over the 1:n relation they have, using the relation between the fields:
+		/// ShippingProfile.ShippingProfileID - PackageProfile.ShippingProfileID
+		/// </summary>
+		public virtual IEntityRelation PackageProfileEntityUsingShippingProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Packages" , true);
+				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, PackageProfileFields.ShippingProfileID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PackageProfileEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and AmazonProfileEntity over the 1:1 relation they have, using the relation between the fields:
 		/// ShippingProfile.ShippingProfileID - AmazonProfile.ShippingProfileID
@@ -250,6 +265,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticShippingProfileRelations
 	{
+		internal static readonly IEntityRelation PackageProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().PackageProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation AmazonProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AmazonProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation AsendiaProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AsendiaProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation BestRateProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().BestRateProfileEntityUsingShippingProfileID;

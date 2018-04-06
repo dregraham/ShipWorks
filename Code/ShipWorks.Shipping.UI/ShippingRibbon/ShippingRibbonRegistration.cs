@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Divelements.SandRibbon;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI.SandRibbon;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using TD.SandDock;
+using Menu = Divelements.SandRibbon.Menu;
+using MenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -18,25 +23,23 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     [Component]
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
-        readonly ComponentResourceManager resources;
-        readonly IShippingRibbonService shippingRibbonService;
-        readonly IShippingProfileManager profileManager;
-        RibbonButton createLabelButton;
-        RibbonButton voidButton;
-        RibbonButton returnButton;
-        RibbonButton reprintButton;
-        RibbonButton shipAgainButton;
-        ApplyProfileButtonWrapper applyProfileButton;
-        RibbonButton manageProfilesButton;
-        Popup applyProfilePopup;
-        Menu applyProfileMenu;
-        ShipmentTypeCode? currentShipmentType;
+        private readonly IShippingRibbonService shippingRibbonService;
+        private readonly IShippingProfileService profileService;
+        private RibbonButton createLabelButton;
+        private RibbonButton voidButton;
+        private RibbonButton returnButton;
+        private RibbonButton reprintButton;
+        private RibbonButton shipAgainButton;
+        private ApplyProfileButtonWrapper applyProfileButton;
+        private RibbonButton manageProfilesButton;
+        private Popup applyProfilePopup;
+        private Menu applyProfileMenu;
+        private ShipmentTypeCode? currentShipmentType;
 
-        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileManager profileManager)
+        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileService profileService)
         {
-            resources = new ComponentResourceManager(typeof(MainForm));
             this.shippingRibbonService = shippingRibbonService;
-            this.profileManager = profileManager;
+            this.profileService = profileService;
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Items = { applyProfileMenu }
             };
 
-            applyProfilePopup.BeforePopup += new BeforePopupEventHandler(OnApplyProfileBeforePopup);
+            applyProfilePopup.BeforePopup += OnApplyProfileBeforePopup;
 
             RibbonButton actualApplyProfileButton = new RibbonButton
             {
@@ -113,7 +116,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             manageProfilesButton = new RibbonButton
             {
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
-                Image = Properties.Resources.document_gear_32_32,
+                Image = Properties.Resources.box_closed_with_label_32_32,
                 Text = "Manage",
                 TextContentRelation = TextContentRelation.Underneath
             };
@@ -166,29 +169,46 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             applyProfileMenu.Items.Clear();
 
-            if (!currentShipmentType.HasValue)
+            List<WidgetBase> menuItems = new List<WidgetBase>();
+            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = profileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Where(p => p.IsApplicable(currentShipmentType))
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .GroupBy(p => p.ShipmentType)
+                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
+
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
             {
-                return;
+                string groupName = "Global";
+                if (profileGroup.Key.HasValue)
+                {
+                    groupName = profileGroup.ToString();
+                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(profileGroup.Key.Value))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Padding = new WidgetEdges(28, -1, 0, -1),
+                        GroupName = groupName,
+                        Enabled = false
+                    };
+                    menuItems.Add(carrierLabel);
+                }
+
+                menuItems.AddRange(profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
+                    .Select(profile => CreateMenuItem(profile, groupName)));
             }
 
-            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value)
-                .OrderBy(x => x.ShipmentTypePrimary)
-                .ThenBy(x => x.Name)
-                .Select(x => CreateMenuItem(x, x.ShipmentTypePrimary ? "Default" : "Custom"))
-                .ToArray();
-
-            if (!menuItems.Any())
+            if (menuItems.None())
             {
-                menuItems = new[] { new MenuItem { Text = "(None)", Enabled = false } };
+                menuItems = new List<WidgetBase> { new MenuItem { Text = "(None)", Enabled = false } };
             }
 
-            applyProfileMenu.Items.AddRange(menuItems);
+            applyProfileMenu.Items.AddRange(menuItems.ToArray());
         }
 
         /// <summary>
         /// Create a menu item from the given profile
         /// </summary>
-        private WidgetBase CreateMenuItem(ShippingProfileEntity profile, string groupName)
+        private WidgetBase CreateMenuItem(IShippingProfileEntity profile, string groupName)
         {
             MenuItem menuItem = new MenuItem(profile.Name);
             menuItem.GroupName = groupName;

@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous FedEx account that has since
                     // been deleted.
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.FedEx))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == ShipmentTypeCode.FedEx))
                     {
                         if (shippingProfileEntity.FedEx.FedExAccountID.HasValue)
                         {

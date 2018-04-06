@@ -114,5 +114,10 @@ namespace ShipWorks.Shipping.Insurance
         /// Validate the given shipment
         /// </summary>
         public void ValidateShipment(ShipmentEntity shipment) => InsuranceUtility.ValidateShipment(shipment);
+
+        /// <summary>
+        /// Get the default insurance value to use based on the shipment contents
+        /// </summary>
+        public decimal GetInsuranceValue(ShipmentEntity shipment) => InsuranceUtility.GetInsuranceValue(shipment);
     }
 }

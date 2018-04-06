@@ -206,13 +206,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [InlineData(ShipmentTypeCode.Usps)]
         public void CreateShipment_SetsShipmentType_BasedOnShipmentTypeManager(ShipmentTypeCode shipmentTypeCode)
         {
-            //var shipmentType = mock.CreateMock<ShipmentType>();
-            //shipmentType.Setup(x => x.ShipmentTypeCode).Returns(shipmentTypeCode);
-
             var shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
-            mock.Override<IShipmentTypeManager>()
+            Mock<IShipmentTypeManager> shipmentTypeManager = mock.Override<IShipmentTypeManager>();
+
+            shipmentTypeManager
                 .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType);
+
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
@@ -844,7 +847,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 x => x.AsOnTrac(p =>
                 {
                     p.Set(s => s.Service, (int) OnTracServiceType.Sunrise);
-                    p.Set(s => s.DimsAddWeight, true);
+                    p.Set(s => s.Instructions, "blah");
                 }));
 
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
@@ -855,7 +858,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
             Assert.Equal((int) OnTracServiceType.SunriseGold, shipment.OnTrac.Service);
-            Assert.True(shipment.OnTrac.DimsAddWeight);
+            Assert.Equal("blah", shipment.OnTrac.Instructions);
         }
 
         [Fact]
@@ -968,8 +971,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Func<ProfileEntityBuilder, EntityBuilder<ShippingProfileEntity>> configureProfile)
         {
             var profile = configureProfile(Create.Profile())
-                //.Set(x => x.Name, Path.GetRandomFileName())
-                //.DoNotSetDefaults()
                 .Save();
 
             var node = CreateFilterNode(objectId);

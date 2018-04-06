@@ -78,6 +78,12 @@ namespace ShipWorks.Shipping.Services
             allShipmentTypeCodes.Except(noAccountShipmentTypes);
 
         /// <summary>
+        /// Configured ShipmentTypeCodes
+        /// </summary>
+        public IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypeCodes =>
+            ShipmentTypeCodes.Where(c => c == ShipmentTypeCode.BestRate || shippingSettings.IsConfigured(c));
+
+        /// <summary>
         /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
         /// </summary>
         public ShipmentType InitialShipmentType(ShipmentEntity shipment)

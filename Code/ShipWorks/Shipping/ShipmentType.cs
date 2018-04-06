@@ -22,7 +22,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
@@ -346,24 +345,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected virtual ShippingProfileControlBase CreateProfileControl()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
-                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
-                CreateProfileControl();
-        }
-
-        /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
         /// been excluded for this shipment type. The integer values are intended to correspond to
         /// the appropriate enumeration values of the specific shipment type (i.e. the integer values
@@ -531,9 +512,7 @@ namespace ShipWorks.Shipping
                 ICustomsManager customsManager = lifetimeScope.Resolve<ICustomsManager>();
                 ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
-
-                // First apply the base profile
-                ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this));
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
@@ -544,6 +523,16 @@ namespace ShipWorks.Shipping
                 }
                 customsManager.GenerateCustomsItems(shipment);
 
+                // First apply the base profile
+                ShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfile(this);
+                if (primaryProfile.IsNew)
+                {
+                    shippingProfileManager.SaveProfile(primaryProfile);
+                }
+
+                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                shippingProfile.Apply(shipment);
+
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
 
@@ -553,7 +542,7 @@ namespace ShipWorks.Shipping
                     IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                     if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                     {
-                        ApplyProfile(shipment, profile);
+                        shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
                     }
                 }
 
@@ -690,22 +679,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-
-        }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public virtual bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
         public virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -719,6 +692,24 @@ namespace ShipWorks.Shipping
             profile.ReturnShipment = false;
 
             profile.RequestedLabelFormat = (int) ThermalLanguage.None;
+
+            //Single package carriers only have one package profile, initialize it now
+            if (!SupportsMultiplePackages)
+            {
+                // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                profile.Packages.Clear();
+                profile.Packages.Add(new PackageProfileEntity()
+                {
+                    Weight = 0,
+                    DimsProfileID = 0,
+                    DimsLength = 0,
+                    DimsWidth = 0,
+                    DimsHeight = 0,
+                    DimsWeight = 0,
+                    DimsAddWeight = true
+                });
+            }
         }
 
         /// <summary>
@@ -876,39 +867,6 @@ namespace ShipWorks.Shipping
             }
 
             return new List<string> { shipment.TrackingNumber };
-        }
-
-        /// <summary>
-        /// Apply the specified shipment profile to the given shipment.
-        /// </summary>
-        public virtual void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
-            ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
-
-            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
-            SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
-
-            // Special case for insurance
-            for (int i = 0; i < GetParcelCount(shipment); i++)
-            {
-                IInsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
-
-                if (profile.Insurance != null)
-                {
-                    insuranceChoice.Insured = profile.Insurance.Value;
-                }
-
-                if (profile.InsuranceInitialValueSource != null)
-                {
-                    // Don't apply the value to the subsequent parcels - that would probably end up over-ensuring the whole shipment.
-                    if (i == 0)
-                    {
-                        InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
-                        insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
-                    }
-                }
-            }
         }
 
         /// <summary>

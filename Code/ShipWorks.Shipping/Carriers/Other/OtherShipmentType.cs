@@ -40,12 +40,6 @@ namespace ShipWorks.Shipping.Carriers.Other
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Other", typeof(OtherShipmentEntity), refreshIfPresent);
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent) =>
-            ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
-
-        /// <summary>
         /// For 'Other' we just use return as a marker
         /// </summary>
         public override bool SupportsReturns => true;
@@ -71,28 +65,15 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             base.ConfigurePrimaryProfile(profile);
 
+            // The base configures dimensions for all shipment types. Other is an exception and
+            // doesn't need it.
+            profile.Packages.Clear();
+
             long originID = ShippingOriginManager.Origins.Count > 0 ? ShippingOriginManager.Origins[0].ShippingOriginID : (long) ShipmentOriginSource.Store;
             profile.OriginID = originID;
 
             profile.Other.Carrier = "";
             profile.Other.Service = "";
-        }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            OtherShipmentEntity otherShipment = shipment.Other;
-            IOtherProfileEntity otherProfile = profile.Other;
-
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
-            ShippingProfileUtility.ApplyProfileValue(otherProfile.ShippingProfile.Insurance, otherShipment, OtherShipmentFields.Insurance);
-
-            UpdateDynamicShipmentData(shipment);
         }
 
         /// <summary>

@@ -50,6 +50,7 @@ namespace ShipWorks
             this.buttonManageTemplates = new Divelements.SandRibbon.Button();
             this.buttonManageActions = new Divelements.SandRibbon.Button();
             this.buttonShippingSettings = new Divelements.SandRibbon.Button();
+            this.buttonShippingProfiles = new Divelements.SandRibbon.Button();
             this.buttonOptions = new Divelements.SandRibbon.Button();
             this.buttonManageStores = new Divelements.SandRibbon.Button();
             this.buttonManageUsers = new Divelements.SandRibbon.Button();
@@ -497,6 +498,7 @@ namespace ShipWorks
             this.buttonManageTemplates,
             this.buttonManageActions,
             this.buttonShippingSettings,
+            this.buttonShippingProfiles,
             this.buttonOptions});
             //
             // buttonManageFilters
@@ -532,10 +534,20 @@ namespace ShipWorks
             this.buttonShippingSettings.Guid = new System.Guid("0e161e23-f9ba-4f01-899d-4e4c908735f6");
             this.buttonShippingSettings.Image = global::ShipWorks.Properties.Resources.box_preferences32;
             this.ribbonSecurityProvider.SetPermission(this.buttonShippingSettings, ShipWorks.Users.Security.PermissionType.ShipmentsManageSettings);
-            this.buttonShippingSettings.QuickAccessKey = "S";
+            this.buttonShippingSettings.QuickAccessKey = "SS";
             this.buttonShippingSettings.Text = "Shipping\r\nSettings";
             this.buttonShippingSettings.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonShippingSettings.Activate += new System.EventHandler(this.OnShippingSettings);
+            this.buttonShippingSettings.Activate += new System.EventHandler(this.OnManageShippingSettings);
+            //
+            // buttonShippingProfiles
+            //
+            this.buttonShippingProfiles.Guid = new System.Guid("13BA3580-9867-41A9-91B4-200E7BD1639B");
+            this.buttonShippingProfiles.Image = global::ShipWorks.Properties.Resources.box_closed_with_label_32_32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonShippingProfiles, ShipWorks.Users.Security.PermissionType.ShipmentsManageSettings);
+            this.buttonShippingProfiles.QuickAccessKey = "SP";
+            this.buttonShippingProfiles.Text = "Shipping\r\nProfiles";
+            this.buttonShippingProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonShippingProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
             //
             // buttonOptions
             //
@@ -3044,6 +3056,7 @@ namespace ShipWorks
         private ShipWorks.Users.Security.RibbonSecurityProvider ribbonSecurityProvider;
         private Divelements.SandRibbon.Button buttonAudit;
         private Divelements.SandRibbon.Button buttonShippingSettings;
+        private Divelements.SandRibbon.Button buttonShippingProfiles;
         private Divelements.SandRibbon.Button buttonFedExClose;
         private Divelements.SandRibbon.Popup popupFedExEndOfDay;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayClose;

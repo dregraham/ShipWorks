@@ -1,33 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
     /// UserControl for editing Endicia profiles
     /// </summary>
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Express1Endicia)]
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.Express1Endicia)]
     public partial class EndiciaProfileControl : PostalProfileControlBase
     {
         // the reseller sub-type this profile configures
-        EndiciaReseller endiciaReseller = EndiciaReseller.None;
+        private EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaProfileControl(EndiciaReseller endiciaReseller)
+        public EndiciaProfileControl()
         {
             InitializeComponent();
 
             ResizeGroupBoxes(tabPage);
-
-            this.endiciaReseller = endiciaReseller;
 
             if (!IsScanBasedReturnsEnabled())
             {
@@ -42,6 +45,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override void LoadProfile(ShippingProfileEntity profile)
         {
+            if (profile.ShipmentType == ShipmentTypeCode.Express1Endicia)
+            {
+                endiciaReseller = EndiciaReseller.Express1;
+            }
+
             base.LoadProfile(profile);
 
             if (EndiciaUtility.IsEndiciaInsuranceActive)

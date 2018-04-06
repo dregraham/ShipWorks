@@ -135,14 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Endicia profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new EndiciaProfileControl(EndiciaReseller);
-        }
-
-        /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
@@ -189,16 +181,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-
-            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Endicia", typeof(EndiciaProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -211,27 +193,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endicia.StealthPostage = true;
             endicia.ReferenceID = "{//Order/Number}";
             endicia.ScanBasedReturn = false;
-        }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            // We can be called during the creation of the base Postal shipment, before the endicia one exists
-            if (shipment.Postal.Endicia != null)
-            {
-                EndiciaShipmentEntity endiciaShipment = shipment.Postal.Endicia;
-                IEndiciaProfileEntity endiciaProfile = profile.Postal.Endicia;
-
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.PostalProfile.Profile.Insurance, endiciaShipment, EndiciaShipmentFields.Insurance);
-            }
         }
 
         /// <summary>

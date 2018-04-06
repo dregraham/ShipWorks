@@ -73,7 +73,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IShippingProfileEntity ShippingProfile { get; }
         
         
-        IEnumerable<IIParcelProfilePackageEntity> Packages { get; }
 
         
 
@@ -103,7 +102,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         IShippingProfileEntity IIParcelProfileEntity.ShippingProfile => ShippingProfile;
         
         
-        IEnumerable<IIParcelProfilePackageEntity> IIParcelProfileEntity.Packages => Packages;
 
         /// <summary>
         /// Get a read only version of the entity

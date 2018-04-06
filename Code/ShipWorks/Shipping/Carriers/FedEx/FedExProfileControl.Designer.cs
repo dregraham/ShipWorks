@@ -234,7 +234,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(354, 99);
+            this.groupBoxFrom.Size = new System.Drawing.Size(465, 99);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -369,7 +369,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 167);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(354, 177);
+            this.groupShipment.Size = new System.Drawing.Size(465, 177);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -390,7 +390,7 @@
             this.thirdPartyConsignee.Location = new System.Drawing.Point(110, 154);
             this.thirdPartyConsignee.Name = "thirdPartyConsignee";
             this.thirdPartyConsignee.Size = new System.Drawing.Size(79, 17);
-            this.thirdPartyConsignee.TabIndex = 110;
+            this.thirdPartyConsignee.TabIndex = 12;
             this.thirdPartyConsignee.Text = "Third Party";
             this.thirdPartyConsignee.UseVisualStyleBackColor = true;
             // 
@@ -402,7 +402,7 @@
             this.consigneeState.Location = new System.Drawing.Point(9, 155);
             this.consigneeState.Name = "consigneeState";
             this.consigneeState.Size = new System.Drawing.Size(15, 14);
-            this.consigneeState.TabIndex = 109;
+            this.consigneeState.TabIndex = 11;
             this.consigneeState.Tag = "";
             this.consigneeState.UseVisualStyleBackColor = true;
             // 
@@ -422,7 +422,7 @@
             this.returnsClearance.Location = new System.Drawing.Point(110, 127);
             this.returnsClearance.Name = "returnsClearance";
             this.returnsClearance.Size = new System.Drawing.Size(115, 17);
-            this.returnsClearance.TabIndex = 106;
+            this.returnsClearance.TabIndex = 10;
             this.returnsClearance.Text = "Returns Clearance";
             this.returnsClearance.UseVisualStyleBackColor = true;
             // 
@@ -434,7 +434,7 @@
             this.returnsClearanceState.Location = new System.Drawing.Point(9, 128);
             this.returnsClearanceState.Name = "returnsClearanceState";
             this.returnsClearanceState.Size = new System.Drawing.Size(15, 14);
-            this.returnsClearanceState.TabIndex = 105;
+            this.returnsClearanceState.TabIndex = 9;
             this.returnsClearanceState.Tag = "";
             this.returnsClearanceState.UseVisualStyleBackColor = true;
             // 
@@ -661,7 +661,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(425, 1455);
+            this.tabControl.Size = new System.Drawing.Size(570, 1455);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
@@ -681,7 +681,7 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(417, 1429);
+            this.tabPageSettings.Size = new System.Drawing.Size(562, 1429);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -696,8 +696,8 @@
             this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
             this.groupFIMS.Location = new System.Drawing.Point(6, 1400);
             this.groupFIMS.Name = "groupFIMS";
-            this.groupFIMS.Size = new System.Drawing.Size(354, 58);
-            this.groupFIMS.TabIndex = 14;
+            this.groupFIMS.Size = new System.Drawing.Size(465, 58);
+            this.groupFIMS.TabIndex = 10;
             this.groupFIMS.TabStop = false;
             this.groupFIMS.Text = "Fims Options";
             // 
@@ -718,7 +718,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.referenceFIMS, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
             this.referenceFIMS.Name = "referenceFIMS";
             this.referenceFIMS.Size = new System.Drawing.Size(222, 21);
-            this.referenceFIMS.TabIndex = 103;
+            this.referenceFIMS.TabIndex = 1;
             this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // referenceFimsState
@@ -752,8 +752,8 @@
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
             this.groupLabels.Location = new System.Drawing.Point(6, 347);
             this.groupLabels.Name = "groupLabels";
-            this.groupLabels.Size = new System.Drawing.Size(354, 58);
-            this.groupLabels.TabIndex = 13;
+            this.groupLabels.Size = new System.Drawing.Size(465, 58);
+            this.groupLabels.TabIndex = 3;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
             // 
@@ -764,7 +764,7 @@
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
             this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 101;
+            this.requestedLabelFormat.TabIndex = 1;
             // 
             // requestedLabelFormatState
             // 
@@ -806,8 +806,8 @@
             this.groupReturns.Controls.Add(this.returnShipmentState);
             this.groupReturns.Location = new System.Drawing.Point(6, 1243);
             this.groupReturns.Name = "groupReturns";
-            this.groupReturns.Size = new System.Drawing.Size(354, 152);
-            this.groupReturns.TabIndex = 10;
+            this.groupReturns.Size = new System.Drawing.Size(465, 152);
+            this.groupReturns.TabIndex = 9;
             this.groupReturns.TabStop = false;
             this.groupReturns.Text = "Returns";
             // 
@@ -967,8 +967,8 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 410);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(354, 82);
-            this.groupInsurance.TabIndex = 3;
+            this.groupInsurance.Size = new System.Drawing.Size(465, 82);
+            this.groupInsurance.TabIndex = 4;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -978,7 +978,7 @@
             this.insuranceControl.Location = new System.Drawing.Point(45, 22);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 0;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -1024,8 +1024,8 @@
             this.groupSmartPost.Controls.Add(this.smartIndiciaState);
             this.groupSmartPost.Location = new System.Drawing.Point(6, 669);
             this.groupSmartPost.Name = "groupSmartPost";
-            this.groupSmartPost.Size = new System.Drawing.Size(354, 164);
-            this.groupSmartPost.TabIndex = 7;
+            this.groupSmartPost.Size = new System.Drawing.Size(465, 164);
+            this.groupSmartPost.TabIndex = 6;
             this.groupSmartPost.TabStop = false;
             this.groupSmartPost.Text = "SmartPost";
             // 
@@ -1037,7 +1037,7 @@
             this.smartHubIDState.Location = new System.Drawing.Point(9, 26);
             this.smartHubIDState.Name = "smartHubIDState";
             this.smartHubIDState.Size = new System.Drawing.Size(15, 14);
-            this.smartHubIDState.TabIndex = 90;
+            this.smartHubIDState.TabIndex = 0;
             this.smartHubIDState.Tag = "";
             this.smartHubIDState.UseVisualStyleBackColor = true;
             // 
@@ -1049,7 +1049,7 @@
             this.smartHubID.Name = "smartHubID";
             this.smartHubID.PromptText = "(Multiple Values)";
             this.smartHubID.Size = new System.Drawing.Size(173, 21);
-            this.smartHubID.TabIndex = 89;
+            this.smartHubID.TabIndex = 1;
             // 
             // labelSmartHubID
             // 
@@ -1067,7 +1067,7 @@
             this.smartConfirmation.Location = new System.Drawing.Point(113, 107);
             this.smartConfirmation.Name = "smartConfirmation";
             this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
-            this.smartConfirmation.TabIndex = 87;
+            this.smartConfirmation.TabIndex = 7;
             this.smartConfirmation.Text = "USPS Delivery Confirmation";
             this.smartConfirmation.UseVisualStyleBackColor = true;
             // 
@@ -1079,7 +1079,7 @@
             this.smartEndorsement.Name = "smartEndorsement";
             this.smartEndorsement.PromptText = "(Multiple Values)";
             this.smartEndorsement.Size = new System.Drawing.Size(173, 21);
-            this.smartEndorsement.TabIndex = 86;
+            this.smartEndorsement.TabIndex = 5;
             // 
             // smartIndicia
             // 
@@ -1089,7 +1089,7 @@
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
             this.smartIndicia.Size = new System.Drawing.Size(173, 21);
-            this.smartIndicia.TabIndex = 85;
+            this.smartIndicia.TabIndex = 3;
             // 
             // labelSmartAncillary
             // 
@@ -1128,7 +1128,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
-            this.smartManifestID.TabIndex = 80;
+            this.smartManifestID.TabIndex = 9;
             this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelSmartManifestID
@@ -1149,7 +1149,7 @@
             this.smartManifestIDState.Location = new System.Drawing.Point(9, 135);
             this.smartManifestIDState.Name = "smartManifestIDState";
             this.smartManifestIDState.Size = new System.Drawing.Size(15, 14);
-            this.smartManifestIDState.TabIndex = 78;
+            this.smartManifestIDState.TabIndex = 8;
             this.smartManifestIDState.Tag = "";
             this.smartManifestIDState.UseVisualStyleBackColor = true;
             // 
@@ -1161,7 +1161,7 @@
             this.smartConfirmationState.Location = new System.Drawing.Point(9, 108);
             this.smartConfirmationState.Name = "smartConfirmationState";
             this.smartConfirmationState.Size = new System.Drawing.Size(15, 14);
-            this.smartConfirmationState.TabIndex = 77;
+            this.smartConfirmationState.TabIndex = 6;
             this.smartConfirmationState.Tag = "";
             this.smartConfirmationState.UseVisualStyleBackColor = true;
             // 
@@ -1184,7 +1184,7 @@
             this.smartEndoresmentState.Location = new System.Drawing.Point(9, 81);
             this.smartEndoresmentState.Name = "smartEndoresmentState";
             this.smartEndoresmentState.Size = new System.Drawing.Size(15, 14);
-            this.smartEndoresmentState.TabIndex = 76;
+            this.smartEndoresmentState.TabIndex = 4;
             this.smartEndoresmentState.Tag = "";
             this.smartEndoresmentState.UseVisualStyleBackColor = true;
             // 
@@ -1196,7 +1196,7 @@
             this.smartIndiciaState.Location = new System.Drawing.Point(9, 54);
             this.smartIndiciaState.Name = "smartIndiciaState";
             this.smartIndiciaState.Size = new System.Drawing.Size(15, 14);
-            this.smartIndiciaState.TabIndex = 75;
+            this.smartIndiciaState.TabIndex = 2;
             this.smartIndiciaState.Tag = "";
             this.smartIndiciaState.UseVisualStyleBackColor = true;
             // 
@@ -1210,7 +1210,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 110);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(354, 52);
+            this.groupTo.Size = new System.Drawing.Size(465, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1300,8 +1300,8 @@
             this.groupEmail.Controls.Add(this.picturEmailInfo);
             this.groupEmail.Location = new System.Drawing.Point(6, 974);
             this.groupEmail.Name = "groupEmail";
-            this.groupEmail.Size = new System.Drawing.Size(354, 264);
-            this.groupEmail.TabIndex = 6;
+            this.groupEmail.Size = new System.Drawing.Size(465, 264);
+            this.groupEmail.TabIndex = 8;
             this.groupEmail.TabStop = false;
             this.groupEmail.Text = "Email Notifications";
             // 
@@ -1312,7 +1312,7 @@
             this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(415, 121);
             this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
             this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 62;
+            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 14;
             this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherEstimatedDelivery
@@ -1322,7 +1322,7 @@
             this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(415, 143);
             this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
             this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherEstimatedDelivery.TabIndex = 60;
+            this.emailNotifyOtherEstimatedDelivery.TabIndex = 20;
             this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientEstimatedDelivery
@@ -1332,7 +1332,7 @@
             this.emailNotifyRecipientEstimatedDelivery.Location = new System.Drawing.Point(415, 101);
             this.emailNotifyRecipientEstimatedDelivery.Name = "emailNotifyRecipientEstimatedDelivery";
             this.emailNotifyRecipientEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 59;
+            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 9;
             this.emailNotifyRecipientEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifySenderEstimatedDelivery
@@ -1342,7 +1342,7 @@
             this.emailNotifySenderEstimatedDelivery.Location = new System.Drawing.Point(415, 80);
             this.emailNotifySenderEstimatedDelivery.Name = "emailNotifySenderEstimatedDelivery";
             this.emailNotifySenderEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderEstimatedDelivery.TabIndex = 58;
+            this.emailNotifySenderEstimatedDelivery.TabIndex = 4;
             this.emailNotifySenderEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // labelEstimatedDelivery
@@ -1363,7 +1363,7 @@
             this.emailNotifyBrokerState.Location = new System.Drawing.Point(9, 122);
             this.emailNotifyBrokerState.Name = "emailNotifyBrokerState";
             this.emailNotifyBrokerState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerState.TabIndex = 50;
+            this.emailNotifyBrokerState.TabIndex = 10;
             this.emailNotifyBrokerState.Tag = "";
             this.emailNotifyBrokerState.UseVisualStyleBackColor = true;
             // 
@@ -1374,7 +1374,7 @@
             this.emailNotifyBrokerShip.Location = new System.Drawing.Point(263, 121);
             this.emailNotifyBrokerShip.Name = "emailNotifyBrokerShip";
             this.emailNotifyBrokerShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerShip.TabIndex = 51;
+            this.emailNotifyBrokerShip.TabIndex = 11;
             this.emailNotifyBrokerShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyBrokerDelivery
@@ -1384,7 +1384,7 @@
             this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(360, 121);
             this.emailNotifyBrokerDelivery.Name = "emailNotifyBrokerDelivery";
             this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerDelivery.TabIndex = 53;
+            this.emailNotifyBrokerDelivery.TabIndex = 13;
             this.emailNotifyBrokerDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyBrokerException
@@ -1394,7 +1394,7 @@
             this.emailNotifyBrokerException.Location = new System.Drawing.Point(306, 121);
             this.emailNotifyBrokerException.Name = "emailNotifyBrokerException";
             this.emailNotifyBrokerException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerException.TabIndex = 52;
+            this.emailNotifyBrokerException.TabIndex = 12;
             this.emailNotifyBrokerException.UseVisualStyleBackColor = false;
             // 
             // labelEmailBroker
@@ -1415,7 +1415,7 @@
             this.emailNotifyMessageState.Location = new System.Drawing.Point(9, 174);
             this.emailNotifyMessageState.Name = "emailNotifyMessageState";
             this.emailNotifyMessageState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyMessageState.TabIndex = 13;
+            this.emailNotifyMessageState.TabIndex = 21;
             this.emailNotifyMessageState.Tag = "";
             this.emailNotifyMessageState.UseVisualStyleBackColor = true;
             // 
@@ -1427,7 +1427,7 @@
             this.emailNotifyOtherState.Location = new System.Drawing.Point(9, 144);
             this.emailNotifyOtherState.Name = "emailNotifyOtherState";
             this.emailNotifyOtherState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherState.TabIndex = 8;
+            this.emailNotifyOtherState.TabIndex = 15;
             this.emailNotifyOtherState.Tag = "";
             this.emailNotifyOtherState.UseVisualStyleBackColor = true;
             // 
@@ -1450,7 +1450,7 @@
             this.emailNotifyRecipientState.Location = new System.Drawing.Point(9, 101);
             this.emailNotifyRecipientState.Name = "emailNotifyRecipientState";
             this.emailNotifyRecipientState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientState.TabIndex = 4;
+            this.emailNotifyRecipientState.TabIndex = 5;
             this.emailNotifyRecipientState.Tag = "";
             this.emailNotifyRecipientState.UseVisualStyleBackColor = true;
             // 
@@ -1475,7 +1475,7 @@
             this.emailNotifyMessage.Name = "emailNotifyMessage";
             this.emailNotifyMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.emailNotifyMessage.Size = new System.Drawing.Size(319, 61);
-            this.emailNotifyMessage.TabIndex = 14;
+            this.emailNotifyMessage.TabIndex = 23;
             // 
             // labelPersonalMessage
             // 
@@ -1484,7 +1484,7 @@
             this.labelPersonalMessage.Location = new System.Drawing.Point(48, 174);
             this.labelPersonalMessage.Name = "labelPersonalMessage";
             this.labelPersonalMessage.Size = new System.Drawing.Size(144, 13);
-            this.labelPersonalMessage.TabIndex = 45;
+            this.labelPersonalMessage.TabIndex = 22;
             this.labelPersonalMessage.Text = "Personal Message (Optional)";
             // 
             // kryptonBorderEdgeEmail2
@@ -1495,7 +1495,7 @@
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 170);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(299, 1);
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(410, 1);
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
@@ -1505,7 +1505,7 @@
             this.emailNotifyOtherShip.Location = new System.Drawing.Point(263, 143);
             this.emailNotifyOtherShip.Name = "emailNotifyOtherShip";
             this.emailNotifyOtherShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherShip.TabIndex = 10;
+            this.emailNotifyOtherShip.TabIndex = 17;
             this.emailNotifyOtherShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherDelivery
@@ -1515,7 +1515,7 @@
             this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(360, 143);
             this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
             this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherDelivery.TabIndex = 12;
+            this.emailNotifyOtherDelivery.TabIndex = 19;
             this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherException
@@ -1525,7 +1525,7 @@
             this.emailNotifyOtherException.Location = new System.Drawing.Point(306, 143);
             this.emailNotifyOtherException.Name = "emailNotifyOtherException";
             this.emailNotifyOtherException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherException.TabIndex = 11;
+            this.emailNotifyOtherException.TabIndex = 18;
             this.emailNotifyOtherException.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientShip
@@ -1535,7 +1535,7 @@
             this.emailNotifyRecipientShip.Location = new System.Drawing.Point(263, 101);
             this.emailNotifyRecipientShip.Name = "emailNotifyRecipientShip";
             this.emailNotifyRecipientShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientShip.TabIndex = 5;
+            this.emailNotifyRecipientShip.TabIndex = 6;
             this.emailNotifyRecipientShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientDelivery
@@ -1545,7 +1545,7 @@
             this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(360, 101);
             this.emailNotifyRecipientDelivery.Name = "emailNotifyRecipientDelivery";
             this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientDelivery.TabIndex = 7;
+            this.emailNotifyRecipientDelivery.TabIndex = 8;
             this.emailNotifyRecipientDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientException
@@ -1555,7 +1555,7 @@
             this.emailNotifyRecipientException.Location = new System.Drawing.Point(306, 101);
             this.emailNotifyRecipientException.Name = "emailNotifyRecipientException";
             this.emailNotifyRecipientException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientException.TabIndex = 6;
+            this.emailNotifyRecipientException.TabIndex = 7;
             this.emailNotifyRecipientException.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherAddress
@@ -1564,7 +1564,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyOtherAddress, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyOtherAddress);
             this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
             this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
-            this.emailNotifyOtherAddress.TabIndex = 9;
+            this.emailNotifyOtherAddress.TabIndex = 16;
             // 
             // kryptonBorderEdgeEmail
             // 
@@ -1574,7 +1574,7 @@
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(299, 1);
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(410, 1);
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
@@ -1720,8 +1720,8 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 497);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(354, 167);
-            this.groupOptions.TabIndex = 4;
+            this.groupOptions.Size = new System.Drawing.Size(465, 167);
+            this.groupOptions.TabIndex = 5;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
@@ -1851,8 +1851,8 @@
             this.groupBilling.Controls.Add(this.labelPayorTransport);
             this.groupBilling.Location = new System.Drawing.Point(6, 838);
             this.groupBilling.Name = "groupBilling";
-            this.groupBilling.Size = new System.Drawing.Size(354, 132);
-            this.groupBilling.TabIndex = 5;
+            this.groupBilling.Size = new System.Drawing.Size(465, 132);
+            this.groupBilling.TabIndex = 7;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";
             // 
@@ -1999,7 +1999,7 @@
             this.tabPagePackages.Location = new System.Drawing.Point(4, 22);
             this.tabPagePackages.Name = "tabPagePackages";
             this.tabPagePackages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePackages.Size = new System.Drawing.Size(417, 1429);
+            this.tabPagePackages.Size = new System.Drawing.Size(492, 1429);
             this.tabPagePackages.TabIndex = 1;
             this.tabPagePackages.Text = "Packages";
             this.tabPagePackages.UseVisualStyleBackColor = true;
@@ -2117,7 +2117,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "FedExProfileControl";
-            this.Size = new System.Drawing.Size(425, 1455);
+            this.Size = new System.Drawing.Size(570, 1455);
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
             this.groupShipment.ResumeLayout(false);

@@ -138,8 +138,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShippingPanelViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
-            builder.RegisterType<ShippingProfileEditorDlg>();
-
             builder.RegisterType<ShippingRibbonService>()
                 .As<IShippingRibbonService>();
 
@@ -161,8 +159,6 @@ namespace ShipWorks.Shipping.UI
                             return container.Resolve<ShipmentViewModel>();
                     }
                 });
-
-            builder.RegisterType<ShippingProfileEditorDlg>();
 
             builder.RegisterType<CachedRatesService>().AsImplementedInterfaces();
 

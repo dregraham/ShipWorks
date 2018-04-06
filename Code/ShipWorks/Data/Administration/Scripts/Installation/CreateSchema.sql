@@ -1106,7 +1106,7 @@ CREATE TABLE [dbo].[ShippingProfile]
 [ShippingProfileID] [bigint] NOT NULL IDENTITY(1053, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipmentType] [int] NOT NULL,
+[ShipmentType] [int] NULL,
 [ShipmentTypePrimary] [bit] NOT NULL,
 [OriginID] [bigint] NULL,
 [Insurance] [bit] NULL,
@@ -1120,22 +1120,38 @@ PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'
 GO
 ALTER TABLE [dbo].[ShippingProfile] ADD CONSTRAINT [PK_ShippingProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
+PRINT N'Altering [dbo].[ShippingProfile]'
+GO
 ALTER TABLE [dbo].[ShippingProfile] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Altering [dbo].[ShippingProfile]'
+PRINT N'Creating [dbo].[PackageProfile]'
+GO
+CREATE TABLE [dbo].[PackageProfile]
+(
+[PackageProfileID] [bigint] NOT NULL IDENTITY(1104, 1000),
+[ShippingProfileID] [bigint] NOT NULL,
+[Weight] [float] NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL
+)
+GO
+PRINT N'Creating primary key [PK_PackageProfile] on [dbo].[PackageProfile]'
+GO
+ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [PK_PackageProfile] PRIMARY KEY CLUSTERED  ([PackageProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[PackageProfile]'
+GO
+ALTER TABLE [dbo].[PackageProfile] ADD CONSTRAINT [FK_PackageProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[BestRateProfile]'
 GO
 CREATE TABLE [dbo].[BestRateProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[Weight] [float] NULL,
 [ServiceLevel] [int] NULL
 )
 GO
@@ -1908,14 +1924,7 @@ GO
 CREATE TABLE [dbo].[AmazonProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [DeliveryExperience] [int] NULL,
-[Weight] [float] NULL,
 [ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
@@ -2155,48 +2164,45 @@ PRINT N'Creating [dbo].[FedExProfilePackage]'
 GO
 CREATE TABLE [dbo].[FedExProfilePackage]
 (
-[FedExProfilePackageID] [bigint] NOT NULL IDENTITY(1062, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[PriorityAlert] [bit] NULL,
-[PriorityAlertEnhancementType] [int] NULL,
-[PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceWeight] [float] NULL,
-[ContainsAlcohol] [bit] NULL,
-[DangerousGoodsEnabled] [bit] NULL,
-[DangerousGoodsType] [int] NULL,
-[DangerousGoodsAccessibilityType] [int] NULL,
-[DangerousGoodsCargoAircraftOnly] [bit] NULL,
-[DangerousGoodsEmergencyContactPhone] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DangerousGoodsOfferor] [nvarchar] (128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DangerousGoodsPackagingCount] [int] NULL,
-[HazardousMaterialNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialClass] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[HazardousMaterialPackingGroup] [int] NULL,
-[HazardousMaterialQuantityValue] [float] NULL,
-[HazardousMaterialQuanityUnits] [int] NULL,
-[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[NumberOfContainers] [int] NULL,
-[PackingDetailsCargoAircraftOnly] [bit] NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[BatteryMaterial] [int] NULL,
-[BatteryPacking] [int] NULL,
-[BatteryRegulatorySubtype] [int] NULL
+	[PackageProfileID] [bigint] NOT NULL,
+	[PriorityAlert] [bit] NULL,
+	[PriorityAlertEnhancementType] [int] NULL,
+	[PriorityAlertDetailContent] [nvarchar](1024) NULL,
+	[DryIceWeight] [float] NULL,
+	[ContainsAlcohol] [bit] NULL,
+	[DangerousGoodsEnabled] [bit] NULL,
+	[DangerousGoodsType] [int] NULL,
+	[DangerousGoodsAccessibilityType] [int] NULL,
+	[DangerousGoodsCargoAircraftOnly] [bit] NULL,
+	[DangerousGoodsEmergencyContactPhone] [nvarchar](16) NULL,
+	[DangerousGoodsOfferor] [nvarchar](128) NULL,
+	[DangerousGoodsPackagingCount] [int] NULL,
+	[HazardousMaterialNumber] [nvarchar](16) NULL,
+	[HazardousMaterialClass] [nvarchar](8) NULL,
+	[HazardousMaterialProperName] [nvarchar](64) NULL,
+	[HazardousMaterialPackingGroup] [int] NULL,
+	[HazardousMaterialQuantityValue] [float] NULL,
+	[HazardousMaterialQuanityUnits] [int] NULL,
+	[SignatoryContactName] [nvarchar](100) NULL,
+	[SignatoryTitle] [nvarchar](100) NULL,
+	[SignatoryPlace] [nvarchar](100) NULL,
+	[ContainerType] [nvarchar](100) NULL,
+	[NumberOfContainers] [int] NULL,
+	[PackingDetailsCargoAircraftOnly] [bit] NULL,
+	[PackingDetailsPackingInstructions] [nvarchar](50) NULL,
+	[BatteryMaterial] [int] NULL,
+	[BatteryPacking] [int] NULL,
+	[BatteryRegulatorySubtype] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
 GO
-ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage] PRIMARY KEY CLUSTERED  ([FedExProfilePackageID])
+ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
+GO
+PRINT N'Adding foreign key to [FedExProfilePackage]'
+ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
+ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[FilterNode]'
 GO
@@ -2553,25 +2559,6 @@ PRINT N'Creating index [IX_iParcelPackage_ShipmentID] on [dbo].[iParcelPackage]'
 GO
 CREATE NONCLUSTERED INDEX [IX_iParcelPackage_ShipmentID] ON [dbo].[iParcelPackage] ([ShipmentID])
 GO
-PRINT N'Creating [dbo].[iParcelProfilePackage]'
-GO
-CREATE TABLE [dbo].[iParcelProfilePackage]
-(
-[iParcelProfilePackageID] [bigint] NOT NULL IDENTITY(1094, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL
-)
-GO
-PRINT N'Creating primary key [PK_iParcelPackageProfile] on [dbo].[iParcelProfilePackage]'
-GO
-ALTER TABLE [dbo].[iParcelProfilePackage] ADD CONSTRAINT [PK_iParcelPackageProfile] PRIMARY KEY CLUSTERED  ([iParcelProfilePackageID])
-GO
 PRINT N'Creating [dbo].[MagentoOrder]'
 GO
 CREATE TABLE [dbo].[MagentoOrder]
@@ -2793,13 +2780,6 @@ CREATE TABLE [dbo].[OnTracProfile]
 [SaturdayDelivery] [bit] NULL,
 [SignatureRequired] [bit] NULL,
 [PackagingType] [int] NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Reference2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Instructions] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
@@ -2928,29 +2908,6 @@ PRINT N'Adding foreign keys to [dbo].[DhlExpressProfile]'
 GO
 ALTER TABLE [dbo].[DhlExpressProfile] ADD CONSTRAINT [FK_DhlExpressProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
-
-PRINT N'Creating [dbo].[DhlExpressProfilePackage]'
-GO
-CREATE TABLE [dbo].[DhlExpressProfilePackage](
-	[DhlExpressProfilePackageID] [bigint] IDENTITY(1094,1000) NOT NULL,
-	[ShippingProfileID] [bigint] NOT NULL,
-	[Weight] [float] NULL,
-	[DimsProfileID] [bigint] NULL,
-	[DimsLength] [float] NULL,
-	[DimsWidth] [float] NULL,
-	[DimsHeight] [float] NULL,
-	[DimsWeight] [float] NULL,
-	[DimsAddWeight] [bit] NULL
-)
-GO
-PRINT N'Creating primary key [PK_DhlExpressPackageProfile] on [dbo].[DhlExpressProfilePackage]'
-GO
-ALTER TABLE [dbo].[DhlExpressProfilePackage] ADD CONSTRAINT [PK_DhlExpressPackageProfile] PRIMARY KEY CLUSTERED  ([DhlExpressProfilePackageID])
-GO
-PRINT N'Adding foreign keys to [dbo].[DhlExpressProfilePackage]'
-GO
-ALTER TABLE [dbo].[DhlExpressProfilePackage] ADD CONSTRAINT [FK_DhlExpressPackageProfile_DhlExpressProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[DhlExpressProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Creating [dbo].[AsendiaProfile]'
 GO
 CREATE TABLE [dbo].[AsendiaProfile](
@@ -2959,21 +2916,14 @@ CREATE TABLE [dbo].[AsendiaProfile](
 	[Service] [int] NULL,
 	[NonMachinable] [bit] NULL,
 	[Contents] [int] NULL,
-	[NonDelivery] [int] NULL,
-	[Weight] [float] NULL,
-	[DimsProfileID] [bigint] NULL,
-	[DimsLength] [float] NULL,
-	[DimsWidth] [float] NULL,
-	[DimsHeight] [float] NULL,
-	[DimsWeight] [float] NULL,
-	[DimsAddWeight] [bit] NULL,
+	[NonDelivery] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaProfile] on [dbo].[AsendiaProfile]'
 GO
 ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [PK_AsendiaProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
-PRINT N'Adding foreign keys to [dbo].[AsemdoaProfile]'
+PRINT N'Adding foreign keys to [dbo].[AsendiaProfile]'
 GO
 ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [FK_AsendiaProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
@@ -4175,30 +4125,27 @@ PRINT N'Creating [dbo].[UpsProfilePackage]'
 GO
 CREATE TABLE [dbo].[UpsProfilePackage]
 (
-[UpsProfilePackageID] [bigint] NOT NULL IDENTITY(1064, 1000),
-[ShippingProfileID] [bigint] NOT NULL,
-[PackagingType] [int] NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[AdditionalHandlingEnabled] [bit] NULL,
-[VerbalConfirmationEnabled] [bit] NULL,
-[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceEnabled] [bit] NULL,
-[DryIceRegulationSet] [int] NULL,
-[DryIceWeight] [float] NULL,
-[DryIceIsForMedicalUse] [bit] NULL
+	[PackageProfileID] [bigint] NOT NULL,
+	[PackagingType] [int] NULL,
+	[AdditionalHandlingEnabled] [bit] NULL,
+	[VerbalConfirmationEnabled] [bit] NULL,
+	[VerbalConfirmationName] [nvarchar](35) NULL,
+	[VerbalConfirmationPhone] [nvarchar](15) NULL,
+	[VerbalConfirmationPhoneExtension] [nvarchar](4) NULL,
+	[DryIceEnabled] [bit] NULL,
+	[DryIceRegulationSet] [int] NULL,
+	[DryIceWeight] [float] NULL,
+	[DryIceIsForMedicalUse] [bit] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]'
 GO
-ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [PK_UpsProfilePackage] PRIMARY KEY CLUSTERED  ([UpsProfilePackageID])
+ALTER TABLE [dbo].[UpsProfilePackage]ADD CONSTRAINT [PK_UpsProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
+GO
+PRINT N'Adding foreign key to [UpsProfilePackage]' 
+ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
+ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[UserColumnSettings]'
 GO
@@ -5678,10 +5625,6 @@ PRINT N'Adding foreign keys to [dbo].[FedExProfile]'
 GO
 ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [FK_FedExProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[FedExProfilePackage]'
-GO
-ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [FK_FedExProfilePackage_FedExProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[FedExProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
@@ -5765,10 +5708,6 @@ PRINT N'Adding foreign keys to [dbo].[iParcelPackage]'
 GO
 ALTER TABLE [dbo].[iParcelPackage] ADD CONSTRAINT [FK_iParcelPackage_iParcelShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[iParcelShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[iParcelProfilePackage]'
-GO
-ALTER TABLE [dbo].[iParcelProfilePackage] ADD CONSTRAINT [FK_iParcelPackageProfile_iParcelProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[iParcelProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[iParcelProfile]'
 GO
 ALTER TABLE [dbo].[iParcelProfile] ADD CONSTRAINT [FK_iParcelProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
@@ -5815,7 +5754,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [FK_Note_User] FOREIGN KEY ([UserID]) RE
 GO
 PRINT N'Adding foreign keys to [dbo].[OnTracProfile]'
 GO
-ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
+ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
 GO
@@ -6002,10 +5941,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[UpsPackage]'
 GO
 ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [FK_UpsPackage_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UpsProfilePackage]'
-GO
-ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [FK_UpsProfilePackage_UpsProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[UpsProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[WorldShipShipment]'
 GO
@@ -6541,6 +6476,38 @@ PRINT N'Adding foreign keys to [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
 ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[Shortcut]'
+GO
+CREATE TABLE [dbo].[Shortcut]
+(
+[ShortcutID] [bigint] NOT NULL IDENTITY(1105, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ModifierKeys] [int] NULL,
+[VirtualKey] [int] NULL,
+[Barcode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Action] [int] NOT NULL,
+[RelatedObjectID] [bigint] NULL
+)
+GO
+PRINT N'Creating primary key [PK_Shortcut] on [dbo].[Shortcut]'
+GO
+ALTER TABLE [dbo].[Shortcut] ADD CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED  ([ShortcutID])
+GO
+PRINT N'Creating index [IX_Shortcut_Keys] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey]) 
+WHERE [ModifierKeys] IS NOT NULL 
+AND [VirtualKey] IS NOT NULL
+GO
+PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE ([Barcode]<>'')
+GO
+PRINT N'Altering [dbo].[Shortcut]'
+GO
+ALTER TABLE [dbo].[Shortcut] ENABLE CHANGE_TRACKING
 GO
 
 PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'

@@ -247,7 +247,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IShippingProfileEntity ShippingProfile { get; }
         
         
-        IEnumerable<IUpsProfilePackageEntity> Packages { get; }
 
         
 
@@ -277,7 +276,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         IShippingProfileEntity IUpsProfileEntity.ShippingProfile => ShippingProfile;
         
         
-        IEnumerable<IUpsProfilePackageEntity> IUpsProfileEntity.Packages => Packages;
 
         /// <summary>
         /// Get a read only version of the entity

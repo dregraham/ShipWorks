@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -20,9 +22,10 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public static class ShippingProfileManager
     {
-        static IEnumerable<IShippingProfileEntity> readOnlyEntities;
-        static TableSynchronizer<ShippingProfileEntity> synchronizer;
-        static bool needCheckForChanges = false;
+        private static IEnumerable<IShippingProfileEntity> readOnlyEntities;
+        private static TableSynchronizer<ShippingProfileEntity> synchronizer;
+        private static bool needCheckForChanges = false;
+        private static IShippingProfileLoader shippingProfileLoader;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -30,6 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProfileEntity>();
+            shippingProfileLoader = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileLoader>();
             InternalCheckForChanges();
         }
 
@@ -60,8 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                     foreach (ShippingProfileEntity profile in modified.Concat(added))
                     {
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-                        shipmentType.LoadProfileData(profile, true);
+                        shippingProfileLoader.LoadProfileData(profile, true);
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -124,57 +127,94 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ProfilesReadOnly.SingleOrDefault(p => p.ShippingProfileID == profileID);
         }
-
+        
         /// <summary>
-        /// Apply the given profile to the given shipment
+        /// Get profiles for the given shipment type
         /// </summary>
-        public static void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
+        public static IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentTypeCode, 
+                                                                         bool includeDefaultProfiles)
         {
-            if (shipment.Processed)
-            {
-                throw new InvalidOperationException("Cannot apply profile to a processed shipment.");
-            }
+            IEnumerable<IShippingProfileEntity> profiles = ProfilesReadOnly.Where(p => p.ShipmentType == null ||
+                                                                                       p.ShipmentType == shipmentTypeCode);
 
-            if (profile.ShipmentType == shipment.ShipmentType)
+            if (!includeDefaultProfiles)
             {
-                ShipmentTypeManager.GetType(shipment).ApplyProfile(shipment, profile);
+                profiles = profiles.Where(p => !p.ShipmentTypePrimary);
+            }
+            
+            return profiles;
+        }
+        
+        /// <summary>
+        /// Save the given profile to the database
+        /// </summary>
+        public static void SaveProfile(ShippingProfileEntity profile)
+        {
+            using (SqlAdapter adapter = new SqlAdapter(false))
+            {
+                SaveProfile(profile, adapter);
+                adapter.Commit();
             }
         }
 
         /// <summary>
         /// Save the given profile to the database
         /// </summary>
-        public static void SaveProfile(ShippingProfileEntity profile)
+        public static void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
         {
-            // Get the shipment type of the profile
-            ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-
             bool rootDirty = profile.IsDirty;
             bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
+            bool extraDirty = SaveProfilePackages(profile, adapter);
 
-            // Transaction
-            using (SqlAdapter adapter = new SqlAdapter(false))
+            // Force the profile change if any derived stuff changes
+            if ((anyDirty || extraDirty) && !rootDirty)
             {
-                bool extraDirty = shipmentType.SaveProfileData(profile, adapter);
-
-                // Force the profile change if any derived stuff changes
-                if ((anyDirty || extraDirty) && !rootDirty)
-                {
-                    profile.Fields[(int) ShippingProfileFieldIndex.ShipmentType].IsChanged = true;
-                    profile.Fields.IsDirty = true;
-                }
-
-                // Save the base profile
-                adapter.SaveAndRefetch(profile);
-
-                adapter.Commit();
+                profile.Fields[(int) ShippingProfileFieldIndex.ShipmentType].IsChanged = true;
+                profile.Fields.IsDirty = true;
             }
+
+            // Save the base profile
+            adapter.SaveAndRefetch(profile);
 
             lock (synchronizer)
             {
                 synchronizer.MergeEntity(profile);
                 CheckForChangesNeeded();
             }
+        }
+
+        /// <summary>
+        /// Save the profile packages
+        /// </summary>
+        private static bool SaveProfilePackages(ShippingProfileEntity profile, ISqlAdapter adapter)
+        {
+            bool changes = false;
+
+            // First delete out anything that needs deleted
+            // Introducing new variable as we will be removing items from PackageProfile
+            // and if we used the same colleciton, we would get an exception.
+            List<PackageProfileEntity> allPackageProfiles = profile.Packages.Where(package => package.Fields.State == EntityState.Deleted).ToList();
+            foreach (PackageProfileEntity package in allPackageProfiles)
+            {
+                // If its new but deleted, just get rid of it                
+                if (package.IsNew)
+                {
+                    profile.Packages.Remove(package);
+                }
+
+                // If its deleted, delete it
+                else
+                {
+                    package.Fields.State = EntityState.Fetched;
+                    profile.Packages.Remove(package);
+
+                    adapter.DeleteEntity(package);
+
+                    changes = true;
+                }                
+            }
+
+            return changes;
         }
 
         /// <summary>
@@ -200,7 +240,7 @@ namespace ShipWorks.Shipping.Profiles
         public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
         {
             return Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
@@ -209,7 +249,24 @@ namespace ShipWorks.Shipping.Profiles
         public static IShippingProfileEntity GetDefaultProfileReadOnly(ShipmentTypeCode shipmentTypeCode)
         {
             return ProfilesReadOnly.FirstOrDefault(p =>
-                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+                p.ShipmentType == shipmentTypeCode && p.ShipmentTypePrimary);
+        }
+
+        /// <summary>
+        /// Collect telemetry data for shipping profiles
+        /// </summary>
+        public static IDictionary<string, string> GetTelemetryData()
+        {
+            Dictionary<string, string> telemetryData = new Dictionary<string, string>();
+            telemetryData.Add("Shipping.Profiles.Count", ProfilesReadOnly.Count().ToString());
+
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> carrierProfiles in ProfilesReadOnly.GroupBy(p => p.ShipmentType))
+            {
+                string profileType = carrierProfiles.Key.HasValue ? EnumHelper.GetDescription(carrierProfiles.Key) : "Global";
+                telemetryData.Add($"Shipping.Profiles.{profileType.Replace(" ", string.Empty)}.Count", carrierProfiles.Count().ToString());
+            }
+
+            return telemetryData;
         }
     }
 }
