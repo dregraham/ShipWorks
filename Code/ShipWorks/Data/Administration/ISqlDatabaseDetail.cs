@@ -58,7 +58,7 @@ namespace ShipWorks.Data.Administration
         int OrderCount { get;  }
 
         /// <summary>
-        /// The oldest order to be downloaded into the database
+        /// The oldest order downloaded into the database
         /// </summary>
         DateTime FirstOrderDate { get; }
     }
