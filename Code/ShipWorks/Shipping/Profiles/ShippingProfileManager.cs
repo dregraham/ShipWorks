@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Profiles
         private static IEnumerable<IShippingProfileEntity> readOnlyEntities;
         private static TableSynchronizer<ShippingProfileEntity> synchronizer;
         private static bool needCheckForChanges = false;
-        private static IShippingProfileLoader shippingProfileLoader;
+        private static IShippingProfileManager shippingProfileManager;
 
         /// <summary>
         /// Initialize ShippingProfileManager
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Profiles
         public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProfileEntity>();
-            shippingProfileLoader = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileLoader>();
+            shippingProfileManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProfileManager>();
             InternalCheckForChanges();
         }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Profiles
 
                     foreach (ShippingProfileEntity profile in modified.Concat(added))
                     {
-                        shippingProfileLoader.LoadProfileData(profile, true);
+                        shippingProfileManager.LoadProfileData(profile, true);
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
