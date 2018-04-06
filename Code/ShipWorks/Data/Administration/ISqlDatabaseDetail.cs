@@ -52,8 +52,14 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         SqlDatabaseStatus Status { get; }
 
+        /// <summary>
+        /// The total number of orders in the database
+        /// </summary>
         int OrderCount { get;  }
 
+        /// <summary>
+        /// The oldest order to be downloaded into the database
+        /// </summary>
         DateTime OldestOrderDate { get; }
     }
 }
