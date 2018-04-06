@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
@@ -14,7 +15,7 @@ namespace ShipWorks.Tests.Users
     public class CurrentUserSettingsTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly UserSettingsEntity settings;
+        private UserSettingsEntity settings;
 
         public CurrentUserSettingsTest()
         {
@@ -126,6 +127,44 @@ namespace ShipWorks.Tests.Users
 
             Assert.Equal(new[] { UserConditionalNotificationType.CombineOrders, UserConditionalNotificationType.SplitOrders },
                 settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new[] { UserConditionalNotificationType.SplitOrders }
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings_WhenDialogSettingsIsEmpty()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new UserConditionalNotificationType[0]
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void ShouldShowNotification_ReturnsTrue_WhenUserSettingsIsNull()
+        {
+            settings = null;
+            var testObject = mock.Create<CurrentUserSettings>();
+            Assert.True(testObject.ShouldShowNotification(UserConditionalNotificationType.CombineOrders));
+
+            settings = new UserSettingsEntity();
         }
 
         public void Dispose()

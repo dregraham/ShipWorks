@@ -406,7 +406,6 @@
     <Compile Include="Carriers\Postal\WebTools\WebToolsPrefetchProvider.cs" />
     <Compile Include="Carriers\Ups\UpsPrefetchProvider.cs" />
     <Compile Include="Services\IShippingProfileFactory.cs" />
-    <Compile Include="Services\IShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileFactory.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileService.cs" />

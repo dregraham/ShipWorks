@@ -13,6 +13,11 @@ namespace ShipWorks.Templates.Printing
         /// Create a print job from the given template result
         /// </summary>
         IPrintJob CreatePrintJob(IList<TemplateResult> templateResults);
+        
+        /// <summary>
+        /// Create a barcode print job for all barcodes
+        /// </summary>
+        IPrintJob CreateBarcodePrintJob();
 
         /// <summary>
         /// Create a print job with barcodes from the given shipping profiles
