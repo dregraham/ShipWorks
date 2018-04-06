@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Repository for ShippingProfiles.
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShippingProfileRepository : IShippingProfileRepository
     {
         private readonly IShippingProfileManager profileManager;
