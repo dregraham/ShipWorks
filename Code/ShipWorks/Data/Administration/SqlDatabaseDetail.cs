@@ -189,6 +189,30 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Returns the total number of orders in database
+        /// </summary>
+        private static async Task<int> GetOrderCount(DbConnection con)
+        {
+            DbCommand command = con.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM [Order]";
+            int result = (int) await command.ExecuteScalarAsync().ConfigureAwait(false);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the oldest order date in the database
+        /// </summary>
+        private static async Task<DateTime> GetOldestOrderDate(DbConnection con)
+        {
+            DbCommand command = con.CreateCommand();
+            command.CommandText = "SELECT MIN(OrderDate) FROM [Order]";
+            DateTime result = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
+
+            return result;
+        }
+
+        /// <summary>
         /// The name of the database
         /// </summary>
         public string Name { get; private set; }
