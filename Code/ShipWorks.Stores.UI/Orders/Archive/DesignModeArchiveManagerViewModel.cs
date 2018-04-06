@@ -30,11 +30,11 @@ namespace ShipWorks.Stores.UI.Orders.Archive
 
     public class DesignModeArchiveManagerArchive
     {
-        public DateTime OldestOrder { get; set; }
-        public DateTime NewestOrder { get; set; }
+        public DateTime FirstOrderDate { get; set; }
+        public DateTime LastOrderDate { get; set; }
         public long OrderCount { get; set; }
 
         public static implicit operator DesignModeArchiveManagerArchive((DateTime oldestOrder, DateTime newestOrder, long orderCount) value) =>
-            new DesignModeArchiveManagerArchive { OldestOrder = value.oldestOrder, NewestOrder = value.newestOrder, OrderCount = value.orderCount };
+            new DesignModeArchiveManagerArchive { FirstOrderDate = value.oldestOrder, LastOrderDate = value.newestOrder, OrderCount = value.orderCount };
     }
 }

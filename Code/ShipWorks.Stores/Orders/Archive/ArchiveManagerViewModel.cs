@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -19,10 +25,14 @@ namespace ShipWorks.Stores.Orders.Archive
     {
         private readonly Func<IOrderArchiveOrchestrator> createArchiveOrchestrator;
         private readonly Func<IArchiveManagerViewModel, IArchiveManagerDialog> createDialog;
+        private readonly Func<ISqlSession> getSqlSession;
+        private readonly IShipWorksDatabaseUtility databaseUtility;
         private readonly Func<IAsyncMessageHelper> messageHelper;
         private readonly PropertyChangedHandler handler;
 
-        private bool isBusy;
+        private bool performingManualArchive;
+        private bool loadingArchives;
+        private IEnumerable<ISqlDatabaseDetail> archives;
         private IArchiveManagerDialog dialog;
         private TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
 
@@ -32,14 +42,19 @@ namespace ShipWorks.Stores.Orders.Archive
         public ArchiveManagerViewModel(
             Func<IOrderArchiveOrchestrator> createArchiveOrchestrator,
             Func<IArchiveManagerViewModel, IArchiveManagerDialog> createDialog,
+            Func<ISqlSession> getSqlSession,
+            IShipWorksDatabaseUtility databaseUtility,
             Func<IAsyncMessageHelper> messageHelper)
         {
+            this.getSqlSession = getSqlSession;
             this.messageHelper = messageHelper;
             this.createDialog = createDialog;
+            this.databaseUtility = databaseUtility;
             this.createArchiveOrchestrator = createArchiveOrchestrator;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
+            Archives = Enumerable.Empty<ISqlDatabaseDetail>();
             ArchiveNow = new RelayCommand(() => ArchiveNowAction());
             Close = new RelayCommand(() => dialog?.Close());
         }
@@ -52,20 +67,33 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Perform an archive now
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ArchiveNow { get; }
 
         /// <summary>
         /// Close the dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand Close { get; }
 
         /// <summary>
-        /// Is the application busy
+        /// List of archives
         /// </summary>
-        public bool IsBusy
+        [Obfuscation(Exclude = true)]
+        public IEnumerable<ISqlDatabaseDetail> Archives
         {
-            get => isBusy;
-            set => handler.Set(nameof(IsBusy), ref isBusy, value);
+            get => archives;
+            set => handler.Set(nameof(Archives), ref archives, value);
+        }
+
+        /// <summary>
+        /// The dialog is loading archives
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool LoadingArchives
+        {
+            get => loadingArchives;
+            set => handler.Set(nameof(LoadingArchives), ref loadingArchives, value);
         }
 
         /// <summary>
@@ -78,11 +106,18 @@ namespace ShipWorks.Stores.Orders.Archive
         public Task<Unit> ShowManager()
         {
             dialog = createDialog(this);
+
+            LoadingArchives = true;
+            Functional.UsingAsync(
+                    getSqlSession().OpenConnection(),
+                    databaseUtility.GetDatabaseDetails)
+                .Do(PopulateArchives);
+
             messageHelper()
                 .ShowDialog(() => dialog)
                 .Do(_ =>
                 {
-                    if (!IsBusy)
+                    if (!performingManualArchive)
                     {
                         dialogCompletionTask.SetResult(Unit.Default);
                     }
@@ -92,17 +127,28 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// Populate the archives collection
+        /// </summary>
+        private void PopulateArchives(IEnumerable<ISqlDatabaseDetail> databases)
+        {
+            Archives = databases
+                .Where(x => x.IsArchive && getSqlSession().DatabaseIdentifier == x.Guid)
+                .OrderByDescending(x => x.LastOrderDate);
+            LoadingArchives = false;
+        }
+
+        /// <summary>
         /// Perform the archive
         /// </summary>
         private async void ArchiveNowAction()
         {
-            IsBusy = true;
+            performingManualArchive = true;
             dialog.Close();
 
             await createArchiveOrchestrator().Archive().Recover(ex => Unit.Default).ConfigureAwait(true);
 
             ShowManager();
-            IsBusy = false;
+            performingManualArchive = false;
         }
     }
 }

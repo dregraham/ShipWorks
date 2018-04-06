@@ -27,16 +27,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ui:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
         </ResourceDictionary>
     </Window.Resources>
-    <Window.Visibility>
-        <Binding Path="IsBusy">
-            <Binding.Converter>
-                <StaticResource ResourceKey="ShowWhenFalse" />
-            </Binding.Converter>
-        </Binding>
-    </Window.Visibility>
     <Grid Margin="{StaticResource StandardPaddingFull}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -48,16 +41,18 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="0" AutoGenerateColumns="False"            
-                  ItemsSource="{Binding Archives, Mode=OneWay}"                  
-                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
-                  SelectionUnit="FullRow"                  
-                  CanUserResizeColumns="True"
-                  CanUserSortColumns="True"
-                  HeadersVisibility="Column"
-                  AlternatingRowBackground="White"
-                  Style="{StaticResource DataGrid.Static}"
-                  GridLinesVisibility="None">
+            <DataGrid Grid.Column="0" 
+                      AutoGenerateColumns="False"            
+                      ItemsSource="{Binding Archives, Mode=OneWay}"                  
+                      SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectionUnit="FullRow"                  
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="True"
+                      HeadersVisibility="Column"
+                      AlternatingRowBackground="White"
+                      IsEnabled="{Binding LoadingArchives, Converter={ui:InverseBooleanConverter}}"
+                      Style="{StaticResource DataGrid.Static}"
+                      GridLinesVisibility="None">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -71,7 +66,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Oldest Order" 
                                         Width="*" 
-                                        Binding="{Binding OldestOrder, StringFormat={}{0:MMMM dd, yyyy}}">
+                                        Binding="{Binding FirstOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -79,7 +74,9 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Newest Order" Width="*" Binding="{Binding NewestOrder, StringFormat={}{0:MMMM dd, yyyy}}">
+                    <DataGridTextColumn Header="Newest Order" 
+                                        Width="*" 
+                                        Binding="{Binding LastOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -98,17 +95,17 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <ui:WaitSpinner Visibility="{Binding LoadingArchives, Converter={StaticResource ShowWhenTrue}}" />
             <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
                 <StackPanel Grid.Column="1" MinWidth="160">
                     <Button Style="{StaticResource Button.Add}" 
                             Command="{Binding ArchiveNow}">Archive Now</Button>
                 </StackPanel>
-                
+
                 <Button Padding="4"
                         Command="{Binding Close}"
                         VerticalAlignment="Bottom">Close</Button>
             </Grid>
-            
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             
