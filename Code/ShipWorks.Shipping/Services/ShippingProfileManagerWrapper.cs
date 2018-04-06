@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -16,16 +14,14 @@ namespace ShipWorks.Shipping.Services
     {
         private static readonly object syncLock = new object();
         private readonly IShippingProfileLoader shippingProfileLoader;
-        private readonly IShortcutManager shortcutManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader, IShortcutManager shortcutManager, ISqlAdapterFactory sqlAdapterFactory)
+        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.shippingProfileLoader = shippingProfileLoader;
-            this.shortcutManager = shortcutManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
