@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -24,7 +25,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Endicia
         public EndiciaShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Build<ISqlAdapter>()));
+                mock =>
+                {
+                    mock.Override<IMainForm>();
+                    mock.Provide(mock.Build<ISqlAdapter>());
+                });
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.EndiciaInsuranceProvider = (int) InsuranceProvider.Carrier);
         }
