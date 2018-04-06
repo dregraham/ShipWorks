@@ -51,5 +51,9 @@ namespace ShipWorks.Data.Administration
         /// The status of the database, as it related to ShipWorks
         /// </summary>
         SqlDatabaseStatus Status { get; }
+
+        int OrderCount { get;  }
+
+        DateTime OldestOrderDate { get; }
     }
 }

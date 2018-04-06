@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Administration
                     await LoadLastOrderNumber(detail, con).ConfigureAwait(false);
                     await LoadArchiveDetails(detail, con).ConfigureAwait(false);
                     await LoadDatabaseGuid(detail, con).ConfigureAwait(false);
+                    await LoadOrderCount(detail, con).ConfigureAwait(false);
+                    await LoadOldestOrderDate(detail, con).ConfigureAwait(false);
                 }
             }
             catch (SqlException ex)
@@ -191,25 +193,21 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Returns the total number of orders in database
         /// </summary>
-        private static async Task<int> GetOrderCount(DbConnection con)
+        private static async Task LoadOrderCount(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand command = con.CreateCommand();
             command.CommandText = "SELECT COUNT(*) FROM [Order]";
-            int result = (int) await command.ExecuteScalarAsync().ConfigureAwait(false);
-
-            return result;
+            detail.OrderCount = (int) await command.ExecuteScalarAsync().ConfigureAwait(false);
         }
 
         /// <summary>
         /// Returns the oldest order date in the database
         /// </summary>
-        private static async Task<DateTime> GetOldestOrderDate(DbConnection con)
+        private static async Task LoadOldestOrderDate(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand command = con.CreateCommand();
             command.CommandText = "SELECT MIN(OrderDate) FROM [Order]";
-            DateTime result = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
-
-            return result;
+            detail.OldestOrderDate = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -221,6 +219,16 @@ namespace ShipWorks.Data.Administration
         /// The status of the database, as it related to ShipWorks
         /// </summary>
         public SqlDatabaseStatus Status { get; private set; }
+
+        /// <summary>
+        /// The total number of orders in the database
+        /// </summary>
+        public int OrderCount { get; private set; }
+
+        /// <summary>
+        /// The oldest order to be downloaded into the database
+        /// </summary>
+        public DateTime OldestOrderDate { get; private set; }
 
         /// <summary>
         /// ShipWorks schema version of the database
