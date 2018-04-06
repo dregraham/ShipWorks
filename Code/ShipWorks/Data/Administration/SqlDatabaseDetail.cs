@@ -18,6 +18,61 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SqlDatabaseDetail));
 
         /// <summary>
+        /// The name of the database
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// The status of the database, as it related to ShipWorks
+        /// </summary>
+        public SqlDatabaseStatus Status { get; private set; }
+
+        /// <summary>
+        /// The total number of orders in the database
+        /// </summary>
+        public int OrderCount { get; private set; }
+
+        /// <summary>
+        /// The oldest order to be downloaded into the database
+        /// </summary>
+        public DateTime FirstOrderDate { get; private set; }
+
+        /// <summary>
+        /// ShipWorks schema version of the database
+        /// </summary>
+        public Version SchemaVersion { get; private set; }
+
+        /// <summary>
+        /// The last ShipWorks user to log in to the database
+        /// </summary>
+        public string LastUsedBy { get; private set; }
+
+        /// <summary>
+        /// The date/time the last ShipWorks user logged in to the database
+        /// </summary>
+        public DateTime LastUsedOn { get; private set; }
+
+        /// <summary>
+        /// The last order number to be downloaded into the database
+        /// </summary>
+        public string LastOrderNumber { get; private set; }
+
+        /// <summary>
+        /// The date of the last order to be downloaded into the database
+        /// </summary>
+        public DateTime LastOrderDate { get; private set; }
+
+        /// <summary>
+        /// Is the database an archive
+        /// </summary>
+        public bool IsArchive { get; private set; }
+
+        /// <summary>
+        /// GUID of the database
+        /// </summary>
+        public Guid Guid { get; private set; }
+
+        /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
         public static async Task<ISqlDatabaseDetail> Load(string database, DbConnection con)
@@ -209,60 +264,5 @@ namespace ShipWorks.Data.Administration
             command.CommandText = "SELECT MIN(OrderDate) FROM [Order]";
             detail.FirstOrderDate = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
         }
-
-        /// <summary>
-        /// The name of the database
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// The status of the database, as it related to ShipWorks
-        /// </summary>
-        public SqlDatabaseStatus Status { get; private set; }
-
-        /// <summary>
-        /// The total number of orders in the database
-        /// </summary>
-        public int OrderCount { get; private set; }
-
-        /// <summary>
-        /// The oldest order to be downloaded into the database
-        /// </summary>
-        public DateTime FirstOrderDate { get; private set; }
-
-        /// <summary>
-        /// ShipWorks schema version of the database
-        /// </summary>
-        public Version SchemaVersion { get; private set; }
-
-        /// <summary>
-        /// The last ShipWorks user to log in to the database
-        /// </summary>
-        public string LastUsedBy { get; private set; }
-
-        /// <summary>
-        /// The date/time the last ShipWorks user logged in to the database
-        /// </summary>
-        public DateTime LastUsedOn { get; private set; }
-
-        /// <summary>
-        /// The last order number to be downloaded into the database
-        /// </summary>
-        public string LastOrderNumber { get; private set; }
-
-        /// <summary>
-        /// The date of the last order to be downloaded into the database
-        /// </summary>
-        public DateTime LastOrderDate { get; private set; }
-
-        /// <summary>
-        /// Is the database an archive
-        /// </summary>
-        public bool IsArchive { get; private set; }
-
-        /// <summary>
-        /// GUID of the database
-        /// </summary>
-        public Guid Guid { get; private set; }
     }
 }
