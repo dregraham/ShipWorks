@@ -88,6 +88,9 @@ namespace ShipWorks.UI.Services
             }
         }
 
+        /// <summary>
+        /// Show a popup message with a Keyboard Icon
+        /// </summary>
         public void ShowKeyboardPopup(string message)
         {
             Control owner = ownerFactory();
@@ -102,6 +105,9 @@ namespace ShipWorks.UI.Services
             }
         }
 
+        /// <summary>
+        /// Show a popup message with a barcode icon
+        /// </summary>
         public void ShowBarcodePopup(string message)
         {
             Control owner = ownerFactory();
