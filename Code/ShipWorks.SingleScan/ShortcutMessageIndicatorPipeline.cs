@@ -23,8 +23,6 @@ namespace ShipWorks.SingleScan
         private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
 
-        private const char BarcodeIconText = (char) 0xf02a;
-        private const char KeyboardIconText = (char) 0xf11c;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -67,9 +65,9 @@ namespace ShipWorks.SingleScan
             {
                 string action = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? shortcutMessage.Value : "Barcode";
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
-                char fontAwesomeIcon = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? KeyboardIconText : BarcodeIconText;
+                IconType icon = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? IconType.Keyboard : IconType.Barcode;
 
-                messageHelper.ShowPopup($"{action}: {name}", fontAwesomeIcon, TimeSpan.FromSeconds(2));
+                messageHelper.ShowPopup($"{action}: {name}", icon, TimeSpan.FromSeconds(2));
             }
         }
 

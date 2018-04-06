@@ -64,7 +64,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup("Barcode: FooBar", (char) 0xf02a, TimeSpan.FromSeconds(2)));
+            messageHelper.Verify(m => m.ShowPopup("Barcode: FooBar", IconType.Barcode, TimeSpan.FromSeconds(2)));
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup("F5: FooBar", (char) 0xf11c, TimeSpan.FromSeconds(2)));
+            messageHelper.Verify(m => m.ShowPopup("F5: FooBar", IconType.Keyboard, TimeSpan.FromSeconds(2)));
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace ShipWorks.SingleScan.Tests
                         
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<TimeSpan>()), Times.Never);
+            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<IconType>(), It.IsAny<TimeSpan>()), Times.Never);
         }
 
         [Fact]
@@ -124,7 +124,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<char>(), It.IsAny<TimeSpan>()), Times.Never);
+            messageHelper.Verify(m => m.ShowPopup(It.IsAny<string>(), It.IsAny<IconType>(), It.IsAny<TimeSpan>()), Times.Never);
         }
     }
 }

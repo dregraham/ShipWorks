@@ -53,7 +53,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a popup message with an image
         /// </summary>
-        void ShowPopup(string message, char fontAwesomeIcon, TimeSpan timeSpan);
+        void ShowPopup(string message, IconType icon, TimeSpan timeSpan);
 
         /// <summary>
         /// Show a dialog and get the results

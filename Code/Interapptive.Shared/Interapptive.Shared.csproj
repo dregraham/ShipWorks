@@ -331,6 +331,7 @@
     <Compile Include="Threading\ProgressUpdater.cs" />
     <Compile Include="UI\FileDialogFactory.cs" />
     <Compile Include="UI\FormsWindowStateSaver.cs" />
+    <Compile Include="UI\IconType.cs" />
     <Compile Include="UI\IFileDialogFactory.cs" />
     <Compile Include="UI\IForm.cs" />
     <Compile Include="UI\IAsyncMessageHelper.cs" />

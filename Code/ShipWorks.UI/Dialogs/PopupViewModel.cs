@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 
 namespace ShipWorks.UI.Dialogs
@@ -20,7 +21,7 @@ namespace ShipWorks.UI.Dialogs
         private readonly Lazy<IPopup> popup;
 
         private string message;
-        private char fontAwesomeIcon;
+        private char icon;
         private readonly TimeSpan defaultFadeStartTimeSpan = new TimeSpan(0, 0, 0, 4, 0);
         private Duration duration;
 
@@ -36,9 +37,6 @@ namespace ShipWorks.UI.Dialogs
                 return newPopup;
             });
 
-            // Default fade behavior is to show the popup for 4 seconds
-            duration = new Duration(defaultFadeStartTimeSpan);
-            fontAwesomeIcon = ' ';
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -47,6 +45,17 @@ namespace ShipWorks.UI.Dialogs
         /// </summary>
         public void Show(string message, IWin32Window owner)
         {
+            Show(message, owner, IconType.None, defaultFadeStartTimeSpan);
+        }
+
+        /// <summary>
+        /// Shows the popup with the given message and image
+        /// </summary>
+        public void Show(string message, IWin32Window owner, IconType icon, TimeSpan fadeTime)
+        {
+            Icon = GetIconChar(icon);
+            Duration = new Duration(fadeTime);
+            
             // Sets the message
             Message = message;
 
@@ -58,14 +67,18 @@ namespace ShipWorks.UI.Dialogs
         }
 
         /// <summary>
-        /// Shows the popup with the given message and image
+        /// Given an IconType, return the FontAwesome character representing the icon
         /// </summary>
-        public void Show(string message, IWin32Window owner, char fontAwesomeIcon, TimeSpan fadeTime)
+        private char GetIconChar(IconType iconType)
         {
-            FontAwesomeIcon = fontAwesomeIcon;
-            Duration = new Duration(fadeTime);
+            switch (iconType)
+            {
+                case IconType.None: return (char) 0;
+                case IconType.Barcode: return (char) 0xf02a;
+                case IconType.Keyboard: return (char) 0xf11c;
+            }
             
-            Show(message, owner); 
+            throw new ArgumentOutOfRangeException(nameof(iconType), iconType, null);
         }
 
         /// <summary>
@@ -82,10 +95,10 @@ namespace ShipWorks.UI.Dialogs
         /// The actual message text we want to display
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public char FontAwesomeIcon
+        public char Icon
         {
-            get => fontAwesomeIcon;
-            set => handler.Set(nameof(FontAwesomeIcon), ref fontAwesomeIcon, value);
+            get => icon;
+            private set => handler.Set(nameof(Icon), ref icon, value);
         }
 
         /// <summary>
