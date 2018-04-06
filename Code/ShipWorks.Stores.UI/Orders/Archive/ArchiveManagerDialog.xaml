@@ -21,7 +21,9 @@
         FontWeight="Normal"
         
         mc:Ignorable="d"
-        Title="Manage Archives" Height="450" Width="800">
+        Title="Manage Archives" 
+        MinHeight="200" MinWidth="400"
+        Height="250" Width="500">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -97,7 +99,7 @@
             </DataGrid>
             <ui:WaitSpinner Visibility="{Binding LoadingArchives, Converter={StaticResource ShowWhenTrue}}" />
             <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
-                <StackPanel Grid.Column="1" MinWidth="160">
+                <StackPanel Grid.Column="1" MinWidth="120">
                     <Button Style="{StaticResource Button.Add}" 
                             Command="{Binding ArchiveNow}">Archive Now</Button>
                 </StackPanel>

@@ -207,7 +207,7 @@ namespace ShipWorks.Data.Administration
         {
             DbCommand command = con.CreateCommand();
             command.CommandText = "SELECT MIN(OrderDate) FROM [Order]";
-            detail.OldestOrderDate = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
+            detail.FirstOrderDate = (DateTime) await command.ExecuteScalarAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The oldest order to be downloaded into the database
         /// </summary>
-        public DateTime OldestOrderDate { get; private set; }
+        public DateTime FirstOrderDate { get; private set; }
 
         /// <summary>
         /// ShipWorks schema version of the database
