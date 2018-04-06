@@ -1,0 +1,117 @@
+﻿<Window
+        x:Class="ShipWorks.Stores.UI.Orders.Archive.ArchiveManagerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Archive"
+        xmlns:ui="http://schemas.shipworks.com/ui"
+        d:DataContext="{d:DesignInstance local:DesignModeArchiveManagerViewModel, IsDesignTimeCreatable=True}"
+        
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        ResizeMode="CanResizeWithGrip"
+        Background="{x:Static SystemColors.ControlBrush}"
+
+        FontFamily="Tahoma"
+        FontSize="8.25 pt"
+        FontStyle="Normal"
+        FontStretch="Normal"
+        FontWeight="Normal"
+        
+        mc:Ignorable="d"
+        Title="Manage Archives" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Visibility>
+        <Binding Path="IsBusy">
+            <Binding.Converter>
+                <StaticResource ResourceKey="ShowWhenFalse" />
+            </Binding.Converter>
+        </Binding>
+    </Window.Visibility>
+    <Grid Margin="{StaticResource StandardPaddingFull}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Column="0" AutoGenerateColumns="False"            
+                  ItemsSource="{Binding Archives, Mode=OneWay}"                  
+                  SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
+                  SelectionUnit="FullRow"                  
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  HeadersVisibility="Column"
+                  AlternatingRowBackground="White"
+                  Style="{StaticResource DataGrid.Static}"
+                  GridLinesVisibility="None">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Oldest Order" 
+                                        Width="*" 
+                                        Binding="{Binding OldestOrder, StringFormat={}{0:MMMM dd, yyyy}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Newest Order" Width="*" Binding="{Binding NewestOrder, StringFormat={}{0:MMMM dd, yyyy}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Orders" Width="80" Binding="{Binding OrderCount, StringFormat={}{0:#,##0}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
+                <StackPanel Grid.Column="1" MinWidth="160">
+                    <Button Style="{StaticResource Button.Add}" 
+                            Command="{Binding ArchiveNow}">Archive Now</Button>
+                </StackPanel>
+                
+                <Button Padding="4"
+                        Command="{Binding Close}"
+                        VerticalAlignment="Bottom">Close</Button>
+            </Grid>
+            
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            
+        </StackPanel>
+    </Grid>
+</Window>

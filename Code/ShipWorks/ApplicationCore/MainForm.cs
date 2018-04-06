@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Threading;
@@ -2025,8 +2024,7 @@ namespace ShipWorks
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                var archiveOrchestrator = scope.Resolve<IOrderArchiveOrchestrator>();
-                await archiveOrchestrator.Archive().Recover(ex => Unit.Default).ConfigureAwait(false);
+                await scope.Resolve<IArchiveManagerViewModel>().ShowManager().ConfigureAwait(false);
             }
         }
 

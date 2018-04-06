@@ -2419,9 +2419,9 @@ namespace ShipWorks
             this.ribbonChunkAdminDatabase.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonSetupDatabase,
             this.separator2,
+            this.buttonArchive,
             this.buttonBackup,
             this.buttonRestore,
-            this.buttonArchive,
             stripLayoutDatabase});
             this.ribbonChunkAdminDatabase.Text = "Database";
             //
