@@ -91,7 +91,7 @@
             // 
             this.registerScannerLabel.AutoSize = true;
             this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(308, 106);
+            this.registerScannerLabel.Location = new System.Drawing.Point(316, 106);
             this.registerScannerLabel.Name = "registerScannerLabel";
             this.registerScannerLabel.Size = new System.Drawing.Size(97, 13);
             this.registerScannerLabel.TabIndex = 36;
@@ -99,9 +99,9 @@
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(206, 101);
+            this.registerScannerButton.Location = new System.Drawing.Point(196, 101);
             this.registerScannerButton.Name = "registerScannerButton";
-            this.registerScannerButton.Size = new System.Drawing.Size(100, 23);
+            this.registerScannerButton.Size = new System.Drawing.Size(110, 23);
             this.registerScannerButton.TabIndex = 35;
             this.registerScannerButton.Text = "Pair Scanner...";
             this.registerScannerButton.UseVisualStyleBackColor = true;
@@ -171,19 +171,19 @@
             // 
             this.button1.Location = new System.Drawing.Point(20, 233);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 23);
+            this.button1.Size = new System.Drawing.Size(110, 23);
             this.button1.TabIndex = 45;
-            this.button1.Text = "Manage Profiles";
+            this.button1.Text = "Manage Profiles...";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.OnClickManageProfiles);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(130, 233);
+            this.button2.Location = new System.Drawing.Point(140, 233);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(212, 23);
+            this.button2.Size = new System.Drawing.Size(220, 23);
             this.button2.TabIndex = 46;
-            this.button2.Text = "Print All Keyboard && Barcode Shortcuts";
+            this.button2.Text = "Print All Keyboard && Barcode Shortcuts...";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.OnClickPrintShortcuts);
             // 
