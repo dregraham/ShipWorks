@@ -51,9 +51,14 @@ namespace Interapptive.Shared.UI
         void ShowPopup(string message);
 
         /// <summary>
-        /// Show a popup message with an image
+        /// Show a popup message with a Keyboard image
         /// </summary>
-        void ShowPopup(string message, IconType icon, TimeSpan timeSpan);
+        void ShowKeyboardPopup(string message);
+
+        /// <summary>
+        /// Show a popup message with a Keyboard image
+        /// </summary>
+        void ShowBarcodePopup(string message);
 
         /// <summary>
         /// Show a dialog and get the results

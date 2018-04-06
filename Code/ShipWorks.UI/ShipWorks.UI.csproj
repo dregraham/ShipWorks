@@ -217,12 +217,12 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
-    <Compile Include="Dialogs\IPopup.cs" />
-    <Compile Include="Dialogs\IPopupViewModel.cs" />
-    <Compile Include="Dialogs\Popup.xaml.cs">
+    <Compile Include="Dialogs\Popup\IPopup.cs" />
+    <Compile Include="Dialogs\Popup\IPopupViewModel.cs" />
+    <Compile Include="Dialogs\Popup\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\PopupViewModel.cs" />
+    <Compile Include="Dialogs\Popup\PopupViewModel.cs" />
     <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
       <DependentUpon>MainOptions.xaml</DependentUpon>
     </Compile>
@@ -345,7 +345,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\Popup.xaml">
+    <Page Include="Dialogs\Popup\Popup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

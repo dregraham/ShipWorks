@@ -65,9 +65,16 @@ namespace ShipWorks.SingleScan
             {
                 string action = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? shortcutMessage.Value : "Barcode";
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
-                IconType icon = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? IconType.Keyboard : IconType.Barcode;
-
-                messageHelper.ShowPopup($"{action}: {name}", icon, TimeSpan.FromSeconds(2));
+                string message = $"{action}: {name}";
+                
+                if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
+                {
+                    messageHelper.ShowKeyboardPopup(message);
+                }
+                else
+                {
+                    messageHelper.ShowBarcodePopup(message);
+                }
             }
         }
 

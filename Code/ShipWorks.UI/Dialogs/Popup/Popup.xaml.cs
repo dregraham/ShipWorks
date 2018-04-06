@@ -4,7 +4,7 @@ using System.Windows.Media.Animation;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.Popup
 {
     /// <summary>
     /// Popup window that displays for a couple of seconds then hides

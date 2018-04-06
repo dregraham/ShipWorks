@@ -7,7 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.Popup
 {
     /// <summary>
     /// ViewModel for the popup window
@@ -22,8 +22,13 @@ namespace ShipWorks.UI.Dialogs
 
         private string message;
         private char icon;
-        private readonly TimeSpan defaultFadeStartTimeSpan = new TimeSpan(0, 0, 0, 4, 0);
+        private readonly TimeSpan defaultFadeStartTimeSpan = TimeSpan.FromSeconds(4);
+        private readonly TimeSpan iconFadeStartTimeSpan = TimeSpan.FromSeconds(2);
         private Duration duration;
+
+        private const char NoIcon = (char) 0;
+        private const char KeyboardIcon = (char) 0xf11c;
+        private const char BarcodeIcon = (char) 0xf02a;
 
         /// <summary>
         /// Constructor
@@ -43,17 +48,23 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Shows the popup
         /// </summary>
-        public void Show(string message, IWin32Window owner)
-        {
-            Show(message, owner, IconType.None, defaultFadeStartTimeSpan);
-        }
+        public void Show(string message, IWin32Window owner) =>
+            Show(message, owner, NoIcon, defaultFadeStartTimeSpan);
+
+
+        public void ShowWithKeyboard(string message, Control owner) =>
+            Show(message, owner, KeyboardIcon, iconFadeStartTimeSpan);
+            
+
+        public void ShowWithBarcode(string message, Control owner) =>
+            Show(message, owner, BarcodeIcon, iconFadeStartTimeSpan);
 
         /// <summary>
         /// Shows the popup with the given message and image
         /// </summary>
-        public void Show(string message, IWin32Window owner, IconType icon, TimeSpan fadeTime)
+        private void Show(string message, IWin32Window owner, char icon, TimeSpan fadeTime)
         {
-            Icon = GetIconChar(icon);
+            Icon = icon;
             Duration = new Duration(fadeTime);
             
             // Sets the message
@@ -64,21 +75,6 @@ namespace ShipWorks.UI.Dialogs
 
             // Trigger the show action to actually show the window
             popup.Value.ShowAction();
-        }
-
-        /// <summary>
-        /// Given an IconType, return the FontAwesome character representing the icon
-        /// </summary>
-        private char GetIconChar(IconType iconType)
-        {
-            switch (iconType)
-            {
-                case IconType.None: return (char) 0;
-                case IconType.Barcode: return (char) 0xf02a;
-                case IconType.Keyboard: return (char) 0xf11c;
-            }
-            
-            throw new ArgumentOutOfRangeException(nameof(iconType), iconType, null);
         }
 
         /// <summary>

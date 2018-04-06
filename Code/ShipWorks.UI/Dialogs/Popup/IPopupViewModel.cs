@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.Popup
 {
     /// <summary>
     /// Interface for the PopupViewModel
@@ -15,8 +15,13 @@ namespace ShipWorks.UI.Dialogs
         void Show(string message, IWin32Window owner);
 
         /// <summary>
-        /// Shows the popup
+        /// Show the popup with a keyboard icon
         /// </summary>
-        void Show(string message, IWin32Window owner, IconType icon, TimeSpan fadeTime);
+        void ShowWithKeyboard(string message, Control owner);
+        
+        /// <summary>
+        /// Show the popup with a barcode icon
+        /// </summary>
+        void ShowWithBarcode(string message, Control owner);
     }
 }
