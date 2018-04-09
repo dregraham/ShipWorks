@@ -7,9 +7,9 @@
                   xmlns:ui="http://schemas.shipworks.com/ui"
                   xmlns:local="clr-namespace:ShipWorks.UI.Dialogs"
                   xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
-                  d:DataContext="{d:DesignInstance local:PopupViewModel, IsDesignTimeCreatable=False}"
+                  xmlns:popup="clr-namespace:ShipWorks.UI.Dialogs.Popup"
+                  d:DataContext="{d:DesignInstance popup:PopupViewModel, IsDesignTimeCreatable=False}"
                   mc:Ignorable="d" 
-                  d:DesignHeight="300" d:DesignWidth="300" 
                   Opacity="0.6" 
                   Focusable="False"
                   ShowActivated="False"
@@ -37,16 +37,18 @@
         </Storyboard>
         <FontFamily x:Key="FontAwesome">/ShipWorks.Core;component/Resources/Font Awesome 5 Free-Solid-900.otf#Font Awesome 5 Free Solid</FontFamily>
     </Window.Resources>
-    <Border 
-        CornerRadius="8"
-        Background="Black"
-        Padding="6">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock  Grid.Column="0" 
+    <Grid Width="1100">
+        <Border
+            CornerRadius="8"
+            Background="Black"
+            Padding="6"
+            HorizontalAlignment="Center">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock  Grid.Column="0" 
                         Visibility="{Binding Icon,
                                     Converter={StaticResource CharToVisibilityConverter}}"
                         Text="{Binding Icon}"
@@ -56,15 +58,16 @@
                         Background="White" 
                         FontSize="30" Margin="10"
                         VerticalAlignment="Center"></TextBlock>
-            <TextBlock Grid.Column="1"
+                <TextBlock Grid.Column="1"
                        Foreground="White" 
                        Margin="4,0"
                        FontSize="30"
                        Text="{Binding Message}"
                        TextWrapping="Wrap"
                        MaxWidth="1000"
-                       VerticalAlignment="Center"/>
-        </Grid>
-    </Border>
+                       VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
 </sui:InteropWindow>
 
