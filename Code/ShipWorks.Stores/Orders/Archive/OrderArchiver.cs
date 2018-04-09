@@ -112,9 +112,8 @@ namespace ShipWorks.Stores.Orders.Archive
                     {
                         await orderArchiveDataAccess
                             .WithMultiUserConnectionAsync(connection =>
-                                PerformArchive(connection, cutoffDate, prepareProgress, archiveProgress, trackedDurationEvent)
-                                    .Do(_ => RegenerateFilters(connection, filterProgress))
-                                    .Bind(_ => TrimArchive(connection, cutoffDate, syncProgress, trackedDurationEvent)))
+                                PerformArchive(connection, cutoffDate, prepareProgress, archiveProgress, trackedDurationEvent))
+                            .Bind(ContinueArchive(cutoffDate, trackedDurationEvent, filterProgress, syncProgress))
                             .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
@@ -127,6 +126,18 @@ namespace ShipWorks.Stores.Orders.Archive
             {
                 userLoginWorkflow.Logon(loggedInUser);
             }
+        }
+
+        /// <summary>
+        /// Continue the archive process
+        /// </summary>
+        private Func<Unit, Task<Unit>> ContinueArchive(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, IProgressReporter filterProgress, IProgressReporter syncProgress)
+        {
+            return _ => orderArchiveDataAccess.WithMultiUserConnectionAsync(connection =>
+            {
+                RegenerateFilters(connection, filterProgress);
+                return TrimArchive(connection, cutoffDate, syncProgress, trackedDurationEvent);
+            });
         }
 
         /// <summary>
