@@ -11,11 +11,9 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -23,42 +21,41 @@ namespace ShipWorks.Stores.Orders.Archive
     /// View model for the archive manager
     /// </summary>
     [Component]
-    public class ArchiveManagerViewModel : IArchiveManagerViewModel, INotifyPropertyChanged
+    public class ArchiveManagerDialogViewModel : IArchiveManagerDialogViewModel, INotifyPropertyChanged
     {
         private readonly Func<IOrderArchiveOrchestrator> createArchiveOrchestrator;
-        private readonly Func<IArchiveManagerViewModel, IArchiveManagerDialog> createDialog;
-        private readonly Func<ISqlSession> getSqlSession;
-        private readonly IShipWorksDatabaseUtility databaseUtility;
+        private readonly Func<IArchiveManagerDialogViewModel, IArchiveManagerDialog> createDialog;
+        private readonly IArchiveManagerDataAccess dataAccess;
         private readonly Func<IAsyncMessageHelper> messageHelper;
         private readonly PropertyChangedHandler handler;
 
-        private bool performingManualArchive;
+        private bool working;
         private bool loadingArchives;
         private bool noArchives;
+        private ISqlDatabaseDetail selectedArchive;
         private IEnumerable<ISqlDatabaseDetail> archives;
         private IArchiveManagerDialog dialog;
-        private readonly TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
+        private TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ArchiveManagerViewModel(
+        public ArchiveManagerDialogViewModel(
             Func<IOrderArchiveOrchestrator> createArchiveOrchestrator,
-            Func<IArchiveManagerViewModel, IArchiveManagerDialog> createDialog,
-            Func<ISqlSession> getSqlSession,
-            IShipWorksDatabaseUtility databaseUtility,
+            Func<IArchiveManagerDialogViewModel, IArchiveManagerDialog> createDialog,
+            IArchiveManagerDataAccess dataAccess,
             Func<IAsyncMessageHelper> messageHelper)
         {
-            this.getSqlSession = getSqlSession;
+            this.dataAccess = dataAccess;
             this.messageHelper = messageHelper;
             this.createDialog = createDialog;
-            this.databaseUtility = databaseUtility;
             this.createArchiveOrchestrator = createArchiveOrchestrator;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             Archives = Enumerable.Empty<ISqlDatabaseDetail>();
             ArchiveNow = new RelayCommand(() => ArchiveNowAction().Forget());
+            ConnectToArchive = new RelayCommand(() => ConnectToArchiveAction(), () => SelectedArchive != null);
             Close = new RelayCommand(() => dialog?.Close());
         }
 
@@ -74,6 +71,12 @@ namespace ShipWorks.Stores.Orders.Archive
         public ICommand ArchiveNow { get; }
 
         /// <summary>
+        /// Connect to an archive
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ConnectToArchive { get; }
+
+        /// <summary>
         /// Close the dialog
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -87,6 +90,16 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             get => archives;
             set => handler.Set(nameof(Archives), ref archives, value);
+        }
+
+        /// <summary>
+        /// Selected archive
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ISqlDatabaseDetail SelectedArchive
+        {
+            get => selectedArchive;
+            set => handler.Set(nameof(SelectedArchive), ref selectedArchive, value);
         }
 
         /// <summary>
@@ -121,16 +134,16 @@ namespace ShipWorks.Stores.Orders.Archive
             dialog = createDialog(this);
 
             LoadingArchives = true;
-            Functional.UsingAsync(
-                    getSqlSession().OpenConnection(),
-                    databaseUtility.GetDatabaseDetails)
+
+            dataAccess
+                .GetArchiveDatabases()
                 .Do(PopulateArchives);
 
             messageHelper()
                 .ShowDialog(() => dialog)
                 .Do(_ =>
                 {
-                    if (!performingManualArchive)
+                    if (!working)
                     {
                         dialogCompletionTask.SetResult(Unit.Default);
                     }
@@ -144,9 +157,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void PopulateArchives(IEnumerable<ISqlDatabaseDetail> databases)
         {
-            Archives = databases
-                .Where(x => x.IsArchive && getSqlSession().DatabaseIdentifier == x.Guid)
-                .OrderByDescending(x => x.LastOrderDate);
+            Archives = databases.OrderByDescending(x => x.LastOrderDate);
             LoadingArchives = false;
             NoArchives = Archives.None();
         }
@@ -156,13 +167,32 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private async Task ArchiveNowAction()
         {
-            performingManualArchive = true;
+            working = true;
             dialog.Close();
 
             await createArchiveOrchestrator().Archive().Recover(ex => Unit.Default).ConfigureAwait(true);
 
             ShowManager().Forget();
-            performingManualArchive = false;
+            working = false;
+        }
+
+        /// <summary>
+        /// Connect to the selected archive
+        /// </summary>
+        private void ConnectToArchiveAction()
+        {
+            working = true;
+            dialog.Close();
+
+            if (dataAccess.ChangeDatabase(SelectedArchive))
+            {
+                dialogCompletionTask.SetResult(Unit.Default);
+            }
+            else
+            {
+                ShowManager();
+                working = false;
+            }
         }
     }
 }

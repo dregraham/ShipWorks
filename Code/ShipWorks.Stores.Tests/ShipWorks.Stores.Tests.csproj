@@ -23,6 +23,7 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Orders\Archive\ArchiveManagerDataAccessTest.cs" />
     <None Remove="Orders\Archive\ArchiveNotificationViewModelTest.cs" />
     <None Remove="Platforms\Manual\ManualStoreTypeTest.cs" />
     <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />

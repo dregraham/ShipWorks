@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Orders.Archive
     /// <summary>
     /// View model for the archive manager
     /// </summary>
-    public interface IArchiveManagerViewModel
+    public interface IArchiveManagerDialogViewModel
     {
         /// <summary>
         /// Show the manager window

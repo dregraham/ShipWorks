@@ -2029,7 +2029,7 @@ namespace ShipWorks
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                await scope.Resolve<IArchiveManagerViewModel>().ShowManager().ConfigureAwait(false);
+                await scope.Resolve<IArchiveManagerDialogViewModel>().ShowManager().ConfigureAwait(false);
             }
         }
 

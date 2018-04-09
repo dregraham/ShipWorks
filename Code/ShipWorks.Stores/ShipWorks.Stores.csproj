@@ -166,12 +166,14 @@
     <Compile Include="Communication\OnDemandDownloader.cs" />
     <Compile Include="Communication\OnDemandDownloaderFactory.cs" />
     <Compile Include="Communication\SingleScanOnDemandDownloader.cs" />
-    <Compile Include="Orders\Archive\ArchiveManagerViewModel.cs" />
+    <Compile Include="Orders\Archive\ArchiveManagerDataAccess.cs" />
+    <Compile Include="Orders\Archive\ArchiveManagerDialogViewModel.cs" />
     <Compile Include="Orders\Archive\ArchiveNotificationManager.cs" />
     <Compile Include="Orders\Archive\ArchiveNotificationViewModel.cs" />
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
     <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
+    <Compile Include="Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />

@@ -50,6 +50,7 @@
                         </Path>
                         <TextBlock Text="{TemplateBinding Content}"
                                    HorizontalAlignment="Center"
+                                   Margin="20 0"
                                    VerticalAlignment="Center" />
                     </Grid>
                 </DataTemplate>
