@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly ISecurityContext securityContext;
+        private readonly Func<ISecurityContext> securityContext;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Profiles
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
             IMessenger messenger,
-            ISecurityContext securityContext)
+            Func<ISecurityContext> securityContext)
         {
             this.shippingProfileRepository = shippingProfileRepository;
             this.strategyFactory = strategyFactory;
@@ -187,7 +188,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Check to see if the profile can be applied
         /// </summary>
         private bool CanApply(IEnumerable<ShipmentEntity> shipments)
-            => shipments.All(s => securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
+            => shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
                 shipments.All(s => IsApplicable(s.ShipmentTypeCode));
     }
 }

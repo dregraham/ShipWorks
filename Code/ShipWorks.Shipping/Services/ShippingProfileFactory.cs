@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly ISecurityContext securityContext;
+        private readonly Func<ISecurityContext> securityContext;
 
         /// <summary>
         /// Constructor
@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Services
         public ShippingProfileFactory(Func<IShippingProfileRepository> shippingProfileRepository,
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
-            IMessenger messenger, 
-            ISecurityContext securityContext)
+            IMessenger messenger,
+            Func<ISecurityContext> securityContext)
         {
             this.shippingProfileRepository = shippingProfileRepository;
             this.strategyFactory = strategyFactory;
