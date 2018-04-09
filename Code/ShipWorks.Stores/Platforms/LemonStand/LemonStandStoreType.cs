@@ -301,7 +301,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity) Store);
 
-            List<string> list;
+            List<string> list = new List<string>();
             try
             {
                 List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
@@ -311,8 +311,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             catch (LemonStandException ex)
             {
-                // If we can't get online status choices, just return empty list instead of crashing.
-                list = new List<string>();
+                // If we can't get online status choices, just return empty list instead of crashing and log.
                 log.Error($"Error retrieving order status list from LemonStand: {ex.Message}");
             }
 
