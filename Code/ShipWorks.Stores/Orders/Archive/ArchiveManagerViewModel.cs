@@ -11,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private bool loadingArchives;
         private IEnumerable<ISqlDatabaseDetail> archives;
         private IArchiveManagerDialog dialog;
-        private TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
+        private readonly TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Constructor
@@ -55,7 +56,7 @@ namespace ShipWorks.Stores.Orders.Archive
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             Archives = Enumerable.Empty<ISqlDatabaseDetail>();
-            ArchiveNow = new RelayCommand(() => ArchiveNowAction());
+            ArchiveNow = new RelayCommand(() => ArchiveNowAction().Forget());
             Close = new RelayCommand(() => dialog?.Close());
         }
 
@@ -140,14 +141,14 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Perform the archive
         /// </summary>
-        private async void ArchiveNowAction()
+        private async Task ArchiveNowAction()
         {
             performingManualArchive = true;
             dialog.Close();
 
             await createArchiveOrchestrator().Archive().Recover(ex => Unit.Default).ConfigureAwait(true);
 
-            ShowManager();
+            ShowManager().Forget();
             performingManualArchive = false;
         }
     }
