@@ -20,8 +20,9 @@
                   ShowInTaskbar="False" 
                   Topmost="True" 
                   WindowStartupLocation="Manual" 
-                  SizeToContent="WidthAndHeight"
-                  x:Name="This">
+                  x:Name="This"
+                  Width="1200"
+                  Height="1000">
     <Window.Resources>
         <vc:CharToVisibilityConverter x:Key="CharToVisibilityConverter" />
         <Storyboard x:Key="storyBoard" TargetProperty="Opacity" TargetName="This" Completed="OnStoryboardCompleted">
@@ -37,18 +38,18 @@
         </Storyboard>
         <FontFamily x:Key="FontAwesome">/ShipWorks.Core;component/Resources/Font Awesome 5 Free-Solid-900.otf#Font Awesome 5 Free Solid</FontFamily>
     </Window.Resources>
-    <Grid Width="1100">
-        <Border
+    <Border
             CornerRadius="8"
             Background="Black"
             Padding="6"
-            HorizontalAlignment="Center">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock  Grid.Column="0" 
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Grid.Column="0" 
                         Visibility="{Binding Icon,
                                     Converter={StaticResource CharToVisibilityConverter}}"
                         Text="{Binding Icon}"
@@ -58,7 +59,7 @@
                         Background="White" 
                         FontSize="30" Margin="10"
                         VerticalAlignment="Center"></TextBlock>
-                <TextBlock Grid.Column="1"
+            <TextBlock Grid.Column="1"
                        Foreground="White" 
                        Margin="4,0"
                        FontSize="30"
@@ -66,8 +67,7 @@
                        TextWrapping="Wrap"
                        MaxWidth="1000"
                        VerticalAlignment="Center" />
-            </Grid>
-        </Border>
-    </Grid>
+        </Grid>
+    </Border>
 </sui:InteropWindow>
 
