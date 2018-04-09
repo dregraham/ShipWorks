@@ -208,8 +208,8 @@ namespace ShipWorks.Data.Administration
                 if (await reader.ReadAsync().ConfigureAwait(false))
                 {
                     detail.OrderCount = reader.GetInt32(0);
-                    detail.OldestOrderDate = reader.GetDateTime(1);
-                    detail.NewestOrderDate = reader.GetDateTime(2);
+                    detail.OldestOrderDate = reader.GetNullableDateTime(1);
+                    detail.NewestOrderDate = reader.GetNullableDateTime(2);
                 }
             }
         }
@@ -232,12 +232,12 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The oldest order to be downloaded into the database
         /// </summary>
-        public DateTime OldestOrderDate { get; private set; }
+        public DateTime? OldestOrderDate { get; private set; }
 
         /// <summary>
         /// The newest order to be downloaded into the database
         /// </summary>
-        public DateTime NewestOrderDate { get; private set; }
+        public DateTime? NewestOrderDate { get; private set; }
 
         /// <summary>
         /// ShipWorks schema version of the database

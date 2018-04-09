@@ -55,11 +55,16 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The total number of orders in the database
         /// </summary>
-        int OrderCount { get;  }
+        int OrderCount { get; }
 
         /// <summary>
         /// The oldest order downloaded into the database
         /// </summary>
-        DateTime OldestOrderDate { get; }
+        DateTime? OldestOrderDate { get; }
+
+        /// <summary>
+        /// The newest order downloaded into the database
+        /// </summary>
+        DateTime? NewestOrderDate { get; }
     }
 }
