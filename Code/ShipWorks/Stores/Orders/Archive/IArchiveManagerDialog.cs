@@ -7,6 +7,6 @@ namespace ShipWorks.Stores.Orders.Archive
     /// </summary>
     public interface IArchiveManagerDialog : IDialog
     {
-        bool? ShowDialog();
+
     }
 }
