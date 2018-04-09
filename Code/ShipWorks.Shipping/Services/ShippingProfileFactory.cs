@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Services
     [Component]
     public class ShippingProfileFactory : IShippingProfileFactory
     {
-        private readonly IShippingProfileRepository shippingProfileRepository;
+        private readonly Func<IShippingProfileRepository> shippingProfileRepository;
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileFactory(IShippingProfileRepository shippingProfileRepository,
+        public ShippingProfileFactory(Func<IShippingProfileRepository> shippingProfileRepository,
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
             IMessenger messenger, 
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Services
 
             IShippingProfile profile = Create(shippingProfileEntity, shortcut);
 
-            shippingProfileRepository.Load(profile, false);
+            shippingProfileRepository().Load(profile, false);
 
             return profile;
         }
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Services
         /// Creates a ShippingProfile with an existing ShippingProfileEntity and ShortcutEntity
         /// </summary>
         public IShippingProfile Create(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcut) =>
-            new ShippingProfile(shippingProfileRepository, strategyFactory, shippingManager, messenger, securityContext)
+            new ShippingProfile(shippingProfileRepository(), strategyFactory, shippingManager, messenger, securityContext)
             {
                 ShippingProfileEntity = shippingProfileEntity,
                 Shortcut = shortcut,
