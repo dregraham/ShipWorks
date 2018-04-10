@@ -87,7 +87,7 @@ namespace ShipWorks.SingleScan
             {
                 CollectShortcutTelemetry(shortcutMessage, telemetryEvent);
 
-                telemetryEvent.AddProperty("Shortcuts.Applied.Result", actionMessage == null ? "Unknown" : "Success");
+                telemetryEvent.AddProperty("Shortcuts.Applied.Result", actionMessage == null || actionMessage.MessageId == Guid.Empty ? "Unknown" : "Success");
             }
         }
 
