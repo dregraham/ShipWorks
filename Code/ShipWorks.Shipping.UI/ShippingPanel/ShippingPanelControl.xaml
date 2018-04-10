@@ -409,7 +409,16 @@
                         <Button Style="{StaticResource Button.CreateLabel}"
                                 Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
-                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}"/>
+                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}">
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelHotkey, StringFormat='Create Labels({0})'}"/>
+                                        <TextBlock Text="Create shipping labels for any selected shipments."/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
 
                     </StackPanel>
 
