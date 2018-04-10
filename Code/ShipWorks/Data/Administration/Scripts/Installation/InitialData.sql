@@ -288,5 +288,6 @@ GO
 INSERT INTO Shortcut
 (ModifierKeys, VirtualKey, Barcode, [Action])
 VALUES
-(3, 87, '', 0)
+(3, 87, '', 0),
+(3, 121, '$PL$', 3)
 GO
