@@ -301,11 +301,19 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity) Store);
 
-            List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
+            List<string> list = new List<string>();
+            try
+            {
+                List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
+                list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
 
-            List<string> list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
-
-            list.Sort();
+                list.Sort();
+            }
+            catch (LemonStandException ex)
+            {
+                // If we can't get online status choices, just return empty list instead of crashing and log.
+                log.Error($"Error retrieving order status list from LemonStand: {ex.Message}");
+            }
 
             return list;
         }
