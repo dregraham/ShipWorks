@@ -176,9 +176,6 @@ namespace ShipWorks.Shipping
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>()
                 .Subscribe(OnStampsUspsAutomaticExpeditedChanged);
             customsControlCache = new CustomsControlCache(lifetimeScope);
-
-            ToolTip toolTip = new ToolTip { ToolTipTitle = "Created Label (F10)" };
-            toolTip.SetToolTip(processDropDownButton, "Create a shipping label for the selected order.");
         }
 
         /// <summary>

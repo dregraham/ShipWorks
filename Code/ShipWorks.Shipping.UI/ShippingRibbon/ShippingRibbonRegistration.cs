@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Padding = new WidgetEdges(10, 2, 10, 2),
                 Text = "Create\r\nLabel",
                 TextContentRelation = TextContentRelation.Underneath,
+                ToolTip = new SuperToolTip("Create Label (F10)", "Create a shipping label for the selected order.", null, false)
             };
 
             voidButton = new RibbonButton
