@@ -29,24 +29,20 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
             <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="{StaticResource StandardPaddingFull}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="0" 
+        <DataGrid Grid.Column="0" 
                       AutoGenerateColumns="False"            
                       ItemsSource="{Binding Archives, Mode=OneWay}"                  
-                      SelectedItem="{Binding SelectedShippingProfile, UpdateSourceTrigger=PropertyChanged}" 
                       SelectionUnit="FullRow"                  
                       CanUserResizeColumns="True"
                       CanUserSortColumns="True"
@@ -55,62 +51,74 @@
                       IsEnabled="{Binding LoadingArchives, Converter={ui:InverseBooleanConverter}}"
                       Style="{StaticResource DataGrid.Static}"
                       GridLinesVisibility="None">
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Oldest Order" 
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Oldest Order" 
                                         Width="*" 
                                         Binding="{Binding OldestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Newest Order" 
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Newest Order" 
                                         Width="*" 
                                         Binding="{Binding NewestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Orders" Width="80" Binding="{Binding OrderCount, StringFormat={}{0:#,##0}}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment" Value="Right" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <ui:WaitSpinner Visibility="{Binding LoadingArchives, Converter={StaticResource ShowWhenTrue}}" />
-            <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
-                <StackPanel Grid.Column="1" MinWidth="120">
-                    <Button Style="{StaticResource Button.Add}" 
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Orders" Width="80" Binding="{Binding OrderCount, StringFormat={}{0:#,##0}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Visibility="{Binding IsEnabled,
+                        RelativeSource={RelativeSource Self},
+                        Converter={StaticResource ShowWhenTrue}}"
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"
+                   Text="No archives found">
+            <TextBlock.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAnd}">
+                    <Binding Path="LoadingArchives" 
+                             Mode="OneWay" 
+                             Converter="{StaticResource InvertBoolean}" />
+                    <Binding Path="NoArchives" Mode="OneWay" />
+                </MultiBinding>
+            </TextBlock.IsEnabled>
+        </TextBlock>
+        <ui:WaitSpinner Visibility="{Binding LoadingArchives, Converter={StaticResource ShowWhenTrue}}" />
+        <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
+            <StackPanel Grid.Column="1" MinWidth="120">
+                <Button Style="{StaticResource Button.Add}" 
                             Command="{Binding ArchiveNow}">Archive Now</Button>
-                </StackPanel>
+            </StackPanel>
 
-                <Button Padding="4"
+            <Button Padding="4"
                         Command="{Binding Close}"
+                        IsCancel="True"
                         VerticalAlignment="Bottom">Close</Button>
-            </Grid>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            
-        </StackPanel>
     </Grid>
 </Window>

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
@@ -33,6 +34,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
         private bool performingManualArchive;
         private bool loadingArchives;
+        private bool noArchives;
         private IEnumerable<ISqlDatabaseDetail> archives;
         private IArchiveManagerDialog dialog;
         private readonly TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
@@ -98,6 +100,16 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// There are no archives
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool NoArchives
+        {
+            get => noArchives;
+            set => handler.Set(nameof(NoArchives), ref noArchives, value);
+        }
+
+        /// <summary>
         /// Show the archive manager dialog
         /// </summary>
         /// <remarks>
@@ -136,6 +148,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 .Where(x => x.IsArchive && getSqlSession().DatabaseIdentifier == x.Guid)
                 .OrderByDescending(x => x.LastOrderDate);
             LoadingArchives = false;
+            NoArchives = Archives.None();
         }
 
         /// <summary>

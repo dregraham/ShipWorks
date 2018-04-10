@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Data;
@@ -217,56 +218,67 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The name of the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; private set; }
 
         /// <summary>
         /// The status of the database, as it related to ShipWorks
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public SqlDatabaseStatus Status { get; private set; }
 
         /// <summary>
         /// The total number of orders in the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int OrderCount { get; private set; }
 
         /// <summary>
         /// The oldest order to be downloaded into the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public DateTime? OldestOrderDate { get; private set; }
 
         /// <summary>
         /// The newest order to be downloaded into the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public DateTime? NewestOrderDate { get; private set; }
 
         /// <summary>
         /// ShipWorks schema version of the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Version SchemaVersion { get; private set; }
 
         /// <summary>
         /// The last ShipWorks user to log in to the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string LastUsedBy { get; private set; }
 
         /// <summary>
         /// The date/time the last ShipWorks user logged in to the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public DateTime LastUsedOn { get; private set; }
 
         /// <summary>
         /// The last order number to be downloaded into the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string LastOrderNumber { get; private set; }
 
         /// <summary>
         /// The date of the last order to be downloaded into the database
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public DateTime LastOrderDate { get; private set; }
 
         /// <summary>
         /// Is the database an archive
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsArchive { get; private set; }
 
         /// <summary>
