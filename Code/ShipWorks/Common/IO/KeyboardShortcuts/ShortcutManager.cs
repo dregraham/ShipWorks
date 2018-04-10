@@ -117,17 +117,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
 
             for (VirtualKeys key = VirtualKeys.F5; key <= VirtualKeys.F9; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None, null));
             }
 
             for (VirtualKeys key = VirtualKeys.N1; key <= VirtualKeys.N9; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null));
             }
 
             for (VirtualKeys key = VirtualKeys.A; key <= VirtualKeys.Z; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null));
             }
             
             // Remove existing shortcuts from the list of available ones

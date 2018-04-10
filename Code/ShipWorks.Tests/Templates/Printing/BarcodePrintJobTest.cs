@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
             var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Templates.Printing
             {
                 Barcode = "blah"
             });
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
 
             TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Templates.Printing
                 ModifierKeys = KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift,
                 VirtualKey = VirtualKeys.N1
             });
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
 
             TestTelemetry(Enumerable.Repeat(profile.Object, 25), new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
 
             TestTelemetry(new[] { profile.Object }, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
 
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var profile = mock.Mock<IShippingProfile>();
             profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt));
+            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
 
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();

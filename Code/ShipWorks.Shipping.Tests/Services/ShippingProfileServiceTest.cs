@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Returns(new List<KeyboardShortcutData>
                 {
                     new KeyboardShortcutData(null, VirtualKeys.A,
-                        KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift)
+                        KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null)
                 });
 
             ShortcutEntity shortcut = new ShortcutEntity
