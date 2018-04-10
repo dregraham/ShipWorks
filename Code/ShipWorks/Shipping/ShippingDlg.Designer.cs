@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Syncfusion.Windows.Forms.Tools.ToolTipInfo toolTipInfo1 = new Syncfusion.Windows.Forms.Tools.ToolTipInfo();
             this.labelProcessing = new System.Windows.Forms.Label();
             this.close = new System.Windows.Forms.Button();
             this.voidSelected = new System.Windows.Forms.Button();
@@ -44,6 +45,10 @@ namespace ShipWorks.Shipping
             this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelService = new System.Windows.Forms.Label();
             this.serviceControlArea = new System.Windows.Forms.Panel();
+            this.tabPageReturns = new System.Windows.Forms.TabPage();
+            this.returnTabControl = new ShipWorks.Shipping.Editing.ReturnTabControl();
+            this.panelReturnMessage = new System.Windows.Forms.Panel();
+            this.labelReturnMessage = new System.Windows.Forms.Label();
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
             this.customsControlArea = new System.Windows.Forms.Panel();
             this.tabPageTracking = new System.Windows.Forms.TabPage();
@@ -58,14 +63,11 @@ namespace ShipWorks.Shipping
             this.labelTrackingProcessed = new System.Windows.Forms.Label();
             this.panelTrackingMessage = new System.Windows.Forms.Panel();
             this.labelTrackingMessage = new System.Windows.Forms.Label();
-            this.panelReturnMessage = new System.Windows.Forms.Panel();
-            this.labelReturnMessage = new System.Windows.Forms.Label();
             this.tabPageInsurance = new System.Windows.Forms.TabPage();
             this.insuranceTabControl = new ShipWorks.Shipping.Insurance.InsuranceTabControl();
-            this.tabPageReturns = new System.Windows.Forms.TabPage();
-            this.returnTabControl = new ShipWorks.Shipping.Editing.ReturnTabControl();
             this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
             this.labelRates = new System.Windows.Forms.Label();
+            this.createLabelToolTip = new Syncfusion.Windows.Forms.Tools.SuperToolTip(this);
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -80,13 +82,13 @@ namespace ShipWorks.Shipping
             this.ratesSplitContainer.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageService.SuspendLayout();
+            this.tabPageReturns.SuspendLayout();
+            this.panelReturnMessage.SuspendLayout();
             this.tabPageCustoms.SuspendLayout();
             this.tabPageTracking.SuspendLayout();
             this.panelTrackingData.SuspendLayout();
             this.panelTrackingMessage.SuspendLayout();
-            this.panelReturnMessage.SuspendLayout();
             this.tabPageInsurance.SuspendLayout();
-            this.tabPageReturns.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelProcessing
@@ -199,6 +201,15 @@ namespace ShipWorks.Shipping
             this.processDropDownButton.SplitContextMenu = this.contextMenuProcess;
             this.processDropDownButton.TabIndex = 14;
             this.processDropDownButton.Text = "Create Label";
+            toolTipInfo1.BackColor = System.Drawing.Color.White;
+            toolTipInfo1.Body.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            toolTipInfo1.Body.Size = new System.Drawing.Size(20, 20);
+            toolTipInfo1.Body.Text = " Create shipping labels for any selected shipments.";
+            toolTipInfo1.Footer.Size = new System.Drawing.Size(20, 20);
+            toolTipInfo1.Header.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            toolTipInfo1.Header.Size = new System.Drawing.Size(20, 20);
+            toolTipInfo1.Header.Text = "Create Labels (F10)";
+            this.createLabelToolTip.SetToolTip(this.processDropDownButton, toolTipInfo1);
             this.processDropDownButton.UseVisualStyleBackColor = true;
             this.processDropDownButton.Click += new System.EventHandler(this.OnProcessSelected);
             // 
@@ -399,6 +410,50 @@ namespace ShipWorks.Shipping
             this.serviceControlArea.Size = new System.Drawing.Size(331, 257);
             this.serviceControlArea.TabIndex = 2;
             // 
+            // tabPageReturns
+            // 
+            this.tabPageReturns.Controls.Add(this.returnTabControl);
+            this.tabPageReturns.Controls.Add(this.panelReturnMessage);
+            this.tabPageReturns.Location = new System.Drawing.Point(4, 22);
+            this.tabPageReturns.Name = "tabPageReturns";
+            this.tabPageReturns.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageReturns.Size = new System.Drawing.Size(348, 302);
+            this.tabPageReturns.TabIndex = 5;
+            this.tabPageReturns.Text = "Returns";
+            this.tabPageReturns.UseVisualStyleBackColor = true;
+            // 
+            // returnTabControl
+            // 
+            this.returnTabControl.AutoScroll = true;
+            this.returnTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.returnTabControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.returnTabControl.Location = new System.Drawing.Point(3, 3);
+            this.returnTabControl.Name = "returnTabControl";
+            this.returnTabControl.Size = new System.Drawing.Size(342, 296);
+            this.returnTabControl.TabIndex = 1;
+            // 
+            // panelReturnMessage
+            // 
+            this.panelReturnMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelReturnMessage.Controls.Add(this.labelReturnMessage);
+            this.panelReturnMessage.Location = new System.Drawing.Point(6, 6);
+            this.panelReturnMessage.Name = "panelReturnMessage";
+            this.panelReturnMessage.Size = new System.Drawing.Size(373, 129);
+            this.panelReturnMessage.TabIndex = 0;
+            this.panelReturnMessage.Visible = false;
+            // 
+            // labelReturnMessage
+            // 
+            this.labelReturnMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelReturnMessage.Location = new System.Drawing.Point(5, 4);
+            this.labelReturnMessage.Name = "labelReturnMessage";
+            this.labelReturnMessage.Size = new System.Drawing.Size(365, 55);
+            this.labelReturnMessage.TabIndex = 0;
+            this.labelReturnMessage.Text = "Multiple shipments are selected.  Select a single shipment to get return informat" +
+    "ion.";
+            // 
             // tabPageCustoms
             // 
             this.tabPageCustoms.Controls.Add(this.customsControlArea);
@@ -536,17 +591,6 @@ namespace ShipWorks.Shipping
             this.panelTrackingMessage.TabIndex = 0;
             this.panelTrackingMessage.Visible = false;
             // 
-            // panelReturnMessage
-            // 
-            this.panelReturnMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                                                                                     | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelReturnMessage.Controls.Add(this.labelReturnMessage);
-            this.panelReturnMessage.Location = new System.Drawing.Point(6, 6);
-            this.panelReturnMessage.Name = "panelReturnMessage";
-            this.panelReturnMessage.Size = new System.Drawing.Size(373, 129);
-            this.panelReturnMessage.TabIndex = 0;
-            this.panelReturnMessage.Visible = false;
-            // 
             // labelTrackingMessage
             // 
             this.labelTrackingMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -557,17 +601,6 @@ namespace ShipWorks.Shipping
             this.labelTrackingMessage.TabIndex = 0;
             this.labelTrackingMessage.Text = "Multiple shipments are selected.  Select a single shipment to get tracking inform" +
     "ation.";
-            // 
-            // labelReturnMessage
-            // 
-            this.labelReturnMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                                                                                     | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelReturnMessage.Location = new System.Drawing.Point(5, 4);
-            this.labelReturnMessage.Name = "labelReturnMessage";
-            this.labelReturnMessage.Size = new System.Drawing.Size(365, 55);
-            this.labelReturnMessage.TabIndex = 0;
-            this.labelReturnMessage.Text = "Multiple shipments are selected.  Select a single shipment to get return inform" +
-                                             "ation.";
             // 
             // tabPageInsurance
             // 
@@ -590,28 +623,6 @@ namespace ShipWorks.Shipping
             this.insuranceTabControl.Size = new System.Drawing.Size(342, 296);
             this.insuranceTabControl.TabIndex = 1;
             // 
-            // tabPageReturns
-            // 
-            this.tabPageReturns.Controls.Add(this.returnTabControl);
-            this.tabPageReturns.Controls.Add(this.panelReturnMessage);
-            this.tabPageReturns.Location = new System.Drawing.Point(4, 22);
-            this.tabPageReturns.Name = "tabPageReturns";
-            this.tabPageReturns.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageReturns.Size = new System.Drawing.Size(348, 302);
-            this.tabPageReturns.TabIndex = 5;
-            this.tabPageReturns.Text = "Returns";
-            this.tabPageReturns.UseVisualStyleBackColor = true;
-            // 
-            // returnTabControl
-            // 
-            this.returnTabControl.AutoScroll = true;
-            this.returnTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.returnTabControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.returnTabControl.Location = new System.Drawing.Point(3, 3);
-            this.returnTabControl.Name = "returnTabControl";
-            this.returnTabControl.Size = new System.Drawing.Size(342, 296);
-            this.returnTabControl.TabIndex = 1;
-            // 
             // rateControl
             // 
             this.rateControl.ActionLinkText = "Edit";
@@ -628,7 +639,7 @@ namespace ShipWorks.Shipping
             this.rateControl.RestrictedRateCount = 5;
             this.rateControl.ShowAllRates = true;
             this.rateControl.ShowSingleRate = false;
-            this.rateControl.Size = new System.Drawing.Size(356, 131);
+            this.rateControl.Size = new System.Drawing.Size(356, 130);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
@@ -641,6 +652,10 @@ namespace ShipWorks.Shipping
             this.labelRates.Size = new System.Drawing.Size(40, 13);
             this.labelRates.TabIndex = 1;
             this.labelRates.Text = "Rates";
+            // 
+            // createLabelToolTip
+            // 
+            this.createLabelToolTip.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(158)))), ((int)(((byte)(218)))));
             // 
             // ShippingDlg
             // 
@@ -682,14 +697,14 @@ namespace ShipWorks.Shipping
             this.tabControl.ResumeLayout(false);
             this.tabPageService.ResumeLayout(false);
             this.tabPageService.PerformLayout();
+            this.tabPageReturns.ResumeLayout(false);
+            this.panelReturnMessage.ResumeLayout(false);
             this.tabPageCustoms.ResumeLayout(false);
             this.tabPageTracking.ResumeLayout(false);
             this.panelTrackingData.ResumeLayout(false);
             this.panelTrackingData.PerformLayout();
             this.panelTrackingMessage.ResumeLayout(false);
-            this.panelReturnMessage.ResumeLayout(false);
             this.tabPageInsurance.ResumeLayout(false);
-            this.tabPageReturns.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -744,5 +759,6 @@ namespace ShipWorks.Shipping
         private ShipWorks.Shipping.Editing.ReturnTabControl returnTabControl;
         private System.Windows.Forms.Label requestedShipping;
         private System.Windows.Forms.TabPage tabPageReturns;
+        private Syncfusion.Windows.Forms.Tools.SuperToolTip createLabelToolTip;
     }
 }

@@ -8,6 +8,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -40,6 +41,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -97,6 +99,7 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
+        private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
@@ -117,9 +120,11 @@ namespace ShipWorks.Shipping
             ICustomsManager customsManager,
             Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
-            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange)
+            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
+            IShortcutManager shortcutManager)
         {
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.shortcutManager = shortcutManager;
             InitializeComponent();
 
             ErrorManager = errorManager;
@@ -270,6 +275,9 @@ namespace ShipWorks.Shipping
 
             // Start listening for keybaord shortcuts
             ListenForKeyboardShortcuts();
+                        
+            string hotkey = new KeyboardShortcutData(shortcutManager.Shortcuts.SingleOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel)).ShortcutText;
+            createLabelToolTip.GetToolTip(processDropDownButton).Header.Text = $"Create Labels ({hotkey})";
         }
 
         /// <summary>
