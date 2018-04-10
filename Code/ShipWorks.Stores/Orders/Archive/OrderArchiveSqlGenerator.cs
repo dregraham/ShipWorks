@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -35,6 +36,8 @@ namespace ShipWorks.Stores.Orders.Archive
 
             return ResourceUtility.ReadString("ShipWorks.Stores.Orders.Archive.CopyDatabase.sql")
                 .Replace("%destinationDatabaseName%", newDatabasename)
+                .Replace("%sourceDatabaseName%", sourceDatabasename)
+                .Replace("%archivingDatabaseName%", SqlUtility.GetArchivingDatabasename(sourceDatabasename))
                 .Replace("%archivalSettingsXml%", archivalSettingsXml);
         }
 

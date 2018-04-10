@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -93,10 +94,10 @@ namespace ShipWorks.Stores.Orders.Archive
             prepareProgress.CanCancel = false;
             IProgressReporter archiveProgress = progressProvider.AddItem("Archiving orders");
             archiveProgress.CanCancel = false;
-            IProgressReporter syncProgress = progressProvider.AddItem("Syncing orders");
-            syncProgress.CanCancel = false;
             IProgressReporter filterProgress = progressProvider.AddItem("Regenerating filters");
             filterProgress.CanCancel = false;
+            IProgressReporter syncProgress = progressProvider.AddItem("Syncing orders");
+            syncProgress.CanCancel = false;
 
             try
             {
@@ -108,15 +109,15 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     using (new LoggedStopwatch(log, "OrderArchive: Archive orders - "))
                     {
-
                         await orderArchiveDataAccess
-                            .WithSingleUserConnectionAsync(PerformArchive(cutoffDate, prepareProgress, archiveProgress, syncProgress, trackedDurationEvent))
-                            .Do(_ => orderArchiveDataAccess.WithMultiUserConnection(RegenerateFilters(filterProgress)))
+                            .WithMultiUserConnectionAsync(connection =>
+                                PerformArchive(connection, cutoffDate, prepareProgress, archiveProgress, trackedDurationEvent))
+                            .Bind(ContinueArchive(cutoffDate, trackedDurationEvent, filterProgress, syncProgress))
                             .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? OrderArchiveResult.Failed : OrderArchiveResult.Succeeded; 
+                        return progressProvider.HasErrors ? OrderArchiveResult.Failed : OrderArchiveResult.Succeeded;
                     }
                 }
             }
@@ -127,9 +128,21 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// Continue the archive process
+        /// </summary>
+        private Func<Unit, Task<Unit>> ContinueArchive(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, IProgressReporter filterProgress, IProgressReporter syncProgress)
+        {
+            return _ => orderArchiveDataAccess.WithMultiUserConnectionAsync(connection =>
+            {
+                RegenerateFilters(connection, filterProgress);
+                return TrimArchive(connection, cutoffDate, syncProgress, trackedDurationEvent);
+            });
+        }
+
+        /// <summary>
         /// Add telemetry properties
         /// </summary>
-        private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount, 
+        private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount,
             long ordersToPurgeCount, OrderArchiveResult result)
         {
             var megabyte = (1024 * 1024);
@@ -173,30 +186,35 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Perform the archive
         /// </summary>
-        private Func<DbConnection, Task<Unit>> PerformArchive(DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress, IProgressReporter syncProgress, TrackedDurationEvent trackedDurationEvent)
+        private Task<Unit> PerformArchive(DbConnection conn, DateTime cutoffDate, IProgressReporter prepareProgress, IProgressReporter archiveProgress, TrackedDurationEvent trackedDurationEvent)
         {
-            async Task<Unit> Func(DbConnection conn)
-            {
-                string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(currentDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
-                string archiveDbArchiveSql = string.Format("{0}{1}{2}{3}{4}",
-                    sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual),
-                    Environment.NewLine,
-                    sqlGenerator.DisableAutoProcessingSettingsSql(),
-                    Environment.NewLine,
-                    sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn)));
+            string archivingDbName = SqlUtility.GetArchivingDatabasename(currentDatabaseName);
+            string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(archivingDbName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
+            currentDbArchiveSql += $"{Environment.NewLine}ALTER DATABASE [{archivingDbName}] MODIFY NAME = [{currentDatabaseName}]";
 
-                return await ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database",
-                                             sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName),
-                                             (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
-                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data",
-                                               currentDbArchiveSql,
-                                               (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())))
-                    .Bind(_ => ExecuteSqlAsync(syncProgress, conn, "Syncing Order and Shipment data",
-                                               archiveDbArchiveSql,
-                                               (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Synch.DurationInSeconds", timeInSeconds.ToString())));
-            }
+            return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database",
+                    sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName),
+                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
+                .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data",
+                    currentDbArchiveSql,
+                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
+        }
 
-            return Func;
+        /// <summary>
+        /// Trim the archive
+        /// </summary>
+        private Task<Unit> TrimArchive(DbConnection conn, DateTime cutoffDate, IProgressReporter syncProgress, TrackedDurationEvent trackedDurationEvent)
+        {
+            string archiveDbArchiveSql =
+                sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual) +
+                Environment.NewLine +
+                sqlGenerator.DisableAutoProcessingSettingsSql() +
+                Environment.NewLine +
+                sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn));
+
+            return ExecuteSqlAsync(syncProgress, conn, "Syncing Order and Shipment data",
+                archiveDbArchiveSql,
+                (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Synch.DurationInSeconds", timeInSeconds.ToString()));
         }
 
         /// <summary>
@@ -222,22 +240,21 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Regenerate filters
         /// </summary>
-        private Action<DbConnection> RegenerateFilters(IProgressReporter filterProgress) =>
-            (conn) =>
+        private void RegenerateFilters(DbConnection conn, IProgressReporter filterProgress)
+        {
+            using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
             {
-                using (new LoggedStopwatch(log, "OrderArchive: Regenerate filters - "))
-                {
-                    filterProgress.Starting();
-                    filterProgress.Detail = "Regenerating filters...";
-                    filterProgress.PercentComplete = 5;
+                filterProgress.Starting();
+                filterProgress.Detail = "Regenerating filters...";
+                filterProgress.PercentComplete = 5;
 
-                    filterHelper.RegenerateFilters(conn);
+                filterHelper.RegenerateFilters(conn);
 
-                    filterHelper.CalculateInitialFilterCounts(conn, filterProgress, 10);
+                filterHelper.CalculateInitialFilterCounts(conn, filterProgress, 10);
 
-                    filterProgress.PercentComplete = 100;
-                    filterProgress.Detail = "Done.";
-                }
-            };
+                filterProgress.PercentComplete = 100;
+                filterProgress.Detail = "Done.";
+            }
+        }
     }
 }

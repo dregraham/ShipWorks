@@ -89,35 +89,26 @@ SET NOCOUNT ON;
 
 IF EXISTS(SELECT * FROM sys.tables WHERE name = 'EntityIDsToDelete')
 BEGIN
-	IF OBJECT_ID('tempdb..#DeletePurgeBatch') IS NOT NULL
+	IF OBJECT_ID('DeletePurgeBatch') IS NOT NULL
 	BEGIN
-		DROP TABLE #DeletePurgeBatch
-	END
-
-	IF OBJECT_ID('tempdb..#DeleteObjectReferences') IS NOT NULL
-	BEGIN
-		DROP TABLE #DeleteObjectReferences
+		DROP TABLE DeletePurgeBatch
 	END
 
 	-- create batch purge ID table
-	CREATE TABLE #DeletePurgeBatch (
+	CREATE TABLE DeletePurgeBatch (
 		EntityID BIGINT PRIMARY KEY
 	);
-
-	DECLARE
-		@startTime DATETIME = GETUTCDATE(),
-		@totalSeconds INT = 1
 		
-	INSERT INTO #DeletePurgeBatch (EntityID)
+	INSERT INTO DeletePurgeBatch (EntityID)
 		SELECT DISTINCT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT EntityID FROM [EntityIDsToDelete] with (nolock))
 			
     RAISERROR ('OrderArchiveInfo:Archiving data from @tableName@', 0, 1) WITH NOWAIT
-	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM #DeletePurgeBatch)
+	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM DeletePurgeBatch)
 				
-	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from #DeletePurgeBatch);
-
-	SET @totalSeconds = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
+	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from DeletePurgeBatch);
 		
+    DROP TABLE DeletePurgeBatch
+
     -- Allow SQL Server write it's transaction buffer to disk.  This helps minimize the final log size.
 	CHECKPOINT;
 END

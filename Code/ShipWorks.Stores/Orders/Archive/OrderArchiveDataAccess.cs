@@ -47,18 +47,15 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
-        /// Execute a function with a connection in single user mode
+        /// Execute a function with a connection in multi user mode
         /// </summary>
-        public async Task<T> WithSingleUserConnectionAsync<T>(Func<DbConnection, Task<T>> func)
+        public async Task<T> WithMultiUserConnectionAsync<T>(Func<DbConnection, Task<T>> func)
         {
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
-                using (new SingleUserModeScope())
+                using (new ExistingConnectionScope())
                 {
-                    using (new ExistingConnectionScope())
-                    {
-                        return await func(ExistingConnectionScope.ScopedConnection).ConfigureAwait(false);
-                    }
+                    return await func(ExistingConnectionScope.ScopedConnection).ConfigureAwait(false);
                 }
             }
         }
@@ -209,6 +206,8 @@ namespace ShipWorks.Stores.Orders.Archive
                    messageToCheck.IndexOf("BACKUP DATABASE successfully", StringComparison.InvariantCultureIgnoreCase) == 0 ||
                    messageToCheck.IndexOf("percent processed", StringComparison.InvariantCultureIgnoreCase) > 0 ||
                    messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("Nonqualified", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("The database name", StringComparison.InvariantCultureIgnoreCase) > -1 ||
                    messageToCheck.IndexOf("Changed database", StringComparison.InvariantCultureIgnoreCase) > -1;
         }
 

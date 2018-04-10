@@ -13,9 +13,9 @@ namespace ShipWorks.Stores.Orders.Archive
     public interface IOrderArchiveDataAccess
     {
         /// <summary>
-        /// Execute a function with a connection in single user mode
+        /// Execute a function with a connection in multi user mode
         /// </summary>
-        Task<T> WithSingleUserConnectionAsync<T>(Func<DbConnection, Task<T>> func);
+        Task<T> WithMultiUserConnectionAsync<T>(Func<DbConnection, Task<T>> func);
 
         /// <summary>
         /// Execute an action with a connection in multi user mode

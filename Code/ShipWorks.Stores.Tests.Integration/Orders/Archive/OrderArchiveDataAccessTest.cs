@@ -129,7 +129,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "ClickCartProOrderSearch",
                 "CommerceInterfaceOrder",
                 "CommerceInterfaceOrderSearch",
-                "Configuration",
                 "Customer",
                 "DhlExpressAccount",
                 "DhlExpressPackage",
