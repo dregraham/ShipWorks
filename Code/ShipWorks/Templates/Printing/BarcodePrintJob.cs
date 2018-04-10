@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Metrics;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Templates.Printing
@@ -15,7 +14,7 @@ namespace ShipWorks.Templates.Printing
     public class BarcodePrintJob : IPrintJob
     {
         private readonly IPrintJobFactory printJobFactory;
-        private readonly IEnumerable<IShippingProfile> shippingProfiles;
+        private readonly IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData;
         private readonly Func<string, ITrackedEvent> telemetryEventFunc;
         private const string HTMLContent = "<html><head><title></title><style>body {{font-family:Arial; text-align:center;}}table {{margin-bottom:40px;}} td {{text-align:center;}} .barcode {{font-family:Free 3 of 9 Extended;font-size:36pt;}}</style></head><body>{0}</body></html>";
         private Form owner;
@@ -29,11 +28,11 @@ namespace ShipWorks.Templates.Printing
         /// Constructor
         /// </summary>
         public BarcodePrintJob(IPrintJobFactory printJobFactory,
-            IEnumerable<IShippingProfile> shippingProfiles,
+            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData,
             Func<string, ITrackedEvent> telemetryEventFunc)
         {
             this.printJobFactory = printJobFactory;
-            this.shippingProfiles = shippingProfiles;
+            this.shortcutData = shortcutData;
             this.telemetryEventFunc = telemetryEventFunc;
             this.printJob = printJobFactory.CreatePrintJob(CreateTemplateResults());
             this.PreviewCompleted = new PrintActionCompletedEventHandler(OnPreivewCompleted);
@@ -75,10 +74,15 @@ namespace ShipWorks.Templates.Printing
         private IList<TemplateResult> CreateTemplateResults()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (IShippingProfile profile in shippingProfiles.Where(p => !string.IsNullOrWhiteSpace(p.ShortcutKey) || !string.IsNullOrWhiteSpace(p.Barcode)))
+            foreach (KeyValuePair<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> section in shortcutData)
             {
-                string barcode = string.IsNullOrWhiteSpace(profile.Barcode) ? string.Empty : $"*{profile.Barcode}*";
-                builder.AppendLine(CreateBarcodeElement(profile.ShippingProfileEntity.Name, barcode.ToUpper(), profile.ShortcutKey));
+                builder.AppendLine($"<H1>{section.Key}</H1>");
+
+                foreach ((string Name, string Barcode, string KeyboardShortcut) shortcut in section.Value)
+                {
+                    string barcode = string.IsNullOrWhiteSpace(shortcut.Barcode) ? string.Empty : $"*{shortcut.Barcode}*";
+                    builder.AppendLine(CreateBarcodeElement(shortcut.Name, barcode.ToUpper(), shortcut.KeyboardShortcut));
+                }
             }
 
             return new List<TemplateResult>()
@@ -117,8 +121,8 @@ namespace ShipWorks.Templates.Printing
                     result = "Failed";
                 }
 
-                int barcodeCount = shippingProfiles.Count(p => !string.IsNullOrWhiteSpace(p.Barcode));
-                int hotkeyCount = shippingProfiles.Count(p => p.KeyboardShortcut.ActionKey != null && p.KeyboardShortcut.Modifiers != null);
+                int barcodeCount = shortcutData.Sum(s => s.Value.Count(v => !string.IsNullOrWhiteSpace(v.Barcode)));
+                int hotkeyCount = shortcutData.Sum(s => s.Value.Count(v => !string.IsNullOrWhiteSpace(v.KeyboardShortcut)));
 
                 using (ITrackedEvent telemetryEvent = telemetryEventFunc("Shortcuts.Print"))
                 {
