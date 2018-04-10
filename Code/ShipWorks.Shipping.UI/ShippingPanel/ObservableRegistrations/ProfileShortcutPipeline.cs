@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
+using Interapptive.Shared.Threading;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
@@ -13,14 +15,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     public class ProfileShortcutPipeline : IShippingPanelTransientPipeline
     {
         private readonly IMessenger messenger;
+        private readonly IMainForm mainForm;
+        private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProfileShortcutPipeline(IMessenger messenger)
+        public ProfileShortcutPipeline(IMessenger messenger, IMainForm mainForm, ISchedulerProvider schedulerProvider)
         {
             this.messenger = messenger;
+            this.mainForm = mainForm;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -31,8 +37,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             subscription = messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
                 .Where(m => viewModel.Shipment != null)
-                .Subscribe(m => messenger.Send(new ApplyProfileMessage(
-                    this, viewModel.Shipment.ShipmentID, m.Shortcut.RelatedObjectID.Value)));
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Where(_ => !mainForm.AdditionalFormsOpen())
+                .Subscribe(m =>
+                {
+                    // This causes the shipping panel to save if there are unsaved changes
+                    mainForm.Focus();
+
+                    messenger.Send(new ApplyProfileMessage(
+                        this, viewModel.Shipment.ShipmentID, m.Shortcut.RelatedObjectID.Value));
+                });
         }
 
         /// <summary>

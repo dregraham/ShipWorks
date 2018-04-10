@@ -7,6 +7,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 using ShipWorks.UI.Dialogs;
+using ShipWorks.UI.Dialogs.Popup;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Services
@@ -84,6 +85,40 @@ namespace ShipWorks.UI.Services
             else
             {
                popupViewModelFactory().Show(message, owner);
+            }
+        }
+
+        /// <summary>
+        /// Show a popup message with a Keyboard Icon
+        /// </summary>
+        public void ShowKeyboardPopup(string message)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string>) ShowPopup, message);
+            }
+            else
+            {
+                popupViewModelFactory().ShowWithKeyboard(message, owner);
+            }
+        }
+
+        /// <summary>
+        /// Show a popup message with a barcode icon
+        /// </summary>
+        public void ShowBarcodePopup(string message)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string>) ShowPopup, message);
+            }
+            else
+            {
+                popupViewModelFactory().ShowWithBarcode(message, owner);
             }
         }
 

@@ -965,6 +965,7 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutManager.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutTriggerType.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Net\IJsonRequest.cs" />
     <Compile Include="Common\Net\JsonRequest.cs" />
@@ -8822,6 +8823,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shipping\Fakes\FakeFIMSLabel.pdf" />
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExEULA.rtf" />
+    <Resource Include="Resources\Font Awesome 5 Free-Solid-900.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v5.wsdl" />

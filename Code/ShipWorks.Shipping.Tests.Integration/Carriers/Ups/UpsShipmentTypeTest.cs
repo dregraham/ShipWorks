@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Insurance;
@@ -21,7 +22,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
 
         public UpsShipmentTypeTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
+                mock => mock.Override<IMainForm>());
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks);
         }

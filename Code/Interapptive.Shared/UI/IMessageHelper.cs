@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 
@@ -48,6 +49,16 @@ namespace Interapptive.Shared.UI
         /// Show a popup message
         /// </summary>
         void ShowPopup(string message);
+
+        /// <summary>
+        /// Show a popup message with a Keyboard image
+        /// </summary>
+        void ShowKeyboardPopup(string message);
+
+        /// <summary>
+        /// Show a popup message with a Keyboard image
+        /// </summary>
+        void ShowBarcodePopup(string message);
 
         /// <summary>
         /// Show a dialog and get the results

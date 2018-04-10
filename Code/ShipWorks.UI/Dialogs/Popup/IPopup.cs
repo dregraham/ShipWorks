@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.Popup
 {
     /// <summary>
     /// Interface for a popup message view

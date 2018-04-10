@@ -112,16 +112,15 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private string GetShortcutMessageSource(ShortcutMessage shortcutMessage)
         {
-            if (shortcutMessage.Sender is KeyboardShortcutKeyFilter)
+            switch (shortcutMessage.Trigger)
             {
-                return "Keyboard";
+                case ShortcutTriggerType.Hotkey:
+                    return "Keyboard";
+                case ShortcutTriggerType.Barcode:
+                    return "Barcode";
+                default:
+                    return shortcutMessage.Sender.GetType().ToString();
             }
-            else if (shortcutMessage.Sender is ScanMessageBroker)
-            {
-                return "Barcode";
-            }
-
-            return shortcutMessage.Sender.GetType().ToString();
         }
         
         /// <summary>
