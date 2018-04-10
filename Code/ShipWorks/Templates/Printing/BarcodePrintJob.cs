@@ -81,7 +81,10 @@ namespace ShipWorks.Templates.Printing
                 foreach ((string Name, string Barcode, string KeyboardShortcut) shortcut in section.Value)
                 {
                     string barcode = string.IsNullOrWhiteSpace(shortcut.Barcode) ? string.Empty : $"*{shortcut.Barcode}*";
-                    builder.AppendLine(CreateBarcodeElement(shortcut.Name, barcode.ToUpper(), shortcut.KeyboardShortcut));
+                    if (!string.IsNullOrWhiteSpace(barcode) || !string.IsNullOrWhiteSpace(shortcut.KeyboardShortcut))
+                    {
+                        builder.AppendLine(CreateBarcodeElement(shortcut.Name, barcode.ToUpper(), shortcut.KeyboardShortcut));
+                    }
                 }
             }
 
