@@ -16,11 +16,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Constructor to use when you don't have a shortcut entity
         /// </summary>
         public KeyboardShortcutData(KeyboardShortcutCommand? command,
-            VirtualKeys? actionKey, KeyboardShortcutModifiers? modifiers)
+            VirtualKeys? actionKey, KeyboardShortcutModifiers? modifiers, KeyboardShortcutCommand? action)
         {
             Command = command;
             ActionKey = actionKey;
             Modifiers = modifiers;
+            Action = action;
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             Command = shortcutEntity.Action;
             ActionKey = shortcutEntity.VirtualKey;
             Modifiers = shortcutEntity.ModifierKeys;
+            Action = shortcutEntity.Action;
         }
 
         /// <summary>
@@ -47,6 +49,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Modifiers for the action key
         /// </summary>
         public KeyboardShortcutModifiers? Modifiers { get; }
+
+        /// <summary>
+        /// The action
+        /// </summary>
+        public KeyboardShortcutCommand? Action { get; }
 
         /// <summary>
         /// Get the shortcut text
