@@ -12,7 +12,7 @@
  namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
  {
      /// <summary>
-     /// Listens for applyprofile keyboard shortcuts and sends an ApplyProfileMessage when it receives one
+     /// Listens for applyprofile shortcuts and sends an ApplyProfileMessage when it receives one
      /// </summary>
      public class ProfileShortcutPipeline : IShippingPanelTransientPipeline
      {

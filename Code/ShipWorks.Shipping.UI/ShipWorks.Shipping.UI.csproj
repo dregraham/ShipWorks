@@ -331,6 +331,7 @@
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelTransientPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\LabelShortcutPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LoadCustomsPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
