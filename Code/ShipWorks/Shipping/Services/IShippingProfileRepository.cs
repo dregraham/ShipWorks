@@ -28,5 +28,7 @@ namespace ShipWorks.Shipping.Services
         /// Save the ShippingProfile and its children 
         /// </summary>
         Result Save(IShippingProfile shippingProfile);
+
+        void Load(IShippingProfile profile, bool refreshIfPresent);
     }
 }

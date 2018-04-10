@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Repository for ShippingProfiles.
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShippingProfileRepository : IShippingProfileRepository
     {
         private readonly IShippingProfileManager profileManager;
@@ -154,6 +154,14 @@ namespace ShipWorks.Shipping.Services
                 log.Error("Error deleting shipping profile", ex);
                 return Result.FromError("An error occurred when deleting the profile.");
             }
+        }
+
+        /// <summary>
+        /// Load the shipping profile
+        /// </summary>
+        public void Load(IShippingProfile profile, bool refreshIfPresent)
+        {
+            profileManager.LoadProfileData(profile.ShippingProfileEntity, refreshIfPresent);
         }
     }
 }

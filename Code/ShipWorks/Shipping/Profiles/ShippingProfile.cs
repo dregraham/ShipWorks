@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32.Native;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -20,54 +20,34 @@ namespace ShipWorks.Shipping.Profiles
     [Component]
     public class ShippingProfile : IShippingProfile
     {
-        private readonly IShippingProfileLoader profileLoader;
+        private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly ISecurityContext securityContext;
-        private ShippingProfileEntity shippingProfileEntity;
+        private readonly Func<ISecurityContext> securityContext;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
         /// </summary>
-        public ShippingProfile(IShippingProfileLoader profileLoader,
+        public ShippingProfile(
+            IShippingProfileRepository shippingProfileRepository, 
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
             IMessenger messenger,
-            ISecurityContext securityContext)
+            Func<ISecurityContext> securityContext)
         {
-            this.profileLoader = profileLoader;
+            this.shippingProfileRepository = shippingProfileRepository;
             this.strategyFactory = strategyFactory;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.securityContext = securityContext;
-            ShippingProfileEntity = new ShippingProfileEntity
-            {
-                Name = string.Empty,
-                ShipmentTypePrimary = false
-            };
-
-            Shortcut = new ShortcutEntity
-            {
-                Action = KeyboardShortcutCommand.ApplyProfile
-            };
-
-            profileLoader.LoadProfileData(ShippingProfileEntity, false);
         }
 
         /// <summary>
         /// Shipping Profile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingProfileEntity ShippingProfileEntity
-        {
-            get => shippingProfileEntity;
-            set
-            {
-                profileLoader.LoadProfileData(value, true);
-                shippingProfileEntity = value;
-            }
-        }
+        public ShippingProfileEntity ShippingProfileEntity { get; set; }
 
         /// <summary>
         /// Shortcut
@@ -140,7 +120,7 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity.ShipmentType = shipmentType;
             ShippingProfileEntity.Packages.Clear();
 
-            profileLoader.LoadProfileData(ShippingProfileEntity, true);
+            shippingProfileRepository.Load(this, true);
         }
 
         /// <summary>
@@ -208,7 +188,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Check to see if the profile can be applied
         /// </summary>
         private bool CanApply(IEnumerable<ShipmentEntity> shipments)
-            => shipments.All(s => securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
+            => shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
                 shipments.All(s => IsApplicable(s.ShipmentTypeCode));
     }
 }

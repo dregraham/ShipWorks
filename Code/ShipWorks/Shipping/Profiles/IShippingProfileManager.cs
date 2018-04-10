@@ -70,5 +70,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Deletes the given profile
         /// </summary>
         void DeleteProfile(ShippingProfileEntity profile, ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Load the profiles data
+        /// </summary>
+        void LoadProfileData(ShippingProfileEntity shippingProfileEntity, bool refreshIfPresent);
     }
 }

@@ -1,10 +1,16 @@
+using System;
 using System.Collections.Generic;
-using System.Data.Common;
+using System.ComponentModel;
 using System.Linq;
-using ShipWorks.Common.IO.KeyboardShortcuts;
+using System.Reflection;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -15,17 +21,17 @@ namespace ShipWorks.Shipping.Services
     public class ShippingProfileManagerWrapper : IShippingProfileManager
     {
         private static readonly object syncLock = new object();
-        private readonly IShippingProfileLoader shippingProfileLoader;
-        private readonly IShortcutManager shortcutManager;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerWrapper(IShippingProfileLoader shippingProfileLoader, IShortcutManager shortcutManager, ISqlAdapterFactory sqlAdapterFactory)
+        public ShippingProfileManagerWrapper(
+            IShipmentTypeManager shipmentTypeManager, 
+            ISqlAdapterFactory sqlAdapterFactory)
         {
-            this.shippingProfileLoader = shippingProfileLoader;
-            this.shortcutManager = shortcutManager;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -99,7 +105,7 @@ namespace ShipWorks.Shipping.Services
                 profile.ShipmentTypePrimary = true;
 
                 // Load the shipmentType specific profile data
-                shippingProfileLoader.LoadProfileData(profile, true);
+                LoadProfileData(profile, true);
 
                 // Configure it as a primary profile
                 shipmentType.ConfigurePrimaryProfile(profile);
@@ -156,6 +162,14 @@ namespace ShipWorks.Shipping.Services
         public void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter)
         {
             ShippingProfileManager.SaveProfile(profile, adapter);
+        }
+        
+        /// <summary>
+        /// Ensure the carrier specific profile data is created and loaded for the given profile
+        /// </summary>
+        public void LoadProfileData(ShippingProfileEntity shippingProfileEntity, bool refreshIfPresent)
+        {
+            ShippingProfileManager.LoadProfileData(shippingProfileEntity, refreshIfPresent);
         }
     }
 }

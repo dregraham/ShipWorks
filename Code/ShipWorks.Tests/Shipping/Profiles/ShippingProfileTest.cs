@@ -34,28 +34,6 @@ namespace ShipWorks.Tests.Shipping.Profiles
         }
 
         [Fact]
-        public void Constructor_LoadProfileDataIsCalledWithTrue_WhenProfileEntityPassedIn()
-        {
-            ShippingProfileEntity profile = new ShippingProfileEntity();
-            ShortcutEntity shortcut = new ShortcutEntity();
-
-            CreateShippingProfile(profile, shortcut);
-            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Once);
-        }
-
-        [Fact]
-        public void Constructor_LoadProfileDataIsCalledWithFalse_WhenNoProfileEntityPassedIn()
-        {
-            var loaderMock = mock.Mock<IShippingProfileLoader>();
-
-            // Testing 
-            new ShippingProfile(loaderMock.Object, mock.Mock<IShippingProfileApplicationStrategyFactory>().Object,
-                mock.Mock<IShippingManager>().Object, mock.Mock<IMessenger>().Object, mock.Mock<ISecurityContext>().Object);
-            
-            loaderMock.Verify(l=>l.LoadProfileData(It.IsAny<ShippingProfileEntity>(), false), Times.Once);
-        }
-
-        [Fact]
         public void ShippingProfile_ShipmentTypeDescriptionIsShipmentTypeDescription()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity
@@ -208,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         }
 
         [Fact]
-        public void ChangeProvider_DelegatesToProfileLoader()
+        public void ChangeProvider_DelegatesToProfileRepository()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity();
             ShortcutEntity shortcut = new ShortcutEntity();
@@ -217,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             testObject.ChangeProvider(ShipmentTypeCode.Endicia);
 
             // The initial set 
-            mock.Mock<IShippingProfileLoader>().Verify(l => l.LoadProfileData(profile, true), Times.Exactly(2));
+            mock.Mock<IShippingProfileRepository>().Verify(l => l.Load(testObject, true), Times.Once);
         }
 
         [Fact]
