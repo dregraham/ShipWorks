@@ -517,9 +517,9 @@ namespace ShipWorks.Shipping
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
                 // LoadCustomsItems is called, saving will be skipped.
-                if (shipment.CustomsGenerated)
+                if (shipment.CustomsGenerated && IsCustomsRequired(shipment))
                 {
-                    shipment.CustomsGenerated = !IsCustomsRequired(shipment);
+                    shipment.CustomsGenerated = false;
                 }
                 customsManager.GenerateCustomsItems(shipment);
 

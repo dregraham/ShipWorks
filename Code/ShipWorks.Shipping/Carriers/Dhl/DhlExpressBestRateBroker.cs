@@ -5,6 +5,8 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Insurance;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -116,6 +118,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             currentShipment.DhlExpress.Service = (int) DhlExpressServiceType.ExpressWorldWide;
             currentShipment.DhlExpress.DhlExpressAccountID = account.DhlExpressAccountID;
+
+            // Customs items are cleared from the shipment when ConfigureNewShipment is called.
+            // This was causing DHL not to return rates because it needs valid customs items.
+            currentShipment.CustomsItems.Clear();
+            foreach (ShipmentCustomsItemEntity customItem in originalShipment.CustomsItems)
+            {
+                currentShipment.CustomsItems.Add(EntityUtility.CloneEntity(customItem));
+            }
         }
 
         /// <summary>
