@@ -27,5 +27,11 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// </summary>
         [Description("apply profile")]
         ApplyProfile = 2,
+        
+        /// <summary>
+        /// Create a label
+        /// </summary>
+        [Description("create label")]
+        CreateLabel = 3
     }
 }
