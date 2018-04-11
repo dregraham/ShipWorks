@@ -413,8 +413,8 @@
                             <Button.ToolTip>
                                 <ToolTip Background="White">
                                     <StackPanel>
-                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelHotkey, StringFormat='Create Labels({0})'}"/>
-                                        <TextBlock Text="Create shipping labels for any selected shipments."/>
+                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelHotkeyTitle}"/>
+                                        <TextBlock Text="{Binding CreateLabelHotkeyDescription}"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>

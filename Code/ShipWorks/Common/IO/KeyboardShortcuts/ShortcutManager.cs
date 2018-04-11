@@ -166,5 +166,13 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                 }
             }
         }
+        
+        public (string Title, string Description) GetCreateLabelToolTipText()
+        {
+            string hotKey = new KeyboardShortcutData(Shortcuts.FirstOrDefault(s =>
+                                s.Action == KeyboardShortcutCommand.CreateLabel))?.ShortcutText ?? "No Shortcut Defined";
+            
+            return ($"Create Label ({hotKey}", "Create a shipping label for the selected order.");
+        }
     }
 }

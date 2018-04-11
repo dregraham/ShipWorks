@@ -113,12 +113,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             TrackShipmentCommand = new RelayCommand(TrackShipment);
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
 
-            ShortcutEntity createLabelShortcut =
-                shortcutManager.Shortcuts.FirstOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel);
-            
-            CreateLabelHotkey = createLabelShortcut != null ?
-                new KeyboardShortcutData(createLabelShortcut).ShortcutText :
-                "No Shortcut Defined";
+            (string Title, string Description) toolTipText = shortcutManager.GetCreateLabelToolTipText();
+            CreateLabelTooltipTitle = toolTipText.Title;
+            CreateLabelTooltipDescription = toolTipText.Description;
         }
 
         /// <summary>
@@ -150,10 +147,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public ICommand CopyTrackingNumberToClipboardCommand { get; }
         
         /// <summary>
-        /// Hotkey for creating labels. Used to display in create label button tooltip.
+        /// Title for Tooltip for creating labels
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string CreateLabelHotkey { get; }
+        public string CreateLabelTooltipTitle { get; }
+        
+        /// <summary>
+        /// Description for Tooltip for creating labels
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CreateLabelTooltipDescription { get; }
 
         /// <summary>
         /// Current shipment adapter

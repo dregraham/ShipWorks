@@ -35,11 +35,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </remarks>
         private void AddToolTip(object sender, EventArgs e)
         {
-            string hotkey = new KeyboardShortcutData(shortcutManager.Shortcuts.FirstOrDefault(s => 
-                                                     s.Action == KeyboardShortcutCommand.CreateLabel)).ShortcutText;
-
-            actualCreateLabelButton.ToolTip = new SuperToolTip($"Create Label ({hotkey})",
-                                                               "Create a shipping label for the selected order.",
+            (string Title, string Description) toolTipText = shortcutManager.GetCreateLabelToolTipText();
+            
+            actualCreateLabelButton.ToolTip = new SuperToolTip(toolTipText.Title,
+                                                               toolTipText.Description,
                                                                null, false);
         }
         

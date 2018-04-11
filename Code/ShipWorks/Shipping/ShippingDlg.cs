@@ -42,6 +42,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.Core.Common.Threading;
+using Syncfusion.Windows.Forms.Tools;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -275,9 +276,12 @@ namespace ShipWorks.Shipping
 
             // Start listening for keybaord shortcuts
             ListenForKeyboardShortcuts();
-                        
-            string hotkey = new KeyboardShortcutData(shortcutManager.Shortcuts.SingleOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel)).ShortcutText;
-            createLabelToolTip.GetToolTip(processDropDownButton).Header.Text = $"Create Labels ({hotkey})";
+
+            (string Title, string Description) toolTipText = shortcutManager.GetCreateLabelToolTipText();
+
+            ToolTipInfo toolTipInfo = createLabelToolTip.GetToolTip(processDropDownButton);
+            toolTipInfo.Header.Text = toolTipText.Title;
+            toolTipInfo.Body.Text = toolTipText.Description;
         }
 
         /// <summary>
