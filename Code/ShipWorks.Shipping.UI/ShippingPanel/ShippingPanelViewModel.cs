@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
 
             ShortcutEntity createLabelShortcut =
-                shortcutManager.Shortcuts.SingleOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel);
+                shortcutManager.Shortcuts.FirstOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel);
             
             CreateLabelHotkey = createLabelShortcut != null ?
                 new KeyboardShortcutData(createLabelShortcut).ShortcutText :
