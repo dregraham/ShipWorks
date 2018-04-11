@@ -52,8 +52,7 @@
                   AlternatingRowBackground="White"
                   Style="{StaticResource DataGrid.Static}"
                   GridLinesVisibility="None"
-                  swui:GridDoubleClickCommand.DataGridDoubleClickCommand ="{Binding EditCommand}">
-            
+                  swui:DoubleClickCommand.DoubleClickCommand="{Binding EditCommand}">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
