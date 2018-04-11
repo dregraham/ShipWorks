@@ -962,6 +962,8 @@
     <Compile Include="Stores\Orders\Archive\ArchiveConstants.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorViewModel.cs" />
     <Compile Include="Stores\Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
     <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
