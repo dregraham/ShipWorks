@@ -95,8 +95,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
         }
-
-
+        
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsApplyProfileAndProfileAppliedMessageIsNotSent()
         {
@@ -172,8 +171,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "LabelPrinted"));
         }
-
-
+        
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsCreateLabelAndProcessShipmentMessageIsNotSent()
         {
