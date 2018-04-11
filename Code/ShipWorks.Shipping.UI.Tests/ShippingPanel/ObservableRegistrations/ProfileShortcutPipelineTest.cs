@@ -141,6 +141,21 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
         }
+        
+        [Fact]
+        public void Register_DoesNotSendApplyProfileMessage_WhenShipmentIsProcessed()
+        {
+            ShortcutMessage message = new ShortcutMessage(this,
+                                                          new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                                                          ShortcutTriggerType.Barcode, "123");
+            viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456) {Processed = true});
+            mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+
+            testMessenger.Send(message);
+            scheduler.Start();
+
+            Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
+        }
 
         public void Dispose()
         {

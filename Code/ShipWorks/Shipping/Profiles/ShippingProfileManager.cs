@@ -66,9 +66,12 @@ namespace ShipWorks.Shipping.Profiles
                 {
                     synchronizer.EntityCollection.Sort((int) ShippingProfileFieldIndex.Name, ListSortDirection.Ascending);
 
-                    foreach (ShippingProfileEntity profile in modified.Concat(added))
+                    using (ISqlAdapter adapter = new SqlAdapter(false))
                     {
-                        LoadProfileData(profile, true);
+                        foreach (ShippingProfileEntity profile in modified.Concat(added))
+                        {
+                            LoadProfileData(profile, true, adapter);
+                        }
                     }
 
                     readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -276,24 +279,21 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
-        public static void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        public static void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent, ISqlAdapter sqlAdapter)
         {
-            using (ISqlAdapter sqlAdapter = new SqlAdapter(false))
+            // If this is the first time loading it, or we are supposed to refresh, do it now
+            if (!profile.IsNew && refreshIfPresent)
             {
-                // If this is the first time loading it, or we are supposed to refresh, do it now
-                if (!profile.IsNew && refreshIfPresent)
-                {
-                    LoadPackages(profile, sqlAdapter);
-                }
-
-                if (profile.Packages.None() &&
-                    (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentType.Value).SupportsMultiplePackages))
-                {
-                    profile.Packages.Add(new PackageProfileEntity());
-                }
-
-                LoadChildProfiles(profile, refreshIfPresent, sqlAdapter);
+                LoadPackages(profile, sqlAdapter);
             }
+
+            if (profile.Packages.None() &&
+                (profile.ShipmentType == null || !shipmentTypeManager.Get(profile.ShipmentType.Value).SupportsMultiplePackages))
+            {
+                profile.Packages.Add(new PackageProfileEntity());
+            }
+
+            LoadChildProfiles(profile, refreshIfPresent, sqlAdapter);
         }
 
         /// <summary>
