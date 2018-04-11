@@ -137,6 +137,7 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AttachedProperties\DoubleClick.cs" />
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
     <Compile Include="AttachedProperties\Focus.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
