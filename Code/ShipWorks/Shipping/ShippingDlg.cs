@@ -41,6 +41,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShipWorks.Core.Common.Threading;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -2245,7 +2246,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnProcessSelected(object sender, EventArgs e)
         {
-            ProcessSelectedShipments();
+            ProcessSelectedShipments().Forget();
         }
 
         /// <summary>
