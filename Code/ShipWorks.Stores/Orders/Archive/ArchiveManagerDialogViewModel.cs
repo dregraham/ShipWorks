@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private ISqlDatabaseDetail selectedArchive;
         private IEnumerable<ISqlDatabaseDetail> archives;
         private IArchiveManagerDialog dialog;
-        private TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
+        private readonly TaskCompletionSource<Unit> dialogCompletionTask = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Constructor

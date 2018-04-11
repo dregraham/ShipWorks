@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Data.Common;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -17,6 +15,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
     {
         private readonly AutoMock mock;
         private readonly ArchiveNotificationViewModel testObject;
+        private readonly ISqlDatabaseDetail liveDatabase;
 
         public ArchiveNotificationViewModelTest()
         {
@@ -24,21 +23,16 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             testObject = mock.Create<ArchiveNotificationViewModel>();
 
             var dbGuid = Guid.NewGuid();
-
-            var sqlSession = mock.Mock<ISqlSession>();
-            sqlSession.SetupGet(x => x.DatabaseIdentifier).Returns(dbGuid);
-            sqlSession.SetupGet(x => x.DatabaseName).Returns("Foo");
-
-            mock.Mock<IShipWorksDatabaseUtility>()
-                .Setup(x => x.GetDatabaseDetails(It.IsAny<DbConnection>()))
-                .ReturnsAsync(new[] {
-                    CreateDatabaseDetail(d =>
+            liveDatabase = CreateDatabaseDetail(d =>
                     {
                         d.SetupGet(x => x.Guid).Returns(dbGuid);
                         d.SetupGet(x => x.Name).Returns("Bar");
                         d.SetupGet(x => x.IsArchive).Returns(false);
-                    })
-                });
+                    });
+
+            mock.Mock<IArchiveManagerDataAccess>()
+                .Setup(x => x.GetLiveDatabase())
+                .ReturnsAsync(liveDatabase);
         }
 
         [Fact]
@@ -53,28 +47,18 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public void ConnectToLiveDatabase_DelegatesToDatabaseUtility_ToGetPossibleDatabases()
         {
-            var connection = mock.Mock<DbConnection>();
-            mock.Mock<ISqlSession>().Setup(x => x.OpenConnection()).Returns(connection);
-
             testObject.ConnectToLiveDatabase.Execute(null);
 
-            mock.Mock<IShipWorksDatabaseUtility>()
-                .Verify(x => x.GetDatabaseDetails(connection.Object));
+            mock.Mock<IArchiveManagerDataAccess>()
+                .Verify(x => x.GetLiveDatabase());
         }
 
         [Fact]
         public void ConnectToLiveDatabase_ShowsErrorMessage_WhenLiveDatabaseIsNotFound()
         {
-            mock.Mock<IShipWorksDatabaseUtility>()
-                .Setup(x => x.GetDatabaseDetails(It.IsAny<DbConnection>()))
-                .ReturnsAsync(new[] {
-                    CreateDatabaseDetail(d =>
-                    {
-                        d.SetupGet(x => x.Guid).Returns(Guid.NewGuid());
-                        d.SetupGet(x => x.Name).Returns("Bar");
-                        d.SetupGet(x => x.IsArchive).Returns(false);
-                    })
-                });
+            mock.Mock<IArchiveManagerDataAccess>()
+                .Setup(x => x.GetLiveDatabase())
+                .Returns(Task.FromException<ISqlDatabaseDetail>(new InvalidOperationException("Foo")));
 
             testObject.ConnectToLiveDatabase.Execute(null);
 
@@ -83,61 +67,12 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         }
 
         [Fact]
-        public void ConnectToLiveDatabase_CallsLogoff_WhenLiveDatabaseIsFound()
+        public void ConnectToLiveDatabase_CallsChangeDatabase_WhenLiveDatabaseIsFound()
         {
             testObject.ConnectToLiveDatabase.Execute(null);
 
-            mock.Mock<IUserLoginWorkflow>()
-                .Verify(x => x.Logoff(false));
-        }
-
-        [Fact]
-        public void ConnectToLiveDatabase_DoesNotSaveNewDatabase_WhenLogoffFails()
-        {
-            mock.Mock<IUserLoginWorkflow>()
-                .Setup(x => x.Logoff(AnyBool))
-                .Returns(false);
-
-            var copiedSession = mock.Mock<ISqlSession>();
-            mock.Mock<ISqlSession>()
-                .Setup(x => x.CreateCopy())
-                .Returns(copiedSession);
-
-            testObject.ConnectToLiveDatabase.Execute(null);
-
-            copiedSession.VerifySet(x => x.DatabaseName = AnyString, Times.Never);
-            copiedSession.Verify(x => x.SaveAsCurrent(), Times.Never);
-        }
-
-        [Fact]
-        public void ConnectToLiveDatabase_SavesNewDatabase_WhenLogoffSucceeds()
-        {
-            mock.Mock<IUserLoginWorkflow>()
-                .Setup(x => x.Logoff(AnyBool))
-                .Returns(true);
-
-            var copiedSession = mock.Mock<ISqlSession>();
-            mock.Mock<ISqlSession>()
-                .Setup(x => x.CreateCopy())
-                .Returns(copiedSession);
-
-            testObject.ConnectToLiveDatabase.Execute(null);
-
-            copiedSession.VerifySet(x => x.DatabaseName = "Bar");
-            copiedSession.Verify(x => x.SaveAsCurrent());
-        }
-
-        [Fact]
-        public void ConnectToLiveDatabase_CallsLogon_WhenLogoffSucceeds()
-        {
-            mock.Mock<IUserLoginWorkflow>()
-                .Setup(x => x.Logoff(AnyBool))
-                .Returns(true);
-
-            testObject.ConnectToLiveDatabase.Execute(null);
-
-            mock.Mock<IUserLoginWorkflow>()
-                .Verify(x => x.Logon(null));
+            mock.Mock<IArchiveManagerDataAccess>()
+                .Verify(x => x.ChangeDatabase(liveDatabase));
         }
 
         /// <summary>
