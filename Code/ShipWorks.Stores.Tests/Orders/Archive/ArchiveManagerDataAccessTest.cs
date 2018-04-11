@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Data.Common;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -108,12 +110,34 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Verify(x => x.Logon(null));
         }
 
+        [Fact]
+        public void GetLiveDatabase_CallsSelectSingleDatabase_WithFilteredListOfDatabases()
+        {
+            var databaseGuid = Guid.Parse("D1D2D159-5447-45EC-A70B-F5FCA08CB0A8");
+
+            var sqlSession = mock.Mock<ISqlSession>();
+            sqlSession.SetupGet(x => x.DatabaseIdentifier).Returns(databaseGuid);
+            sqlSession.SetupGet(x => x.DatabaseName).Returns("Foo");
+
+            var liveDatabase = CreateDatabaseDetail(detail => detail.SetupGet(x => x.Guid).Returns(databaseGuid));
+            var otherDatabase = CreateDatabaseDetail(detail => detail.SetupGet(x => x.Guid).Returns(Guid.NewGuid()));
+
+            mock.Mock<IShipWorksDatabaseUtility>()
+                .Setup(x => x.GetDatabaseDetails(It.IsAny<DbConnection>()))
+                .ReturnsAsync(new[] { liveDatabase, otherDatabase });
+
+            testObject.GetLiveDatabase();
+
+            mock.Mock<ISingleDatabaseSelectorViewModel>()
+                .Verify(x => x.SelectSingleDatabase(ItIs.Enumerable(liveDatabase)));
+        }
+
         /// <summary>
         /// Create a database detail entry
         /// </summary>
         private ISqlDatabaseDetail CreateDatabaseDetail(Action<Mock<ISqlDatabaseDetail>> configure)
         {
-            var detail = mock.Mock<ISqlDatabaseDetail>();
+            var detail = mock.CreateMock<ISqlDatabaseDetail>();
             detail.SetupGet(x => x.Status).Returns(SqlDatabaseStatus.ShipWorks);
             detail.SetupGet(x => x.Guid).Returns(Guid.NewGuid());
             detail.SetupGet(x => x.IsArchive).Returns(false);
