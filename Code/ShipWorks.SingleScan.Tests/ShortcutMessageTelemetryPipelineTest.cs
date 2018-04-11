@@ -162,7 +162,7 @@ namespace ShipWorks.SingleScan.Tests
             ShippingProfile profile = mock.Create<ShippingProfile>();
             profile.Shortcut = shortcut;
 
-            testMessenger.Send(new ProcessShipmentsMessage());
+            testMessenger.Send(new ProcessShipmentsMessage(this, new[] { new ShipmentEntity() }, new[] { new ShipmentEntity() }, null));
 
             scheduler.Start();
 
