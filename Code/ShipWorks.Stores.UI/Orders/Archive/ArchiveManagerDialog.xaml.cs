@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.UI.Orders.Archive
         /// <summary>
         /// Constructor
         /// </summary>
-        public ArchiveManagerDialog(IArchiveManagerViewModel viewModel)
+        public ArchiveManagerDialog(IArchiveManagerDialogViewModel viewModel)
         {
             InitializeComponent();
 

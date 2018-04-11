@@ -50,6 +50,7 @@
                       AlternatingRowBackground="White"
                       IsEnabled="{Binding LoadingArchives, Converter={ui:InverseBooleanConverter}}"
                       Style="{StaticResource DataGrid.Static}"
+                      SelectedItem="{Binding SelectedArchive}"
                       GridLinesVisibility="None">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -112,7 +113,10 @@
         <Grid Grid.Column="1" Margin="{StaticResource StandardPaddingLeft}">
             <StackPanel Grid.Column="1" MinWidth="120">
                 <Button Style="{StaticResource Button.Add}" 
-                            Command="{Binding ArchiveNow}">Archive Now</Button>
+                        Command="{Binding ArchiveNow}">Archive Now</Button>
+                <Button MinHeight="23"
+                        Margin="{StaticResource StandardPaddingTop}"
+                        Command="{Binding ConnectToArchive}">Connect to Archive</Button>
             </StackPanel>
 
             <Button Padding="4"
