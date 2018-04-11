@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             testObject.PrintBarcodesCommand.Execute(null);
 
-            mock.Mock<IPrintJobFactory>().Verify(p => p.CreateBarcodePrintJob(testObject.ShippingProfiles));
+            mock.Mock<IPrintJobFactory>().Verify(p => p.CreateBarcodePrintJob());
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profile = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             var printJob = mock.Mock<IPrintJob>();
-            mock.Mock<IPrintJobFactory>().Setup(f => f.CreateBarcodePrintJob(It.IsAny<IEnumerable<IShippingProfile>>())).Returns(printJob);
+            mock.Mock<IPrintJobFactory>().Setup(f => f.CreateBarcodePrintJob()).Returns(printJob);
             var form = new Form();
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>(new TypedParameter(typeof(IWin32Window), form));
