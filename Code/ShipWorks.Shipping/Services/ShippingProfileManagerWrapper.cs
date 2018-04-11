@@ -169,7 +169,10 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void LoadProfileData(ShippingProfileEntity shippingProfileEntity, bool refreshIfPresent)
         {
-            ShippingProfileManager.LoadProfileData(shippingProfileEntity, refreshIfPresent);
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                ShippingProfileManager.LoadProfileData(shippingProfileEntity, refreshIfPresent, adapter);
+            }
         }
     }
 }

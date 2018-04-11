@@ -2,16 +2,8 @@
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
@@ -26,18 +18,20 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     public class ShippingProfileManagerWrapperTest : IDisposable
     {
         private readonly DataContext context;
-        private readonly Mock<ISqlAdapterFactory> sqlAdapterFactory;
-        private readonly Mock<ISqlAdapter> sqlAdapter;
+        private Mock<ISqlAdapter> sqlAdapter;
         private readonly ShippingProfileManagerWrapper testObject;
 
         public ShippingProfileManagerWrapperTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
-            
+            Mock<ISqlAdapterFactory> sqlAdapterFactory = null;
 
-            sqlAdapter = context.Mock.Mock<ISqlAdapter>();
-            sqlAdapterFactory = context.Mock.Mock<ISqlAdapterFactory>();
-            sqlAdapterFactory.Setup(a => a.Create()).Returns(sqlAdapter);
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock => 
+            {
+                sqlAdapter = mock.Override<ISqlAdapter>();
+                sqlAdapterFactory = mock.Override<ISqlAdapterFactory>();
+            });
+
+            sqlAdapterFactory.Setup(s => s.Create()).Returns(sqlAdapter);
 
             testObject = context.Mock.Create<ShippingProfileManagerWrapper>();
         }
