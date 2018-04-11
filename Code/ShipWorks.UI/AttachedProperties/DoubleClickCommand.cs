@@ -14,40 +14,40 @@ namespace ShipWorks.UI.AttachedProperties
         /// <summary>
         /// Associate a command with a double click
         /// </summary>
-        public static readonly DependencyProperty DoubleClickProperty =
-            DependencyProperty.RegisterAttached("DoubleClickCommand", typeof(ICommand), typeof(DoubleClickCommand),
+        public static readonly DependencyProperty Command =
+            DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(DoubleClickCommand),
                 new PropertyMetadata(AttachOrRemoveDoubleClickEvent));
 
         /// <summary>
         /// Get the double click command
         /// </summary>
-        public static ICommand GetDoubleClickCommand(DependencyObject obj)
+        public static ICommand GetCommand(DependencyObject obj)
         {
-            return (ICommand) obj.GetValue(DoubleClickProperty);
+            return (ICommand) obj.GetValue(Command);
         }
 
         /// <summary>
         /// Set the double click command
         /// </summary>
-        public static void SetDoubleClickCommand(DependencyObject obj, ICommand value)
+        public static void SetCommand(DependencyObject obj, ICommand value)
         {
-            obj.SetValue(DoubleClickProperty, value);
+            obj.SetValue(Command, value);
         }
 
         /// <summary>
         /// Attach or Remove double click event
         /// </summary>
-        public static void AttachOrRemoveDoubleClickEvent(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        private static void AttachOrRemoveDoubleClickEvent(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             if (obj is Control control)
             {
                 if (args.OldValue == null && args.NewValue != null)
                 {
-                    control.MouseDoubleClick += ExecuteDoubleClick;
+                    control.MouseDoubleClick += ExecuteCommand;
                 }
                 else if (args.OldValue != null && args.NewValue == null)
                 {
-                    control.MouseDoubleClick -= ExecuteDoubleClick;
+                    control.MouseDoubleClick -= ExecuteCommand;
                 }
             }
         }
@@ -55,11 +55,11 @@ namespace ShipWorks.UI.AttachedProperties
         /// <summary>
         /// Run double click command
         /// </summary>
-        private static void ExecuteDoubleClick(object sender, MouseButtonEventArgs args)
+        private static void ExecuteCommand(object sender, MouseButtonEventArgs args)
         {
-            DependencyObject obj = sender as DependencyObject;
-            ICommand cmd = (ICommand) obj?.GetValue(DoubleClickProperty);
-            cmd?.Execute(obj);
+            ICommand command = GetCommand(sender as DependencyObject);
+            
+            command?.Execute(null);
         }
     }
 }
