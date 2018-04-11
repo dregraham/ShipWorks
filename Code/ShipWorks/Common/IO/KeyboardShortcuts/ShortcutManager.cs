@@ -167,6 +167,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             }
         }
         
+        /// <summary>
+        /// Get tooltip text for tooltip
+        /// </summary>
         public (string Title, string Description) GetCreateLabelToolTipText()
         {
             string hotKey = new KeyboardShortcutData(Shortcuts.FirstOrDefault(s =>
