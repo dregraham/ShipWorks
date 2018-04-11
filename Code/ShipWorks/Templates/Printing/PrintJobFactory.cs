@@ -49,20 +49,6 @@ namespace ShipWorks.Templates.Printing
         }
         
         /// <summary>
-        /// Create a barcode print job
-        /// </summary>
-        public IPrintJob CreateBarcodePrintJob(IEnumerable<IShippingProfile> shippingProfiles)
-        {
-            Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutDat = 
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-
-            shortcutDat.Add("ShipWorks Shortcuts", GetBuiltInShortcutData());
-            shortcutDat.Add("Shipping Profiles", GetProfileShortcutData(shippingProfiles));
-            
-            return CreateBarcodePrintJob(shortcutDat);
-        }
-
-        /// <summary>
         /// Get a list of profiles shortcut data
         /// </summary>
         private IEnumerable<(string Name, string Barcode, string KeyboardShortcut)> GetBuiltInShortcutData()

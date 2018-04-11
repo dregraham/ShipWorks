@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Print the barcodes
         /// </summary>
         private void PrintBarcodes() =>
-            printJobFactory.CreateBarcodePrintJob(ShippingProfiles).PreviewAsync((Form) owner);
+            printJobFactory.CreateBarcodePrintJob().PreviewAsync((Form) owner);
 
         /// <summary>
         /// Command to add a new profile
