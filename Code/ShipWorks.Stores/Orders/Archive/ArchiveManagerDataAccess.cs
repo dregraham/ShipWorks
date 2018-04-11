@@ -101,6 +101,6 @@ namespace ShipWorks.Stores.Orders.Archive
             Functional.UsingAsync(
                 sqlSession.OpenConnection(),
                 databaseUtility.GetDatabaseDetails)
-            .Do(databases => databases.Where(x => x.IsArchive && sqlSession.DatabaseIdentifier == x.Guid));
+            .Map(databases => databases.Where(x => x.IsArchive && sqlSession.DatabaseIdentifier == x.Guid));
     }
 }

@@ -28,7 +28,6 @@ namespace ShipWorks.Stores.Orders.Archive
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-
         /// <summary>
         /// Constructor
         /// </summary>

@@ -5,17 +5,21 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Orders.Archive
 {
     public class ArchiveManagerDataAccessTest : IDisposable
     {
         readonly AutoMock mock;
+        private readonly ArchiveManagerDataAccess testObject;
 
         public ArchiveManagerDataAccessTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<ArchiveManagerDataAccess>();
         }
 
         [Theory]
@@ -44,6 +48,64 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             var result = ArchiveManagerDataAccess.IsLiveDatabase(sqlSession.Object)(databaseItem);
 
             Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void ChangeDatabase_CallsLogoff_WhenLiveDatabaseIsFound()
+        {
+            testObject.ChangeDatabase(mock.Build<ISqlDatabaseDetail>());
+
+            mock.Mock<IUserLoginWorkflow>()
+                .Verify(x => x.Logoff(false));
+        }
+
+        [Fact]
+        public void ChangeDatabase_DoesNotSaveNewDatabase_WhenLogoffFails()
+        {
+            mock.Mock<IUserLoginWorkflow>()
+                .Setup(x => x.Logoff(AnyBool))
+                .Returns(false);
+
+            var copiedSession = mock.Mock<ISqlSession>();
+            mock.Mock<ISqlSession>()
+                .Setup(x => x.CreateCopy())
+                .Returns(copiedSession);
+
+            testObject.ChangeDatabase(mock.Build<ISqlDatabaseDetail>());
+
+            copiedSession.VerifySet(x => x.DatabaseName = AnyString, Times.Never);
+            copiedSession.Verify(x => x.SaveAsCurrent(), Times.Never);
+        }
+
+        [Fact]
+        public void ChangeDatabase_SavesNewDatabase_WhenLogoffSucceeds()
+        {
+            mock.Mock<IUserLoginWorkflow>()
+                .Setup(x => x.Logoff(AnyBool))
+                .Returns(true);
+
+            var copiedSession = mock.Mock<ISqlSession>();
+            mock.Mock<ISqlSession>()
+                .Setup(x => x.CreateCopy())
+                .Returns(copiedSession);
+
+            testObject.ChangeDatabase(CreateDatabaseDetail(detail => detail.SetupGet(x => x.Name).Returns("Bar")));
+
+            copiedSession.VerifySet(x => x.DatabaseName = "Bar");
+            copiedSession.Verify(x => x.SaveAsCurrent());
+        }
+
+        [Fact]
+        public void ChangeDatabase_CallsLogon_WhenLogoffSucceeds()
+        {
+            mock.Mock<IUserLoginWorkflow>()
+                .Setup(x => x.Logoff(AnyBool))
+                .Returns(true);
+
+            testObject.ChangeDatabase(mock.Build<ISqlDatabaseDetail>());
+
+            mock.Mock<IUserLoginWorkflow>()
+                .Verify(x => x.Logon(null));
         }
 
         /// <summary>
