@@ -2243,9 +2243,9 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process selected shipments
         /// </summary>
-        private async void OnProcessSelected(object sender, EventArgs e)
+        private void OnProcessSelected(object sender, EventArgs e)
         {
-            await ProcessSelectedShipments();
+            ProcessSelectedShipments();
         }
 
         /// <summary>
