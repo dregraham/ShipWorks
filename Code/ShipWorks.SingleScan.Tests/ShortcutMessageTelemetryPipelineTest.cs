@@ -151,7 +151,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             testObject.InitializeForCurrentSession();
 
-            ShortcutEntity shortcut = new ShortcutEntity()
+            ShortcutEntity shortcut = new ShortcutEntity
             {
                 Action = KeyboardShortcutCommand.CreateLabel
             };

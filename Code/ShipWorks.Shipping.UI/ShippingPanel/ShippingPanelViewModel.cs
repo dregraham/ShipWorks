@@ -112,7 +112,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             CreateLabelCommand = new RelayCommand(CreateLabel);
             TrackShipmentCommand = new RelayCommand(TrackShipment);
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
-            CreateLabelHotkey = new KeyboardShortcutData(shortcutManager.Shortcuts.SingleOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel)).ShortcutText;
+
+            ShortcutEntity createLabelShortcut =
+                shortcutManager.Shortcuts.SingleOrDefault(s => s.Action == KeyboardShortcutCommand.CreateLabel);
+            
+            CreateLabelHotkey = createLabelShortcut != null ?
+                new KeyboardShortcutData(createLabelShortcut).ShortcutText :
+                "No Shortcut Defined";
         }
 
         /// <summary>
