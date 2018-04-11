@@ -9,13 +9,13 @@ namespace ShipWorks.UI.AttachedProperties
     /// Attached property to issue a command when the control is double clicked
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public static class DoubleClickCommand
+    public static class DoubleClick
     {
         /// <summary>
         /// Associate a command with a double click
         /// </summary>
         public static readonly DependencyProperty Command =
-            DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(DoubleClickCommand),
+            DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(DoubleClick),
                 new PropertyMetadata(AttachOrRemoveDoubleClickEvent));
 
         /// <summary>
