@@ -2136,10 +2136,12 @@
     <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Printing\BarcodePage.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJob.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
     <Compile Include="Templates\Printing\IPrintJob.cs" />
     <Compile Include="Templates\Printing\IPrintJobFactory.cs" />
+    <Compile Include="Templates\Printing\PrintableBarcode.cs" />
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Printing\PrintJobFactory.cs" />

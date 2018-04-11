@@ -31,27 +31,23 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void Ctor_DelegatesToPrintJobFactoryForPrintJob()
         {
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData = 
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", new[] { (Name: "shortcut name", Barcode: "shortcut barcode", KeyboardShortcut: "shortcut keyboard") });
+            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "shortcut barcode", "shortcut keyboard") });
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>), shortcutData));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new[] { page }));
 
-            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:Free 3 of 9 Extended;font-size:36pt;}</style></head><body><H1>Some Test Data</H1>\r\n<table><tr><td> shortcut name </td></tr><tr><td class='barcode'>*SHORTCUT BARCODE*</td></tr><tr><td>shortcut keyboard</td></tr></table>\r\n</body></html>")));
+            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:'Free 3 of 9 Extended';font-size:36pt;} </style></head><body><h1>Some Test Data</h1><br/>\r\n<div>\r\n<b>shortcut name</b><br/>\r\n<span class='barcode'>*shortcut barcode*</span><br/>\r\nshortcut keyboard\r\n</div>\r\n\r\n<br/>\r\n</body></html>")));
         }
 
         [Fact]
         public void PreviewAsync_DelegatesToInternalPrintJobPreviewAsync()
         {
-            var profile = mock.Mock<IShippingProfile>();
-            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();
             var form = new Form();
 
             printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new List<BarcodePage>()));
 
             testObject.PreviewAsync(form);
 
@@ -61,14 +57,12 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_DelegatesToInternalPrintJobPrintAsync()
         {
-            var profile = mock.Mock<IShippingProfile>();
-            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();
 
             printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new List<BarcodePage>()));
 
             testObject.PrintAsync();
 
@@ -76,24 +70,13 @@ namespace ShipWorks.Tests.Templates.Printing
         }
 
         [Fact]
-        public void Ctor_SkipsProfilesThatDoNotHaveBarcodesOrShortcuts()
-        {
-            var profile = mock.Mock<IShippingProfile>();
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
-
-            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:Free 3 of 9 Extended;font-size:36pt;}</style></head><body></body></html>")));
-        }
-
-        [Fact]
         public void PrintAsync_SendsTelemetryEvent_WhenNotCancelled()
         {
             var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
 
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", new[] { (Name: "shortcut name", Barcode: "shortcut barcode", KeyboardShortcut: "abcd") });
+            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "shortcut barcode", "abcd") });
 
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
             trackedEventFunc.Verify(f => f("Shortcuts.Print"), Times.Once);
         }
@@ -103,11 +86,9 @@ namespace ShipWorks.Tests.Templates.Printing
         {
             var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
 
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", new[] { (Name: "shortcut name", Barcode: "shortcut barcode", KeyboardShortcut: "abcd") });
+            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "shortcut barcode", "abcd") });
 
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, null, true, null));
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, true, null));
 
             trackedEventFunc.Verify(f => f(AnyString), Times.Never);
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty(AnyString, AnyString), Times.Never);
@@ -116,11 +97,9 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_SendsCorrectBarcodeCount()
         {
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", Enumerable.Repeat((Name: "shortcut name", Barcode: "", KeyboardShortcut: "abcd"), 25));
-            
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+            BarcodePage page = new BarcodePage("Some Test Data", Enumerable.Repeat(new PrintableBarcode("shortcut name", "", "abcd"), 25));
+
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
@@ -129,11 +108,9 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_SendsCorrectHotkeyCount()
         {
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", Enumerable.Repeat((Name: "shortcut name", Barcode: "", KeyboardShortcut: "abcd"), 25));
-            
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+            BarcodePage page = new BarcodePage("Some Test Data", Enumerable.Repeat(new PrintableBarcode("shortcut name", "", "abcd"), 25));
+
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
@@ -142,11 +119,9 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_SendsTelemetrySuccessEvent_WhenSuccesfull()
         {
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-            shortcutData.Add("Some Test Data", new[] { (Name: "shortcut name", Barcode: "", KeyboardShortcut: "abcd") });
+            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "", "abcd") });
 
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
 
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Success"), Times.Once);
         }
@@ -154,12 +129,9 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_SendsTelemetryFailedEvent_WhenUnsuccessfull()
         {
-            IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
+            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "", "abcd") });
 
-            shortcutData.Add("Some Test Data", new[] { (Name: "shortcut name", Barcode: "", KeyboardShortcut: "abcd") });
-
-            TestTelemetry(shortcutData, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
+            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
 
             mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Failed"), Times.Once);
         }
@@ -167,10 +139,6 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_PrintCompletedIsInvoked()
         {
-            var profile = mock.Mock<IShippingProfile>();
-            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-            profile.SetupGet(s => s.KeyboardShortcut).Returns(new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null));
-
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();
             printJob.Setup(p => p.PrintAsync())
@@ -178,7 +146,7 @@ namespace ShipWorks.Tests.Templates.Printing
 
             printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new List<BarcodePage>()));
 
             var eventWasDispatched = false;
             testObject.PrintCompleted += (sender, args) => eventWasDispatched = true;
@@ -191,9 +159,6 @@ namespace ShipWorks.Tests.Templates.Printing
         [Fact]
         public void PrintAsync_PreviewCompletedIsInvoked()
         {
-            var profile = mock.Mock<IShippingProfile>();
-            profile.SetupGet(s => s.ShortcutKey).Returns("abcd");
-
             var printJobFactory = mock.Mock<IPrintJobFactory>();
             var printJob = mock.Mock<IPrintJob>();
             printJob.Setup(p => p.PreviewAsync(It.IsAny<Form>()))
@@ -201,7 +166,7 @@ namespace ShipWorks.Tests.Templates.Printing
 
             printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<IShippingProfile>), new[] { profile.Object }));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new List<BarcodePage>()));
 
             var eventWasDispatched = false;
             testObject.PreviewCompleted += (sender, args) => eventWasDispatched = true;
@@ -211,7 +176,7 @@ namespace ShipWorks.Tests.Templates.Printing
             Assert.True(eventWasDispatched);
         }
 
-        private void TestTelemetry(IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData,
+        private void TestTelemetry(IEnumerable<BarcodePage> barcodePages,
             PrintActionCompletedEventArgs printActionCompletedEventArgs)
         {
             var printJobFactory = mock.Mock<IPrintJobFactory>();
@@ -221,7 +186,7 @@ namespace ShipWorks.Tests.Templates.Printing
 
             printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
 
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>), shortcutData));
+            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), barcodePages));
 
             testObject.PrintAsync();
         }
