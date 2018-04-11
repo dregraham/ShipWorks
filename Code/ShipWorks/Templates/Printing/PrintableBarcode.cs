@@ -43,7 +43,6 @@ namespace ShipWorks.Templates.Printing
             }
 
             StringBuilder builder = new StringBuilder();
-
             builder.AppendLine("<div>");
 
             if (!string.IsNullOrWhiteSpace(Name))
@@ -62,8 +61,6 @@ namespace ShipWorks.Templates.Printing
             }
 
             builder.AppendLine("</div>");
-            
-
             return builder.ToString();
         }
     }

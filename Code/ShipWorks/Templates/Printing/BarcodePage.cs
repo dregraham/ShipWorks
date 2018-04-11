@@ -29,7 +29,6 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Get the pages html content
         /// </summary>
-        /// <returns></returns>
         public TemplateResult GetTemplateResult()
         {
             StringBuilder htmlBuilder = new StringBuilder();
@@ -45,7 +44,7 @@ namespace ShipWorks.Templates.Printing
                 }
             }
 
-            if (htmlBuilder.Length > 0)
+            if (htmlBuilder.Length > 0 && !string.IsNullOrWhiteSpace(title))
             {
                 htmlBuilder.Insert(0, $"<h1>{title}</h1>");
             }
