@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Perform the archive
         /// </summary>
-        private async Task ArchiveNowAction()
+        public async Task ArchiveNowAction()
         {
             working = true;
             dialog.Close();

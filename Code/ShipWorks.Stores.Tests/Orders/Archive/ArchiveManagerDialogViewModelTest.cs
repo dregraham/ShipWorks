@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
@@ -64,14 +65,14 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         }
 
         [Fact]
-        public void ArchiveNow_ReopensDialog()
+        public async Task ArchiveNow_ReopensDialog()
         {
-            testObject.ShowManager();
+            testObject.ShowManager().Forget();
 
             mock.Mock<IAsyncMessageHelper>()
                 .ResetCalls();
 
-            testObject.ArchiveNow.Execute(null);
+            await testObject.ArchiveNowAction();
 
             mock.Mock<IAsyncMessageHelper>()
                 .Verify(x => x.ShowDialog(It.IsAny<Func<IDialog>>()));
