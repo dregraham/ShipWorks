@@ -413,8 +413,8 @@
                             <Button.ToolTip>
                                 <ToolTip Background="White">
                                     <StackPanel>
-                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelHotkeyTitle}"/>
-                                        <TextBlock Text="{Binding CreateLabelHotkeyDescription}"/>
+                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelTooltipTitle}"/>
+                                        <TextBlock Text="{Binding CreateLabelTooltipDescription}"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
