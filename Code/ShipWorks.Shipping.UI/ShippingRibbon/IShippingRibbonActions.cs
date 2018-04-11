@@ -1,4 +1,4 @@
-﻿using ShipWorks.Core.UI.SandRibbon;
+﻿using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {

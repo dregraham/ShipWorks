@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Divelements.SandRibbon;
@@ -9,11 +8,9 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.Core.UI.SandRibbon;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.UI.Controls.SandRibbon;
 using TD.SandDock;
 using Menu = Divelements.SandRibbon.Menu;
 using MenuItem = Divelements.SandRibbon.MenuItem;
@@ -29,7 +26,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private readonly IShippingRibbonService shippingRibbonService;
         private readonly IShippingProfileService profileService;
         private readonly IShortcutManager shortcutManager;
-        private RibbonButton createLabelButton;
+        private CreateLabelButtonWrapper createLabelButton;
+        private RibbonButton actualCreateLabelButton;
         private RibbonButton voidButton;
         private RibbonButton returnButton;
         private RibbonButton reprintButton;
@@ -113,7 +111,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             };
 
             applyProfileButton = new ApplyProfileButtonWrapper(actualApplyProfileButton);
-
+            
             manageProfilesButton = new RibbonButton
             {
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
@@ -140,7 +138,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 FurtherOptions = false,
                 ItemJustification = ItemJustification.Stretch,
-                Items = { createLabelButton, voidButton, returnButton, stripLayoutReprint },
+                Items = { actualCreateLabelButton, voidButton, returnButton, stripLayoutReprint },
                 Text = "Shipping",
             };
 
@@ -157,7 +155,11 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             };
 
             ribbon.Controls.Add(ribbonTabShipping);
-
+            
+            // This needs to be done after the button is added to the ribbon because it needs to hook in to the 
+            // host controls loaded event.
+            createLabelButton = new CreateLabelButtonWrapper(actualCreateLabelButton, shortcutManager);
+            
             ribbon.ResumeLayout();
 
             shippingRibbonService.Register(this);
@@ -168,7 +170,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void RegisterCreateLabelButton()
         {
-            createLabelButton = new RibbonButton
+            actualCreateLabelButton = new RibbonButton
             {
                 Guid = new Guid("ec40e12c-fa12-4b2b-8b81-0fed6863162e"),
                 Image = Properties.Resources.box_next_32_32,
@@ -176,8 +178,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Create\r\nLabel",
                 TextContentRelation = TextContentRelation.Underneath
             };
-                createLabelButton.ToolTip = new SuperToolTip("Create Label (F10)",
-                    "Create a shipping label for the selected order.", null, false);
+            
+            actualCreateLabelButton.Activate += (s, evt) => createLabelButton.CreateLabel();
         }
 
         /// <summary>

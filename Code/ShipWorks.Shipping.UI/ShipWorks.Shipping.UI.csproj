@@ -388,6 +388,7 @@
     <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.Properties.cs" />
     <Compile Include="ShippingRibbon\ApplyProfileButtonWrapper.cs" />
+    <Compile Include="ShippingRibbon\CreateLabelButtonWrapper.cs" />
     <Compile Include="ShippingRibbon\IShippingRibbonActions.cs" />
     <Compile Include="ShippingRibbon\IShippingRibbonService.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonRegistration.cs" />

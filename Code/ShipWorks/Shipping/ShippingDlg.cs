@@ -41,7 +41,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
