@@ -39,13 +39,15 @@ namespace ShipWorks.Templates.Printing
         /// </summary>
         public IPrintJob CreateBarcodePrintJob()
         {
-            Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutDat =
-                new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
-
-            shortcutDat.Add("ShipWorks Shortcuts", GetBuiltInShortcutData());
-            shortcutDat.Add("Shipping Profiles", GetProfileShortcutData(shippingProfileService.GetConfiguredShipmentTypeProfiles()));
+            var barcodeData = new Dictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>>();
             
-            return CreateBarcodePrintJob(shortcutDat);
+            IEnumerable<(string Name, string Barcode, string KeyboardShortcut)> shippingProfileBarcodeData = shippingProfileService.GetConfiguredShipmentTypeProfiles()
+                .Select(profile => (profile.ShippingProfileEntity.Name, profile.Barcode, profile.ShortcutKey));
+
+            barcodeData.Add("Shipping Profiles", shippingProfileBarcodeData);
+            barcodeData.Add("ShipWorks Shortcuts", GetBuiltInShortcutData());
+
+            return new BarcodePrintJob(this, barcodeData, telemetryEventFunc);
         }
         
         /// <summary>
@@ -53,38 +55,17 @@ namespace ShipWorks.Templates.Printing
         /// </summary>
         private IEnumerable<(string Name, string Barcode, string KeyboardShortcut)> GetBuiltInShortcutData()
         {
-            List<(string Name, string Barcode, string KeyboardShortcut)> profileShortcutData = new List<(string Name, string Barcode, string KeyboardShortcut)>();
+            var barcodeData = new List<(string Name, string Barcode, string KeyboardShortcut)>();
 
             shortcutManager.Shortcuts.Where(s => s.Action == KeyboardShortcutCommand.CreateLabel)
-                .ForEach(s => profileShortcutData.Add(("Create Label", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
+                .ForEach(s => barcodeData.Add(("Create Label", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
 
             shortcutManager.Shortcuts.Where(s => s.Action == KeyboardShortcutCommand.ApplyWeight)
-                .ForEach(s => profileShortcutData.Add(("Apply Weight", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
+                .ForEach(s => barcodeData.Add(("Apply Weight", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
 
-            return profileShortcutData;
+            return barcodeData;
         }
         
-        /// <summary>
-        /// Get a list of profiles shortcut data
-        /// </summary>
-        private IEnumerable<(string Name, string Barcode, string KeyboardShortcut)> GetProfileShortcutData(IEnumerable<IShippingProfile> shippingProfiles)
-        {
-            List<(string Name, string Barcode, string KeyboardShortcut)> profileShortcutData = new List<(string Name, string Barcode, string KeyboardShortcut)>();
-
-            foreach (IShippingProfile profile in shippingProfiles)
-            {
-                profileShortcutData.Add((profile.ShippingProfileEntity.Name, profile.Barcode, profile.ShortcutKey));
-            }
-
-            return profileShortcutData;
-        }
-
-        /// <summary>
-        /// create a barcode print job using the dictionary 
-        /// </summary>
-        private IPrintJob CreateBarcodePrintJob(IDictionary<string, IEnumerable<(string Name, string Barcode, string KeyboardShortcut)>> shortcutData) =>
-            new BarcodePrintJob(this, shortcutData, telemetryEventFunc);
-
         /// <summary>
         /// Crate a print job with the given template result
         /// </summary>
