@@ -3,6 +3,9 @@ using ShipWorks.Data.Administration;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
+    /// <summary>
+    /// View model to select a single database
+    /// </summary>
     public interface ISingleDatabaseSelectorViewModel
     {
         /// <summary>

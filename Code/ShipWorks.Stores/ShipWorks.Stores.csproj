@@ -185,6 +185,7 @@
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
+    <Compile Include="Orders\Archive\SingleDatabaseSelectorViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
     <Compile Include="Orders\Combine\Actions\IStoreSpecificCombineOrderAction.cs" />
     <Compile Include="Orders\Split\Actions\IStoreSpecificSplitOrderAction.cs" />
