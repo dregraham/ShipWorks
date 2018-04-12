@@ -143,6 +143,8 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Orders\Archive\DesignModeSingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Orders\Archive\SchemaVersionStatusConverter.cs" />
     <Compile Include="Orders\Archive\SingleDatabaseSelectorDialog.xaml.cs">
       <DependentUpon>SingleDatabaseSelectorDialog.xaml</DependentUpon>
     </Compile>

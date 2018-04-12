@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Orders.Archive
     {
         private readonly Func<ISqlSession> getSqlSession;
         private readonly IShipWorksDatabaseUtility databaseUtility;
-        private readonly ISingleDatabaseSelectorViewModel singleDatabaseSelector;
+        private readonly Func<ISingleDatabaseSelectorViewModel> singleDatabaseSelector;
         private readonly IUserLoginWorkflow loginWorkflow;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Orders.Archive
         public ArchiveManagerDataAccess(
             Func<ISqlSession> getSqlSession,
             IShipWorksDatabaseUtility databaseUtility,
-            ISingleDatabaseSelectorViewModel singleDatabaseSelector,
+            Func<ISingleDatabaseSelectorViewModel> singleDatabaseSelector,
             IUserLoginWorkflow loginWorkflow)
         {
             this.loginWorkflow = loginWorkflow;
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 con => databaseUtility
                     .GetDatabaseDetails(con)
                     .Map(x => x.Where(IsLiveDatabase(sqlSession)))
-                    .Map(singleDatabaseSelector.SelectSingleDatabase)
+                    .Map(singleDatabaseSelector().SelectSingleDatabase)
                     .Bind(EnsureDatabaseExists));
 
         /// <summary>

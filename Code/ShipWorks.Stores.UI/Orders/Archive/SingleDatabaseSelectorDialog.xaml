@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Archive"
         xmlns:ui="http://schemas.shipworks.com/ui"
-        d:DataContext="{d:DesignInstance local:DesignModeArchiveManagerViewModel, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance local:DesignModeSingleDatabaseSelectorViewModel, IsDesignTimeCreatable=True}"
         
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow"
@@ -32,26 +32,33 @@
             <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
             <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:StringToVisibilityConverter x:Key="StringToVisibility"/>
+            <local:SchemaVersionStatusConverter x:Key="SchemaVersionStatus" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="{StaticResource StandardPaddingFull}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Column="0" 
-                AutoGenerateColumns="False"            
-                ItemsSource="{Binding Databases, Mode=OneWay}"                  
-                SelectionUnit="FullRow"                  
-                CanUserResizeColumns="True"
-                CanUserSortColumns="True"
-                AlternatingRowBackground="White"
-                Style="{StaticResource DataGrid.Static}"
-                SelectedItem="{Binding SelectedDatabase}"
+        <TextBlock Margin="{StaticResource StandardPaddingBottom}">
+            ShipWorks found multiple databases that may be the live database for this archive.
+        </TextBlock>
+        
+        <DataGrid Grid.Row="1" 
+                  AutoGenerateColumns="False"            
+                  ItemsSource="{Binding Databases, Mode=OneWay}"                  
+                  SelectionUnit="FullRow"                  
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  AlternatingRowBackground="White"
+                  Style="{StaticResource DataGrid.Static}"
+                  SelectedItem="{Binding SelectedDatabase}"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto"
-                GridLinesVisibility="None">
+                  GridLinesVisibility="None">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
@@ -64,29 +71,34 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" 
-                                    Width="*" 
+                                    Width="Auto" 
                                     Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="1,2" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Status" 
-                                    Width="*" 
-                                    Binding="{Binding Status}">
+                                    Width="Auto" 
+                                    Binding="{Binding SchemaVersion, Converter={StaticResource SchemaVersionStatus}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="1,2" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTemplateColumn Header="Last Activity" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                            <TextBlock TextTrimming="CharacterEllipsis" 
+                                       VerticalAlignment="Center" 
+                                       Visibility="{Binding LastUsedBy, Converter={StaticResource StringToVisibility}}"
+                                       Margin="1,2">
                                 <Run Text="{Binding LastUsedBy, Mode=OneTime}" />, 
                                 on 
                                 <Run Text="{Binding LastUsedOn, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
@@ -97,7 +109,10 @@
                 <DataGridTemplateColumn Header="Latest Order" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                            <TextBlock TextTrimming="CharacterEllipsis" 
+                                       VerticalAlignment="Center" 
+                                       Visibility="{Binding LastUsedBy, Converter={StaticResource StringToVisibility}}"
+                                       Margin="1,2">
                                 <Run Text="{Binding LastOrderNumber, Mode=OneTime}" />, 
                                 on 
                                 <Run Text="{Binding LastOrderDate, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
@@ -107,7 +122,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                         Margin="{StaticResource StandardPaddingTop}"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
