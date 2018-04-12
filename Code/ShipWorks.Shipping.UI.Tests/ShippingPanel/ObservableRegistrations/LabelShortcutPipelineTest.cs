@@ -56,12 +56,30 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
             Assert.Equal(1, testMessenger.SentMessages.OfType<CreateLabelMessage>()
                 .Count(m => m.ShipmentID == 456 && m.Sender == testObject));
+        }
+        
+        
+        [Fact]
+        public void Register_DoesNotSendMessage_WhenShippingPanelIsClosed()
+        {
+            ShortcutMessage message = new ShortcutMessage(this,
+                new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
+                ShortcutTriggerType.Barcode, "-PL-");
+            viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
+            mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(false);
+
+            testMessenger.Send(message);
+            scheduler.Start();
+
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
         }
         
         [Fact]
@@ -72,6 +90,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
@@ -87,6 +106,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
@@ -104,6 +124,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.SetupGet(v => v.Shipment).Returns((ShipmentEntity) null);
 
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
@@ -120,6 +141,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(true);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
@@ -136,6 +158,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456) {Processed = true});
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
