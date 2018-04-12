@@ -143,6 +143,9 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Orders\Archive\SingleDatabaseSelectorDialog.xaml.cs">
+      <DependentUpon>SingleDatabaseSelectorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Orders\Archive\ArchiveManagerDialog.xaml.cs">
       <DependentUpon>ArchiveManagerDialog.xaml</DependentUpon>
     </Compile>
@@ -741,6 +744,10 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Orders\Archive\SingleDatabaseSelectorDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Orders\Archive\ArchiveManagerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
