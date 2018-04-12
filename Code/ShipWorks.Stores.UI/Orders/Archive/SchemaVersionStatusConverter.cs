@@ -19,11 +19,11 @@ namespace ShipWorks.Stores.UI.Orders.Archive
             {
                 var requiredSchemaVersion = SqlSchemaUpdater.GetRequiredSchemaVersion();
 
-                if (schemaVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                if (schemaVersion > requiredSchemaVersion)
                 {
                     return "Newer";
                 }
-                else if (schemaVersion < SqlSchemaUpdater.GetRequiredSchemaVersion())
+                else if (schemaVersion < requiredSchemaVersion)
                 {
                     return "Out of Date";
                 }
