@@ -577,10 +577,10 @@ namespace ShipWorks.Data.Administration
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridDatabases.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
                 this.gridDatabaseIcon,
-            this.gridColumnName,
-            this.gridColumnStatus,
-            this.gridColumnStoreType,
-            this.gridColumnLatestOrder});
+                this.gridColumnName,
+                this.gridColumnStatus,
+                this.gridColumnStoreType,
+                this.gridColumnLatestOrder});
             this.gridDatabases.CommitOnLoseFocus = true;
             this.gridDatabases.EmptyTextForeColor = System.Drawing.SystemColors.GrayText;
             this.gridDatabases.EnableSearching = false;
@@ -592,6 +592,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabases.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabases.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell(""),
                         new Divelements.SandGrid.GridCell("ShipWorks"),
                         new Divelements.SandGrid.GridCell("Ready"),
                         new Divelements.SandGrid.GridCell("Brian, on 07/13/11"),

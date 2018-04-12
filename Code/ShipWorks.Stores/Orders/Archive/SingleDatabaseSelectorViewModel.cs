@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 return databaseDetails.FirstOrDefault();
             }
 
-            Databases = databaseDetails;
+            Databases = databaseDetails.OrderBy(x => x.Name);
 
             dialog = createDialog();
             dialog.DataContext = this;

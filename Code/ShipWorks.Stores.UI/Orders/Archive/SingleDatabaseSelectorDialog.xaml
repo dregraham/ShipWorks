@@ -41,15 +41,17 @@
         </Grid.RowDefinitions>
 
         <DataGrid Grid.Column="0" 
-                      AutoGenerateColumns="False"            
-                      ItemsSource="{Binding Databases, Mode=OneWay}"                  
-                      SelectionUnit="FullRow"                  
-                      CanUserResizeColumns="True"
-                      CanUserSortColumns="True"
-                      AlternatingRowBackground="White"
-                      Style="{StaticResource DataGrid.Static}"
-                      SelectedItem="{Binding SelectedDatabase}"
-                      GridLinesVisibility="None">
+                AutoGenerateColumns="False"            
+                ItemsSource="{Binding Databases, Mode=OneWay}"                  
+                SelectionUnit="FullRow"                  
+                CanUserResizeColumns="True"
+                CanUserSortColumns="True"
+                AlternatingRowBackground="White"
+                Style="{StaticResource DataGrid.Static}"
+                SelectedItem="{Binding SelectedDatabase}"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto"
+                GridLinesVisibility="None">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
@@ -61,9 +63,9 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Database Name" 
-                                        Width="*" 
-                                        Binding="{Binding OldestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
+                <DataGridTextColumn Header="Name" 
+                                    Width="*" 
+                                    Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -72,18 +74,8 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Status" 
-                                        Width="*" 
-                                        Binding="{Binding NewestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Last User" 
                                     Width="*" 
-                                    Binding="{Binding NewestOrderDate, StringFormat={}{0:MMMM dd, yyyy}}">
+                                    Binding="{Binding Status}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -91,29 +83,45 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Last Order" Width="80" Binding="{Binding OrderCount, StringFormat={}{0:#,##0}}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Last Activity" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                                <Run Text="{Binding LastUsedBy, Mode=OneTime}" />, 
+                                on 
+                                <Run Text="{Binding LastUsedOn, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Latest Order" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                                <Run Text="{Binding LastOrderNumber, Mode=OneTime}" />, 
+                                on 
+                                <Run Text="{Binding LastOrderDate, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-            <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="1"
                         Margin="{StaticResource StandardPaddingTop}"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-            <Button MinHeight="23"
+            <Button Style="{StaticResource Button.Link}"
+                        Foreground="{StaticResource Blue}"
+                        VerticalAlignment="Center"
                     Command="{Binding Cancel}"
                     Margin="{StaticResource StandardPaddingRight}"
                     Padding="{StaticResource StandardPaddingLeftAndRight}"
                     IsCancel="True">Cancel</Button>
             <Button MinHeight="23"
-                        Command="{Binding Accept}"
+                    IsDefault="True"
+                    Command="{Binding Accept}"
                     Padding="{StaticResource StandardPaddingLeftAndRight}">Select</Button>
-            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
