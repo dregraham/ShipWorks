@@ -42,6 +42,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             viewModel = mock.CreateMock<ShippingPanelViewModel>();
             mainForm = mock.Mock<IMainForm>();
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testObject = mock.Create<ProfileShortcutPipeline>();
             testObject.Register(viewModel.Object);
