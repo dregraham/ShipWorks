@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         {
             ShortcutMessage message = new ShortcutMessage(this,
                 new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
-                ShortcutTriggerType.Barcode, "$PL$");
+                ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         {
             ShortcutMessage message = new ShortcutMessage(this,
                 new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
-                ShortcutTriggerType.Barcode, "$PL$");
+                ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
 
