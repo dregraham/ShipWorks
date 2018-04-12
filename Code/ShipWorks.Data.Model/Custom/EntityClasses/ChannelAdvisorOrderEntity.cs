@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Amazon;
@@ -19,7 +18,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// The Amazon Order ID from Amazon
         /// </summary>
-        bool IAmazonOrder.IsPrime => IsPrime == (int) AmazonIsPrime.Yes;
+        bool IAmazonOrder.IsPrime
+        {
+            get { return IsPrime == (int)AmazonIsPrime.Yes; }
+        }
 
         /// <summary>
         /// List of IAmazonOrderItem representing the Amazon order items
@@ -32,12 +34,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Should the order be treated as same day
         /// </summary>
-        public bool IsSameDay()
-        {
-            return IsPrime == (int) AmazonIsPrime.Yes &&
-                   RequestedShipping != null &&
-                   (RequestedShipping.EndsWith("sameday", StringComparison.OrdinalIgnoreCase) ||
-                    RequestedShipping.EndsWith("same day", StringComparison.OrdinalIgnoreCase));
-        }
+        public bool IsSameDay() => false;
     }
 }
