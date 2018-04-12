@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -170,5 +172,15 @@ namespace ShipWorks.Data
                 return false;
             }
         }
+
+        /// <summary>
+        /// Get telemetry data for configuration
+        /// </summary>
+        internal static IEnumerable<KeyValuePair<string, string>> GetTelemetryData() =>
+            new[]
+            {
+                Functional.Using(SqlSession.Current.OpenConnection(),
+                connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString()))
+            };
     }
 }
