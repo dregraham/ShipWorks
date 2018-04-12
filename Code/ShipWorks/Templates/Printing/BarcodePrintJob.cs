@@ -70,7 +70,7 @@ namespace ShipWorks.Templates.Printing
         /// Create a list of template results to display 
         /// </summary>
         private IList<TemplateResult> CreateTemplateResults() =>
-            barcodePages.Select(p => p.GetTemplateResult()).ToList();
+            barcodePages.Where(p => p.Barcodes.Any()).Select(p => p.GetTemplateResult()).ToList();
 
         /// <summary>
         /// Print the barcodes

@@ -40,7 +40,8 @@ namespace ShipWorks.Templates.Printing
         public IPrintJob CreateBarcodePrintJob()
         {
             IEnumerable<PrintableBarcode> shippingProfileBarcodeData = shippingProfileService.GetConfiguredShipmentTypeProfiles()
-                .Select(profile => new PrintableBarcode(profile.ShippingProfileEntity.Name, profile.Barcode, profile.ShortcutKey));
+                .Where(p => !string.IsNullOrWhiteSpace(p.Barcode) || !string.IsNullOrWhiteSpace(p.ShortcutKey))
+                .Select(p => new PrintableBarcode(p.ShippingProfileEntity.Name, p.Barcode, p.ShortcutKey));
 
             BarcodePage profileBarcodePage = new BarcodePage("Shipping Profiles", shippingProfileBarcodeData);
             BarcodePage shortcutsBarcodePage = new BarcodePage("ShipWorks Shortcuts", GetBuiltInShortcutData());

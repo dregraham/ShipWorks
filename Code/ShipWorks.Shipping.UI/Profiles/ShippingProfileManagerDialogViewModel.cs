@@ -51,16 +51,10 @@ namespace ShipWorks.Shipping.UI.Profiles
             DeleteCommand = new RelayCommand(Delete,
                 () => SelectedShippingProfile != null && !SelectedShippingProfile.ShippingProfileEntity.ShipmentTypePrimary);
 
-            PrintBarcodesCommand = new RelayCommand(PrintBarcodes, AnyShortcutsToPrint);
+            PrintBarcodesCommand = new RelayCommand(PrintBarcodes);
 
             ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetConfiguredShipmentTypeProfiles());
         }
-
-        /// <summary>
-        /// Are there any shortcuts to print
-        /// </summary>
-        private bool AnyShortcutsToPrint() => 
-            ShippingProfiles.Any(s => !string.IsNullOrWhiteSpace(s.ShortcutKey) || !string.IsNullOrWhiteSpace(s.Barcode));
 
         /// <summary>
         /// Print the barcodes
