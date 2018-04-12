@@ -1,6 +1,6 @@
 ﻿using Divelements.SandRibbon;
 
-namespace ShipWorks.Core.UI.SandRibbon
+namespace ShipWorks.UI.Controls.SandRibbon
 {
     /// <summary>
     /// Interface implementation of the SandRibbon button

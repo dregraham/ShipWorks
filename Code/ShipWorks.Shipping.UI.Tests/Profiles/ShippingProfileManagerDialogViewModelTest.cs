@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
 
             testObject.PrintBarcodesCommand.Execute(null);
 
-            mock.Mock<IPrintJobFactory>().Verify(p => p.CreateBarcodePrintJob(testObject.ShippingProfiles));
+            mock.Mock<IPrintJobFactory>().Verify(p => p.CreateBarcodePrintJob());
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             var profile = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
             mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles()).Returns(new List<ShippingProfile>() { profile });
             var printJob = mock.Mock<IPrintJob>();
-            mock.Mock<IPrintJobFactory>().Setup(f => f.CreateBarcodePrintJob(It.IsAny<IEnumerable<IShippingProfile>>())).Returns(printJob);
+            mock.Mock<IPrintJobFactory>().Setup(f => f.CreateBarcodePrintJob()).Returns(printJob);
             var form = new Form();
 
             var testObject = mock.Create<ShippingProfileManagerDialogViewModel>(new TypedParameter(typeof(IWin32Window), form));
@@ -193,31 +193,6 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             testObject.PrintBarcodesCommand.Execute(null);
 
             printJob.Verify(p => p.PreviewAsync(form));
-        }
-
-        [Fact]
-        public void AnyShortcutsToPrint_ReturnsFalseAfterDelete()
-        {
-            mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-
-            var profileEntity = new ShippingProfileEntity();
-            var anotherProfile = CreateShippingProfile(new ShippingProfileEntity(), new ShortcutEntity());
-            var profileToDelete = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles())
-                .Returns(new List<ShippingProfile>()
-                {
-                    anotherProfile,
-                    profileToDelete
-                });
-
-            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-            testObject.SelectedShippingProfile = profileToDelete;
-
-            Assert.True(testObject.PrintBarcodesCommand.CanExecute(null));
-
-            testObject.DeleteCommand.Execute(null);
-            
-            Assert.False(testObject.PrintBarcodesCommand.CanExecute(null));
         }
 
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)

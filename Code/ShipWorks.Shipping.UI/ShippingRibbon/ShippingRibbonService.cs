@@ -6,14 +6,13 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
+using ShipWorks.UI.Controls.SandRibbon;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon

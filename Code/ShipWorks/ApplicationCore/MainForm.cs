@@ -1483,13 +1483,21 @@ namespace ShipWorks
             }
 
             // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
-            if (shipmentDock.Value?.IsOpen != true)
+            if (!IsShippingPanelOpen())
             {
                 ribbon.SetEditingContext(null);
                 return;
             }
 
             ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        /// <summary>
+        /// True if shippingPanel is Open
+        /// </summary>
+        public bool IsShippingPanelOpen()
+        {
+            return shipmentDock.Value?.IsOpen == true;
         }
 
         /// <summary>

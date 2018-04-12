@@ -10,8 +10,10 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using System.Reactive.Disposables;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using Interapptive.Shared.Utility;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
@@ -50,11 +52,17 @@ namespace ShipWorks.SingleScan
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
                 .ContinueAfter(ProfileAppliedSignal, TimeSpan.FromSeconds(5), schedulerProvider.Default,
                     (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
-                .Subscribe(m => CollectProfileAppliedShortcutTelemetry(m.shortcutMessage, m.profileAppliedMessage)),
+                .Subscribe(m => CollectTelemetryWithResult(m.shortcutMessage, m.profileAppliedMessage)),
 
              messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
-                .Subscribe(CollectWeightAppliedShortcutTelemetry)
+                .Subscribe(CollectTelemetryWithoutResult),
+                      
+            messenger.OfType<ShortcutMessage>()
+                     .Where(m => m.AppliesTo(KeyboardShortcutCommand.CreateLabel))
+                     .ContinueAfter(LabelCreatedSignal, TimeSpan.FromSeconds(5), schedulerProvider.Default,
+                                    (x, y) => (shortcutMessage: x, processShipmentMessage: y))
+                     .Subscribe(m => CollectTelemetryWithResult(m.shortcutMessage, m.processShipmentMessage))
             );
         }
 
@@ -64,31 +72,29 @@ namespace ShipWorks.SingleScan
         private IObservable<ProfileAppliedMessage> ProfileAppliedSignal(ShortcutMessage shortcutMessage) =>
              messenger.OfType<ProfileAppliedMessage>()
                 .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
+
+        /// <summary>
+        /// Signal that the shipment is being processed
+        /// </summary>
+        private IObservable<ProcessShipmentsMessage> LabelCreatedSignal(ShortcutMessage shortcutMessage) => messenger.OfType<ProcessShipmentsMessage>();
         
         /// <summary>
         /// Handle telemetry for a profile being applied via shortcut 
         /// </summary>
-        private void CollectProfileAppliedShortcutTelemetry(ShortcutMessage shortcutMessage, ProfileAppliedMessage profileAppliedMessage)
+        private void CollectTelemetryWithResult(ShortcutMessage shortcutMessage, IShipWorksMessage actionMessage)
         {
             using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shortcuts.Applied"))
             {
                 CollectShortcutTelemetry(shortcutMessage, telemetryEvent);
 
-                if (profileAppliedMessage == null)
-                {
-                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "Unknown");
-                }
-                else
-                {
-                    telemetryEvent.AddProperty("Shortcuts.Applied.Result", "Success");
-                }
+                telemetryEvent.AddProperty("Shortcuts.Applied.Result", actionMessage == null || actionMessage.MessageId == Guid.Empty ? "Unknown" : "Success");
             }
         }
 
         /// <summary>
         /// Handle telemetry for a weight being applied via shortcut 
         /// </summary>
-        private void CollectWeightAppliedShortcutTelemetry(ShortcutMessage shortcutMessage)
+        private void CollectTelemetryWithoutResult(ShortcutMessage shortcutMessage)
         {
             using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shortcuts.Applied"))
             {
@@ -134,6 +140,8 @@ namespace ShipWorks.SingleScan
                     return "ScaleReading";
                 case KeyboardShortcutCommand.ApplyProfile:
                     return "ShippingProfile";
+                case KeyboardShortcutCommand.CreateLabel:
+                    return "LabelPrinted";
                 default:
                     return EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
             }
