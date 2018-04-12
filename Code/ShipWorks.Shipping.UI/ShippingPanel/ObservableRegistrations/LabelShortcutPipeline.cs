@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             subscription = messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.CreateLabel))
                 .Where(m => viewModel.Shipment != null)
+                .Where(m => viewModel.Shipment.ShipmentTypeCode != ShipmentTypeCode.None)
                 .Where(m => !viewModel.Shipment.Processed)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Where(_ => !mainForm.AdditionalFormsOpen() && mainForm.IsShippingPanelOpen())
@@ -53,6 +54,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// Dispose the subscription
         /// </summary>
         public void Dispose() => subscription?.Dispose();
-
     }
 }
