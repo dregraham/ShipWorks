@@ -56,32 +56,36 @@ namespace ShipWorks.Templates.Printing
         private static void LogPrintResult(TemplateResult templateResult, PrintJobSettings settings, Guid jobIdentifier)
         {
             // Determine the input that generated this result
-            TemplateInput input = templateResult.XPathSource.Context.Input;
+            TemplateInput input = templateResult.XPathSource?.Context.Input;
 
-            // Log each of the original input keys.  Will only be multiple for reports
-            foreach (long key in input.ContextKeys)
+            // XPathSource is null if printing out barcodes
+            if (input != null)
             {
-                long contextEntityID = key;
-                long relatedEntityID = key;
-
-                EntityType type = EntityUtility.GetEntityType(key);
-
-                // If the template had Customer context, then log it to the customer.  Otherwise, everything get's logged to the order,
-                // regardless of what was originally selected.
-                if (type != EntityType.CustomerEntity)
+                // Log each of the original input keys.  Will only be multiple for reports
+                foreach (long key in input.ContextKeys)
                 {
-                    List<long> relatedKeys = DataProvider.GetRelatedKeys(contextEntityID, EntityType.OrderEntity);
+                    long contextEntityID = key;
+                    long relatedEntityID = key;
 
-                    // Should not happen often, if ever.  If the list is empty, that means that something was deleted in the meantime.  We'll just use the original.
-                    if (relatedKeys.Count != 0)
+                    EntityType type = EntityUtility.GetEntityType(key);
+
+                    // If the template had Customer context, then log it to the customer.  Otherwise, everything get's logged to the order,
+                    // regardless of what was originally selected.
+                    if (type != EntityType.CustomerEntity)
                     {
-                        Debug.Assert(relatedKeys.Count == 1);
+                        List<long> relatedKeys = DataProvider.GetRelatedKeys(contextEntityID, EntityType.OrderEntity);
 
-                        relatedEntityID = relatedKeys[0];
+                        // Should not happen often, if ever.  If the list is empty, that means that something was deleted in the meantime.  We'll just use the original.
+                        if (relatedKeys.Count != 0)
+                        {
+                            Debug.Assert(relatedKeys.Count == 1);
+
+                            relatedEntityID = relatedKeys[0];
+                        }
                     }
-                }
 
-                LogPrintResultContent(templateResult, settings, relatedEntityID, contextEntityID, jobIdentifier);
+                    LogPrintResultContent(templateResult, settings, relatedEntityID, contextEntityID, jobIdentifier);
+                }
             }
         }
 

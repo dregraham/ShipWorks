@@ -22,5 +22,10 @@ namespace Interapptive.Shared.UI
         /// Insurance behavior change notification dialog
         /// </summary>
         InsuranceBehaviorChange = 3,
+
+        /// <summary>
+        /// Display indicator for shortcuts
+        /// </summary>
+        ShortcutIndicator = 4
     }
 }

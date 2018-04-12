@@ -43,7 +43,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        public bool AllowAutoPrint(ScanMessage scanMessage)
+        public bool AllowAutoPrint(SingleScanMessage scanMessage)
         {
             // they scanned a barcode
             return !scanMessage.ScannedText.IsNullOrWhiteSpace() && singleScanAutomationSettings.IsAutoPrintEnabled();

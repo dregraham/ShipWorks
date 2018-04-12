@@ -70,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.menuList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.menuList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.menuList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.menuList.FormattingEnabled = true;
             this.menuList.IntegralHeight = false;
             this.menuList.ItemHeight = 26;
@@ -83,6 +83,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.menuList.Size = new System.Drawing.Size(132, 501);
             this.menuList.TabIndex = 0;
             this.menuList.SelectedIndexChanged += new System.EventHandler(this.OnChangeOptionPage);
+            this.menuList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.MenuListDrawItem);
+            this.menuList.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.MenuListMeasureItem);
             // 
             // ShipWorksOptions
             // 

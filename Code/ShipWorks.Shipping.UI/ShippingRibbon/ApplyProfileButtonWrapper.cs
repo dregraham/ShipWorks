@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Apply a specific profile
         /// </summary>
-        public void ApplyProfile(ShippingProfileEntity profile)
+        public void ApplyProfile(IShippingProfileEntity profile)
         {
             actualApplyProfileButton.Tag = profile;
             Activate?.Invoke(this, EventArgs.Empty);

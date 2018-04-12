@@ -81,49 +81,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Load an existing profile data into the parent entity, or create if it doesn't exist.  If its already loaded and present
-        /// it can be optionally refreshed.
-        /// </summary>
-        public static void LoadProfileData(EntityBase2 parent, string childProperty, Type profileType, bool refreshIfPresent)
-        {
-            PropertyInfo property = GetChildProperty(parent, childProperty);
-
-            // See if the profile data is already present
-            if (refreshIfPresent)
-            {
-                property.SetValue(parent, null, null);
-            }
-
-            // If the profile isn't there we have to fetch it
-            if (property.GetValue(parent, null) == null)
-            {
-                EntityBase2 childEntity;
-
-                // Try to fetch the existing profile data for the shipment
-                if (parent.Fields.State != EntityState.New)
-                {
-                    childEntity = (EntityBase2) Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
-                    SqlAdapter.Default.FetchEntity(childEntity);
-                }
-                // If the parent is new, just create a new child.
-                else
-                {
-                    childEntity = (EntityBase2) Activator.CreateInstance(profileType);
-                }
-
-                // Apply the reference
-                property.SetValue(parent, childEntity, null);
-
-                // If it doesn't exist, then we have to create to save it as new
-                if (childEntity.Fields.State != EntityState.Fetched)
-                {
-                    // Reset the object to new and apply
-                    childEntity.Fields.State = EntityState.New;
-                }
-            }
-        }
-
-        /// <summary>
         /// Load insurance data into the parent entity, or create if it doesn't exist.  If its already loaded and present
         /// it can be optionally refreshed.
         /// </summary>

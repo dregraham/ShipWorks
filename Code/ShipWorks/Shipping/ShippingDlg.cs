@@ -8,12 +8,14 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -33,6 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -94,8 +97,10 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
+        private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
+        IDisposable keyboardShortcutSubscription;
 
         /// <summary>
         /// Constructor
@@ -127,6 +132,8 @@ namespace ShipWorks.Shipping
             this.shippingManager = shippingManager;
             this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, nameof(shipments));
+
+            shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
             ManageWindowPositioning();
 
@@ -252,6 +259,34 @@ namespace ShipWorks.Shipping
             }
 
             UpdateEditControlsSecurity();
+
+            // Start listening for keybaord shortcuts
+            ListenForKeyboardShortcuts();
+        }
+
+        /// <summary>
+        /// Listen for KeyboardShortcutMessage
+        /// </summary>
+        private void ListenForKeyboardShortcuts()
+        {
+            keyboardShortcutSubscription?.Dispose();
+            keyboardShortcutSubscription = Messenger.Current.OfType<ShortcutMessage>().Subscribe(async m => await HandleKeyboardShortcut(m));
+        }
+        
+        /// <summary>
+        /// Handle the KeyboardShortcutMessage
+        /// </summary>
+        /// <param name="shortcutMessage"></param>
+        private async Task HandleKeyboardShortcut(ShortcutMessage shortcutMessage)
+        {
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
+            {
+                long? profileId = shortcutMessage.Shortcut.RelatedObjectID;
+                if (profileId != null)
+                {
+                    await ApplyProfile(profileId.Value);
+                }
+            }
         }
 
         /// <summary>
@@ -1586,29 +1621,13 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
-                (ShipmentTypeCode)comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
+                (ShipmentTypeCode) comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
             {
-                foreach (IShippingProfileEntity profile in ShippingProfileManager.ProfilesReadOnly.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
-                {
-                    if (profile.ShipmentTypeCode != ShipmentTypeCode.None &&
-                        profile.ShipmentTypeCode == shipmentTypeCode.Value)
-                    {
-                        ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
-                        menuItem.Tag = profile;
-                        menuItem.Click += OnApplyProfile;
-
-                        if (profile.ShipmentTypePrimary && contextMenuProfiles.Items.Count > 0)
-                        {
-                            contextMenuProfiles.Items.Add(new ToolStripSeparator());
-                        }
-
-                        contextMenuProfiles.Items.Add(menuItem);
-                    }
-                }
+                AddProfilesToMenu(shipmentTypeCode.Value);
             }
 
             if (contextMenuProfiles.Items.Count == 0)
@@ -1622,6 +1641,56 @@ namespace ShipWorks.Shipping
             ToolStripMenuItem manageProfilesMenuItem = new ToolStripMenuItem("Manage Profiles...");
             manageProfilesMenuItem.Click += OnProfiles;
             contextMenuProfiles.Items.Add(manageProfilesMenuItem);
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
+        {
+            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Where(p => p.IsApplicable(shipmentTypeCode))
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .GroupBy(p => p.ShipmentType)
+                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
+            
+            bool firstGroup = true;
+            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
+            {
+                if (!firstGroup)
+                {
+                    contextMenuProfiles.Items.Add(new ToolStripSeparator());
+                }
+
+                firstGroup = false;
+
+                if (profileGroup.Key.HasValue)
+                {
+                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
+                    {
+                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
+                        Margin = new Padding(-4, 2, 2, 2),
+                        Enabled = false
+                    };
+                    contextMenuProfiles.Items.Add(carrierLabel);
+                }
+
+                profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
+                    .ForEach(p => AddProfileToMenu(p, contextMenuProfiles));
+            }
+        }
+
+        /// <summary>
+        /// Adds given profile to the given menu
+        /// </summary>
+        private void AddProfileToMenu(IShippingProfileEntity profile, ContextMenuStrip menu)
+        {
+            ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
+            menuItem.Tag = profile;
+            menuItem.Click += OnApplyProfile;
+            menu.Items.Add(menuItem);
         }
 
         /// <summary>
@@ -1639,24 +1708,26 @@ namespace ShipWorks.Shipping
         /// </remarks>
         private async void OnApplyProfile(object sender, EventArgs e)
         {
-            applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             IShippingProfileEntity profile = (IShippingProfileEntity)menuItem.Tag;
 
+            await ApplyProfile(profile.ShippingProfileID);
+        }
+
+        /// <summary>
+        /// Apply the given profile
+        /// </summary>
+        private async Task ApplyProfile(long profileId)
+        {
+            applyingProfile = true;
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
 
-            // Apply the profile to each ui displayed shipment
-            foreach (ShipmentEntity shipment in uiDisplayedShipments)
-            {
-                if (!shipment.Processed)
-                {
-                    ShippingProfileManager.ApplyProfile(shipment, profile);
-                }
-            }
+            shippingProfileService.Get(profileId)
+                .Apply(uiDisplayedShipments.Where(s => !s.Processed));
 
             // Reload the UI to show the changes
-            await LoadSelectedShipments(true);
+            await LoadSelectedShipments(true).ConfigureAwait(true);
             applyingProfile = false;
         }
 
@@ -1677,13 +1748,13 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
+                if (!shipment.Processed && securityCreateEditProcess)
+                {
+                    canApplyProfile = true;
+                }
+
                 if (shipment.ShipmentTypeCode != ShipmentTypeCode.None)
                 {
-                    if (!shipment.Processed && securityCreateEditProcess)
-                    {
-                        canApplyProfile = true;
-                    }
-
                     if (!shipment.Processed && shipmentTypeManager.Get(shipment).SupportsGetRates)
                     {
                         canGetRates = true;
@@ -2379,6 +2450,8 @@ namespace ShipWorks.Shipping
 
                 // Dispose each of the service controls and clear the cache.
                 DisposeSerivceControlCache();
+
+                keyboardShortcutSubscription?.Dispose();
             }
 
             base.Dispose(disposing);

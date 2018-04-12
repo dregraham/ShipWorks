@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -9,6 +11,11 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public interface IShippingProfileManager
     {
+        /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        IEnumerable<ShippingProfileEntity> Profiles { get; }
+
         /// <summary>
         /// Get the default profile for the given shipment type
         /// </summary>
@@ -37,12 +44,17 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
-        IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value);
+        IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentType, bool includeDefaultProfiles);
 
         /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
         IEnumerable<IShippingProfileEntity> GetProfilesReadOnlyFor(ShipmentTypeCode value);
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        void SaveProfile(ShippingProfileEntity profile, ISqlAdapter adapter);
 
         /// <summary>
         /// Saves the given profile
@@ -53,5 +65,15 @@ namespace ShipWorks.Shipping.Profiles
         /// Initialize ShippingProfileManager
         /// </summary>
         void InitializeForCurrentSession();
+
+        /// <summary>
+        /// Deletes the given profile
+        /// </summary>
+        void DeleteProfile(ShippingProfileEntity profile, ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Load the profiles data
+        /// </summary>
+        void LoadProfileData(ShippingProfileEntity shippingProfileEntity, bool refreshIfPresent);
     }
 }

@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             {
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
 
-                linkCommonProfile.Text = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType).Name;
+                linkCommonProfile.Text = shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(shipmentType).Name;
             }
 
             LoadRules();
@@ -116,9 +116,13 @@ namespace ShipWorks.Shipping.Settings.Defaults
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+                ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
+                
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfileEntity), shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType))
+                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }
@@ -129,9 +133,11 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Open the profile manager
         /// </summary>
-        void OnManageProfiles(object sender, EventArgs e)
+        private void OnManageProfiles(object sender, EventArgs e)
         {
-            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
+            // We go up the parent chain to get the actual settings dlg so that the manage profile dialog will center
+            // on the settings dlg instead of the profile rule control
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(ParentForm, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
         }
 
         /// <summary>

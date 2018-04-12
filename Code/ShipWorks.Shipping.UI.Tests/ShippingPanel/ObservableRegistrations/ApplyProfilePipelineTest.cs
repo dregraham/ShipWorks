@@ -6,6 +6,8 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
@@ -33,33 +35,33 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(mock.Create<ShippingPanelViewModel>());
 
-            messenger.OnNext(new ApplyProfileMessage(this, 1234, new ShippingProfileEntity()));
+            messenger.OnNext(new ApplyProfileMessage(this, 1234, 0));
 
-            mock.Mock<IShipmentTypeManager>()
-                .Verify(x => x.Get(It.IsAny<ShipmentEntity>()), Times.Never);
+            mock.Mock<IShippingProfileService>()
+                .Verify(x => x.Get(It.IsAny<long>()), Times.Never);
         }
 
         [Fact]
         public void Register_DelegatesToApplyProfile_WhenShipmentMatchesViewModel()
         {
-            Mock<ShipmentType> shipmentTypeMock = mock.CreateMock<ShipmentType>();
+            Mock<IShippingProfile> shippingProfile = mock.CreateMock<IShippingProfile>();
             ShipmentEntity shipment = new ShipmentEntity { ShipmentID = 12 };
 
             Mock<ShippingPanelViewModel> viewModel = mock.CreateMock<ShippingPanelViewModel>();
             viewModel.Setup(x => x.Shipment).Returns(shipment);
 
-            ShippingProfileEntity profile = new ShippingProfileEntity();
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShippingProfileID = 123 };
 
-            mock.Mock<IShipmentTypeManager>()
-                .Setup(x => x.Get(shipment))
-                .Returns(shipmentTypeMock.Object);
+            mock.Mock<IShippingProfileService>()
+                .Setup(x => x.Get(123))
+                .Returns(shippingProfile);
 
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
-            messenger.OnNext(new ApplyProfileMessage(this, 12, profile));
+            messenger.OnNext(new ApplyProfileMessage(this, 12, profile.ShippingProfileID));
 
-            shipmentTypeMock.Verify(x => x.ApplyProfile(shipment, profile));
+            shippingProfile.Verify(x => x.Apply(shipment));
         }
 
         [Fact]
@@ -68,12 +70,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             Mock<ShippingPanelViewModel> viewModel = mock.CreateMock<ShippingPanelViewModel>();
             viewModel.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 12 });
 
+            var adapter = mock.Mock<ICarrierShipmentAdapter>();
+
+            var profile = mock.Mock<IShippingProfile>();
+            profile.Setup(p => p.Apply(It.IsAny<ShipmentEntity>())).Returns(adapter);
+
+            mock.Mock<IShippingProfileService>().Setup(s => s.Get(It.IsAny<long>())).Returns(profile);
+
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 
-            messenger.OnNext(new ApplyProfileMessage(this, 12, new ShippingProfileEntity()));
+            messenger.OnNext(new ApplyProfileMessage(this, 12, 0));
 
-            viewModel.Verify(x => x.LoadShipment(viewModel.Object.ShipmentAdapter));
+            viewModel.Verify(x => x.LoadShipment(adapter.Object));
         }
 
         public void Dispose()

@@ -10,7 +10,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -18,7 +17,6 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -87,14 +85,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Create the UserControl used to edit OnTrac profiles.
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new OnTracProfileControl();
-        }
-
-        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
@@ -156,15 +146,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShipmentTypeDataService.LoadShipmentData(
                 this, shipment, shipment, "OnTrac", typeof(OnTracShipmentEntity), refreshIfPresent);
         }
-
-        /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            ShipmentTypeDataService.LoadProfileData(profile, "OnTrac", typeof(OnTracProfileEntity), refreshIfPresent);
-        }
-
+        
         /// <summary>
         /// Get shipment description
         /// </summary>
@@ -270,14 +252,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.SaturdayDelivery = false;
             onTrac.SignatureRequired = false;
 
-            onTrac.Weight = 0;
-            onTrac.DimsProfileID = 0;
-            onTrac.DimsLength = 0;
-            onTrac.DimsWidth = 0;
-            onTrac.DimsHeight = 0;
-            onTrac.DimsWeight = 0;
-            onTrac.DimsAddWeight = true;
-
             onTrac.PackagingType = (int) OnTracPackagingType.Package;
             onTrac.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
@@ -285,53 +259,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.Reference2 = string.Empty;
             onTrac.Instructions = string.Empty;
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            OnTracShipmentEntity onTracShipment = shipment.OnTrac;
-            IOnTracProfileEntity onTracProfile = profile.OnTrac;
-
-            long? accountID = (onTracProfile.OnTracAccountID == 0 && OnTracAccountManager.Accounts.Count > 0) ?
-                OnTracAccountManager.Accounts[0].OnTracAccountID :
-                onTracProfile.OnTracAccountID;
-
-            ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ShippingProfile.Insurance, onTracShipment, OnTracShipmentFields.Insurance);
-
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);
-
-            if (onTracProfile.Weight.HasValue && onTracProfile.Weight.Value != 0)
-            {
-                ShippingProfileUtility.ApplyProfileValue(onTracProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsProfileID, onTracShipment, OnTracShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsWeight, onTracShipment, OnTracShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsLength, onTracShipment, OnTracShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsHeight, onTracShipment, OnTracShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsWidth, onTracShipment, OnTracShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.DimsAddWeight, onTracShipment, OnTracShipmentFields.DimsAddWeight);
-
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Reference1, onTracShipment, OnTracShipmentFields.Reference1);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Reference2, onTracShipment, OnTracShipmentFields.Reference2);
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.Instructions, onTracShipment, OnTracShipmentFields.Instructions);
-
-            ShippingProfileUtility.ApplyProfileValue(onTracProfile.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
-
-            UpdateTotalWeight(shipment);
-
-            UpdateDynamicShipmentData(shipment);
-        }
-
-        /// <summary>
+        
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)

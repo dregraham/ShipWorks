@@ -42,13 +42,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NonMachinable = source.NonMachinable;
             Contents = source.Contents;
             NonDelivery = source.NonDelivery;
-            Weight = source.Weight;
-            DimsProfileID = source.DimsProfileID;
-            DimsLength = source.DimsLength;
-            DimsWidth = source.DimsWidth;
-            DimsHeight = source.DimsHeight;
-            DimsWeight = source.DimsWeight;
-            DimsAddWeight = source.DimsAddWeight;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -94,48 +87,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> NonDelivery { get; }
-        /// <summary> The Weight property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."Weight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> Weight { get; }
-        /// <summary> The DimsProfileID property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsProfileID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> DimsProfileID { get; }
-        /// <summary> The DimsLength property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsLength"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsLength { get; }
-        /// <summary> The DimsWidth property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsWidth"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsWidth { get; }
-        /// <summary> The DimsHeight property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsHeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsHeight { get; }
-        /// <summary> The DimsWeight property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Double> DimsWeight { get; }
-        /// <summary> The DimsAddWeight property of the Entity AsendiaProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaProfile"."DimsAddWeight"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Boolean> DimsAddWeight { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

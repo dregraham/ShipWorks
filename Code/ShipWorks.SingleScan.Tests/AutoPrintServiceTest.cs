@@ -63,7 +63,7 @@ namespace ShipWorks.SingleScan.Tests
 
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
@@ -81,7 +81,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(service => service.ConfirmOrder(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(false);
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
@@ -101,7 +101,7 @@ namespace ShipWorks.SingleScan.Tests
             singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
                 mock.Mock<IFilterNodeContentEntity>().Object, 101);
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             mock.Mock<ISingleScanConfirmationService>()
                 .Verify(service => service.ConfirmOrder(101L, 72, "A"));
@@ -123,7 +123,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
@@ -145,7 +145,7 @@ namespace ShipWorks.SingleScan.Tests
             SetReturnValueOfApplyWeight(true);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.True(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
@@ -158,10 +158,10 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             SetReturnValueOfApplyWeight(true);
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "FirstScan", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "FirstScan", IntPtr.Zero))));
 
             shipments.Add(new ShipmentEntity(1));
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "SecondScan", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "SecondScan", IntPtr.Zero))));
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
@@ -182,7 +182,7 @@ namespace ShipWorks.SingleScan.Tests
             SetReturnValueOfApplyWeight(false);
             shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.True(messenger.SentMessages.OfType<ProcessShipmentsMessage>().None());
         }
@@ -196,7 +196,7 @@ namespace ShipWorks.SingleScan.Tests
             SetReturnValueOfApplyWeight(true);
             shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             var shipmentsMessage = messenger.SentMessages.OfType<ProcessShipmentsMessage>().Single();
@@ -216,8 +216,8 @@ namespace ShipWorks.SingleScan.Tests
             SetReturnValueOfApplyWeight(true);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.Equal(2, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
@@ -232,7 +232,7 @@ namespace ShipWorks.SingleScan.Tests
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "N/A"), Times.Once);
@@ -249,7 +249,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1) { ShipmentTypeCode = ShipmentTypeCode.Usps });
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "USPS"), Times.Once);
@@ -267,7 +267,7 @@ namespace ShipWorks.SingleScan.Tests
             shipments.Add(new ShipmentEntity(1) { ShipmentTypeCode = ShipmentTypeCode.Usps });
             shipments.Add(new ShipmentEntity(2) { ShipmentTypeCode = ShipmentTypeCode.FedEx });
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "USPS, FedEx"), Times.Once);
@@ -284,7 +284,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "No"), Times.Once);
@@ -302,7 +302,7 @@ namespace ShipWorks.SingleScan.Tests
             shipments.Add(new ShipmentEntity(1));
             shipments.Add(new ShipmentEntity(2));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "Yes"), Times.Once);
@@ -323,7 +323,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "Yes"), Times.Once);
@@ -348,7 +348,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "No"), Times.Once);
@@ -373,7 +373,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "Yes"), Times.Once);
@@ -398,7 +398,7 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             trackedDurationEvent.Verify(
                             e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "No"), Times.Once);

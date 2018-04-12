@@ -95,9 +95,13 @@ namespace ShipWorks.Shipping.Editing
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+                ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfileEntity), shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType))
+                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }

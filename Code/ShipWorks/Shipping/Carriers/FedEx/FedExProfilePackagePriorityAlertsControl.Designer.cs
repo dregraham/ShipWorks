@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelPriorityAlert.Location = new System.Drawing.Point(7, 6);
             this.labelPriorityAlert.Name = "labelPriorityAlert";
             this.labelPriorityAlert.Size = new System.Drawing.Size(71, 13);
-            this.labelPriorityAlert.TabIndex = 0;
+            this.labelPriorityAlert.TabIndex = 2;
             this.labelPriorityAlert.Text = "Priority Alert:";
             this.labelPriorityAlert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.lalbelPriorityAlertContentDetail.Location = new System.Drawing.Point(10, 30);
             this.lalbelPriorityAlertContentDetail.Name = "lalbelPriorityAlertContentDetail";
             this.lalbelPriorityAlertContentDetail.Size = new System.Drawing.Size(68, 37);
-            this.lalbelPriorityAlertContentDetail.TabIndex = 2;
+            this.lalbelPriorityAlertContentDetail.TabIndex = 3;
             this.lalbelPriorityAlertContentDetail.Text = "Additional alert details:";
             this.lalbelPriorityAlertContentDetail.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.priorityAlertContentDetail.Name = "priorityAlertContentDetail";
             this.priorityAlertContentDetail.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.priorityAlertContentDetail.Size = new System.Drawing.Size(211, 95);
-            this.priorityAlertContentDetail.TabIndex = 3;
+            this.priorityAlertContentDetail.TabIndex = 1;
             // 
             // priorityAlertEnhancementType
             // 
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.priorityAlertEnhancementType.Location = new System.Drawing.Point(84, 3);
             this.priorityAlertEnhancementType.Name = "priorityAlertEnhancementType";
             this.priorityAlertEnhancementType.Size = new System.Drawing.Size(211, 21);
-            this.priorityAlertEnhancementType.TabIndex = 1;
+            this.priorityAlertEnhancementType.TabIndex = 0;
             // 
             // FedExProfilePackagePriorityAlertsControl
             // 

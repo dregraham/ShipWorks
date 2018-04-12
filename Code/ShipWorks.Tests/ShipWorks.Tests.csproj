@@ -297,7 +297,6 @@
     <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Common\KeyboardShortcuts\KeyboardShortcutKeyFilterTest.cs" />
-    <Compile Include="Common\KeyboardShortcuts\KeyboardShortcutTranslatorTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />
@@ -543,6 +542,7 @@
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactoryTest.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfileTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
@@ -616,6 +616,8 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
+    <Compile Include="Templates\Printing\BarcodePrintJobTest.cs" />
+    <Compile Include="Templates\Printing\PrintJobFactoryTest.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />

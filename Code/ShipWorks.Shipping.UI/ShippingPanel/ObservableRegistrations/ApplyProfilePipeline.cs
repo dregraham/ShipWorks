@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using log4net;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -15,22 +17,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     public class ApplyProfilePipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IShippingProfileService shippingProfileService;
         private readonly ILog log;
         private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ApplyProfilePipeline(IObservable<IShipWorksMessage> messageStream,
-            IShipmentTypeManager shipmentTypeManager,
+            IShippingProfileService shippingProfileService,
             ISchedulerProvider schedulerProvider,
-            Func<Type, ILog> logManager)
+            Func<Type, ILog> logManager,
+            IMessenger messenger)
         {
             this.messageStream = messageStream;
-            this.shipmentTypeManager = shipmentTypeManager;
+            this.shippingProfileService = shippingProfileService;
             this.schedulerProvider = schedulerProvider;
+            this.messenger = messenger;
             log = logManager(typeof(ApplyProfilePipeline));
         }
 
@@ -41,15 +46,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             subscription = messageStream.OfType<ApplyProfileMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
-                .Select(x =>
-                {
-                    ShipmentType shipmentType = shipmentTypeManager.Get(viewModel.Shipment);
-                    shipmentType.ApplyProfile(viewModel.Shipment, x.Profile);
-                    return viewModel.ShipmentAdapter;
-                })
-                .ObserveOn(schedulerProvider.Dispatcher)
+                .Select(x => shippingProfileService.Get(x.ProfileID).Apply(viewModel.Shipment))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
-                .Subscribe(x => viewModel.LoadShipment(x));
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(x => 
+                {
+                    // Because now the profile can change the ShipmentType of the shipment 
+                    // we are mimicking the logic found in the ChangeShipmentTypePipeline
+                    // If the user clicks to apply a profile but never gives focus to the 
+                    // shipping panel and the shipping panel never loses focus nothing saves 
+                    // the shipment, this forces the panel to refresh the new shipment and save it.
+                    viewModel.LoadShipment(x);
+                    viewModel.SaveToDatabase();
+
+                    messenger.Send(new ShipmentChangedMessage(this, x, nameof(viewModel.ShipmentType)));
+                });
         }
 
         /// <summary>

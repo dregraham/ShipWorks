@@ -4,5 +4,6 @@
     <typeImport typeName="Interapptive.Shared.Enums.CombineSplitStatusType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
     <typeImport typeName="Interapptive.Shared.Enums.AddressValidationStoreSettingType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>     
     <typeImport typeName="Interapptive.Shared.Enums.AsendiaServiceType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
-    <typeImport typeName="Interapptive.Shared.Enums.AmazonIsPrime" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>     
+    <typeImport typeName="Interapptive.Shared.Enums.AmazonIsPrime" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
+    <typeImport typeName="Interapptive.Shared.Win32.Native.VirtualKeys" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>         
 </typeImports> 

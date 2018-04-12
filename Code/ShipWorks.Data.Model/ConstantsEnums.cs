@@ -434,22 +434,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>DeliveryExperience. </summary>
 		DeliveryExperience,
-		///<summary>Weight. </summary>
-		Weight,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
 		/// <summary></summary>
@@ -742,20 +728,6 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -870,20 +842,6 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>Weight. </summary>
-		Weight,
 		///<summary>ServiceLevel. </summary>
 		ServiceLevel,
 		/// <summary></summary>
@@ -2108,30 +2066,6 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressProfilePackage.</summary>
-	public enum DhlExpressProfilePackageFieldIndex
-	{
-		///<summary>DhlExpressProfilePackageID. </summary>
-		DhlExpressProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3460,24 +3394,26 @@ namespace ShipWorks.Data.Model
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfilePackage.</summary>
 	public enum FedExProfilePackageFieldIndex
 	{
-		///<summary>FedExProfilePackageID. </summary>
-		FedExProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
+		///<summary>PackageProfileID. Inherited from PackageProfile</summary>
+		PackageProfileID_PackageProfile,
+		///<summary>ShippingProfileID. Inherited from PackageProfile</summary>
 		ShippingProfileID,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from PackageProfile</summary>
 		Weight,
-		///<summary>DimsProfileID. </summary>
+		///<summary>DimsProfileID. Inherited from PackageProfile</summary>
 		DimsProfileID,
-		///<summary>DimsLength. </summary>
+		///<summary>DimsLength. Inherited from PackageProfile</summary>
 		DimsLength,
-		///<summary>DimsWidth. </summary>
+		///<summary>DimsWidth. Inherited from PackageProfile</summary>
 		DimsWidth,
-		///<summary>DimsHeight. </summary>
+		///<summary>DimsHeight. Inherited from PackageProfile</summary>
 		DimsHeight,
-		///<summary>DimsWeight. </summary>
+		///<summary>DimsWeight. Inherited from PackageProfile</summary>
 		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
+		///<summary>DimsAddWeight. Inherited from PackageProfile</summary>
 		DimsAddWeight,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		///<summary>PriorityAlert. </summary>
 		PriorityAlert,
 		///<summary>PriorityAlertEnhancementType. </summary>
@@ -5068,30 +5004,6 @@ namespace ShipWorks.Data.Model
 		IsDeliveryDutyPaid,
 		///<summary>SkuAndQuantities. </summary>
 		SkuAndQuantities,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfilePackage.</summary>
-	public enum IParcelProfilePackageFieldIndex
-	{
-		///<summary>IParcelProfilePackageID. </summary>
-		IParcelProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7230,20 +7142,6 @@ namespace ShipWorks.Data.Model
 		SignatureRequired,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>Reference1. </summary>
 		Reference1,
 		///<summary>Reference2. </summary>
@@ -7861,6 +7759,30 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PackageProfile.</summary>
+	public enum PackageProfileFieldIndex
+	{
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalOrder.</summary>
 	public enum PayPalOrderFieldIndex
 	{
@@ -8148,22 +8070,8 @@ namespace ShipWorks.Data.Model
 		Service,
 		///<summary>Confirmation. </summary>
 		Confirmation,
-		///<summary>Weight. </summary>
-		Weight,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>NonRectangular. </summary>
 		NonRectangular,
 		///<summary>NonMachinable. </summary>
@@ -9883,6 +9791,26 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shortcut.</summary>
+	public enum ShortcutFieldIndex
+	{
+		///<summary>ShortcutID. </summary>
+		ShortcutID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ModifierKeys. </summary>
+		ModifierKeys,
+		///<summary>VirtualKey. </summary>
+		VirtualKey,
+		///<summary>Barcode. </summary>
+		Barcode,
+		///<summary>Action. </summary>
+		Action,
+		///<summary>RelatedObjectID. </summary>
+		RelatedObjectID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.</summary>
 	public enum SparkPayStoreFieldIndex
 	{
@@ -10788,26 +10716,28 @@ namespace ShipWorks.Data.Model
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfilePackage.</summary>
 	public enum UpsProfilePackageFieldIndex
 	{
-		///<summary>UpsProfilePackageID. </summary>
-		UpsProfilePackageID,
-		///<summary>ShippingProfileID. </summary>
+		///<summary>PackageProfileID. Inherited from PackageProfile</summary>
+		PackageProfileID_PackageProfile,
+		///<summary>ShippingProfileID. Inherited from PackageProfile</summary>
 		ShippingProfileID,
+		///<summary>Weight. Inherited from PackageProfile</summary>
+		Weight,
+		///<summary>DimsProfileID. Inherited from PackageProfile</summary>
+		DimsProfileID,
+		///<summary>DimsLength. Inherited from PackageProfile</summary>
+		DimsLength,
+		///<summary>DimsWidth. Inherited from PackageProfile</summary>
+		DimsWidth,
+		///<summary>DimsHeight. Inherited from PackageProfile</summary>
+		DimsHeight,
+		///<summary>DimsWeight. Inherited from PackageProfile</summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. Inherited from PackageProfile</summary>
+		DimsAddWeight,
+		///<summary>PackageProfileID. </summary>
+		PackageProfileID,
 		///<summary>PackagingType. </summary>
 		PackagingType,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
 		///<summary>AdditionalHandlingEnabled. </summary>
 		AdditionalHandlingEnabled,
 		///<summary>VerbalConfirmationEnabled. </summary>
@@ -12321,8 +12251,6 @@ namespace ShipWorks.Data.Model
 		DhlExpressPackageEntity,
 		///<summary>DhlExpressProfile</summary>
 		DhlExpressProfileEntity,
-		///<summary>DhlExpressProfilePackage</summary>
-		DhlExpressProfilePackageEntity,
 		///<summary>DhlExpressShipment</summary>
 		DhlExpressShipmentEntity,
 		///<summary>DimensionsProfile</summary>
@@ -12427,8 +12355,6 @@ namespace ShipWorks.Data.Model
 		IParcelPackageEntity,
 		///<summary>IParcelProfile</summary>
 		IParcelProfileEntity,
-		///<summary>IParcelProfilePackage</summary>
-		IParcelProfilePackageEntity,
 		///<summary>IParcelShipment</summary>
 		IParcelShipmentEntity,
 		///<summary>JetOrder</summary>
@@ -12513,6 +12439,8 @@ namespace ShipWorks.Data.Model
 		OtherProfileEntity,
 		///<summary>OtherShipment</summary>
 		OtherShipmentEntity,
+		///<summary>PackageProfile</summary>
+		PackageProfileEntity,
 		///<summary>PayPalOrder</summary>
 		PayPalOrderEntity,
 		///<summary>PayPalOrderSearch</summary>
@@ -12585,6 +12513,8 @@ namespace ShipWorks.Data.Model
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
 		ShopSiteStoreEntity,
+		///<summary>Shortcut</summary>
+		ShortcutEntity,
 		///<summary>SparkPayStore</summary>
 		SparkPayStoreEntity,
 		///<summary>StatusPreset</summary>

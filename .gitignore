@@ -10,6 +10,7 @@
 *.sln.docstates
 .vs
 *.jfm
+*.idea
 
 # Build results
 

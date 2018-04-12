@@ -102,14 +102,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Create the UserControl used to handle USPS w/ Express1 profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new Express1UspsProfileControl();
-        }
-
-        /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
         /// <param name="shipment"></param>

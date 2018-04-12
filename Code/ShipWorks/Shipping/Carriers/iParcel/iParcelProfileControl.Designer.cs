@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupLabels.Location = new System.Drawing.Point(6, 129);
             this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(405, 83);
-            this.groupLabels.TabIndex = 76;
+            this.groupLabels.TabIndex = 2;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
             // 
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
             this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 101;
+            this.requestedLabelFormat.TabIndex = 1;
             // 
             // requestedLabelFormatState
             // 
@@ -187,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupOptions.Location = new System.Drawing.Point(6, 371);
             this.groupOptions.Name = "groupOptions";
             this.groupOptions.Size = new System.Drawing.Size(405, 101);
-            this.groupOptions.TabIndex = 75;
+            this.groupOptions.TabIndex = 5;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.skuAndQuantityState.Location = new System.Drawing.Point(6, 68);
             this.skuAndQuantityState.Name = "skuAndQuantityState";
             this.skuAndQuantityState.Size = new System.Drawing.Size(15, 14);
-            this.skuAndQuantityState.TabIndex = 75;
+            this.skuAndQuantityState.TabIndex = 4;
             this.skuAndQuantityState.Tag = "";
             this.skuAndQuantityState.UseVisualStyleBackColor = true;
             // 
@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.skuAndQuantity.MaxLength = 32767;
             this.skuAndQuantity.Name = "skuAndQuantity";
             this.skuAndQuantity.Size = new System.Drawing.Size(222, 21);
-            this.skuAndQuantity.TabIndex = 76;
+            this.skuAndQuantity.TabIndex = 5;
             this.skuAndQuantity.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             this.skuAndQuantity.TokenUsage = ShipWorks.Templates.Tokens.TokenUsage.ShippingReference;
             // 
@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.dutyDeliveryPaid.Location = new System.Drawing.Point(139, 42);
             this.dutyDeliveryPaid.Name = "dutyDeliveryPaid";
             this.dutyDeliveryPaid.Size = new System.Drawing.Size(114, 17);
-            this.dutyDeliveryPaid.TabIndex = 83;
+            this.dutyDeliveryPaid.TabIndex = 3;
             this.dutyDeliveryPaid.Text = "Duty Delivery Paid";
             this.dutyDeliveryPaid.UseVisualStyleBackColor = true;
             // 
@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.dutyDeliveryPaidState.Location = new System.Drawing.Point(6, 43);
             this.dutyDeliveryPaidState.Name = "dutyDeliveryPaidState";
             this.dutyDeliveryPaidState.Size = new System.Drawing.Size(15, 14);
-            this.dutyDeliveryPaidState.TabIndex = 82;
+            this.dutyDeliveryPaidState.TabIndex = 2;
             this.dutyDeliveryPaidState.Tag = "";
             this.dutyDeliveryPaidState.UseVisualStyleBackColor = true;
             // 
@@ -261,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.emailTrack.Location = new System.Drawing.Point(139, 19);
             this.emailTrack.Name = "emailTrack";
             this.emailTrack.Size = new System.Drawing.Size(94, 17);
-            this.emailTrack.TabIndex = 78;
+            this.emailTrack.TabIndex = 1;
             this.emailTrack.Text = "Track By Email";
             this.emailTrack.UseVisualStyleBackColor = true;
             // 
@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.emailTrackState.Location = new System.Drawing.Point(6, 20);
             this.emailTrackState.Name = "emailTrackState";
             this.emailTrackState.Size = new System.Drawing.Size(15, 14);
-            this.emailTrackState.TabIndex = 77;
+            this.emailTrackState.TabIndex = 0;
             this.emailTrackState.Tag = "";
             this.emailTrackState.UseVisualStyleBackColor = true;
             // 
@@ -309,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupReference.Location = new System.Drawing.Point(6, 305);
             this.groupReference.Name = "groupReference";
             this.groupReference.Size = new System.Drawing.Size(405, 60);
-            this.groupReference.TabIndex = 12;
+            this.groupReference.TabIndex = 4;
             this.groupReference.TabStop = false;
             this.groupReference.Text = "Reference";
             // 
@@ -332,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.referenceState.Location = new System.Drawing.Point(9, 26);
             this.referenceState.Name = "referenceState";
             this.referenceState.Size = new System.Drawing.Size(15, 14);
-            this.referenceState.TabIndex = 2;
+            this.referenceState.TabIndex = 0;
             this.referenceState.Tag = "";
             this.referenceState.UseVisualStyleBackColor = true;
             // 
@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.referenceNumber.MaxLength = 32767;
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(222, 21);
-            this.referenceNumber.TabIndex = 3;
+            this.referenceNumber.TabIndex = 1;
             this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelReference
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupInsurance.Location = new System.Drawing.Point(6, 217);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(405, 82);
-            this.groupInsurance.TabIndex = 11;
+            this.groupInsurance.TabIndex = 3;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -375,7 +375,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.insuranceControl.Location = new System.Drawing.Point(48, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -408,7 +408,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupShipment.Location = new System.Drawing.Point(6, 67);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(405, 57);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
@@ -466,7 +466,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
             this.groupBoxFrom.Size = new System.Drawing.Size(405, 55);
-            this.groupBoxFrom.TabIndex = 3;
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
             // 
@@ -545,7 +545,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.groupBoxPackages.Location = new System.Drawing.Point(6, 6);
             this.groupBoxPackages.Name = "groupBoxPackages";
             this.groupBoxPackages.Size = new System.Drawing.Size(405, 52);
-            this.groupBoxPackages.TabIndex = 1;
+            this.groupBoxPackages.TabIndex = 0;
             this.groupBoxPackages.TabStop = false;
             this.groupBoxPackages.Text = "From";
             // 

@@ -128,14 +128,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new iParcelProfileControl();
-        }
-
-        /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
         /// multiple package shipments, allowing the shipment type a chance to add new packages
         /// to coincide with the ShipSense knowledge base entry.
@@ -189,41 +181,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return adapters;
         }
-
-        /// <summary>
-        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
-        /// </summary>
-        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
-        {
-            bool changes = base.SaveProfileData(profile, adapter);
-
-            // First delete out anything that needs deleted
-            foreach (IParcelProfilePackageEntity package in profile.IParcel.Packages.ToList())
-            {
-                // If its new but deleted, just get rid of it
-                if (package.Fields.State == EntityState.Deleted)
-                {
-                    if (package.IsNew)
-                    {
-                        profile.IParcel.Packages.Remove(package);
-                    }
-
-                    // If its deleted, delete it
-                    else
-                    {
-                        package.Fields.State = EntityState.Fetched;
-                        profile.IParcel.Packages.Remove(package);
-
-                        adapter.DeleteEntity(package);
-
-                        changes = true;
-                    }
-                }
-            }
-
-            return changes;
-        }
-
+        
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -243,130 +201,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             profile.IParcel.Reference = "Order {//Order/Number}";
             profile.IParcel.SkuAndQuantities = "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>";
             profile.IParcel.IsDeliveryDutyPaid = true;
-        }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        [NDependIgnoreLongMethod]
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            IParcelShipmentEntity iParcel = shipment.IParcel;
-            IIParcelProfileEntity source = profile.IParcel;
-
-            bool changedPackageWeights = false;
-            int profilePackageCount = profile.IParcel.Packages.Count();
-
-            // Apply all package profiles
-            for (int i = 0; i < profilePackageCount; i++)
-            {
-                // Get the profile to apply
-                IIParcelProfilePackageEntity packageProfile = profile.IParcel.Packages.ElementAt(i);
-
-                IParcelPackageEntity package;
-
-                // Get the existing, or create a new package
-                if (iParcel.Packages.Count > i)
-                {
-                    package = iParcel.Packages[i];
-                }
-                else
-                {
-                    package = CreateDefaultPackage();
-                    iParcel.Packages.Add(package);
-                }
-
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, IParcelPackageFields.Weight);
-                changedPackageWeights |= (packageProfile.Weight != null);
-
-                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, IParcelPackageFields.DimsProfileID);
-                if (packageProfile.DimsProfileID != null)
-                {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, IParcelPackageFields.DimsLength);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, IParcelPackageFields.DimsWidth);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, IParcelPackageFields.DimsHeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, IParcelPackageFields.DimsWeight);
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, IParcelPackageFields.DimsAddWeight);
-                }
-            }
-
-            // Remove any packages that are too many for the profile
-            if (profilePackageCount > 0)
-            {
-                // Go through each package that needs removed
-                foreach (IParcelPackageEntity package in iParcel.Packages.Skip(profilePackageCount).ToList())
-                {
-                    if (package.Weight != 0)
-                    {
-                        changedPackageWeights = true;
-                    }
-
-                    // Remove it from the list
-                    iParcel.Packages.Remove(package);
-
-                    // If its saved in the database, we have to delete it
-                    if (!package.IsNew)
-                    {
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            adapter.DeleteEntity(package);
-                        }
-                    }
-                }
-            }
-
-            // Apply value stored at shipment level which applies to each package.
-            foreach (IParcelPackageEntity package in iParcel.Packages)
-            {
-                ShippingProfileUtility.ApplyProfileValue(profile.IParcel.SkuAndQuantities, package,
-                    IParcelPackageFields.SkuAndQuantities);
-            }
-
-            base.ApplyProfile(shipment, profile);
-
-            long? accountID = (source.IParcelAccountID == 0 && iParcelAccountManager.Accounts.Count > 0)
-                                  ? (long?) iParcelAccountManager.Accounts[0].IParcelAccountID
-                                  : source.IParcelAccountID;
-
-            ShippingProfileUtility.ApplyProfileValue(accountID, iParcel, IParcelShipmentFields.IParcelAccountID);
-            ShippingProfileUtility.ApplyProfileValue(source.Service, iParcel, IParcelShipmentFields.Service);
-            ShippingProfileUtility.ApplyProfileValue(source.Reference, iParcel, IParcelShipmentFields.Reference);
-            ShippingProfileUtility.ApplyProfileValue(source.TrackByEmail, iParcel, IParcelShipmentFields.TrackByEmail);
-            ShippingProfileUtility.ApplyProfileValue(source.TrackBySMS, iParcel, IParcelShipmentFields.TrackBySMS);
-            ShippingProfileUtility.ApplyProfileValue(source.IsDeliveryDutyPaid, iParcel, IParcelShipmentFields.IsDeliveryDutyPaid);
-
-            if (changedPackageWeights)
-            {
-                UpdateTotalWeight(shipment);
-            }
-
-            UpdateDynamicShipmentData(shipment);
-        }
-
-        /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            bool existed = profile.IParcel != null;
-
-            ShipmentTypeDataService.LoadProfileData(profile, "IParcel", typeof(IParcelProfileEntity), refreshIfPresent);
-
-            IParcelProfileEntity iParcelProfileEntityParcel = profile.IParcel;
-
-            // If this is the first time loading it, or we are supposed to refresh, do it now
-            if (!existed || refreshIfPresent)
-            {
-                iParcelProfileEntityParcel.Packages.Clear();
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(iParcelProfileEntityParcel.Packages,
-                                                  new RelationPredicateBucket(IParcelProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-
-                    iParcelProfileEntityParcel.Packages.Sort((int) IParcelProfilePackageFieldIndex.IParcelProfilePackageID, ListSortDirection.Ascending);
-                }
-            }
         }
 
         /// <summary>
