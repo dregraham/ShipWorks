@@ -195,31 +195,6 @@ namespace ShipWorks.Shipping.UI.Tests.Profiles
             printJob.Verify(p => p.PreviewAsync(form));
         }
 
-        [Fact]
-        public void AnyShortcutsToPrint_ReturnsFalseAfterDelete()
-        {
-            mock.Mock<IMessageHelper>().Setup(m => m.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-
-            var profileEntity = new ShippingProfileEntity();
-            var anotherProfile = CreateShippingProfile(new ShippingProfileEntity(), new ShortcutEntity());
-            var profileToDelete = CreateShippingProfile(profileEntity, new ShortcutEntity() { Barcode = "blah" });
-            mock.Mock<IShippingProfileService>().Setup(s => s.GetConfiguredShipmentTypeProfiles())
-                .Returns(new List<ShippingProfile>()
-                {
-                    anotherProfile,
-                    profileToDelete
-                });
-
-            var testObject = mock.Create<ShippingProfileManagerDialogViewModel>();
-            testObject.SelectedShippingProfile = profileToDelete;
-
-            Assert.True(testObject.PrintBarcodesCommand.CanExecute(null));
-
-            testObject.DeleteCommand.Execute(null);
-            
-            Assert.False(testObject.PrintBarcodesCommand.CanExecute(null));
-        }
-
         private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
         {
             var shippingProfile = mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
