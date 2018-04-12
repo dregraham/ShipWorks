@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(m => viewModel.Shipment != null)
                 .Where(m => !viewModel.Shipment.Processed)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Where(_ => !mainForm.AdditionalFormsOpen())
+                .Where(_ => !mainForm.AdditionalFormsOpen() && mainForm.IsShippingPanelOpen())
                 .Subscribe(m =>
                 {
                     // This causes the shipping panel to save if there are unsaved changes
