@@ -4259,7 +4259,7 @@ select new { m }
 
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
-warnif count > 60
+warnif count > 49
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreComplexMethod*") 
@@ -4279,7 +4279,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
-warnif count > 38
+warnif count > 12
 
 from m in JustMyCode.Types.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongTypes*") 
@@ -4287,7 +4287,7 @@ from m in JustMyCode.Types.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
-warnif count > 319
+warnif count > 281
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongMethod*") 
