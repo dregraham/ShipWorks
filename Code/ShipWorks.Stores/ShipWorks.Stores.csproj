@@ -173,7 +173,6 @@
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
     <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
-    <Compile Include="Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />

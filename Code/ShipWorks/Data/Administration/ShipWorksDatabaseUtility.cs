@@ -320,9 +320,8 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the first available database name that doesn't conflict with any other databases on the server represented by the given connection
         /// </summary>
-        public static async Task<string> GetFirstAvailableDatabaseName(DbConnection con)
+        public static async Task<string> GetFirstAvailableDatabaseName(DbConnection con, string baseName = "ShipWorks")
         {
-            string baseName = "ShipWorks";
             string databaseName = baseName;
 
             var databases = await ShipWorksDatabaseUtility.GetDatabaseDetails(con).ConfigureAwait(false);

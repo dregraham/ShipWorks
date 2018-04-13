@@ -948,6 +948,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveNotification.cs" />

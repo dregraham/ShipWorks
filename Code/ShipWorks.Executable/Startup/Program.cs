@@ -41,7 +41,7 @@ namespace ShipWorks.Startup
                 FlowReservoir.Enroll();
             }
 
-            ShipWorks.Program.Main();
+            ShipWorks.Program.Main().GetAwaiter().GetResult();
         }
     }
 }

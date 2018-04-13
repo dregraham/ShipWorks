@@ -19,6 +19,8 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -28,6 +30,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -482,9 +485,20 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 // Old LocalDb session
                 SqlSession localDbSession = SqlSession.Current;
-                if (localDbSession.Configuration.ServerInstance != SqlInstanceUtility.LocalDbServerInstance)
+                if (!localDbSession.Configuration.ServerInstance.Equals(SqlInstanceUtility.LocalDbServerInstance, StringComparison.InvariantCultureIgnoreCase))
                 {
                     throw new InvalidOperationException("Cannot upgrade a non-LocalDb server instance.");
+                }
+
+                // Get a list of any archive databases, for the connected database, that need to be moved
+                IEnumerable<ISqlDatabaseDetail> archiveDatabases = Enumerable.Empty<ISqlDatabaseDetail>();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IArchiveManagerDataAccess dataAccess = lifetimeScope.Resolve<IArchiveManagerDataAccess>();
+
+                    // Doing the ToList here to force the call to the database on the current SqlSession.  
+                    // If we wait until later, we'll get an error.
+                    archiveDatabases = (await dataAccess.GetArchiveDatabases().ConfigureAwait(false)).ToList();
                 }
 
                 // New upgraded session
@@ -492,25 +506,18 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 SqlSessionConfiguration newServerInfo = SqlInstanceUtility.DetermineCredentials(serverInstance);
                 SqlSession newSession = new SqlSession(newServerInfo);
 
-                // Detatch the database from LocalDb
-                log.InfoFormat("Detaching mdf-ldf from LocalDB");
-                DatabaseFileInfo fileInfo = DetachDatabase(localDbSession);
-
                 // Get the next available database name to use
-                string databaseName = await AssignAutomaticDatabaseNameInternal().ConfigureAwait(false);
+                string databaseName = await AssignAutomaticDatabaseNameInternal(localDbSession.Configuration.DatabaseName).ConfigureAwait(false);
 
-                // If it returned nul, there was an error and Environment.ExitCode is already set.
-                if (databaseName == null)
+                MoveDatabase(localDbSession, newSession, newServerInfo, databaseName).ConfigureAwait(false);
+
+                // Now move any archived databases
+                foreach (string archiveDatabaseName in archiveDatabases.Select(d => d.Name))
                 {
-                    return;
+                    localDbSession = new SqlSession(localDbSession);
+                    localDbSession.Configuration.DatabaseName = archiveDatabaseName;
+                    await MoveDatabase(localDbSession, newSession, newServerInfo, archiveDatabaseName).ConfigureAwait(false);
                 }
-
-                (string targetMdf, string targetLdf) = MoveLocalDbDataFiles(newSession, databaseName, fileInfo);
-
-                log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
-
-                // Now we attach the db files into the full instance
-                AttachDatabase(newSession, databaseName, targetMdf, targetLdf, newServerInfo.Username);
             }
             catch (Win32Exception ex)
             {
@@ -524,6 +531,29 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             Environment.ExitCode = exitCode;
+        }
+
+        /// <summary>
+        /// Move a database from one instance to another.
+        /// </summary>
+        private async Task MoveDatabase(SqlSession localDbSession, SqlSession newSession, SqlSessionConfiguration newServerInfo, string newDatabaseName)
+        {
+            // If it returned null, there was an error and Environment.ExitCode is already set.
+            if (newDatabaseName == null)
+            {
+                return;
+            }
+
+            // Detach the database from LocalDb
+            log.InfoFormat("Detaching mdf-ldf from LocalDB");
+            DatabaseFileInfo fileInfo = DetachDatabase(localDbSession);
+
+            (string targetMdf, string targetLdf) = MoveLocalDbDataFiles(newSession, newDatabaseName, fileInfo);
+
+            log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
+
+            // Now we attach the db files into the full instance
+            AttachDatabase(newSession, newDatabaseName, targetMdf, targetLdf, newServerInfo.Username);
         }
 
         /// <summary>
@@ -675,7 +705,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Executes in an elevated process to assign the name to use for the database in the full version of sql server that LocalDb was upgraded to
         /// </summary>
-        private async Task<string> AssignAutomaticDatabaseNameInternal()
+        private async Task<string> AssignAutomaticDatabaseNameInternal(string baseName = "ShipWorks")
         {
             int exitCode = 0;
 
@@ -691,7 +721,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 using (DbConnection con = session.OpenConnection())
                 {
-                    string databaseName = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con).ConfigureAwait(false);
+                    string databaseName = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con, baseName).ConfigureAwait(false);
 
                     // Now record that this is the database that is to be used for full instances for this path by default
                     using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
