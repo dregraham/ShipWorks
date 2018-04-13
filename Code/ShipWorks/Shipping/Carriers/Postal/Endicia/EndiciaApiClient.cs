@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wraps access to the Endicia API
     /// </summary>
-    [NDependIgnoreLongTypes]
     public class EndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;

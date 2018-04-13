@@ -166,7 +166,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
         }
 
+        /// <summary>
+        /// Gets the next batch of order items
+        /// </summary>
+        public ChannelAdvisorOrderItemsResult GetOrderItems(string nextToken, string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
 
+            return ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken);
+        }
+        
         /// <summary>
         /// Get detailed product information from ChannelAdvisor with the given product ID
         /// </summary>

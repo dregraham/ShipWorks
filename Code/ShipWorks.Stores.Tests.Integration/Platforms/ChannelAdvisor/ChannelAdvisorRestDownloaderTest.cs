@@ -18,6 +18,7 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly Mock<IProgressReporter> mockProgressReporter;
-        private readonly ChannelAdvisorOrderResult firstBatch;
+        private ChannelAdvisorOrderResult firstBatch;
         private readonly DbConnection dbConnection;
         private readonly ChannelAdvisorRestDownloader testObject;
         private readonly DateTime utcNow;
@@ -155,6 +156,39 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             }
 
             Assert.Equal("SW", item.DistributionCenter);
+        }
+
+        [Fact]
+        public async Task Download_DownloadsOrderItemPages()
+        {
+            var item = new ChannelAdvisorOrderItem
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>
+                {
+                    new ChannelAdvisorFulfillmentItem
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            order.ID = 42;
+            order.Items = Enumerable.Range(0, 20).Select(_ => item).ToList();
+            
+            firstBatch = new ChannelAdvisorOrderResult
+            {
+                OdataContext = "",
+                OdataNextLink = "",
+                ResultCount = 1,
+                Orders = new List<ChannelAdvisorOrder> { order }
+            };
+
+            client.Setup(c => c.GetOrderItems(AnyString, AnyString))
+                .Returns(new ChannelAdvisorOrderItemsResult { OrderItems = new [] {item} });
+            
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            string expectedUrl = "https://api.channeladvisor.com/v1/Orders(42)/Items?$skip=20&$expand=FulfillmentItems";
+            client.Verify(c => c.GetOrderItems(expectedUrl,AnyString), Times.Once);
         }
 
         private ChannelAdvisorOrder SingleOrder()
