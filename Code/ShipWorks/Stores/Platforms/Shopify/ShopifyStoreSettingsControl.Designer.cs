@@ -36,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
             this.requestedShippingOptions = new System.Windows.Forms.ComboBox();
             this.labelWeightUnitOfMeasure = new System.Windows.Forms.Label();
+            this.shopifyNotifyCustomer = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // sectionTitle1
@@ -66,16 +67,27 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.labelWeightUnitOfMeasure.TabIndex = 22;
             this.labelWeightUnitOfMeasure.Text = "Requested shipping should be based on:";
             // 
+            // shopifyNotifyCustomer
+            // 
+            this.shopifyNotifyCustomer.AutoSize = true;
+            this.shopifyNotifyCustomer.Location = new System.Drawing.Point(20, 69);
+            this.shopifyNotifyCustomer.Name = "shopifyNotifyCustomer";
+            this.shopifyNotifyCustomer.Size = new System.Drawing.Size(316, 17);
+            this.shopifyNotifyCustomer.TabIndex = 24;
+            this.shopifyNotifyCustomer.Text = "Shopify should notify the customer when an order is shipped";
+            this.shopifyNotifyCustomer.UseVisualStyleBackColor = true;
+            // 
             // ShopifyStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.shopifyNotifyCustomer);
             this.Controls.Add(this.requestedShippingOptions);
             this.Controls.Add(this.labelWeightUnitOfMeasure);
             this.Controls.Add(this.sectionTitle1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ShopifyStoreSettingsControl";
-            this.Size = new System.Drawing.Size(489, 70);
+            this.Size = new System.Drawing.Size(489, 96);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -86,6 +98,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private UI.Controls.SectionTitle sectionTitle1;
         private System.Windows.Forms.ComboBox requestedShippingOptions;
         private System.Windows.Forms.Label labelWeightUnitOfMeasure;
-
+        private System.Windows.Forms.CheckBox shopifyNotifyCustomer;
     }
 }
