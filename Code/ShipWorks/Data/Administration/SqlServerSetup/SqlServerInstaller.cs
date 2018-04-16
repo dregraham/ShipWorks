@@ -19,8 +19,6 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -509,14 +507,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 // Get the next available database name to use
                 string databaseName = await AssignAutomaticDatabaseNameInternal(localDbSession.Configuration.DatabaseName).ConfigureAwait(false);
 
-                MoveDatabase(localDbSession, newSession, newServerInfo, databaseName).ConfigureAwait(false);
+                MoveDatabase(localDbSession, newSession, newServerInfo, databaseName);
 
                 // Now move any archived databases
                 foreach (string archiveDatabaseName in archiveDatabases.Select(d => d.Name))
                 {
                     localDbSession = new SqlSession(localDbSession);
                     localDbSession.Configuration.DatabaseName = archiveDatabaseName;
-                    await MoveDatabase(localDbSession, newSession, newServerInfo, archiveDatabaseName).ConfigureAwait(false);
+                    MoveDatabase(localDbSession, newSession, newServerInfo, archiveDatabaseName);
                 }
             }
             catch (Win32Exception ex)
@@ -536,7 +534,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Move a database from one instance to another.
         /// </summary>
-        private async Task MoveDatabase(SqlSession localDbSession, SqlSession newSession, SqlSessionConfiguration newServerInfo, string newDatabaseName)
+        private void MoveDatabase(SqlSession localDbSession, SqlSession newSession, SqlSessionConfiguration newServerInfo, string newDatabaseName)
         {
             // If it returned null, there was an error and Environment.ExitCode is already set.
             if (newDatabaseName == null)
