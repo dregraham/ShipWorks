@@ -422,10 +422,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 }
 
                 JObject fulfillmentReq = new JObject(
-                    new JProperty("fulfillment", new JObject(
+                    new JProperty("fulfillment",
+                    new JObject(
                         new JProperty("tracking_company", carrier),
                         new JProperty("tracking_number", trackingNumber),
-                        new JProperty("custom_tracking_url", carrierTrackingUrl))));
+                        new JProperty("custom_tracking_url", carrierTrackingUrl),
+                        new JProperty("notify_customer", store.ShopifyNotifyCustomer))));
 
                 string jsonRequest = fulfillmentReq.ToString();
 
