@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -6,9 +9,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -27,8 +27,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Constructor
         /// </summary>
         public PostalPostProcessingMessage(
-            IGlobalPostLabelNotification globalPostNotification, 
-            IDateTimeProvider dateTimeProvider, 
+            IGlobalPostLabelNotification globalPostNotification,
+            IDateTimeProvider dateTimeProvider,
             ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository)
         {
             this.globalPostNotification = globalPostNotification;
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotifiactionForShipment(s));
 
             if (gapShipment != null && globalPostNotification.AppliesToCurrentUser())
-            { 
+            {
                 globalPostNotification.Show(gapShipment);
             }
         }
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            bool showNotifiaction = IsGapLabel(shipment.Postal) || 
+            bool showNotifiaction = IsGapLabel(shipment.Postal) ||
                 PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool IsEndiciaReseller(IShipmentEntity shipment)
         {
-            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int)EndiciaReseller.None;
+            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int) EndiciaReseller.None;
         }
 
         /// <summary>
@@ -96,7 +96,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return true;
             }
 
-            return false;
+            return (shipment.Service == (int) PostalServiceType.InternationalFirst ||
+                shipment.Service == (int) PostalServiceType.InternationalPriority ||
+                shipment.Service == (int) PostalServiceType.InternationalExpress);
         }
     }
 }

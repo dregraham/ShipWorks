@@ -259,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
                 account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
-                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo);
+                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo.Capabilities);
             }
 
             return account;
@@ -268,17 +268,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get GlobalPost service availability from the account info
         /// </summary>
-        private GlobalPostServiceAvailability GetGlobalPostServiceAvailability(AccountInfoV27 accountInfo)
+        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
         {
-            GlobalPostServiceAvailability gpAvailability = accountInfo.Capabilities.CanPrintGP ?
+            GlobalPostServiceAvailability gpAvailability = capabilities.CanPrintGP ?
                 GlobalPostServiceAvailability.GlobalPost :
                 GlobalPostServiceAvailability.None;
 
-            GlobalPostServiceAvailability gpSmartSaverAvailability = accountInfo.Capabilities.CanPrintGPSmartSaver ?
+            GlobalPostServiceAvailability gpSmartSaverAvailability = capabilities.CanPrintGPSmartSaver ?
                 GlobalPostServiceAvailability.SmartSaver :
                 GlobalPostServiceAvailability.None;
 
-            return gpAvailability | gpSmartSaverAvailability;
+            return gpAvailability | gpSmartSaverAvailability | GetGlobalPostInternationalPresortAvailability(capabilities);
+        }
+
+        /// <summary>
+        /// Get international presort availability for Global Post
+        /// </summary>
+        private static GlobalPostServiceAvailability GetGlobalPostInternationalPresortAvailability(CapabilitiesV18 capabilities)
+        {
+            if (!capabilities.CanPrintIntlPresortSinglePiece)
+            {
+                return GlobalPostServiceAvailability.None;
+            }
+
+            GlobalPostServiceAvailability first = capabilities.CanPrintFCIPresort ?
+                GlobalPostServiceAvailability.InternationalFirst :
+                GlobalPostServiceAvailability.None;
+
+            GlobalPostServiceAvailability priority = capabilities.CanPrintPMIPresort ?
+                GlobalPostServiceAvailability.InternationalPriority :
+                GlobalPostServiceAvailability.None;
+
+            GlobalPostServiceAvailability express = capabilities.CanPrintPMEIPresort ?
+                GlobalPostServiceAvailability.InternationalExpress :
+                GlobalPostServiceAvailability.None;
+
+            return first | priority | express;
         }
 
         /// <summary>
