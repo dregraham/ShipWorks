@@ -3102,7 +3102,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyStoreEntity's mappings</summary>
 		private void InitShopifyStoreEntityMappings()
 		{
-			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 7, 0);
+			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 8, 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopUrlName", "ShopifyShopUrlName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopDisplayName", "ShopifyShopDisplayName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3110,6 +3110,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyRequestedShippingOption", "ShopifyRequestedShippingOption", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ApiKey", "ApiKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "Password", "Password", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyNotifyCustomer", "ShopifyNotifyCustomer", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 		}
 
 		/// <summary>Inits ShopSiteStoreEntity's mappings</summary>

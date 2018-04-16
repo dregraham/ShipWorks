@@ -22522,6 +22522,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.Password);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ShopifyNotifyCustomer field instance</summary>
+		public static EntityField2 ShopifyNotifyCustomer
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyNotifyCustomer);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopSiteStoreEntity</summary>

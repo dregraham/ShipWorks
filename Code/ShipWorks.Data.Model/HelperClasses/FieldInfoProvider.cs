@@ -2945,6 +2945,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyRequestedShippingOption", typeof(System.Int32), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, 0, 0, 10);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ApiKey", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ApiKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.Password, 100, 0, 0);
+			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyNotifyCustomer", typeof(System.Boolean), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, 0, 0, 0);
 		}
 		/// <summary>Inits ShopSiteStoreEntity's FieldInfo objects</summary>
 		private void InitShopSiteStoreEntityInfos()
