@@ -270,15 +270,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
         {
-            GlobalPostServiceAvailability gpAvailability = capabilities.CanPrintGP ?
-                GlobalPostServiceAvailability.GlobalPost :
-                GlobalPostServiceAvailability.None;
-
-            GlobalPostServiceAvailability gpSmartSaverAvailability = capabilities.CanPrintGPSmartSaver ?
-                GlobalPostServiceAvailability.SmartSaver :
-                GlobalPostServiceAvailability.None;
-
-            return gpAvailability | gpSmartSaverAvailability | GetGlobalPostInternationalPresortAvailability(capabilities);
+            return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
+                HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
+                GetGlobalPostInternationalPresortAvailability(capabilities);
         }
 
         /// <summary>
@@ -291,20 +285,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 return GlobalPostServiceAvailability.None;
             }
 
-            GlobalPostServiceAvailability first = capabilities.CanPrintFCIPresort ?
-                GlobalPostServiceAvailability.InternationalFirst :
-                GlobalPostServiceAvailability.None;
-
-            GlobalPostServiceAvailability priority = capabilities.CanPrintPMIPresort ?
-                GlobalPostServiceAvailability.InternationalPriority :
-                GlobalPostServiceAvailability.None;
-
-            GlobalPostServiceAvailability express = capabilities.CanPrintPMEIPresort ?
-                GlobalPostServiceAvailability.InternationalExpress :
-                GlobalPostServiceAvailability.None;
-
-            return first | priority | express;
+            return HasCapability(capabilities.CanPrintFCIPresort, GlobalPostServiceAvailability.InternationalFirst) |
+                HasCapability(capabilities.CanPrintPMIPresort, GlobalPostServiceAvailability.InternationalPriority) |
+                HasCapability(capabilities.CanPrintPMEIPresort, GlobalPostServiceAvailability.InternationalExpress);
         }
+
+        /// <summary>
+        /// Gets a capability based on whether a user has it or not
+        /// </summary>
+        private static GlobalPostServiceAvailability HasCapability(bool hasCapability, GlobalPostServiceAvailability capability) =>
+            hasCapability ? capability : GlobalPostServiceAvailability.None;
 
         /// <summary>
         /// Get the USPS URL of the given urlType
