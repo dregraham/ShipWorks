@@ -26,16 +26,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
     [Component]
     public class ShopifyWebClient : IShopifyWebClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
-        static readonly LruCache<string, JToken> productCache = new LruCache<string, JToken>(1000);
-        readonly static ShopifyWebClientRequestThrottle throttler = new ShopifyWebClientRequestThrottle();
+        private static readonly LruCache<string, JToken> productCache = new LruCache<string, JToken>(1000);
+        private static readonly ShopifyWebClientRequestThrottle throttler = new ShopifyWebClientRequestThrottle();
 
         // Progress reporting
-        IProgressReporter progress;
+        private readonly IProgressReporter progress;
 
-        ShopifyStoreEntity store;
-        ShopifyEndpoints endpoints;
+        private readonly ShopifyStoreEntity store;
+        private ShopifyEndpoints endpoints;
 
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                     // Check the content of the page for the form action that goes to the auth login page.
                     // If the content contains the html, it is the login page.
-                    bool isLoginPage = isLoginPage = pageText.IndexOf("login", StringComparison.OrdinalIgnoreCase) > -1;
+                    bool isLoginPage = pageText.IndexOf("login", StringComparison.OrdinalIgnoreCase) > -1;
 
                     return isLoginPage;
                 }
@@ -152,8 +152,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                string msg = string.Format("An error occurred in GetAccessToken({0}).{1}     ", requestTokenUrl, Environment.NewLine);
-                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", msg, ex.ToString());
+                string msg = $"An error occurred in GetAccessToken({requestTokenUrl}).{Environment.NewLine}     ";
+                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", msg, ex);
 
                 throw new ShopifyException("Shopify did not return a valid access token to ShipWorks.", ex);
             }
@@ -170,7 +170,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             try
             {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter() { Verb = HttpVerb.Get };
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
                 request.Uri = new Uri(Endpoints.ShopUrl);
 
                 // Make the call and get the response
@@ -178,21 +178,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 JToken shop = JObject.Parse(shopAsString);
 
-                if (shop != null && shop["shop"] != null)
+                if (shop?["shop"] != null)
                 {
                     shop = shop["shop"];
 
-                    store.StoreName = shop.GetValue<string>("name", "Shopify Store");
+                    store.StoreName = shop.GetValue("name", "Shopify Store");
                     store.ShopifyShopDisplayName = store.StoreName;
 
-                    store.Street1 = shop.GetValue<string>("address1", string.Empty);
-                    store.City = shop.GetValue<string>("city", string.Empty);
-                    store.StateProvCode = Geography.GetStateProvCode(shop.GetValue<string>("province", string.Empty));
-                    store.PostalCode = shop.GetValue<string>("zip", string.Empty);
-                    store.CountryCode = Geography.GetCountryCode(shop.GetValue<string>("country", string.Empty));
+                    store.Street1 = shop.GetValue("address1", string.Empty);
+                    store.City = shop.GetValue("city", string.Empty);
+                    store.StateProvCode = Geography.GetStateProvCode(shop.GetValue("province", string.Empty));
+                    store.PostalCode = shop.GetValue("zip", string.Empty);
+                    store.CountryCode = Geography.GetCountryCode(shop.GetValue("country", string.Empty));
 
-                    store.Email = shop.GetValue<string>("email", string.Empty);
-                    store.Phone = shop.GetValue<string>("phone", string.Empty);
+                    store.Email = shop.GetValue("email", string.Empty);
+                    store.Phone = shop.GetValue("phone", string.Empty);
                 }
                 else
                 {
@@ -201,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                log.ErrorFormat("An error occurred during JObect.Parse", ex);
+                log.Error("An error occurred during JObect.Parse", ex);
 
                 throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving store information.", ex);
             }
@@ -212,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public DateTime GetServerCurrentDateTime()
         {
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter() { Verb = HttpVerb.Get };
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
             request.Uri = new Uri(Endpoints.ApiGetOrderCountUrl);
 
             // We don't really care about the order count, we just need a call to the server, so use Now
@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             try
             {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter() { Verb = HttpVerb.Get };
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
                 request.Uri = new Uri(url);
 
                 // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
@@ -271,8 +271,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                string message = string.Format("An error occurred in GetOrderCount for Url: '{0}'){1}     ", url, Environment.NewLine);
-                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", message, ex.ToString());
+                string message = $"An error occurred in GetOrderCount for Url: '{url}'){Environment.NewLine}     ";
+                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", message, ex);
 
                 throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting the order count.", ex);
             }
@@ -284,7 +284,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
         public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int page = 1)
         {
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter() { Verb = HttpVerb.Get };
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
             request.Uri = new Uri(Endpoints.ApiGetOrdersUrl);
 
             // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
@@ -317,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 if (ordersToken != null && ordersToken.Count > 0)
                 {
                     // Sort the orders by update date ascending
-                    ordersToReturn = ordersToken.OrderBy(o => o["updated_at"]).ToList<JToken>();
+                    ordersToReturn = ordersToken.OrderBy(o => o["updated_at"]).ToList();
                 }
             }
 
@@ -334,11 +334,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public JToken GetProduct(long shopifyProductId)
         {
             string url = Endpoints.ApiProductUrl(shopifyProductId);
-            JToken product;
 
             try
             {
                 // See if we have a cached version of the product
+                JToken product;
                 if (productCache.Contains(url.ToLower()))
                 {
                     product = productCache[url.ToLower()];
@@ -346,7 +346,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 else
                 {
                     // Not cached, so go get it
-                    HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter() { Verb = HttpVerb.Get };
+                    HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
                     request.Uri = new Uri(url);
 
                     try
@@ -375,7 +375,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                string message = string.Format("An error occurred in GetProduct for Url: '{0}'){1}     ", url, Environment.NewLine);
+                string message = $"An error occurred in GetProduct for Url: '{url}'){Environment.NewLine}     ";
                 log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex);
 
                 throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting a product.", ex);
@@ -400,8 +400,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                string message = string.Format("An error occurred in GetFraudRisks for Url: '{0}'){1}     ", url, Environment.NewLine);
-                log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex.ToString());
+                string message = $"An error occurred in GetFraudRisks for Url: '{url}'){Environment.NewLine}     ";
+                log.ErrorFormat("{0}An error occurred during Json operation. {1}", message, ex);
 
                 throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting fraud risks.", ex);
             }
@@ -483,7 +483,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             else
             {
-                string authInfo = string.Format("{0}:{1}", store.ApiKey, store.Password);
+                string authInfo = $"{store.ApiKey}:{store.Password}";
                 string encodedAuthInfo = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
 
                 request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
@@ -528,7 +528,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (Exception ex)
             {
-                log.Error(string.Format("Error in ProcessRequest for action: '{0}'.", action), ex);
+                log.Error($"Error in ProcessRequest for action: '{action}'.", ex);
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
             }
         }
@@ -558,14 +558,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 {
                     throw new RequestThrottledException(ex.Message);
                 }
-                else if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
+
+                if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
                 {
                     throw new ShopifyAlreadyUploadedException(ex.Message);
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
         }
 
@@ -582,10 +581,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 // Get the query string from the uri
                 NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
 
-                return queryStringParams[ShopifyConstants.RequestTokenParamName].ToString();
+                return queryStringParams[ShopifyConstants.RequestTokenParamName];
             }
 
-            throw new InvalidOperationException(string.Format("The requestToken could not be extracted from {0}", requestTokenUrl));
+            throw new InvalidOperationException($"The requestToken could not be extracted from {requestTokenUrl}");
         }
 
         /// <summary>
@@ -603,14 +602,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
 
             // Now get the value of the request token param
-            if (queryStringParams != null &&
-                queryStringParams[ShopifyConstants.RequestTokenParamName] != null &&
-                !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]))
-            {
-                return true;
-            }
-
-            return false;
+            return queryStringParams?[ShopifyConstants.RequestTokenParamName] != null &&
+                   !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]);
         }
 
         /// <summary>
