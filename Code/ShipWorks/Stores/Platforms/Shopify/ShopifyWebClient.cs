@@ -510,7 +510,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Shopify, EnumHelper.GetDescription(action));
                     logger.LogRequest(request);
 
-
                     RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(action, request, progressReporter);
 
                     // Ask for the response
