@@ -3,32 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Xunit;
+using log4net;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
+using ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse;
 using ShipWorks.Shipping.Editing.Rating;
-using ILog = log4net.ILog;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 {
     public class OnTracRateRequestTest
     {
-        Mock<IHttpResponseReader> mockedHttpResponseReader;
-
-        Mock<IApiLogEntry> mockedLogger;
-
-        Mock<HttpVariableRequestSubmitter> mockedSubmitter;
-
-        Mock<ILog> log;
-
-        ShipmentEntity shipment;
-
-        OnTracRates testObject;
+        private readonly Mock<IHttpResponseReader> mockedHttpResponseReader;
+        private readonly Mock<IApiLogEntry> mockedLogger;
+        private readonly Mock<HttpVariableRequestSubmitter> mockedSubmitter;
+        private readonly Mock<ILog> log;
+        private readonly ShipmentEntity shipment;
+        private readonly OnTracRates testObject;
 
         public OnTracRateRequestTest()
         {
@@ -123,25 +118,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
-        RateGroup RunSuccessfullGetRates(IEnumerable<OnTracServiceType> availableServiceTypes = null)
+        private RateGroup RunSuccessfullGetRates(IEnumerable<OnTracServiceType> availableServiceTypes = null)
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "",
-                Shipments = new[]
+                Shipments = new Shipments
                 {
-                    new RateShipment
+                    Shipment = new[]
                     {
-                        Rates = new[]
+                        new ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse.Shipment
                         {
-                            new RateQuote
+                            Rates = new[]
                             {
-                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                                new Rate
+                                {
+                                    Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                                }
                             }
                         }
-                    }
+                    },
+                    Error = ""
                 }
-            };
+            };   
 
             string serializedValidResponse = SerializationUtility.SerializeToXml(rateShipmentList);
 
@@ -155,24 +153,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         [Fact]
         public void GetRates_RequestedWeightIsZero_PackageTypeIsLetter()
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "",
-                Shipments = new[]
+                Shipments = new Shipments
                 {
-                    new RateShipment
+                    Shipment = new[]
                     {
-                        Rates = new[]
+                        new ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse.Shipment
                         {
-                            new RateQuote
+                            Rates = new[]
                             {
-                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                                new Rate
+                                {
+                                    Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                                }
                             }
                         }
-                    }
+                    },
+                    Error = ""
                 }
             };
-
 
             shipment.OnTrac.PackagingType = (int)OnTracPackagingType.Letter;
 
@@ -181,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            RateGroup rateGroup = testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
 
             Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
@@ -192,22 +192,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         [Fact]
         public void GetRates_ThrowsOnTracException_WhenErrorInShipment()
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "",
-                Shipments = new[]
+                Shipments = new Shipments
                 {
-                    new RateShipment
+                    Shipment = new[]
                     {
-                        Error = "AHHHH!!!",
-                        Rates = new[]
+                        new ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse.Shipment
                         {
-                            new RateQuote
+                            Rates = new[]
                             {
-                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
-                            }
+                               new Rate
+                               {
+                                    Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                               }
+                            },
+                            Error = "AHHHH!!!"
                         }
-                    }
+                    },
+                    Error = ""
                 }
             };
 
@@ -222,10 +225,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         [Fact]
         public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned()
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "",
-                Shipments = new RateShipment[0]
+                Shipments = new Shipments()
             };
 
             string serializedValidResponse = SerializationUtility.SerializeToXml(rateShipmentList);
@@ -239,9 +241,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         [Fact]
         public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned()
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "Da Da Da"
+                Shipments = new Shipments
+                {
+                    Shipment = new ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse.Shipment[0],
+                    Error = "dude"
+                }
             };
 
             string serializedValidResponse = SerializationUtility.SerializeToXml(rateShipmentList);
@@ -255,25 +261,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         [Fact]
         public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned()
         {
-            RateShipmentList rateShipmentList = new RateShipmentList
+            OnTracRateResponse rateShipmentList = new OnTracRateResponse
             {
-                Error = "",
-                Shipments = new[]
+                Shipments = new Shipments
                 {
-                    new RateShipment
+                    Shipment = new[]
                     {
-                        Rates = new[]
+                        new ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse.Shipment
                         {
-                            new RateQuote
+                            Rates = new[]
                             {
-                                Service = "XX"
-                            },
-                            new RateQuote
-                            {
-                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                               new Rate
+                               {
+                                    Service = "XX"
+                               },
+                               new Rate
+                               {
+                                    Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                               }
                             }
                         }
-                    }
+                    },
+                    Error = ""
                 }
             };
 

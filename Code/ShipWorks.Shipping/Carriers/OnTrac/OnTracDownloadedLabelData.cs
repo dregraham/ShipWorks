@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Pdf;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
-using ShipWorks.UI;
+
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -22,10 +20,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private readonly ILog log;
         private readonly IObjectReferenceManager objectReferenceManager;
         private readonly ShipmentEntity shipment;
-        private readonly ShipmentResponse shipmentResponse;
+        private readonly Schemas.ShipmentResponse.Shipment shipmentResponse;
+        private const string ErrorMessage = "Error reading OnTrac label.";
 
         public OnTracDownloadedLabelData(ShipmentEntity shipment,
-            ShipmentResponse shipmentResponse,
+            Schemas.ShipmentResponse.Shipment shipmentResponse,
             IObjectReferenceManager objectReferenceManager,
             IDataResourceManager dataResourceManager,
             Func<Type, ILog> getLogger)
@@ -43,53 +42,42 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public void Save()
         {
             shipment.TrackingNumber = shipmentResponse.Tracking;
-            shipment.ShipmentCost = (decimal) shipmentResponse.TotalChrg;
-            shipment.BilledWeight = shipmentResponse.BilledWeight;
-
+            shipment.ShipmentCost = shipmentResponse.TotalChrg;
+            double billedWeight;
+            if (double.TryParse(shipmentResponse.BilledWeight, out billedWeight))
+            {
+                shipment.BilledWeight = billedWeight;
+            }
+                
             // Interapptive users have an Unprocess button.  If we are reprocessing we need to clear the old images
             objectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            byte[] imageData;
-            if (shipment.ActualLabelFormat.HasValue)
-            {
-                imageData = Encoding.ASCII.GetBytes(shipmentResponse.Label);
-            }
-            else
-            {
-                try
-                {
-                    imageData = GetCroppedImageData(shipmentResponse.Label);
-                }
-                catch (FormatException ex)
-                {
-                    const string error = "Error reading OnTrac label.";
-                    log.Error(error, ex);
-                    throw new ShippingException(error, ex);
-                }
-            }
+            // Actual label format will only have a value if thermal
+            bool isPdf = !shipment.ActualLabelFormat.HasValue;
 
-            dataResourceManager.CreateFromBytes(imageData, shipment.ShipmentID, "LabelPrimary");
-        }
-
-        /// <summary>
-        /// Gets the cropped image data.
-        /// </summary>
-        private byte[] GetCroppedImageData(string shipmentLabelFromOnTracApi)
-        {
-            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(shipmentLabelFromOnTracApi)))
+            try
             {
-                using (Image imageOriginal = Image.FromStream(stream))
+                byte[] label = isPdf ?
+                    Convert.FromBase64String(shipmentResponse.Label) :
+                    Encoding.ASCII.GetBytes(shipmentResponse.Label);
+
+                using (MemoryStream stream = new MemoryStream(label))
                 {
-                    using (Image imageLabelCrop = DisplayHelper.CropImage(imageOriginal, 0, 0, imageOriginal.Width, 396))
+                    if (isPdf)
                     {
-                        using (MemoryStream imageStream = new MemoryStream())
-                        {
-                            imageLabelCrop.Save(imageStream, ImageFormat.Png);
-
-                            return imageStream.ToArray();
-                        }
+                        dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID,
+                                                          i => "LabelPrimary", s => s.ToArray());
+                    }
+                    else
+                    {
+                        dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, "LabelPrimary");
                     }
                 }
+            }
+            catch(FormatException ex)
+            {
+                log.Error(ErrorMessage, ex);
+                throw new ShippingException(ErrorMessage, ex);
             }
         }
     }
