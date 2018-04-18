@@ -86,11 +86,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private static Func<PostalServiceType, GlobalPostServiceAvailability, bool> GetPresortAvailabilityTest(IShipmentEntity shipment, Func<IShipmentEntity, IUspsAccountEntity> getAccount)
         {
-            var account = new Lazy<IUspsAccountEntity>(() => getAccount(shipment));
+            var account = getAccount(shipment);
+            if (account == null)
+            {
+                return (_, __) => false;
+            }
 
-            return (PostalServiceType service, GlobalPostServiceAvailability requiredFlag) =>
-                shipment.Postal.Service == (int) service &&
-                    ((GlobalPostServiceAvailability) account.Value?.GlobalPostAvailability).HasFlag(requiredFlag);
+            var availability = (GlobalPostServiceAvailability) account.GlobalPostAvailability;
+
+            return (service, requiredFlag) =>
+                shipment.Postal.Service == (int) service && availability.HasFlag(requiredFlag);
         }
 
         /// <summary>
