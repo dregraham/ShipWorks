@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
                             Contact = recipient.UnparsedName.Truncate(20),
                             Phone = PersonUtility.GetPhoneDigits10(recipient.Phone)
                         },
-                        Service = GetOnTracServiceType((OnTracServiceType) onTracShipment.Service),
+                        Service = EnumHelper.GetApiValue((OnTracServiceType) onTracShipment.Service),
                         SignatureRequired = onTracShipment.SignatureRequired,
                         Residential = shipworksShipment.ResidentialResult,
                         SaturdayDel = onTracShipment.SaturdayDelivery,
@@ -105,14 +105,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         }
 
         /// <summary>
-        /// Given a shipworks service type, return an OnTrac service type defined by OnTrac XSD
-        /// </summary>
-        private static string GetOnTracServiceType(OnTracServiceType onTracServiceType)
-        {
-            return EnumHelper.GetApiValue(onTracServiceType);
-        }
-
-        /// <summary>
         /// If not Thermal, return pdf api int enumerator. If is thermal, return requested int api thermal type enumerator.
         /// </summary>
         private static int GetOnTracLabelType(int? thermalType)
@@ -120,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
             if (!thermalType.HasValue)
             {
                 // PDF
-                return 14;
+                return 13;
             }
 
             switch ((ThermalLanguage) thermalType)
