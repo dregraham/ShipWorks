@@ -74,14 +74,23 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            var account = uspsAccountRetriever.GetAccountReadOnly(shipment);
+            var hasAvailability = GetPresortAvailabilityTest(shipment, uspsAccountRetriever.GetAccountReadOnly);
 
-            return (shipment.Postal.Service == (int) PostalServiceType.InternationalFirst &&
-                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalFirst)) ||
-                (shipment.Postal.Service == (int) PostalServiceType.InternationalPriority &&
-                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalPriority)) ||
-                (shipment.Postal.Service == (int) PostalServiceType.InternationalExpress &&
-                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalExpress));
+            return hasAvailability(PostalServiceType.InternationalFirst, GlobalPostServiceAvailability.InternationalFirst) ||
+                hasAvailability(PostalServiceType.InternationalPriority, GlobalPostServiceAvailability.InternationalPriority) ||
+                hasAvailability(PostalServiceType.InternationalExpress, GlobalPostServiceAvailability.InternationalExpress);
+        }
+
+        /// <summary>
+        /// Get a test for whether the user has the availability of a specific presort service
+        /// </summary>
+        private static Func<PostalServiceType, GlobalPostServiceAvailability, bool> GetPresortAvailabilityTest(IShipmentEntity shipment, Func<IShipmentEntity, IUspsAccountEntity> getAccount)
+        {
+            var account = new Lazy<IUspsAccountEntity>(() => getAccount(shipment));
+
+            return (PostalServiceType service, GlobalPostServiceAvailability requiredFlag) =>
+                shipment.Postal.Service == (int) service &&
+                    ((GlobalPostServiceAvailability) account.Value?.GlobalPostAvailability).HasFlag(requiredFlag);
         }
 
         /// <summary>
@@ -103,10 +112,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Is this shipment an Endicia Express 1 shipment
         /// </summary>
-        private bool IsEndiciaReseller(IShipmentEntity shipment)
-        {
-            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int) EndiciaReseller.None;
-        }
+        private bool IsEndiciaReseller(IShipmentEntity shipment) =>
+            endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int) EndiciaReseller.None;
 
         /// <summary>
         /// Determines whether the shipment is a Gap shipment.
@@ -118,15 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            if (shipment.Service == (int) PostalServiceType.InternationalFirst &&
-                shipment.CustomsContentType != (int) PostalCustomsContentType.Documents &&
-                (shipment.PackagingType == (int) PostalPackagingType.Envelope ||
-                    shipment.PackagingType == (int) PostalPackagingType.LargeEnvelope))
-            {
-                return true;
-            }
-
-            return false;
+            return PostalUtility.IsGapLabel(shipment);
         }
     }
 }
