@@ -2,6 +2,9 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// Handle notification for Global Post labels
+    /// </summary>
     public interface IGlobalPostLabelNotification
     {
         /// <summary>

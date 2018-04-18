@@ -4,7 +4,6 @@ using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -21,7 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
     {
         private readonly IGlobalPostLabelNotification globalPostNotification;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
+        private readonly IReadOnlyCarrierAccountRetriever<IEndiciaAccountEntity> endiciaAccountRepository;
+        private readonly IReadOnlyCarrierAccountRetriever<IUspsAccountEntity> uspsAccountRetriever;
 
         /// <summary>
         /// Constructor
@@ -29,11 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public PostalPostProcessingMessage(
             IGlobalPostLabelNotification globalPostNotification,
             IDateTimeProvider dateTimeProvider,
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository)
+            IReadOnlyCarrierAccountRetriever<IEndiciaAccountEntity> endiciaAccountRepository,
+            IReadOnlyCarrierAccountRetriever<IUspsAccountEntity> uspsAccountRetriever)
         {
             this.globalPostNotification = globalPostNotification;
             this.dateTimeProvider = dateTimeProvider;
             this.endiciaAccountRepository = endiciaAccountRepository;
+            this.uspsAccountRetriever = uspsAccountRetriever;
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotifiactionForShipment(s));
+            IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotificationForShipment(s));
 
             if (gapShipment != null && globalPostNotification.AppliesToCurrentUser())
             {
@@ -52,13 +54,41 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Should we show the notification
         /// </summary>
-        private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
+        private bool ShowNotificationForShipment(IShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Postal == null)
             {
                 return false;
             }
 
+            return IsGapShipment(shipment) || IsPresortShipment(shipment);
+        }
+
+        /// <summary>
+        /// Is the shipment presort?
+        /// </summary>
+        private bool IsPresortShipment(IShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Usps == null)
+            {
+                return false;
+            }
+
+            var account = uspsAccountRetriever.GetAccountReadOnly(shipment);
+
+            return (shipment.Postal.Service == (int) PostalServiceType.InternationalFirst &&
+                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalFirst)) ||
+                (shipment.Postal.Service == (int) PostalServiceType.InternationalPriority &&
+                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalPriority)) ||
+                (shipment.Postal.Service == (int) PostalServiceType.InternationalExpress &&
+                    ((GlobalPostServiceAvailability) account.GlobalPostAvailability).HasFlag(GlobalPostServiceAvailability.InternationalExpress));
+        }
+
+        /// <summary>
+        /// Is the shipment Gap?
+        /// </summary>
+        private bool IsGapShipment(IShipmentEntity shipment)
+        {
             bool showNotifiaction = IsGapLabel(shipment.Postal) ||
                 PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
 
@@ -96,9 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return true;
             }
 
-            return (shipment.Service == (int) PostalServiceType.InternationalFirst ||
-                shipment.Service == (int) PostalServiceType.InternationalPriority ||
-                shipment.Service == (int) PostalServiceType.InternationalExpress);
+            return false;
         }
     }
 }

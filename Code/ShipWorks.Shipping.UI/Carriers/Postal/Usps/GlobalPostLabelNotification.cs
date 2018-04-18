@@ -1,12 +1,12 @@
-﻿using Interapptive.Shared.UI;
+﻿using System;
+using System.Data.SqlTypes;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
-using System;
-using System.Data.SqlTypes;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
 {
@@ -32,6 +32,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private const string EndiciaGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5175";
         private const string GlobalPostAdvantageProgramMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000114989";
         private const string GlobalPostAdvantageProgramBrowserDlgTitle = "Your First-Class International Envelope Label";
+
+        // Presort info
+        private const string PresortDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5229";
+        private const string PresortMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000121488-presort-labels";
+        private const string PresortDialogTitle = "Your International Label";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalPostLabelNotification"/> class.
@@ -73,7 +78,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             webBrowserDlg.ShowDialog();
 
             // As per SDC mockups, if the user does not dismiss the dialog, show them again after a day
-            userSession.User.Settings.NextGlobalPostNotificationDate = ((IDismissableWebBrowserDlgViewModel) webBrowserDlg.DataContext).Dismissed ?
+            userSession.User.Settings.NextGlobalPostNotificationDate = browserViewModel.Dismissed ?
                 SqlDateTime.MaxValue.Value :
                 DateTime.UtcNow.AddDays(1);
         }
@@ -83,26 +88,66 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// </summary>
         private static (string urlToUse, string titleToUse, string moreInfo) GetDialogAssets(IShipmentEntity shipment)
         {
-            string urlToUse = GlobalPostDisplayUrl;
-            bool gapShipment = !PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
-            
+            bool gapShipment = !PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
+            bool presortShipment = PostalUtility.IsPresort(shipment.Postal);
+
+            string urlToUse = GetDisplayUrl(shipment, gapShipment, presortShipment);
+            string titleToUse = GetTitleToUse(gapShipment, presortShipment);
+            string moreInfo = GetMorInfoLink(gapShipment, presortShipment);
+
+            return (urlToUse, titleToUse, moreInfo);
+        }
+
+        /// <summary>
+        /// Get the more info link
+        /// </summary>
+        private static string GetMorInfoLink(bool gapShipment, bool presortShipment)
+        {
+            if (presortShipment)
+            {
+                return PresortMoreInfoUrl;
+            }
+
+            return gapShipment ? GlobalPostAdvantageProgramMoreInfoUrl : GlobalPostMoreInfoUrl;
+        }
+
+        /// <summary>
+        /// Get the title for the dialog
+        /// </summary>
+        private static string GetTitleToUse(bool gapShipment, bool presortShipment)
+        {
+            if (presortShipment)
+            {
+                return PresortDialogTitle;
+            }
+
+            return gapShipment ? GlobalPostAdvantageProgramBrowserDlgTitle : GlobalPostBrowserDlgTitle;
+        }
+
+        /// <summary>
+        /// Get the display url for the dialog
+        /// </summary>
+        private static string GetDisplayUrl(IShipmentEntity shipment, bool gapShipment, bool presortShipment)
+        {
+            if (presortShipment)
+            {
+                return PresortDisplayUrl;
+            }
+
             if (gapShipment)
             {
                 if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
                 {
-                    urlToUse = EndiciaGlobalPostAdvantageProgramDisplayUrl;
+                    return EndiciaGlobalPostAdvantageProgramDisplayUrl;
                 }
 
                 if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
                 {
-                    urlToUse = StampsGlobalPostAdvantageProgramDisplayUrl;
+                    return StampsGlobalPostAdvantageProgramDisplayUrl;
                 }
             }
-     
-            string titleToUse = gapShipment ? GlobalPostAdvantageProgramBrowserDlgTitle : GlobalPostBrowserDlgTitle;
-            string moreInfo = gapShipment ? GlobalPostAdvantageProgramMoreInfoUrl : GlobalPostMoreInfoUrl;
 
-            return (urlToUse, titleToUse, moreInfo);
+            return GlobalPostDisplayUrl;
         }
     }
 }

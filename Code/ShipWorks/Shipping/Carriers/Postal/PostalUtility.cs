@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac;
@@ -25,6 +26,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// </summary>
     public static class PostalUtility
     {
+        /// <summary>
+        /// Lookup of presort service types
+        /// </summary>
+        private static readonly ImmutableHashSet<PostalServiceType> presortServiceTypes =
+            new[]
+            {
+                PostalServiceType.InternationalFirst,
+                PostalServiceType.InternationalPriority,
+                PostalServiceType.InternationalExpress
+            }.ToImmutableHashSet();
+
         /// <summary>
         /// Lookup of what service types are associated with which edition features
         /// </summary>
@@ -94,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Indiciates if the given postal code is a military destination.
+        /// Indicates if the given postal code is a military destination.
         /// </summary>
         public static bool IsMilitaryPostalCode(string postalCode)
         {
@@ -592,5 +604,20 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return postalServiceTypes.Contains(serviceType);
         }
+
+        /// <summary>
+        /// Is the shipment a GAP label
+        /// </summary>
+        public static bool IsGapLabel(IPostalShipmentEntity shipment) =>
+            shipment.Service == (int) PostalServiceType.InternationalFirst &&
+                shipment.CustomsContentType != (int) PostalCustomsContentType.Documents &&
+                (shipment.PackagingType == (int) PostalPackagingType.Envelope ||
+                    shipment.PackagingType == (int) PostalPackagingType.LargeEnvelope);
+
+        /// <summary>
+        /// Is the service a Presort service
+        /// </summary>
+        public static bool IsPresort(IPostalShipmentEntity postalShipment) =>
+            !IsGapLabel(postalShipment) && presortServiceTypes.Contains((PostalServiceType) postalShipment.Service);
     }
 }

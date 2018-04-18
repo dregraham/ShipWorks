@@ -1,13 +1,13 @@
-﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.UI;
+﻿using System;
+using System.Data.SqlTypes;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
-using System;
-using System.Data.SqlTypes;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
@@ -15,28 +15,27 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
     public class GlobalPostNotificationTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly GlobalPostLabelNotification testObject;
 
         public GlobalPostNotificationTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            testObject = mock.Create<GlobalPostLabelNotification>();
         }
 
         [Fact]
-        public void AppliesToSession_ReturnsTrue_WhenNextGlobalPostNotificationDateIsInPast()
+        public void AppliesToCurrentUser_ReturnsTrue_WhenNextGlobalPostNotificationDateIsInPast()
         {
-            var testObject = mock.Create<GlobalPostLabelNotification>();
-
             Assert.True(testObject.AppliesToCurrentUser());
         }
 
         [Fact]
-        public void AppliesToSession_ReturnsFalse_WhenNextGlobalPostNotificationDateIsInFuture()
+        public void AppliesToCurrentUser_ReturnsFalse_WhenNextGlobalPostNotificationDateIsInFuture()
         {
             mock.Mock<IUserSession>()
                 .Setup(u => u.User)
                 .Returns(new UserEntity { Settings = new UserSettingsEntity { NextGlobalPostNotificationDate = SqlDateTime.MaxValue.Value } });
-
-            var testObject = mock.Create<GlobalPostLabelNotification>();
 
             Assert.False(testObject.AppliesToCurrentUser());
         }
@@ -46,16 +45,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/3782");
 
-            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-            var dialog = mock.MockRepository.Create<IDialog>();
-            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
-            mock.MockFunc<string, IDialog>(dialog);
-            
-            var testObject = mock.Create<GlobalPostLabelNotification>();
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
 
-            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
-
-            viewModel.Verify(v => v.Load(displayUri, "Your GlobalPost Label", "https://stamps.custhelp.com/app/answers/detail/a_id/3802"));
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(v => v.Load(displayUri, "Your GlobalPost Label", "https://stamps.custhelp.com/app/answers/detail/a_id/3802"));
         }
 
         [Fact]
@@ -63,16 +56,16 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/5174");
 
-            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-            var dialog = mock.MockRepository.Create<IDialog>();
-            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
-            mock.MockFunc<string, IDialog>(dialog);
+            var shipment = Create.Shipment()
+                .AsPostal(p => p.AsUsps()
+                    .Set(x => x.Service = (int) PostalServiceType.InternationalFirst)
+                    .Set(x => x.PackagingType = (int) PostalPackagingType.Envelope)
+                    .Set(x => x.CustomsContentType = (int) PostalCustomsContentType.Other))
+                .Build();
+            testObject.Show(shipment);
 
-            var testObject = mock.Create<GlobalPostLabelNotification>();
-
-            testObject.Show(new ShipmentEntity() { ShipmentTypeCode = ShipmentTypeCode.Usps, Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
-
-            viewModel.Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
         }
 
         [Fact]
@@ -80,16 +73,31 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/5175");
 
-            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-            var dialog = mock.MockRepository.Create<IDialog>();
-            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
-            mock.MockFunc<string, IDialog>(dialog);
+            var shipment = Create.Shipment()
+                .AsPostal(p => p.AsEndicia()
+                    .Set(x => x.Service = (int) PostalServiceType.InternationalFirst)
+                    .Set(x => x.PackagingType = (int) PostalPackagingType.Envelope)
+                    .Set(x => x.CustomsContentType = (int) PostalCustomsContentType.Other))
+                .Build();
+            testObject.Show(shipment);
 
-            var testObject = mock.Create<GlobalPostLabelNotification>();
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+        }
 
-            testObject.Show(new ShipmentEntity() { ShipmentTypeCode = ShipmentTypeCode.Endicia, Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
+        [Theory]
+        [InlineData(PostalServiceType.InternationalExpress)]
+        [InlineData(PostalServiceType.InternationalFirst)]
+        [InlineData(PostalServiceType.InternationalPriority)]
+        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsPresort(PostalServiceType service)
+        {
+            Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/5229");
 
-            viewModel.Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+            var shipment = Create.Shipment().AsPostal(p => p.Set(x => x.Service = (int) service)).Build();
+            testObject.Show(shipment);
+
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(v => v.Load(displayUri, "Your International Label", "http://support.shipworks.com/support/solutions/articles/4000121488-presort-labels"));
         }
 
         [Fact]
@@ -97,12 +105,8 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             DateTime notificationDate = SqlDateTime.MinValue.Value;
 
-            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-            viewModel.Setup(v => v.Dismissed).Returns(true);
-
-            var dialog = mock.MockRepository.Create<IDialog>();
-            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
-            mock.MockFunc<string, IDialog>(dialog);
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Setup(v => v.Dismissed).Returns(true);
 
             var user = new UserEntity
             {
@@ -116,8 +120,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             userSession.Setup(u => u.User)
                 .Returns(user);
 
-            var testObject = mock.Create<GlobalPostLabelNotification>();
-            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
 
             Assert.Equal(SqlDateTime.MaxValue.Value.Date, user.Settings.NextGlobalPostNotificationDate.Date);
         }
@@ -127,12 +130,8 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             DateTime notificationDate = SqlDateTime.MinValue.Value;
 
-            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-            viewModel.Setup(v => v.Dismissed).Returns(false);
-
-            var dialog = mock.MockRepository.Create<IDialog>();
-            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
-            mock.MockFunc<string, IDialog>(dialog);
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Setup(v => v.Dismissed).Returns(false);
 
             var user = new UserEntity
             {
@@ -145,9 +144,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User)
                 .Returns(user);
-
-            var testObject = mock.Create<GlobalPostLabelNotification>();
-            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
 
             Assert.True(userSession.Object.User.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddDays(1).Date));
         }
