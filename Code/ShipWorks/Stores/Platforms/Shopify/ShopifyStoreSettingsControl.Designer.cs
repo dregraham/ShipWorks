@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.shopifyNotifyCustomer.Name = "shopifyNotifyCustomer";
             this.shopifyNotifyCustomer.Size = new System.Drawing.Size(316, 17);
             this.shopifyNotifyCustomer.TabIndex = 24;
-            this.shopifyNotifyCustomer.Text = "Shopify should notify the customer when an order is shipped";
+            this.shopifyNotifyCustomer.Text = "Shopify should notify the customer when an order is shipped.";
             this.shopifyNotifyCustomer.UseVisualStyleBackColor = true;
             // 
             // ShopifyStoreSettingsControl
