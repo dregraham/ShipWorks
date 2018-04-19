@@ -1319,6 +1319,12 @@
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
     <Compile Include="Shipping\Carriers\IShipmentDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.cs">
+      <DependentUpon>EasyTrackResponse.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.cs">
+      <DependentUpon>OnTracDirectPostShipmentRequest.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -8843,6 +8849,15 @@
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v12.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ValidationAvailabilityAndCommitmentService_v6.wsdl" />
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -4,7 +4,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
 {
@@ -13,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
     /// </summary>
     public class OnTracShipmentRequest : OnTracRequest
     {
-        readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
+        private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
 
         /// <summary>
         /// Constructor
@@ -36,28 +35,24 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <summary>
         /// Call OnTrac webservice: OnTrac will create a new shipment and return OnTrac specific information
         /// </summary>
-        /// <param name="shipmentRequestList">Shipment request DTO based on OnTrac XSD</param>
+        /// <param name="shipmentRequest">Shipment request DTO based on OnTrac XSD</param>
         /// <returns> Shipment response DTO based on OnTrac XSD </returns>
         /// <exception cref="OnTracException">Thrown if error from OnTrac</exception>
-        public ShipmentResponse ProcessShipment(ShipmentRequestList shipmentRequestList)
+        public Schemas.ShipmentResponse.Shipment ProcessShipment(Schemas.ShipmentRequest.OnTracShipmentRequest shipmentRequest)
         {
             //serialize object for http transmission
-            string shipmentRequestListString = SerializationUtility.SerializeToXml(shipmentRequestList);
+            string shipmentRequestListString = SerializationUtility.SerializeToXml(shipmentRequest);
             byte[] shipmentRequestListBytes = Encoding.UTF8.GetBytes(shipmentRequestListString);
 
             //Create HttpRequest
             IHttpRequestSubmitter shipmentRequestSubmitter = httpRequestSubmitterFactory.GetHttpBinaryPostRequestSubmitter(shipmentRequestListBytes);
 
             //base string
-            string url = string.Format(
-                "{0}{1}/shipments?pw={2}",
-                BaseUrlUsedToCallOnTrac,
-                AccountNumber,
-                OnTracPassword);
+            string url = $"{BaseUrlUsedToCallOnTrac}{AccountNumber}/shipments?pw={OnTracPassword}";
 
             shipmentRequestSubmitter.Uri = new Uri(url);
 
-            ShipmentResponseList shipmentResponseList = ExecuteLoggedRequest<ShipmentResponseList>(shipmentRequestSubmitter);
+            Schemas.ShipmentResponse.OnTracShipmentResponse shipmentResponseList = ExecuteLoggedRequest<Schemas.ShipmentResponse.OnTracShipmentResponse>(shipmentRequestSubmitter);
 
             // OnTrac may not return any shipments
             if (shipmentResponseList.Shipments == null || shipmentResponseList.Shipments.Length == 0)
