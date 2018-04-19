@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Pdf;
+using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -72,7 +75,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
             testObject.Save();
 
-            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(label, 1234, "LabelPrimary"));
+            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromPdf(
+                                                             PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(),
+                                                             shipment.ShipmentID,
+                                                             "LabelPrimary"));
         }
 
         [Fact]

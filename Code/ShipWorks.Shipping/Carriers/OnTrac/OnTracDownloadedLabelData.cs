@@ -65,8 +65,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 {
                     if (isPdf)
                     {
-                        dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID,
-                                                          i => "LabelPrimary", s => s.ToArray());
+                        dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID, "LabelPrimary");
                     }
                     else
                     {
