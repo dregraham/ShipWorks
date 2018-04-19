@@ -130,6 +130,13 @@ namespace Interapptive.Shared.Utility
                 ex => GenericResult.FromError<T>(ex));
 
         /// <summary>
+        /// Filter results by the given predicate
+        /// </summary>
+        /// <returns>Value if true, otherwise an error result</returns>
+        public GenericResult<T> Filter(Func<T, bool> predicate) =>
+            Bind(x => predicate(x) ? x : GenericResult.FromError<T>("Filtered"));
+
+        /// <summary>
         /// Map the value of the result
         /// </summary>
         /// <param name="func">Map the value to another value</param>

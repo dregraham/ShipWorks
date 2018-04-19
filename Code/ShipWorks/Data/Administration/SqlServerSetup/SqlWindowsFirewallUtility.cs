@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using log4net;
 using System.Diagnostics;
-using Microsoft.Win32;
 using System.IO;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Interaction;
 using Interapptive.Shared.Win32;
+using log4net;
+using Microsoft.Win32;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -56,8 +55,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 {
                     // We need to launch the process to elevate ourselves
                     Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, string.Format("/cmd:{0} {1}", 
-                        new CommandLineHandler().CommandName, 
+                    process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, string.Format("/cmd:{0} {1}",
+                        new CommandLineHandler().CommandName,
                         string.IsNullOrEmpty(instance) ? SqlInstanceUtility.DefaultInstanceName : instance));
                     process.StartInfo.Verb = "runas";
                     process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -193,7 +192,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             /// <summary>
             /// Execute the command with the given options
             /// </summary>
-            public void Execute(List<string> args)
+            public Task Execute(List<string> args)
             {
                 if (args.Count != 1)
                 {
@@ -217,6 +216,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     log.Error("Failed to process firewall request.", ex);
                     Environment.ExitCode = ex.ErrorCode;
                 }
+
+                return Task.CompletedTask;
             }
         }
     }

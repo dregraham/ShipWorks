@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -18,7 +18,8 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service that retrieves rates when shipments change
     /// </summary>
-    public class RatesRetrieverService : IInitializeForCurrentUISession
+    [Component(RegistrationType.Self)]
+    public class RatesRetrieverService : IRatesRetrieverService
     {
         const double ThrottleTime = 250;
         private readonly IMessenger messenger;
@@ -114,6 +115,9 @@ namespace ShipWorks.Shipping.Services
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
+
+            // Clear the Rates UI after login
+            messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
         }
 
         /// <summary>

@@ -2,9 +2,12 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.UI
 {
@@ -29,6 +32,19 @@ namespace ShipWorks.UI
         {
             this.messageHelper = messageHelper;
             this.ownerFactory = ownerFactory;
+        }
+
+        /// <summary>
+        /// Show a message box with the given text.
+        /// </summary>
+        /// <param name="message">Message that should be displayed</param>
+        /// <returns>
+        /// Task that will complete when the dialog is closed
+        /// </returns>
+        public Task ShowMessage(string message)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => messageHelper.ShowMessage(owner, message));
         }
 
         /// <summary>
@@ -71,6 +87,25 @@ namespace ShipWorks.UI
         /// </summary>
         public Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description) =>
             ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description));
+
+        /// <summary>
+        /// Show a new progress dialog
+        /// </summary>
+        public Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan) =>
+            ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description, progressProvider, timeSpan));
+
+        /// <summary>
+        /// Create a progress provider
+        /// </summary>
+        public IProgressProvider CreateProgressProvider() => new ProgressProvider();
+
+        /// <summary>
+        /// Get a connection sensitive scope
+        /// </summary>
+        public Task<IConnectionSensitiveScope> GetConnectionSensitiveScope(string text) =>
+            Task.FromResult(ConnectionSensitiveScope.IsActive ?
+                ConnectionSensitiveScope.Empty :
+                new ConnectionSensitiveScope("archive database", ownerFactory()));
 
         /// <summary>
         /// Show a dialog

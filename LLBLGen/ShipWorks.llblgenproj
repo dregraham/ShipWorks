@@ -98,7 +98,7 @@
     <TypeShortcut Shortcut="FedExFreightPhysicalPackagingType" Type="ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightShipmentRoleType" Type="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightSpecialServicesType" Type="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="Hotkey" Type="ShipWorks.IO.KeyboardShortcuts.Hotkey, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="Hotkey" Type="System.String" />
     <TypeShortcut Shortcut="KeyboardShortcutCommand" Type="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="KeyboardShortcutModifiers" Type="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShipmentTypeCode" Type="ShipWorks.Shipping.ShipmentTypeCode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -582,6 +582,7 @@
         <Fields>
           <Field Name="AddressCasing" Type="bool" FieldIndex="3" />
           <Field Name="AllowEbayCombineLocally" Type="bool" FieldIndex="14" />
+          <Field Name="ArchivalSettingsXml" Type="string" MaxLength="2147483647" FieldIndex="15" />
           <Field Name="AuditDeletedOrders" Type="bool" FieldIndex="11" />
           <Field Name="AuditNewOrders" Type="bool" FieldIndex="10" />
           <Field Name="ConfigurationID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -4217,7 +4218,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-03-22T17:28:13.6675903Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-06T14:06:13.0482131Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4777,6 +4778,7 @@
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
                     <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                     <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -10612,6 +10614,7 @@
           <FieldMappings>
             <FieldMapping FieldName="AddressCasing" TargetFieldName="AddressCasing" />
             <FieldMapping FieldName="AllowEbayCombineLocally" TargetFieldName="AllowEbayCombineLocally" />
+            <FieldMapping FieldName="ArchivalSettingsXml" TargetFieldName="ArchivalSettingsXml" />
             <FieldMapping FieldName="AuditDeletedOrders" TargetFieldName="AuditDeletedOrders" />
             <FieldMapping FieldName="AuditNewOrders" TargetFieldName="AuditNewOrders" />
             <FieldMapping FieldName="ConfigurationID" TargetFieldName="ConfigurationID" />

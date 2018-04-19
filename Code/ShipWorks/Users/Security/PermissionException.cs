@@ -1,9 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Users.Security
 {
@@ -37,7 +39,7 @@ namespace ShipWorks.Users.Security
         /// Common constructor
         /// </summary>
         public PermissionException(PermissionType permissionType)
-            : base(string.Format("Insufficient permission for '{0}'.", permissionType))
+            : base(GetPermissionArchiveMessage(string.Format("Insufficient permission for '{0}'.", permissionType)))
         {
             this.permissionType = permissionType;
         }
@@ -55,11 +57,11 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Serialization constructor
         /// </summary>
-        protected PermissionException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+        protected PermissionException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext)
         {
-            user = (UserEntity)serializationInfo.GetValue(nameof(user), typeof(UserEntity));
-            permissionType = (PermissionType)serializationInfo.GetValue(nameof(permissionType), typeof(PermissionType));
+            user = (UserEntity) serializationInfo.GetValue(nameof(user), typeof(UserEntity));
+            permissionType = (PermissionType) serializationInfo.GetValue(nameof(permissionType), typeof(PermissionType));
         }
 
         /// <summary>
@@ -72,7 +74,20 @@ namespace ShipWorks.Users.Security
                 throw new ArgumentNullException("user");
             }
 
-            return string.Format("User '{0}' does not have permission for '{1}'.", user.Username, permissionType);
+            return GetPermissionArchiveMessage(string.Format("User '{0}' does not have permission for '{1}'.", user.Username, permissionType));
+        }
+
+        /// <summary>
+        /// Get a permission error message
+        /// </summary>
+        private static string GetPermissionArchiveMessage(string permissionMessage)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                    ArchiveConstants.InvalidActionInArchiveMessage :
+                    permissionMessage;
+            }
         }
 
         /// <summary>

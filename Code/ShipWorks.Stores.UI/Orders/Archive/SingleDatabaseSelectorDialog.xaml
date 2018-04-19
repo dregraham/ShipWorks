@@ -1,0 +1,142 @@
+﻿<Window
+        x:Class="ShipWorks.Stores.UI.Orders.Archive.SingleDatabaseSelectorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Archive"
+        xmlns:ui="http://schemas.shipworks.com/ui"
+        d:DataContext="{d:DesignInstance local:DesignModeSingleDatabaseSelectorViewModel, IsDesignTimeCreatable=True}"
+        
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        ResizeMode="CanResizeWithGrip"
+        Background="{x:Static SystemColors.ControlBrush}"
+
+        FontFamily="Tahoma"
+        FontSize="8.25 pt"
+        FontStyle="Normal"
+        FontStretch="Normal"
+        FontWeight="Normal"
+        
+        mc:Ignorable="d"
+        Title="Select Database" 
+        MinHeight="200" MinWidth="400"
+        Height="250" Width="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:StringToVisibilityConverter x:Key="StringToVisibility"/>
+            <local:SchemaVersionStatusConverter x:Key="SchemaVersionStatus" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="{StaticResource StandardPaddingFull}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="{StaticResource StandardPaddingBottom}">
+            ShipWorks found multiple databases that may be the live database for this archive.
+        </TextBlock>
+        
+        <DataGrid Grid.Row="1" 
+                  AutoGenerateColumns="False"            
+                  ItemsSource="{Binding Databases, Mode=OneWay}"                  
+                  SelectionUnit="FullRow"                  
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  AlternatingRowBackground="White"
+                  Style="{StaticResource DataGrid.Static}"
+                  SelectedItem="{Binding SelectedDatabase}"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto"
+                  GridLinesVisibility="None">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" 
+                                    Width="Auto" 
+                                    Binding="{Binding Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="1,2" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Status" 
+                                    Width="Auto" 
+                                    Binding="{Binding SchemaVersion, Converter={StaticResource SchemaVersionStatus}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="1,2" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Last Activity" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextTrimming="CharacterEllipsis" 
+                                       VerticalAlignment="Center" 
+                                       Visibility="{Binding LastUsedBy, Converter={StaticResource StringToVisibility}}"
+                                       Margin="1,2">
+                                <Run Text="{Binding LastUsedBy, Mode=OneTime}" />, 
+                                on 
+                                <Run Text="{Binding LastUsedOn, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Latest Order" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextTrimming="CharacterEllipsis" 
+                                       VerticalAlignment="Center" 
+                                       Visibility="{Binding LastUsedBy, Converter={StaticResource StringToVisibility}}"
+                                       Margin="1,2">
+                                <Run Text="{Binding LastOrderNumber, Mode=OneTime}" />, 
+                                on 
+                                <Run Text="{Binding LastOrderDate, Mode=OneTime, StringFormat={}{0:MM/dd/yy}}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2"
+                        Margin="{StaticResource StandardPaddingTop}"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+            <Button Style="{StaticResource Button.Link}"
+                        Foreground="{StaticResource Blue}"
+                        VerticalAlignment="Center"
+                    Command="{Binding Cancel}"
+                    Margin="{StaticResource StandardPaddingRight}"
+                    Padding="{StaticResource StandardPaddingLeftAndRight}"
+                    IsCancel="True">Cancel</Button>
+            <Button MinHeight="23"
+                    IsDefault="True"
+                    Command="{Binding Accept}"
+                    Padding="{StaticResource StandardPaddingLeftAndRight}">Select</Button>
+        </StackPanel>
+    </Grid>
+</Window>

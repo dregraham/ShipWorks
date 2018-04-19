@@ -37,6 +37,11 @@ namespace ShipWorks.UI.Wizard
         [Category("Wizard")]
         public event EventHandler<WizardSteppingIntoEventArgs> SteppingInto;
 
+        /// <summary>
+        /// Handle a SteppingInto async event
+        /// </summary>
+        public Func<object, WizardSteppingIntoEventArgs, Task> SteppingIntoAsync;
+
         // Event raised every time the page is displayed and fully drawn.
         [Category("Wizard")]
         public event EventHandler<WizardPageShownEventArgs> PageShown;
@@ -133,8 +138,13 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Raise the SteppingInto event.
         /// </summary>
-        internal void RaiseSteppingInto(WizardSteppingIntoEventArgs e)
+        internal async Task RaiseSteppingInto(WizardSteppingIntoEventArgs e)
         {
+            if (SteppingIntoAsync != null)
+            {
+                await SteppingIntoAsync(this, e).ConfigureAwait(true);
+            }
+
             SteppingInto?.Invoke(this, e);
         }
 

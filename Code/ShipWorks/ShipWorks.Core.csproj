@@ -954,6 +954,26 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotification.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationManager.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationViewModel.cs" />
+    <Compile Include="Data\Administration\IShipWorksDatabaseUtility.cs" />
+    <Compile Include="Data\Administration\ISqlDatabaseDetail.cs" />
+    <Compile Include="Data\Administration\ShipWorksDatabaseUtilityWrapper.cs" />
+    <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\ArchiveConstants.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
+    <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
@@ -8625,16 +8645,21 @@
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />
+    <Compile Include="Users\IUserLoginWorkflow.cs" />
+    <Compile Include="Users\Security\ISecurityContextFactory.cs" />
     <Compile Include="Users\IUserConditionalNotification.cs" />
     <Compile Include="Users\IUserService.cs" />
     <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Logon\LogonCredentials.cs" />
+    <Compile Include="Users\Security\SecurityContextFactory.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Users\Security\AddStorePermissionsDlg.Designer.cs">
       <DependentUpon>AddStorePermissionsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Security\ArchiveSecurityContext.cs" />
+    <Compile Include="Users\Security\BaseSecurityContext.cs" />
     <Compile Include="Users\Security\ISecurityContext.cs" />
     <Compile Include="Users\Security\PermissionAwareDeleter.cs" />
     <Compile Include="Users\Security\PermissionBinding.cs" />
@@ -8680,6 +8705,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
     <Compile Include="Users\UserServiceLogonResultType.cs" />
@@ -10734,6 +10760,12 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <Content Include="Resources\data_16.png" />
+    <Content Include="Resources\data_error_16.png" />
+    <Content Include="Resources\data_ok_16.png" />
+    <Content Include="Resources\data_time.png" />
+    <Content Include="Resources\data_time_16.png" />
+    <Content Include="Resources\data_unknown_16.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />
@@ -11142,6 +11174,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Archiving\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>

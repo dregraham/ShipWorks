@@ -36,7 +36,8 @@
     <Style x:Key="Button.Add" TargetType="Button">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Width" Value="Auto" />
-        <Setter Property="Height" Value="23"/>
+        <Setter Property="MinHeight" Value="23"/>
+        <Setter Property="Content" Value="Add" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -47,10 +48,10 @@
                               Style="{StaticResource Path.Plus.Green}"
                               HorizontalAlignment="Left">
                         </Path>
-                        <TextBlock Text="Add"
+                        <TextBlock Text="{TemplateBinding Content}"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"                                   
-                                   Margin="20 0 20 0"/>
+                                   Margin="20 0"
+                                   VerticalAlignment="Center" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

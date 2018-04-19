@@ -775,7 +775,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 15, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 16, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -791,6 +791,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "CustomerKey", "CustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 			this.AddElementFieldMapping("ConfigurationEntity", "AllowEbayCombineLocally", "AllowEbayCombineLocally", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("ConfigurationEntity", "ArchivalSettingsXml", "ArchivalSettingsXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 15);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>

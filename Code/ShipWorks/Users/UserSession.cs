@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Security;
@@ -58,7 +59,7 @@ namespace ShipWorks.Users
 
         // The currently logged in user and his security context
         private static UserEntity loggedInUser;
-        private static SecurityContext securityContext;
+        private static ISecurityContext securityContext;
 
         // The current running computer
         private static ComputerEntity thisComputer;
@@ -176,7 +177,7 @@ namespace ShipWorks.Users
             ShippingPrintOutputManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
-            
+
 
             lifetimeScope?.Dispose();
             lifetimeScope = IoC.BeginLifetimeScope();
@@ -236,7 +237,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// The SecurityContext of the logged on user.  Only valid of IsLoggedOn is true.
         /// </summary>
-        public static SecurityContext Security
+        public static ISecurityContext Security
         {
             get
             {
@@ -246,7 +247,7 @@ namespace ShipWorks.Users
                     return SuperUser.SecurityContext;
                 }
 
-                return securityContext;
+                return securityContext ?? SecurityContext.EmptySecurityContext;
             }
         }
 
@@ -336,11 +337,8 @@ namespace ShipWorks.Users
             loggedInUser = null;
             securityContext = null;
 
-            lastUsername = "";
-            lastPassword = "";
-            lastRemember = false;
+            (lastRemember, lastUsername, lastPassword) = GetSavedUserCredentials();
 
-            lastRemember = GetSavedUserCredentials(out lastUsername, out lastPassword);
             if (lastRemember)
             {
                 return Logon(lastUsername, lastPassword, lastRemember);
@@ -354,15 +352,12 @@ namespace ShipWorks.Users
         /// <summary>
         /// Gets the user credentials that were saved as a part of "Log me in automatically"
         /// </summary>
-        public static bool GetSavedUserCredentials(out string username, out string password)
+        public static (bool lastRemember, string lastUsername, string lastPassword) GetSavedUserCredentials()
         {
-            username = "";
-            password = "";
-
             // If the file does not exist, do nothing
             if (!File.Exists(SettingsFilename))
             {
-                return false;
+                return (false, string.Empty, string.Empty);
             }
 
             try
@@ -374,25 +369,25 @@ namespace ShipWorks.Users
                 XPathNavigator xpath = xmlSettings.CreateNavigator();
 
                 // Load the settings
-                username = XPathUtility.Evaluate(xpath, "//Username", "");
+                string username = XPathUtility.Evaluate(xpath, "//Username", "");
 
                 bool remember = XPathUtility.Evaluate(xpath, "//Remember", false);
                 if (remember)
                 {
-                    password = SecureText.Decrypt(XPathUtility.Evaluate(xpath, "//Password", ""), username);
+                    string password = SecureText.Decrypt(XPathUtility.Evaluate(xpath, "//Password", ""), username);
 
-                    return true;
+                    return (true, username, password);
                 }
                 else
                 {
-                    return false;
+                    return (false, string.Empty, string.Empty);
                 }
             }
             catch (XmlException ex)
             {
                 log.Error("Error reading saved user credentials.", ex);
 
-                return false;
+                return (false, string.Empty, string.Empty);
             }
         }
 
@@ -424,6 +419,7 @@ namespace ShipWorks.Users
 
                 return true;
             }
+
             return false;
         }
 
@@ -439,18 +435,23 @@ namespace ShipWorks.Users
         /// <summary>
         /// Log in the specified user
         /// </summary>
-        public static void Logon(UserEntity user, bool audit)
+        public static bool Logon(UserEntity user, bool audit)
         {
             loggedInUser = user;
 
             // Load the user's security context
-            securityContext = new SecurityContext(user);
+            securityContext = IoC.UnsafeGlobalLifetimeScope
+                .Resolve<Owned<ISecurityContextFactory>>()
+                .Value
+                .Create(user);
 
             // Audit the logon
             if (audit)
             {
                 AuditUtility.Audit(AuditActionType.Logon);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -525,7 +526,7 @@ namespace ShipWorks.Users
             xmlWriter.WriteStartElement("Credentials");
             xmlWriter.WriteElementString("Username", username);
 
-            // Dont save the the password if not remembering
+            // Don't save the password if not remembering
             if (remember)
             {
                 xmlWriter.WriteElementString("Remember", bool.TrueString);

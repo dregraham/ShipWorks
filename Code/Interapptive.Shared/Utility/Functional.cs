@@ -50,5 +50,20 @@ namespace Interapptive.Shared.Utility
                 return await func(x).ConfigureAwait(false);
             }
         }
+
+        /// <summary>
+        /// Parse a boolean value
+        /// </summary>
+        /// <param name="arg">String to try and parse</param>
+        /// <returns></returns>
+        public static GenericResult<bool> ParseBool(string arg)
+        {
+            if (bool.TryParse(arg, out bool result))
+            {
+                return GenericResult.FromSuccess(result);
+            }
+
+            return GenericResult.FromError<bool>($"Could not parse {arg} as bool");
+        }
     }
 }

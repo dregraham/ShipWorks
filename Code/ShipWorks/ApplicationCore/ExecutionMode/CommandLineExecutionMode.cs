@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        public override void Execute()
+        public override async Task Execute()
         {
             Initialize();
 
@@ -97,7 +97,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             try
             {
-                handler.Execute(options);
+                await handler.Execute(options).ConfigureAwait(true);
             }
             catch (CommandLineCommandArgumentException ex)
             {

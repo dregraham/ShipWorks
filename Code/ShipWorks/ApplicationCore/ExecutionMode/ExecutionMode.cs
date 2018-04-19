@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        public abstract void Execute();
+        public abstract Task Execute();
 
         /// <summary>
         /// Intended to be used as an opportunity to handle any unhandled exceptions that bubble up from

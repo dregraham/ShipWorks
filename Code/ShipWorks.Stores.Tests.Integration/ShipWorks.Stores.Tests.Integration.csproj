@@ -179,6 +179,8 @@
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveDataAccessTest.cs" />
+    <Compile Include="Orders\Archive\OrderArchiverTest.cs" />
     <Compile Include="Orders\Split\OrderSplitGatewayTest.cs" />
     <Compile Include="Orders\Split\OrderSplitterTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonMwsDownloaderTest.cs" />

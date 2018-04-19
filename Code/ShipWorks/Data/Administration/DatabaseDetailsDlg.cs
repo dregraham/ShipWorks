@@ -11,6 +11,8 @@ using Interapptive.Shared.Utility;
 using System.Data.SqlClient;
 using log4net;
 using Autofac;
+using Autofac.Core.Lifetime;
+using Interapptive.Shared.Data;
 
 namespace ShipWorks.Data.Administration
 {
@@ -48,6 +50,8 @@ namespace ShipWorks.Data.Administration
                     labelSqlInstance.Text = "Local Only";
                     labelDatabase.Text = "Default";
                     labelLoggedInAs.Text = "Default";
+
+                    linkEnableRemoteConnections.Visible = !lifetimeScope.Resolve<IConfigurationData>().IsArchive();
                 }
                 else
                 {
@@ -57,7 +61,6 @@ namespace ShipWorks.Data.Administration
                     labelRemoteConnections.Text = "Supported";
                     linkEnableRemoteConnections.Visible = false;
                 }
-
             }
             else
             {

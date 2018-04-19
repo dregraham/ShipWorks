@@ -760,6 +760,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AllowEbayCombineLocally", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AllowEbayCombineLocally, 0, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()

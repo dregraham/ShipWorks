@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Users.Security
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.Users.Security
         // The permission needed to do the delete
         PermissionType permissionType;
         Control owner;
- 
+
         /// <summary>
         /// Raised when the execute is complete.  Raised on the UI thread of the owner.
         /// </summary>
@@ -76,7 +77,14 @@ namespace ShipWorks.Users.Security
             {
                 if (e.Issues.Count > 0)
                 {
-                    MessageHelper.ShowWarning(owner, string.Format("Some {0} were not deleted due to insufficient permission.", name.ToLowerInvariant()));
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        string permissionMessage = lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                            ArchiveConstants.InvalidActionInArchiveMessage :
+                            string.Format("Some {0} were not deleted due to insufficient permission.", name.ToLowerInvariant());
+
+                        lifetimeScope.Resolve<IMessageHelper>().ShowInformation(owner, permissionMessage);
+                    }
                 }
 
                 if (ExecuteCompleted != null)

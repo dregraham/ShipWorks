@@ -72,8 +72,6 @@ namespace ShipWorks.Tests.Shared.Database
                     .Replace("-", "_")
                     .Replace("(", string.Empty)
                     .Replace(")", string.Empty).Truncate(50);
-
-                databasePrefix += Guid.NewGuid().ToString("N").Substring(0, 8);
             }
             catch (Exception ex)
             {

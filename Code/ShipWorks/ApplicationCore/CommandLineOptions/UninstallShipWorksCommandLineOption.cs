@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Services.Installers;
@@ -29,7 +30,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Execute the command
         /// </summary>
-        public void Execute(List<string> args)
+        public Task Execute(List<string> args)
         {
             // Shutdown logging so we can cleanup the log folders
             LogManager.Shutdown();
@@ -84,6 +85,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     // Nothing to log - we are in the middle of wiping the log folder!
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

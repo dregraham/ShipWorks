@@ -100,6 +100,7 @@ namespace ShipWorks.Shipping
         private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
+        private bool isArchiveMode = false;
         IDisposable keyboardShortcutSubscription;
 
         /// <summary>
@@ -112,6 +113,9 @@ namespace ShipWorks.Shipping
             ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory, Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange)
         {
+            this.lifetimeScope = lifetimeScope;
+            isArchiveMode = lifetimeScope.Resolve<IConfigurationData>().IsArchive();
+
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             InitializeComponent();
 
@@ -130,15 +134,17 @@ namespace ShipWorks.Shipping
             List<ShipmentEntity> shipments = message.Shipments.ToList();
 
             this.shippingManager = shippingManager;
-            this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, nameof(shipments));
 
             shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
             ManageWindowPositioning();
 
-            SetupTimer(getRatesTimer, OnGetRatesTimerTick, getRatesDebounceTime);
-            SetupTimer(shipSenseChangedTimer, OnShipSenseChangedTimerTick, shipSenseChangedDebounceTime);
+            if (!isArchiveMode)
+            {
+                SetupTimer(getRatesTimer, OnGetRatesTimerTick, getRatesDebounceTime);
+                SetupTimer(shipSenseChangedTimer, OnShipSenseChangedTimerTick, shipSenseChangedDebounceTime);
+            }
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
@@ -1928,6 +1934,11 @@ namespace ShipWorks.Shipping
         /// be true on calls raised because the shipment changed. It should be false on calls from the debounce logic.</param>
         private void GetRates(bool cloneShipment)
         {
+            if (isArchiveMode)
+            {
+                return;
+            }
+
             getRatesTimer.Stop();
 
             // There's no need to bother doing anything if we don't have exactly one shipment because

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
-using Interapptive.Shared.Threading;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -14,15 +17,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private IDisposable subscription;
-        private readonly ISchedulerProvider schedulerProvider;
+        private readonly ILog log;
+        private readonly Func<IMainForm> getOwner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WindowUnloadingPipeline(IObservable<IShipWorksMessage> messageStream, ISchedulerProvider schedulerProvider)
+        public WindowUnloadingPipeline(
+            Func<IMainForm> getOwner,
+            IObservable<IShipWorksMessage> messageStream,
+            Func<Type, ILog> createLog)
         {
+            this.getOwner = getOwner;
             this.messageStream = messageStream;
-            this.schedulerProvider = schedulerProvider;
+            log = createLog(GetType());
         }
 
         /// <summary>
@@ -31,12 +39,32 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messageStream.OfType<WindowResettingMessage>()
-                .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(x =>
-                {
-                    viewModel?.SaveToDatabase();
-                    viewModel?.UnloadShipment();
-                });
+                .Do(_ => SaveShipmentAndUnload(viewModel))
+                .CatchAndContinue((SingleUserModeException ex) => log.Error("Could not save view model", ex))
+                .Subscribe();
+        }
+
+        /// <summary>
+        /// Save shipment and unload panel
+        /// </summary>
+        /// <remarks>
+        /// We've got to invoke if necessary instead of using the scheduler because the scheduler
+        /// was scheduling the save regardless of if it was necessary. So when archiving, ShipWorks
+        /// could crash depending on when the save occurred.
+        /// </remarks>
+        private void SaveShipmentAndUnload(ShippingPanelViewModel viewModel)
+        {
+            var owner = getOwner();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke(((Action<ShippingPanelViewModel>) SaveShipmentAndUnload), new[] { viewModel });
+            }
+            else
+            {
+                viewModel?.SaveToDatabase();
+                viewModel?.UnloadShipment();
+            }
         }
 
         /// <summary>

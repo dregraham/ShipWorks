@@ -3,11 +3,13 @@
                     xmlns:local="clr-namespace:ShipWorks.UI.Controls">
     <Style TargetType="{x:Type local:NotificationBorder}">
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+        <Setter Property="Padding" Value="8" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:NotificationBorder}">
                     <Border BorderThickness="2"
                             CornerRadius="2"
+                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -21,7 +23,8 @@
                                     Margin="0"
                                     VerticalAlignment="Stretch"
                                     MinWidth="30"
-                                    Background="{TemplateBinding BorderBrush}" Padding="4,0,8,0">
+                                    Background="{TemplateBinding BorderBrush}"
+                                    Padding="4,0,8,0">
                                 <ContentControl TextBlock.Foreground="White"
                                                 TextBlock.FontWeight="Bold"
                                                 TextBlock.FontSize="24"
@@ -30,7 +33,7 @@
                                                 VerticalAlignment="Center"
                                                 Content="{Binding Path=IconControl, RelativeSource={RelativeSource TemplatedParent}}" />
                             </Border>
-                            <ContentPresenter Grid.Column="1" Margin="8" />
+                            <ContentPresenter Grid.Column="1" Margin="{TemplateBinding Padding}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
