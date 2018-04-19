@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Shopify
+﻿using CefSharp.WinForms;
+
+namespace ShipWorks.Stores.Platforms.Shopify
 {
     partial class ShopifyCreateTokenWizard
     {
@@ -35,7 +37,7 @@
             this.labelAddress = new System.Windows.Forms.Label();
             this.wizardPageAuthenticate = new ShipWorks.UI.Wizard.WizardPage();
             this.panelBrowser = new System.Windows.Forms.Panel();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.webBrowser = new ChromiumWebBrowser();
             this.wizardPageSuccess = new ShipWorks.UI.Wizard.WizardPage();
             this.imageStatus = new System.Windows.Forms.PictureBox();
             this.labelStatus = new System.Windows.Forms.Label();
@@ -163,10 +165,10 @@
             this.webBrowser.Location = new System.Drawing.Point(0, 0);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
+            //this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(707, 747);
             this.webBrowser.TabIndex = 0;
-            this.webBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.OnWebBrowserNavigated);
+            this.webBrowser.AddressChanged += OnWebBrowserNavigated;
             // 
             // wizardPageSuccess
             // 
@@ -239,7 +241,7 @@
         private System.Windows.Forms.TextBox shopUrlName;
         private System.Windows.Forms.Label labelAddress;
         private System.Windows.Forms.Panel panelBrowser;
-        private System.Windows.Forms.WebBrowser webBrowser;
+        private ChromiumWebBrowser webBrowser;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.PictureBox imageStatus;
         private System.Windows.Forms.Label label1;

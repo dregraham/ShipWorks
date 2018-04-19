@@ -137,6 +137,8 @@ Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not Com
 //----------------------------------------------------------------
 #include "DotNetDownloadPage.iss"
 #include "DotNetInstallPage.iss";
+#include "VCRedistDownloadPage.iss"
+#include "ChromiumDownloadPage.iss"
 #include "SystemChecks.iss"
 #include "Guid.iss"
 
@@ -269,6 +271,8 @@ begin
   LastPageID := wpLicense;
   LastPageID := CreateDotNetDownloadPage(LastPageID);
   LastPageID := CreateDotNetInstallPage(LastPageID);
+  LastPageID := CreateVCRedistDownloadPage(wpPreparing);
+  LastPageID := CreateChromiumDownloadPage(LastPageID);
 end;
 
 //----------------------------------------------------------------
