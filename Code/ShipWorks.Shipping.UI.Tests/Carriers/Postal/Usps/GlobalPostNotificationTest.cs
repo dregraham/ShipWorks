@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SqlTypes;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
@@ -20,6 +22,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public GlobalPostNotificationTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(x => x.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>()))
+                .Returns(true);
 
             testObject = mock.Create<GlobalPostLabelNotification>();
         }
@@ -103,26 +109,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         [Fact]
         public void Show_SetsNextGlobalPostNotificationDateToMaxSqlDate_WhenDismissed()
         {
-            DateTime notificationDate = SqlDateTime.MinValue.Value;
-
             mock.Mock<IDismissableWebBrowserDlgViewModel>()
                 .Setup(v => v.Dismissed).Returns(true);
 
-            var user = new UserEntity
-            {
-                Settings = new UserSettingsEntity
-                {
-                    NextGlobalPostNotificationDate = notificationDate
-                }
-            };
-
-            var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User)
-                .Returns(user);
-
             testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
 
-            Assert.Equal(SqlDateTime.MaxValue.Value.Date, user.Settings.NextGlobalPostNotificationDate.Date);
+            mock.Mock<ICurrentUserSettings>()
+                .Verify(x => x.StopShowingNotification(UserConditionalNotificationType.GlobalPostChange));
         }
 
         [Fact]

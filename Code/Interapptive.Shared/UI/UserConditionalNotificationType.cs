@@ -22,5 +22,20 @@ namespace Interapptive.Shared.UI
         /// Insurance behavior change notification dialog
         /// </summary>
         InsuranceBehaviorChange = 3,
+
+        /// <summary>
+        /// Presort label change
+        /// </summary>
+        PresortLabelChange = 4,
+
+        /// <summary>
+        /// Global post label change
+        /// </summary>
+        GlobalPostChange = 5,
+
+        /// <summary>
+        /// Document envelope customs change
+        /// </summary>
+        GlobalPostAdvantageChange = 6,
     }
 }
