@@ -521,6 +521,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 optionToAdd.UnitPrice = 0;
             }
 
+            if (product.is_bundled_product)
+            {
+                OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
+                optionToAdd.Name = "Parent Order Product ID";
+                optionToAdd.Description = product.parent_order_product_id.ToString();
+                optionToAdd.UnitPrice = 0;
+            }
+
             if (product.Image != null)
             {
                 item.Image = product.Image;
