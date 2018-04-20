@@ -299,6 +299,11 @@ namespace ShipWorks.Data.Administration
 
         /// <summary>
         /// Create a backup of SQL Server to the specified backup file
+        /// 
+        /// For EditionIDs, see https://docs.microsoft.com/en-us/sql/t-sql/functions/serverproperty-transact-sql?view=sql-server-2017
+        /// 
+        /// For compression support, see https://technet.microsoft.com/en-us/library/cc645993(v=sql.105).aspx
+        /// Then change the "Other Versions" drop down to see each SQL Server version's features.
         /// </summary>
         private SqlServerEditionIdType CreateSqlBackup(ProgressItem progressItem, string database, string backupFile)
         {
@@ -319,19 +324,31 @@ namespace ShipWorks.Data.Administration
 
                     set @EditionTypeId = serverproperty('EditionID')
 
-                     /* These are Express or Web editions, so no compression */
-                     if -1592396055 = @EditionTypeId or -133711905 = @EditionTypeId or 1293598313 = @EditionTypeId
-	                     BEGIN
-		                     BACKUP DATABASE @Database 
-		                     TO DISK = @FilePath      
-		                     WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
-	                     END
+                    /* These are editions that support compression 
+                    Enterprise:									1804890536
+                    Enterprise Edition: Core-based Licensing:	1872460670 
+                    Enterprise Evaluation:						610778273
+                    Standard:									-1534726760
+                    Business Intelligence:						284895786
+                    Developer:									-2117995310
+                    */
+                    IF    1804890536 = @EditionTypeId 
+                      or  1872460670 = @EditionTypeId
+                      or  610778273  = @EditionTypeId
+                      or -1534726760 = @EditionTypeId 
+                      or  284895786  = @EditionTypeId 
+                      or -2117995310 = @EditionTypeId
+	                    BEGIN
+		                    BACKUP DATABASE @Database 
+		                    TO DISK = @FilePath      
+		                    WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 2
+	                    END
                     ELSE
-	                     BEGIN
-		                     BACKUP DATABASE @Database 
-		                     TO DISK = @FilePath      
-		                     WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 2
-	                     END
+	                    BEGIN
+		                    BACKUP DATABASE @Database 
+		                    TO DISK = @FilePath      
+		                    WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
+	                    END
 
                     SELECT serverproperty('EditionID')";
 
