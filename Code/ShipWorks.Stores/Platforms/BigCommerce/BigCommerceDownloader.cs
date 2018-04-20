@@ -471,6 +471,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             item.IsDigitalItem = productType == EnumHelper.GetApiValue(BigCommerceProductType.Digital) ||
                                  productType == EnumHelper.GetApiValue(BigCommerceProductType.GiftCertificate);
 
+            item.ParentOrderProductID = orderProduct.parent_order_product_id;
+
             // Now load all the item options
             LoadProductAndRelatedObjects(item, orderProduct);
 
@@ -518,14 +520,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
                 optionToAdd.Name = configurableField.name;
                 optionToAdd.Description = string.IsNullOrWhiteSpace(configurableField.original_filename) ? configurableField.value.ToString() : configurableField.original_filename;
-                optionToAdd.UnitPrice = 0;
-            }
-
-            if (product.is_bundled_product)
-            {
-                OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
-                optionToAdd.Name = "Parent Order Product ID";
-                optionToAdd.Description = product.parent_order_product_id.ToString();
                 optionToAdd.UnitPrice = 0;
             }
 

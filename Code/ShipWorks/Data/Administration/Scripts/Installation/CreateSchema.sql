@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[BigCommerceOrderItem]
 [OrderItemID] [bigint] NOT NULL,
 [OrderAddressID] [bigint] NOT NULL,
 [OrderProductID] [bigint] NOT NULL,
+[ParentOrderProductID] [bigint] NULL,
 [IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
 [EventDate] [datetime] NULL,
 [EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL

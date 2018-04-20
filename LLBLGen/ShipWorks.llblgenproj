@@ -458,6 +458,7 @@
           <Field Name="IsDigitalItem" Type="bool" FieldIndex="2" />
           <Field Name="OrderAddressID" Type="long" FieldIndex="0" />
           <Field Name="OrderProductID" Type="long" FieldIndex="1" />
+          <Field Name="ParentOrderProductID" Type="long" IsOptional="true" Precision="19" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="BigCommerceStore" ObjectID="63a4d250-0560-4123-aba9-480d238fc84a" InheritanceType="2">
@@ -4218,7 +4219,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-06T14:06:13.0482131Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-20T18:52:51.6157797Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4587,9 +4588,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -7142,9 +7144,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7294,25 +7296,18 @@
                     <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Service" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Confirmation" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="Weight" Ordinal="4" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="PackagingType" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="DimsProfileID" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="DimsLength" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsWidth" Ordinal="8" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsHeight" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsWeight" Ordinal="10" IsOptional="true" DbType="6" Precision="38" />
-                    <Field Name="DimsAddWeight" Ordinal="11" IsOptional="true" DbType="2" />
-                    <Field Name="NonRectangular" Ordinal="12" IsOptional="true" DbType="2" />
-                    <Field Name="NonMachinable" Ordinal="13" IsOptional="true" DbType="2" />
-                    <Field Name="CustomsContentType" Ordinal="14" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsContentDescription" Ordinal="15" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="ExpressSignatureWaiver" Ordinal="16" IsOptional="true" DbType="2" />
-                    <Field Name="SortType" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="EntryFacility" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="Memo1" Ordinal="19" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="Memo2" Ordinal="20" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="Memo3" Ordinal="21" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="NoPostage" Ordinal="22" IsOptional="true" DbType="2" />
+                    <Field Name="PackagingType" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonRectangular" Ordinal="5" IsOptional="true" DbType="2" />
+                    <Field Name="NonMachinable" Ordinal="6" IsOptional="true" DbType="2" />
+                    <Field Name="CustomsContentType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsContentDescription" Ordinal="8" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="ExpressSignatureWaiver" Ordinal="9" IsOptional="true" DbType="2" />
+                    <Field Name="SortType" Ordinal="10" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="EntryFacility" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Memo1" Ordinal="12" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Memo2" Ordinal="13" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Memo3" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="NoPostage" Ordinal="15" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="PostalShipment">
@@ -10487,6 +10482,7 @@
             <FieldMapping FieldName="OrderAddressID" TargetFieldName="OrderAddressID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="OrderProductID" TargetFieldName="OrderProductID" />
+            <FieldMapping FieldName="ParentOrderProductID" TargetFieldName="ParentOrderProductID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":BigCommerceStore" TargetName="ShipWorksLocal:dbo:BigCommerceStore">
