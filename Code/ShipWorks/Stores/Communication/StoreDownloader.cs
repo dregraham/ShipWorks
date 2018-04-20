@@ -756,9 +756,11 @@ namespace ShipWorks.Stores.Communication
             SetAddressValidationStatus(order, true, "Ship", adapter);
             SetAddressValidationStatus(order, true, "Bill", adapter);
 
+            log.Info($"StoreDownloader.SaveNewOrder waiting for getCustomerTask");
             // Wait for the customer to be found or created
             CustomerEntity customer = await getCustomerTask.ConfigureAwait(false);
 
+            log.Info($"StoreDownloader.SaveNewOrder AdjustNoteCount");
             // Update the note counts
             AdjustNoteCount(order, customer);
 
@@ -786,20 +788,31 @@ namespace ShipWorks.Stores.Communication
                 // If note count changed, save the customer
                 if (customer.IsDirty)
                 {
+                    log.Info($"StoreDownloader.PerformInitialOrderSave saving customer");
                     await adapter.SaveEntityAsync(customer, false).ConfigureAwait(false);
                 }
 
+                log.Info($"StoreDownloader.PerformInitialOrderSave setting order.CustomerID");
                 order.CustomerID = customer.CustomerID;
 
+                log.Info($"StoreDownloader.PerformInitialOrderSave");
                 // Save the order so we can get its OrderID
                 await adapter.SaveEntityAsync(order, false).ConfigureAwait(false);
             }
             catch (ORMQueryExecutionException ex)
-                when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
             {
-                throw new DownloadException(
-                    $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
-                    "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
+                if (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new DownloadException(
+                        $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
+                        "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
+                }
+
+                if (ex.Message.Contains("The entity is out of sync with its data in the database", StringComparison.OrdinalIgnoreCase))
+                {
+                    log.Error($"An order was not able to successfully download.  Please try downloading again.", ex);
+                    throw new DownloadException($"An order was not able to successfully download.  Please try downloading again.");
+                }
             }
         }
 
