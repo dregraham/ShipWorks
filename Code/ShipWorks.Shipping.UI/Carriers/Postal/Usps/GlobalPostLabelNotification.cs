@@ -16,7 +16,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
     {
         private readonly Func<IDismissableWebBrowserDlg> browserFactory;
         private readonly IDismissableWebBrowserDlgViewModel browserViewModel;
-        private readonly IUserSession userSession;
         private readonly IWin32Window owner;
 
         readonly ICurrentUserSettings userSettings;
@@ -28,36 +27,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             Func<IDismissableWebBrowserDlg> browserFactory,
             IDismissableWebBrowserDlgViewModel browserViewModel,
             ICurrentUserSettings userSettings,
-            IUserSession userSession,
             IWin32Window owner)
         {
             this.userSettings = userSettings;
             this.browserFactory = browserFactory;
             this.browserViewModel = browserViewModel;
-            this.userSession = userSession;
             this.owner = owner;
         }
-
-        /// <summary>
-        /// Check to see if we should show the notification based on the current user. If the user
-        /// dismisses the notification, don't show again. If not, show once a day.
-        /// </summary>
-        public bool AppliesToCurrentUser() =>
-            userSession.User.Settings.NextGlobalPostNotificationDate < DateTime.UtcNow;
 
         /// <summary>
         /// Show the notification and save result
         /// </summary>
         public void Show(IShipmentEntity shipment)
         {
-            if (userSession.User.Settings.NextGlobalPostNotificationDate >= DateTime.UtcNow)
-            {
-                return;
-            }
-
             var assets = new GlobalPostDialogDetails(shipment);
 
-            if (!userSettings.ShouldShowNotification(assets.NotificationType))
+            if (!userSettings.ShouldShowNotification(assets.NotificationType, DateTime.UtcNow))
             {
                 return;
             }
@@ -77,8 +62,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             {
                 userSettings.StopShowingNotification(assets.NotificationType);
             }
-
-            userSession.User.Settings.NextGlobalPostNotificationDate = DateTime.UtcNow.AddDays(1);
+            else
+            {
+                userSettings.StopShowingNotificationFor(assets.NotificationType, TimeSpan.FromDays(1));
+            }
         }
     }
 }

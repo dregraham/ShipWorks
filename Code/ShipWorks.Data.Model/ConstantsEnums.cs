@@ -11030,8 +11030,6 @@ namespace ShipWorks.Data.Model
 		CustomerFilterLastActive,
 		///<summary>CustomerFilterExpandedFolders. </summary>
 		CustomerFilterExpandedFolders,
-		///<summary>NextGlobalPostNotificationDate. </summary>
-		NextGlobalPostNotificationDate,
 		///<summary>SingleScanSettings. </summary>
 		SingleScanSettings,
 		///<summary>AutoWeigh. </summary>

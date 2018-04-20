@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
     public class PostalPostProcessingMessageTest
     {
         private readonly AutoMock mock;
-        private readonly Mock<IGlobalPostLabelNotification> globalPostNotification;
         private readonly ShipmentEntity globalPostShipment;
         private readonly ShipmentEntity gapShipment;
         private readonly PostalPostProcessingMessage testObject;
@@ -33,9 +32,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             endiciaAccount = new EndiciaAccountEntity();
             endiciaAccountRepository = mock.Mock<IReadOnlyCarrierAccountRetriever<IEndiciaAccountEntity>>();
             endiciaAccountRepository.Setup(e => e.GetAccountReadOnly(AnyIShipment)).Returns(endiciaAccount);
-
-            globalPostNotification = mock.Mock<IGlobalPostLabelNotification>();
-            globalPostNotification.Setup(g => g.AppliesToCurrentUser()).Returns(true);
 
             dateTimeProvider = mock.Mock<IDateTimeProvider>();
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2019, 01, 01));
@@ -71,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -88,30 +84,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         public void Show_DelegatesToGlobalPostNotificationShow_WhenShipmentIsGap()
         {
             testObject.Show(new[] { gapShipment });
-            globalPostNotification.Verify(g => g.Show(gapShipment));
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment));
         }
 
         [Fact]
         public void Show_DelegatesToGlobalPostNotificationShow_WhenShipmentIsGlobalPost()
         {
             testObject.Show(new[] { globalPostShipment });
-            globalPostNotification.Verify(g => g.Show(globalPostShipment));
-        }
-
-        [Fact]
-        public void Show_DelegatesToGlobalPostNotificationAppliesToCurrentUser()
-        {
-            testObject.Show(new[] { globalPostShipment });
-            globalPostNotification.Verify(g => g.AppliesToCurrentUser());
-        }
-
-        [Fact]
-        public void Show_DoesNotDelegateToGlobalPostNotificationShow_WhenAppliesToCurrentUserIsFalse()
-        {
-            globalPostNotification.Setup(g => g.AppliesToCurrentUser()).Returns(false);
-            testObject.Show(new[] { globalPostShipment });
-
-            globalPostNotification.Verify(g => g.Show(globalPostShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(globalPostShipment));
         }
 
         [Theory]
@@ -131,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { shipment });
 
-            globalPostNotification.Verify(g => g.Show(shipment));
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(shipment));
         }
 
         [Fact]
@@ -143,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { shipment });
 
-            globalPostNotification.Verify(g => g.Show(AnyIShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(AnyIShipment), Times.Never);
         }
 
         [Fact]
@@ -153,7 +133,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -163,7 +143,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -173,7 +153,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -183,7 +163,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
+            mock.Mock<IGlobalPostLabelNotification>().Verify(g => g.Show(gapShipment), Times.Never);
         }
     }
 }

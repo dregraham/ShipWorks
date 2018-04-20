@@ -16,11 +16,17 @@ namespace ShipWorks.Shared.Users
         public DialogSettings()
         {
             DismissedNotifications = Enumerable.Empty<UserConditionalNotificationType>().ToArray();
+            NotificationDialogSettings = Enumerable.Empty<NotificationDialogSetting>().ToArray();
         }
 
         /// <summary>
         /// List of notifications that have been dismissed
         /// </summary>
         public UserConditionalNotificationType[] DismissedNotifications { get; set; }
+
+        /// <summary>
+        /// Settings for notification dialogs
+        /// </summary>
+        public NotificationDialogSetting[] NotificationDialogSettings { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotificationForShipment(s));
 
-            if (gapShipment != null && globalPostNotification.AppliesToCurrentUser())
+            if (gapShipment != null)
             {
                 globalPostNotification.Show(gapShipment);
             }

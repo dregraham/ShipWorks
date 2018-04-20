@@ -11,6 +11,7 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 {
@@ -24,26 +25,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             mock.Mock<ICurrentUserSettings>()
-                .Setup(x => x.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>()))
+                .Setup(x => x.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>(), AnyDate))
                 .Returns(true);
 
             testObject = mock.Create<GlobalPostLabelNotification>();
-        }
-
-        [Fact]
-        public void AppliesToCurrentUser_ReturnsTrue_WhenNextGlobalPostNotificationDateIsInPast()
-        {
-            Assert.True(testObject.AppliesToCurrentUser());
-        }
-
-        [Fact]
-        public void AppliesToCurrentUser_ReturnsFalse_WhenNextGlobalPostNotificationDateIsInFuture()
-        {
-            mock.Mock<IUserSession>()
-                .Setup(u => u.User)
-                .Returns(new UserEntity { Settings = new UserSettingsEntity { NextGlobalPostNotificationDate = SqlDateTime.MaxValue.Value } });
-
-            Assert.False(testObject.AppliesToCurrentUser());
         }
 
         [Fact]
@@ -126,20 +111,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             mock.Mock<IDismissableWebBrowserDlgViewModel>()
                 .Setup(v => v.Dismissed).Returns(false);
 
-            var user = new UserEntity
-            {
-                Settings = new UserSettingsEntity
-                {
-                    NextGlobalPostNotificationDate = notificationDate
-                }
-            };
-
-            var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User)
-                .Returns(user);
             testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
 
-            Assert.True(userSession.Object.User.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddDays(1).Date));
+            mock.Mock<ICurrentUserSettings>()
+                .Verify(x => x.StopShowingNotificationFor(UserConditionalNotificationType.GlobalPostChange, TimeSpan.FromDays(1)));
         }
 
         public void Dispose()
