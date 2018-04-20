@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Tests.Utility
         /// 
         /// http://blog.gauffin.org/2014/08/how-to-create-a-sqlexception/
         /// </summary>
-        public static SqlException CreateSqlException(int number, int secondErrorNumber)
+        public static SqlException CreateSqlException(int number, int secondErrorNumber, Exception innerException = null)
         {
             var collectionConstructor = typeof(SqlErrorCollection)
               .GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, //visibility
@@ -52,7 +52,7 @@ namespace Interapptive.Shared.Tests.Utility
                 new[] { typeof(string), typeof(SqlErrorCollection), typeof(Exception), typeof(Guid) },
                 null); //param modifiers
 
-            return (SqlException)constructor.Invoke(new object[] { "Error message", errorCollection, new DataException(), Guid.NewGuid() });
+            return (SqlException)constructor.Invoke(new object[] { "Error message", errorCollection, innerException, Guid.NewGuid() });
         }
     }
 }
