@@ -53,6 +53,9 @@ namespace ShipWorks.Startup
             LoadApp();
         }
 
+        /// <summary>
+        /// Load the app after configuring Chromium
+        /// </summary>
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void LoadApp()
         {
@@ -69,7 +72,9 @@ namespace ShipWorks.Startup
             ShipWorks.Program.Main();
         }
 
-        // Will attempt to load missing assembly from either x86 or x64 subdir
+        /// <summary>
+        /// Resolve CEF assemblies using correct bitness
+        /// </summary>
         private static Assembly Resolver(object sender, ResolveEventArgs args)
         {
             if (args.Name.StartsWith("CefSharp"))
@@ -79,9 +84,10 @@ namespace ShipWorks.Startup
                                                        Environment.Is64BitProcess ? "x64" : "x86",
                                                        assemblyName);
 
-                return File.Exists(archSpecificPath)
-                           ? Assembly.LoadFile(archSpecificPath)
-                           : null;
+                if (File.Exists(archSpecificPath))
+                {
+                    return Assembly.LoadFile(archSpecificPath);
+                }
             }
 
             return null;
