@@ -37,7 +37,8 @@ end;
 //----------------------------------------------------------------
 function GetChromiumDownloadURL(): String;
 begin
-	Result := 'https://www.interapptive.com/download/components/chromium/' + GetChromiumFileName();
+	// Result := 'https://www.interapptive.com/download/components/chromium/' + GetChromiumFileName();
+	Result := 'http://devsandbox:8888/' + GetChromiumFileName();
 end;
 
 //----------------------------------------------------------------
@@ -53,7 +54,7 @@ begin
 	then begin
 		if (GetVersionNumbersString(GetChromiumDestinationTestFile(), FileVersion))
 		then begin
-			Result := not (FileVersion = '55.0.0.0');
+			Result := not (FileVersion = '63.0.3.0');
 		end;
 	end;
 end;
