@@ -60,7 +60,7 @@ namespace ShipWorks.Users
                 .NotificationDialogSettings
                 .First(x => x.Type == notificationType);
 
-            return notificationSettings.CanShowAfter.HasValue && notificationSettings.CanShowAfter > date;
+            return notificationSettings.CanShowAfter.HasValue && date > notificationSettings.CanShowAfter;
         }
 
         /// <summary>

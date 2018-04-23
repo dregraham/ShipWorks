@@ -32,6 +32,32 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
+        public void Show_ShowsDialog_WhenShouldShowNotificationReturnsFalse()
+        {
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(x => x.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>(), AnyDate))
+                .Returns(true);
+
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
+
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(x => x.Load(It.IsAny<Uri>(), AnyString, AnyString));
+        }
+
+        [Fact]
+        public void Show_DoesNotShowDialog_WhenShouldShowNotificationReturnsFalse()
+        {
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(x => x.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>(), AnyDate))
+                .Returns(false);
+
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) PostalServiceType.GlobalPostEconomyIntl } });
+
+            mock.Mock<IDismissableWebBrowserDlgViewModel>()
+                .Verify(x => x.Load(It.IsAny<Uri>(), AnyString, AnyString), Times.Never);
+        }
+
+        [Fact]
         public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsGlobalPost()
         {
             Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/3782");
