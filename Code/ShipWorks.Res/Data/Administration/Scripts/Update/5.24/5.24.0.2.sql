@@ -1,7 +1,4 @@
-﻿USE [ShipWorksLocal]
-GO
-
-PRINT N'Dropping constraints from [dbo].[BigCommerceOrderItem]'
+﻿PRINT N'Dropping constraints from [dbo].[BigCommerceOrderItem]'
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] DROP CONSTRAINT [FK_BigCommerceOrderItem_OrderItem]
 GO
