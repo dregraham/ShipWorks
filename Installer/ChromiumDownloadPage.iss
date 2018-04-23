@@ -59,7 +59,7 @@ begin
       if (not DirExists(GetChromiumDestination())) then ForceDirectories(GetChromiumDestination());
       UnZip(DownloadFileName, GetChromiumDestination() + '\');
     end else begin
-      failReason := 'Setup was unable to download the template renderer.  Please check that you have an open ' +
+      failReason := 'Setup was unable to download the other components.  Please check that you have an open ' +
           'connection to the internet, and run Setup again.  Error: ' + IntToStr(DownloadResult) + ' ' + DownloadFileName;
     end;
 
@@ -68,8 +68,8 @@ begin
         ShowErrorPage(
             CurPageID,
             'Setup Error',
-            'Could not download the template renderer.',
-            failReason + #13 + #13 + 'You can download it directly from the following link.',
+            'Could not download the other components.',
+            failReason + #13 + #13 + 'You can download them directly from the following link.',
             GetChromiumDownloadURL());
 
     WizardForm.NextButton.Enabled := True;
@@ -127,8 +127,8 @@ begin
 
   Page := CreateCustomPage(
     PreviousPageId,
-    'Install template renderer',
-    'ShipWorks requires a renderer for templates'
+    'Install other components',
+    'ShipWorks requires other components'
   );
 
   infoLabel := TLabel.Create(Page);
@@ -136,9 +136,9 @@ begin
   begin
     Parent := Page.Surface;
     Caption :=
-      'ShipWorks requires a template renderer, which is not installed on your computer.' + #13 +
+      'ShipWorks requires other components, which are not currently on your computer.' + #13 +
       '' + #13 +
-      'Click Next to download it now (60 MB).';
+      'Click Next to download them now (60 MB).';
     Left := ScaleX(0);
     Top := ScaleY(0);
     Width := ScaleX(415);

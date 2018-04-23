@@ -170,9 +170,9 @@ begin
   begin
     Parent := Page.Surface;
     Caption :=
-      'ShipWorks requires additional Microsoft run-time components, which is not installed on your computer.' + #13 +
+      'ShipWorks requires additional Microsoft run-time components, which are not installed on your computer.' + #13 +
       '' + #13 +
-      'Click Next to download it now (15 MB).';
+      'Click Next to download them now (7 MB).';
     Left := ScaleX(0);
     Top := ScaleY(0);
     Width := ScaleX(415);
