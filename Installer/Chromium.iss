@@ -13,7 +13,7 @@
 //----------------------------------------------------------------
 function GetChromiumFileName(): String;
 begin
-	Result := 'renderer_55_' + GetArchName() + '.zip';
+	Result := 'renderer_63_' + GetArchName() + '.zip';
 end;
 
 //----------------------------------------------------------------
