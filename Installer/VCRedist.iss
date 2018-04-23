@@ -53,6 +53,19 @@ begin
 			Result := False;
 		end;
 	end;
+
+	// Try to read the registry to see if this version of .NET is installed
+	if (RegQueryDWordValue(
+		HKEY_LOCAL_MACHINE,
+		'SOFTWARE\WOW6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\' + GetArchName(),
+		'Installed',
+		Installed))
+	then begin
+		if (Installed = 1)
+		then begin
+			Result := False;
+		end;
+	end;
 end;
 
 // File Gaurds
