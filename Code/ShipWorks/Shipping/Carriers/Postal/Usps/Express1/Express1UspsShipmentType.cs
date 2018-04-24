@@ -10,10 +10,11 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -160,6 +161,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 PostalConfirmationType.AdultSignatureRequired,
                 PostalConfirmationType.AdultSignatureRestricted
             };
+        }
+
+        /// <summary>
+        /// Track the given Express1 shipment
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            return PostalWebClientTracking.TrackShipment(shipment.TrackingNumber);
         }
     }
 }

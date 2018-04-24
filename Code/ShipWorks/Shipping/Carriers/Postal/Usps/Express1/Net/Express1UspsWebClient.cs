@@ -24,6 +24,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Tracking;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.Address;
 using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ContentTypeV2;
@@ -1330,6 +1331,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Not implemented in Express1
         /// </summary>
         public string GetUrl(IUspsAccountEntity account, WebServices.UrlType urlType)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Tracking is done via Express1UspsShipmentType.TrackShipment.  
+        /// This is only here due to interface.
+        /// </summary>
+        public TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }
