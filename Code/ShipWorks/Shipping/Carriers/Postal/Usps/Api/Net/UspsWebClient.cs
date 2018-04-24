@@ -246,15 +246,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     out expectedDeliveryDate, out serviceDescription, out carrier, out destinationInfo);
             }
 
-            foreach (TrackingEvent trackingEvent in trackingEvents)
+            if (trackingEvents.Any())
             {
-                result.Details.Add(new TrackingResultDetail()
+                foreach (TrackingEvent trackingEvent in trackingEvents)
                 {
-                    Date = trackingEvent.Timestamp.ToString("M/dd/yyy"),
-                    Time = trackingEvent.Timestamp.ToString("h:mm tt"),
-                    Activity = trackingEvent.Event, 
-                    Location = GetTrackEventLocation(trackingEvent)
-                });
+                    result.Details.Add(new TrackingResultDetail()
+                    {
+                        Date = trackingEvent.Timestamp.ToString("M/dd/yyy"),
+                        Time = trackingEvent.Timestamp.ToString("h:mm tt"),
+                        Activity = trackingEvent.Event,
+                        Location = GetTrackEventLocation(trackingEvent)
+                    });
+                }
+
+                result.Summary = trackingEvents.OrderBy(te => te.Timestamp).Last().Event;
             }
 
             return result;
