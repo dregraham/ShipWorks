@@ -317,11 +317,11 @@ namespace Interapptive.Shared.Data
             string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
             if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
             {
-                string trustworthyStatement = $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON";
+                string trustworthyStatement = $@"ALTER DATABASE [{databaseName}] SET TRUSTWORTHY ON";
                 log.Info($"Executing: {trustworthyStatement}");
                 DbCommandProvider.ExecuteNonQuery(con, trustworthyStatement);
 
-                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {databaseOwner}";
+                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::[{databaseName}] TO [{databaseOwner}]";
                 log.Info($"Executing: {setDatabaseOwnerStatement}");
                 DbCommandProvider.ExecuteNonQuery(con, setDatabaseOwnerStatement);
             }
