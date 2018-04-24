@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Data.Connection
 
             foreach (int errorNumber in connectionErrors)
             {
-                Win32Exception win32Exception = new Win32Exception(258, "timeout");
+                Win32Exception win32Exception = new Win32Exception(3, "timeout");
                 SqlException sqlException = SqlExceptionUtility.CreateSqlException(errorNumber, 3, win32Exception);
 
                 Assert.False(ConnectionMonitor.IsDbConnectionException(sqlException));
