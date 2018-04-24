@@ -26,8 +26,7 @@ end;
 //----------------------------------------------------------------
 function GetVCRedistDownloadURL(): String;
 begin
-	// Result := 'https://www.interapptive.com/download/components/chromium/VC12/' + GetVCRedistFileName();
-	Result := 'http://devsandbox:8888/VC12/' + GetVCRedistFileName();
+	Result := 'https://www.interapptive.com/download/components/chromium/VC12/' + GetVCRedistFileName();
 end;
 
 //----------------------------------------------------------------

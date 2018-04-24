@@ -37,8 +37,7 @@ end;
 //----------------------------------------------------------------
 function GetChromiumDownloadURL(): String;
 begin
-	// Result := 'https://www.interapptive.com/download/components/chromium/' + GetChromiumFileName();
-	Result := 'http://devsandbox:8888/' + GetChromiumFileName();
+	Result := 'https://www.interapptive.com/download/components/chromium/' + GetChromiumFileName();
 end;
 
 //----------------------------------------------------------------
