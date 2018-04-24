@@ -222,10 +222,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (UspsApiException ex)
             {
-                TranslateProcessShipmentException(account, ex);
-
-                // This isn't an exception we can handle, so just throw the original exception
-                throw;
+                throw new ShippingException("ShipWorks was unable to get tracking information.", ex);
             }
         }
 
