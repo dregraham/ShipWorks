@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Security;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
+namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 {
     public class ShopSiteLegacyAuthenticationPersistenceStrategyTest : IDisposable
     {
@@ -75,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
 
             viewModel.VerifySet(x => x.LegacyMerchantID = "foo");
-            viewModel.VerifySet(x => x.LegacyPassword = "bar");
+            viewModel.VerifySet(x => x.LegacyPassword = It.IsAny<SecureString>());
             viewModel.VerifySet(x => x.LegacyUseUnsecureHttp = true);
         }
 
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             var store = mock.CreateMock<IShopSiteStoreEntity>();
-
+            
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
 
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns(apiUsername);
-            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo".ToSecureString);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -135,7 +136,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
-            viewModel.SetupGet(x => x.LegacyPassword).Returns(apiToken);
+            viewModel.SetupGet(x => x.LegacyPassword).Returns(apiToken.ToSecureString);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -154,7 +155,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns(apiUsername);
-            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo".ToSecureString);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -178,7 +179,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
 
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
-            viewModel.SetupGet(x => x.LegacyPassword).Returns(apiToken);
+            viewModel.SetupGet(x => x.LegacyPassword).Returns(apiToken.ToSecureString);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -197,7 +198,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
 
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
-            viewModel.SetupGet(x => x.LegacyPassword).Returns("baz");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("baz".ToSecureString);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -214,7 +215,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("bar");
-            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo".ToSecureString);
             viewModel.SetupGet(x => x.LegacyUseUnsecureHttp).Returns(useUnsecureConnection);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
@@ -230,7 +231,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
-            viewModel.SetupGet(x => x.LegacyPassword).Returns("bar");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("bar".ToSecureString());
 
             var store = new ShopSiteStoreEntity
             {
