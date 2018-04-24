@@ -86,16 +86,7 @@ namespace ShipWorks.Data.Connection
                 return Interlocked.Read(ref connections);
             }
         }
-
-        /// <summary>
-        /// Should only be used in a debug scenario to figure out whos creating connections and why
-        /// </summary>
-        public static bool LogConnectionCallstacks
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// The current status of the connection monitor
         /// </summary>
@@ -372,11 +363,6 @@ namespace ShipWorks.Data.Connection
 
             // track total connections
             Interlocked.Increment(ref connections);
-
-            if (LogConnectionCallstacks)
-            {
-                Debug.WriteLine(new StackTrace().ToString());
-            }
         }
 
         /// <summary>
