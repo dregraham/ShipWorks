@@ -9698,6 +9698,8 @@ namespace ShipWorks.Data.Model
 		ApiKey,
 		///<summary>Password. </summary>
 		Password,
+		///<summary>ShopifyNotifyCustomer. </summary>
+		ShopifyNotifyCustomer,
 		/// <summary></summary>
 		AmountOfFields
 	}

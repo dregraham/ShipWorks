@@ -2604,6 +2604,7 @@
           <Field Name="ApiKey" Type="string" MaxLength="100" FieldIndex="4" />
           <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="ShopifyAccessToken" Type="string" MaxLength="255" FieldIndex="2" />
+          <Field Name="ShopifyNotifyCustomer" Type="bool" FieldIndex="6" />
           <Field Name="ShopifyRequestedShippingOption" Type="int" FieldIndex="3" />
           <Field Name="ShopifyShopDisplayName" Type="string" MaxLength="100" FieldIndex="1" />
           <Field Name="ShopifyShopUrlName" Type="string" MaxLength="100" FieldIndex="0" />
@@ -4218,7 +4219,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-06T14:06:13.0482131Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-16T15:38:22.6466664Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7142,9 +7143,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -8082,6 +8083,7 @@
                     <Field Name="ShopifyRequestedShippingOption" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="ApiKey" Ordinal="6" DbType="12" Length="100" />
                     <Field Name="Password" Ordinal="7" DbType="12" Length="100" />
+                    <Field Name="ShopifyNotifyCustomer" Ordinal="8" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ShopSiteStore">
@@ -12675,6 +12677,7 @@
             <FieldMapping FieldName="ApiKey" TargetFieldName="ApiKey" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="ShopifyAccessToken" TargetFieldName="ShopifyAccessToken" />
+            <FieldMapping FieldName="ShopifyNotifyCustomer" TargetFieldName="ShopifyNotifyCustomer" />
             <FieldMapping FieldName="ShopifyRequestedShippingOption" TargetFieldName="ShopifyRequestedShippingOption" />
             <FieldMapping FieldName="ShopifyShopDisplayName" TargetFieldName="ShopifyShopDisplayName" />
             <FieldMapping FieldName="ShopifyShopUrlName" TargetFieldName="ShopifyShopUrlName" />

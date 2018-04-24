@@ -3700,7 +3700,8 @@ CREATE TABLE [dbo].[ShopifyStore]
 [ShopifyAccessToken] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShopifyRequestedShippingOption] [int] NOT NULL,
 [ApiKey] [nvarchar](100) NOT NULL,
-[Password] [nvarchar](100) NOT NULL
+[Password] [nvarchar](100) NOT NULL,
+[ShopifyNotifyCustomer] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyStore] on [dbo].[ShopifyStore]'
