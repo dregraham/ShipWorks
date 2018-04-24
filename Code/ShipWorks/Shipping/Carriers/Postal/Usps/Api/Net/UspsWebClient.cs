@@ -216,6 +216,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
+            try
+            {
+                return ExceptionWrapper(() => TrackShipmentInternal(shipment, account), account);
+            }
+            catch (UspsApiException ex)
+            {
+                TranslateProcessShipmentException(account, ex);
+
+                // This isn't an exception we can handle, so just throw the original exception
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        private TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        {
             TrackingResult result = new TrackingResult();
             TrackingEvent[] trackingEvents;
             DateTime? guaranteedDeliveryDate;
