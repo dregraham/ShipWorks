@@ -21,10 +21,10 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -1495,6 +1495,69 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     request.Test = account.TestAccount ? "YES" : "NO";
                 }
+            }
+        }
+
+        /// <summary>
+        /// Track the given shipment
+        /// </summary>
+        public Tracking.TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            PostalShipmentEntity postal = shipment.Postal;
+            EndiciaAccountEntity account = GetAccount(postal);
+
+            PackageStatusRequest packageStatusRequest = new PackageStatusRequest()
+            {
+                PicNumbers = new []{shipment.TrackingNumber},
+                RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment)),
+                RequestID = Guid.NewGuid().ToString("N"),
+                CertifiedIntermediary = new CertifiedIntermediary()
+                {
+                    AccountID = account.AccountNumber,
+                    PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                }
+            };
+
+            try
+            {
+                using (EwsLabelService service = CreateWebService("Track", GetReseller(account, shipment)))
+                {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
+                    PackageStatusResponse packageStatusResponse = service.StatusRequest(packageStatusRequest);
+
+                    // Check for errors
+                    if (packageStatusResponse.Status != 0)
+                    {
+                        log.Error($@"An error was returned while getting tracking info for ShipmentID: '{shipment.ShipmentID}', tracking number: '{shipment.TrackingNumber}'.  
+                                     The error number was {packageStatusResponse.Status}");
+                    }
+
+                    Tracking.TrackingResult trackingResult = new Tracking.TrackingResult();
+
+                    IEnumerable<StatusEventList> statusEvents = packageStatusResponse.PackageStatus.SelectMany(ps => ps.PackageStatusEventList);
+
+                    if (statusEvents.Any())
+                    {
+                        foreach (StatusEventList statusResponse in statusEvents)
+                        {
+                            trackingResult.Details.Add(new TrackingResultDetail()
+                            {
+                                Activity = statusResponse.StatusDescription,
+                                Date = DateTime.Parse(statusResponse.EventDateTime).ToString("M/dd/yyy"),
+                                Time = DateTime.Parse(statusResponse.EventDateTime).ToString("h:mm tt")
+                            });
+                        }
+
+                        trackingResult.Summary = statusEvents.OrderBy(te => DateTime.Parse(te.EventDateTime)).Last().TrackingSummary;
+                    }
+
+                    return trackingResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(ShippingException));
             }
         }
     }
