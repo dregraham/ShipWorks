@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -1504,7 +1505,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public Tracking.TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             PostalShipmentEntity postal = shipment.Postal;
-            EndiciaAccountEntity account = GetAccount(postal);
+            EndiciaAccountEntity account;
+
+            try
+            {
+                account = GetAccount(postal);
+            }
+            catch (Exception e) when (e is EndiciaException || e is ShippingException)
+            {
+                // We weren't able to get the account, so the user must have deleted it.
+                // Just try PostalWebTools instead.
+                return new PostalWebShipmentType().TrackShipment(shipment);
+            }
 
             PackageStatusRequest packageStatusRequest = new PackageStatusRequest()
             {

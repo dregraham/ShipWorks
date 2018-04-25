@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -215,6 +216,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
+
+            if (account == null)
+            {
+                // We weren't able to get the account, so the user must have deleted it.
+                // Just try PostalWebTools instead.
+                return new PostalWebShipmentType().TrackShipment(shipment);
+            }
 
             try
             {
