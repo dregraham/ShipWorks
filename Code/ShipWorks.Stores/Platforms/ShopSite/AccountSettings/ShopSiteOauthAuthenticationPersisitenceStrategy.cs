@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             MethodConditions.EnsureArgumentIsNotNull(viewModel, nameof(viewModel));
 
             viewModel.LegacyMerchantID = string.Empty;
-            viewModel.LegacyPassword = string.Empty;
+            viewModel.LegacyPassword = new SecureString();
 
             viewModel.OAuthClientID = store.OauthClientID;
             viewModel.OAuthSecretKey = encryptionProvider.Decrypt(store.OauthSecretKey);

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Security;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
-namespace ShipWorks.Stores.Platforms.ShopSite
+namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
 {
     /// <summary>
     /// View model for ShopSite account settings
@@ -30,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
         private string apiUrl;
         private string legacyMerchantID;
-        private string legacyPassword;
+        private SecureString legacyPassword;
         private string oAuthClientID;
         private string oAuthSecretKey;
         private string oAuthAuthorizationCode;
@@ -95,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// Password for the legacy accounts
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string LegacyPassword
+        public SecureString LegacyPassword
         {
             get { return legacyPassword; }
             set { handler.Set(nameof(LegacyPassword), ref legacyPassword, value); }
@@ -235,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Check for the url scheme and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
             {
-                storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
+                storeUrlToCheck = $"https://{storeUrlToCheck}";
             }
 
             if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
