@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.ShopSite"
              mc:Ignorable="d"
 
@@ -48,8 +49,11 @@
                  Text="{Binding LegacyMerchantID, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="2" TextAlignment="Right">Password:</TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding LegacyPassword, UpdateSourceTrigger=PropertyChanged}" />
+        <PasswordBox Grid.Row="2" Grid.Column="1">
+            <i:Interaction.Behaviors>
+                <ui:PasswordBoxBindingBehavior Password="{Binding LegacyPassword, UpdateSourceTrigger=PropertyChanged}" />
+            </i:Interaction.Behaviors>
+        </PasswordBox>
 
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
                    TextWrapping="Wrap"
