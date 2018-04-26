@@ -82,6 +82,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             shopifyStore.ShopifyRequestedShippingOption = (int) ShopifyRequestedShippingField.Title;
             shopifyStore.ApiKey = string.Empty;
             shopifyStore.Password = string.Empty;
+            shopifyStore.ShopifyNotifyCustomer = true;
 
             return shopifyStore;
         }
