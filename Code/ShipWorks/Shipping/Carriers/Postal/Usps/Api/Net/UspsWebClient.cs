@@ -26,9 +26,11 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -206,6 +208,96 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return accountInfo;
+        }
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        public TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
+
+            if (account == null)
+            {
+                // We weren't able to get the account, so the user must have deleted it.
+                // Just try PostalWebTools instead.
+                return new PostalWebShipmentType().TrackShipment(shipment);
+            }
+
+            try
+            {
+                return ExceptionWrapper(() => TrackShipmentInternal(shipment, account), account);
+            }
+            catch (UspsApiException ex)
+            {
+                throw new ShippingException("ShipWorks was unable to get tracking information.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        private TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        {
+            TrackingResult result = new TrackingResult();
+            TrackingEvent[] trackingEvents;
+            DateTime? guaranteedDeliveryDate;
+            DateTime? expectedDeliveryDate;
+            string serviceDescription;
+            string carrier;
+            DestinationInfo destinationInfo;
+
+            using (ISwsimV69 webService = CreateWebService("TrackShipment"))
+            {
+                webService.TrackShipment(GetCredentials(account), shipment.TrackingNumber,
+                    out trackingEvents, out guaranteedDeliveryDate,
+                    out expectedDeliveryDate, out serviceDescription, out carrier, out destinationInfo);
+            }
+
+            if (trackingEvents.Any())
+            {
+                foreach (TrackingEvent trackingEvent in trackingEvents)
+                {
+                    result.Details.Add(new TrackingResultDetail()
+                    {
+                        Date = trackingEvent.Timestamp.ToString("M/dd/yyy"),
+                        Time = trackingEvent.Timestamp.ToString("h:mm tt"),
+                        Activity = trackingEvent.Event,
+                        Location = GetTrackEventLocation(trackingEvent)
+                    });
+                }
+
+                result.Summary = trackingEvents.OrderBy(te => te.Timestamp).Last().Event;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get descriptive location text for the given track event
+        /// </summary>
+        private string GetTrackEventLocation(TrackingEvent trackEvent)
+        {
+            string location = AddressCasing.Apply(trackEvent.City) ?? string.Empty;
+
+            if (!string.IsNullOrEmpty(trackEvent.State))
+            {
+                if (location.Length > 0)
+                {
+                    location += ", ";
+                }
+
+                location += trackEvent.State;
+            }
+            
+            if (location.Length > 0)
+            {
+                location += ", ";
+            }
+
+            location += Geography.GetCountryName(trackEvent.Country);
+
+            return location;
         }
 
         /// <summary>

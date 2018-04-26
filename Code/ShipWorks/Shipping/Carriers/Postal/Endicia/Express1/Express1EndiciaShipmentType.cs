@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Autofac;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -119,6 +121,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
             // Don't update Express1 entries because they could overwrite Endicia records
+        }
+
+        /// <summary>
+        /// Track the given Express1 shipment
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            return PostalWebClientTracking.TrackShipment(shipment.TrackingNumber);
         }
     }
 }
