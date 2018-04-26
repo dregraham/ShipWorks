@@ -11,11 +11,12 @@ namespace ShipWorks.Tests.Data.Administration
         [InlineData(SqlServerEditionIdType.EnterpriseEvaluation, true)]
         [InlineData(SqlServerEditionIdType.BusinessIntelligence, true)]
         [InlineData(SqlServerEditionIdType.Developer, true)]
-        [InlineData(SqlServerEditionIdType.SqlDatabaseOrSqlDataWarehouse, true)]
+        [InlineData(SqlServerEditionIdType.SqlDatabaseOrSqlDataWarehouse, false)]
         [InlineData(SqlServerEditionIdType.Standard, true)]
         [InlineData(SqlServerEditionIdType.ExpressWithAdvancedServices, false)]
         [InlineData(SqlServerEditionIdType.Express, false)]
         [InlineData(SqlServerEditionIdType.Web, false)]
+        [InlineData(SqlServerEditionIdType.WorkgroupEdition, false)]
         public void SupportsCompression_ReturnsCorrectValue(SqlServerEditionIdType editionIdType, bool expectedResult)
         {
             Assert.Equal(expectedResult, editionIdType.SupportsCompression());

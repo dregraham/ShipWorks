@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security;
 
 namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
 {
@@ -19,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
         /// <summary>
         /// Password for legacy API access
         /// </summary>
-        string LegacyPassword { get; set; }
+        SecureString LegacyPassword { get; set; }
 
         /// <summary>
         /// Username for OAuth access

@@ -88,7 +88,13 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            shipment.CustomsItems.Clear();
+            // EntityCollection.Clear does not add items to the RemovedEntitiesTracker so we have to
+            // do Remove for each item in the collection.
+            int customsItemsCount = shipment.CustomsItems.Count;
+            for (int i = customsItemsCount - 1; i >= 0; i--)
+            {
+                shipment.CustomsItems.RemoveAt(i);
+            }
 
             decimal customsValue = 0m;
 
@@ -119,7 +125,10 @@ namespace ShipWorks.Shipping
             shipment.CustomsGenerated = true;
 
             // Set the removed tracker for tracking deletions in the UI until saved
-            shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+            if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+            {
+                shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+            }
 
             // Consider them loaded.  This is an in-memory field
             shipment.CustomsItemsLoaded = true;

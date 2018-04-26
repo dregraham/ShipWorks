@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
-namespace ShipWorks.Stores.Platforms.ShopSite
+namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
 {
     /// <summary>
     /// Strategy for persisting authentication data
@@ -49,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             MethodConditions.EnsureArgumentIsNotNull(viewModel, nameof(viewModel));
 
             viewModel.LegacyMerchantID = store.Username;
-            viewModel.LegacyPassword = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Decrypt(store.Password);
+            viewModel.LegacyPassword = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Decrypt(store.Password).ToSecureString();
             viewModel.LegacyUseUnsecureHttp = !store.RequireSSL;
 
             viewModel.OAuthClientID = string.Empty;
@@ -72,13 +65,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             // To make a call to the store, we need to validate the password
-            if (string.IsNullOrWhiteSpace(viewModel.LegacyPassword))
+            if (string.IsNullOrWhiteSpace(viewModel.LegacyPassword.ToInsecureString()))
             {
                 return GenericResult.FromError<ShopSiteStoreEntity>("Please enter a password for your ShopSite Store.");
             }
 
             store.Username = viewModel.LegacyMerchantID.Trim();
-            store.Password = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Encrypt(viewModel.LegacyPassword.Trim());
+            store.Password = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username)
+                                              .Encrypt(viewModel.LegacyPassword.ToInsecureString().Trim());
             store.RequireSSL = !viewModel.LegacyUseUnsecureHttp;
 
             store.OauthClientID = string.Empty;
@@ -95,12 +89,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public IResult ValidateApiUrl(string apiUrl)
         {
-            if (apiUrl.EndsWith("db_xml.cgi"))
-            {
-                return Result.FromSuccess();
-            }
-
-            return GenericResult.FromError<string>("A valid URl to the CGI script should end with '/db_xml.cgi'.");
+            return apiUrl.EndsWith("db_xml.cgi") ?
+                Result.FromSuccess() :
+                GenericResult.FromError<string>("A valid URl to the CGI script should end with '/db_xml.cgi'.");
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Security;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
@@ -81,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
             viewModel.VerifySet(x => x.LegacyMerchantID = string.Empty);
-            viewModel.VerifySet(x => x.LegacyPassword = string.Empty);
+            viewModel.VerifySet(x => x.LegacyPassword = It.IsAny<SecureString>());
         }
 
         [Fact]
