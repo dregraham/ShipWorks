@@ -32,6 +32,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.groupBoxFrom = new System.Windows.Forms.GroupBox();
+            this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.labelOrigin = new System.Windows.Forms.Label();
+            this.origin = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.originState = new System.Windows.Forms.CheckBox();
             this.groupInsurance = new System.Windows.Forms.GroupBox();
             this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceProfileControl();
             this.insuranceState = new System.Windows.Forms.CheckBox();
@@ -49,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.groupBoxFrom.SuspendLayout();
             this.groupInsurance.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.SuspendLayout();
@@ -60,48 +66,106 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(439, 282);
-            this.tabControl.TabIndex = 1;
+            this.tabControl.Size = new System.Drawing.Size(439, 500);
+            this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
             // 
             this.tabPageSettings.AutoScroll = true;
+            this.tabPageSettings.Controls.Add(this.groupBoxFrom);
             this.tabPageSettings.Controls.Add(this.groupInsurance);
             this.tabPageSettings.Controls.Add(this.groupShipment);
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(431, 256);
+            this.tabPageSettings.Size = new System.Drawing.Size(431, 474);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
+            // groupBoxFrom
+            // 
+            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxFrom.Controls.Add(this.kryptonBorderEdge1);
+            this.groupBoxFrom.Controls.Add(this.labelOrigin);
+            this.groupBoxFrom.Controls.Add(this.origin);
+            this.groupBoxFrom.Controls.Add(this.originState);
+            this.groupBoxFrom.Location = new System.Drawing.Point(3, 6);
+            this.groupBoxFrom.Name = "groupBoxFrom";
+            this.groupBoxFrom.Size = new System.Drawing.Size(419, 51);
+            this.groupBoxFrom.TabIndex = 0;
+            this.groupBoxFrom.TabStop = false;
+            this.groupBoxFrom.Text = "From";
+            // 
+            // kryptonBorderEdge1
+            // 
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge1.AutoSize = false;
+            this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge1.Location = new System.Drawing.Point(34, 17);
+            this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
+            this.kryptonBorderEdge1.Size = new System.Drawing.Size(1, 23);
+            this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
+            // 
+            // labelOrigin
+            // 
+            this.labelOrigin.AutoSize = true;
+            this.labelOrigin.Location = new System.Drawing.Point(85, 21);
+            this.labelOrigin.Name = "labelOrigin";
+            this.labelOrigin.Size = new System.Drawing.Size(39, 13);
+            this.labelOrigin.TabIndex = 12;
+            this.labelOrigin.Text = "Origin:";
+            // 
+            // origin
+            // 
+            this.origin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.origin.FormattingEnabled = true;
+            this.origin.Location = new System.Drawing.Point(128, 18);
+            this.origin.Name = "origin";
+            this.origin.PromptText = "(Multiple Values)";
+            this.origin.Size = new System.Drawing.Size(206, 21);
+            this.origin.TabIndex = 1;
+            // 
+            // originState
+            // 
+            this.originState.AutoSize = true;
+            this.originState.Checked = true;
+            this.originState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.originState.Location = new System.Drawing.Point(11, 21);
+            this.originState.Name = "originState";
+            this.originState.Size = new System.Drawing.Size(15, 14);
+            this.originState.TabIndex = 0;
+            this.originState.Tag = "";
+            this.originState.UseVisualStyleBackColor = true;
+            // 
             // groupInsurance
             // 
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
-            this.groupInsurance.Location = new System.Drawing.Point(3, 170);
+            this.groupInsurance.Location = new System.Drawing.Point(3, 235);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(419, 82);
-            this.groupInsurance.TabIndex = 11;
+            this.groupInsurance.TabIndex = 2;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.insuranceControl.Location = new System.Drawing.Point(45, 21);
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(42, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
             this.insuranceState.AutoSize = true;
-            this.insuranceState.Location = new System.Drawing.Point(9, 25);
+            this.insuranceState.Location = new System.Drawing.Point(11, 25);
             this.insuranceState.Name = "insuranceState";
             this.insuranceState.Size = new System.Drawing.Size(15, 14);
             this.insuranceState.TabIndex = 0;
@@ -109,19 +173,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             // kryptonBorderEdge10
             // 
-            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge10.AutoSize = false;
             this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
+            this.kryptonBorderEdge10.Location = new System.Drawing.Point(34, 17);
             this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
             this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
-            this.kryptonBorderEdge10.TabIndex = 96;
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
             // 
-            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupShipment.Controls.Add(this.labelTransitTime);
             this.groupShipment.Controls.Add(this.transitTime);
@@ -133,10 +196,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.groupShipment.Controls.Add(this.weight);
             this.groupShipment.Controls.Add(this.labelWeight);
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
-            this.groupShipment.Location = new System.Drawing.Point(3, 6);
+            this.groupShipment.Location = new System.Drawing.Point(3, 67);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(419, 158);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
@@ -144,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             this.labelTransitTime.AutoSize = true;
             this.labelTransitTime.BackColor = System.Drawing.Color.Transparent;
-            this.labelTransitTime.Location = new System.Drawing.Point(52, 23);
+            this.labelTransitTime.Location = new System.Drawing.Point(42, 21);
             this.labelTransitTime.Name = "labelTransitTime";
             this.labelTransitTime.Size = new System.Drawing.Size(82, 13);
             this.labelTransitTime.TabIndex = 76;
@@ -154,21 +217,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             this.transitTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.transitTime.FormattingEnabled = true;
-            this.transitTime.Location = new System.Drawing.Point(140, 20);
+            this.transitTime.Location = new System.Drawing.Point(128, 18);
             this.transitTime.Name = "transitTime";
             this.transitTime.PromptText = "(Multiple Values)";
             this.transitTime.Size = new System.Drawing.Size(121, 21);
-            this.transitTime.TabIndex = 75;
+            this.transitTime.TabIndex = 1;
             // 
             // transitTimeState
             // 
             this.transitTimeState.AutoSize = true;
             this.transitTimeState.Checked = true;
             this.transitTimeState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.transitTimeState.Location = new System.Drawing.Point(7, 23);
+            this.transitTimeState.Location = new System.Drawing.Point(11, 21);
             this.transitTimeState.Name = "transitTimeState";
             this.transitTimeState.Size = new System.Drawing.Size(15, 14);
-            this.transitTimeState.TabIndex = 74;
+            this.transitTimeState.TabIndex = 0;
             this.transitTimeState.Tag = "";
             this.transitTimeState.UseVisualStyleBackColor = true;
             // 
@@ -177,10 +240,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsState.AutoSize = true;
             this.dimensionsState.Checked = true;
             this.dimensionsState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dimensionsState.Location = new System.Drawing.Point(7, 79);
+            this.dimensionsState.Location = new System.Drawing.Point(11, 77);
             this.dimensionsState.Name = "dimensionsState";
             this.dimensionsState.Size = new System.Drawing.Size(15, 14);
-            this.dimensionsState.TabIndex = 73;
+            this.dimensionsState.TabIndex = 4;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
             // 
@@ -188,17 +251,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(137, 71);
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(125, 69);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 72;
+            this.dimensionsControl.TabIndex = 5;
             // 
             // labelDimensions
             // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
-            this.labelDimensions.Location = new System.Drawing.Point(70, 79);
+            this.labelDimensions.Location = new System.Drawing.Point(60, 77);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 71;
@@ -209,30 +272,33 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weightState.AutoSize = true;
             this.weightState.Checked = true;
             this.weightState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.weightState.Location = new System.Drawing.Point(7, 51);
+            this.weightState.Location = new System.Drawing.Point(11, 49);
             this.weightState.Name = "weightState";
             this.weightState.Size = new System.Drawing.Size(15, 14);
-            this.weightState.TabIndex = 70;
+            this.weightState.TabIndex = 2;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
             // 
             // weight
             // 
+            this.weight.AutoSize = true;
+            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(140, 47);
+            this.weight.ConfigureTelemetryEntityCounts = null;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(128, 45);
             this.weight.Name = "weight";
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(269, 21);
-            this.weight.TabIndex = 68;
+            this.weight.Size = new System.Drawing.Size(269, 24);
+            this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
             // 
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(89, 51);
+            this.labelWeight.Location = new System.Drawing.Point(79, 49);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 67;
@@ -240,14 +306,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(34, 17);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 130);
-            this.kryptonBorderEdge.TabIndex = 5;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // BestRateProfileControl
@@ -256,9 +321,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "BestRateProfileControl";
-            this.Size = new System.Drawing.Size(439, 282);
+            this.Size = new System.Drawing.Size(439, 500);
             this.tabControl.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.groupBoxFrom.ResumeLayout(false);
+            this.groupBoxFrom.PerformLayout();
             this.groupInsurance.ResumeLayout(false);
             this.groupInsurance.PerformLayout();
             this.groupShipment.ResumeLayout(false);
@@ -286,6 +353,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private System.Windows.Forms.Label labelTransitTime;
         private MultiValueComboBox transitTime;
         private System.Windows.Forms.CheckBox transitTimeState;
-
+        private System.Windows.Forms.GroupBox groupBoxFrom;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
+        private System.Windows.Forms.Label labelOrigin;
+        private MultiValueComboBox origin;
+        private System.Windows.Forms.CheckBox originState;
     }
 }

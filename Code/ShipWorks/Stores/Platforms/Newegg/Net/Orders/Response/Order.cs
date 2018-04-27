@@ -111,7 +111,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response
         public DateTime OrderDateToUtcTime()
         {
             TimeZoneInfo pacificStandardTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            return System.TimeZoneInfo.ConvertTimeToUtc(this.OrderDateInPacificStandardTime, pacificStandardTimeZone);
+
+            // Crash was occuring here due to invalid time. Invalid times are during the hour time period that doesn't
+            // exist due to daylight savings "spring forward". The invalid time is coming directly from NewEgg.
+            // If invalid time, add an hour before converting to UTC, then subtract the hour afterward to eliminate
+            // the risk of orders being skipped because the time is in the future.
+            return pacificStandardTimeZone.IsInvalidTime(OrderDateInPacificStandardTime) ?
+                TimeZoneInfo.ConvertTimeToUtc(OrderDateInPacificStandardTime.AddHours(1), pacificStandardTimeZone).AddHours(-1) :
+                TimeZoneInfo.ConvertTimeToUtc(OrderDateInPacificStandardTime, pacificStandardTimeZone);
         }
 
         /// <summary>

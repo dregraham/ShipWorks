@@ -132,8 +132,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// </summary>
         private List<UpsServiceMapping> GetServiceTypes(string countryCode, ShipmentTypeCode shipmentTypeCode)
         {
-            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
-
             // See if the requested country code has specific services defined
             bool hasCountryCode = LoadUpsServiceMappings().Any(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant());
 
@@ -144,7 +142,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                 countryCode = InternationalCountryCode;
             }
 
-            if (shipmentType.IsMailInnovationsEnabled())
+            UpsShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode) as UpsShipmentType;
+            if (shipmentType != null && shipmentType.IsMailInnovationsEnabled())
             {
                 return LoadUpsServiceMappings().Where(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
             }
@@ -224,8 +223,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         {
             List<UpsServiceMapping> tmpUpsServiceTypeMapping = new List<UpsServiceMapping>();
 
-           // Add all of the Mail Innovations services
-            if (((UpsShipmentType)ShipmentTypeManager.GetType(shipment)).IsMailInnovationsEnabled())
+            UpsShipmentType shipmentType = ShipmentTypeManager.GetType(shipment) as UpsShipmentType;
+
+            // Add all of the Mail Innovations services
+            if (shipmentType != null && shipmentType.IsMailInnovationsEnabled())
             {
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, UsCountryCode, "M4", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, UsCountryCode, "M2", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));

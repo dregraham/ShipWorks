@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShopifyRequestedShippingOption = source.ShopifyRequestedShippingOption;
             ApiKey = source.ApiKey;
             Password = source.Password;
+            ShopifyNotifyCustomer = source.ShopifyNotifyCustomer;
             
             
             
@@ -86,6 +87,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Password { get; }
+        /// <summary> The ShopifyNotifyCustomer property of the Entity ShopifyStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopifyStore"."ShopifyNotifyCustomer"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ShopifyNotifyCustomer { get; }
         
         
         

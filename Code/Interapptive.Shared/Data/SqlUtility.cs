@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -87,7 +88,7 @@ namespace Interapptive.Shared.Data
                 throw new ArgumentNullException("con");
             }
 
-            log.Info("Altering database to SINGLE_USER");
+            log.Info($"Altering database '{con.Database}' to SINGLE_USER");
             DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
         }
 
@@ -101,7 +102,7 @@ namespace Interapptive.Shared.Data
                 throw new ArgumentNullException("con");
             }
 
-            log.Info("Altering database to MULTI_USER");
+            log.Info($"Altering database '{con.Database}' to MULTI_USER");
             DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE");
         }
 
@@ -126,6 +127,43 @@ namespace Interapptive.Shared.Data
             }
 
             return Convert.ToInt32(result) == 1;
+        }
+
+        /// <summary>
+        /// Checks to see if there is an archiving database that didn't get renamed, possibly due to a crash,
+        /// and renames it to what is expected.
+        /// </summary>
+        public static bool RenameArchvingDbIfNeeded(DbConnection con, string databaseName)
+        {
+            if (con?.Database.ToLowerInvariant() != "master")
+            {
+                throw new ArgumentException("con must have Database set to master to attempt renaming a database.");
+            }
+
+            if (DoesDatabaseExist(con, databaseName) || !DoesDatabaseExist(con, $"{GetArchivingDatabasename(databaseName)}"))
+            {
+                log.Info("Rename not applicable.");
+                return false;
+            }
+
+            string rename = $"ALTER DATABASE [{GetArchivingDatabasename(databaseName)}] MODIFY NAME = [{databaseName}]";
+
+            log.Info($"Renaming database: '{rename}'");
+            DbCommandProvider.ExecuteNonQuery(con, rename);
+            log.Info($"Renamed database: '{databaseName}'");
+
+            // Need to give SQL Server time to finish up, otherwise we get an error that we can't connect yet.
+            Thread.Sleep(1000);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get the archiving database name
+        /// </summary>
+        public static string GetArchivingDatabasename(string databaseName)
+        {
+            return $"ZArchiving_{databaseName}";
         }
 
         /// <summary>
@@ -279,11 +317,11 @@ namespace Interapptive.Shared.Data
             string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
             if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
             {
-                string trustworthyStatement = $@"ALTER DATABASE {databaseName} SET TRUSTWORTHY ON";
+                string trustworthyStatement = $@"ALTER DATABASE [{databaseName}] SET TRUSTWORTHY ON";
                 log.Info($"Executing: {trustworthyStatement}");
                 DbCommandProvider.ExecuteNonQuery(con, trustworthyStatement);
 
-                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::{databaseName} TO {databaseOwner}";
+                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::[{databaseName}] TO [{databaseOwner}]";
                 log.Info($"Executing: {setDatabaseOwnerStatement}");
                 DbCommandProvider.ExecuteNonQuery(con, setDatabaseOwnerStatement);
             }

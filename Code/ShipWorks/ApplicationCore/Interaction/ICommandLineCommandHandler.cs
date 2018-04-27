@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -19,6 +17,6 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// Execute the command with the given arguments.  If the arguments are not valid for the command,
         /// a CommandLineCommandException is thrown.
         /// </summary>
-        void Execute(List<string> args);
+        Task Execute(List<string> args);
     }
 }

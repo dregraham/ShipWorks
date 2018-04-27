@@ -121,14 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsServiceControl(ShipmentTypeCode, rateControl);
         }
-
-        /// <summary>
-        /// Create the UserControl used to handle USPS profiles
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UspsProfileControl();
-        }
                 
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information
@@ -268,15 +260,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Usps", typeof(UspsProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Gets an instance to the best rate shipping broker for the USPS shipment type based on
         /// the shipment configuration.
         /// </summary>
@@ -311,28 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             profile.Postal.Usps.RateShop = true;
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            // We can be called during the creation of the base Postal shipment, before the USPS one exists
-            if (shipment.Postal.Usps != null)
-            {
-                UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
-                IUspsProfileEntity uspsProfile = profile.Postal.Usps;
-
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.UspsAccountID, uspsShipment, UspsShipmentFields.UspsAccountID);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.PostalProfile.Profile.Insurance, uspsShipment, UspsShipmentFields.Insurance);
-            }
-        }
-
+        
         /// <summary>
         /// Generate the carrier specific template xml
         /// </summary>

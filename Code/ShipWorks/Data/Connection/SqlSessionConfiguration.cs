@@ -272,7 +272,8 @@ namespace ShipWorks.Data.Connection
 
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
 
-            csb.ApplicationName = "ShipWorks";
+            string appName = Program.ExecutionMode is UserInterfaceExecutionMode ? "ShipWorks" : "ShipWorksBackground";
+            csb.ApplicationName = appName;
             csb.DataSource = ServerInstance;
             csb.InitialCatalog = DatabaseName;
 

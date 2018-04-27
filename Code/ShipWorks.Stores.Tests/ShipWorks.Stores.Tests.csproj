@@ -22,9 +22,14 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
- <ItemGroup>
+  <ItemGroup>
+    <None Remove="Orders\Archive\ArchiveManagerDataAccessTest.cs" />
+    <None Remove="Orders\Archive\ArchiveManagerDialogViewModelTest.cs" />
+    <None Remove="Orders\Archive\ArchiveNotificationViewModelTest.cs" />
+    <None Remove="Orders\Archive\SingleDatabaseSelectorViewModelTest.cs" />
     <None Remove="Platforms\Manual\ManualStoreTypeTest.cs" />
-<None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
+    <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
+    <None Remove="Orders\Archive\OrderArchiveFilterRegeneratorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

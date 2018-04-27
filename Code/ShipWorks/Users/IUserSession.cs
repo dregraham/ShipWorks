@@ -31,6 +31,11 @@ namespace ShipWorks.Users
         bool Logon(LogonCredentials credentials);
 
         /// <summary>
+        /// Log in the specified user
+        /// </summary>
+        bool Logon(UserEntity user, bool audit);
+
+        /// <summary>
         /// Logs in using the last logged in user
         /// </summary>
         bool LogonLastUser();

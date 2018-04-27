@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
@@ -16,8 +15,8 @@ using ShipWorks.UI;
 using System.Runtime.InteropServices;
 using System.Transactions;
 using System.Text;
-using ShipWorks.Users.Audit;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Interapptive.Shared.Utility;
 
@@ -87,16 +86,7 @@ namespace ShipWorks.Data.Connection
                 return Interlocked.Read(ref connections);
             }
         }
-
-        /// <summary>
-        /// Should only be used in a debug scenario to figure out whos creating connections and why
-        /// </summary>
-        public static bool LogConnectionCallstacks
-        {
-            get;
-            set;
-        }
-
+        
         /// <summary>
         /// The current status of the connection monitor
         /// </summary>
@@ -283,7 +273,7 @@ namespace ShipWorks.Data.Connection
                     }
 
                     // If it's a login failure, or b\c our connection has gone away, we have to check to see if it is because we were locked out due to SINGLE_USER
-                    if (ex.Number == 4060 || ex.Number == 233)
+                    if (ex.Number == 4060 || ex.Number == 233 || IsDbConnectionException(ex))
                     {
                         if (!SingleUserModeScope.IsActive)
                         {
@@ -373,11 +363,6 @@ namespace ShipWorks.Data.Connection
 
             // track total connections
             Interlocked.Increment(ref connections);
-
-            if (LogConnectionCallstacks)
-            {
-                Debug.WriteLine(new StackTrace().ToString());
-            }
         }
 
         /// <summary>
@@ -532,6 +517,13 @@ namespace ShipWorks.Data.Connection
             if (sqlExceptions.Any())
             {
                 List<int> errors = sqlExceptions.Select(e => e.Number).ToList();
+
+                // We had at least one SqlException, so we can check Win32Exceptions
+                IEnumerable<Win32Exception> win32Exceptions = exceptions.OfType<Win32Exception>();
+                if (win32Exceptions.Any())
+                {
+                    errors.AddRange(win32Exceptions.Select(w => w.NativeErrorCode));
+                }
 
                 foreach (SqlErrorCollection errorCollection in sqlExceptions.Select(e => e.Errors))
                 {

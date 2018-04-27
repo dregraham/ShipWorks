@@ -19,6 +19,11 @@ namespace ShipWorks.Users
         bool ShouldShowNotification(UserConditionalNotificationType notificationType, DateTime date);
 
         /// <summary>
+        /// Start showing the given notification for the user
+        /// </summary>
+        void StartShowingNotification(UserConditionalNotificationType notificationType);
+
+        /// <summary>
         /// Stop showing the given notification for the user
         /// </summary>
         void StopShowingNotification(UserConditionalNotificationType notificationType);

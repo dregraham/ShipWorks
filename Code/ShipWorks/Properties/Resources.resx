@@ -1579,4 +1579,25 @@
   <data name="split_icon_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\split_icon_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="box_closed_with_label_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\box_closed_with_label_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_time" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_time.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_error_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_error_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_ok_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_ok_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_time_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_time_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="data_unknown_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\data_unknown_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

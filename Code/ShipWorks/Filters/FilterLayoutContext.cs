@@ -26,7 +26,7 @@ using ShipWorks.Users.Security;
 namespace ShipWorks.Filters
 {
     /// <summary>
-    /// Provides functionality for effeciently loading filter layouts
+    /// Provides functionality for efficiently loading filter layouts
     /// </summary>
     [NDependIgnoreLongTypes]
     public class FilterLayoutContext
@@ -149,7 +149,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Load the layout with the specified ID, ensureing its for the given target.
+        /// Load the layout with the specified ID, ensuring its for the given target.
         /// </summary>
         private void LoadLayout(long layoutID)
         {
@@ -221,7 +221,7 @@ namespace ShipWorks.Filters
             int levelsDeep = GetFilterNodeLevels(layoutID);
 
             // We actually have to go another level deeper in the prefetch, so that the object model _knows_ there is nothing deeper, and the child
-            // collections are prefilled with zero entries, rather than being null and needing lazy loaded.
+            // collections are pre-filled with zero entries, rather than being null and needing lazy loaded.
             levelsDeep++;
 
             while (levelsDeep > 0)
@@ -235,7 +235,7 @@ namespace ShipWorks.Filters
                     RelationCollection nodeRelationToSequence = new RelationCollection();
                     nodeRelationToSequence.Add(FilterNodeEntity.Relations.FilterSequenceEntityUsingFilterSequenceID);
 
-                    // We need the children sorted by the position of there corresponding sequenc entities
+                    // We need the children sorted by the position of there corresponding sequence entities
                     ISortExpression sorter = new SortExpression(FilterSequenceFields.Position | SortOperator.Ascending);
 
                     // We need to get all the children of this node.  This is where the recursion happens,
@@ -411,7 +411,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Get the number of filters (not including folders) contained by top-level filters layouts, not including 'My' fiters
+        /// Get the number of filters (not including folders) contained by top-level filters layouts, not including 'My' filters
         /// </summary>
         public int GetTopLevelFilterCount()
         {
@@ -481,7 +481,7 @@ namespace ShipWorks.Filters
             {
                 bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged || filter.Fields[(int) FilterFieldIndex.State].IsChanged;
 
-                // Fetch list of nodes befor refetching.
+                // Fetch list of nodes before refetching.
                 List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
                 //IEnumerable<long> filterNodesIDsToUpdate = nodesToUpdate
                 //    //.Where(nodeToUpdate => nodeToUpdate.Fields[(int)FilterNodeFieldIndex.State].IsChanged || nodeToUpdate.Filter.IsFolder)
@@ -510,7 +510,7 @@ namespace ShipWorks.Filters
             {
                 FilterHelper.TranslateException(ex);
 
-                // Rethrow, if the translate didnt
+                // Rethrow, if the translate didn't
                 throw;
             }
         }
@@ -567,11 +567,11 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Regenerates the filter sql for all filters in the database.  This is used by the database updater anytime there is a schema change.
         ///
-        /// If there are outstanding "Search" filters they will be regnerated but not calculated.  This is b\c when regenerating the will be marked as needing initial counts,
+        /// If there are outstanding "Search" filters they will be regenerated but not calculated.  This is b\c when regenerating the will be marked as needing initial counts,
         /// but the search engine and not the filter update engine is supposed to be responsible for search filter initial counts.  So in that case, the search results will just
         /// always be spinning until the user canceled or updated the search.  That said, given we only use this during upgrade, that shouldn't even really be possible.
         /// </summary>
-        public void RegenerateAllFilters(SqlAdapter adapter)
+        public void RegenerateAllFilters(ISqlAdapter adapter)
         {
             List<FilterEntity> allFilters = new List<FilterEntity>();
 
@@ -590,7 +590,7 @@ namespace ShipWorks.Filters
 
             // We have to make sure and do "Quick Filters" and "Search" too, which will not be already in our context.  See the comments on the function summary
             // for information about the Search filters
-            FilterNodeCollection localNodes = FilterNodeCollection.Fetch(adapter,
+            FilterNodeCollection localNodes = FilterNodeCollection.Fetch(adapter.AsDataAccessAdapter(),
 
                 // Quick filters
                 FilterNodeFields.Purpose == (int) FilterNodePurpose.Quick |
@@ -610,13 +610,13 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Regenerate the given list of filters.  All affected nodes (even those due to folder conditions) will be regnerated automatically as well.
+        /// Regenerate the given list of filters.  All affected nodes (even those due to folder conditions) will be regenerated automatically as well.
         /// </summary>
-        private void RegenerateFilterSql(List<FilterEntity> filters, SqlAdapter adapter)
+        private void RegenerateFilterSql(List<FilterEntity> filters, ISqlAdapter adapter)
         {
             // Ordered list of affected nodes, from children up, so folders are accurate
             OrderedDictionary affectedNodes = new OrderedDictionary();
-            
+
             using (new LoggedStopwatch(log, "RegenerateFilterSql-GetAffectedNodesList"))
             {
                 // Look at all filters
@@ -630,7 +630,7 @@ namespace ShipWorks.Filters
                         {
                             affectedNodes.Remove(node.FilterNodeID);
                         }
-                        
+
                         affectedNodes.Add(node.FilterNodeID, node);
                     }
                 }
@@ -758,13 +758,13 @@ namespace ShipWorks.Filters
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Filter = filter;
 
-            // Now we need a new FilterNode to represent it in the hiearchy.  We may need more than one - we'll need one for
+            // Now we need a new FilterNode to represent it in the hierarchy.  We may need more than one - we'll need one for
             // each link its parent has.  But Move will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
             filterNode.Filter.State = (int) FilterState.Enabled;
 
-            // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
+            // Since we don't exist anywhere yet, this doesn't actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position, adapter);
         }
 
@@ -821,14 +821,14 @@ namespace ShipWorks.Filters
                 throw new FilterInvalidLocationException(string.Format("Cannot add a {0} filter to a {1} layout.", filter.FilterTarget, parentFilter.FilterTarget));
             }
 
-            // Make sure we arent linking ourselves to somewhere we already are
+            // Make sure we aren't linking ourselves to somewhere we already are
             string reason;
             if (!CanAddChild(filter, parentNode, out reason))
             {
                 throw new FilterInvalidLocationException(reason);
             }
 
-            // Special case for new nodes that arent already in the hierarchy.  If we didn't do this, then due to the recursive
+            // Special case for new nodes that aren't already in the hierarchy.  If we didn't do this, then due to the recursive
             // saves, this new node, which is basically just a prototype telling us what to add, would be actually added to
             // the database.
             if (filterNode.IsNew)
@@ -848,7 +848,7 @@ namespace ShipWorks.Filters
             List<FilterNodeEntity> preMoveAncestors = null;
             if (move)
             {
-                // Getting all the ancestores that could be potentially affected by this move, so we can update them after the move
+                // Getting all the ancestors that could be potentially affected by this move, so we can update them after the move
                 preMoveAncestors = GetAncestorsAffectedByDefinition(filter);
             }
 
@@ -951,7 +951,7 @@ namespace ShipWorks.Filters
                     adapter.SaveAndRefetch(anscestor);
                 }
 
-                // Update the filter counts for all previous anscestor folders for moves
+                // Update the filter counts for all previous ancestor folders for moves
                 if (preMoveAncestors != null)
                 {
                     foreach (FilterNodeEntity anscestor in preMoveAncestors)
@@ -967,7 +967,7 @@ namespace ShipWorks.Filters
             {
                 FilterHelper.TranslateException(ex);
 
-                // Rethrow, if the translate didnt
+                // Rethrow, if the translate didn't
                 throw;
             }
         }
@@ -994,17 +994,17 @@ namespace ShipWorks.Filters
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Filter = copy;
 
-            // Now we need a new FilterNode to represent it in the hiearchy.  We may need more than one - we'll need one for
+            // Now we need a new FilterNode to represent it in the hierarchy.  We may need more than one - we'll need one for
             // each link its parent has.  But AddNodeToParent will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
 
-            // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
+            // Since we don't exist anywhere yet, this doesn't actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position);
         }
 
         /// <summary>
-        /// Get a unqiue name we can use as the name of a copy of this filter
+        /// Get a unique name we can use as the name of a copy of this filter
         /// </summary>
         private string GetCopyName(FilterEntity filter)
         {
@@ -1114,12 +1114,12 @@ namespace ShipWorks.Filters
                     adapter.SaveAndRefetch(siblings[i]);
                 }
 
-                // No more nodes refering to it, we can delete the sequence
+                // No more nodes referring to it, we can delete the sequence
                 sequence.Filter = null;
                 sequence.Parent = null;
                 adapter.DeleteEntity(sequence);
 
-                // If this was the last sequence refering to the filter, we can delete the filter
+                // If this was the last sequence referring to the filter, we can delete the filter
                 if (deleteFilter)
                 {
                     log.InfoFormat("Deleting filter {0}", filter.Name);
@@ -1137,7 +1137,7 @@ namespace ShipWorks.Filters
             {
                 FilterHelper.TranslateException(ex);
 
-                // Rethrow, if the translate didnt
+                // Rethrow, if the translate didn't
                 throw;
             }
         }
@@ -1169,13 +1169,13 @@ namespace ShipWorks.Filters
 
             if (deleteSequence)
             {
-                // No more nodes refering to it, we can delete the sequence
+                // No more nodes referring to it, we can delete the sequence
                 sequence.Filter = null;
                 sequence.Parent = null;
                 adapter.DeleteEntity(sequence);
             }
 
-            // If this was the last sequence refering to the filter, we can delete the filter
+            // If this was the last sequence referring to the filter, we can delete the filter
             if (deleteFilter)
             {
                 log.InfoFormat("Deleting filter {0}", filter.Name);
@@ -1259,7 +1259,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Move the node up, using teh specified adapter
+        /// Move the node up, using the specified adapter
         /// </summary>
         private void MoveUp(FilterNodeEntity node, SqlAdapter adapter)
         {
@@ -1293,7 +1293,7 @@ namespace ShipWorks.Filters
             {
                 FilterHelper.TranslateException(ex);
 
-                // Rethrow, if the translate didnt
+                // Rethrow, if the translate didn't
                 throw;
             }
         }
@@ -1348,7 +1348,7 @@ namespace ShipWorks.Filters
             {
                 FilterHelper.TranslateException(ex);
 
-                // Rethrow, if the translate didnt
+                // Rethrow, if the translate didn't
                 throw;
             }
         }
@@ -1385,7 +1385,7 @@ namespace ShipWorks.Filters
                 }
             }
 
-            // If the parent has the child for its anscestor at some point, then the child cant really be a child
+            // If the parent has the child for its ancestor at some point, then the child cant really be a child
             if (HasAncestor(parent, child))
             {
                 reason = string.Format("A {0} cannot be added as a descendant of itself.", child.IsFolder ? "folder" : "filter");
@@ -1472,10 +1472,10 @@ namespace ShipWorks.Filters
         /// </summary>
         private bool HasAncestor(FilterEntity child, FilterEntity ancestor)
         {
-            // Check all of the potential ancestores immediate children
+            // Check all of the potential ancestors immediate children
             foreach (FilterSequenceEntity childSequence in ancestor.ChildSequences)
             {
-                // The potential anscestor has this child as an immediate child.
+                // The potential ancestor has this child as an immediate child.
                 if (childSequence.Filter == child)
                 {
                     return true;

@@ -152,6 +152,16 @@ namespace ShipWorks.ApplicationCore.Services
                 // Are we running on entering this method
                 bool isRunning = checkInTimer != null;
 
+                // Check to see if we are single user.  If so, stop and restart the sql monitor timer.
+                if (TestIsSingleUser())
+                {
+                    // Not connected - stop
+                    OnStop();
+
+                    // Stop also stops the sql monitor timer - we need that to keep going so we can detect when it gets fixed
+                    sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, sqlMonitorTimespan, sqlMonitorTimespan);
+                }
+
                 // Check the SQL Session, and determine if it changed
                 bool hasChanged = CheckSqlSession();
 
@@ -191,11 +201,39 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
+        /// Test to see if the requested database is in single user mode
+        /// </summary>
+        /// <returns></returns>
+        private bool TestIsSingleUser()
+        {
+            if (SqlSession.Current == null)
+            {
+                return false;
+            }
+
+            // If the database is in SINGLE_USER, don't even try to connect
+            SqlSession master = new SqlSession(SqlSession.Current);
+            master.Configuration.DatabaseName = "master";
+            using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+            {
+                testConnection.Open();
+
+                return SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+            }
+        }
+
+        /// <summary>
         /// Check SQL Session for changes.  Updates 'lastConfiguration' and 'lastConfigurationSuccess', and returns true if the session has changed.
         /// </summary>
         [NDependIgnoreLongMethod]
         private bool CheckSqlSession()
         {
+            // If database is in single user mode, we can't connect.
+            if (TestIsSingleUser())
+            {
+                return false;
+            }
+
             // Reloading the SQL Session and any other changes that may cause have to be within a connection scope, so we don't try to do it while other things are updating,
             // and other things don't try to update while we are doing it.
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("checking connection", null))
@@ -217,6 +255,13 @@ namespace ShipWorks.ApplicationCore.Services
                 if (hasChanged)
                 {
                     SqlSession.Initialize();
+
+                    // We just initialized, so check to see if the database is in single user mode.
+                    // If database is in single user mode, we can't connect.
+                    if (TestIsSingleUser())
+                    {
+                        return false;
+                    }
 
                     // Make sure that change tracking is enabled for the database and all applicable tables.
                     SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();

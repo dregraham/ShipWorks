@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
+using ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using log4net;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
 {
@@ -22,8 +22,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
     public class OnTracRates : OnTracRequest
     {
         private readonly HttpVariableRequestSubmitter httpVariableRequestSubmitter;
-        readonly ILog log;
-
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -57,11 +56,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         {
             ILookup<OnTracServiceType, OnTracServiceType> availableServices = availableServiceTypes.ToLookup(x => x);
 
-            RateShipment rateShipment = GetRatesFromOnTrac(shipment);
+            Schemas.RateResponse.Shipment rateShipment = GetRatesFromOnTrac(shipment);
 
             List<RateResult> rates = new List<RateResult>();
 
-            foreach (RateQuote rateQuote in rateShipment.Rates)
+            foreach (Rate rateQuote in rateShipment.Rates)
             {
                 try
                 {
@@ -74,7 +73,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                     }
 
                     DateTime? expectedDeliveryDate = GetExpectedDeliveryDate(rateQuote);
-                    string deliveryDateDescription = rateQuote.TransitDays.ToString();
+                    string deliveryDateDescription = rateQuote.TransitDays;
+
+                    int transitDays;
+                    int.TryParse(rateQuote.TransitDays, out transitDays);
 
                     if (expectedDeliveryDate.HasValue)
                     {
@@ -82,25 +84,25 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                     }
                     else
                     {
-                        expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                        expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
                     }
 
                     rates.Add(
                         new RateResult(
                             EnumHelper.GetDescription(onTracServiceType),
                             deliveryDateDescription,
-                            (decimal)rateQuote.TotalCharge,
+                            rateQuote.TotalCharge,
                             onTracServiceType)
                         {
                             ExpectedDeliveryDate = expectedDeliveryDate,
-                            ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays),
+                            ServiceLevel = GetServiceLevel(onTracServiceType, transitDays),
                             ShipmentType = ShipmentTypeCode.OnTrac,
                             ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.OnTrac)
                         });
                 }
                 catch (InvalidOperationException ex)
                 {
-                    log.Info(string.Format("Unknown Service Type {0}", rateQuote.Service), ex);
+                    log.Info($"Unknown Service Type {rateQuote.Service}", ex);
                 }
             }
 
@@ -110,9 +112,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// <summary>
         /// Try to get an expected delivery date from the rate quote
         /// </summary>
-        private static DateTime? GetExpectedDeliveryDate(RateQuote rateQuote)
+        private static DateTime? GetExpectedDeliveryDate(Rate rateQuote)
         {
-            if (rateQuote.ExpectedDeliveryDate == null || rateQuote.ExpectedDeliveryDate.Length != 8 || rateQuote.CommitTime == null)
+            if (rateQuote.ExpectedDeliveryDate == null || rateQuote.ExpectedDeliveryDate.Length != 8 || rateQuote.CommitTime == DateTime.MinValue)
             {
                 return null;
             }
@@ -120,12 +122,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
             int year;
             int month;
             int day;
-            DateTime commitTimeDate;
+            DateTime commitTimeDate = rateQuote.CommitTime;
 
             if (!int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(0, 4), out year) ||
                 !int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(4, 2), out month) ||
                 !int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(6, 2), out day) ||
-                !DateTime.TryParse(rateQuote.CommitTime, out commitTimeDate))
+                commitTimeDate == DateTime.MinValue)
             {
                 return null;
             }
@@ -162,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// Gets rates from OnTrac
         /// </summary>
         /// <returns> RateShipmentList is a class defined by the OnTrac XSDs </returns>
-        private RateShipment GetRatesFromOnTrac(ShipmentEntity shipment)
+        private Schemas.RateResponse.Shipment GetRatesFromOnTrac(ShipmentEntity shipment)
         {
             OnTracShipmentEntity onTracShipment = shipment.OnTrac;
 
@@ -206,16 +208,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
             httpVariableRequestSubmitter.Uri = new Uri(sbRequestUrl.ToString());
             httpVariableRequestSubmitter.Verb = HttpVerb.Get;
 
-            RateShipmentList result = ExecuteLoggedRequest<RateShipmentList>(httpVariableRequestSubmitter);
+            OnTracRateResponse result = ExecuteLoggedRequest<OnTracRateResponse>(httpVariableRequestSubmitter);
 
             // OnTrac may not return any rating results
-            if (result.Shipments == null || !result.Shipments.Any())
+            if (result.Shipments?.Shipment == null || !result.Shipments.Shipment.Any())
             {
                 throw new OnTracException("OnTrac did not provide any rate results to ShipWorks.");
             }
 
             // We only ever request 1 shipment
-            return result.Shipments[0];
+            return result.Shipments.Shipment[0];
         }
     }
 }

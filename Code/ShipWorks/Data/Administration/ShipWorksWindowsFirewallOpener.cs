@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Interaction;
-using log4net;
-using Interapptive.Shared.Win32;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.Data.Administration
 {
@@ -31,9 +30,9 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Excecute the command
+        /// Execute the command
         /// </summary>
-        public void Execute(List<string> args)
+        public Task Execute(List<string> args)
         {
             try
             {
@@ -51,6 +50,8 @@ namespace ShipWorks.Data.Administration
                 log.Error("Failed to process firewall request.", ex);
                 Environment.ExitCode = ex.ErrorCode;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

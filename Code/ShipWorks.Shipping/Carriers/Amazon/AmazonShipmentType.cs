@@ -201,15 +201,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
 
         /// <summary>
-        /// Ensure the carrier specific profile data is created and loaded for the given profile
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            base.LoadProfileData(profile, refreshIfPresent);
-            ShipmentTypeDataService.LoadProfileData(profile, "Amazon", typeof(AmazonProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -218,53 +209,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonProfileEntity amazon = profile.Amazon;
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
-            amazon.Weight = 0;
-
-            amazon.DimsProfileID = 0;
-            amazon.DimsLength = 0;
-            amazon.DimsWidth = 0;
-            amazon.DimsHeight = 0;
-            amazon.DimsWeight = 0;
-            amazon.DimsAddWeight = true;
 
             amazon.ShippingServiceID = string.Empty;
         }
-
-        /// <summary>
-        /// Apply the given shipping profile to the shipment
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            if (shipment.Amazon == null)
-            {
-                return;
-            }
-
-            AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            IAmazonProfileEntity amazonProfile = profile.Amazon;
-
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
-
-            if (amazonProfile.Weight.GetValueOrDefault() > 0)
-            {
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
-            if (amazonProfile.DimsProfileID != null)
-            {
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
-            }
-        }
-
+       
         /// <summary>
         /// Updates the total weight of the shipment
         /// </summary>

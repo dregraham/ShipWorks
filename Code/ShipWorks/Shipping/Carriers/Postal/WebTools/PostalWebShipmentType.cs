@@ -37,11 +37,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         protected override SettingsControlBase CreateSettingsControl() => new PostalWebSettingsControl();
 
         /// <summary>
-        /// Create the control used to edit the profile settings
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl() => new PostalProfileControlBase();
-
-        /// <summary>
         /// USPS supports getting postal service rates
         /// </summary>
         public override bool SupportsGetRates => true;

@@ -1,9 +1,8 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
-using System;
-using System.Linq;
 
 namespace ShipWorks.Users
 {
@@ -50,6 +49,15 @@ namespace ShipWorks.Users
         {
             Func<bool> loginWithCredentials = () => userSession.Logon(credentials);
             return Logon(loginWithCredentials);
+        }
+
+        /// <summary>
+        /// Logs the user in
+        /// </summary>
+        public EnumResult<UserServiceLogonResultType> Logon(UserEntity user, bool audit)
+        {
+            Func<bool> loginAsUser = () => userSession.Logon(user, audit);
+            return Logon(loginAsUser);
         }
 
         /// <summary>

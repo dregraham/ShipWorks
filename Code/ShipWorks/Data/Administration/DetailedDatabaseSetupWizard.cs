@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -23,6 +24,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
@@ -187,6 +189,9 @@ namespace ShipWorks.Data.Administration
 
             // Replace the user wizard page with the new tango user wizard page
             Pages.Insert(Pages.Count - 1, (WizardPage) tangoUserControlHost);
+
+            wizardPageSelectSqlServerInstance.StepNextAsync = OnStepNextSelectSqlInstance;
+            wizardPageDatabaseName.SteppingIntoAsync = OnSteppingIntoCreateDatabase;
         }
 
         /// <summary>
@@ -195,7 +200,7 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
-            gridDatabses.Rows.Clear();
+            gridDatabases.Rows.Clear();
 
             StartSearchingSqlServers();
 
@@ -278,10 +283,10 @@ namespace ShipWorks.Data.Administration
             }
             else
             {
-                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+                SqlServerInstaller localSqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
                 // Setup which first page the user will see
-                if (sqlServerInstaller.IsSqlServer2017Supported || sqlServerInstaller.IsSqlServer2014Supported)
+                if (localSqlServerInstaller.IsSqlServer2017Supported || localSqlServerInstaller.IsSqlServer2014Supported)
                 {
                     Pages.Remove(wizardPageChooseWisely2008);
 
@@ -955,7 +960,7 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
         {
             labelDatabaseSelect.Text = sqlInstanceChooseDatabase ? "Select your ShipWorks database" : "Connection Check";
-            gridDatabses.Visible = sqlInstanceChooseDatabase;
+            gridDatabases.Visible = sqlInstanceChooseDatabase;
 
             if (e.FirstTime)
             {
@@ -975,7 +980,7 @@ namespace ShipWorks.Data.Administration
                 }
 
                 // This function handles a selected instance or blank
-                ConnectToSelectedServerInstance();
+                ConnectToSelectedServerInstance().Forget();
             }
             else
             {
@@ -1000,7 +1005,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLeaveSqlInstance(object sender, EventArgs e)
         {
-            ConnectToSelectedServerInstance();
+            ConnectToSelectedServerInstance().Forget();
         }
 
         /// <summary>
@@ -1010,7 +1015,7 @@ namespace ShipWorks.Data.Administration
         {
             if (comboSqlServers.Focused && keyData == Keys.Return)
             {
-                ConnectToSelectedServerInstance();
+                ConnectToSelectedServerInstance().Forget();
                 return true;
             }
             else
@@ -1022,7 +1027,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The selected SQL Server instance has changed
         /// </summary>
-        private void OnChangeSelectedInstance(object sender, EventArgs e)
+        private async void OnChangeSelectedInstance(object sender, EventArgs e)
         {
             ImageComboBoxItem selected = comboSqlServers.SelectedItem as ImageComboBoxItem;
             if (selected != null)
@@ -1049,14 +1054,14 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
-            ConnectToSelectedServerInstance();
+            await ConnectToSelectedServerInstance().ConfigureAwait(true);
         }
 
         /// <summary>
         /// Connect to the currently selected SQL Server instance
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void ConnectToSelectedServerInstance()
+        private async Task ConnectToSelectedServerInstance()
         {
             string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
@@ -1089,8 +1094,8 @@ namespace ShipWorks.Data.Administration
             // If there is no selected instance name, we just clear everything out. And get out.
             if (string.IsNullOrWhiteSpace(selectedInstance))
             {
-                gridDatabses.Rows.Clear();
-                gridDatabses.EmptyText = "";
+                gridDatabases.Rows.Clear();
+                gridDatabases.EmptyText = "";
 
                 panelSelectedInstance.Visible = false;
 
@@ -1106,9 +1111,9 @@ namespace ShipWorks.Data.Administration
             }
 
             // Clear the database list
-            gridDatabses.Rows.Clear();
-            gridDatabses.EmptyText = "";
-            gridDatabses.Visible = false;
+            gridDatabases.Rows.Clear();
+            gridDatabases.EmptyText = "";
+            gridDatabases.Visible = false;
 
             pictureSqlConnection.Image = Resources.arrows_greengray;
             pictureSqlConnection.Visible = true;
@@ -1123,90 +1128,78 @@ namespace ShipWorks.Data.Administration
             SqlSessionConfiguration firstTryConfiguration = !string.IsNullOrEmpty(sqlSession.Configuration.ServerInstance) ? sqlSession.Configuration : (SqlSession.IsConfigured ? SqlSession.Current.Configuration : null);
 
             // Start the background task to try to log in and figure out the background databases...
-            var task = Task.Factory.StartNew(() =>
+            SqlSessionConfiguration configuration = await Task.Run(() => SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration)).ConfigureAwait(true);
+            IEnumerable<ISqlDatabaseDetail> databases = null;
+
+            if (configuration != null)
             {
-                SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration);
-
-                if (configuration != null)
+                using (DbConnection con = new SqlSession(configuration).OpenConnection())
                 {
-                    using (DbConnection con = new SqlSession(configuration).OpenConnection())
-                    {
-                        return Tuple.Create(configuration, ShipWorksDatabaseUtility.GetDatabaseDetails(con));
-                    }
+                    databases = await ShipWorksDatabaseUtility.GetDatabaseDetails(con).ConfigureAwait(true);
                 }
-                else
-                {
-                    return null;
-                }
-            });
+            }
 
-            task.ContinueWith(t =>
+            // If the background session we know about isn't the same as the current connection session, then the user has changed
+            // it in the meantime on us and we discard the results
+            if (backgroundSession != connectionSession)
             {
-                // If the background session we know about isn't the same as the current connection session, then the user has changed
-                // it in the meantime on us and we discard the results
-                if (backgroundSession != connectionSession)
-                {
-                    return;
-                }
+                return;
+            }
 
-                // Whether it worked or not, this is now the SQL Instance this session is configured for.  This is especially important to set now in case
-                // the user opens the window to try to change the credentials.
-                sqlSession.Configuration.ServerInstance = selectedInstance;
+            // Whether it worked or not, this is now the SQL Instance this session is configured for.  This is especially important to set now in case
+            // the user opens the window to try to change the credentials.
+            sqlSession.Configuration.ServerInstance = selectedInstance;
 
-                string instanceDisplay = (selectedInstance == SqlInstanceUtility.LocalDbServerInstance) ? localDbDisplayName : selectedInstance;
+            string instanceDisplay = (selectedInstance == SqlInstanceUtility.LocalDbServerInstance) ? localDbDisplayName : selectedInstance;
 
-                // Null indicates error
-                if (t.Result == null)
-                {
-                    pictureSqlConnection.Image = Resources.warning16;
-                    labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
-                    linkSqlInstanceAccount.Text = "Try changing the account";
+            // Null indicates error
+            if (configuration == null)
+            {
+                pictureSqlConnection.Image = Resources.warning16;
+                labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
+                linkSqlInstanceAccount.Text = "Try changing the account";
 
-                    gridDatabses.EmptyText = "";
-                    gridDatabses.Visible = false;
-                }
-                else
-                {
-                    SqlSessionConfiguration configuration = t.Result.Item1;
-                    List<SqlDatabaseDetail> databases = t.Result.Item2;
+                gridDatabases.EmptyText = "";
+                gridDatabases.Visible = false;
+            }
+            else
+            {
+                pictureSqlConnection.Image = Resources.check16;
+                labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
+                linkSqlInstanceAccount.Text = "Change";
 
-                    pictureSqlConnection.Image = Resources.check16;
-                    labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
-                    linkSqlInstanceAccount.Text = "Change";
+                gridDatabases.EmptyText = "No databases were found.";
+                gridDatabases.Visible = sqlInstanceChooseDatabase;
 
-                    gridDatabses.EmptyText = "No databases were found.";
-                    gridDatabses.Visible = sqlInstanceChooseDatabase;
+                // Save the credentials
+                sqlSession.Configuration.Username = configuration.Username;
+                sqlSession.Configuration.Password = configuration.Password;
+                sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
-                    // Save the credentials
-                    sqlSession.Configuration.Username = configuration.Username;
-                    sqlSession.Configuration.Password = configuration.Password;
-                    sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+                // We also have to save them to our connectionSession, so we can properly track when\if it changes
+                connectionSession.Configuration.Username = configuration.Username;
+                connectionSession.Configuration.Password = configuration.Password;
+                connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
-                    // We also have to save them to our connectionSession, so we can properly track when\if it changes
-                    connectionSession.Configuration.Username = configuration.Username;
-                    connectionSession.Configuration.Password = configuration.Password;
-                    connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+                LoadDatabaseList(databases, configuration);
+            }
 
-                    LoadDatabaseList(databases, configuration);
-                }
-
-                linkSqlInstanceAccount.Left = labelSqlConnection.Right;
-                linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
-
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            linkSqlInstanceAccount.Left = labelSqlConnection.Right;
+            linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
         }
 
         /// <summary>
         /// Load the database grid
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadDatabaseList(List<SqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
+        private void LoadDatabaseList(IEnumerable<ISqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
         {
-            gridDatabses.Rows.Clear();
+            gridDatabases.Rows.Clear();
 
             // Add a row for each database
             foreach (SqlDatabaseDetail database in databases.OrderBy(d => d.Name))
             {
+                Bitmap icon;
                 string status;
                 string activity = "";
                 string order = "";
@@ -1219,10 +1212,12 @@ namespace ShipWorks.Data.Administration
                 if (isCurrent)
                 {
                     status = "(Active)";
+                    icon = Resources.data_ok_16;
                 }
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
                 else if (database.Status == SqlDatabaseStatus.ShipWorks)
                 {
+                    icon = database.IsArchive ? Resources.data_time_16 : Resources.data_16;
                     if (database.SchemaVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
                         status = "Newer";
@@ -1239,12 +1234,19 @@ namespace ShipWorks.Data.Administration
                 // Not a ShipWorks database
                 else if (database.Status == SqlDatabaseStatus.NonShipWorks)
                 {
+                    icon = Resources.data_unknown_16;
                     status = "Non-ShipWorks";
                 }
                 // Couldn't connect for some reason
                 else
                 {
+                    icon = Resources.data_error_16;
                     status = "Couldn't Connect";
+                }
+
+                if (database.IsArchive)
+                {
+                    status += " [Archive]";
                 }
 
                 // See if we have info on the last logged in user
@@ -1279,11 +1281,18 @@ namespace ShipWorks.Data.Administration
                 // Only create the row if it wasn't nulled out on purpose to skip showing it
                 if (name != null)
                 {
-                    gridDatabses.Rows.Add(new GridRow(new string[] { name, status, activity, order }) { Tag = database });
+                    var gridCells = new GridCell[] {
+                        new GridCell("", icon),
+                        new GridCell(name),
+                        new GridCell(status),
+                        new GridCell(activity),
+                        new GridCell(order)
+                    };
+                    gridDatabases.Rows.Add(new GridRow(gridCells) { Tag = database });
 
                     if (isCurrent)
                     {
-                        gridDatabses.Rows[gridDatabses.Rows.Count - 1].Selected = true;
+                        gridDatabases.Rows[gridDatabases.Rows.Count - 1].Selected = true;
                     }
                 }
             }
@@ -1292,13 +1301,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// User wants to change the SQL Server account to use
         /// </summary>
-        private void OnChangeSqlInstanceAccount(object sender, EventArgs e)
+        private async void OnChangeSqlInstanceAccount(object sender, EventArgs e)
         {
             using (SqlCredentialsDlg dlg = new SqlCredentialsDlg(sqlSession))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    ConnectToSelectedServerInstance();
+                    await ConnectToSelectedServerInstance().ConfigureAwait(true);
                 }
             }
         }
@@ -1307,7 +1316,7 @@ namespace ShipWorks.Data.Administration
         /// Stepping next from selecting the sql instance to connect to.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void OnStepNextSelectSqlInstance(object sender, WizardStepEventArgs e)
+        private async Task OnStepNextSelectSqlInstance(object sender, WizardStepEventArgs e)
         {
             if (comboSqlServers.Text.Length == 0)
             {
@@ -1390,7 +1399,7 @@ namespace ShipWorks.Data.Administration
             // Connected to SQL Server, now see if we need to validate the database
             if (sqlInstanceChooseDatabase)
             {
-                if (gridDatabses.SelectedElements.Count == 0)
+                if (gridDatabases.SelectedElements.Count == 0)
                 {
                     MessageHelper.ShowInformation(this, "Please select a database before continuing.");
                     e.NextPage = CurrentPage;
@@ -1398,11 +1407,11 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                string database = ((SqlDatabaseDetail) gridDatabses.SelectedElements[0].Tag).Name;
+                string database = ((ISqlDatabaseDetail) gridDatabases.SelectedElements[0].Tag).Name;
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseDetail detail = ShipWorksDatabaseUtility.GetDatabaseDetail(database, con);
+                    ISqlDatabaseDetail detail = await ShipWorksDatabaseUtility.GetDatabaseDetail(database, con).ConfigureAwait(true);
 
                     if (detail.Status == SqlDatabaseStatus.ShipWorks)
                     {
@@ -1629,7 +1638,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the page for creating a shipworks database
         /// </summary>
-        private void OnSteppingIntoCreateDatabase(object sender, WizardSteppingIntoEventArgs e)
+        private async Task OnSteppingIntoCreateDatabase(object sender, WizardSteppingIntoEventArgs e)
         {
             // This will be true if we are stepping back into this page
             if (pendingDatabaseCreated)
@@ -1650,7 +1659,7 @@ namespace ShipWorks.Data.Administration
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
-                    givenDatabaseName.Text = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
+                    givenDatabaseName.Text = await ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con).ConfigureAwait(true);
                     databaseName.Text = givenDatabaseName.Text;
 
                     linkEditGivenDatabaseName.Left = givenDatabaseName.Right + 1;
@@ -1844,12 +1853,11 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
-                    string username;
-                    string password;
                     long userID = -1;
 
                     // See if we can try to login automatically
-                    if (UserSession.GetSavedUserCredentials(out username, out password))
+                    var (remembered, username, password) = UserSession.GetSavedUserCredentials();
+                    if (remembered)
                     {
                         userID = UserUtility.GetShipWorksUserID(username, password);
                     }

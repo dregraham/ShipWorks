@@ -604,7 +604,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // profiles that may be associated with a previous account that has since
                     // been deleted.
                     IEnumerable<ShippingProfileEntity> shippingProfileEntities = ShippingProfileManager.Profiles
-                        .Where(p => p.ShipmentType == (int) shipmentTypeCode)
+                        .Where(p => p.ShipmentType == shipmentTypeCode)
                         .Where(shippingProfileEntity => shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue);
 
                     foreach (ShippingProfileEntity shippingProfileEntity in shippingProfileEntities)
@@ -751,7 +751,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             newProfile.Name =
                 $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
-            newProfile.ShipmentType = (int) ShipmentTypeCode.Usps;
+            newProfile.ShipmentType = ShipmentTypeCode.Usps;
             newProfile.ShipmentTypePrimary = false;
 
             newProfile.Postal = CreateCopy(profile.Postal);

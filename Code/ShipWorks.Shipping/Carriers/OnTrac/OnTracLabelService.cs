@@ -7,7 +7,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -17,14 +16,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.OnTrac)]
     public class OnTracLabelService : ILabelService
     {
-        private readonly Func<ShipmentEntity, ShipmentResponse, OnTracDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<ShipmentEntity, Schemas.ShipmentResponse.Shipment, OnTracDownloadedLabelData> createDownloadedLabelData;
         private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository,
-            Func<ShipmentEntity, ShipmentResponse, OnTracDownloadedLabelData> createDownloadedLabelData)
+            Func<ShipmentEntity, Schemas.ShipmentResponse.Shipment, OnTracDownloadedLabelData> createDownloadedLabelData)
         {
             this.onTracAccountRepository = onTracAccountRepository;
             this.createDownloadedLabelData = createDownloadedLabelData;
@@ -54,12 +53,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     (int?) null;
 
                 // Transform shipment to OnTrac DTO
-                ShipmentRequestList shipmentRequestList = OnTracDtoAdapter.CreateShipmentRequestList(
+                Schemas.ShipmentRequest.OnTracShipmentRequest shipmentRequest = OnTracDtoAdapter.CreateShipmentRequest(
                     shipment,
                     account.AccountNumber);
 
                 // Get new shipment from OnTrac and save the shipment info
-                ShipmentResponse shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequestList);
+                Schemas.ShipmentResponse.Shipment shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest);
 
                 return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, shipmentResponse));
             }

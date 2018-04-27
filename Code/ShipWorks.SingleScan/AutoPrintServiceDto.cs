@@ -4,7 +4,7 @@ using ShipWorks.Messaging.Messages.SingleScan;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// A holder for the FilterCountsUpdateMessage and ScanMessage
+    /// A holder for the FilterCountsUpdateMessage and SingleScanMessage
     /// </summary>
     public struct AutoPrintServiceDto
     {
@@ -12,7 +12,7 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public AutoPrintServiceDto(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
-            ScanMessage scanMessage)
+            SingleScanMessage scanMessage)
         {
             MatchedOrderCount = singleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
             ScannedBarcode = scanMessage.ScannedText;

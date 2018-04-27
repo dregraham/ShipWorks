@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Diagnostics;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -11,6 +10,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Used to retrieve the database identifier guid from sproc GetDatabaseGuid.
     /// </summary>
+    [Component(SingleInstance = true)]
     public class DatabaseIdentifier : IDatabaseIdentifier
     {
         private Guid databaseId = Guid.Empty;

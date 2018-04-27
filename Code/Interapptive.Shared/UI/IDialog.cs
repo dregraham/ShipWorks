@@ -4,8 +4,12 @@ using System.Windows.Forms;
 namespace Interapptive.Shared.UI
 {
     /// <summary>
-    /// Interface for displaying WPF Dialogs
+    /// Interface for displaying WPF Dialogs. DO NOT IMPLEMENT THIS INTERFACE DIRECTLY. USE INTEROPWINDOW INSTEAD!
     /// </summary>
+    /// <remarks>
+    /// This interface was originally used to create wpf dialogs with winforms owners. This eventaully evolved into the
+    /// InteropWindow class. PLEASE IMPLEMENT THAT INSTEAD. OTHERWISE YOU WILL NOT GET THE PROPER FUNCTIONALITY.
+    /// </remarks>
     public interface IDialog
     {
         /// <summary>

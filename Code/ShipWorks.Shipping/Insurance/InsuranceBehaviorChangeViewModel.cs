@@ -24,7 +24,6 @@ namespace ShipWorks.Shipping.Insurance
         private readonly Func<IInsuranceBehaviorChangeViewModel, IInsuranceBehaviorChangeDialog> createDialog;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
-        private readonly ISchedulerProvider schedulerProvider;
         private readonly PropertyChangedHandler handler;
 
         private bool doNotShowAgain;
@@ -36,11 +35,8 @@ namespace ShipWorks.Shipping.Insurance
         public InsuranceBehaviorChangeViewModel(
             Func<IInsuranceBehaviorChangeViewModel, IInsuranceBehaviorChangeDialog> createDialog,
             ICurrentUserSettings currentUserSettings,
-            IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider
-            )
+            IMessageHelper messageHelper)
         {
-            this.schedulerProvider = schedulerProvider;
             this.messageHelper = messageHelper;
             this.createDialog = createDialog;
             this.currentUserSettings = currentUserSettings;
@@ -96,6 +92,14 @@ namespace ShipWorks.Shipping.Insurance
             {
                 PerformNotification();
             }
+        }
+
+        /// <summary>
+        /// Notify the user of the change
+        /// </summary>
+        public void Notify(IDictionary<long, (bool before, bool after)> insuranceSelection)
+        {
+            Notify(insuranceSelection.ToDictionary(i => i.Key, i => i.Value.before), insuranceSelection.ToDictionary(i => i.Key, i => i.Value.after));
         }
 
         /// <summary>

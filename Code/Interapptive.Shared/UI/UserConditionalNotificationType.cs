@@ -24,18 +24,23 @@ namespace Interapptive.Shared.UI
         InsuranceBehaviorChange = 3,
 
         /// <summary>
+        /// Display indicator for shortcuts
+        /// </summary>
+        ShortcutIndicator = 4,
+
+        /// <summary>
         /// Presort label change
         /// </summary>
-        PresortLabelChange = 4,
+        PresortLabelChange = 5,
 
         /// <summary>
         /// Global post label change
         /// </summary>
-        GlobalPostChange = 5,
+        GlobalPostChange = 6,
 
         /// <summary>
         /// Document envelope customs change
         /// </summary>
-        GlobalPostAdvantageChange = 6,
+        GlobalPostAdvantageChange = 7,
     }
 }

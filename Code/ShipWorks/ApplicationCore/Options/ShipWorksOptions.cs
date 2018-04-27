@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.Core.Messaging;
@@ -29,8 +30,10 @@ namespace ShipWorks.ApplicationCore.Options
             messenger = scope.Resolve<IMessenger>();
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
 
-            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this, scope));
+            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data));
+
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
+            optionPages["Keyboard && Barcode Shortcuts"] = InitializeOptionPage(new OptionPageShortcuts(this, scope));
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
@@ -111,6 +114,36 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             messenger.Send(new EnableSingleScanInputFilterMessage(this));
+        }
+
+        /// <summary>
+        /// Draw the menu list item
+        /// </summary>
+        private void MenuListDrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            e.DrawFocusRectangle();
+            e.Graphics.DrawString((string) menuList.Items[e.Index], e.Font, new SolidBrush(e.ForeColor), e.Bounds);
+        }
+
+        /// <summary>
+        /// Measures the menu list item
+        /// </summary>
+        private void MenuListMeasureItem(object sender, MeasureItemEventArgs e)
+        {
+            string text = (string) menuList.Items[e.Index];
+            Graphics graphics = Graphics.FromHwnd(this.Handle);
+            SizeF size = graphics.MeasureString(text, this.Font);
+            float dif = size.Width - menuList.Width;
+
+            int menuItemHeight = 26;
+            while (dif > 0)
+            {
+                dif -= menuList.Width;
+                menuItemHeight += 10;
+            }
+
+            e.ItemHeight = menuItemHeight;
         }
     }
 }

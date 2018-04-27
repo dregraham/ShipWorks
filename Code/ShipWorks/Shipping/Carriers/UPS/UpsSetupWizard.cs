@@ -645,7 +645,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     UpsAccountEntity upsAccountEntity = UpsAccountManager.Accounts.First();
 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) shipmentType.ShipmentTypeCode))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == shipmentType.ShipmentTypeCode))
                     {
                         shippingProfileEntity.Ups.UpsAccountID = upsAccountEntity.UpsAccountID;
                         ShippingProfileManager.SaveProfile(shippingProfileEntity);

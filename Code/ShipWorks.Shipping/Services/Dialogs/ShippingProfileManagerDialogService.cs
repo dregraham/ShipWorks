@@ -2,11 +2,12 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Messaging.Messages.Dialogs;
-using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     {
         readonly IObservable<IShipWorksMessage> messenger;
         readonly IWin32Window mainWindow;
+        private readonly ILifetimeScope lifetimeScope;
         readonly ISchedulerProvider schedulerProvider;
         IDisposable subscription;
 
@@ -24,11 +26,13 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// Constructor
         /// </summary>
         public ShippingProfileManagerDialogService(IObservable<IShipWorksMessage> messenger,
-            ISchedulerProvider schedulerProvider, IWin32Window mainWindow)
+            ISchedulerProvider schedulerProvider, IWin32Window mainWindow,
+            ILifetimeScope lifetimeScope)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.mainWindow = mainWindow;
+            this.lifetimeScope = lifetimeScope;
         }
 
         /// <summary>
@@ -59,9 +63,11 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private void OpenProfileManagerDialog(OpenProfileManagerDialogMessage message)
         {
-            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(message.RestrictToShipmentType))
+            using (ILifetimeScope scope = lifetimeScope.BeginLifetimeScope())
             {
-                dlg.ShowDialog(message.Sender as IWin32Window ?? mainWindow);
+                IShippingProfileManagerDialogFactory shippingProfileManagerDialogFactory = scope.Resolve<IShippingProfileManagerDialogFactory>();
+                IDialog dlg = shippingProfileManagerDialogFactory.Create(message.Sender as IWin32Window ?? mainWindow);
+                dlg.ShowDialog();
             }
 
             message.OnComplete?.Invoke();

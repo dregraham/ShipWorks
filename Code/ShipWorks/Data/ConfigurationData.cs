@@ -1,5 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -15,6 +22,13 @@ namespace ShipWorks.Data
         static ConfigurationEntity config;
         static IConfigurationEntity configReadOnly;
         static bool needCheckForChanges;
+
+        private static Version archiveVersion = new Version(5, 23, 1, 6);
+
+        /// <summary>
+        /// Which version was archive functionality introduced
+        /// </summary>
+        public static Version ArchiveVersion => archiveVersion;
 
         /// <summary>
         /// Completely reload the count cache
@@ -117,5 +131,56 @@ namespace ShipWorks.Data
 
             adapter.SaveEntity(newConfig);
         }
+
+        /// <summary>
+        /// Are we currently in an archive database?
+        /// </summary>
+        public static bool IsArchive(DbConnection connection)
+        {
+            string archivalSettingsXml = string.Empty;
+
+            using (ISqlAdapter sqlAdapter = new SqlAdapter(connection))
+            {
+                try
+                {
+                    if (SqlSchemaUpdater.GetInstalledSchemaVersion(connection) < ArchiveVersion)
+                    {
+                        return false;
+                    }
+
+                    ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
+                    sqlAdapter.FetchEntity(configurationEntity);
+                    archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(archivalSettingsXml))
+            {
+                return false;
+            }
+
+            try
+            {
+                return XDocument.Parse(archivalSettingsXml)?.Root?.HasElements == true;
+            }
+            catch (XmlException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Get telemetry data for configuration
+        /// </summary>
+        internal static IEnumerable<KeyValuePair<string, string>> GetTelemetryData() =>
+            new[]
+            {
+                Functional.Using(SqlSession.Current.OpenConnection(),
+                connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString()))
+            };
     }
 }

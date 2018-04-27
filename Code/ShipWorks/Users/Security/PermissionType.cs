@@ -16,6 +16,7 @@ namespace ShipWorks.Users.Security
         [PermissionScope(PermissionScope.Global)] DatabaseSetup = 2,
         [PermissionScope(PermissionScope.Global)] DatabaseBackup = 3,
         [PermissionScope(PermissionScope.Global)] DatabaseRestore = 4,
+        [PermissionScope(PermissionScope.Global)] DatabaseArchive = 5,
 
         [PermissionScope(PermissionScope.Global)] ManageStores = 10,
         [PermissionScope(PermissionScope.Global)] ManageUsers = 11,
@@ -28,7 +29,7 @@ namespace ShipWorks.Users.Security
         [PermissionScope(PermissionScope.Global)] CustomersCreateEdit = 21,
         [PermissionScope(PermissionScope.Global)] CustomersDelete = 22,
         [PermissionScope(PermissionScope.Global)] CustomersEditNotes = 23,
-        [PermissionScope(PermissionScope.Global)] CustomersAddOrder = 24, 
+        [PermissionScope(PermissionScope.Global)] CustomersAddOrder = 24,
 
         [PermissionScope(PermissionScope.Store)] OrdersModify = 50,
         [PermissionScope(PermissionScope.Store)] OrdersViewPaymentData = 51,

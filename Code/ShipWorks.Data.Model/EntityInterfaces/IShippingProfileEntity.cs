@@ -43,8 +43,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 ShipmentType { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<ShipWorks.Shipping.ShipmentTypeCode> ShipmentType { get; }
         /// <summary> The ShipmentTypePrimary property of the Entity ShippingProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingProfile"."ShipmentTypePrimary"<br/>
@@ -100,6 +100,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IUpsProfileEntity Ups { get; }
         
         
+        IEnumerable<IPackageProfileEntity> Packages { get; }
 
         
 
@@ -138,6 +139,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IUpsProfileEntity IShippingProfileEntity.Ups => Ups;
         
         
+        IEnumerable<IPackageProfileEntity> IShippingProfileEntity.Packages => Packages;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -137,6 +137,7 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AttachedProperties\DoubleClick.cs" />
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
     <Compile Include="AttachedProperties\Focus.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
@@ -218,12 +219,12 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
-    <Compile Include="Dialogs\IPopup.cs" />
-    <Compile Include="Dialogs\IPopupViewModel.cs" />
-    <Compile Include="Dialogs\Popup.xaml.cs">
+    <Compile Include="Dialogs\Popup\IPopup.cs" />
+    <Compile Include="Dialogs\Popup\IPopupViewModel.cs" />
+    <Compile Include="Dialogs\Popup\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\PopupViewModel.cs" />
+    <Compile Include="Dialogs\Popup\PopupViewModel.cs" />
     <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
       <DependentUpon>MainOptions.xaml</DependentUpon>
     </Compile>
@@ -274,6 +275,7 @@
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />
+    <Compile Include="ValueConverters\CharToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
@@ -345,7 +347,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\Popup.xaml">
+    <Page Include="Dialogs\Popup\Popup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -402,6 +404,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Sizes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

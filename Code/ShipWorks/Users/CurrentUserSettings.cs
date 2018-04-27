@@ -62,6 +62,20 @@ namespace ShipWorks.Users
 
             return notificationSettings.CanShowAfter.HasValue && date > notificationSettings.CanShowAfter;
         }
+		
+        /// <summary>
+        /// Start showing the given notification for the user
+        /// </summary>
+        public void StartShowingNotification(UserConditionalNotificationType notificationType)
+        {
+            DialogSettings settings = userSession.Settings?.DialogSettingsObject;
+
+            if (settings != null)
+            {
+                settings.DismissedNotifications = settings.DismissedNotifications.Except(new[] { notificationType }).ToArray();
+                userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+            }
+        }
 
         /// <summary>
         /// Stop showing the given notification for the user
@@ -70,6 +84,11 @@ namespace ShipWorks.Users
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
 
+			if (settings == null)
+			{
+				return;
+			}
+			
             settings.NotificationDialogSettings = settings.NotificationDialogSettings
                 .Where(x => x.Type != notificationType)
                 .Append(new NotificationDialogSetting(notificationType))

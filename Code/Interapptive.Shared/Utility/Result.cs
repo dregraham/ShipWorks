@@ -81,6 +81,24 @@ namespace Interapptive.Shared.Utility
             Match(map, ex => GenericResult.FromError<TResult>(ex));
 
         /// <summary>
+        /// Bind the value of the result
+        /// </summary>
+        /// <returns>
+        /// A Task containing the mapped value, or the original error
+        /// </returns>
+        public Task Bind(Func<Task> map) =>
+            Match(map, ex => Result.FromError(ex));
+
+        /// <summary>
+        /// Bind the value of the result
+        /// </summary>
+        /// <returns>
+        /// A Task containing the mapped value, or the original error
+        /// </returns>
+        public Task<TResult> Bind<TResult>(Func<Task<TResult>> map) =>
+            Match(map, ex => Task.FromException<TResult>(ex));
+
+        /// <summary>
         /// Map the value of the result
         /// </summary>
         /// <returns>

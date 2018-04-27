@@ -30,6 +30,10 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.groupInsurance = new System.Windows.Forms.GroupBox();
+            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceProfileControl();
+            this.insuranceState = new System.Windows.Forms.CheckBox();
+            this.kryptonBorderEdge10 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.contentsState = new System.Windows.Forms.CheckBox();
             this.nonDeliveryState = new System.Windows.Forms.CheckBox();
@@ -71,12 +75,9 @@
             this.packagesCount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackages = new System.Windows.Forms.Label();
             this.packagesState = new System.Windows.Forms.CheckBox();
-            this.groupInsurance = new System.Windows.Forms.GroupBox();
-            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceProfileControl();
-            this.insuranceState = new System.Windows.Forms.CheckBox();
-            this.kryptonBorderEdge10 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.groupInsurance.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupLabels.SuspendLayout();
             this.groupOptions.SuspendLayout();
@@ -84,7 +85,6 @@
             this.groupBoxFrom.SuspendLayout();
             this.tabPagePackages.SuspendLayout();
             this.groupBoxPackages.SuspendLayout();
-            this.groupInsurance.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -115,9 +115,51 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
+            // groupInsurance
+            // 
+            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupInsurance.Controls.Add(this.insuranceControl);
+            this.groupInsurance.Controls.Add(this.insuranceState);
+            this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
+            this.groupInsurance.Location = new System.Drawing.Point(6, 202);
+            this.groupInsurance.Name = "groupInsurance";
+            this.groupInsurance.Size = new System.Drawing.Size(405, 82);
+            this.groupInsurance.TabIndex = 3;
+            this.groupInsurance.TabStop = false;
+            this.groupInsurance.Text = "Insurance";
+            // 
+            // insuranceControl
+            // 
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(48, 21);
+            this.insuranceControl.Name = "insuranceControl";
+            this.insuranceControl.Size = new System.Drawing.Size(316, 52);
+            this.insuranceControl.TabIndex = 1;
+            // 
+            // insuranceState
+            // 
+            this.insuranceState.AutoSize = true;
+            this.insuranceState.Location = new System.Drawing.Point(9, 25);
+            this.insuranceState.Name = "insuranceState";
+            this.insuranceState.Size = new System.Drawing.Size(15, 14);
+            this.insuranceState.TabIndex = 0;
+            this.insuranceState.UseVisualStyleBackColor = true;
+            // 
+            // kryptonBorderEdge10
+            // 
+            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge10.AutoSize = false;
+            this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
+            this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
+            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
+            this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
+            // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.contentsState);
             this.groupBox1.Controls.Add(this.nonDeliveryState);
@@ -129,7 +171,7 @@
             this.groupBox1.Location = new System.Drawing.Point(6, 392);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(405, 81);
-            this.groupBox1.TabIndex = 77;
+            this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Customs";
             // 
@@ -141,7 +183,7 @@
             this.contentsState.Location = new System.Drawing.Point(9, 24);
             this.contentsState.Name = "contentsState";
             this.contentsState.Size = new System.Drawing.Size(15, 14);
-            this.contentsState.TabIndex = 78;
+            this.contentsState.TabIndex = 0;
             this.contentsState.Tag = "";
             this.contentsState.UseVisualStyleBackColor = true;
             // 
@@ -153,7 +195,7 @@
             this.nonDeliveryState.Location = new System.Drawing.Point(9, 51);
             this.nonDeliveryState.Name = "nonDeliveryState";
             this.nonDeliveryState.Size = new System.Drawing.Size(15, 14);
-            this.nonDeliveryState.TabIndex = 107;
+            this.nonDeliveryState.TabIndex = 2;
             this.nonDeliveryState.Tag = "";
             this.nonDeliveryState.UseVisualStyleBackColor = true;
             // 
@@ -175,7 +217,7 @@
             this.nonDelivery.Name = "nonDelivery";
             this.nonDelivery.PromptText = "(Multiple Values)";
             this.nonDelivery.Size = new System.Drawing.Size(206, 21);
-            this.nonDelivery.TabIndex = 105;
+            this.nonDelivery.TabIndex = 3;
             // 
             // labelContents
             // 
@@ -189,7 +231,7 @@
             // 
             // kryptonBorderEdge4
             // 
-            this.kryptonBorderEdge4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge4.AutoSize = false;
             this.kryptonBorderEdge4.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -206,11 +248,11 @@
             this.contents.Name = "contents";
             this.contents.PromptText = "(Multiple Values)";
             this.contents.Size = new System.Drawing.Size(206, 21);
-            this.contents.TabIndex = 88;
+            this.contents.TabIndex = 1;
             // 
             // groupLabels
             // 
-            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupLabels.Controls.Add(this.labelThermalNote);
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
@@ -219,7 +261,7 @@
             this.groupLabels.Location = new System.Drawing.Point(6, 125);
             this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(405, 71);
-            this.groupLabels.TabIndex = 76;
+            this.groupLabels.TabIndex = 2;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
             // 
@@ -241,7 +283,7 @@
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
             this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 101;
+            this.requestedLabelFormat.TabIndex = 1;
             // 
             // requestedLabelFormatState
             // 
@@ -254,7 +296,7 @@
             // 
             // kryptonBorderEdge11
             // 
-            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge11.AutoSize = false;
             this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -265,7 +307,7 @@
             // 
             // groupOptions
             // 
-            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupOptions.Controls.Add(this.nonMachinable);
             this.groupOptions.Controls.Add(this.nonMachinableState);
@@ -280,7 +322,7 @@
             this.groupOptions.Location = new System.Drawing.Point(6, 290);
             this.groupOptions.Name = "groupOptions";
             this.groupOptions.Size = new System.Drawing.Size(405, 96);
-            this.groupOptions.TabIndex = 75;
+            this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
@@ -290,7 +332,7 @@
             this.nonMachinable.Location = new System.Drawing.Point(128, 65);
             this.nonMachinable.Name = "nonMachinable";
             this.nonMachinable.Size = new System.Drawing.Size(102, 17);
-            this.nonMachinable.TabIndex = 86;
+            this.nonMachinable.TabIndex = 5;
             this.nonMachinable.Text = "Non-Machinable";
             this.nonMachinable.UseVisualStyleBackColor = true;
             // 
@@ -302,7 +344,7 @@
             this.nonMachinableState.Location = new System.Drawing.Point(9, 66);
             this.nonMachinableState.Name = "nonMachinableState";
             this.nonMachinableState.Size = new System.Drawing.Size(15, 14);
-            this.nonMachinableState.TabIndex = 75;
+            this.nonMachinableState.TabIndex = 4;
             this.nonMachinableState.Tag = "";
             this.nonMachinableState.UseVisualStyleBackColor = true;
             // 
@@ -342,7 +384,7 @@
             this.dutyDeliveryPaid.Location = new System.Drawing.Point(128, 42);
             this.dutyDeliveryPaid.Name = "dutyDeliveryPaid";
             this.dutyDeliveryPaid.Size = new System.Drawing.Size(114, 17);
-            this.dutyDeliveryPaid.TabIndex = 83;
+            this.dutyDeliveryPaid.TabIndex = 3;
             this.dutyDeliveryPaid.Text = "Delivery Duty Paid";
             this.dutyDeliveryPaid.UseVisualStyleBackColor = true;
             // 
@@ -354,7 +396,7 @@
             this.dutyDeliveryPaidState.Location = new System.Drawing.Point(9, 43);
             this.dutyDeliveryPaidState.Name = "dutyDeliveryPaidState";
             this.dutyDeliveryPaidState.Size = new System.Drawing.Size(15, 14);
-            this.dutyDeliveryPaidState.TabIndex = 82;
+            this.dutyDeliveryPaidState.TabIndex = 2;
             this.dutyDeliveryPaidState.Tag = "";
             this.dutyDeliveryPaidState.UseVisualStyleBackColor = true;
             // 
@@ -364,7 +406,7 @@
             this.saturdayDelivery.Location = new System.Drawing.Point(128, 19);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
-            this.saturdayDelivery.TabIndex = 78;
+            this.saturdayDelivery.TabIndex = 1;
             this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = true;
             // 
@@ -376,13 +418,13 @@
             this.saturdayState.Location = new System.Drawing.Point(9, 20);
             this.saturdayState.Name = "saturdayState";
             this.saturdayState.Size = new System.Drawing.Size(15, 14);
-            this.saturdayState.TabIndex = 77;
+            this.saturdayState.TabIndex = 0;
             this.saturdayState.Tag = "";
             this.saturdayState.UseVisualStyleBackColor = true;
             // 
             // kryptonBorderEdge2
             // 
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -393,7 +435,7 @@
             // 
             // groupShipment
             // 
-            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
             this.groupShipment.Controls.Add(this.labelService);
@@ -402,13 +444,13 @@
             this.groupShipment.Location = new System.Drawing.Point(6, 65);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(405, 54);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -451,7 +493,7 @@
             // 
             // groupBoxFrom
             // 
-            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.accountState);
@@ -460,7 +502,7 @@
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
             this.groupBoxFrom.Size = new System.Drawing.Size(405, 53);
-            this.groupBoxFrom.TabIndex = 3;
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
             // 
@@ -497,7 +539,7 @@
             // 
             // kryptonBorderEdge1
             // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -521,7 +563,7 @@
             // 
             // panelPackageControls
             // 
-            this.panelPackageControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panelPackageControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackageControls.Location = new System.Drawing.Point(6, 64);
             this.panelPackageControls.Name = "panelPackageControls";
@@ -530,7 +572,7 @@
             // 
             // groupBoxPackages
             // 
-            this.groupBoxPackages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxPackages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxPackages.Controls.Add(this.kryptonBorderEdge3);
             this.groupBoxPackages.Controls.Add(this.packagesCount);
@@ -545,7 +587,7 @@
             // 
             // kryptonBorderEdge3
             // 
-            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -597,48 +639,6 @@
             this.packagesState.Tag = "";
             this.packagesState.UseVisualStyleBackColor = true;
             // 
-            // groupInsurance
-            // 
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupInsurance.Controls.Add(this.insuranceControl);
-            this.groupInsurance.Controls.Add(this.insuranceState);
-            this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
-            this.groupInsurance.Location = new System.Drawing.Point(6, 202);
-            this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(405, 82);
-            this.groupInsurance.TabIndex = 78;
-            this.groupInsurance.TabStop = false;
-            this.groupInsurance.Text = "Insurance";
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(48, 21);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
-            // 
-            // insuranceState
-            // 
-            this.insuranceState.AutoSize = true;
-            this.insuranceState.Location = new System.Drawing.Point(9, 25);
-            this.insuranceState.Name = "insuranceState";
-            this.insuranceState.Size = new System.Drawing.Size(15, 14);
-            this.insuranceState.TabIndex = 0;
-            this.insuranceState.UseVisualStyleBackColor = true;
-            // 
-            // kryptonBorderEdge10
-            // 
-            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.kryptonBorderEdge10.AutoSize = false;
-            this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
-            this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
-            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
-            this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
-            // 
             // DhlExpressProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,6 +648,8 @@
             this.Size = new System.Drawing.Size(425, 1127);
             this.tabControl.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.groupInsurance.ResumeLayout(false);
+            this.groupInsurance.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupLabels.ResumeLayout(false);
@@ -661,8 +663,6 @@
             this.tabPagePackages.ResumeLayout(false);
             this.groupBoxPackages.ResumeLayout(false);
             this.groupBoxPackages.PerformLayout();
-            this.groupInsurance.ResumeLayout(false);
-            this.groupInsurance.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -65,32 +65,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
-        /// Apply the specified shipment profile to the given shipment.
-        /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
-        {
-            base.ApplyProfile(shipment, profile);
-
-            BestRateShipmentEntity bestRateShipment = shipment.BestRate;
-            IBestRateProfileEntity bestRateProfile = profile.BestRate;
-
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
-
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ShippingProfile.Insurance, bestRateShipment, BestRateShipmentFields.Insurance);
-
-            if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
-            {
-                ShippingProfileUtility.ApplyProfileValue(bestRateProfile.Weight, shipment, ShipmentFields.ContentWeight);
-            }
-        }
-        
-        /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -98,14 +72,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
             return new BestRateServiceControl(ShipmentTypeCode, rateControl);
-        }
-
-        /// <summary>
-        /// Create the UserControl that is used to edit a profile for the service
-        /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new BestRateProfileControl();
         }
 
         /// <summary>
@@ -167,14 +133,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment.BestRate, shipment.BestRate, null),
                 new DimensionsAdapter(shipment.BestRate));
-        }
-
-        /// <summary>
-        /// Ensures that the carrier specific data for the given profile exists and is loaded
-        /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
-            ShipmentTypeDataService.LoadProfileData(profile, "BestRate", typeof(BestRateProfileEntity), refreshIfPresent);
         }
 
         /// <summary>

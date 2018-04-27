@@ -209,9 +209,12 @@ INSERT INTO [dbo].[ShippingProfile] ([Name], [ShipmentType], [ShipmentTypePrimar
 VALUES ('Defaults - Best rate', 14, 1, 0, 0, 0, 0.00, 0)
 GO
 
-INSERT INTO [dbo].[BestRateProfile] ([ShippingProfileID], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Weight], [ServiceLevel])
-SELECT TOP 1 ShippingProfileID, 0, 0, 0, 0, 0, 0, 0, 0  FROM ShippingProfile WHERE ShipmentType = 14
+INSERT INTO [dbo].[BestRateProfile] ([ShippingProfileID], [ServiceLevel])
+SELECT TOP 1 ShippingProfileID, 0  FROM ShippingProfile WHERE ShipmentType = 14
 GO
+
+INSERT INTO [dbo].[PackageProfile] (ShippingProfileID, [Weight], DimsProfileID, DimsLength, DimsWidth, DimsHeight, DimsWeight, DimsAddWeight)
+SELECT TOP 1 ShippingProfileID, 0, 0, 0, 0, 0, 0, 0 FROM ShippingProfile WHERE ShipmentType = 14
 
 -- Cleanup functions
 DROP FUNCTION [dbo].[GetTicksFromDateTime]
@@ -278,4 +281,12 @@ VALUES
 ('UPS_PTP_2ND_DAY_AIR', 'UPS 2nd Day Air'),
 ('UPS_PTP_NEXT_DAY_AIR_SAVER', 'UPS Next Day Air Saver'),
 ('UPS_PTP_NEXT_DAY_AIR', 'UPS Next Day Air');
+GO
+
+PRINT N'Add weight HotKey'
+GO
+INSERT INTO Shortcut
+(ModifierKeys, VirtualKey, Barcode, [Action])
+VALUES
+(3, 87, '', 0)
 GO

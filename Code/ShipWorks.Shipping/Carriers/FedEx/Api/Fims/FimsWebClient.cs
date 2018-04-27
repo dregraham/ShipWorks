@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     [Component]
     public class FimsWebClient : IFimsWebClient
     {
-        private static readonly Uri productionUri = new Uri("http://www.shipfims.com/pkgFedex3/pkgFormService");
+        private static readonly Uri productionUri = new Uri("https://www.shipfims.com/pkgFedex3/pkgFormService");
         private static readonly XNamespace soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
         private static readonly FedExShipmentTokenProcessor tokenProcessor = new FedExShipmentTokenProcessor();
 

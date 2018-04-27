@@ -432,21 +432,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Confirmation", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NonRectangular", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -677,16 +663,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)PostalProfileFieldIndex.Confirmation, value); }
 		}
 
-		/// <summary> The Weight property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)PostalProfileFieldIndex.Weight, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.Weight, value); }
-		}
-
 		/// <summary> The PackagingType property of the Entity PostalProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "PostalProfile"."PackagingType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
@@ -695,66 +671,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)PostalProfileFieldIndex.PackagingType, false); }
 			set	{ SetValue((int)PostalProfileFieldIndex.PackagingType, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)PostalProfileFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)PostalProfileFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)PostalProfileFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)PostalProfileFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)PostalProfileFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity PostalProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PostalProfile"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)PostalProfileFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)PostalProfileFieldIndex.DimsAddWeight, value); }
 		}
 
 		/// <summary> The NonRectangular property of the Entity PostalProfile<br/><br/></summary>

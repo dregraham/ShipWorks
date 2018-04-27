@@ -83,6 +83,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Population;
@@ -90,6 +91,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
@@ -141,6 +143,9 @@ namespace ShipWorks
 
         readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
+        private IArchiveNotificationManager archiveNotificationManager;
+
+        private IMessageFilter keyboardShortcutFilter;
 
         /// <summary>
         /// Constructor
@@ -162,6 +167,8 @@ namespace ShipWorks
             // Persist size\position of the window
             WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
+
+            keyboardShortcutFilter = IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>();
 
             InitializeCustomEnablerComponents();
         }
@@ -253,6 +260,7 @@ namespace ShipWorks
 
             // Prepare app level initialization
             DashboardManager.InitializeForApplication(dashboardArea);
+            archiveNotificationManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IArchiveNotificationManager>(TypedParameter.From(panelArchiveNotification));
             AuditProcessor.InitializeForApplication();
 
             // We need to know what the download is doing
@@ -285,8 +293,6 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
-
-            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
@@ -435,7 +441,12 @@ namespace ShipWorks
         /// <summary>
         /// Initiate the process of logging on to the system
         /// </summary>
-        private void InitiateLogon()
+        public void InitiateLogon() => InitiateLogon(null);
+
+        /// <summary>
+        /// Initiate the process of logging on to the system
+        /// </summary>
+        public void InitiateLogon(UserEntity user)
         {
             if (!SqlSession.IsConfigured)
             {
@@ -450,7 +461,7 @@ namespace ShipWorks
                 SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
                 sqlChangeTracking.Enable();
 
-                LogonToShipWorks();
+                LogonToShipWorks(user);
 
                 ShipSenseLoader.LoadDataAsync();
             }
@@ -463,14 +474,14 @@ namespace ShipWorks
         /// <summary>
         /// Initiate the process of logging off the system.
         /// </summary>
-        private void InitiateLogoff(bool clearRememberMe)
+        public bool InitiateLogoff(bool clearRememberMe)
         {
             // Don't need a scope if we're already in one
             using (ConnectionSensitiveScope scope = (ConnectionSensitiveScope.IsActive ? null : new ConnectionSensitiveScope("log off", this)))
             {
                 if (scope != null && !scope.Acquired)
                 {
-                    return;
+                    return false;
                 }
 
                 SaveCurrentUserSettings();
@@ -478,8 +489,12 @@ namespace ShipWorks
                 UserSession.Logoff(clearRememberMe);
             }
 
+            Application.RemoveMessageFilter(keyboardShortcutFilter);
+
             // Can't do anything when logged off
             ShowBlankUI();
+
+            return true;
         }
 
         /// <summary>
@@ -502,7 +517,12 @@ namespace ShipWorks
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        if (SqlUtility.RenameArchvingDbIfNeeded(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        {
+                            canConnect = SqlSession.Current.CanConnect();
+                        }
+
+                        if (!canConnect && SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
                         {
                             using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {
@@ -599,7 +619,7 @@ namespace ShipWorks
         /// Log on to ShipWorks as a ShipWorks user.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LogonToShipWorks()
+        private void LogonToShipWorks(UserEntity logonAsUser)
         {
             UserManager.InitializeForCurrentUser();
 
@@ -608,7 +628,6 @@ namespace ShipWorks
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-
                     IUserService userService = lifetimeScope.Resolve<IUserService>();
                     EnumResult<UserServiceLogonResultType> logonResult;
 
@@ -639,6 +658,11 @@ namespace ShipWorks
                     {
                         MessageHelper.ShowError(this, logonResult.Message);
                         return;
+                    }
+
+                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
+                    {
+                        logonResult = userService.Logon(logonAsUser, true);
                     }
 
                     if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
@@ -750,6 +774,8 @@ namespace ShipWorks
             // Start the dashboard.  Has to be before updating store depending UI - as that affects dashboard display.
             DashboardManager.OpenDashboard();
 
+            archiveNotificationManager.ShowIfNecessary();
+
             // Get all new\edited templates are installed
             BuiltinTemplates.UpdateTemplates(this);
 
@@ -781,6 +807,7 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+            Application.AddMessageFilter(keyboardShortcutFilter);
         }
 
         /// <summary>
@@ -879,6 +906,11 @@ namespace ShipWorks
             {
                 UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    lifetimeScope.Resolve<IOrderArchiveFilterRegenerator>().Regenerate();
+                }
+
                 logonAsyncLoadSuccess = true;
             }
             catch (Exception ex)
@@ -932,6 +964,8 @@ namespace ShipWorks
             {
                 return values.Union(SqlServerInfo.Fetch())
                     .Union(ShippingSettings.GetTelemetryData())
+                    .Union(ShippingProfileManager.GetTelemetryData())
+                    .Union(ConfigurationData.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
             catch (Exception ex)
@@ -1017,6 +1051,8 @@ namespace ShipWorks
             heartBeat.Stop();
 
             ApplicationText = "";
+
+            archiveNotificationManager.Reset();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
@@ -1183,7 +1219,11 @@ namespace ShipWorks
             UserEntity user = UserSession.User;
 
             // Update title
-            ApplicationText = user.Username;
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var configurationData = lifetimeScope.Resolve<IConfigurationData>();
+                ApplicationText = user.Username + (configurationData.IsArchive() ? " [Archive]" : string.Empty);
+            }
 
             // Load display from user settings
             ShipWorksDisplay.ColorScheme = (ColorScheme) user.Settings.DisplayColorScheme;
@@ -1282,6 +1322,8 @@ namespace ShipWorks
             kryptonManager.GlobalPaletteMode = AppearanceHelper.GetKryptonPaletteMode();
 
             ApplySystemTrayProperties();
+
+            archiveNotificationManager.RefreshUI();
         }
 
         /// <summary>
@@ -1982,6 +2024,17 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Archive a set of orders
+        /// </summary>
+        private async void OnArchive(object sender, EventArgs e)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                await scope.Resolve<IArchiveManagerDialogViewModel>().ShowManager().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Show the ShipWorks options window
         /// </summary>
         private void OnShowOptions(object sender, EventArgs e)
@@ -2136,9 +2189,9 @@ namespace ShipWorks
             // due to one of our own modal dialog's returning, the heartbeat will not occur until after the method that called
             // the modal window returns.
             BeginInvoke(new MethodInvoker(() =>
-                {
-                    ForceHeartbeat(HeartbeatOptions.None);
-                }));
+            {
+                ForceHeartbeat(HeartbeatOptions.None);
+            }));
         }
 
         /// <summary>
@@ -3114,9 +3167,9 @@ namespace ShipWorks
 
                 PermissionAwareDeleter deleter = new PermissionAwareDeleter(this, PermissionType.OrdersModify);
                 deleter.ExecuteCompleted += (s, a) =>
-                    {
-                        ForceHeartbeat(HeartbeatOptions.ChangesExpected);
-                    };
+                {
+                    ForceHeartbeat(HeartbeatOptions.ChangesExpected);
+                };
 
                 deleter.DeleteAsync(keysToDelete);
             }
@@ -3452,17 +3505,17 @@ namespace ShipWorks
 
             // Initialize the note panel
             panelNotes.Initialize(new Guid("{FBE6CCDC-B822-45e2-813C-4AF64AE58657}"), GridColumnDefinitionSet.Notes, (GridColumnLayout noteLayout) =>
-                {
-                    noteLayout.DefaultSortColumnGuid = noteLayout.AllColumns[NoteFields.Edited].Definition.ColumnGuid;
-                    noteLayout.DefaultSortOrder = ListSortDirection.Descending;
+            {
+                noteLayout.DefaultSortColumnGuid = noteLayout.AllColumns[NoteFields.Edited].Definition.ColumnGuid;
+                noteLayout.DefaultSortOrder = ListSortDirection.Descending;
 
-                    // Turn off all columns except the object and the note
-                    foreach (GridColumnPosition position in noteLayout.AllColumns
-                        .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
-                    {
-                        position.Visible = false;
-                    }
-                });
+                // Turn off all columns except the object and the note
+                foreach (GridColumnPosition position in noteLayout.AllColumns
+                    .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
+                {
+                    position.Visible = false;
+                }
+            });
 
             // Initialize the orders panel
             panelOrders.Initialize(new Guid("{06878FA9-7A6D-442c-B4F8-357C1B3F6A45}"), GridColumnDefinitionSet.OrderPanel, layout =>
@@ -3486,47 +3539,47 @@ namespace ShipWorks
 
             // Initialize the items panel
             panelItems.Initialize(new Guid("{E102F97E-5C0F-4fa2-A0CF-47FC852C0B57}"), GridColumnDefinitionSet.OrderItems, (GridColumnLayout layout) =>
-                {
-                    // Adjust to fit for default panel size
-                    layout.AllColumns[OrderItemFields.Name].Width = 120;
-                    layout.AllColumns[OrderItemFields.Quantity].Width = 30;
-                    layout.AllColumns[OrderItemFields.UnitPrice].Width = 50;
-                    layout.AllColumns[OrderItemFields.LocalStatus].Width = 60;
+            {
+                // Adjust to fit for default panel size
+                layout.AllColumns[OrderItemFields.Name].Width = 120;
+                layout.AllColumns[OrderItemFields.Quantity].Width = 30;
+                layout.AllColumns[OrderItemFields.UnitPrice].Width = 50;
+                layout.AllColumns[OrderItemFields.LocalStatus].Width = 60;
 
-                    // Hide all the store specific columns
-                    foreach (GridColumnPosition column in layout.AllColumns.Where(c => c.Definition.StoreTypeCode != null))
-                    {
-                        column.Visible = false;
-                    }
-                });
+                // Hide all the store specific columns
+                foreach (GridColumnPosition column in layout.AllColumns.Where(c => c.Definition.StoreTypeCode != null))
+                {
+                    column.Visible = false;
+                }
+            });
 
             // Initialize the charges panel
             panelCharges.Initialize(new Guid("{E604A11A-2B98-4186-9814-644EB8F58204}"), GridColumnDefinitionSet.Charges, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[OrderChargeFields.Type].Width = 70;
-                });
+            {
+                layout.AllColumns[OrderChargeFields.Type].Width = 70;
+            });
 
             // Initialize the shipments panel
             panelShipments.Initialize(new Guid("{C5FFA0CC-3AD2-485a-BC26-1E6072636116}"), GridColumnDefinitionSet.ShipmentPanel, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[new Guid("{98038AB5-AA95-4778-9801-574C2B723DD4}")].Visible = false;
-                });
+            {
+                layout.AllColumns[new Guid("{98038AB5-AA95-4778-9801-574C2B723DD4}")].Visible = false;
+            });
 
             // Initialize the email control
             panelEmail.Initialize(new Guid("{F0C792D7-90F5-4eab-9EF0-ADCEC49AC167}"), GridColumnDefinitionSet.EmailOutboundPanel, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[EmailOutboundFields.AccountID].Visible = false;
-                    layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
-                    layout.AllColumns[EmailOutboundFields.Subject].Visible = false;
-                });
+            {
+                layout.AllColumns[EmailOutboundFields.AccountID].Visible = false;
+                layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
+                layout.AllColumns[EmailOutboundFields.Subject].Visible = false;
+            });
 
             // Initialize the print control
             panelPrinted.Initialize(new Guid("{AEEDA4AE-5D84-447d-90BA-92AFCD0D4BD4}"), GridColumnDefinitionSet.PrintResult, (GridColumnLayout layout) =>
-                {
-                    layout.AllColumns[PrintResultFields.PrintDate].Visible = false;
-                    layout.AllColumns[PrintResultFields.PaperSourceName].Visible = false;
-                    layout.AllColumns[PrintResultFields.Copies].Visible = false;
-                });
+            {
+                layout.AllColumns[PrintResultFields.PrintDate].Visible = false;
+                layout.AllColumns[PrintResultFields.PaperSourceName].Visible = false;
+                layout.AllColumns[PrintResultFields.Copies].Visible = false;
+            });
 
             // Initialize the payment details panel
             panelPaymentDetail.Initialize(new Guid("{1C5FD43A-E357-462b-A2BC-CF458E2EE45D}"), GridColumnDefinitionSet.PaymentDetails, null);
@@ -3627,7 +3680,7 @@ namespace ShipWorks
         /// <summary>
         /// Open the shipping settings window
         /// </summary>
-        private void OnShippingSettings(object sender, EventArgs e)
+        private void OnManageShippingSettings(object sender, EventArgs e)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -3636,6 +3689,14 @@ namespace ShipWorks
                     dlg.ShowDialog(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// Open the shipping settings window
+        /// </summary>
+        private void OnManageShippingProfiles(object sender, EventArgs e)
+        {
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this));
         }
 
         /// <summary>
@@ -4118,8 +4179,14 @@ namespace ShipWorks
 
             if (e.SecurityDenials > 0)
             {
-                MessageHelper.ShowInformation(this,
-                    string.Format("{0} messages were not sent due to insufficient permissions to send email.", e.SecurityDenials));
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    string message = lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                        ArchiveConstants.InvalidActionInArchiveMessage :
+                        string.Format("{0} messages were not sent due to insufficient permissions to send email.", e.SecurityDenials);
+
+                    lifetimeScope.Resolve<IMessageHelper>().ShowInformation(this, message);
+                }
             }
         }
 

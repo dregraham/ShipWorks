@@ -36,7 +36,7 @@ namespace Interapptive.Shared.Data
         public event SqlScriptBatchCompletedEventHandler BatchCompleted;
 
         /// <summary>
-        /// Contstructor
+        /// Constructor
         /// </summary>
         public SqlScript(string name, string sql)
         {
@@ -100,7 +100,7 @@ namespace Interapptive.Shared.Data
                     int tries = 3;
 
                     // We keep trying for certain errors that mean we need to wait for SQL Server to get done configuring.  This was done for the CreateDatabase script, when
-                    // dreating a database in Amazon RDS.
+                    // creating a database in Amazon RDS.
                     while (tries-- > 0)
                     {
                         try

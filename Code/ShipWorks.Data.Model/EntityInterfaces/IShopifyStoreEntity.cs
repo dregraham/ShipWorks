@@ -57,6 +57,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Password { get; }
+        /// <summary> The ShopifyNotifyCustomer property of the Entity ShopifyStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopifyStore"."ShopifyNotifyCustomer"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean ShopifyNotifyCustomer { get; }
         
         
         

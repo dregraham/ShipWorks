@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     mock.Provide<Func<Control>>(() => new Control());
                     mock.Override<ITangoWebClient>();
                     mock.Override<IMessageHelper>();
+                    mock.Override<IMainForm>();
                 });
 
             Modify.Store(context.Store)
@@ -116,7 +118,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
         [Fact]
         public void Populate_LoadsCustoms_WhenShipmentIsInternational()
-        {
+        { 
             var testObject = context.Mock.Create<ShippingPanelViewModel>();
 
             Modify.Shipment(shipment).AsPostal(x => x.AsUsps())
