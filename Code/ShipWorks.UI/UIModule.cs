@@ -63,9 +63,6 @@ namespace ShipWorks.UI
             builder.RegisterType<WebBrowserDlg>()
                 .Named<IDialog>("WebBrowserDlg");
 
-            builder.RegisterType<DismissableWebBrowserDlg>()
-                .Named<IDialog>("DismissableWebBrowserDlg");
-
             builder.RegisterType<DismissableWebBrowserDlgViewModel>()
                 .As<IDismissableWebBrowserDlgViewModel>();
 

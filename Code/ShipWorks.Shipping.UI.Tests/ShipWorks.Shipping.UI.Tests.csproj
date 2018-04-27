@@ -181,6 +181,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressServiceControlTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostAvailabilityServiceTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostNotificationTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsWebClientTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\FakeUpsLocalRatingViewModel.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateDiscrepencyViewModelTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRatingViewModelTest.cs" />

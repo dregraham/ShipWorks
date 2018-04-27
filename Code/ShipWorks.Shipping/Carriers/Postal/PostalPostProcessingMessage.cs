@@ -1,14 +1,13 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -21,19 +20,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
     {
         private readonly IGlobalPostLabelNotification globalPostNotification;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
+        private readonly IReadOnlyCarrierAccountRetriever<IEndiciaAccountEntity> endiciaAccountRepository;
+        private readonly IReadOnlyCarrierAccountRetriever<IUspsAccountEntity> uspsAccountRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PostalPostProcessingMessage(
-            IGlobalPostLabelNotification globalPostNotification, 
-            IDateTimeProvider dateTimeProvider, 
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository)
+            IGlobalPostLabelNotification globalPostNotification,
+            IDateTimeProvider dateTimeProvider,
+            IReadOnlyCarrierAccountRetriever<IEndiciaAccountEntity> endiciaAccountRepository,
+            IReadOnlyCarrierAccountRetriever<IUspsAccountEntity> uspsAccountRetriever)
         {
             this.globalPostNotification = globalPostNotification;
             this.dateTimeProvider = dateTimeProvider;
             this.endiciaAccountRepository = endiciaAccountRepository;
+            this.uspsAccountRetriever = uspsAccountRetriever;
         }
 
         /// <summary>
@@ -41,10 +43,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotifiactionForShipment(s));
+            IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotificationForShipment(s));
 
-            if (gapShipment != null && globalPostNotification.AppliesToCurrentUser())
-            { 
+            if (gapShipment != null)
+            {
                 globalPostNotification.Show(gapShipment);
             }
         }
@@ -52,14 +54,56 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Should we show the notification
         /// </summary>
-        private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
+        private bool ShowNotificationForShipment(IShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Postal == null)
             {
                 return false;
             }
 
-            bool showNotifiaction = IsGapLabel(shipment.Postal) || 
+            return IsGapShipment(shipment) || IsPresortShipment(shipment);
+        }
+
+        /// <summary>
+        /// Is the shipment presort?
+        /// </summary>
+        private bool IsPresortShipment(IShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Usps == null)
+            {
+                return false;
+            }
+
+            var hasAvailability = GetPresortAvailabilityTest(shipment, uspsAccountRetriever.GetAccountReadOnly);
+
+            return hasAvailability(PostalServiceType.InternationalFirst, GlobalPostServiceAvailability.InternationalFirst) ||
+                hasAvailability(PostalServiceType.InternationalPriority, GlobalPostServiceAvailability.InternationalPriority) ||
+                hasAvailability(PostalServiceType.InternationalExpress, GlobalPostServiceAvailability.InternationalExpress);
+        }
+
+        /// <summary>
+        /// Get a test for whether the user has the availability of a specific presort service
+        /// </summary>
+        private static Func<PostalServiceType, GlobalPostServiceAvailability, bool> GetPresortAvailabilityTest(IShipmentEntity shipment, Func<IShipmentEntity, IUspsAccountEntity> getAccount)
+        {
+            var account = getAccount(shipment);
+            if (account == null)
+            {
+                return (_, __) => false;
+            }
+
+            var availability = (GlobalPostServiceAvailability) account.GlobalPostAvailability;
+
+            return (service, requiredFlag) =>
+                shipment.Postal.Service == (int) service && availability.HasFlag(requiredFlag);
+        }
+
+        /// <summary>
+        /// Is the shipment Gap?
+        /// </summary>
+        private bool IsGapShipment(IShipmentEntity shipment)
+        {
+            bool showNotifiaction = IsGapLabel(shipment.Postal) ||
                 PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
@@ -73,10 +117,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Is this shipment an Endicia Express 1 shipment
         /// </summary>
-        private bool IsEndiciaReseller(IShipmentEntity shipment)
-        {
-            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int)EndiciaReseller.None;
-        }
+        private bool IsEndiciaReseller(IShipmentEntity shipment) =>
+            endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller != (int) EndiciaReseller.None;
 
         /// <summary>
         /// Determines whether the shipment is a Gap shipment.
@@ -88,15 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            if (shipment.Service == (int) PostalServiceType.InternationalFirst &&
-                shipment.CustomsContentType != (int) PostalCustomsContentType.Documents &&
-                (shipment.PackagingType == (int) PostalPackagingType.Envelope ||
-                    shipment.PackagingType == (int) PostalPackagingType.LargeEnvelope))
-            {
-                return true;
-            }
-
-            return false;
+            return PostalUtility.IsGapLabel(shipment);
         }
     }
 }

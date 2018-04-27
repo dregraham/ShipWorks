@@ -351,7 +351,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
                 account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
-                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo);
+                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo.Capabilities);
             }
 
             return account;
@@ -360,18 +360,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get GlobalPost service availability from the account info
         /// </summary>
-        private GlobalPostServiceAvailability GetGlobalPostServiceAvailability(AccountInfoV27 accountInfo)
+        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
         {
-            GlobalPostServiceAvailability gpAvailability = accountInfo.Capabilities.CanPrintGP ?
-                GlobalPostServiceAvailability.GlobalPost :
-                GlobalPostServiceAvailability.None;
-
-            GlobalPostServiceAvailability gpSmartSaverAvailability = accountInfo.Capabilities.CanPrintGPSmartSaver ?
-                GlobalPostServiceAvailability.SmartSaver :
-                GlobalPostServiceAvailability.None;
-
-            return gpAvailability | gpSmartSaverAvailability;
+            return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
+                HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
+                GetGlobalPostInternationalPresortAvailability(capabilities);
         }
+
+        /// <summary>
+        /// Get international presort availability for Global Post
+        /// </summary>
+        private static GlobalPostServiceAvailability GetGlobalPostInternationalPresortAvailability(CapabilitiesV18 capabilities)
+        {
+            if (!capabilities.CanPrintIntlPresortSinglePiece)
+            {
+                return GlobalPostServiceAvailability.None;
+            }
+
+            return HasCapability(capabilities.CanPrintFCIPresort, GlobalPostServiceAvailability.InternationalFirst) |
+                HasCapability(capabilities.CanPrintPMIPresort, GlobalPostServiceAvailability.InternationalPriority) |
+                HasCapability(capabilities.CanPrintPMEIPresort, GlobalPostServiceAvailability.InternationalExpress);
+        }
+
+        /// <summary>
+        /// Gets a capability based on whether a user has it or not
+        /// </summary>
+        private static GlobalPostServiceAvailability HasCapability(bool hasCapability, GlobalPostServiceAvailability capability) =>
+            hasCapability ? capability : GlobalPostServiceAvailability.None;
 
         /// <summary>
         /// Get the USPS URL of the given urlType

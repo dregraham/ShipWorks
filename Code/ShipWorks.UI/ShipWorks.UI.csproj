@@ -194,6 +194,7 @@
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IDismissableWebBrowserDlg.cs" />
     <Compile Include="Controls\WebBrowser\IDismissableWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">

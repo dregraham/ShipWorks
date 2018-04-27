@@ -3054,21 +3054,20 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
-          <Field Name="AutoWeigh" Type="bool" FieldIndex="17" />
+          <Field Name="AutoWeigh" Type="bool" FieldIndex="16" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
-          <Field Name="DialogSettings" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="18" />
+          <Field Name="DialogSettings" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="17" />
           <Field Name="DisplayColorScheme" Type="int" FieldIndex="1" />
           <Field Name="DisplaySystemTray" Type="bool" FieldIndex="2" />
           <Field Name="FilterInitialSortType" Type="int" FieldIndex="7" />
           <Field Name="FilterInitialSpecified" Type="long" FieldIndex="6" />
           <Field Name="FilterInitialUseLastActive" Type="bool" FieldIndex="5" />
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
-          <Field Name="NextGlobalPostNotificationDate" Type="datetime" FieldIndex="15" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
-          <Field Name="SingleScanSettings" Type="int" FieldIndex="16" />
+          <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
           <Field Name="UserID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -13139,7 +13138,6 @@
             <FieldMapping FieldName="FilterInitialSpecified" TargetFieldName="FilterInitialSpecified" />
             <FieldMapping FieldName="FilterInitialUseLastActive" TargetFieldName="FilterInitialUseLastActive" />
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
-            <FieldMapping FieldName="NextGlobalPostNotificationDate" TargetFieldName="NextGlobalPostNotificationDate" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />

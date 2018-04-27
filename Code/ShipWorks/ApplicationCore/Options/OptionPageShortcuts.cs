@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using ShipWorks.Common.IO.Hardware.Scanner;
-using ShipWorks.Data.Model.EntityClasses;
-using Microsoft.ApplicationInsights.DataContracts;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Connection;
-using System.Reflection;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using Microsoft.ApplicationInsights.DataContracts;
+using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -45,7 +45,7 @@ namespace ShipWorks.ApplicationCore.Options
             userSession = scope.Resolve<IUserSession>();
             messenger = scope.Resolve<IMessenger>();
             pringJobFactory = scope.Resolve<IPrintJobFactory>();
-            currentUserSettings = new CurrentUserSettings(userSession);
+            currentUserSettings = scope.Resolve<ICurrentUserSettings>();
             settings = userSession.User.Settings;
             this.owner = owner;
         }
@@ -99,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Options
             {
                 displayShortcutIndicator.Checked =
                     currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator);
-                
+
                 // Load single scan settings and update ui
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;

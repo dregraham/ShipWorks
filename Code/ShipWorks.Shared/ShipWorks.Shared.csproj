@@ -155,6 +155,7 @@
     <Compile Include="Templates\TemplateBuiltinFolders.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Users\DialogSettings.cs" />
+    <Compile Include="Users\NotificationDialogSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

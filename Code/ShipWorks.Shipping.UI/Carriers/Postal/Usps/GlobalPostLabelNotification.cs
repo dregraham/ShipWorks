@@ -1,12 +1,9 @@
-﻿using Interapptive.Shared.UI;
+﻿using System;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
-using System;
-using System.Data.SqlTypes;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
 {
@@ -17,54 +14,42 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
     /// <seealso cref="ShipWorks.Shipping.Carriers.Postal.Usps.IGlobalPostLabelNotification" />
     public class GlobalPostLabelNotification : IGlobalPostLabelNotification
     {
-        private readonly Func<string, IDialog> browserFactory;
+        private readonly Func<IDismissableWebBrowserDlg> browserFactory;
         private readonly IDismissableWebBrowserDlgViewModel browserViewModel;
-        private readonly IUserSession userSession;
         private readonly IWin32Window owner;
 
-        // Global Post stuff 
-        private const string GlobalPostDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
-        private const string GlobalPostMoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
-        private const string GlobalPostBrowserDlgTitle = "Your GlobalPost Label";
-
-        // Global Post Advantage Program stuff
-        private const string StampsGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5174";
-        private const string EndiciaGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5175";
-        private const string GlobalPostAdvantageProgramMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000114989";
-        private const string GlobalPostAdvantageProgramBrowserDlgTitle = "Your First-Class International Envelope Label";
+        readonly ICurrentUserSettings userSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalPostLabelNotification"/> class.
         /// </summary>
-        public GlobalPostLabelNotification(Func<string, IDialog> browserFactory,
+        public GlobalPostLabelNotification(
+            Func<IDismissableWebBrowserDlg> browserFactory,
             IDismissableWebBrowserDlgViewModel browserViewModel,
-            IUserSession userSession,
+            ICurrentUserSettings userSettings,
             IWin32Window owner)
         {
+            this.userSettings = userSettings;
             this.browserFactory = browserFactory;
             this.browserViewModel = browserViewModel;
-            this.userSession = userSession;
             this.owner = owner;
         }
-
-        /// <summary>
-        /// Check to see if we should show the notification based on the current user. If the user
-        /// dismisses the notification, don't show again. If not, show once a day.
-        /// </summary>
-        public bool AppliesToCurrentUser() =>
-            userSession.User.Settings.NextGlobalPostNotificationDate < DateTime.UtcNow;
 
         /// <summary>
         /// Show the notification and save result
         /// </summary>
         public void Show(IShipmentEntity shipment)
         {
-            (string urlToUse, string titleToUse, string moreInfo) = GetDialogAssets(shipment);
+            var assets = new GlobalPostDialogDetails(shipment);
 
-            Uri displayUri = new Uri(urlToUse);
-            browserViewModel.Load(displayUri, titleToUse, moreInfo);
+            if (!userSettings.ShouldShowNotification(assets.NotificationType, DateTime.UtcNow))
+            {
+                return;
+            }
 
-            IDialog webBrowserDlg = browserFactory("DismissableWebBrowserDlg");
+            browserViewModel.Load(assets.DisplayUrl, assets.Title, assets.MoreInfoLink);
+
+            IDismissableWebBrowserDlg webBrowserDlg = browserFactory();
             webBrowserDlg.LoadOwner(owner);
             webBrowserDlg.Height = 680;
             webBrowserDlg.Width = 1300;
@@ -73,36 +58,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             webBrowserDlg.ShowDialog();
 
             // As per SDC mockups, if the user does not dismiss the dialog, show them again after a day
-            userSession.User.Settings.NextGlobalPostNotificationDate = ((IDismissableWebBrowserDlgViewModel) webBrowserDlg.DataContext).Dismissed ?
-                SqlDateTime.MaxValue.Value :
-                DateTime.UtcNow.AddDays(1);
-        }
-
-        /// <summary>
-        /// Get the assets needed for displaying the dialog
-        /// </summary>
-        private static (string urlToUse, string titleToUse, string moreInfo) GetDialogAssets(IShipmentEntity shipment)
-        {
-            string urlToUse = GlobalPostDisplayUrl;
-            bool gapShipment = !PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
-            
-            if (gapShipment)
+            if (browserViewModel.Dismissed)
             {
-                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
-                {
-                    urlToUse = EndiciaGlobalPostAdvantageProgramDisplayUrl;
-                }
-
-                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
-                {
-                    urlToUse = StampsGlobalPostAdvantageProgramDisplayUrl;
-                }
+                userSettings.StopShowingNotification(assets.NotificationType);
             }
-     
-            string titleToUse = gapShipment ? GlobalPostAdvantageProgramBrowserDlgTitle : GlobalPostBrowserDlgTitle;
-            string moreInfo = gapShipment ? GlobalPostAdvantageProgramMoreInfoUrl : GlobalPostMoreInfoUrl;
-
-            return (urlToUse, titleToUse, moreInfo);
+            else
+            {
+                userSettings.StopShowingNotificationFor(assets.NotificationType, TimeSpan.FromDays(1));
+            }
         }
     }
 }
