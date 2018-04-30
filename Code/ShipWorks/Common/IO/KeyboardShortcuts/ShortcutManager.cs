@@ -28,6 +28,27 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private TableSynchronizer<ShortcutEntity> tableSynchronizer;
         private bool needCheckForChanges;
+        private readonly KeyboardShortcutData[] reservedShortcuts = new[]
+        {
+            new KeyboardShortcutData(null, VirtualKeys.A,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.C,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.D,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.F,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.O,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.P,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.V,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.W,
+                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.F10, KeyboardShortcutModifiers.None)
+        };
+        
 
         /// <summary>
         /// Constructor
@@ -134,6 +155,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             foreach (ShortcutEntity shortcut in Shortcuts)
             {
                 acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.VirtualKey && s.Modifiers == shortcut.ModifierKeys);
+            }
+            
+            // Remove reserved shortcuts from the list of available ones
+            foreach (KeyboardShortcutData shortcut in reservedShortcuts)
+            {
+                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.ActionKey && s.Modifiers == shortcut.Modifiers);
             }
             
             return acceptedShortcuts;
