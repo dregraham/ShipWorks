@@ -4219,7 +4219,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-20T18:52:51.6157797Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-30T14:49:25.0589982Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8698,10 +8698,9 @@
                     <Field Name="TemplateLastSelected" Ordinal="13" DbType="0" Precision="19" />
                     <Field Name="CustomerFilterLastActive" Ordinal="14" DbType="0" Precision="19" />
                     <Field Name="CustomerFilterExpandedFolders" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
-                    <Field Name="NextGlobalPostNotificationDate" Ordinal="16" DbType="4" />
-                    <Field Name="SingleScanSettings" Ordinal="17" DbType="8" Precision="10" />
-                    <Field Name="AutoWeigh" Ordinal="18" DbType="2" />
-                    <Field Name="DialogSettings" Ordinal="19" IsOptional="true" DbType="26" Length="2147483647" />
+                    <Field Name="SingleScanSettings" Ordinal="16" DbType="8" Precision="10" />
+                    <Field Name="AutoWeigh" Ordinal="17" DbType="2" />
+                    <Field Name="DialogSettings" Ordinal="18" IsOptional="true" DbType="26" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
