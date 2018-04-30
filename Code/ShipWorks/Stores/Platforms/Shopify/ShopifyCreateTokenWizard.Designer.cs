@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Shopify
+﻿using CefSharp.WinForms;
+
+namespace ShipWorks.Stores.Platforms.Shopify
 {
     partial class ShopifyCreateTokenWizard
     {
@@ -35,18 +37,18 @@
             this.labelAddress = new System.Windows.Forms.Label();
             this.wizardPageAuthenticate = new ShipWorks.UI.Wizard.WizardPage();
             this.panelBrowser = new System.Windows.Forms.Panel();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.webBrowser = new ChromiumWebBrowser("about:blank");
             this.wizardPageSuccess = new ShipWorks.UI.Wizard.WizardPage();
             this.imageStatus = new System.Windows.Forms.PictureBox();
             this.labelStatus = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageShopAddress.SuspendLayout();
             this.wizardPageAuthenticate.SuspendLayout();
             this.panelBrowser.SuspendLayout();
             this.wizardPageSuccess.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imageStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -88,7 +90,7 @@
             this.wizardPageShopAddress.Controls.Add(this.labelAddress);
             this.wizardPageShopAddress.Description = "Enter the the shop name of your Shopify store.";
             this.wizardPageShopAddress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageShopAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageShopAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageShopAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageShopAddress.Name = "wizardPageShopAddress";
             this.wizardPageShopAddress.Size = new System.Drawing.Size(733, 466);
@@ -124,7 +126,7 @@
             // labelAddress
             // 
             this.labelAddress.AutoSize = true;
-            this.labelAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelAddress.Location = new System.Drawing.Point(24, 10);
             this.labelAddress.Name = "labelAddress";
             this.labelAddress.Size = new System.Drawing.Size(192, 13);
@@ -136,7 +138,7 @@
             this.wizardPageAuthenticate.Controls.Add(this.panelBrowser);
             this.wizardPageAuthenticate.Description = "Login to allow ShipWorks to connect to Shopify.";
             this.wizardPageAuthenticate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAuthenticate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageAuthenticate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageAuthenticate.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAuthenticate.Name = "wizardPageAuthenticate";
             this.wizardPageAuthenticate.Size = new System.Drawing.Size(756, 772);
@@ -147,8 +149,8 @@
             // 
             // panelBrowser
             // 
-            this.panelBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelBrowser.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBrowser.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelBrowser.Controls.Add(this.webBrowser);
@@ -163,10 +165,10 @@
             this.webBrowser.Location = new System.Drawing.Point(0, 0);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
+            //this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(707, 747);
             this.webBrowser.TabIndex = 0;
-            this.webBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.OnWebBrowserNavigated);
+            this.webBrowser.AddressChanged += OnWebBrowserNavigated;
             // 
             // wizardPageSuccess
             // 
@@ -174,7 +176,7 @@
             this.wizardPageSuccess.Controls.Add(this.labelStatus);
             this.wizardPageSuccess.Description = "ShipWorks can now connect to your Shopify store.";
             this.wizardPageSuccess.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageSuccess.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageSuccess.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageSuccess.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSuccess.Name = "wizardPageSuccess";
             this.wizardPageSuccess.Size = new System.Drawing.Size(756, 524);
@@ -216,7 +218,7 @@
             this.Text = "Shopify Login Token";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageShopAddress.ResumeLayout(false);
@@ -225,7 +227,7 @@
             this.panelBrowser.ResumeLayout(false);
             this.wizardPageSuccess.ResumeLayout(false);
             this.wizardPageSuccess.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imageStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageStatus)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -239,7 +241,7 @@
         private System.Windows.Forms.TextBox shopUrlName;
         private System.Windows.Forms.Label labelAddress;
         private System.Windows.Forms.Panel panelBrowser;
-        private System.Windows.Forms.WebBrowser webBrowser;
+        private ChromiumWebBrowser webBrowser;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.PictureBox imageStatus;
         private System.Windows.Forms.Label label1;
