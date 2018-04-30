@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.DTO
         public int option_set_id { get; set; }
         public bool is_bundled_product { get; set; }
         public string bin_picking_number { get; set; }
-        public object parent_order_product_id { get; set; }
+        public int? parent_order_product_id { get; set; }
         public string event_name { get; set; }
         public List<BigCommerceProductDiscount> applied_discounts { get; set; }
         public List<BigCommerceProductOption> product_options { get; set; }

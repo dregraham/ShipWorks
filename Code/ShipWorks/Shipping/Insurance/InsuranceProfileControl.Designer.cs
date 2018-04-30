@@ -40,7 +40,7 @@
             this.labelInsuredValue.Location = new System.Drawing.Point(1, 26);
             this.labelInsuredValue.Name = "labelInsuredValue";
             this.labelInsuredValue.Size = new System.Drawing.Size(88, 13);
-            this.labelInsuredValue.TabIndex = 102;
+            this.labelInsuredValue.TabIndex = 1;
             this.labelInsuredValue.Text = "Insurance value:";
             // 
             // useInsurance
@@ -49,7 +49,7 @@
             this.useInsurance.Location = new System.Drawing.Point(3, 3);
             this.useInsurance.Name = "useInsurance";
             this.useInsurance.Size = new System.Drawing.Size(127, 17);
-            this.useInsurance.TabIndex = 101;
+            this.useInsurance.TabIndex = 0;
             this.useInsurance.Text = "ShipWorks Insurance";
             this.useInsurance.UseVisualStyleBackColor = true;
             // 
@@ -64,7 +64,7 @@
             this.source.Location = new System.Drawing.Point(95, 23);
             this.source.Name = "source";
             this.source.Size = new System.Drawing.Size(106, 21);
-            this.source.TabIndex = 104;
+            this.source.TabIndex = 2;
             this.source.SelectedIndexChanged += new System.EventHandler(this.OnChangeSource);
             // 
             // amount
@@ -77,7 +77,7 @@
             this.amount.Location = new System.Drawing.Point(207, 23);
             this.amount.Name = "amount";
             this.amount.Size = new System.Drawing.Size(81, 21);
-            this.amount.TabIndex = 103;
+            this.amount.TabIndex = 3;
             this.amount.Text = "$0.00";
             // 
             // InsuranceProfileControl
@@ -88,7 +88,7 @@
             this.Controls.Add(this.amount);
             this.Controls.Add(this.labelInsuredValue);
             this.Controls.Add(this.useInsurance);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "InsuranceProfileControl";
             this.Size = new System.Drawing.Size(316, 52);
             this.ResumeLayout(false);

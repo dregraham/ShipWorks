@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -24,7 +25,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Express1Usps
         public Express1UspsShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Build<ISqlAdapter>()));
+                mock =>
+                {
+                    mock.Provide(mock.Build<ISqlAdapter>());
+                    mock.Override<IMainForm>();
+                });
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 

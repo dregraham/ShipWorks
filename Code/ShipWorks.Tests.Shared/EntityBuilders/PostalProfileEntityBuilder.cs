@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 builder.SetDefaultsOnNullableFields();
             }
 
-            parentBuilder.Set(x => x.ShipmentTypeCode, ProfileTypeCode);
+            parentBuilder.Set(x => x.ShipmentType, ProfileTypeCode);
             Set(ProfileAccessor, builder.Build());
 
             return this;

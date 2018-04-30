@@ -343,6 +343,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ApiKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Password", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShopifyNotifyCustomer", fieldHashtable);
 		}
 		#endregion
 
@@ -454,6 +456,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.Password, true); }
 			set	{ SetValue((int)ShopifyStoreFieldIndex.Password, value); }
+		}
+
+		/// <summary> The ShopifyNotifyCustomer property of the Entity ShopifyStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyNotifyCustomer"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ShopifyNotifyCustomer
+		{
+			get { return (System.Boolean)GetValue((int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, true); }
+			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

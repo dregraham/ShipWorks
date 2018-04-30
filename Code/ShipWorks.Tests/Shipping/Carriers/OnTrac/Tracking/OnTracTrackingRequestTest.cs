@@ -6,7 +6,7 @@ using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Tracking;
+using ShipWorks.Shipping.Carriers.OnTrac.Schemas.TrackingResponse;
 using ShipWorks.Shipping.Tracking;
 using Xunit;
 
@@ -14,15 +14,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 {
     public class OnTracTrackingRequestTest
     {
-        Mock<IHttpResponseReader> mockedHttpResponseReader;
+        private readonly Mock<IHttpResponseReader> mockedHttpResponseReader;
 
-        Mock<IApiLogEntry> mockedLogger;
-
-        Mock<HttpVariableRequestSubmitter> mockedSubmitter;
-
-        OnTracTrackedShipment testObject;
-
-        TrackingShipmentList validOnTracResponse;
+        private readonly Mock<IApiLogEntry> mockedLogger;
+        private readonly Mock<HttpVariableRequestSubmitter> mockedSubmitter;
+        private readonly OnTracTrackedShipment testObject;
+        private readonly OnTracTrackingResult validOnTracResponse;
 
         public OnTracTrackingRequestTest()
         {
@@ -44,11 +41,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             //Create Actual OnTracTrackingRequest with mock submitter and mock logger
             testObject = new OnTracTrackedShipment(37, "testpass", mockedSubmitter.Object, mockedLogFactory.Object);
 
-            validOnTracResponse = new TrackingShipmentList
+            validOnTracResponse = new OnTracTrackingResult
             {
                 Shipments = new[]
                 {
-                    new TrackingShipment
+                    new ShipWorks.Shipping.Carriers.OnTrac.Schemas.TrackingResponse.Shipment
                     {
                         Delivered = true,
                         Exp_Del_Date = DateTime.Parse("1/2/2012"),
@@ -122,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
-        TrackingResult RunSuccessfullRequestTracking()
+        private TrackingResult RunSuccessfullRequestTracking()
         {
             string validOnTracResponseString = SerializationUtility.SerializeToXml(validOnTracResponse);
 
@@ -161,7 +158,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 
             Assert.Equal(2, trackingResult.Details.Count);
             Assert.Equal("First Event Desc", trackingResult.Details.First().Activity);
-            Assert.Equal("<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>",
+            Assert.Equal(
+                "<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>",
                 trackingResult.Summary);
         }
 
@@ -179,7 +177,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 
             Assert.Equal(2, trackingResult.Details.Count);
             Assert.Equal("First Event Desc", trackingResult.Details.First().Activity);
-            Assert.Equal("<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>",
+            Assert.Equal(
+                "<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>",
                 trackingResult.Summary);
         }
 
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         [Fact]
         public void TrackShipment_ThrowsException_WhenNoShipments()
         {
-            validOnTracResponse.Shipments = new TrackingShipment[0];
+            validOnTracResponse.Shipments = new ShipWorks.Shipping.Carriers.OnTrac.Schemas.TrackingResponse.Shipment[0];
             string validOnTracResponseString = SerializationUtility.SerializeToXml(validOnTracResponse);
 
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(validOnTracResponseString);

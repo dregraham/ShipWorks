@@ -16,7 +16,14 @@ namespace ShipWorks.Templates.Printing
         double marginBottom = 1;
         double marginLeft = 1;
         double marginRight = 1;
-        
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PrintJobPageSettings()
+        {
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

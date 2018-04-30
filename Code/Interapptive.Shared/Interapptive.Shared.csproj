@@ -190,6 +190,9 @@
     <Compile Include="ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Data\DbConnectionExtensions.cs" />
+    <Compile Include="Data\DbDataReaderExtensions.cs" />
+    <Compile Include="Data\IConnectionSensitiveScope.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />
     <Compile Include="Enums\AsendiaServiceType.cs" />
@@ -351,6 +354,7 @@
     <Compile Include="UI\UserConditionalNotificationType.cs" />
     <Compile Include="UI\WpfWindowStateSaver.cs" />
     <Compile Include="Utility\ClrHelper.cs" />
+    <Compile Include="Utility\DateTimeExtensions.cs" />
     <Compile Include="Utility\DecimalExtensions.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />

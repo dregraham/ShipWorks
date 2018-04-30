@@ -919,26 +919,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty DhlExpressProfilePackageEntity objects.</summary>
-	[Serializable]
-	public partial class DhlExpressProfilePackageEntityFactory : EntityFactoryBase2<DhlExpressProfilePackageEntity> {
-		/// <summary>CTor</summary>
-		public DhlExpressProfilePackageEntityFactory() : base("DhlExpressProfilePackageEntity", ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, false) { }
-		
-		/// <summary>Creates a new DhlExpressProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new DhlExpressProfilePackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressProfilePackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty DhlExpressShipmentEntity objects.</summary>
 	[Serializable]
 	public partial class DhlExpressShipmentEntityFactory : EntityFactoryBase2<DhlExpressShipmentEntity> {
@@ -1443,7 +1423,7 @@ namespace ShipWorks.Data.Model.FactoryClasses
 	[Serializable]
 	public partial class FedExProfilePackageEntityFactory : EntityFactoryBase2<FedExProfilePackageEntity> {
 		/// <summary>CTor</summary>
-		public FedExProfilePackageEntityFactory() : base("FedExProfilePackageEntity", ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, false) { }
+		public FedExProfilePackageEntityFactory() : base("FedExProfilePackageEntity", ShipWorks.Data.Model.EntityType.FedExProfilePackageEntity, true) { }
 		
 		/// <summary>Creates a new FedExProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
@@ -1971,26 +1951,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelProfileEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfileUsingFields
-            // __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
-	/// <summary>Factory to create new, empty IParcelProfilePackageEntity objects.</summary>
-	[Serializable]
-	public partial class IParcelProfilePackageEntityFactory : EntityFactoryBase2<IParcelProfilePackageEntity> {
-		/// <summary>CTor</summary>
-		public IParcelProfilePackageEntityFactory() : base("IParcelProfilePackageEntity", ShipWorks.Data.Model.EntityType.IParcelProfilePackageEntity, false) { }
-		
-		/// <summary>Creates a new IParcelProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new IParcelProfilePackageEntity(fields);
-            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfilePackageUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
@@ -2839,6 +2799,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty PackageProfileEntity objects.</summary>
+	[Serializable]
+	public partial class PackageProfileEntityFactory : EntityFactoryBase2<PackageProfileEntity> {
+		/// <summary>CTor</summary>
+		public PackageProfileEntityFactory() : base("PackageProfileEntity", ShipWorks.Data.Model.EntityType.PackageProfileEntity, true) { }
+		
+		/// <summary>Creates a new PackageProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new PackageProfileEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPackageProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty PayPalOrderEntity objects.</summary>
 	[Serializable]
 	public partial class PayPalOrderEntityFactory : EntityFactoryBase2<PayPalOrderEntity> {
@@ -3559,6 +3539,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ShortcutEntity objects.</summary>
+	[Serializable]
+	public partial class ShortcutEntityFactory : EntityFactoryBase2<ShortcutEntity> {
+		/// <summary>CTor</summary>
+		public ShortcutEntityFactory() : base("ShortcutEntity", ShipWorks.Data.Model.EntityType.ShortcutEntity, false) { }
+		
+		/// <summary>Creates a new ShortcutEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ShortcutEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShortcutUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty SparkPayStoreEntity objects.</summary>
 	[Serializable]
 	public partial class SparkPayStoreEntityFactory : EntityFactoryBase2<SparkPayStoreEntity> {
@@ -4003,7 +4003,7 @@ namespace ShipWorks.Data.Model.FactoryClasses
 	[Serializable]
 	public partial class UpsProfilePackageEntityFactory : EntityFactoryBase2<UpsProfilePackageEntity> {
 		/// <summary>CTor</summary>
-		public UpsProfilePackageEntityFactory() : base("UpsProfilePackageEntity", ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, false) { }
+		public UpsProfilePackageEntityFactory() : base("UpsProfilePackageEntity", ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity, true) { }
 		
 		/// <summary>Creates a new UpsProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
@@ -4674,9 +4674,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity:
 					factoryToUse = new DhlExpressProfileEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity:
-					factoryToUse = new DhlExpressProfilePackageEntityFactory();
-					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity:
 					factoryToUse = new DhlExpressShipmentEntityFactory();
 					break;
@@ -4833,9 +4830,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.IParcelProfileEntity:
 					factoryToUse = new IParcelProfileEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.IParcelProfilePackageEntity:
-					factoryToUse = new IParcelProfilePackageEntityFactory();
-					break;
 				case ShipWorks.Data.Model.EntityType.IParcelShipmentEntity:
 					factoryToUse = new IParcelShipmentEntityFactory();
 					break;
@@ -4962,6 +4956,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.OtherShipmentEntity:
 					factoryToUse = new OtherShipmentEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.PackageProfileEntity:
+					factoryToUse = new PackageProfileEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.PayPalOrderEntity:
 					factoryToUse = new PayPalOrderEntityFactory();
 					break;
@@ -5069,6 +5066,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					factoryToUse = new ShopSiteStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ShortcutEntity:
+					factoryToUse = new ShortcutEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
 					factoryToUse = new SparkPayStoreEntityFactory();

@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -478,6 +479,10 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
+                    if (ex.IsReadonlyDatabaseException(log))
+                    {
+                        return true;
+                    }
                     TranslateException(ex);
                     throw;
                 }
@@ -497,6 +502,10 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (ORMQueryExecutionException ex)
                 {
+                    if (ex.IsReadonlyDatabaseException(log))
+                    {
+                        return true;
+                    }
                     TranslateException(ex);
                     throw;
                 }
@@ -603,6 +612,10 @@ namespace ShipWorks.Data.Connection
             }
             catch (ORMQueryExecutionException ex)
             {
+                if (ex.IsReadonlyDatabaseException(log))
+                {
+                    return 1;
+                }
                 TranslateException(ex);
                 throw;
             }
@@ -619,6 +632,10 @@ namespace ShipWorks.Data.Connection
             }
             catch (SqlException ex)
             {
+                if (ex.IsReadonlyDatabaseException(log))
+                {
+                    return 1;
+                }
                 TranslateException(ex);
                 throw;
             }
@@ -656,6 +673,7 @@ namespace ShipWorks.Data.Connection
             if (sqlEx == null)
             {
                 ORMQueryExecutionException queryEx = ex as ORMQueryExecutionException;
+
                 if (queryEx != null)
                 {
                     sqlEx = queryEx.InnerException as SqlException;

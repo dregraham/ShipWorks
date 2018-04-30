@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -117,15 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (accountInfo != null)
                 {
-                    GlobalPostServiceAvailability gpAvailability = accountInfo.Capabilities.CanPrintGP ?
-                        GlobalPostServiceAvailability.GlobalPost :
-                        GlobalPostServiceAvailability.None;
-
-                    GlobalPostServiceAvailability gpSmartSaverAvailability = accountInfo.Capabilities.CanPrintGPSmartSaver ?
-                        GlobalPostServiceAvailability.SmartSaver :
-                        GlobalPostServiceAvailability.None;
-
-                    account.GlobalPostAvailability = (int) (gpAvailability | gpSmartSaverAvailability);
+                    account.GlobalPostAvailability = (int) UspsWebClient.GetGlobalPostServiceAvailability(accountInfo.Capabilities);
 
                     accountRepo.Save(account);
                 }

@@ -91,7 +91,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitDhlExpressAccountEntityInfos();
 			InitDhlExpressPackageEntityInfos();
 			InitDhlExpressProfileEntityInfos();
-			InitDhlExpressProfilePackageEntityInfos();
 			InitDhlExpressShipmentEntityInfos();
 			InitDimensionsProfileEntityInfos();
 			InitDownloadEntityInfos();
@@ -144,7 +143,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelAccountEntityInfos();
 			InitIParcelPackageEntityInfos();
 			InitIParcelProfileEntityInfos();
-			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
 			InitJetOrderEntityInfos();
 			InitJetOrderItemEntityInfos();
@@ -187,6 +185,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitOrderSearchEntityInfos();
 			InitOtherProfileEntityInfos();
 			InitOtherShipmentEntityInfos();
+			InitPackageProfileEntityInfos();
 			InitPayPalOrderEntityInfos();
 			InitPayPalOrderSearchEntityInfos();
 			InitPayPalStoreEntityInfos();
@@ -223,6 +222,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderSearchEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
+			InitShortcutEntityInfos();
 			InitSparkPayStoreEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
@@ -415,14 +415,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(AmazonProfileFieldIndex), "AmazonProfileEntity");
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
@@ -519,13 +512,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonDelivery, 0, 0, 10);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
 		private void InitAsendiaShipmentEntityInfos()
@@ -593,13 +579,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(BestRateProfileFieldIndex), "BestRateProfileEntity");
 			this.AddElementFieldInfo("BestRateProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)BestRateProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("BestRateProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsAddWeight, 0, 0, 0);
-			this.AddElementFieldInfo("BestRateProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("BestRateProfileEntity", "ServiceLevel", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.ServiceLevel, 0, 0, 10);
 		}
 		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>
@@ -628,6 +607,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "IsDigitalItem", typeof(System.Boolean), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.IsDigitalItem, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventDate, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventName", typeof(System.String), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventName, 255, 0, 0);
+			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "ParentOrderProductID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.ParentOrderProductID, 0, 0, 19);
 		}
 		/// <summary>Inits BigCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitBigCommerceStoreEntityInfos()
@@ -781,6 +761,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AllowEbayCombineLocally", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AllowEbayCombineLocally, 0, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -872,20 +853,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonDelivery, 0, 0, 10);
-		}
-		/// <summary>Inits DhlExpressProfilePackageEntity's FieldInfo objects</summary>
-		private void InitDhlExpressProfilePackageEntityInfos()
-		{
-			this.AddFieldIndexEnumForElementName(typeof(DhlExpressProfilePackageFieldIndex), "DhlExpressProfilePackageEntity");
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DhlExpressProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)DhlExpressProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits DhlExpressShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlExpressShipmentEntityInfos()
@@ -1350,15 +1317,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitFedExProfilePackageEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(FedExProfilePackageFieldIndex), "FedExProfilePackageEntity");
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "FedExProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)FedExProfilePackageFieldIndex.FedExProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)FedExProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("FedExProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)FedExProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlert", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlert, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertEnhancementType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertEnhancementType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PriorityAlertDetailContent", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PriorityAlertDetailContent, 1024, 0, 0);
@@ -1873,20 +1832,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelProfileEntity", "IsDeliveryDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)IParcelProfileFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelProfileEntity", "SkuAndQuantities", typeof(System.String), false, false, false, true,  (int)IParcelProfileFieldIndex.SkuAndQuantities, 500, 0, 0);
 		}
-		/// <summary>Inits IParcelProfilePackageEntity's FieldInfo objects</summary>
-		private void InitIParcelProfilePackageEntityInfos()
-		{
-			this.AddFieldIndexEnumForElementName(typeof(IParcelProfilePackageFieldIndex), "IParcelProfilePackageEntity");
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "IParcelProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)IParcelProfilePackageFieldIndex.IParcelProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)IParcelProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("IParcelProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)IParcelProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
-		}
 		/// <summary>Inits IParcelShipmentEntity's FieldInfo objects</summary>
 		private void InitIParcelShipmentEntityInfos()
 		{
@@ -2199,13 +2144,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OnTracProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "SignatureRequired", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.SignatureRequired, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)OnTracProfileFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("OnTracProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("OnTracProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)OnTracProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Reference1, 300, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Reference2", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Reference2, 300, 0, 0);
 			this.AddElementFieldInfo("OnTracProfileEntity", "Instructions", typeof(System.String), false, false, false, true,  (int)OnTracProfileFieldIndex.Instructions, 300, 0, 0);
@@ -2432,6 +2370,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("OtherShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)OtherShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
+		/// <summary>Inits PackageProfileEntity's FieldInfo objects</summary>
+		private void InitPackageProfileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(PackageProfileFieldIndex), "PackageProfileEntity");
+			this.AddElementFieldInfo("PackageProfileEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)PackageProfileFieldIndex.PackageProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)PackageProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("PackageProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PackageProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+		}
 		/// <summary>Inits PayPalOrderEntity's FieldInfo objects</summary>
 		private void InitPayPalOrderEntityInfos()
 		{
@@ -2480,14 +2432,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)PostalProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("PostalProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("PostalProfileEntity", "Confirmation", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.Confirmation, 0, 0, 10);
-			this.AddElementFieldInfo("PostalProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("PostalProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("PostalProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NonRectangular", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NonRectangular, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "CustomsContentType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsContentType, 0, 0, 10);
@@ -2880,7 +2825,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingProfileEntity", "ShippingProfileID", typeof(System.Int64), true, false, true, false,  (int)ShippingProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("ShippingProfileEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ShippingProfileFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "Name", typeof(System.String), false, false, false, false,  (int)ShippingProfileFieldIndex.Name, 50, 0, 0);
-			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentType", typeof(System.Int32), false, false, false, false,  (int)ShippingProfileFieldIndex.ShipmentType, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentType", typeof(Nullable<ShipWorks.Shipping.ShipmentTypeCode>), false, false, false, true,  (int)ShippingProfileFieldIndex.ShipmentType, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ShipmentTypePrimary", typeof(System.Boolean), false, false, false, false,  (int)ShippingProfileFieldIndex.ShipmentTypePrimary, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "OriginID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingProfileFieldIndex.OriginID, 0, 0, 19);
 			this.AddElementFieldInfo("ShippingProfileEntity", "Insurance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.Insurance, 0, 0, 0);
@@ -3002,6 +2947,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyRequestedShippingOption", typeof(System.Int32), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, 0, 0, 10);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ApiKey", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ApiKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.Password, 100, 0, 0);
+			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyNotifyCustomer", typeof(System.Boolean), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, 0, 0, 0);
 		}
 		/// <summary>Inits ShopSiteStoreEntity's FieldInfo objects</summary>
 		private void InitShopSiteStoreEntityInfos()
@@ -3019,6 +2965,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthSecretKey", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthSecretKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Identifier, 350, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthAuthorizationCode", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, 100, 0, 0);
+		}
+		/// <summary>Inits ShortcutEntity's FieldInfo objects</summary>
+		private void InitShortcutEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShortcutFieldIndex), "ShortcutEntity");
+			this.AddElementFieldInfo("ShortcutEntity", "ShortcutID", typeof(System.Int64), true, false, true, false,  (int)ShortcutFieldIndex.ShortcutID, 0, 0, 19);
+			this.AddElementFieldInfo("ShortcutEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ShortcutFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ShortcutEntity", "ModifierKeys", typeof(Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers>), false, false, false, true,  (int)ShortcutFieldIndex.ModifierKeys, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "VirtualKey", typeof(Nullable<Interapptive.Shared.Win32.Native.VirtualKeys>), false, false, false, true,  (int)ShortcutFieldIndex.VirtualKey, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "Barcode", typeof(System.String), false, false, false, false,  (int)ShortcutFieldIndex.Barcode, 50, 0, 0);
+			this.AddElementFieldInfo("ShortcutEntity", "Action", typeof(ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand), false, false, false, false,  (int)ShortcutFieldIndex.Action, 0, 0, 10);
+			this.AddElementFieldInfo("ShortcutEntity", "RelatedObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShortcutFieldIndex.RelatedObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()
@@ -3362,16 +3320,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsProfilePackageEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsProfilePackageFieldIndex), "UpsProfilePackageEntity");
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "UpsProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)UpsProfilePackageFieldIndex.UpsProfilePackageID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)UpsProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackageProfileID", typeof(System.Int64), true, false, true, false,  (int)UpsProfilePackageFieldIndex.PackageProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.PackagingType, 0, 0, 10);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.Weight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("UpsProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "AdditionalHandlingEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
@@ -3495,7 +3445,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
 			this.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
 			this.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
-			this.AddElementFieldInfo("UserSettingsEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanSettings", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanSettings, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);

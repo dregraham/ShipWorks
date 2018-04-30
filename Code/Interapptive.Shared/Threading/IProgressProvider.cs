@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 
 namespace Interapptive.Shared.Threading
@@ -9,7 +11,7 @@ namespace Interapptive.Shared.Threading
     public interface IProgressProvider
     {
         /// <summary>
-        /// Indicates if the current state of the items allows for cancelation.
+        /// Indicates if the current state of the items allows for cancellation.
         /// </summary>
         bool CanCancel { get; }
 
@@ -39,7 +41,7 @@ namespace Interapptive.Shared.Threading
         IProgressReporter AddItem(string name);
 
         /// <summary>
-        /// Request cancelation of the operation in progress
+        /// Request cancellation of the operation in progress
         /// </summary>
         void Cancel();
 
@@ -48,5 +50,15 @@ namespace Interapptive.Shared.Threading
         /// to terminated.
         /// </summary>
         void Terminate(Exception error);
+
+        /// <summary>
+        /// Task that completes when the progress provider is terminated
+        /// </summary>
+        Task<Unit> Terminated { get; }
+
+        /// <summary>
+        /// End the progress provider
+        /// </summary>
+        void Terminate();
     }
 }

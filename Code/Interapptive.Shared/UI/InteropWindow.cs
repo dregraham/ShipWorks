@@ -18,7 +18,7 @@ namespace Interapptive.Shared.UI
         private bool isInitialized = false;
 
         /// <summary>
-        /// Constructor for the designer
+        /// DO NOT USE IN CODE!!! This constructor is for the designer only.
         /// </summary>
         public InteropWindow()
         { }
@@ -27,7 +27,7 @@ namespace Interapptive.Shared.UI
         /// Initializes a new instance of the <see cref="InteropWindow"/> class.
         /// </summary>
         /// <param name="owner">The owner.</param>
-        protected InteropWindow(IWin32Window owner)
+        protected InteropWindow(IWin32Window owner, bool isStateSaverManaged)
         {
             WindowStyle = WindowStyle.ToolWindow;
             ShowInTaskbar = false;
@@ -37,6 +37,28 @@ namespace Interapptive.Shared.UI
             Topmost = true;
 
             LoadOwner(owner);
+
+            if (isStateSaverManaged)
+            {
+                Initialized += delegate
+                {
+                    WindowStateSaver.Manage(this);
+                };
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InteropWindow"/> class.
+        /// </summary>
+        /// <param name="owner">The winforms control that created this control</param>
+        /// <param name="viewModel">The view model for this control</param>
+        protected InteropWindow(IWin32Window owner, object viewModel, bool isStateSaverManaged)
+            : this(owner, isStateSaverManaged)
+        {
+            if (viewModel != null)
+            {
+                DataContext = viewModel;
+            }
         }
 
         /// <summary>
@@ -59,7 +81,7 @@ namespace Interapptive.Shared.UI
         {
             Handle = owner.Handle;
 
-            WindowInteropHelper interopHelper = new WindowInteropHelper(this) {Owner = owner.Handle};
+            WindowInteropHelper interopHelper = new WindowInteropHelper(this) { Owner = owner.Handle };
 
             // Need HwndSource to get handle to owned window,
             // and the handle only exists when SourceInitialized has been raised

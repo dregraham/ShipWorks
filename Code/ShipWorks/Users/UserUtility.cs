@@ -1,27 +1,26 @@
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Filters.Grid;
 using ShipWorks.Filters;
+using ShipWorks.Filters.Grid;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users.Security;
-using System.Data.Common;
-using System.Data.SqlTypes;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Text;
-using System;
-using ShipWorks.ApplicationCore.Options;
 
 
 namespace ShipWorks.Users
@@ -215,7 +214,6 @@ namespace ShipWorks.Users
                 CustomerFilterExpandedFolders = null,
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
-                NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value,
                 SingleScanSettings = (int) SingleScanSettings.Disabled,
                 AutoWeigh = false
             };

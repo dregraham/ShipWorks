@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.UI;
+﻿using System;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Users
 {
@@ -13,8 +14,23 @@ namespace ShipWorks.Users
         bool ShouldShowNotification(UserConditionalNotificationType notificationType);
 
         /// <summary>
+        /// Should the specified notification type be shown
+        /// </summary>
+        bool ShouldShowNotification(UserConditionalNotificationType notificationType, DateTime date);
+
+        /// <summary>
+        /// Start showing the given notification for the user
+        /// </summary>
+        void StartShowingNotification(UserConditionalNotificationType notificationType);
+
+        /// <summary>
         /// Stop showing the given notification for the user
         /// </summary>
         void StopShowingNotification(UserConditionalNotificationType notificationType);
+
+        /// <summary>
+        /// Stop showing the given notification for the user
+        /// </summary>
+        void StopShowingNotificationFor(UserConditionalNotificationType notificationType, TimeSpan waitTime);
     }
 }

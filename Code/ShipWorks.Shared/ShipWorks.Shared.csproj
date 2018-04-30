@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutCommand.cs" />
+    <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryMaterialType.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryPackingType.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Templates\TemplateBuiltinFolders.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Users\DialogSettings.cs" />
+    <Compile Include="Users\NotificationDialogSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

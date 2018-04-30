@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Interapptive.Shared;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -19,7 +19,8 @@ namespace ShipWorks.Users.Security
     /// <summary>
     /// Encapsulates user permission settings and their modifications.
     /// </summary>
-    public class SecurityContext : ISecurityContext
+    [Component(RegistrationType.Self)]
+    public class SecurityContext : BaseSecurityContext
     {
         PermissionSet permissionSet;
         bool isAdmin;
@@ -121,55 +122,13 @@ namespace ShipWorks.Users.Security
         public static SecurityContext EmptySecurityContext => emptySecurityContext.Value;
 
         /// <summary>
-        /// Determines if the current user has the specified permission, and if not, throws a PermissionException.
-        /// </summary>
-        public void DemandPermission(PermissionType type)
-        {
-            DemandPermission(type, null);
-        }
-
-        /// <summary>
-        /// Determines if the current user has the specified permission, and if not, throws a PermissionException. If the PermissionType is
-        /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
-        /// be translated to its order's StoreID.
-        /// </summary>
-        public void DemandPermission(PermissionType type, long? objectID)
-        {
-            if (!HasPermission(type, objectID))
-            {
-                throw new PermissionException(UserSession.User, type);
-            }
-        }
-
-        /// <summary>
-        /// Determines if the current user has the specified permission
-        /// </summary>
-        /// <remarks>
-        /// If the PermissionType is related to orders, then the ObjectID will be automatically translated to a StoreID, 
-        /// such as an OrderItemID would be translated to its order's StoreID.
-        /// </remarks>
-        public Result RequestPermission(PermissionType type, long? objectID) =>
-            HasPermission(type, objectID) ?
-                Result.FromSuccess() :
-                Result.FromError("User does not have permission");
-
-        /// <summary>
-        /// Determines if the user has the specified permission.  This takes into consideration
-        /// permissions that imply other permissions (such as Edit Orders implies Edit Notes)
-        /// </summary>
-        public bool HasPermission(PermissionType type)
-        {
-            return HasPermission(type, null);
-        }
-
-        /// <summary>
         /// Determines if the user has the specified permission for the given object.   This takes into consideration
         /// permissions that imply other permissions (such as Edit Orders implies Edit Notes).  If the PermissionType is
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public bool HasPermission(PermissionType type, long? objectID)
+        public override bool HasPermission(PermissionType type, long? objectID)
         {
             if (isAdmin)
             {
@@ -429,7 +388,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Clear all the cached permissions
         /// </summary>
-        public void ClearPermissionCache()
+        public override void ClearPermissionCache()
         {
             permissionCache.Clear();
             storePermissionCountCache.Clear();
@@ -438,7 +397,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Determines how many stores the user is allowed to do the given permission for
         /// </summary>
-        public StorePermissionCoverage GetRelatedObjectPermissionCoverage(PermissionType type)
+        public override StorePermissionCoverage GetRelatedObjectPermissionCoverage(PermissionType type)
         {
             if (PermissionHelper.GetScope(type) != PermissionScope.IndirectRelatedObject)
             {
@@ -491,7 +450,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Determines how many stores the user is allowed to do the given permission for
         /// </summary>
-        public StorePermissionCoverage GetStorePermissionCoverage(PermissionType permissionType)
+        public override StorePermissionCoverage GetStorePermissionCoverage(PermissionType permissionType)
         {
             if (PermissionHelper.GetScope(permissionType) != PermissionScope.Store)
             {

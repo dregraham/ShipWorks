@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
@@ -30,7 +31,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Execute the command
         /// </summary>
-        public void Execute(List<string> args)
+        public Task Execute(List<string> args)
         {
             try
             {
@@ -80,6 +81,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 log.Error("Failed to regenerate all filters.", ex);
                 Environment.ExitCode = ex.ErrorCode;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:element name="OnTracShipmentStatus">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Packages"/>
+        <xsd:element name="Note" type="xsd:string"/>
+        <xsd:element name="Error" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element> 
+  
+  
+	
+	<xsd:element name="Packages">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Package"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+  
+	<xsd:element name="Package">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Events"/>
+				<xsd:element name="Tracking" type="xsd:string"/>
+				<xsd:element name="Exp_Del_Date" type="xsd:dateTime"/>
+				<xsd:element name="ShipDate" type="xsd:dateTime"/>
+				<xsd:element name="Delivered" type="xsd:boolean"/>
+				<xsd:element name="Zip" type="xsd:string"/>
+				<xsd:element name="Service" type="xsd:string"/>
+				<xsd:element name="POD" type="xsd:string"/>
+				<xsd:element name="Error" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="Events">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Event" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+  
+	<xsd:element name="Event">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Status" type="xsd:string"/>
+				<xsd:element name="Description" type="xsd:string"/>
+				<xsd:element name="EventTime" type="xsd:dateTime"/>
+				<xsd:element name="Facility" type="xsd:string"/>
+				<xsd:element name="City" type="xsd:string"/>
+				<xsd:element name="State" type="xsd:string"/>
+				<xsd:element name="Zip" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

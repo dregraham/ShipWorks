@@ -5,9 +5,9 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -16,7 +16,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// Class for managing the login session and connectivity to SQL Server
     /// </summary>
-    public class SqlSession
+    public class SqlSession : ISqlSession
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Data.Connection
         // Cached properties of the server
         string serverMachineName;
         Version serverVersion;
-        
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -134,11 +134,20 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Needs to be called whenver a core property of teh connection string changes
+        /// Name of the database this session is for
+        /// </summary>
+        public string DatabaseName
+        {
+            get => Configuration?.DatabaseName;
+            set => Configuration.ToResult().Do(x => x.DatabaseName = value);
+        }
+
+        /// <summary>
+        /// Needs to be called whenever a core property of the connection string changes
         /// </summary>
         private void ConnectionChanged()
         {
-            // This forces the time to be regotten the next time asked for
+            // This forces the time to be refreshed the next time asked for
             SqlDateTimeProvider.Current.ResetCache();
 
             // Set cached properties so that they will get re-populated when asked for.
@@ -175,19 +184,37 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public void TestConnection()
+        public bool TestConnection()
         {
-            TestConnection(TimeSpan.FromSeconds(10));
+            return TestConnection(TimeSpan.FromSeconds(10));
         }
 
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public void TestConnection(TimeSpan timeout)
+        public bool TestConnection(TimeSpan timeout)
         {
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
             csb.ConnectTimeout = (int) timeout.TotalSeconds;
 
+            // First check to see if the database is in single user mode
+            string originalDatabaseName = csb.InitialCatalog;
+            csb.InitialCatalog = "master";
+
+            using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
+            {
+                con.Open();
+
+                if (SqlUtility.IsSingleUser(con, originalDatabaseName))
+                {
+                    return false;
+                }
+
+                con.Close();
+            }
+
+            // The db isn't single user, so try connecting to it.
+            csb.InitialCatalog = originalDatabaseName;
             using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
             {
                 con.Open();
@@ -196,6 +223,8 @@ namespace ShipWorks.Data.Connection
 
                 con.Close();
             }
+
+            return true;
         }
 
         /// <summary>
@@ -205,9 +234,7 @@ namespace ShipWorks.Data.Connection
         {
             try
             {
-                TestConnection();
-
-                return true;
+                return TestConnection();
             }
             catch (SqlException)
             {
@@ -469,13 +496,13 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// The state of the configuration used to connect to SQL Server
         /// </summary>
-        public static bool IsConfigured
-        {
-            get
-            {
-                return SqlSession.Current != null;
-            }
-        }
+        public static bool IsConfigured => Current != null;
+
+        /// <summary>
+        /// Create a copy of the current SqlSession
+        /// </summary>
+        public ISqlSession CreateCopy() =>
+            new SqlSession(new SqlSessionConfiguration(Configuration));
 
         /// <summary>
         /// Gets a connection string, based on specified ConnectionString, and modifies it to have a new

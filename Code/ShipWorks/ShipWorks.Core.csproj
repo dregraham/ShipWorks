@@ -894,6 +894,12 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Options\OptionPageShortcuts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Options\OptionPageShortcuts.Designer.cs">
+      <DependentUpon>OptionPageShortcuts.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Options\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
@@ -953,6 +959,26 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotification.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationManager.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationViewModel.cs" />
+    <Compile Include="Data\Administration\IShipWorksDatabaseUtility.cs" />
+    <Compile Include="Data\Administration\ISqlDatabaseDetail.cs" />
+    <Compile Include="Data\Administration\ShipWorksDatabaseUtilityWrapper.cs" />
+    <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\ArchiveConstants.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
+    <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
@@ -960,11 +986,11 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\IKeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\IShortcutManager.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutManager.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutTriggerType.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Net\IJsonRequest.cs" />
     <Compile Include="Common\Net\JsonRequest.cs" />
@@ -997,6 +1023,7 @@
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlServerEditionType.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\IVersionSpecificUpdate.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_24_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_16_01_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\SqlServerCompatibilityFix.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00.cs" />
@@ -1077,10 +1104,12 @@
     <Compile Include="Filters\Search\SingleScanSearchCondition.cs" />
     <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Messaging\Messages\KeyboardShortcutMessage.cs" />
+    <Compile Include="Messaging\Messages\ShortcutMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\DisableSingleScanInputFilterMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\EnableSingleScanInputFilterMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\ScanMessage.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\ScanMessageBroker.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\SingleScanMessage.cs" />
     <Compile Include="Messaging\Messages\Filters\SingleScanFilterUpdateCompleteMessage.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
@@ -1316,6 +1345,12 @@
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
     <Compile Include="Shipping\Carriers\IShipmentDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.cs">
+      <DependentUpon>EasyTrackResponse.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.cs">
+      <DependentUpon>OnTracDirectPostShipmentRequest.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -1430,6 +1465,13 @@
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
+    <Compile Include="Shipping\Profiles\IProfileControlFactory.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfile.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileApplicationStrategyFactory.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileService.cs" />
+    <Compile Include="Shipping\Profiles\ProfileAppliedMessage.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfile.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
@@ -1437,6 +1479,7 @@
     <Compile Include="Shipping\IShippingOriginManager.cs" />
     <Compile Include="Shipping\Services\IAutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Services\IShippingProfileRepository.cs" />
     <Compile Include="Shipping\Services\ISingleScanOrderConfirmationService.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
@@ -2101,9 +2144,13 @@
     <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Printing\BarcodePrintJob.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
+    <Compile Include="Templates\Printing\IPrintJob.cs" />
+    <Compile Include="Templates\Printing\IPrintJobFactory.cs" />
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
+    <Compile Include="Templates\Printing\PrintJobFactory.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
@@ -5524,13 +5571,6 @@
     <Compile Include="Shipping\Profiles\ShippingProfileEditorDlg.Designer.cs">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerDlg.Designer.cs">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Profiles\ShippingProfileUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingActionUtility.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderControl.cs">
       <SubType>UserControl</SubType>
@@ -6895,6 +6935,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Nudges\NudgeDlg.resx">
       <DependentUpon>NudgeDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Options\OptionPageShortcuts.resx">
+      <DependentUpon>OptionPageShortcuts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>
@@ -8608,16 +8651,21 @@
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />
+    <Compile Include="Users\IUserLoginWorkflow.cs" />
+    <Compile Include="Users\Security\ISecurityContextFactory.cs" />
     <Compile Include="Users\IUserConditionalNotification.cs" />
     <Compile Include="Users\IUserService.cs" />
     <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Logon\LogonCredentials.cs" />
+    <Compile Include="Users\Security\SecurityContextFactory.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Users\Security\AddStorePermissionsDlg.Designer.cs">
       <DependentUpon>AddStorePermissionsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Security\ArchiveSecurityContext.cs" />
+    <Compile Include="Users\Security\BaseSecurityContext.cs" />
     <Compile Include="Users\Security\ISecurityContext.cs" />
     <Compile Include="Users\Security\PermissionAwareDeleter.cs" />
     <Compile Include="Users\Security\PermissionBinding.cs" />
@@ -8663,6 +8711,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
     <Compile Include="Users\UserServiceLogonResultType.cs" />
@@ -8812,6 +8861,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shipping\Fakes\FakeFIMSLabel.pdf" />
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExEULA.rtf" />
+    <Resource Include="Resources\Font Awesome 5 Free-Solid-900.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v5.wsdl" />
@@ -8829,6 +8881,15 @@
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v12.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ValidationAvailabilityAndCommitmentService_v6.wsdl" />
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -9621,9 +9682,6 @@
     <EmbeddedResource Include="Shipping\Profiles\ShippingProfileEditorDlg.resx">
       <DependentUpon>ShippingProfileEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Profiles\ShippingProfileManagerDlg.resx">
-      <DependentUpon>ShippingProfileManagerDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShippingProviderControl.resx">
       <DependentUpon>ShippingProviderControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10282,7 +10340,7 @@
     <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
-    <None Include="Resources\edit.png" />
+    <Resource Include="Resources\edit.png" />
     <None Include="Resources\rename.png" />
     <None Include="Resources\folderclosed_copy.png" />
     <None Include="Resources\CopyFolderHS.png" />
@@ -10375,7 +10433,7 @@
     <None Include="Resources\gear_run.png" />
     <None Include="Resources\funnel1.png" />
     <None Include="Resources\school3.png" />
-    <None Include="Resources\printer.png" />
+    <Resource Include="Resources\printer.png" />
     <None Include="Resources\printer_view.png" />
     <None Include="Resources\printer1.png" />
     <None Include="Resources\printer_view1.png" />
@@ -10707,6 +10765,13 @@
     <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
+    <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <Content Include="Resources\data_16.png" />
+    <Content Include="Resources\data_error_16.png" />
+    <Content Include="Resources\data_ok_16.png" />
+    <Content Include="Resources\data_time.png" />
+    <Content Include="Resources\data_time_16.png" />
+    <Content Include="Resources\data_unknown_16.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />
@@ -11115,6 +11180,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Archiving\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>

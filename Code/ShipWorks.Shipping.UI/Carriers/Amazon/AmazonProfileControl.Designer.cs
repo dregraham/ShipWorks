@@ -41,6 +41,9 @@
             this.insuranceState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge10 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupShipment = new System.Windows.Forms.GroupBox();
+            this.serviceState = new System.Windows.Forms.CheckBox();
+            this.labelService = new System.Windows.Forms.Label();
+            this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.deliveryExperience = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelDeliveryExperience = new System.Windows.Forms.Label();
             this.deliveryExperienceState = new System.Windows.Forms.CheckBox();
@@ -52,9 +55,6 @@
             this.labelWeight = new System.Windows.Forms.Label();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.labelService = new System.Windows.Forms.Label();
-            this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.serviceState = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupBoxFrom.SuspendLayout();
@@ -98,7 +98,7 @@
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
             this.groupBoxFrom.Size = new System.Drawing.Size(405, 57);
-            this.groupBoxFrom.TabIndex = 12;
+            this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
             // 
@@ -119,7 +119,7 @@
             this.labelSender.Location = new System.Drawing.Point(67, 27);
             this.labelSender.Name = "labelSender";
             this.labelSender.Size = new System.Drawing.Size(39, 13);
-            this.labelSender.TabIndex = 12;
+            this.labelSender.TabIndex = 70;
             this.labelSender.Text = "Origin:";
             // 
             // originCombo
@@ -130,7 +130,7 @@
             this.originCombo.Name = "originCombo";
             this.originCombo.PromptText = "(Multiple Values)";
             this.originCombo.Size = new System.Drawing.Size(206, 21);
-            this.originCombo.TabIndex = 3;
+            this.originCombo.TabIndex = 1;
             // 
             // originState
             // 
@@ -140,7 +140,7 @@
             this.originState.Location = new System.Drawing.Point(9, 26);
             this.originState.Name = "originState";
             this.originState.Size = new System.Drawing.Size(15, 14);
-            this.originState.TabIndex = 2;
+            this.originState.TabIndex = 0;
             this.originState.Tag = "";
             this.originState.UseVisualStyleBackColor = true;
             // 
@@ -154,7 +154,7 @@
             this.groupInsurance.Location = new System.Drawing.Point(6, 266);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(405, 76);
-            this.groupInsurance.TabIndex = 11;
+            this.groupInsurance.TabIndex = 2;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -164,7 +164,7 @@
             this.insuranceControl.Location = new System.Drawing.Point(35, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -206,9 +206,43 @@
             this.groupShipment.Location = new System.Drawing.Point(6, 69);
             this.groupShipment.Name = "groupShipment";
             this.groupShipment.Size = new System.Drawing.Size(405, 191);
-            this.groupShipment.TabIndex = 5;
+            this.groupShipment.TabIndex = 1;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
+            // 
+            // serviceState
+            // 
+            this.serviceState.AutoSize = true;
+            this.serviceState.Checked = true;
+            this.serviceState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.serviceState.Location = new System.Drawing.Point(9, 23);
+            this.serviceState.Name = "serviceState";
+            this.serviceState.Size = new System.Drawing.Size(15, 14);
+            this.serviceState.TabIndex = 0;
+            this.serviceState.Tag = "";
+            this.serviceState.UseVisualStyleBackColor = true;
+            // 
+            // labelService
+            // 
+            this.labelService.AutoSize = true;
+            this.labelService.BackColor = System.Drawing.Color.White;
+            this.labelService.Location = new System.Drawing.Point(60, 23);
+            this.labelService.Name = "labelService";
+            this.labelService.Size = new System.Drawing.Size(46, 13);
+            this.labelService.TabIndex = 79;
+            this.labelService.Text = "Service:";
+            // 
+            // service
+            // 
+            this.service.DisplayMember = "Description";
+            this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.service.FormattingEnabled = true;
+            this.service.Location = new System.Drawing.Point(112, 20);
+            this.service.Name = "service";
+            this.service.PromptText = "(Multiple Values)";
+            this.service.Size = new System.Drawing.Size(220, 21);
+            this.service.TabIndex = 1;
+            this.service.ValueMember = "ShippingServiceId";
             // 
             // deliveryExperience
             // 
@@ -218,7 +252,7 @@
             this.deliveryExperience.Name = "deliveryExperience";
             this.deliveryExperience.PromptText = "(Multiple Values)";
             this.deliveryExperience.Size = new System.Drawing.Size(220, 21);
-            this.deliveryExperience.TabIndex = 5;
+            this.deliveryExperience.TabIndex = 7;
             // 
             // labelDeliveryExperience
             // 
@@ -238,7 +272,7 @@
             this.deliveryExperienceState.Location = new System.Drawing.Point(9, 161);
             this.deliveryExperienceState.Name = "deliveryExperienceState";
             this.deliveryExperienceState.Size = new System.Drawing.Size(15, 14);
-            this.deliveryExperienceState.TabIndex = 74;
+            this.deliveryExperienceState.TabIndex = 6;
             this.deliveryExperienceState.Tag = "";
             this.deliveryExperienceState.UseVisualStyleBackColor = true;
             // 
@@ -250,7 +284,7 @@
             this.dimensionsState.Location = new System.Drawing.Point(9, 82);
             this.dimensionsState.Name = "dimensionsState";
             this.dimensionsState.Size = new System.Drawing.Size(15, 14);
-            this.dimensionsState.TabIndex = 73;
+            this.dimensionsState.TabIndex = 4;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
             // 
@@ -262,7 +296,7 @@
             this.dimensionsControl.Location = new System.Drawing.Point(109, 78);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 2;
+            this.dimensionsControl.TabIndex = 5;
             // 
             // labelDimensions
             // 
@@ -282,7 +316,7 @@
             this.weightState.Location = new System.Drawing.Point(9, 53);
             this.weightState.Name = "weightState";
             this.weightState.Size = new System.Drawing.Size(15, 14);
-            this.weightState.TabIndex = 70;
+            this.weightState.TabIndex = 2;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
             // 
@@ -298,7 +332,7 @@
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(269, 24);
-            this.weight.TabIndex = 1;
+            this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
             // 
             // labelWeight
@@ -321,40 +355,6 @@
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 163);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            // 
-            // labelService
-            // 
-            this.labelService.AutoSize = true;
-            this.labelService.BackColor = System.Drawing.Color.White;
-            this.labelService.Location = new System.Drawing.Point(60, 23);
-            this.labelService.Name = "labelService";
-            this.labelService.Size = new System.Drawing.Size(46, 13);
-            this.labelService.TabIndex = 79;
-            this.labelService.Text = "Service:";
-            // 
-            // service
-            // 
-            this.service.DisplayMember = "Description";
-            this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.service.FormattingEnabled = true;
-            this.service.Location = new System.Drawing.Point(112, 20);
-            this.service.Name = "service";
-            this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(220, 21);
-            this.service.TabIndex = 78;
-            this.service.ValueMember = "ShippingServiceId";
-            // 
-            // serviceState
-            // 
-            this.serviceState.AutoSize = true;
-            this.serviceState.Checked = true;
-            this.serviceState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.serviceState.Location = new System.Drawing.Point(9, 23);
-            this.serviceState.Name = "serviceState";
-            this.serviceState.Size = new System.Drawing.Size(15, 14);
-            this.serviceState.TabIndex = 80;
-            this.serviceState.Tag = "";
-            this.serviceState.UseVisualStyleBackColor = true;
             // 
             // AmazonProfileControl
             // 

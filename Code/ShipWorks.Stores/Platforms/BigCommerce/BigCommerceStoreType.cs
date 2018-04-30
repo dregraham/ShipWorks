@@ -126,6 +126,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             var item = new Lazy<BigCommerceOrderItemEntity>(() => (BigCommerceOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("BigCommerce");
+            outline.AddElement("OrderProductID", () => item.Value.OrderProductID);
+            outline.AddElement("ParentOrderProductID", () => item.Value.ParentOrderProductID);
             outline.AddElement("DigitalItem", () => item.Value.IsDigitalItem);
             outline.AddElement("EventDate", () => item.Value.EventDate);
             outline.AddElement("EventName", () => item.Value.EventName);

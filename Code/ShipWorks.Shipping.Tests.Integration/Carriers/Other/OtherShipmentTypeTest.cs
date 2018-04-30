@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,7 +28,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Other
         public OtherShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Build<ISqlAdapter>()));
+                mock =>
+                {
+                    mock.Provide(mock.Build<ISqlAdapter>());
+                    mock.Override<IMainForm>();
+                });
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 

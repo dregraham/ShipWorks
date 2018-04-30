@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -12,7 +12,6 @@
     <Name>ShipWorks.SingleScan</Name>
     <Name>ShipWorks.Stores</Name>
     <Name>ShipWorks.Stores.UI</Name>
-    <Name>ShipWorks.ThirdPartyApi</Name>
     <Name>ShipWorks.UI</Name>
   </Assemblies>
   <FrameworkAssemblies>

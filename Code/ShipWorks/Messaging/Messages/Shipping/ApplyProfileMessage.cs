@@ -12,11 +12,11 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplyProfileMessage(object sender, long shipmentID, IShippingProfileEntity profile)
+        public ApplyProfileMessage(object sender, long shipmentID, long profileID)
         {
             Sender = sender;
             ShipmentID = shipmentID;
-            Profile = profile;
+            ProfileID = profileID;
             MessageId = Guid.NewGuid();
         }
 
@@ -38,6 +38,6 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Profile to be applied
         /// </summary>
-        public IShippingProfileEntity Profile { get; }
+        public long ProfileID { get; }
     }
 }

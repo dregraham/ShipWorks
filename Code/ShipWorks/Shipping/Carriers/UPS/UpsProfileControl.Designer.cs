@@ -83,7 +83,6 @@
             this.emailNotifySenderState = new System.Windows.Forms.CheckBox();
             this.emailNotifyMessage = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelPersonalMessage = new System.Windows.Forms.Label();
-            this.kryptonBorderEdgeEmail2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.emailNotifyOtherShip = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherException = new System.Windows.Forms.CheckBox();
@@ -91,7 +90,6 @@
             this.emailNotifyRecipientDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifyRecipientException = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherAddress = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.kryptonBorderEdgeEmail = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelEmailOther = new System.Windows.Forms.Label();
             this.labelEmailRecipient = new System.Windows.Forms.Label();
             this.labelEmailSender = new System.Windows.Forms.Label();
@@ -180,14 +178,16 @@
             this.packagesCount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackages = new System.Windows.Forms.Label();
             this.packagesState = new System.Windows.Forms.CheckBox();
-            this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
             this.groupBoxGeneral = new System.Windows.Forms.GroupBox();
+            this.customsDescription = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelCustomsDescription = new System.Windows.Forms.Label();
             this.customsDescState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge12 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.customsDescription = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.kryptonBorderEdgeEmail2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.kryptonBorderEdgeEmail = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupLabels.SuspendLayout();
@@ -203,9 +203,9 @@
             this.groupBoxFrom.SuspendLayout();
             this.tabPagePackages.SuspendLayout();
             this.groupBoxPackages.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.tabPageCustoms.SuspendLayout();
             this.groupBoxGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -251,7 +251,7 @@
             this.groupLabels.Location = new System.Drawing.Point(6, 221);
             this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(405, 58);
-            this.groupLabels.TabIndex = 12;
+            this.groupLabels.TabIndex = 3;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
             // 
@@ -262,7 +262,7 @@
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
             this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 101;
+            this.requestedLabelFormat.TabIndex = 1;
             // 
             // requestedLabelFormatState
             // 
@@ -304,7 +304,7 @@
             this.surePostGroup.Location = new System.Drawing.Point(6, 1315);
             this.surePostGroup.Name = "surePostGroup";
             this.surePostGroup.Size = new System.Drawing.Size(405, 127);
-            this.surePostGroup.TabIndex = 11;
+            this.surePostGroup.TabIndex = 9;
             this.surePostGroup.TabStop = false;
             this.surePostGroup.Text = "SurePost / Mail Innovations";
             this.surePostGroup.Visible = false;
@@ -314,7 +314,7 @@
             this.packageId.Location = new System.Drawing.Point(178, 69);
             this.packageId.Name = "packageId";
             this.packageId.Size = new System.Drawing.Size(200, 21);
-            this.packageId.TabIndex = 108;
+            this.packageId.TabIndex = 5;
             // 
             // packageIdState
             // 
@@ -322,7 +322,7 @@
             this.packageIdState.Location = new System.Drawing.Point(9, 72);
             this.packageIdState.Name = "packageIdState";
             this.packageIdState.Size = new System.Drawing.Size(15, 14);
-            this.packageIdState.TabIndex = 110;
+            this.packageIdState.TabIndex = 4;
             this.packageIdState.UseVisualStyleBackColor = true;
             // 
             // labelPackageId
@@ -341,7 +341,7 @@
             this.irregularIndicatorState.Location = new System.Drawing.Point(9, 99);
             this.irregularIndicatorState.Name = "irregularIndicatorState";
             this.irregularIndicatorState.Size = new System.Drawing.Size(15, 14);
-            this.irregularIndicatorState.TabIndex = 107;
+            this.irregularIndicatorState.TabIndex = 6;
             this.irregularIndicatorState.UseVisualStyleBackColor = true;
             // 
             // irregularIndicator
@@ -352,7 +352,7 @@
             this.irregularIndicator.Name = "irregularIndicator";
             this.irregularIndicator.PromptText = "(Multiple Values)";
             this.irregularIndicator.Size = new System.Drawing.Size(200, 21);
-            this.irregularIndicator.TabIndex = 106;
+            this.irregularIndicator.TabIndex = 7;
             // 
             // labelIrregularIndicator
             // 
@@ -369,7 +369,7 @@
             this.costCenter.Location = new System.Drawing.Point(178, 44);
             this.costCenter.Name = "costCenter";
             this.costCenter.Size = new System.Drawing.Size(200, 21);
-            this.costCenter.TabIndex = 100;
+            this.costCenter.TabIndex = 3;
             // 
             // costCenterState
             // 
@@ -377,7 +377,7 @@
             this.costCenterState.Location = new System.Drawing.Point(9, 47);
             this.costCenterState.Name = "costCenterState";
             this.costCenterState.Size = new System.Drawing.Size(15, 14);
-            this.costCenterState.TabIndex = 104;
+            this.costCenterState.TabIndex = 2;
             this.costCenterState.UseVisualStyleBackColor = true;
             // 
             // labelCostCenter
@@ -396,7 +396,7 @@
             this.surePostClassificationState.Location = new System.Drawing.Point(9, 20);
             this.surePostClassificationState.Name = "surePostClassificationState";
             this.surePostClassificationState.Size = new System.Drawing.Size(15, 14);
-            this.surePostClassificationState.TabIndex = 101;
+            this.surePostClassificationState.TabIndex = 0;
             this.surePostClassificationState.UseVisualStyleBackColor = true;
             // 
             // kryptonBorderEdge9
@@ -418,7 +418,7 @@
             this.surePostClassification.Name = "surePostClassification";
             this.surePostClassification.PromptText = "(Multiple Values)";
             this.surePostClassification.Size = new System.Drawing.Size(200, 21);
-            this.surePostClassification.TabIndex = 10;
+            this.surePostClassification.TabIndex = 1;
             // 
             // labelSurePostClassification
             // 
@@ -440,7 +440,7 @@
             this.groupInsurance.Location = new System.Drawing.Point(6, 285);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(405, 82);
-            this.groupInsurance.TabIndex = 10;
+            this.groupInsurance.TabIndex = 4;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
             // 
@@ -450,7 +450,7 @@
             this.insuranceControl.Location = new System.Drawing.Point(45, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
-            this.insuranceControl.TabIndex = 97;
+            this.insuranceControl.TabIndex = 1;
             // 
             // insuranceState
             // 
@@ -491,7 +491,7 @@
             this.returnGroup.Location = new System.Drawing.Point(6, 1180);
             this.returnGroup.Name = "returnGroup";
             this.returnGroup.Size = new System.Drawing.Size(405, 130);
-            this.returnGroup.TabIndex = 7;
+            this.returnGroup.TabIndex = 8;
             this.returnGroup.TabStop = false;
             this.returnGroup.Text = "Return Service";
             // 
@@ -501,7 +501,7 @@
             this.returnShipment.Location = new System.Drawing.Point(78, 25);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
-            this.returnShipment.TabIndex = 99;
+            this.returnShipment.TabIndex = 1;
             this.returnShipment.Text = "This is a return shipment";
             this.returnShipment.UseVisualStyleBackColor = true;
             // 
@@ -511,7 +511,7 @@
             this.returnState.Location = new System.Drawing.Point(8, 26);
             this.returnState.Name = "returnState";
             this.returnState.Size = new System.Drawing.Size(15, 14);
-            this.returnState.TabIndex = 98;
+            this.returnState.TabIndex = 0;
             this.returnState.UseVisualStyleBackColor = true;
             // 
             // returnContents
@@ -520,7 +520,7 @@
             this.returnContents.MaxLength = 32767;
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(200, 21);
-            this.returnContents.TabIndex = 86;
+            this.returnContents.TabIndex = 5;
             this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // returnService
@@ -531,14 +531,14 @@
             this.returnService.Name = "returnService";
             this.returnService.PromptText = "(Multiple Values)";
             this.returnService.Size = new System.Drawing.Size(200, 21);
-            this.returnService.TabIndex = 85;
+            this.returnService.TabIndex = 3;
             // 
             // returnUndeliverable
             // 
             this.returnUndeliverable.Location = new System.Drawing.Point(178, 102);
             this.returnUndeliverable.Name = "returnUndeliverable";
             this.returnUndeliverable.Size = new System.Drawing.Size(200, 21);
-            this.returnUndeliverable.TabIndex = 84;
+            this.returnUndeliverable.TabIndex = 7;
             // 
             // labelUndeliverableMail
             // 
@@ -575,7 +575,7 @@
             this.returnUndeliverableState.Location = new System.Drawing.Point(8, 104);
             this.returnUndeliverableState.Name = "returnUndeliverableState";
             this.returnUndeliverableState.Size = new System.Drawing.Size(15, 14);
-            this.returnUndeliverableState.TabIndex = 77;
+            this.returnUndeliverableState.TabIndex = 6;
             this.returnUndeliverableState.Tag = "";
             this.returnUndeliverableState.UseVisualStyleBackColor = true;
             // 
@@ -587,7 +587,7 @@
             this.returnServiceState.Location = new System.Drawing.Point(8, 52);
             this.returnServiceState.Name = "returnServiceState";
             this.returnServiceState.Size = new System.Drawing.Size(15, 14);
-            this.returnServiceState.TabIndex = 75;
+            this.returnServiceState.TabIndex = 2;
             this.returnServiceState.Tag = "";
             this.returnServiceState.UseVisualStyleBackColor = true;
             // 
@@ -599,7 +599,7 @@
             this.returnContentsState.Location = new System.Drawing.Point(8, 79);
             this.returnContentsState.Name = "returnContentsState";
             this.returnContentsState.Size = new System.Drawing.Size(15, 14);
-            this.returnContentsState.TabIndex = 74;
+            this.returnContentsState.TabIndex = 4;
             this.returnContentsState.Tag = "";
             this.returnContentsState.UseVisualStyleBackColor = true;
             // 
@@ -653,7 +653,7 @@
             this.groupEmail.Location = new System.Drawing.Point(6, 874);
             this.groupEmail.Name = "groupEmail";
             this.groupEmail.Size = new System.Drawing.Size(405, 299);
-            this.groupEmail.TabIndex = 6;
+            this.groupEmail.TabIndex = 7;
             this.groupEmail.TabStop = false;
             this.groupEmail.Text = "Quantum View Notify";
             // 
@@ -665,7 +665,7 @@
             this.emailNotifyFromState.Location = new System.Drawing.Point(8, 161);
             this.emailNotifyFromState.Name = "emailNotifyFromState";
             this.emailNotifyFromState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyFromState.TabIndex = 57;
+            this.emailNotifyFromState.TabIndex = 13;
             this.emailNotifyFromState.Tag = "";
             this.emailNotifyFromState.UseVisualStyleBackColor = true;
             // 
@@ -677,7 +677,7 @@
             this.emailNotifySubjectState.Location = new System.Drawing.Point(8, 187);
             this.emailNotifySubjectState.Name = "emailNotifySubjectState";
             this.emailNotifySubjectState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySubjectState.TabIndex = 56;
+            this.emailNotifySubjectState.TabIndex = 15;
             this.emailNotifySubjectState.Tag = "";
             this.emailNotifySubjectState.UseVisualStyleBackColor = true;
             // 
@@ -688,7 +688,7 @@
             this.emailSubject.Location = new System.Drawing.Point(113, 186);
             this.emailSubject.Name = "emailSubject";
             this.emailSubject.Size = new System.Drawing.Size(165, 21);
-            this.emailSubject.TabIndex = 14;
+            this.emailSubject.TabIndex = 16;
             // 
             // labelEmailSubject
             // 
@@ -705,7 +705,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.emailFrom, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsQvnFrom);
             this.emailFrom.Name = "emailFrom";
             this.emailFrom.Size = new System.Drawing.Size(165, 21);
-            this.emailFrom.TabIndex = 13;
+            this.emailFrom.TabIndex = 14;
             // 
             // labelEmailFrom
             // 
@@ -724,7 +724,7 @@
             this.emailNotifyMessageState.Location = new System.Drawing.Point(8, 211);
             this.emailNotifyMessageState.Name = "emailNotifyMessageState";
             this.emailNotifyMessageState.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyMessageState.TabIndex = 51;
+            this.emailNotifyMessageState.TabIndex = 17;
             this.emailNotifyMessageState.Tag = "";
             this.emailNotifyMessageState.UseVisualStyleBackColor = true;
             // 
@@ -784,7 +784,7 @@
             this.emailNotifyMessage.Name = "emailNotifyMessage";
             this.emailNotifyMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.emailNotifyMessage.Size = new System.Drawing.Size(319, 61);
-            this.emailNotifyMessage.TabIndex = 15;
+            this.emailNotifyMessage.TabIndex = 18;
             // 
             // labelPersonalMessage
             // 
@@ -795,17 +795,6 @@
             this.labelPersonalMessage.Size = new System.Drawing.Size(144, 13);
             this.labelPersonalMessage.TabIndex = 45;
             this.labelPersonalMessage.Text = "Personal Message (Optional)";
-            // 
-            // kryptonBorderEdgeEmail2
-            // 
-            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdgeEmail2.AutoSize = false;
-            this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 150);
-            this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(340, 1);
-            this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
             // 
@@ -874,17 +863,6 @@
             this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
             this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
             this.emailNotifyOtherAddress.TabIndex = 9;
-            // 
-            // kryptonBorderEdgeEmail
-            // 
-            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdgeEmail.AutoSize = false;
-            this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
-            this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(340, 1);
-            this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
             // 
@@ -1035,7 +1013,7 @@
             this.groupBilling.Location = new System.Drawing.Point(6, 614);
             this.groupBilling.Name = "groupBilling";
             this.groupBilling.Size = new System.Drawing.Size(405, 253);
-            this.groupBilling.TabIndex = 5;
+            this.groupBilling.TabIndex = 6;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";
             // 
@@ -1044,7 +1022,7 @@
             this.payorDutiesPostalCode.Location = new System.Drawing.Point(158, 195);
             this.payorDutiesPostalCode.Name = "payorDutiesPostalCode";
             this.payorDutiesPostalCode.Size = new System.Drawing.Size(173, 21);
-            this.payorDutiesPostalCode.TabIndex = 77;
+            this.payorDutiesPostalCode.TabIndex = 10;
             // 
             // labelPayorDutiesPostalCode
             // 
@@ -1074,14 +1052,14 @@
             this.payorDutiesCountry.Name = "payorDutiesCountry";
             this.payorDutiesCountry.PromptText = "(Multiple Values)";
             this.payorDutiesCountry.Size = new System.Drawing.Size(173, 21);
-            this.payorDutiesCountry.TabIndex = 79;
+            this.payorDutiesCountry.TabIndex = 11;
             // 
             // payorDutiesAccount
             // 
             this.payorDutiesAccount.Location = new System.Drawing.Point(158, 168);
             this.payorDutiesAccount.Name = "payorDutiesAccount";
             this.payorDutiesAccount.Size = new System.Drawing.Size(173, 21);
-            this.payorDutiesAccount.TabIndex = 76;
+            this.payorDutiesAccount.TabIndex = 9;
             // 
             // labelPayorDutiesAccount
             // 
@@ -1101,7 +1079,7 @@
             this.payorDutiesAccountState.Location = new System.Drawing.Point(8, 169);
             this.payorDutiesAccountState.Name = "payorDutiesAccountState";
             this.payorDutiesAccountState.Size = new System.Drawing.Size(15, 14);
-            this.payorDutiesAccountState.TabIndex = 75;
+            this.payorDutiesAccountState.TabIndex = 8;
             this.payorDutiesAccountState.Tag = "";
             this.payorDutiesAccountState.UseVisualStyleBackColor = true;
             // 
@@ -1113,7 +1091,7 @@
             this.payorDutiesState.Location = new System.Drawing.Point(8, 143);
             this.payorDutiesState.Name = "payorDutiesState";
             this.payorDutiesState.Size = new System.Drawing.Size(15, 14);
-            this.payorDutiesState.TabIndex = 73;
+            this.payorDutiesState.TabIndex = 6;
             this.payorDutiesState.Tag = "";
             this.payorDutiesState.UseVisualStyleBackColor = true;
             // 
@@ -1125,7 +1103,7 @@
             this.payorDuties.Name = "payorDuties";
             this.payorDuties.PromptText = "(Multiple Values)";
             this.payorDuties.Size = new System.Drawing.Size(173, 21);
-            this.payorDuties.TabIndex = 74;
+            this.payorDuties.TabIndex = 7;
             // 
             // labelPayorDuties
             // 
@@ -1278,7 +1256,7 @@
             this.groupOptions.Location = new System.Drawing.Point(6, 376);
             this.groupOptions.Name = "groupOptions";
             this.groupOptions.Size = new System.Drawing.Size(405, 230);
-            this.groupOptions.TabIndex = 4;
+            this.groupOptions.TabIndex = 5;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
@@ -1288,7 +1266,7 @@
             this.usePaperlessInvoice.Location = new System.Drawing.Point(159, 156);
             this.usePaperlessInvoice.Name = "usePaperlessInvoice";
             this.usePaperlessInvoice.Size = new System.Drawing.Size(129, 17);
-            this.usePaperlessInvoice.TabIndex = 111;
+            this.usePaperlessInvoice.TabIndex = 11;
             this.usePaperlessInvoice.Text = "Use paperless invoice";
             this.usePaperlessInvoice.UseVisualStyleBackColor = true;
             // 
@@ -1310,7 +1288,7 @@
             this.usePaperlessInvoiceState.Location = new System.Drawing.Point(9, 157);
             this.usePaperlessInvoiceState.Name = "usePaperlessInvoiceState";
             this.usePaperlessInvoiceState.Size = new System.Drawing.Size(15, 14);
-            this.usePaperlessInvoiceState.TabIndex = 110;
+            this.usePaperlessInvoiceState.TabIndex = 10;
             this.usePaperlessInvoiceState.Tag = "";
             this.usePaperlessInvoiceState.UseVisualStyleBackColor = true;
             // 
@@ -1320,7 +1298,7 @@
             this.carbonNeutral.Location = new System.Drawing.Point(159, 207);
             this.carbonNeutral.Name = "carbonNeutral";
             this.carbonNeutral.Size = new System.Drawing.Size(99, 17);
-            this.carbonNeutral.TabIndex = 108;
+            this.carbonNeutral.TabIndex = 15;
             this.carbonNeutral.Text = "Carbon Neutral";
             this.carbonNeutral.UseVisualStyleBackColor = true;
             // 
@@ -1342,7 +1320,7 @@
             this.carbonNeutralState.Location = new System.Drawing.Point(9, 208);
             this.carbonNeutralState.Name = "carbonNeutralState";
             this.carbonNeutralState.Size = new System.Drawing.Size(15, 14);
-            this.carbonNeutralState.TabIndex = 107;
+            this.carbonNeutralState.TabIndex = 14;
             this.carbonNeutralState.Tag = "";
             this.carbonNeutralState.UseVisualStyleBackColor = true;
             // 
@@ -1352,7 +1330,7 @@
             this.extraDocuments.Location = new System.Drawing.Point(159, 181);
             this.extraDocuments.Name = "extraDocuments";
             this.extraDocuments.Size = new System.Drawing.Size(159, 17);
-            this.extraDocuments.TabIndex = 105;
+            this.extraDocuments.TabIndex = 13;
             this.extraDocuments.Text = "Additional paper documents";
             this.extraDocuments.UseVisualStyleBackColor = true;
             // 
@@ -1374,7 +1352,7 @@
             this.extraDocumentsState.Location = new System.Drawing.Point(9, 182);
             this.extraDocumentsState.Name = "extraDocumentsState";
             this.extraDocumentsState.Size = new System.Drawing.Size(15, 14);
-            this.extraDocumentsState.TabIndex = 104;
+            this.extraDocumentsState.TabIndex = 12;
             this.extraDocumentsState.Tag = "";
             this.extraDocumentsState.UseVisualStyleBackColor = true;
             // 
@@ -1384,7 +1362,7 @@
             this.shipperRelease.Location = new System.Drawing.Point(159, 131);
             this.shipperRelease.Name = "shipperRelease";
             this.shipperRelease.Size = new System.Drawing.Size(103, 17);
-            this.shipperRelease.TabIndex = 102;
+            this.shipperRelease.TabIndex = 9;
             this.shipperRelease.Text = "Shipper Release";
             this.shipperRelease.UseVisualStyleBackColor = true;
             // 
@@ -1406,7 +1384,7 @@
             this.shipperReleaseState.Location = new System.Drawing.Point(9, 132);
             this.shipperReleaseState.Name = "shipperReleaseState";
             this.shipperReleaseState.Size = new System.Drawing.Size(15, 14);
-            this.shipperReleaseState.TabIndex = 101;
+            this.shipperReleaseState.TabIndex = 8;
             this.shipperReleaseState.Tag = "";
             this.shipperReleaseState.UseVisualStyleBackColor = true;
             // 
@@ -1418,7 +1396,7 @@
             this.reference2State.Location = new System.Drawing.Point(9, 80);
             this.reference2State.Name = "reference2State";
             this.reference2State.Size = new System.Drawing.Size(15, 14);
-            this.reference2State.TabIndex = 77;
+            this.reference2State.TabIndex = 4;
             this.reference2State.Tag = "";
             this.reference2State.UseVisualStyleBackColor = true;
             // 
@@ -1430,7 +1408,7 @@
             this.uspsEndorsementState.Location = new System.Drawing.Point(9, 107);
             this.uspsEndorsementState.Name = "uspsEndorsementState";
             this.uspsEndorsementState.Size = new System.Drawing.Size(15, 14);
-            this.uspsEndorsementState.TabIndex = 100;
+            this.uspsEndorsementState.TabIndex = 6;
             this.uspsEndorsementState.Tag = "";
             this.uspsEndorsementState.UseVisualStyleBackColor = true;
             // 
@@ -1440,7 +1418,7 @@
             this.referenceNumber2.MaxLength = 32767;
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(222, 21);
-            this.referenceNumber2.TabIndex = 76;
+            this.referenceNumber2.TabIndex = 5;
             this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelReference2
@@ -1461,7 +1439,7 @@
             this.uspsEndorsement.Name = "uspsEndorsement";
             this.uspsEndorsement.PromptText = "(Multiple Values)";
             this.uspsEndorsement.Size = new System.Drawing.Size(200, 21);
-            this.uspsEndorsement.TabIndex = 11;
+            this.uspsEndorsement.TabIndex = 7;
             // 
             // kryptonBorderEdge4
             // 
@@ -1878,17 +1856,6 @@
             this.packagesState.Tag = "";
             this.packagesState.UseVisualStyleBackColor = true;
             // 
-            // kryptonBorderEdge7
-            // 
-            this.kryptonBorderEdge7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.kryptonBorderEdge7.AutoSize = false;
-            this.kryptonBorderEdge7.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge7.Location = new System.Drawing.Point(29, 16);
-            this.kryptonBorderEdge7.Name = "kryptonBorderEdge7";
-            this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
-            this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
-            // 
             // tabPageCustoms
             // 
             this.tabPageCustoms.Controls.Add(this.groupBoxGeneral);
@@ -1914,6 +1881,13 @@
             this.groupBoxGeneral.TabIndex = 1;
             this.groupBoxGeneral.TabStop = false;
             this.groupBoxGeneral.Text = "General";
+            // 
+            // customsDescription
+            // 
+            this.customsDescription.Location = new System.Drawing.Point(120, 17);
+            this.customsDescription.Name = "customsDescription";
+            this.customsDescription.Size = new System.Drawing.Size(260, 21);
+            this.customsDescription.TabIndex = 18;
             // 
             // labelCustomsDescription
             // 
@@ -1947,12 +1921,38 @@
             this.kryptonBorderEdge12.Size = new System.Drawing.Size(1, 23);
             this.kryptonBorderEdge12.Text = "kryptonBorderEdge1";
             // 
-            // customsDescription
+            // kryptonBorderEdgeEmail2
             // 
-            this.customsDescription.Location = new System.Drawing.Point(120, 17);
-            this.customsDescription.Name = "customsDescription";
-            this.customsDescription.Size = new System.Drawing.Size(260, 21);
-            this.customsDescription.TabIndex = 18;
+            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdgeEmail2.AutoSize = false;
+            this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 150);
+            this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(340, 1);
+            this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
+            // 
+            // kryptonBorderEdgeEmail
+            // 
+            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdgeEmail.AutoSize = false;
+            this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
+            this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(340, 1);
+            this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
+            // 
+            // kryptonBorderEdge7
+            // 
+            this.kryptonBorderEdge7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge7.AutoSize = false;
+            this.kryptonBorderEdge7.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge7.Location = new System.Drawing.Point(29, 16);
+            this.kryptonBorderEdge7.Name = "kryptonBorderEdge7";
+            this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
+            this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
             // 
             // UpsProfileControl
             // 
@@ -1987,10 +1987,10 @@
             this.tabPagePackages.ResumeLayout(false);
             this.groupBoxPackages.ResumeLayout(false);
             this.groupBoxPackages.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.tabPageCustoms.ResumeLayout(false);
             this.groupBoxGeneral.ResumeLayout(false);
             this.groupBoxGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }

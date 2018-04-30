@@ -1,17 +1,11 @@
 using System;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
-using Autofac;
-using Interapptive.Shared.Metrics;
-using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
 using ShipWorks.Filters;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
-using Microsoft.ApplicationInsights.DataContracts;
-using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Data.Connection;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
@@ -24,21 +18,15 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPagePersonal : OptionPageBase
     {
         private readonly ShipWorksOptionsData data;
-        private readonly IWin32Window owner;
-        private readonly IScannerConfigurationRepository scannerRepo;
-        private SingleScanSettings singleScanSettingsOnLoad;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OptionPagePersonal(ShipWorksOptionsData data, IWin32Window owner, ILifetimeScope scope)
+        public OptionPagePersonal(ShipWorksOptionsData data)
         {
             InitializeComponent();
 
             this.data = data;
-            this.owner = owner;
-
-            scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -77,15 +65,7 @@ namespace ShipWorks.ApplicationCore.Options
                 // Set selected sort option
                 filterInitialSort.SelectedValue = (FilterInitialSortType) settings.FilterInitialSortType;
 
-                comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;
-
-                // Load single scan settings and update ui
-                singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
-                autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
-                autoWeigh.Checked = settings.AutoWeigh;
-                UpdateSingleScanSettingsUI();
-
-                singleScanSettingsOnLoad = (SingleScanSettings)settings.SingleScanSettings;
+                comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;                
             }
             else
             {
@@ -122,72 +102,12 @@ namespace ShipWorks.ApplicationCore.Options
 
                 settings.ShippingWeightFormat = (int) comboWeightFormat.SelectedValue;
 
-                if (autoPrint.Checked)
-                {
-                    settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
-                }
-                else if (singleScan.Checked)
-                {
-                    settings.SingleScanSettings = (int) SingleScanSettings.Scan;
-                }
-                else
-                {
-                    settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
-                }
-
-                settings.AutoWeigh = autoWeigh.Checked;
-
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.SaveAndRefetch(settings);
                 }
-
-                UpdateSingleScanTelemetry(settings);
             }
         }
-
-        /// <summary>
-        /// Log the Single Scan Settings to Telemetry
-        /// </summary>
-        /// <param name="settings"></param>
-        private void UpdateSingleScanTelemetry(UserSettingsEntity settings)
-        {
-            if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
-            {
-                EventTelemetry telemetryEvent = new EventTelemetry("SingleScan.Settings.Changed");
-                string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
-                telemetryEvent.Properties.Add("SingleScan.Settings.Value", telemetryValue);
-
-                Telemetry.TrackEvent(telemetryEvent);
-            }
-        }
-
-        /// <summary>
-        /// Update auto print checkbox state based on single scan setting
-        /// </summary>
-        private void UpdateSingleScanSettingsUI()
-        {
-            // Only allow auto print to be checked when single scan is enabled
-            if (!singleScan.Checked)
-            {
-                autoPrint.Checked = false;
-                autoPrint.Enabled = false;
-                autoWeigh.Checked = false;
-                autoWeigh.Enabled = false;
-                registerScannerLabel.Visible = false;
-            }
-            else
-            {
-                autoPrint.Enabled = true;
-                registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
-                autoWeigh.Enabled = true;
-            }
-        }
-
-        /// <summary>
-        /// Update UI when single scan is enabled
-        /// </summary>
-        private void OnChangeSingleScanSettings(object sender, EventArgs e) => UpdateSingleScanSettingsUI();
 
         /// <summary>
         /// Changing which method of initial filter selection to use
@@ -195,27 +115,6 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnChangeInitialFilterSelection(object sender, EventArgs e)
         {
             filterComboBox.Enabled = radioInitialFilterAlways.Checked;
-        }
-
-        /// <summary>
-        /// Called when [click register scanner].
-        /// </summary>
-        private void OnClickRegisterScanner(object sender, EventArgs e)
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                Form findScanner = scope.ResolveNamed<Form>("ScannerRegistrationDialog");
-                try
-                {
-                    findScanner.ShowDialog(owner);
-                }
-                catch (TargetInvocationException ex)
-                {
-                    MessageHelper.ShowError(owner, ex.InnerException.Message);
-                }
-
-                UpdateSingleScanSettingsUI();
-            }
-        }
+        }        
     }
 }

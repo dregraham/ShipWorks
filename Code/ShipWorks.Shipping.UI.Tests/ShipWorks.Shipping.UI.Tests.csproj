@@ -181,11 +181,13 @@
     <Compile Include="Carriers\Dhl\DhlExpressServiceControlTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostAvailabilityServiceTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostNotificationTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsWebClientTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\FakeUpsLocalRatingViewModel.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateDiscrepencyViewModelTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRatingViewModelTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OrderSelectionChangedHandlerTest.cs" />
+    <Compile Include="Profiles\ShippingProfileManagerDialogViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipelineTest.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipelineTest.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipelineTest.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ProfileShortcutPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\RatesRetrievedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShippingDialogOpeningPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipelineTest.cs" />

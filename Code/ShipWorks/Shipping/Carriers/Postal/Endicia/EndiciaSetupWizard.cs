@@ -871,7 +871,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
                 // been deleted.
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.Endicia))
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == ShipmentTypeCode.Endicia))
                 {
                     if (shippingProfileEntity.Postal.Endicia.EndiciaAccountID.HasValue)
                     {

@@ -352,20 +352,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ServiceLevel", fieldHashtable);
 		}
 		#endregion
@@ -473,76 +459,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)BestRateProfileFieldIndex.ShippingProfileID, true); }
 			set	{ SetValue((int)BestRateProfileFieldIndex.ShippingProfileID, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)BestRateProfileFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)BestRateProfileFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)BestRateProfileFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)BestRateProfileFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)BestRateProfileFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)BestRateProfileFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.DimsAddWeight, value); }
-		}
-
-		/// <summary> The Weight property of the Entity BestRateProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)BestRateProfileFieldIndex.Weight, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.Weight, value); }
 		}
 
 		/// <summary> The ServiceLevel property of the Entity BestRateProfile<br/><br/></summary>

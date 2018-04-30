@@ -4,20 +4,18 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 
@@ -171,29 +169,32 @@ namespace ShipWorks.Data.Administration
                     {
                         using (new ExistingConnectionScope())
                         {
-                            // Update the tables
-                            UpdateScripts(installedSchema, progressScripts);
-
-                            // Functionality starting
-                            progressFunctionality.Starting();
-
-                            // Update the assemblies
-                            UpdateAssemblies(progressFunctionality);
-
-                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                            UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
-                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
-
-                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                            // database upgrade can take time and cause a timeout.
-                            if (singleUserScope != null)
+                            using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
-                            }
+                                // Update the tables
+                                UpdateScripts(installedSchema, progressScripts);
 
-                            ApplyVersionSpecificUpdates(installedAssembly);
+                                // Functionality starting
+                                progressFunctionality.Starting();
+
+                                // Update the assemblies
+                                UpdateAssemblies(progressFunctionality);
+
+                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                                UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
+
+                                // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
+                                SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+
+                                // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                                // database upgrade can take time and cause a timeout.
+                                if (singleUserScope != null)
+                                {
+                                    SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                                }
+
+                                ApplyVersionSpecificUpdates(installedAssembly);
+                            }
                         }
                     }
                 }
@@ -429,64 +430,18 @@ namespace ShipWorks.Data.Administration
                 progressFunctionality.Detail = "Done";
                 progressFunctionality.Completed();
 
-                CalculateInitialFilterCounts(connection, progressFilterCounts);
+                using (new LoggedStopwatch(log, "Calculate initial filter counts during database upgrade."))
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IFilterHelper filterHelper = scope.Resolve<IFilterHelper>();
+                        filterHelper.CalculateInitialFilterCounts(connection, progressFilterCounts, 0);
+                    }
+                }
             }
             finally
             {
                 FilterLayoutContext.PopScope();
-            }
-        }
-
-        /// <summary>
-        /// Calculate initial filter counts while doing a database upgrade.
-        /// </summary>
-        private static void CalculateInitialFilterCounts(DbConnection connection, ProgressItem progressFilterCounts)
-        {
-            progressFilterCounts.Starting();
-            progressFilterCounts.Detail = "Calculating initial filter counts...";
-
-            // Create a new adapter
-            using (SqlAdapter adapter = new SqlAdapter(connection))
-            {
-                FilterCollection filters = new FilterCollection();
-                adapter.FetchEntityCollection(filters, null);
-                int totalFilters = filters.Count;
-
-                // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
-                // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
-                // give this plenty of time.
-                adapter.CommandTimeOut = int.MaxValue;
-
-                log.DebugFormat("Begin initial filter counts during database upgrade.");
-
-                SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
-                    new SqlAdapterRetry<SqlException>(5, -5, "ActionProcedures.CalculateInitialFilterCounts");
-
-                int nodesUpdated = 1;
-                int iterationNodesUpdated = 1;
-                sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                {
-                    // Keep calculating until no nodes were updated
-                    while (iterationNodesUpdated > 0)
-                    {
-                        ActionProcedures.CalculateInitialFilterCounts(ref iterationNodesUpdated, adapter);
-                        nodesUpdated += iterationNodesUpdated;
-
-                        if (iterationNodesUpdated == 0)
-                        {
-                            progressFilterCounts.PercentComplete = 100;
-                        }
-                        else
-                        {
-                            progressFilterCounts.PercentComplete = (int) (((decimal) nodesUpdated / totalFilters) * 100);
-                        }
-                    }
-                });
-
-                progressFilterCounts.Detail = "Done";
-                progressFilterCounts.Completed();
-
-                log.DebugFormat("Complete initial filter counts during database upgrade.");
             }
         }
 
@@ -518,7 +473,7 @@ namespace ShipWorks.Data.Administration
             /// <summary>
             /// Run the command with the given arguments
             /// </summary>
-            public void Execute(List<string> args)
+            public Task Execute(List<string> args)
             {
                 string type = null;
 
@@ -544,7 +499,7 @@ namespace ShipWorks.Data.Administration
                             // a new int from the schema id
                             int schemaID = GetSchemaID(GetRequiredSchemaVersion());
 
-                            log.InfoFormat("Required shcema version: {0}", schemaID);
+                            log.InfoFormat("Required schema version: {0}", schemaID);
                             Environment.ExitCode = schemaID;
 
                             break;
@@ -588,6 +543,8 @@ namespace ShipWorks.Data.Administration
                             throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
                         }
                 }
+
+                return Task.CompletedTask;
             }
         }
 

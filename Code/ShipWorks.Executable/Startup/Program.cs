@@ -19,9 +19,6 @@ namespace ShipWorks.Startup
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [SuppressMessage("CSharp.Analyzers",
-            "CS4014: Because this call is not awaited, execution of the current method continues before the call is completed",
-            Justification = "The main entry point cannot be awaited")]
         [STAThread]
         [SuppressMessage("CSharp.Analyzers",
             "CS4014: Because this call is not awaited, execution of the current method continues before the call is completed",
@@ -69,7 +66,7 @@ namespace ShipWorks.Startup
             // Make sure you set performDependencyCheck false
             Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
 
-            ShipWorks.Program.Main();
+			ShipWorks.Program.Main().GetAwaiter().GetResult();
         }
 
         /// <summary>

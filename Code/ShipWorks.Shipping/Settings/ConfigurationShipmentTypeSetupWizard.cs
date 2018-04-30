@@ -1,7 +1,9 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -14,13 +16,15 @@ namespace ShipWorks.Shipping.Settings
         private readonly IShipmentTypeSetupWizard inner;
         private readonly ShipmentTypeCode shipmentTypeCode;
         private readonly IMessageHelper messageHelper;
+        private readonly IShippingProfileManager shippingProfileManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ConfigurationShipmentTypeSetupWizard(IShipmentTypeSetupWizard inner, ShipmentTypeCode shipmentTypeCode, IMessageHelper messageHelper)
+        public ConfigurationShipmentTypeSetupWizard(IShipmentTypeSetupWizard inner, ShipmentTypeCode shipmentTypeCode, IMessageHelper messageHelper, IShippingProfileManager shippingProfileManager)
         {
             this.messageHelper = messageHelper;
+            this.shippingProfileManager = shippingProfileManager;
             this.shipmentTypeCode = shipmentTypeCode;
             this.inner = inner;
         }
@@ -40,6 +44,12 @@ namespace ShipWorks.Shipping.Settings
 
                     if (result == DialogResult.OK)
                     {
+                        ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+                        if (profile.IsNew)
+                        {
+                            shippingProfileManager.SaveProfile(profile);
+                        }
+
                         ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
                     }
 

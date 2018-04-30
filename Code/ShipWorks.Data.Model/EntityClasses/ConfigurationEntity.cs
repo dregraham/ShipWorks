@@ -326,6 +326,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UseParallelActionQueue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AllowEbayCombineLocally", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ArchivalSettingsXml", fieldHashtable);
 		}
 		#endregion
 
@@ -532,6 +534,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AllowEbayCombineLocally, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AllowEbayCombineLocally, value); }
+		}
+
+		/// <summary> The ArchivalSettingsXml property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."ArchivalSettingsXml"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ArchivalSettingsXml
+		{
+			get { return (System.String)GetValue((int)ConfigurationFieldIndex.ArchivalSettingsXml, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.ArchivalSettingsXml, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

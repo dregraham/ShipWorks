@@ -27,9 +27,11 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Execute
         /// </summary>
-        public override void Execute()
+        public override Task Execute()
         {
             // Test doesn't need to do anything
+
+            return Task.CompletedTask;
         }
 
         /// <summary>

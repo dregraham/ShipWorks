@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
@@ -14,7 +15,7 @@ namespace ShipWorks.Tests.Users
     public class CurrentUserSettingsTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly UserSettingsEntity settings;
+        private UserSettingsEntity settings;
 
         public CurrentUserSettingsTest()
         {
@@ -36,7 +37,7 @@ namespace ShipWorks.Tests.Users
         {
             settings.DialogSettingsObject = new DialogSettings
             {
-                DismissedNotifications = new[] { UserConditionalNotificationType.SplitOrders }
+                NotificationDialogSettings = new NotificationDialogSetting[] { UserConditionalNotificationType.SplitOrders }
             };
 
             var testObject = mock.Create<CurrentUserSettings>();
@@ -70,7 +71,7 @@ namespace ShipWorks.Tests.Users
         {
             settings.DialogSettingsObject = new DialogSettings
             {
-                DismissedNotifications = new[] { UserConditionalNotificationType.CombineOrders }
+                NotificationDialogSettings = new NotificationDialogSetting[] { UserConditionalNotificationType.CombineOrders }
             };
 
             var testObject = mock.Create<CurrentUserSettings>();
@@ -86,7 +87,7 @@ namespace ShipWorks.Tests.Users
             testObject.StopShowingNotification(UserConditionalNotificationType.CombineOrders);
 
             Assert.Contains(UserConditionalNotificationType.CombineOrders,
-                settings.DialogSettingsObject.DismissedNotifications);
+                settings.DialogSettingsObject.NotificationDialogSettings);
         }
 
         [Fact]
@@ -96,7 +97,7 @@ namespace ShipWorks.Tests.Users
             testObject.StopShowingNotification(UserConditionalNotificationType.CombineOrders);
             testObject.StopShowingNotification(UserConditionalNotificationType.CombineOrders);
 
-            Assert.Equal(1, settings.DialogSettingsObject.DismissedNotifications.Count());
+            Assert.Equal(1, settings.DialogSettingsObject.NotificationDialogSettings.Count());
         }
 
         [Fact]
@@ -104,14 +105,14 @@ namespace ShipWorks.Tests.Users
         {
             settings.DialogSettingsObject = new DialogSettings
             {
-                DismissedNotifications = new[] { UserConditionalNotificationType.SplitOrders }
+                NotificationDialogSettings = new NotificationDialogSetting[] { UserConditionalNotificationType.SplitOrders }
             };
 
             var testObject = mock.Create<CurrentUserSettings>();
             testObject.StopShowingNotification(UserConditionalNotificationType.CombineOrders);
 
             Assert.Contains(UserConditionalNotificationType.CombineOrders,
-                settings.DialogSettingsObject.DismissedNotifications);
+                settings.DialogSettingsObject.NotificationDialogSettings);
         }
 
         [Theory]
@@ -124,8 +125,46 @@ namespace ShipWorks.Tests.Users
             testObject.StopShowingNotification(first);
             testObject.StopShowingNotification(second);
 
-            Assert.Equal(new[] { UserConditionalNotificationType.CombineOrders, UserConditionalNotificationType.SplitOrders },
-                settings.DialogSettingsObject.DismissedNotifications);
+            Assert.Equal(new NotificationDialogSetting[] { UserConditionalNotificationType.CombineOrders, UserConditionalNotificationType.SplitOrders },
+                settings.DialogSettingsObject.NotificationDialogSettings);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new[] { UserConditionalNotificationType.SplitOrders }
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void StartShowingNotifications_RemovesTypeFromDialogSettings_WhenDialogSettingsIsEmpty()
+        {
+            settings.DialogSettingsObject = new DialogSettings
+            {
+                DismissedNotifications = new UserConditionalNotificationType[0]
+            };
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.StartShowingNotification(UserConditionalNotificationType.SplitOrders);
+
+            Assert.Empty(settings.DialogSettingsObject.DismissedNotifications);
+        }
+
+        [Fact]
+        public void ShouldShowNotification_ReturnsTrue_WhenUserSettingsIsNull()
+        {
+            settings = null;
+            var testObject = mock.Create<CurrentUserSettings>();
+            Assert.True(testObject.ShouldShowNotification(UserConditionalNotificationType.CombineOrders));
+
+            settings = new UserSettingsEntity();
         }
 
         public void Dispose()

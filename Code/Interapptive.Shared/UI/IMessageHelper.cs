@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 
@@ -50,6 +51,16 @@ namespace Interapptive.Shared.UI
         void ShowPopup(string message);
 
         /// <summary>
+        /// Show a popup message with a Keyboard image
+        /// </summary>
+        void ShowKeyboardPopup(string message);
+
+        /// <summary>
+        /// Show a popup message with a Keyboard image
+        /// </summary>
+        void ShowBarcodePopup(string message);
+
+        /// <summary>
         /// Show a dialog and get the results
         /// </summary>
         DialogResult ShowDialog(Func<IForm> createDialog);
@@ -88,6 +99,11 @@ namespace Interapptive.Shared.UI
         /// Show a message
         /// </summary>
         void ShowMessage(string message);
+
+        /// <summary>
+        /// Show a message
+        /// </summary>
+        void ShowMessage(IWin32Window owner, string message);
 
         /// <summary>
         /// Set the cursor, then set it back when the result is disposed

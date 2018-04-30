@@ -48,7 +48,7 @@
             this.primaryProfileLink.Location = new System.Drawing.Point(221, 38);
             this.primaryProfileLink.Name = "primaryProfileLink";
             this.primaryProfileLink.Size = new System.Drawing.Size(76, 13);
-            this.primaryProfileLink.TabIndex = 62;
+            this.primaryProfileLink.TabIndex = 1;
             this.primaryProfileLink.TabStop = true;
             this.primaryProfileLink.Text = "primary profile";
             this.primaryProfileLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnProfileLinkClicked);
@@ -60,7 +60,7 @@
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
             this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 102;
+            this.requestedLabelFormat.TabIndex = 0;
             // 
             // RequestedLabelFormatOptionControl
             // 

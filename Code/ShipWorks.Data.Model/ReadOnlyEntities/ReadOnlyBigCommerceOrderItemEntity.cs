@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsDigitalItem = source.IsDigitalItem;
             EventDate = source.EventDate;
             EventName = source.EventName;
+            ParentOrderProductID = source.ParentOrderProductID;
             
             
             
@@ -79,6 +80,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String EventName { get; }
+        /// <summary> The ParentOrderProductID property of the Entity BigCommerceOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BigCommerceOrderItem"."ParentOrderProductID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> ParentOrderProductID { get; }
         
         
         

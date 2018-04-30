@@ -198,10 +198,6 @@ namespace ShipWorks.ApplicationCore
             // log = logFactory(typeof (type))
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
-            builder.RegisterType<DatabaseIdentifier>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<PdfBlackAndWhiteDocument>()
                 .AsImplementedInterfaces();
 
@@ -222,10 +218,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ConfigurationDataWrapper>()
                 .As<IConfigurationData>();
 
-            builder.RegisterAssemblyTypes(allAssemblies)
-                .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
-                .AsImplementedInterfaces();
-
             builder.RegisterGeneric(typeof(OrderedCompositeManipulator<,>))
                 .As(typeof(IOrderedCompositeManipulator<,>));
 
@@ -234,6 +226,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<ScaleReaderWrapper>()
                 .As<IScaleReader>();
+
+            builder.Register(c => SqlSession.Current)
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
                 new Dictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>>();

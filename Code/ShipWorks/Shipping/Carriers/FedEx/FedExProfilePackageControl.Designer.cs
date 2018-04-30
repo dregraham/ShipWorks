@@ -31,6 +31,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.batteryRegulatorySubtypeState = new System.Windows.Forms.CheckBox();
+            this.batteryRegulatorySubtype = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.batteryPackingState = new System.Windows.Forms.CheckBox();
+            this.batteryPacking = new System.Windows.Forms.ComboBox();
+            this.batteryPackingLabel = new System.Windows.Forms.Label();
+            this.batteryMaterialState = new System.Windows.Forms.CheckBox();
+            this.batteryMaterial = new System.Windows.Forms.ComboBox();
+            this.batteryMaterialLabel = new System.Windows.Forms.Label();
             this.packingInstructionsState = new System.Windows.Forms.CheckBox();
             this.labelPackingInstructions = new System.Windows.Forms.Label();
             this.packingInstructions = new System.Windows.Forms.TextBox();
@@ -105,16 +115,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.label1 = new System.Windows.Forms.Label();
-            this.batteryMaterialState = new System.Windows.Forms.CheckBox();
-            this.batteryMaterial = new System.Windows.Forms.ComboBox();
-            this.batteryMaterialLabel = new System.Windows.Forms.Label();
-            this.batteryPackingState = new System.Windows.Forms.CheckBox();
-            this.batteryPacking = new System.Windows.Forms.ComboBox();
-            this.batteryPackingLabel = new System.Windows.Forms.Label();
-            this.batteryRegulatorySubtypeState = new System.Windows.Forms.CheckBox();
-            this.batteryRegulatorySubtype = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.label1.Location = new System.Drawing.Point(102, 902);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 13);
-            this.label1.TabIndex = 156;
+            this.label1.TabIndex = 100;
             this.label1.Text = "Subtype:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryRegulatorySubtypeState.Location = new System.Drawing.Point(8, 887);
             this.batteryRegulatorySubtypeState.Name = "batteryRegulatorySubtypeState";
             this.batteryRegulatorySubtypeState.Size = new System.Drawing.Size(15, 14);
-            this.batteryRegulatorySubtypeState.TabIndex = 154;
+            this.batteryRegulatorySubtypeState.TabIndex = 52;
             this.batteryRegulatorySubtypeState.Tag = "";
             this.batteryRegulatorySubtypeState.UseVisualStyleBackColor = true;
             // 
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryRegulatorySubtype.Location = new System.Drawing.Point(159, 892);
             this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
             this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
-            this.batteryRegulatorySubtype.TabIndex = 153;
+            this.batteryRegulatorySubtype.TabIndex = 53;
             this.batteryRegulatorySubtype.Tag = "97";
             // 
             // label3
@@ -262,7 +262,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryPackingState.Location = new System.Drawing.Point(8, 859);
             this.batteryPackingState.Name = "batteryPackingState";
             this.batteryPackingState.Size = new System.Drawing.Size(15, 14);
-            this.batteryPackingState.TabIndex = 151;
+            this.batteryPackingState.TabIndex = 50;
             this.batteryPackingState.Tag = "";
             this.batteryPackingState.UseVisualStyleBackColor = true;
             // 
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryPacking.Location = new System.Drawing.Point(159, 856);
             this.batteryPacking.Name = "batteryPacking";
             this.batteryPacking.Size = new System.Drawing.Size(171, 21);
-            this.batteryPacking.TabIndex = 150;
+            this.batteryPacking.TabIndex = 51;
             this.batteryPacking.Tag = "97";
             // 
             // batteryPackingLabel
@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryMaterialState.Location = new System.Drawing.Point(8, 832);
             this.batteryMaterialState.Name = "batteryMaterialState";
             this.batteryMaterialState.Size = new System.Drawing.Size(15, 14);
-            this.batteryMaterialState.TabIndex = 148;
+            this.batteryMaterialState.TabIndex = 48;
             this.batteryMaterialState.Tag = "";
             this.batteryMaterialState.UseVisualStyleBackColor = true;
             // 
@@ -306,7 +306,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.batteryMaterial.Location = new System.Drawing.Point(159, 829);
             this.batteryMaterial.Name = "batteryMaterial";
             this.batteryMaterial.Size = new System.Drawing.Size(171, 21);
-            this.batteryMaterial.TabIndex = 147;
+            this.batteryMaterial.TabIndex = 49;
             this.batteryMaterial.Tag = "97";
             // 
             // batteryMaterialLabel
@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingInstructionsState.Location = new System.Drawing.Point(8, 805);
             this.packingInstructionsState.Name = "packingInstructionsState";
             this.packingInstructionsState.Size = new System.Drawing.Size(15, 14);
-            this.packingInstructionsState.TabIndex = 144;
+            this.packingInstructionsState.TabIndex = 46;
             this.packingInstructionsState.Tag = "";
             this.packingInstructionsState.UseVisualStyleBackColor = true;
             // 
@@ -349,7 +349,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingInstructions.Location = new System.Drawing.Point(159, 802);
             this.packingInstructions.Name = "packingInstructions";
             this.packingInstructions.Size = new System.Drawing.Size(171, 21);
-            this.packingInstructions.TabIndex = 142;
+            this.packingInstructions.TabIndex = 47;
             // 
             // packingCargoAircraftOnlyState
             // 
@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingCargoAircraftOnlyState.Location = new System.Drawing.Point(8, 779);
             this.packingCargoAircraftOnlyState.Name = "packingCargoAircraftOnlyState";
             this.packingCargoAircraftOnlyState.Size = new System.Drawing.Size(15, 14);
-            this.packingCargoAircraftOnlyState.TabIndex = 141;
+            this.packingCargoAircraftOnlyState.TabIndex = 44;
             this.packingCargoAircraftOnlyState.Tag = "";
             this.packingCargoAircraftOnlyState.UseVisualStyleBackColor = true;
             // 
@@ -369,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingCargoAircraftOnly.Location = new System.Drawing.Point(159, 779);
             this.packingCargoAircraftOnly.Name = "packingCargoAircraftOnly";
             this.packingCargoAircraftOnly.Size = new System.Drawing.Size(116, 17);
-            this.packingCargoAircraftOnly.TabIndex = 140;
+            this.packingCargoAircraftOnly.TabIndex = 45;
             this.packingCargoAircraftOnly.Text = "Cargo aircraft only";
             this.packingCargoAircraftOnly.UseVisualStyleBackColor = true;
             // 
@@ -389,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.numberOfContainers.Location = new System.Drawing.Point(159, 530);
             this.numberOfContainers.Name = "numberOfContainers";
             this.numberOfContainers.Size = new System.Drawing.Size(171, 21);
-            this.numberOfContainers.TabIndex = 138;
+            this.numberOfContainers.TabIndex = 27;
             // 
             // numberOfContainersState
             // 
@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.numberOfContainersState.Location = new System.Drawing.Point(8, 533);
             this.numberOfContainersState.Name = "numberOfContainersState";
             this.numberOfContainersState.Size = new System.Drawing.Size(15, 14);
-            this.numberOfContainersState.TabIndex = 137;
+            this.numberOfContainersState.TabIndex = 26;
             this.numberOfContainersState.Tag = "";
             this.numberOfContainersState.UseVisualStyleBackColor = true;
             // 
@@ -422,7 +422,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.containerTypeState.Location = new System.Drawing.Point(8, 506);
             this.containerTypeState.Name = "containerTypeState";
             this.containerTypeState.Size = new System.Drawing.Size(15, 14);
-            this.containerTypeState.TabIndex = 135;
+            this.containerTypeState.TabIndex = 24;
             this.containerTypeState.Tag = "";
             this.containerTypeState.UseVisualStyleBackColor = true;
             // 
@@ -443,7 +443,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.containerType.Location = new System.Drawing.Point(159, 503);
             this.containerType.Name = "containerType";
             this.containerType.Size = new System.Drawing.Size(171, 21);
-            this.containerType.TabIndex = 133;
+            this.containerType.TabIndex = 25;
             // 
             // signatoryPlaceState
             // 
@@ -453,7 +453,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signatoryPlaceState.Location = new System.Drawing.Point(8, 614);
             this.signatoryPlaceState.Name = "signatoryPlaceState";
             this.signatoryPlaceState.Size = new System.Drawing.Size(15, 14);
-            this.signatoryPlaceState.TabIndex = 131;
+            this.signatoryPlaceState.TabIndex = 32;
             this.signatoryPlaceState.Tag = "";
             this.signatoryPlaceState.UseVisualStyleBackColor = true;
             // 
@@ -462,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signatoryPlace.Location = new System.Drawing.Point(159, 611);
             this.signatoryPlace.Name = "signatoryPlace";
             this.signatoryPlace.Size = new System.Drawing.Size(171, 21);
-            this.signatoryPlace.TabIndex = 130;
+            this.signatoryPlace.TabIndex = 33;
             // 
             // labelSignatoryPlace
             // 
@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signatoryTitleState.Location = new System.Drawing.Point(8, 587);
             this.signatoryTitleState.Name = "signatoryTitleState";
             this.signatoryTitleState.Size = new System.Drawing.Size(15, 14);
-            this.signatoryTitleState.TabIndex = 128;
+            this.signatoryTitleState.TabIndex = 30;
             this.signatoryTitleState.Tag = "";
             this.signatoryTitleState.UseVisualStyleBackColor = true;
             // 
@@ -494,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signatoryNameState.Location = new System.Drawing.Point(8, 560);
             this.signatoryNameState.Name = "signatoryNameState";
             this.signatoryNameState.Size = new System.Drawing.Size(15, 14);
-            this.signatoryNameState.TabIndex = 127;
+            this.signatoryNameState.TabIndex = 28;
             this.signatoryNameState.Tag = "";
             this.signatoryNameState.UseVisualStyleBackColor = true;
             // 
@@ -503,14 +503,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signatoryName.Location = new System.Drawing.Point(159, 557);
             this.signatoryName.Name = "signatoryName";
             this.signatoryName.Size = new System.Drawing.Size(171, 21);
-            this.signatoryName.TabIndex = 125;
+            this.signatoryName.TabIndex = 29;
             // 
             // signatoryTitle
             // 
             this.signatoryTitle.Location = new System.Drawing.Point(159, 584);
             this.signatoryTitle.Name = "signatoryTitle";
             this.signatoryTitle.Size = new System.Drawing.Size(171, 21);
-            this.signatoryTitle.TabIndex = 126;
+            this.signatoryTitle.TabIndex = 31;
             // 
             // labelSignatoryTitle
             // 
@@ -538,7 +538,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packagingCount.Location = new System.Drawing.Point(159, 452);
             this.packagingCount.Name = "packagingCount";
             this.packagingCount.Size = new System.Drawing.Size(171, 21);
-            this.packagingCount.TabIndex = 122;
+            this.packagingCount.TabIndex = 21;
             // 
             // quantity
             // 
@@ -547,7 +547,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(193, 23);
             this.quantity.State = true;
-            this.quantity.TabIndex = 121;
+            this.quantity.TabIndex = 43;
             // 
             // quantityState
             // 
@@ -557,7 +557,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.quantityState.Location = new System.Drawing.Point(8, 753);
             this.quantityState.Name = "quantityState";
             this.quantityState.Size = new System.Drawing.Size(15, 14);
-            this.quantityState.TabIndex = 119;
+            this.quantityState.TabIndex = 42;
             this.quantityState.Tag = "";
             this.quantityState.UseVisualStyleBackColor = true;
             // 
@@ -569,7 +569,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingGroupState.Location = new System.Drawing.Point(8, 726);
             this.packingGroupState.Name = "packingGroupState";
             this.packingGroupState.Size = new System.Drawing.Size(15, 14);
-            this.packingGroupState.TabIndex = 118;
+            this.packingGroupState.TabIndex = 40;
             this.packingGroupState.Tag = "";
             this.packingGroupState.UseVisualStyleBackColor = true;
             // 
@@ -581,7 +581,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.properNameState.Location = new System.Drawing.Point(8, 693);
             this.properNameState.Name = "properNameState";
             this.properNameState.Size = new System.Drawing.Size(15, 14);
-            this.properNameState.TabIndex = 117;
+            this.properNameState.TabIndex = 38;
             this.properNameState.Tag = "";
             this.properNameState.UseVisualStyleBackColor = true;
             // 
@@ -604,7 +604,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packingGroup.Name = "packingGroup";
             this.packingGroup.PromptText = "(Multiple Values)";
             this.packingGroup.Size = new System.Drawing.Size(171, 21);
-            this.packingGroup.TabIndex = 113;
+            this.packingGroup.TabIndex = 41;
             // 
             // labelPackingGroup
             // 
@@ -621,7 +621,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.properName.Location = new System.Drawing.Point(159, 690);
             this.properName.Name = "properName";
             this.properName.Size = new System.Drawing.Size(171, 21);
-            this.properName.TabIndex = 111;
+            this.properName.TabIndex = 39;
             // 
             // labelProperName
             // 
@@ -641,7 +641,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.aircraftState.Location = new System.Drawing.Point(8, 480);
             this.aircraftState.Name = "aircraftState";
             this.aircraftState.Size = new System.Drawing.Size(15, 14);
-            this.aircraftState.TabIndex = 109;
+            this.aircraftState.TabIndex = 22;
             this.aircraftState.Tag = "";
             this.aircraftState.UseVisualStyleBackColor = true;
             // 
@@ -651,7 +651,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.aircarft.Location = new System.Drawing.Point(159, 480);
             this.aircarft.Name = "aircarft";
             this.aircarft.Size = new System.Drawing.Size(116, 17);
-            this.aircarft.TabIndex = 108;
+            this.aircarft.TabIndex = 23;
             this.aircarft.Text = "Cargo aircraft only";
             this.aircarft.UseVisualStyleBackColor = true;
             // 
@@ -673,7 +673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packagingCountState.Location = new System.Drawing.Point(8, 455);
             this.packagingCountState.Name = "packagingCountState";
             this.packagingCountState.Size = new System.Drawing.Size(15, 14);
-            this.packagingCountState.TabIndex = 106;
+            this.packagingCountState.TabIndex = 20;
             this.packagingCountState.Tag = "";
             this.packagingCountState.UseVisualStyleBackColor = true;
             // 
@@ -696,7 +696,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.hazardClassState.Location = new System.Drawing.Point(8, 666);
             this.hazardClassState.Name = "hazardClassState";
             this.hazardClassState.Size = new System.Drawing.Size(15, 14);
-            this.hazardClassState.TabIndex = 102;
+            this.hazardClassState.TabIndex = 36;
             this.hazardClassState.Tag = "";
             this.hazardClassState.UseVisualStyleBackColor = true;
             // 
@@ -708,7 +708,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.hazardousMaterialIdState.Location = new System.Drawing.Point(8, 639);
             this.hazardousMaterialIdState.Name = "hazardousMaterialIdState";
             this.hazardousMaterialIdState.Size = new System.Drawing.Size(15, 14);
-            this.hazardousMaterialIdState.TabIndex = 101;
+            this.hazardousMaterialIdState.TabIndex = 34;
             this.hazardousMaterialIdState.Tag = "";
             this.hazardousMaterialIdState.UseVisualStyleBackColor = true;
             // 
@@ -720,7 +720,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.offerorState.Location = new System.Drawing.Point(8, 428);
             this.offerorState.Name = "offerorState";
             this.offerorState.Size = new System.Drawing.Size(15, 14);
-            this.offerorState.TabIndex = 100;
+            this.offerorState.TabIndex = 18;
             this.offerorState.Tag = "";
             this.offerorState.UseVisualStyleBackColor = true;
             // 
@@ -732,7 +732,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emergencyContactPhoneState.Location = new System.Drawing.Point(8, 401);
             this.emergencyContactPhoneState.Name = "emergencyContactPhoneState";
             this.emergencyContactPhoneState.Size = new System.Drawing.Size(15, 14);
-            this.emergencyContactPhoneState.TabIndex = 99;
+            this.emergencyContactPhoneState.TabIndex = 16;
             this.emergencyContactPhoneState.Tag = "";
             this.emergencyContactPhoneState.UseVisualStyleBackColor = true;
             // 
@@ -744,7 +744,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsAccessibilityState.Location = new System.Drawing.Point(8, 373);
             this.dangerousGoodsAccessibilityState.Name = "dangerousGoodsAccessibilityState";
             this.dangerousGoodsAccessibilityState.Size = new System.Drawing.Size(15, 14);
-            this.dangerousGoodsAccessibilityState.TabIndex = 98;
+            this.dangerousGoodsAccessibilityState.TabIndex = 14;
             this.dangerousGoodsAccessibilityState.Tag = "";
             this.dangerousGoodsAccessibilityState.UseVisualStyleBackColor = true;
             // 
@@ -756,7 +756,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsMaterialTypeState.Location = new System.Drawing.Point(8, 345);
             this.dangerousGoodsMaterialTypeState.Name = "dangerousGoodsMaterialTypeState";
             this.dangerousGoodsMaterialTypeState.Size = new System.Drawing.Size(15, 14);
-            this.dangerousGoodsMaterialTypeState.TabIndex = 97;
+            this.dangerousGoodsMaterialTypeState.TabIndex = 12;
             this.dangerousGoodsMaterialTypeState.Tag = "";
             this.dangerousGoodsMaterialTypeState.UseVisualStyleBackColor = true;
             // 
@@ -768,7 +768,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsEnabledState.Location = new System.Drawing.Point(8, 318);
             this.dangerousGoodsEnabledState.Name = "dangerousGoodsEnabledState";
             this.dangerousGoodsEnabledState.Size = new System.Drawing.Size(15, 14);
-            this.dangerousGoodsEnabledState.TabIndex = 96;
+            this.dangerousGoodsEnabledState.TabIndex = 10;
             this.dangerousGoodsEnabledState.Tag = "";
             this.dangerousGoodsEnabledState.UseVisualStyleBackColor = true;
             // 
@@ -777,14 +777,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.hazardousMaterialId.Location = new System.Drawing.Point(159, 636);
             this.hazardousMaterialId.Name = "hazardousMaterialId";
             this.hazardousMaterialId.Size = new System.Drawing.Size(171, 21);
-            this.hazardousMaterialId.TabIndex = 22;
+            this.hazardousMaterialId.TabIndex = 35;
             // 
             // hazardClass
             // 
             this.hazardClass.Location = new System.Drawing.Point(159, 663);
             this.hazardClass.Name = "hazardClass";
             this.hazardClass.Size = new System.Drawing.Size(171, 21);
-            this.hazardClass.TabIndex = 23;
+            this.hazardClass.TabIndex = 37;
             // 
             // labelDangerousGoods
             // 
@@ -813,7 +813,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsAccessibility.Location = new System.Drawing.Point(159, 370);
             this.dangerousGoodsAccessibility.Name = "dangerousGoodsAccessibility";
             this.dangerousGoodsAccessibility.Size = new System.Drawing.Size(171, 21);
-            this.dangerousGoodsAccessibility.TabIndex = 28;
+            this.dangerousGoodsAccessibility.TabIndex = 15;
             this.dangerousGoodsAccessibility.Tag = "97";
             // 
             // labelHazardousMaterialCode
@@ -832,7 +832,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.containsAlcohol.Location = new System.Drawing.Point(159, 288);
             this.containsAlcohol.Name = "containsAlcohol";
             this.containsAlcohol.Size = new System.Drawing.Size(167, 17);
-            this.containsAlcohol.TabIndex = 94;
+            this.containsAlcohol.TabIndex = 9;
             this.containsAlcohol.Text = "This package contains alcohol";
             this.containsAlcohol.UseVisualStyleBackColor = true;
             // 
@@ -852,7 +852,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsEnabled.Location = new System.Drawing.Point(159, 317);
             this.dangerousGoodsEnabled.Name = "dangerousGoodsEnabled";
             this.dangerousGoodsEnabled.Size = new System.Drawing.Size(217, 17);
-            this.dangerousGoodsEnabled.TabIndex = 95;
+            this.dangerousGoodsEnabled.TabIndex = 11;
             this.dangerousGoodsEnabled.Text = "This package contains dangerous goods";
             this.dangerousGoodsEnabled.UseVisualStyleBackColor = true;
             // 
@@ -875,7 +875,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.alcoholState.Location = new System.Drawing.Point(8, 288);
             this.alcoholState.Name = "alcoholState";
             this.alcoholState.Size = new System.Drawing.Size(15, 14);
-            this.alcoholState.TabIndex = 92;
+            this.alcoholState.TabIndex = 8;
             this.alcoholState.Tag = "";
             this.alcoholState.UseVisualStyleBackColor = true;
             // 
@@ -892,12 +892,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // priorityAlertControl
             // 
-            this.priorityAlertControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.priorityAlertControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.priorityAlertControl.Location = new System.Drawing.Point(75, 154);
             this.priorityAlertControl.Name = "priorityAlertControl";
             this.priorityAlertControl.Size = new System.Drawing.Size(309, 138);
             this.priorityAlertControl.State = true;
-            this.priorityAlertControl.TabIndex = 91;
+            this.priorityAlertControl.TabIndex = 7;
             // 
             // labelAccessibility
             // 
@@ -918,7 +918,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.priorityAlertState.Location = new System.Drawing.Point(8, 154);
             this.priorityAlertState.Name = "priorityAlertState";
             this.priorityAlertState.Size = new System.Drawing.Size(15, 14);
-            this.priorityAlertState.TabIndex = 90;
+            this.priorityAlertState.TabIndex = 6;
             this.priorityAlertState.Tag = "";
             this.priorityAlertState.UseVisualStyleBackColor = true;
             // 
@@ -941,7 +941,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dryIceState.Location = new System.Drawing.Point(8, 130);
             this.dryIceState.Name = "dryIceState";
             this.dryIceState.Size = new System.Drawing.Size(15, 14);
-            this.dryIceState.TabIndex = 88;
+            this.dryIceState.TabIndex = 4;
             this.dryIceState.Tag = "";
             this.dryIceState.UseVisualStyleBackColor = true;
             // 
@@ -951,7 +951,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.offeror.Location = new System.Drawing.Point(159, 425);
             this.offeror.Name = "offeror";
             this.offeror.Size = new System.Drawing.Size(171, 21);
-            this.offeror.TabIndex = 21;
+            this.offeror.TabIndex = 19;
             // 
             // dryIceWeight
             // 
@@ -959,13 +959,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dryIceWeight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.dryIceWeight.BackColor = System.Drawing.Color.Transparent;
             this.dryIceWeight.ConfigureTelemetryEntityCounts = null;
-            this.dryIceWeight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.dryIceWeight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dryIceWeight.Location = new System.Drawing.Point(159, 127);
             this.dryIceWeight.Name = "dryIceWeight";
             this.dryIceWeight.RangeMax = 2000D;
             this.dryIceWeight.RangeMin = 0D;
             this.dryIceWeight.Size = new System.Drawing.Size(218, 24);
-            this.dryIceWeight.TabIndex = 87;
+            this.dryIceWeight.TabIndex = 5;
             this.dryIceWeight.Weight = 0D;
             // 
             // dangerousGoodsMaterialType
@@ -976,7 +976,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsMaterialType.Location = new System.Drawing.Point(159, 342);
             this.dangerousGoodsMaterialType.Name = "dangerousGoodsMaterialType";
             this.dangerousGoodsMaterialType.Size = new System.Drawing.Size(171, 21);
-            this.dangerousGoodsMaterialType.TabIndex = 20;
+            this.dangerousGoodsMaterialType.TabIndex = 13;
             this.dangerousGoodsMaterialType.Tag = "96";
             // 
             // labelDryIceWeight
@@ -995,11 +995,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emergencyContactPhone.Location = new System.Drawing.Point(159, 398);
             this.emergencyContactPhone.Name = "emergencyContactPhone";
             this.emergencyContactPhone.Size = new System.Drawing.Size(171, 21);
-            this.emergencyContactPhone.TabIndex = 19;
+            this.emergencyContactPhone.TabIndex = 17;
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1038,7 +1038,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.ConfigureTelemetryEntityCounts = null;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(159, 23);
             this.weight.Name = "weight";
             this.weight.RangeMax = 19999D;
@@ -1071,7 +1071,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dimensionsControl.Location = new System.Drawing.Point(156, 49);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
@@ -1079,7 +1079,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdge1
             // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1090,7 +1090,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdge2
             // 
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1105,7 +1105,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.groupBox);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExProfilePackageControl";
             this.Size = new System.Drawing.Size(396, 928);
             this.groupBox.ResumeLayout(false);

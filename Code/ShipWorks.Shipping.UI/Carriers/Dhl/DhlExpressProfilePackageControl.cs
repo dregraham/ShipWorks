@@ -20,21 +20,21 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Load the data from the given profile package into the control
         /// </summary>
-        public void LoadProfilePackage(DhlExpressProfilePackageEntity parcelPackageProfileEntity)
+        public void LoadProfilePackage(PackageProfileEntity parcelPackageProfileEntity)
         {
             ProfilePackage = parcelPackageProfileEntity;
             groupBox.Text = string.Format(groupBox.Text, Parent.Controls.IndexOf(this) + 1);
 
             dimensionsControl.Initialize();
 
-            AddValueMapping(ProfilePackage, DhlExpressProfilePackageFields.Weight, weightState, weight, labelWeight);
-            AddValueMapping(ProfilePackage, DhlExpressProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(ProfilePackage, PackageProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(ProfilePackage, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
         }
 
         /// <summary>
         /// The profile package data loaded into the control
         /// </summary>
-        public DhlExpressProfilePackageEntity ProfilePackage { get; private set; }
+        public PackageProfileEntity ProfilePackage { get; private set; }
 
         /// <summary>
         /// Save the settings from the UI to the entity

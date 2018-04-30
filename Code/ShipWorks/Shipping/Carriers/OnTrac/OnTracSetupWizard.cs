@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
                 // been deleted.
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.OnTrac))
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == ShipmentTypeCode.OnTrac))
                 {
                     if (shippingProfileEntity.OnTrac.OnTracAccountID.HasValue)
                     {

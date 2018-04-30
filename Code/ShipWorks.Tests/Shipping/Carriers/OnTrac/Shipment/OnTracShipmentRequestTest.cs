@@ -8,7 +8,8 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
+using ShipmentRequest = ShipWorks.Shipping.Carriers.OnTrac.Schemas.ShipmentRequest;
+using ShipmentResponse = ShipWorks.Shipping.Carriers.OnTrac.Schemas.ShipmentResponse;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
 {
@@ -101,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        ShipmentResponse RunSuccessfullGetNewShipment()
+        ShipmentResponse.Shipment RunSuccessfullGetNewShipment()
         {
             //fake string response from OnTrac
             const string fakedResponseXml =
@@ -111,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(fakedResponseXml);
 
             //Get result
-            var shippingResult = testObject.ProcessShipment(new ShipmentRequestList());
+            var shippingResult = testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest());
             return shippingResult;
         }
 
@@ -125,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(fakedResponseXml);
 
             //Get result
-            Assert.Throws<OnTracException>(() => testObject.ProcessShipment(new ShipmentRequestList()));
+            Assert.Throws<OnTracException>(() => testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest()));
         }
     }
 }

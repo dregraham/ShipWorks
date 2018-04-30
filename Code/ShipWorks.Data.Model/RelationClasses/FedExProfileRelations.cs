@@ -30,27 +30,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.FedExProfilePackageEntityUsingShippingProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between FedExProfileEntity and FedExProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
-		/// FedExProfile.ShippingProfileID - FedExProfilePackage.ShippingProfileID
-		/// </summary>
-		public virtual IEntityRelation FedExProfilePackageEntityUsingShippingProfileID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Packages" , true);
-				relation.AddEntityFieldPair(FedExProfileFields.ShippingProfileID, FedExProfilePackageFields.ShippingProfileID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExProfilePackageEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between FedExProfileEntity and ShippingProfileEntity over the 1:1 relation they have, using the relation between the fields:
 		/// FedExProfile.ShippingProfileID - ShippingProfile.ShippingProfileID
@@ -85,7 +70,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticFedExProfileRelations
 	{
-		internal static readonly IEntityRelation FedExProfilePackageEntityUsingShippingProfileIDStatic = new FedExProfileRelations().FedExProfilePackageEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new FedExProfileRelations().ShippingProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>

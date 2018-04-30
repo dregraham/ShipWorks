@@ -30,27 +30,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.IParcelProfilePackageEntityUsingShippingProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between IParcelProfileEntity and IParcelProfilePackageEntity over the 1:n relation they have, using the relation between the fields:
-		/// IParcelProfile.ShippingProfileID - IParcelProfilePackage.ShippingProfileID
-		/// </summary>
-		public virtual IEntityRelation IParcelProfilePackageEntityUsingShippingProfileID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Packages" , true);
-				relation.AddEntityFieldPair(IParcelProfileFields.ShippingProfileID, IParcelProfilePackageFields.ShippingProfileID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("IParcelProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("IParcelProfilePackageEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between IParcelProfileEntity and ShippingProfileEntity over the 1:1 relation they have, using the relation between the fields:
 		/// IParcelProfile.ShippingProfileID - ShippingProfile.ShippingProfileID
@@ -85,7 +70,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticIParcelProfileRelations
 	{
-		internal static readonly IEntityRelation IParcelProfilePackageEntityUsingShippingProfileIDStatic = new IParcelProfileRelations().IParcelProfilePackageEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new IParcelProfileRelations().ShippingProfileEntityUsingShippingProfileID;
 
 		/// <summary>CTor</summary>

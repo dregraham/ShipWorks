@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -23,7 +24,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
         public FedExShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Build<ISqlAdapter>()));
+                mock =>
+                {
+                    mock.Provide(mock.Build<ISqlAdapter>());
+                    mock.Override<IMainForm>();
+                });
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.FedExInsuranceProvider = (int) InsuranceProvider.Carrier);
         }
