@@ -1064,7 +1064,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedProduct.Weight = 11.2m;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
-            Assert.Equal(Convert.ToDouble(11.2m.ConvertFromKilogramsToPounds()), orderToSave.OrderItems.Single().Weight);
+            
+            // 11.2 lbs is 24.6918 KG (when rounded to nearest 4th decimal place)
+            Assert.Equal(24.6918, orderToSave.OrderItems.Single().Weight);
         }
 
         [Fact]
