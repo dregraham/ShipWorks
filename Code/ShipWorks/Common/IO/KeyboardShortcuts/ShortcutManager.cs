@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
@@ -124,6 +122,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             return acceptedShortcuts;
         }
 
+        /// <summary>
+        /// Remove existing and reserved shortcuts
+        /// </summary>
         private void RemoveExistingShortcuts(List<KeyboardShortcutData> acceptedShortcuts)
         {
             // Remove existing shortcuts from the list of available ones
