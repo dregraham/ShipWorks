@@ -27,6 +27,8 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     {
         private TableSynchronizer<ShortcutEntity> tableSynchronizer;
         private bool needCheckForChanges;
+        
+        // Shortcuts reserved for future use
         private readonly KeyboardShortcutData[] reservedShortcuts = 
         {
             new KeyboardShortcutData(null, VirtualKeys.A,
@@ -47,14 +49,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                                      KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
             new KeyboardShortcutData(null, VirtualKeys.F10, KeyboardShortcutModifiers.None)
         };
-        
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ShortcutManager()
-        {
-        }
 
         /// <summary>
         /// Initializes the object
