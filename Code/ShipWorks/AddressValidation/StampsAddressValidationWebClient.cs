@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
+using Quartz.Util;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers;
@@ -76,12 +77,14 @@ namespace ShipWorks.AddressValidation
                 UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepository.DefaultProfileAccount).ConfigureAwait(false);
                 validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
+                bool shouldParseAddress = !personAdapter.Street2.IsNullOrWhiteSpace();
+
                 if (uspsResult.IsSuccessfulMatch)
                 {
                     // Only add the origin to the validation results if it was fully matched
                     if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum)
                     {
-                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType));
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType, shouldParseAddress));
                     }
                                         
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
@@ -96,7 +99,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType, shouldParseAddress));
                 }
             }
             catch (UspsException ex)

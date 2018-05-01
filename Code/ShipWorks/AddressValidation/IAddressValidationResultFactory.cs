@@ -12,6 +12,6 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create an AddressValidationResult
         /// </summary>
-        AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult, int addressType);
+        AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult, int addressType, bool shouldParseStreet);
     }
 }
