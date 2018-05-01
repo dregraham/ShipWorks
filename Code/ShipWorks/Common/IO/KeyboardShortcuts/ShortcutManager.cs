@@ -25,10 +25,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     public class ShortcutManager : IInitializeForCurrentSession, ICheckForChangesNeeded, IShortcutManager
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private TableSynchronizer<ShortcutEntity> tableSynchronizer;
         private bool needCheckForChanges;
-        private readonly KeyboardShortcutData[] reservedShortcuts = new[]
+        private readonly KeyboardShortcutData[] reservedShortcuts = 
         {
             new KeyboardShortcutData(null, VirtualKeys.A,
                                      KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
@@ -53,9 +52,8 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutManager(ISqlAdapterFactory sqlAdapterFactory)
+        public ShortcutManager()
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
