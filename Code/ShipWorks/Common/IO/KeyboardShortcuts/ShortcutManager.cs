@@ -31,22 +31,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         // Shortcuts reserved for future use
         private readonly KeyboardShortcutData[] reservedShortcuts = 
         {
-            new KeyboardShortcutData(null, VirtualKeys.A,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.C,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.D,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.F,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.O,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.P,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.V,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.W,
-                                     KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.D, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.F, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.O, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
             new KeyboardShortcutData(null, VirtualKeys.F10, KeyboardShortcutModifiers.None)
         };
 
@@ -125,7 +117,33 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys()
         {
-            // Create list of keyboard shortcut data with F5-F9 and Ctrl+Shift+A-Z
+            List<KeyboardShortcutData> acceptedShortcuts = CreateAcceptedShortcutList();
+
+            RemoveExistingShortcuts(acceptedShortcuts);
+
+            return acceptedShortcuts;
+        }
+
+        private void RemoveExistingShortcuts(List<KeyboardShortcutData> acceptedShortcuts)
+        {
+            // Remove existing shortcuts from the list of available ones
+            foreach (ShortcutEntity shortcut in Shortcuts)
+            {
+                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.VirtualKey && s.Modifiers == shortcut.ModifierKeys);
+            }
+
+            // Remove reserved shortcuts from the list of available ones
+            foreach (KeyboardShortcutData shortcut in reservedShortcuts)
+            {
+                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.ActionKey && s.Modifiers == shortcut.Modifiers);
+            }
+        }
+
+        /// <summary>
+        /// Create list of keyboard shortcut data with F5-F9 and Ctrl+Shift+A-Z
+        /// </summary>
+        private static List<KeyboardShortcutData> CreateAcceptedShortcutList()
+        {
             List<KeyboardShortcutData> acceptedShortcuts = new List<KeyboardShortcutData>();
 
             for (VirtualKeys key = VirtualKeys.F5; key <= VirtualKeys.F9; key++)
@@ -135,26 +153,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
 
             for (VirtualKeys key = VirtualKeys.N1; key <= VirtualKeys.N9; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(
+                    new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
             }
 
             for (VirtualKeys key = VirtualKeys.A; key <= VirtualKeys.Z; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(
+                    new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
             }
-            
-            // Remove existing shortcuts from the list of available ones
-            foreach (ShortcutEntity shortcut in Shortcuts)
-            {
-                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.VirtualKey && s.Modifiers == shortcut.ModifierKeys);
-            }
-            
-            // Remove reserved shortcuts from the list of available ones
-            foreach (KeyboardShortcutData shortcut in reservedShortcuts)
-            {
-                acceptedShortcuts.RemoveWhere(s => s.ActionKey == shortcut.ActionKey && s.Modifiers == shortcut.Modifiers);
-            }
-            
+
             return acceptedShortcuts;
         }
 
