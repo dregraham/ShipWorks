@@ -37,7 +37,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
             new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
             new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.F10, KeyboardShortcutModifiers.None)
         };
 
         /// <summary>
