@@ -1,9 +1,4 @@
 ﻿using ShipWorks.AddressValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using Xunit;
@@ -21,20 +16,24 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void CreateAddressValidationResult_ReturnsAddressValidationResultWithIsValid(bool isValid)
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void CreateAddressValidationResult_ReturnsAddressValidationResultWithIsValid(bool isValid, bool shouldParseStreet)
         {
-            Assert.Equal(isValid, testObject.CreateAddressValidationResult(new Address(), isValid, new UspsAddressValidationResults(), 0).IsValid);
+            Assert.Equal(isValid, testObject.CreateAddressValidationResult(new Address(), isValid, new UspsAddressValidationResults(), 0, shouldParseStreet).IsValid);
         }
 
         [Theory]
-        [InlineData(true, ValidationDetailStatusType.Yes)]
-        [InlineData(false, ValidationDetailStatusType.No)]
-        [InlineData(null, ValidationDetailStatusType.Unknown)]
-        public void CreateAddressValidationResult_ReturnsAddressValidationResultWithPOBox(bool? poBox, ValidationDetailStatusType expected)
+        [InlineData(true, ValidationDetailStatusType.Yes, true)]
+        [InlineData(false, ValidationDetailStatusType.No, false)]
+        [InlineData(true, ValidationDetailStatusType.Yes, false)]
+        [InlineData(false, ValidationDetailStatusType.No, true)]
+        [InlineData(null, ValidationDetailStatusType.Unknown, true)]
+        public void CreateAddressValidationResult_ReturnsAddressValidationResultWithPOBox(bool? poBox, ValidationDetailStatusType expected, bool shouldParseStreet)
         {
-            Assert.Equal(expected, testObject.CreateAddressValidationResult(new Address(), true, new UspsAddressValidationResults() { IsPoBox = poBox }, 0).POBox);
+            Assert.Equal(expected, testObject.CreateAddressValidationResult(new Address(), true, new UspsAddressValidationResults() { IsPoBox = poBox }, 0, shouldParseStreet).POBox);
         }
 
         [Theory]
@@ -44,11 +43,11 @@ namespace ShipWorks.Tests.AddressValidation
         [InlineData(ResidentialDeliveryIndicatorType.Unsupported, ValidationDetailStatusType.Unknown)]
         public void CreateAddressValidationResult_ReturnsAddressValidationResultWithResidentialStatus(ResidentialDeliveryIndicatorType status, ValidationDetailStatusType expected)
         {
-            Assert.Equal(expected, testObject.CreateAddressValidationResult(new Address(), true, new UspsAddressValidationResults() { ResidentialIndicator = status }, 0).ResidentialStatus);
+            Assert.Equal(expected, testObject.CreateAddressValidationResult(new Address(), true, new UspsAddressValidationResults() { ResidentialIndicator = status }, 0, false).ResidentialStatus);
         }
 
         [Theory]
-        [InlineData("12345","56789","0000","12345")]
+        [InlineData("12345", "56789", "0000", "12345")]
         [InlineData("", "56789", "0000", "56789")]
         [InlineData("", "56789", "1234", "56789-1234")]
         public void CreateAddressValidationResult_ReturnsAddressValidationResultWithPostalCode(string postalCode, string zipCode, string zipCodeAddOn, string expected)
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.AddressValidation
                 ZIPCodeAddOn = zipCodeAddOn
             };
 
-            Assert.Equal(expected, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).PostalCode);
+            Assert.Equal(expected, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).PostalCode);
         }
 
         [Theory]
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.AddressValidation
                 Country = countryCode
             };
 
-            Assert.Equal(expected, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).StateProvCode);
+            Assert.Equal(expected, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).StateProvCode);
         }
 
         [Fact]
@@ -96,10 +95,10 @@ namespace ShipWorks.Tests.AddressValidation
                 City = "Wildwood"
             };
 
-            Assert.Equal("16204 Bay Harbour Ct", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street1);
-            Assert.Equal("123", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street2);
-            Assert.Equal("456", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street3);
-            Assert.Equal("Wildwood", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).City);
+            Assert.Equal("16204 Bay Harbour Ct", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street1);
+            Assert.Equal("123", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street2);
+            Assert.Equal("456", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street3);
+            Assert.Equal("Wildwood", testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).City);
         }
 
 
@@ -114,10 +113,10 @@ namespace ShipWorks.Tests.AddressValidation
                 City = null
             };
 
-            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street1);
-            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street2);
-            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).Street3);
-            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0).City);
+            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street1);
+            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street2);
+            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).Street3);
+            Assert.Equal(string.Empty, testObject.CreateAddressValidationResult(address, true, new UspsAddressValidationResults(), 0, false).City);
         }
     }
 }

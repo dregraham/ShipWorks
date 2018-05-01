@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -33,6 +34,21 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// PreProcess a value before it gets set.
+        /// </summary>
+        protected override void PreProcessValueToSet(IFieldInfo fieldToSet, ref object valueToSet)
+        {
+            // Round weights to 4 decimal places because LLBLGEN will throw when setting a double property
+            // to a decimal database field
+            if (fieldToSet.FieldIndex == (int) OrderItemFieldIndex.Weight)
+            {
+                valueToSet = Math.Round((double) valueToSet, 4);
+            }
+
+            base.PreProcessValueToSet(fieldToSet, ref valueToSet);
         }
 
         /// <summary>
