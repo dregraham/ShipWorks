@@ -45,5 +45,17 @@ namespace ShipWorks.Data.Modal.Tests.Custom
 
             Assert.Contains(testObject, order.OrderItems);
         }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1.0000, 1)]
+        [InlineData(1.00003, 1)]
+        [InlineData(1111.32135100003, 1111.3214)]
+        [InlineData(.321321321321321321321, .3213)]
+        [InlineData(1111111111, 1111111111)]
+        public void PreProcessValueToSet_RoundsWeightField(double value, double expectedResult)
+        {
+            Assert.Equal(expectedResult, new OrderItemEntity { Weight = value }.Weight);
+        }
     }
 }
