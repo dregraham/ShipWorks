@@ -47,11 +47,11 @@ namespace ShipWorks.Tests.AddressValidation
             var resultFactory = mock.Mock<IAddressValidationResultFactory>();
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
-            await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US" });
+            await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US", Street1 = "Foo", Street2 = "Bar"});
 
-            resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult, It.IsAny<int>()));
-            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>()));
-            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult, It.IsAny<int>()));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult, It.IsAny<int>(), true));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>(), true));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult, It.IsAny<int>(), true));
         }
 
         [Fact]

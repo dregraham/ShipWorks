@@ -13,7 +13,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create the AddressValidationResult
         /// </summary>
-        public AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult, int addressType)
+        public AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult, int addressType, bool shouldParseStreet)
         {
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
@@ -30,7 +30,11 @@ namespace ShipWorks.AddressValidation
                 AddressType = addressType
             };
 
-            addressValidationResult.ParseStreet1();
+            if (shouldParseStreet)
+            {
+                addressValidationResult.ParseStreet1();
+            }
+
             addressValidationResult.ApplyAddressCasing();
 
             return addressValidationResult;
