@@ -7,15 +7,18 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -139,11 +142,54 @@ namespace ShipWorks.Stores.Platforms.Magento
             GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", orderIdentifier.OrderNumber, result.Message);
+                await HandleFailedOrderInstantiation(orderIdentifier.OrderNumber, result, magentoOrder).ConfigureAwait(false);
                 return;
             }
 
             await LoadOrder((MagentoOrderEntity) result.Value, magentoOrder, Progress).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Handle when instantiating the order fails
+        /// </summary>
+        private async Task HandleFailedOrderInstantiation(long orderNumber, GenericResult<OrderEntity> result, Order magentoOrder)
+        {
+            if (magentoStore.UpdateSplitOrderOnlineStatus)
+            {
+                var splitOrders = await FindSplitOrders(orderNumber).ConfigureAwait(false);
+
+                foreach (var orderEntity in splitOrders.OfType<OrderEntity>())
+                {
+                    orderEntity.OnlineStatus = magentoOrder.Status;
+                    UpdateLastModifiedDate(orderEntity, magentoOrder);
+                }
+
+                await Functional.UsingAsync(
+                        sqlAdapterFactory.Create(),
+                        sqlAdapter => sqlAdapter.SaveEntityCollectionAsync(splitOrders))
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+            }
+        }
+
+        /// <summary>
+        /// Load split orders for the given identifier
+        /// </summary>
+        private Task<IEntityCollection2> FindSplitOrders(long orderNumber)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<OrderEntity> query = factory.Order
+                .Where(OrderFields.IsManual == false)
+                .AndWhere(OrderFields.CombineSplitStatus == CombineSplitStatusType.Split)
+                .AndWhere(OrderFields.StoreID == Store.StoreID)
+                .AndWhere(OrderFields.OrderNumber == orderNumber);
+
+            return Functional.UsingAsync(
+                sqlAdapterFactory.Create(),
+                adapter => adapter.FetchQueryAsync(query));
         }
 
         /// <summary>
@@ -200,11 +246,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             // Update the status
             progressReporter.Detail = $"Processing order {QuantitySaved + 1}...";
 
-            DateTime lastModifiedDate;
-            if (DateTime.TryParse(magentoOrder.UpdatedAt, out lastModifiedDate))
-            {
-                orderEntity.OnlineLastModified = DateTime.SpecifyKind(lastModifiedDate, DateTimeKind.Utc);
-            }
+            UpdateLastModifiedDate(orderEntity, magentoOrder);
 
             orderEntity.OnlineStatus = magentoOrder.Status;
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
@@ -231,6 +273,17 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Update the last modified date of the entity
+        /// </summary>
+        private static void UpdateLastModifiedDate(OrderEntity orderEntity, Order magentoOrder)
+        {
+            if (DateTime.TryParse(magentoOrder.UpdatedAt, out DateTime lastModifiedDate))
+            {
+                orderEntity.OnlineLastModified = DateTime.SpecifyKind(lastModifiedDate, DateTimeKind.Utc);
+            }
         }
 
         /// <summary>
