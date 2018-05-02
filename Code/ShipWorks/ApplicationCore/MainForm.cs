@@ -145,8 +145,6 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
 
-        private IMessageFilter keyboardShortcutFilter;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -167,8 +165,6 @@ namespace ShipWorks
             // Persist size\position of the window
             WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
-
-            keyboardShortcutFilter = IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>();
 
             InitializeCustomEnablerComponents();
         }
@@ -489,8 +485,6 @@ namespace ShipWorks
                 UserSession.Logoff(clearRememberMe);
             }
 
-            Application.RemoveMessageFilter(keyboardShortcutFilter);
-
             // Can't do anything when logged off
             ShowBlankUI();
 
@@ -807,7 +801,6 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
-            Application.AddMessageFilter(keyboardShortcutFilter);
         }
 
         /// <summary>
