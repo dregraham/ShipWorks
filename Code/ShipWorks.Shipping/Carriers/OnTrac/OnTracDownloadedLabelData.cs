@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Imaging;
 using Interapptive.Shared.Pdf;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -61,15 +64,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     Convert.FromBase64String(shipmentResponse.Label) :
                     Encoding.ASCII.GetBytes(shipmentResponse.Label);
 
+                string labelName = "LabelPrimary";
                 using (MemoryStream stream = new MemoryStream(label))
                 {
                     if (isPdf)
                     {
-                        dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID, "LabelPrimary");
+                        dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID,
+                                                          i => i == 0 ? labelName : $"{labelName}-{i}",
+                                                          SaveCroppedLabel);
                     }
                     else
                     {
-                        dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, "LabelPrimary");
+                        dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, labelName);
                     }
                 }
             }
@@ -77,6 +83,25 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 log.Error(ErrorMessage, ex);
                 throw new ShippingException(ErrorMessage, ex);
+            }
+        }
+        
+        /// <summary>
+        /// Save the cropped label
+        /// </summary>
+        private byte[] SaveCroppedLabel(MemoryStream stream)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (Bitmap labelImage = stream.CropImageStream())
+                {
+                    Bitmap resized = new Bitmap(labelImage, new Size(576, 384));
+                    
+                    resized.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    resized.Save(memoryStream, ImageFormat.Png);
+                }
+
+                return memoryStream.ToArray();
             }
         }
     }
