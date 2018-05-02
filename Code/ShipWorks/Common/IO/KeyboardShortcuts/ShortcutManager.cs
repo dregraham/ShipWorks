@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Win32.Native;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -70,12 +71,20 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             lock (tableSynchronizer)
             {
-                if (tableSynchronizer.Synchronize())
+                try
                 {
-                    tableSynchronizer.EntityCollection.Sort((int) ShortcutFieldIndex.Action, ListSortDirection.Ascending);
-                }
+                    if (tableSynchronizer.Synchronize())
+                    {
+                        tableSynchronizer.EntityCollection.Sort((int) ShortcutFieldIndex.Action, ListSortDirection.Ascending);
+                    }
 
-                needCheckForChanges = false;
+                    needCheckForChanges = false;
+                }
+                catch (ORMQueryExecutionException ex) when (ex.Message.Contains("Invalid object name \'dbo.Shortcut\'"))
+                {
+                    // This happens when a user is logged on and has dbo.Shortcut, but then upgrades
+                    // to a version of ShipWorks that doesn't have dbo.Shortcut and hits a key
+                }
             }
         }
 
