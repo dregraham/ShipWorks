@@ -77,8 +77,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
             mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromPdf(
                                                              PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(),
-                                                             shipment.ShipmentID,
-                                                             "LabelPrimary"));
+                                                             shipment.ShipmentID, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
         }
 
         [Fact]
