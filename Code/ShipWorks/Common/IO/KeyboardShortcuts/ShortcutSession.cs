@@ -50,17 +50,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Removes keyboardShortcutFilter to application
         /// </summary>
-        public void EndSession()
-        {
-            windowsMessageFilterRegistrar.RemoveMessageFilter(keyboardShortcutFilter);
-        }
-        
+        public void EndSession() => windowsMessageFilterRegistrar.RemoveMessageFilter(keyboardShortcutFilter);
+
         /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose()
-        {
-            EndSession();
-        }
+        public void Dispose() => EndSession();
     }
 }
