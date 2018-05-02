@@ -5970,6 +5970,8 @@ namespace ShipWorks.Data.Model
 		MagentoTrackingEmails,
 		///<summary>MagentoVersion. </summary>
 		MagentoVersion,
+		///<summary>UpdateSplitOrderOnlineStatus. </summary>
+		UpdateSplitOrderOnlineStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}

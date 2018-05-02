@@ -85,7 +85,8 @@ namespace ShipWorks.Stores.Platforms.Magento
             MagentoStoreEntity magentoStore = new MagentoStoreEntity
             {
                 MagentoTrackingEmails = false,
-                MagentoVersion = (int) MagentoVersion.PhpFile
+                MagentoVersion = (int) MagentoVersion.PhpFile,
+                UpdateSplitOrderOnlineStatus = false,
             };
 
             InitializeStoreDefaults(magentoStore);
