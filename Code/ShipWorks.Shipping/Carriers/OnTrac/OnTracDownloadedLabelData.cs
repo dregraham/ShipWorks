@@ -95,8 +95,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 using (Bitmap labelImage = stream.CropImageStream())
                 {
-                    labelImage.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                    labelImage.Save(memoryStream, ImageFormat.Png);
+                    Bitmap resized = new Bitmap(labelImage, new Size(576, 384));
+                    
+                    resized.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    resized.Save(memoryStream, ImageFormat.Png);
                 }
 
                 return memoryStream.ToArray();
