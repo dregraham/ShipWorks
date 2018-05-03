@@ -51,7 +51,7 @@
                        Grid.ColumnSpan="2" 
                        Margin="0,3">
                 <Run>Most information is read-only.</Run>
-                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000120591-working-in-a-shipworks-archive">More info...</Hyperlink>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/solution/articles/4000122197-working-in-a-shipworks-archive">More info...</Hyperlink>
             </TextBlock>
             <Button Grid.Column="3" 
                     Padding="4"
