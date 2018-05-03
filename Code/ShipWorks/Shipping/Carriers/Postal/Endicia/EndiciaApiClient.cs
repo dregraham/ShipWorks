@@ -933,6 +933,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// request a refund for the given shipment
+        /// </summary>
+        public void RequestRefund(ShipmentEntity shipment)
+        {
+            EndiciaAccountEntity account = GetAccount(shipment.Postal);
+
+            try
+            {
+                using (EwsLabelService service = CreateWebService("Refund", GetReseller(account, shipment)))
+                {
+                    RefundRequest request = new RefundRequest()
+                    {
+                        RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment)),
+                        RequestID = Guid.NewGuid().ToString("N"),
+                        CertifiedIntermediary = new CertifiedIntermediary()
+                        {
+                            AccountID = account.AccountNumber,
+                            PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                        },
+                        PicNumbers = new[] { shipment.TrackingNumber }
+                    };
+
+                    RefundResponse response = service.GetRefund(request);
+                    IEnumerable<LabelResponse> errors = response.Refund.Where(r => r.RefundStatus != RefundStatus.Approved);
+
+                    if (errors.Any())
+                    {
+                        throw new EndiciaException(errors.First().RefundStatusMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
         /// Process the given shipment
         /// </summary>
         public LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
