@@ -143,76 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
                 throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
             }
         }
-
-        /// <summary>
-        /// Request a refund from endicia for the given shipment
-        /// </summary>
-        public static void RequestRefund(ShipmentEntity shipment)
-        {
-            EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
-            if (account == null)
-            {
-                throw new EndiciaException("The Endicia account associated with the shipment has been removed from ShipWorks.");
-            }
-
-            if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
-            {
-                log.InfoFormat("DHL shipments do not support refunds. {0}", shipment.ShipmentID);
-                return;
-            }
-
-            // Nothing to refund
-            if (shipment.Postal.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
-            {
-                log.WarnFormat("No refund being required from Endicia for non-postage shipment. {0}", shipment.ShipmentID);
-                return;
-            }
-
-            XElement xRoot = new XElement("RefundRequest",
-
-                new XElement("AccountID", account.AccountNumber),
-                new XElement("PassPhrase", SecureText.Decrypt(account.ApiUserPassword, "Endicia")),
-
-                new XElement("Test", (EndiciaApiClient.UseTestServer || account.TestAccount) ? "Y" : "N"),
-
-                new XElement("RefundList", 
-                    new XElement("PieceID", shipment.Postal.Endicia.TransactionID)));
-
-            try
-            {
-                using (ELSServicesService service = CreateService("RefundRequest"))
-                {
-                    object rawResponse = service.RefundRequest(xRoot.ToString());
-                    XDocument xDocument = ExtractSuccessResponse(rawResponse);
-
-                    XElement result = xDocument.Descendants("PieceID").SingleOrDefault();
-                    if (result == null)
-                    {
-                        throw new ShippingException("The response from Endicia does not appear to be correctly formatted.");
-                    }
-
-                    if (string.Compare((string) result.Element("IsApproved"), "YES", true) != 0)
-                    {
-                        string message = (string) result.Element("ErrorMsg");
-
-                        if (message == "Denied - Invalid" && shipment.Postal.Service == (int) PostalServiceType.InternationalFirst)
-                        {
-                            message = "The Postal Service requires that International First-Class mail be voided directly through Endicia.";
-                        }
-
-                        throw new EndiciaException(message);
-                    }
-
-                    // Save the reufnd from id
-                    shipment.Postal.Endicia.RefundFormID = (int?) xDocument.Descendants("FormNumber").FirstOrDefault();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
-            }
-        }
-               
+        
         /// <summary>
         /// Create a SCAN form for the given shipments. All of the shipments should have been created using the same account.
         /// </summary>

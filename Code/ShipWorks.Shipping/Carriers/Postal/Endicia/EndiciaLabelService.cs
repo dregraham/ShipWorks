@@ -131,7 +131,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             try
             {
-                EndiciaApiAccount.RequestRefund(shipment);
+                EndiciaApiClient endiciaApiClient = new EndiciaApiClient(endiciaShipmentType.AccountRepository,
+                    endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
+
+                endiciaApiClient.RequestRefund(shipment);
             }
             catch (EndiciaException ex)
             {
