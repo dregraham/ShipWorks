@@ -943,18 +943,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (EwsLabelService service = CreateWebService("Refund", GetReseller(account, shipment)))
                 {
-                    RefundRequest request = new RefundRequest();
-                    request.RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment));
-                    request.RequestID = Guid.NewGuid().ToString("N");
-                    request.CertifiedIntermediary = new CertifiedIntermediary()
+                    RefundRequest request = new RefundRequest()
                     {
-                        AccountID = account.AccountNumber,
-                        PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                        RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment)),
+                        RequestID = Guid.NewGuid().ToString("N"),
+                        CertifiedIntermediary = new CertifiedIntermediary()
+                        {
+                            AccountID = account.AccountNumber,
+                            PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                        },
+                        PicNumbers = new[] { shipment.TrackingNumber }
                     };
 
-                    request.PicNumbers = new[] { shipment.TrackingNumber };
                     RefundResponse response = service.GetRefund(request);
-
                     IEnumerable<LabelResponse> errors = response.Refund.Where(r => r.RefundStatus != RefundStatus.Approved);
 
                     if (errors.Any())
