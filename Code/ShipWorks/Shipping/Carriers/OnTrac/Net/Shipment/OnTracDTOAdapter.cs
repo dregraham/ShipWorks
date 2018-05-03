@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
             if (!thermalType.HasValue)
             {
                 // PDF
-                return 13;
+                return 14;
             }
 
             switch ((ThermalLanguage) thermalType)
