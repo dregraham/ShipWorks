@@ -429,7 +429,7 @@ namespace ShipWorks.ApplicationCore.Appearance
                 int menuPosition;
 
                 // Items at the top stay at top
-                if (originalItems.IndexOf(unusedItem) == 0)
+                if (originalItems.IndexOf(unusedItem) == 0 || menu.Items.Count == 0)
                 {
                     menuPosition = 0;
                 }
