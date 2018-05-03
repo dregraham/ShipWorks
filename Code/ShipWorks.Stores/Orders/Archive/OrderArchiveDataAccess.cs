@@ -208,7 +208,8 @@ namespace ShipWorks.Stores.Orders.Archive
                    messageToCheck.IndexOf("BatchTotal:", StringComparison.InvariantCultureIgnoreCase) > -1 ||
                    messageToCheck.IndexOf("Nonqualified", StringComparison.InvariantCultureIgnoreCase) > -1 ||
                    messageToCheck.IndexOf("The database name", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                   messageToCheck.IndexOf("Changed database", StringComparison.InvariantCultureIgnoreCase) > -1;
+                   messageToCheck.IndexOf("Changed database", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                   messageToCheck.IndexOf("Error executing xp_delete_file", StringComparison.InvariantCultureIgnoreCase) > -1;
         }
 
         /// <summary>
