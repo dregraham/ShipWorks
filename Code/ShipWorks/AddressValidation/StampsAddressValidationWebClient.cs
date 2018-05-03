@@ -97,9 +97,12 @@ namespace ShipWorks.AddressValidation
                     validationResult.AddressValidationError = uspsResult.BadAddressMessage;
                 }
 
-                foreach (Address address in uspsResult.Candidates)
+                if (uspsResult.Candidates != null)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType, shouldParseAddress));
+                    foreach (Address address in uspsResult.Candidates)
+                    {
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType, shouldParseAddress));
+                    }   
                 }
             }
             catch (UspsException ex)
