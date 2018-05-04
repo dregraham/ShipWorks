@@ -154,13 +154,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private async Task HandleFailedOrderInstantiation(long orderNumber, GenericResult<OrderEntity> result, Order magentoOrder)
         {
-            if (magentoStore.UpdateSplitOrderOnlineStatus)
+            var splitOrders = await FindSplitOrders(orderNumber).ConfigureAwait(false);
+            
+            if (splitOrders.Count > 0)
             {
-                var splitOrders = await FindSplitOrders(orderNumber).ConfigureAwait(false);
-
                 foreach (var orderEntity in splitOrders.OfType<OrderEntity>())
                 {
-                    orderEntity.OnlineStatus = magentoOrder.Status;
+                    if (magentoStore.UpdateSplitOrderOnlineStatus)
+                    {
+                        orderEntity.OnlineStatus = magentoOrder.Status;
+                    }
+
+                    // Always update the last modified so that we don't get in an infinite download loop
                     UpdateLastModifiedDate(orderEntity, magentoOrder);
                 }
 
@@ -168,10 +173,6 @@ namespace ShipWorks.Stores.Platforms.Magento
                         sqlAdapterFactory.Create(),
                         sqlAdapter => sqlAdapter.SaveEntityCollectionAsync(splitOrders))
                     .ConfigureAwait(false);
-            }
-            else
-            {
-                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
             }
         }
 
