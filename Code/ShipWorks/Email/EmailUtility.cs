@@ -138,6 +138,7 @@ namespace ShipWorks.Email
         public static Smtp LogonToSmtp(EmailAccountEntity account)
         {
             TlsParameters tls = new TlsParameters();
+            tls.Version |= TlsVersion.TLS11;
             tls.CertificateVerifier = CertificateVerifier.AcceptAll;
 
             Smtp smtp = new Smtp();
