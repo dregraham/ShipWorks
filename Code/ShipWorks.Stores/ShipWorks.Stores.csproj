@@ -679,6 +679,7 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Overstock\OverstockStoreType.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalSplitOrderAction.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
     <Compile Include="Platforms\PowersportsSupport\CoreExtensions\Filters\Orders\PowersportsSupportAmazonOrderIDCondition.cs" />
