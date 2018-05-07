@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.shipmentUpdate = new System.Windows.Forms.CheckBox();
             this.labelComments = new System.Windows.Forms.Label();
             this.commentToken = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelEmail = new System.Windows.Forms.Label();
             this.sendEmail = new System.Windows.Forms.CheckBox();
+            this.magentoTwoRestDownloadSettingsControl1 = new ShipWorks.Stores.Platforms.Magento.WizardPages.MagentoTwoRestDownloadSettingsControl();
             this.SuspendLayout();
             // 
             // shipmentUpdate
@@ -65,7 +66,7 @@
             this.commentToken.Name = "commentToken";
             this.commentToken.Size = new System.Drawing.Size(279, 21);
             this.commentToken.TabIndex = 4;
-            this.commentToken.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.commentToken.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelEmail
             // 
@@ -86,17 +87,26 @@
             this.sendEmail.Text = "Magento should email the customer that the order was completed.";
             this.sendEmail.UseVisualStyleBackColor = true;
             // 
+            // magentoTwoRestDownloadSettingsControl1
+            // 
+            this.magentoTwoRestDownloadSettingsControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.magentoTwoRestDownloadSettingsControl1.Location = new System.Drawing.Point(0, 81);
+            this.magentoTwoRestDownloadSettingsControl1.Name = "magentoTwoRestDownloadSettingsControl1";
+            this.magentoTwoRestDownloadSettingsControl1.Size = new System.Drawing.Size(456, 64);
+            this.magentoTwoRestDownloadSettingsControl1.TabIndex = 7;
+            // 
             // MagentoOnlineUpdateActionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.magentoTwoRestDownloadSettingsControl1);
             this.Controls.Add(this.sendEmail);
             this.Controls.Add(this.labelEmail);
             this.Controls.Add(this.commentToken);
             this.Controls.Add(this.labelComments);
             this.Controls.Add(this.shipmentUpdate);
             this.Name = "MagentoOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(459, 80);
+            this.Size = new System.Drawing.Size(459, 146);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,5 +119,6 @@
         private ShipWorks.Templates.Tokens.TemplateTokenTextBox commentToken;
         private System.Windows.Forms.Label labelEmail;
         private System.Windows.Forms.CheckBox sendEmail;
+        private MagentoTwoRestDownloadSettingsControl magentoTwoRestDownloadSettingsControl1;
     }
 }
