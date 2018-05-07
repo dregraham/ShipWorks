@@ -6992,7 +6992,9 @@ PRINT N'Creating [dbo].[OverstockStore]'
 GO
 CREATE TABLE [dbo].[OverstockStore]
 (
-[StoreID] [bigint] NOT NULL
+[StoreID] [bigint] NOT NULL,
+[Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OverstockStore] on [dbo].[OverstockStore]'
