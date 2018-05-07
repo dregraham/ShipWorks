@@ -916,6 +916,30 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<OtherShipmentEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the OverstockOrder entity</summary>
+		public EntityQuery<OverstockOrderEntity> OverstockOrder
+		{
+			get { return Create<OverstockOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the OverstockOrderItem entity</summary>
+		public EntityQuery<OverstockOrderItemEntity> OverstockOrderItem
+		{
+			get { return Create<OverstockOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the OverstockOrderSearch entity</summary>
+		public EntityQuery<OverstockOrderSearchEntity> OverstockOrderSearch
+		{
+			get { return Create<OverstockOrderSearchEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the OverstockStore entity</summary>
+		public EntityQuery<OverstockStoreEntity> OverstockStore
+		{
+			get { return Create<OverstockStoreEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the PackageProfile entity</summary>
 		public EntityQuery<PackageProfileEntity> PackageProfile
 		{
