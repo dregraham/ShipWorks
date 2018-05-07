@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new AlphaNumericOrderIdentifier(((OverstockOrderEntity) order).OverstockOrderID.ToString());
+            return new OverstockOrderIdentifier(((OverstockOrderEntity) order).OverstockOrderID);
         }
 
         /// <summary>
