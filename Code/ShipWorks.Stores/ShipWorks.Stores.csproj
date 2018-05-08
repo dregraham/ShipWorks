@@ -679,6 +679,8 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Overstock\Content\OverstockCombineOrderAction.cs" />
+    <Compile Include="Platforms\Overstock\Content\OverstockSplitOrderAction.cs" />
     <Compile Include="Platforms\Overstock\DTO\OverstockDto.cs" />
     <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
