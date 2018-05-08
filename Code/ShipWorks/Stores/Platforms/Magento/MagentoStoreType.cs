@@ -103,6 +103,20 @@ namespace ShipWorks.Stores.Platforms.Magento
                 MagentoOrderID = 0
             });
 
+
+        /// <summary>
+        /// Create the control used to edit Magento download settings
+        /// </summary>
+        public override IDownloadSettingsControl CreateDownloadSettingsControl()
+        {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                return new MagentoDownloadSettingsControl();
+            }
+
+            return base.CreateDownloadSettingsControl();
+        }
+
         /// <summary>
         /// Creates an order identifier that will locate the order provided in the database.
         /// </summary>

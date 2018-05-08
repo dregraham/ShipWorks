@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Management
                 manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
                 manualOrderSettingsControl.Location = new Point(32, 45);
                 manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top |  AnchorStyles.Right;
                 optionPageSettings.Controls.Add(manualOrderSettingsControl);
                 sectionTitleManualOrders.Location = new Point(15, 15);
             }
@@ -279,17 +279,17 @@ namespace ShipWorks.Stores.Management
             Control oldDownloadSettingsControl = downloadSettingsControl as Control;
 
             if (oldDownloadSettingsControl != null &&
-                optionPageSettings.Controls.Contains(oldDownloadSettingsControl))
+                panelDownloading.Controls.Contains(oldDownloadSettingsControl))
             {
-                optionPageSettings.Controls.Remove(oldDownloadSettingsControl);
+                panelDownloading.Controls.Remove(oldDownloadSettingsControl);
             }
 
             downloadSettingsControl = storeType.CreateDownloadSettingsControl();
             downloadSettingsControl.LoadStore(store);
-            downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+            downloadSettingsControl.Location = new Point(17, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
             downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
             downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            optionPageSettings.Controls.Add(downloadSettingsControl as Control);
+            panelDownloading.Controls.Add(downloadSettingsControl as Control);
         }
 
         /// <summary>
@@ -298,10 +298,10 @@ namespace ShipWorks.Stores.Management
         private void ConfigureManualOrderSettingsControl()
         {
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
+            manualOrderSettingsControl.Location = new Point(19, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
             manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
             manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            optionPageSettings.Controls.Add(manualOrderSettingsControl);
+            panelManualOrders.Controls.Add(manualOrderSettingsControl);
         }
 
         /// <summary>
@@ -318,20 +318,29 @@ namespace ShipWorks.Stores.Management
             storeSettingsControl = storeType.CreateStoreSettingsControl();
             if (storeSettingsControl != null)
             {
+                storeSettingsControl.AutoSize = true;
+                storeSettingsControl.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+                // Store settings if present
+                if (storeSettingsControl != null)
+                {
+                    storeSettingsControl.LoadStore(store);
+                }
+
                 // Settings control gets location and width of the section title, so that each settings control can simply
                 // set its titles to go all the way across with anchors.
-                storeSettingsControl.Location = new Point(sectionTitleManualOrders.Left, manualOrderSettingsControl.Bottom + VerticalSpaceBetweenSections);
-                storeSettingsControl.Width = sectionTitleManualOrders.Width;
+                storeSettingsControl.Location = new Point(panelManualOrders.Left, panelManualOrders.Bottom + VerticalSpaceBetweenSections);
+                storeSettingsControl.Width = panelManualOrders.Width;
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(storeSettingsControl);
 
-                UpdateControlPositionBelowControl(storeSettingsControl);
+                UpdatPanelPositions();
 
-                storeSettingsControl.SizeChanged += (sender, args) => UpdateControlPositionBelowControl(storeSettingsControl);
+                storeSettingsControl.SizeChanged += (sender, args) => UpdatPanelPositions();
             }
             else
             {
-                UpdateControlPositionBelowControl(manualOrderSettingsControl);
+                UpdatPanelPositions();
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
@@ -345,11 +354,6 @@ namespace ShipWorks.Stores.Management
             // Manual orders
             manualOrderSettingsControl.LoadStore(store);
 
-            // Store settings if present
-            if (storeSettingsControl != null)
-            {
-                storeSettingsControl.LoadStore(store);
-            }
 
             // Store status
             storeDisabled.Checked = !store.Enabled;
@@ -358,11 +362,23 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Update the location of controls below the specified control
         /// </summary>
-        private void UpdateControlPositionBelowControl(Control control)
+        private void UpdatPanelPositions()
         {
-            panelStoreStatus.Top = control.Bottom + VerticalSpaceBetweenSections;
-            panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
-            panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
+            panelManualOrders.Top = panelDownloading.Bottom + VerticalSpaceBetweenSections;
+
+            if (storeSettingsControl == null || storeSettingsControl.Height == 0)
+            {
+                panelStoreStatus.Top = panelManualOrders.Bottom + VerticalSpaceBetweenSections;
+                panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
+                panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
+            }
+            else
+            {
+                storeSettingsControl.Top = panelManualOrders.Bottom + VerticalSpaceBetweenSections;
+                panelStoreStatus.Top = storeSettingsControl.Bottom + VerticalSpaceBetweenSections;
+                panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
+                panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
+            }
         }
 
         /// <summary>

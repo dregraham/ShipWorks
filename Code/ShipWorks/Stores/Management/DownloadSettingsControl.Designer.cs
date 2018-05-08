@@ -32,7 +32,6 @@
             this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
             this.configureDownloadComputers = new ShipWorks.UI.Controls.LinkControl();
             this.automaticDownloadControl = new ShipWorks.Stores.Management.AutomaticDownloadControl();
-            this.magentoTwoRestDownloadSettingsControl1 = new ShipWorks.Stores.Platforms.Magento.WizardPages.MagentoTwoRestDownloadSettingsControl();
             this.SuspendLayout();
             // 
             // labelAllowDownload
@@ -74,26 +73,16 @@
             this.automaticDownloadControl.Size = new System.Drawing.Size(292, 51);
             this.automaticDownloadControl.TabIndex = 6;
             // 
-            // magentoTwoRestDownloadSettingsControl1
-            // 
-            this.magentoTwoRestDownloadSettingsControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.magentoTwoRestDownloadSettingsControl1.Location = new System.Drawing.Point(-10, 84);
-            this.magentoTwoRestDownloadSettingsControl1.Name = "magentoTwoRestDownloadSettingsControl1";
-            this.magentoTwoRestDownloadSettingsControl1.Size = new System.Drawing.Size(451, 60);
-            this.magentoTwoRestDownloadSettingsControl1.TabIndex = 7;
-            //this.magentoTwoRestDownloadSettingsControl1.Load += new System.EventHandler();
-            // 
             // DownloadSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.magentoTwoRestDownloadSettingsControl1);
             this.Controls.Add(this.labelAllowDownload);
             this.Controls.Add(this.comboAllowDownload);
             this.Controls.Add(this.configureDownloadComputers);
             this.Controls.Add(this.automaticDownloadControl);
             this.Name = "DownloadSettingsControl";
-            this.Size = new System.Drawing.Size(517, 149);
+            this.Size = new System.Drawing.Size(544, 73);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -105,6 +94,5 @@
         private ComputerDownloadAllowedComboBox comboAllowDownload;
         private UI.Controls.LinkControl configureDownloadComputers;
         private AutomaticDownloadControl automaticDownloadControl;
-        private Platforms.Magento.WizardPages.MagentoTwoRestDownloadSettingsControl magentoTwoRestDownloadSettingsControl1;
     }
 }

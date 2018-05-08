@@ -2001,6 +2001,12 @@
     <Compile Include="Stores\Platforms\Magento\IMagentoModuleWebClientFactory.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoUploadAction.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoDownloadSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Magento\MagentoDownloadSettingsControl.Designer.cs">
+      <DependentUpon>MagentoDownloadSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />
@@ -2010,12 +2016,6 @@
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdaterFactory.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\ShipmentDetails.cs" />
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoTwoRestDownloadSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoTwoRestDownloadSettingsControl.Designer.cs">
-      <DependentUpon>MagentoTwoRestDownloadSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Manual\ManualAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8257,8 +8257,8 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Magento\WizardPages\MagentoTwoRestDownloadSettingsControl.resx">
-      <DependentUpon>MagentoTwoRestDownloadSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Magento\MagentoDownloadSettingsControl.resx">
+      <DependentUpon>MagentoDownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.resx">
       <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
