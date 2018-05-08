@@ -137,9 +137,7 @@ namespace ShipWorks.Email
         /// </summary>
         public static Smtp LogonToSmtp(EmailAccountEntity account)
         {
-            TlsParameters tls = new TlsParameters();
-            tls.Version |= TlsVersion.TLS11;
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
+            TlsParameters tls = GetTlsParameters();
 
             Smtp smtp = new Smtp();
 
@@ -311,6 +309,18 @@ namespace ShipWorks.Email
             }
 
             return imap;
+        }
+
+        /// <summary>
+        /// Generate TlsParameters
+        /// </summary>
+        private static TlsParameters GetTlsParameters()
+        {
+            TlsParameters tls = new TlsParameters();
+            tls.Version |= TlsVersion.TLS11;
+            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
+
+            return tls;
         }
 
         /// <summary>
