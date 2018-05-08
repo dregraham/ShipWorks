@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Overstock
         }
 
         /// <summary>
-        /// Gets or sets the Username
+        /// Gets or sets the User name
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string Username
@@ -68,7 +68,14 @@ namespace ShipWorks.Stores.UI.Platforms.Overstock
         /// </summary>
         public bool Save(OverstockStoreEntity store)
         {
-            bool result = webClient.TestConnection(store).Result;
+            // Use a throw away store to test entered credentials.
+            OverstockStoreEntity testStore = new OverstockStoreEntity()
+            {
+                Username = Username,
+                Password = Password
+            };
+
+            bool result = webClient.TestConnection(testStore).Result;
 
             if (!result)
             {

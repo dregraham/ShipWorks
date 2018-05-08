@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Overstock.DTO;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -14,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Get orders overstock
         /// </summary>
-        Task<GenericResult<List<object>>> GetOrders(IOverstockStoreEntity store);
+        Task<GenericResult<List<OverstockOrderDto>>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime);
 
         /// <summary>
         /// Uploads the shipment details.

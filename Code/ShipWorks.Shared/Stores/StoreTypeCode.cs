@@ -409,6 +409,6 @@ namespace ShipWorks.Stores
         [Description("Overstock")]
         [StoreTypeIdentity("Overstock", "OVS")]
         [StoreTypeIcon("overstock")]
-        Overstock = 81
+        Overstock = 82
     }
 }

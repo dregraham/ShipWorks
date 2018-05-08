@@ -679,9 +679,13 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Overstock\DTO\OverstockDto.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
+    <Compile Include="Platforms\Overstock\OverstockDownloader.cs" />
     <Compile Include="Platforms\Overstock\OverstockException.cs" />
     <Compile Include="Platforms\Overstock\OverstockOrderIdentifier.cs" />
+    <Compile Include="Platforms\Overstock\OverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\OverstockStoreType.cs" />
     <Compile Include="Platforms\Overstock\OverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\OverstockWebClientEndpoints.cs" />

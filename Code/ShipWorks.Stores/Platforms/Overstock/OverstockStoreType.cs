@@ -77,10 +77,12 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            OverstockOrderItemEntity entity = new OverstockOrderItemEntity();
-            entity.ChannelLineId = -1;
-            entity.LineId = -1;
-            entity.ItemID = -1;
+            OverstockOrderItemEntity entity = new OverstockOrderItemEntity
+            {
+                ChannelLineId = -1,
+                LineId = -1,
+                ItemID = -1
+            };
 
             return entity;
         }
@@ -94,6 +96,21 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices() => new[] { "Acknowledged", "Processing", "Complete" };
+        public override ICollection<string> GetOnlineStatusChoices() => new[]
+        {
+            "Acknowledged",
+            "Accepted",
+            "Canceled",
+            "Cancelled",
+            "Complete",
+            "Entered",
+            "Processing",
+        };
+
+        /// <summary>
+        /// Specifies the download policy for the online store
+        /// </summary>
+        public override InitialDownloadPolicy InitialDownloadPolicy => 
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
     }
 }
