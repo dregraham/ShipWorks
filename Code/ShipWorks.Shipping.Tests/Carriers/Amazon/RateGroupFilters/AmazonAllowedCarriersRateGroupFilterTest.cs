@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         [InlineData("stamps_dot_com")]
         [InlineData("fedeX")]
         [InlineData("uPs")]
+        [InlineData("oNtRaC")]
         public void Filter_IncludesRate_WhenRateIsFromAllowedCarrier(string carrierName)
         {
             RateResult rate = new RateResult("Foo", "1", 1, new AmazonRateTag { CarrierName = carrierName });
