@@ -95,6 +95,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 case "usps":
                 case "stamps_dot_com":
                     return EnumHelper.GetImage(ShipmentTypeCode.Usps);
+                case "ontrac":
+                    return EnumHelper.GetImage(ShipmentTypeCode.OnTrac);
                 default:
                     return EnumHelper.GetImage(ShipmentTypeCode.None);
             }
