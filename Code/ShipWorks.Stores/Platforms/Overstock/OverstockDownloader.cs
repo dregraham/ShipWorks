@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Overstock)]
     public class OverstockDownloader : StoreDownloader
     {
-        private IOverstockWebClient webClient;
+        private readonly IOverstockWebClient webClient;
         private readonly OverstockStoreEntity overstockStore;
 
         /// <summary>

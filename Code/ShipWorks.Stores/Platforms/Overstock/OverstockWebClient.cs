@@ -84,7 +84,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public async Task<GenericResult<List<OverstockOrderDto>>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime)
         {
-            List<object> ordersToReturn = new List<object>();
             try
             {
                 // Create a request for getting orders
