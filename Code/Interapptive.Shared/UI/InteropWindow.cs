@@ -52,10 +52,10 @@ namespace Interapptive.Shared.UI
         /// </summary>
         /// <param name="owner">The winforms control that created this control</param>
         /// <param name="viewModel">The view model for this control</param>
-        protected InteropWindow(IWin32Window owner, object viewModel, bool isStateSaverManaged) 
+        protected InteropWindow(IWin32Window owner, object viewModel, bool isStateSaverManaged)
             : this(owner, isStateSaverManaged)
         {
-            if(viewModel != null)
+            if (viewModel != null)
             {
                 DataContext = viewModel;
             }
@@ -81,7 +81,7 @@ namespace Interapptive.Shared.UI
         {
             Handle = owner.Handle;
 
-            WindowInteropHelper interopHelper = new WindowInteropHelper(this) {Owner = owner.Handle};
+            WindowInteropHelper interopHelper = new WindowInteropHelper(this) { Owner = owner.Handle };
 
             // Need HwndSource to get handle to owned window,
             // and the handle only exists when SourceInitialized has been raised

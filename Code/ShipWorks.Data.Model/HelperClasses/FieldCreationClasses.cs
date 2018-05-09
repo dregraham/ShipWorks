@@ -2077,6 +2077,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.EventName);}
 		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.ParentOrderProductID field instance</summary>
+		public static EntityField2 ParentOrderProductID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.ParentOrderProductID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BigCommerceStoreEntity</summary>
@@ -4371,6 +4376,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AllowEbayCombineLocally
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AllowEbayCombineLocally);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.ArchivalSettingsXml field instance</summary>
+		public static EntityField2 ArchivalSettingsXml
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.ArchivalSettingsXml);}
 		}
 	}
 
@@ -22522,6 +22532,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.Password);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ShopifyNotifyCustomer field instance</summary>
+		public static EntityField2 ShopifyNotifyCustomer
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyNotifyCustomer);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopSiteStoreEntity</summary>
@@ -25371,11 +25386,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomerFilterExpandedFolders
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterExpandedFolders);}
-		}
-		/// <summary>Creates a new UserSettingsEntity.NextGlobalPostNotificationDate field instance</summary>
-		public static EntityField2 NextGlobalPostNotificationDate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.NextGlobalPostNotificationDate);}
 		}
 		/// <summary>Creates a new UserSettingsEntity.SingleScanSettings field instance</summary>
 		public static EntityField2 SingleScanSettings

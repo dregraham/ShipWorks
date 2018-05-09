@@ -92,11 +92,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return;
                         }
 
-                        // Get the products for the order to pass into the loader
-                        List<ChannelAdvisorProduct> caProducts =
-                            caOrder.Items
-                                .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
-                                .Where(p => p != null).ToList();
+                        DownloadOtherLineItems(caOrder);
+                        
+                        List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
@@ -117,6 +115,42 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
+        }
+
+        /// <summary>
+        /// Loads all order items, gets pages if required.
+        /// </summary>
+        private void DownloadOtherLineItems(ChannelAdvisorOrder caOrder)
+        {
+            int maxItems = 20;
+            List<ChannelAdvisorOrderItem> caOrderItems = caOrder.Items.ToList();
+            while (caOrderItems.Count == maxItems)
+            {
+                string nextToken =
+                    $"https://api.channeladvisor.com/v1/Orders({caOrder.ID})/Items?$skip={caOrderItems.Count}&$expand=FulfillmentItems";
+                
+                ChannelAdvisorOrderItemsResult nextPage = restClient.GetOrderItems(
+                    nextToken,
+                    refreshToken);
+                
+                caOrderItems.AddRange(nextPage.OrderItems);
+                maxItems += 20;
+            }
+
+            caOrder.Items = caOrderItems;
+        }
+
+        /// <summary>
+        /// Download product details from ChannelAdvisor
+        /// </summary>
+        private List<ChannelAdvisorProduct> DownloadChannelAdvisorProducts(ChannelAdvisorOrder caOrder)
+        {
+            // Get the products for the order to pass into the loader
+            List<ChannelAdvisorProduct> caProducts =
+                caOrder.Items
+                    .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
+                    .Where(p => p != null).ToList();
+            return caProducts;
         }
 
         /// <summary>
@@ -183,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // Required by order loader
                 order.Store = Store;
-
+                
                 //Order loader loads the order
                 orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 

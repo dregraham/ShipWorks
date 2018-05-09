@@ -297,6 +297,7 @@
     <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Common\KeyboardShortcuts\KeyboardShortcutKeyFilterTest.cs" />
+    <Compile Include="Common\KeyboardShortcuts\ShortcutSessionTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />
@@ -624,6 +625,8 @@
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />
     <Compile Include="Users\CurrentUserSettingsTest.cs" />
+    <Compile Include="Users\Security\ArchiveSecurityContextTest.cs" />
+    <Compile Include="Users\Security\SecurityContextFactoryTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -194,7 +198,7 @@ namespace ShipWorks.Stores
                 // Issues are added for insufficient permissions.  If there are any, issue a warning.
                 else
                 {
-                    context.Complete(MenuCommandResult.Warning, "The status of some orders were not set due to insufficient permission.");
+                    context.Complete(MenuCommandResult.Warning, GetPermissionMessage());
                 }
             };
 
@@ -210,6 +214,19 @@ namespace ShipWorks.Stores
                 context
 
                 );
+        }
+
+        /// <summary>
+        /// Get a permission error message
+        /// </summary>
+        private static string GetPermissionMessage()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<IConfigurationData>().IsArchive() ?
+                    ArchiveConstants.InvalidActionInArchiveMessage :
+                    "The status of some orders were not set due to insufficient permission.";
+            }
         }
 
         /// <summary>

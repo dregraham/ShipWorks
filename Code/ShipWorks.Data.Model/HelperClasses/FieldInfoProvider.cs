@@ -607,6 +607,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "IsDigitalItem", typeof(System.Boolean), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.IsDigitalItem, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventDate, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventName", typeof(System.String), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventName, 255, 0, 0);
+			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "ParentOrderProductID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.ParentOrderProductID, 0, 0, 19);
 		}
 		/// <summary>Inits BigCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitBigCommerceStoreEntityInfos()
@@ -760,6 +761,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AllowEbayCombineLocally", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AllowEbayCombineLocally, 0, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -2945,6 +2947,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyRequestedShippingOption", typeof(System.Int32), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, 0, 0, 10);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ApiKey", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ApiKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.Password, 100, 0, 0);
+			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyNotifyCustomer", typeof(System.Boolean), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, 0, 0, 0);
 		}
 		/// <summary>Inits ShopSiteStoreEntity's FieldInfo objects</summary>
 		private void InitShopSiteStoreEntityInfos()
@@ -3442,7 +3445,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
 			this.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
 			this.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
-			this.AddElementFieldInfo("UserSettingsEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanSettings", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanSettings, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);

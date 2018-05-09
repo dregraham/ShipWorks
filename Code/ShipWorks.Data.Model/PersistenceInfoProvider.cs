@@ -618,13 +618,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
 		private void InitBigCommerceOrderItemEntityMappings()
 		{
-			this.AddElementMapping("BigCommerceOrderItemEntity", @"ShipWorksLocal", @"dbo", "BigCommerceOrderItem", 6, 0);
+			this.AddElementMapping("BigCommerceOrderItemEntity", @"ShipWorksLocal", @"dbo", "BigCommerceOrderItem", 7, 0);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "OrderAddressID", "OrderAddressID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "OrderProductID", "OrderProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "IsDigitalItem", "IsDigitalItem", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "EventDate", "EventDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "EventName", "EventName", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("BigCommerceOrderItemEntity", "ParentOrderProductID", "ParentOrderProductID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 6);
 		}
 
 		/// <summary>Inits BigCommerceStoreEntity's mappings</summary>
@@ -775,7 +776,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 15, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 16, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -791,6 +792,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "CustomerKey", "CustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 			this.AddElementFieldMapping("ConfigurationEntity", "AllowEbayCombineLocally", "AllowEbayCombineLocally", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("ConfigurationEntity", "ArchivalSettingsXml", "ArchivalSettingsXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 15);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -3102,7 +3104,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyStoreEntity's mappings</summary>
 		private void InitShopifyStoreEntityMappings()
 		{
-			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 7, 0);
+			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 8, 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopUrlName", "ShopifyShopUrlName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopDisplayName", "ShopifyShopDisplayName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3110,6 +3112,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyRequestedShippingOption", "ShopifyRequestedShippingOption", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ApiKey", "ApiKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "Password", "Password", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyNotifyCustomer", "ShopifyNotifyCustomer", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 		}
 
 		/// <summary>Inits ShopSiteStoreEntity's mappings</summary>
@@ -3622,7 +3625,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 19, 0);
+			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 18, 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -3638,10 +3641,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "TemplateLastSelected", "TemplateLastSelected", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 12);
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterLastActive", "CustomerFilterLastActive", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterExpandedFolders", "CustomerFilterExpandedFolders", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("UserSettingsEntity", "NextGlobalPostNotificationDate", "NextGlobalPostNotificationDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
-			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
-			this.AddElementFieldMapping("UserSettingsEntity", "AutoWeigh", "AutoWeigh", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
-			this.AddElementFieldMapping("UserSettingsEntity", "DialogSettings", "DialogSettings", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 18);
+			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 15);
+			this.AddElementFieldMapping("UserSettingsEntity", "AutoWeigh", "AutoWeigh", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
+			this.AddElementFieldMapping("UserSettingsEntity", "DialogSettings", "DialogSettings", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 17);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

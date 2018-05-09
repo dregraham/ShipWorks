@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -124,7 +125,7 @@ namespace ShipWorks
                     return;
                 }
 
-                ExecutionMode.Execute();
+                await ExecutionMode.Execute().ConfigureAwait(true);
 
                 // Log total connections made
                 log.InfoFormat("Total connections: {0}", ConnectionMonitor.TotalConnectionCount);
@@ -368,6 +369,11 @@ namespace ShipWorks
             if (isCrashing)
             {
                 log.Error("Exception received while already terminating.", ex);
+                return;
+            }
+
+            if (ex.IsReadonlyDatabaseException(log))
+            {
                 return;
             }
 

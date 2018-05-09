@@ -1123,6 +1123,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap data_16 {
+            get {
+                object obj = ResourceManager.GetObject("data_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap data_disk16 {
             get {
                 object obj = ResourceManager.GetObject("data_disk16", resourceCulture);
@@ -1136,6 +1146,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap data_disk32 {
             get {
                 object obj = ResourceManager.GetObject("data_disk32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap data_error_16 {
+            get {
+                object obj = ResourceManager.GetObject("data_error_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1193,6 +1213,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap data_ok_16 {
+            get {
+                object obj = ResourceManager.GetObject("data_ok_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap data_out16 {
             get {
                 object obj = ResourceManager.GetObject("data_out16", resourceCulture);
@@ -1226,6 +1256,36 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap data_refresh {
             get {
                 object obj = ResourceManager.GetObject("data_refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap data_time {
+            get {
+                object obj = ResourceManager.GetObject("data_time", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap data_time_16 {
+            get {
+                object obj = ResourceManager.GetObject("data_time_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap data_unknown_16 {
+            get {
+                object obj = ResourceManager.GetObject("data_unknown_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

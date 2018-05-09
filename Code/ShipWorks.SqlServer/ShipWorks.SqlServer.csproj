@@ -142,6 +142,7 @@
     <Compile Include="Maintenance\RebuildTableIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Purge\PurgeEntities.cs" />
     <Compile Include="Purge\PurgeAbandonedResources.cs" />
     <Compile Include="Purge\PurgeAuditProcedure.cs" />
     <Compile Include="Purge\PurgeEmailOutboundProcedure.cs" />

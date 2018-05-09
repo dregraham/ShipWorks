@@ -1,15 +1,15 @@
-﻿using Interapptive.Shared.UI;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Interop;
-
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.UI.Controls.WebBrowser
 {
     /// <summary>
     /// Interaction logic for DismissableWebBrowserDlg.xaml
     /// </summary>
-    public partial class DismissableWebBrowserDlg : IWin32Window, IDialog
+    [Component]
+    public partial class DismissableWebBrowserDlg : IDismissableWebBrowserDlg
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DismissableWebBrowserDlg"/> class.
@@ -18,7 +18,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
         {
             InitializeComponent();
         }
-       
+
         /// <summary>
         /// Window handle.
         /// </summary>

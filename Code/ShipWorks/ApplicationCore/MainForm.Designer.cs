@@ -69,6 +69,7 @@ namespace ShipWorks
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
+            this.buttonArchive = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
             this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
@@ -78,6 +79,7 @@ namespace ShipWorks
             this.buttonSplit = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
+            this.panelArchiveNotification = new System.Windows.Forms.Panel();
             this.panelDockingArea = new System.Windows.Forms.Panel();
             this.gridControl = new ShipWorks.ApplicationCore.MainGridControl();
             this.dockContainer1 = new TD.SandDock.DockContainer();
@@ -733,6 +735,16 @@ namespace ShipWorks
             this.buttonRestore.Text = "Restore";
             this.buttonRestore.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonRestore.Activate += new System.EventHandler(this.OnRestoreBackup);
+            //
+            // buttonArchive
+            //
+            this.buttonArchive.Guid = new System.Guid("457547E9-DC3A-4CD9-A196-864C43CD1249");
+            this.buttonArchive.Image = global::ShipWorks.Properties.Resources.data_time;
+            this.ribbonSecurityProvider.SetPermission(this.buttonArchive, ShipWorks.Users.Security.PermissionType.DatabaseArchive);
+            this.buttonArchive.QuickAccessKey = "A";
+            this.buttonArchive.Text = "Archive";
+            this.buttonArchive.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonArchive.Activate += new System.EventHandler(this.OnArchive);
             //
             // buttonSetupDatabase
             //
@@ -2407,6 +2419,7 @@ namespace ShipWorks
             this.ribbonChunkAdminDatabase.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonSetupDatabase,
             this.separator2,
+            this.buttonArchive,
             this.buttonBackup,
             this.buttonRestore,
             stripLayoutDatabase});
@@ -2736,6 +2749,17 @@ namespace ShipWorks
             this.pictureBox8.TabIndex = 0;
             this.pictureBox8.TabStop = false;
             //
+            // panelArchiveNotification
+            //
+            this.panelArchiveNotification.Visible = false;
+            this.panelArchiveNotification.BackColor = System.Drawing.Color.Transparent;
+            this.panelArchiveNotification.Controls.Add(this.dashboardBarSample);
+            this.panelArchiveNotification.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelArchiveNotification.Location = new System.Drawing.Point(3, 149);
+            this.panelArchiveNotification.Name = "panelArchiveNotification";
+            this.panelArchiveNotification.Size = new System.Drawing.Size(969, 52);
+            this.panelArchiveNotification.TabIndex = 6;
+            //
             // dashboardArea
             //
             this.dashboardArea.BackColor = System.Drawing.Color.Transparent;
@@ -2778,6 +2802,7 @@ namespace ShipWorks
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 750);
             this.Controls.Add(this.panelDockingArea);
+            this.Controls.Add(this.panelArchiveNotification);
             this.Controls.Add(this.dashboardArea);
             this.Controls.Add(this.ribbon);
             this.Controls.Add(this.statusBar);
@@ -2844,6 +2869,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popupShowPanels;
         private Divelements.SandRibbon.MenuItem menuItemShowFiltersPanel;
         private Divelements.SandRibbon.Menu menuShowPanels;
+        private System.Windows.Forms.Panel panelArchiveNotification;
         private System.Windows.Forms.Panel panelDockingArea;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip notifyIconMenuStrip;
@@ -2852,6 +2878,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkAdminDatabase;
         private Divelements.SandRibbon.Button buttonBackup;
         private Divelements.SandRibbon.Button buttonRestore;
+        private Divelements.SandRibbon.Button buttonArchive;
         private Divelements.SandRibbon.Button buttonSetupDatabase;
         private Divelements.SandRibbon.Button buttonChangeConnection;
         private Divelements.SandRibbon.Button buttonManageUsers;

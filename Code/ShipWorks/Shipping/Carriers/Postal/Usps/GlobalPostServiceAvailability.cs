@@ -18,6 +18,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         GlobalPost = 1,
 
         [Description("SmartSaver")]
-        SmartSaver = 2
+        SmartSaver = 2,
+
+        [Description("InternationalFirst")]
+        InternationalFirst = 4,
+
+        [Description("InternationalPriority")]
+        InternationalPriority = 8,
+
+        [Description("InternationalExpress")]
+        InternationalExpress = 16
     }
 }

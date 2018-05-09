@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[BigCommerceOrderItem]
 [OrderItemID] [bigint] NOT NULL,
 [OrderAddressID] [bigint] NOT NULL,
 [OrderProductID] [bigint] NOT NULL,
+[ParentOrderProductID] [bigint] NULL,
 [IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
 [EventDate] [datetime] NULL,
 [EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
@@ -1720,14 +1721,7 @@ CREATE TABLE [dbo].[PostalProfile]
 [ShippingProfileID] [bigint] NOT NULL,
 [Service] [int] NULL,
 [Confirmation] [int] NULL,
-[Weight] [float] NULL,
 [PackagingType] [int] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
 [NonRectangular] [bit] NULL,
 [NonMachinable] [bit] NULL,
 [CustomsContentType] [int] NULL,
@@ -3700,7 +3694,8 @@ CREATE TABLE [dbo].[ShopifyStore]
 [ShopifyAccessToken] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShopifyRequestedShippingOption] [int] NOT NULL,
 [ApiKey] [nvarchar](100) NOT NULL,
-[Password] [nvarchar](100) NOT NULL
+[Password] [nvarchar](100) NOT NULL,
+[ShopifyNotifyCustomer] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyStore] on [dbo].[ShopifyStore]'
@@ -4185,7 +4180,6 @@ CREATE TABLE [dbo].[UserSettings]
 [TemplateLastSelected] [bigint] NOT NULL,
 [CustomerFilterLastActive] [bigint] NOT NULL,
 [CustomerFilterExpandedFolders] [xml] NULL,
-[NextGlobalPostNotificationDate] [DateTime] NOT NULL,
 [SingleScanSettings] [int] NOT NULL,
 [AutoWeigh] [bit] NOT NULL,
 [DialogSettings] [xml] NULL
@@ -4443,7 +4437,8 @@ CREATE TABLE [dbo].[Configuration]
 [AuditDeletedOrders] [bit] NOT NULL,
 [CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
-[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0))
+[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
+[ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>')
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

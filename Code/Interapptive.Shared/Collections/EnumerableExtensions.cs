@@ -238,6 +238,12 @@ namespace Interapptive.Shared.Collections
             new ReadOnlyDictionary<TKey, TValue>(source.ToDictionary(k => k.Key, v => v.Value));
 
         /// <summary>
+        /// Is the count of the collection less than the specified amount
+        /// </summary>
+        public static bool IsCountLessThan<T>(this IEnumerable<T> source, int count) =>
+            source.CompareCountTo(count) == ComparisonResult.Less;
+
+        /// <summary>
         /// Is the count of the collection greater than the specified amount
         /// </summary>
         public static bool IsCountGreaterThan<T>(this IEnumerable<T> source, int count) =>

@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
+using CefSharp;
 using Interapptive.Shared.UI;
-using System.Net;
-using Interapptive.Shared.Net;
 using log4net;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -98,33 +91,55 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 browserDisplayedShopName = ShopUrlName;
 
                 // Make sure we are logged out first, so the authentication process doesn't get completely skipped over and look goofy
-                webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(OnBrowserLogoutCompleted);
-                webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).ApiLogoutUrl);
+                webBrowser.LoadingStateChanged += OnBrowserLogoutCompleted;
+                webBrowser.Load(new ShopifyEndpoints(ShopUrlName).ApiLogoutUrl);
             }
         }
 
         /// <summary>
         /// The document has completed loading
         /// </summary>
-        private void OnBrowserLogoutCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void OnBrowserLogoutCompleted(object sender, LoadingStateChangedEventArgs e)
         {
+            if (e.IsLoading)
+            {
+                return;
+            }
+
+            if (InvokeRequired)
+            {
+                BeginInvoke((EventHandler<LoadingStateChangedEventArgs>) OnBrowserLogoutCompleted, sender, e);
+                return;
+            }
+
             this.Cursor = Cursors.WaitCursor;
 
-            webBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(OnBrowserLogoutCompleted);
+            webBrowser.LoadingStateChanged -= OnBrowserLogoutCompleted;
 
-            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(OnBrowserDocumentCompleted);
-            webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl());
+            webBrowser.LoadingStateChanged += OnBrowserDocumentCompleted;
+            webBrowser.Load(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl().ToString());
         }
 
         /// <summary>
         /// The document has completed loading
         /// </summary>
-        private void OnBrowserDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void OnBrowserDocumentCompleted(object sender, LoadingStateChangedEventArgs e)
         {
+            if (e.IsLoading)
+            {
+                return;
+            }
+
+            if (InvokeRequired)
+            {
+                BeginInvoke((EventHandler<LoadingStateChangedEventArgs>) OnBrowserDocumentCompleted, sender, e);
+                return;
+            }
+
             webBrowser.Visible = true;
             this.Cursor = Cursors.Default;
 
-            webBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(OnBrowserDocumentCompleted);
+            webBrowser.LoadingStateChanged -= OnBrowserDocumentCompleted;
         }
 
         /// <summary>
@@ -174,13 +189,20 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Fires when the web browser has navigated to a page.  This is the event needed to determine if we have received a valid
         /// authorization code.
         /// </summary>
-        private void OnWebBrowserNavigated(object sender, WebBrowserNavigatedEventArgs e)
+        private void OnWebBrowserNavigated(object sender, AddressChangedEventArgs e)
         {
+            var url = new Uri(e.Address);
+
+            if (url.PathAndQuery == "/admin")
+            {
+                webBrowser.Load(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl().ToString());
+            }
+
             // This gets called for every navigable link on the page, so make sure the Url is the one we care about.
-            if (ShopifyWebClient.UriHasRequestToken(e.Url))
+            if (ShopifyWebClient.UriHasRequestToken(url))
             {
                 // We have a url with the request token, process it.
-                OnInterceptLoginCallback(this, e.Url);
+                OnInterceptLoginCallback(this, url);
             }
         }
     }

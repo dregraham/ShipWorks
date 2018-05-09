@@ -471,6 +471,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             item.IsDigitalItem = productType == EnumHelper.GetApiValue(BigCommerceProductType.Digital) ||
                                  productType == EnumHelper.GetApiValue(BigCommerceProductType.GiftCertificate);
 
+            item.ParentOrderProductID = orderProduct.parent_order_product_id;
+
             // Now load all the item options
             LoadProductAndRelatedObjects(item, orderProduct);
 

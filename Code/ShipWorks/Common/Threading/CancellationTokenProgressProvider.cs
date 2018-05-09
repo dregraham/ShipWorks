@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 
@@ -14,6 +16,7 @@ namespace ShipWorks.Common.Threading
         ObservableCollection<IProgressReporter> progressItems = new ObservableCollection<IProgressReporter>();
 
         readonly CancellationTokenSource cancellationSource;
+        private readonly TaskCompletionSource<Unit> terminatedCompletionSource = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Constructor
@@ -98,6 +101,16 @@ namespace ShipWorks.Common.Threading
 
             return item;
         }
+
+        /// <summary>
+        /// Task that completes when the progress provider is terminated
+        /// </summary>
+        public Task<Unit> Terminated => terminatedCompletionSource.Task;
+
+        /// <summary>
+        /// End the progress provider
+        /// </summary>
+        public void Terminate() => terminatedCompletionSource.SetResult(Unit.Default);
 
         /// <summary>
         /// Called when changes are made to the progress item collection

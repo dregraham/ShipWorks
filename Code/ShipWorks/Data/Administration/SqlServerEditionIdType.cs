@@ -56,9 +56,12 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static bool SupportsCompression(this SqlServerEditionIdType value)
         {
-            return value != SqlServerEditionIdType.Express &&
-                   value != SqlServerEditionIdType.ExpressWithAdvancedServices &&
-                   value != SqlServerEditionIdType.Web;
+            return value == SqlServerEditionIdType.Enterprise ||
+                   value == SqlServerEditionIdType.EnterpriseEditionCoreBasedLicensing ||
+                   value == SqlServerEditionIdType.EnterpriseEvaluation ||
+                   value == SqlServerEditionIdType.Standard ||
+                   value == SqlServerEditionIdType.BusinessIntelligence ||
+                   value == SqlServerEditionIdType.Developer;
         }
 
         /// <summary>

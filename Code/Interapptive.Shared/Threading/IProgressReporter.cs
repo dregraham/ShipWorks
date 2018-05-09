@@ -51,5 +51,18 @@ namespace Interapptive.Shared.Threading
         /// Cancel the current progress reporter
         /// </summary>
         void Cancel();
+
+        /// <summary>
+        /// Called when the item has not yet been run, but won't be run due to a previous error.
+        /// </summary>
+        void Terminate();
+
+        /// <summary>
+        /// Name of the progress item
+        /// </summary>
+        string Name { get; }
+        
+        // Raised when an of the properties of the item changed
+        event EventHandler Changed;
     }
 }

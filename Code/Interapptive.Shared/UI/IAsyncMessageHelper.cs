@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 
 namespace Interapptive.Shared.UI
@@ -13,6 +14,15 @@ namespace Interapptive.Shared.UI
     /// </remarks>
     public interface IAsyncMessageHelper
     {
+        /// <summary>
+        /// Show a message box with the given text.
+        /// </summary>
+        /// <param name="message">Message that should be displayed</param>
+        /// <returns>
+        /// Task that will complete when the dialog is closed
+        /// </returns>
+        Task ShowMessage(string message);
+
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
@@ -43,5 +53,20 @@ namespace Interapptive.Shared.UI
         /// Show a new progress dialog
         /// </summary>
         Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description);
+
+        /// <summary>
+        /// Show a new progress dialog with the given provider
+        /// </summary>
+        Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan);
+
+        /// <summary>
+        /// Create a progress provider
+        /// </summary>
+        IProgressProvider CreateProgressProvider();
+
+        /// <summary>
+        /// Get a connection sensitive scope
+        /// </summary>
+        Task<IConnectionSensitiveScope> GetConnectionSensitiveScope(string text);
     }
 }

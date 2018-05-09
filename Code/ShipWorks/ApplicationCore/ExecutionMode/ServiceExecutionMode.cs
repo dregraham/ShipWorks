@@ -139,7 +139,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        public override void Execute()
+        public override Task Execute()
         {
             log.Info("Running as a service.");
 
@@ -152,13 +152,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
             else
             {
-                // Do full initialzition
+                // Do full initialization
                 Initialize();
 
                 startupTimeInUtc = DateTime.UtcNow;
 
                 Host.Run();
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>

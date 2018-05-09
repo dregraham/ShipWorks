@@ -930,6 +930,8 @@ namespace ShipWorks.Data.Model
 		EventDate,
 		///<summary>EventName. </summary>
 		EventName,
+		///<summary>ParentOrderProductID. </summary>
+		ParentOrderProductID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1900,6 +1902,8 @@ namespace ShipWorks.Data.Model
 		UseParallelActionQueue,
 		///<summary>AllowEbayCombineLocally. </summary>
 		AllowEbayCombineLocally,
+		///<summary>ArchivalSettingsXml. </summary>
+		ArchivalSettingsXml,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9696,6 +9700,8 @@ namespace ShipWorks.Data.Model
 		ApiKey,
 		///<summary>Password. </summary>
 		Password,
+		///<summary>ShopifyNotifyCustomer. </summary>
+		ShopifyNotifyCustomer,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10960,8 +10966,6 @@ namespace ShipWorks.Data.Model
 		CustomerFilterLastActive,
 		///<summary>CustomerFilterExpandedFolders. </summary>
 		CustomerFilterExpandedFolders,
-		///<summary>NextGlobalPostNotificationDate. </summary>
-		NextGlobalPostNotificationDate,
 		///<summary>SingleScanSettings. </summary>
 		SingleScanSettings,
 		///<summary>AutoWeigh. </summary>

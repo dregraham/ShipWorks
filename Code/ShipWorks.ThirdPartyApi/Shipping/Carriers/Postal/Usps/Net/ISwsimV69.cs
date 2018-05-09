@@ -110,5 +110,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         string ChangePlan(object Item, int PlanId, string PromoCode, bool? SendEmail, bool SendEmailSpecified,
             out PurchaseStatus PurchaseStatus, out int TransactionID, out string RejectionReason);
+
+        /// <summary>
+        /// Track a shipment
+        /// </summary>
+        /// <param name="Item">This is the authenticator</param>
+        /// <param name="Item1">This is the tracking number</param>
+        /// <param name="TrackingEvents">Collection of TrackingEvent objects, each one representing one scan of the package by the USPS.</param>
+        /// <param name="GuaranteedDeliveryDate">USPS provided guaranteed date, if available.</param>
+        /// <param name="ExpectedDeliveryDate">USPS provided expected or predicted delivery date.</param>
+        /// <param name="ServiceDescription">A plain language description of the service returned, i.e. “USPS Priority Mail”</param>
+        /// <param name="Carrier">Specifies carrier of the package.</param>
+        /// <param name="DestinationInfo">Specifies the destination the package is headed to, if available.</param>
+        /// <returns></returns>
+        string TrackShipment(object Item, object Item1, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate, 
+            out DateTime? ExpectedDeliveryDate, out string ServiceDescription, out string Carrier, out DestinationInfo DestinationInfo);
     }
 }

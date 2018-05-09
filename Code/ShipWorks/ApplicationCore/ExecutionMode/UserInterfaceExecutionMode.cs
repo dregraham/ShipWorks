@@ -102,7 +102,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Runs the ShipWorks UI.
         /// </summary>
-        public override void Execute()
+        public override Task Execute()
         {
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
@@ -138,6 +138,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
+
+            return Task.CompletedTask;
         }
 
         /// <summary>

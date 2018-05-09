@@ -1,12 +1,15 @@
 ﻿using System;
+using System.IO;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Pdf;
+using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using ShipmentResponse = ShipWorks.Shipping.Carriers.OnTrac.Schemas.ShipmentResponse;
 
 namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 {
@@ -23,11 +26,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         public void Save_CopiesResponseData_ToShipmentEntity()
         {
             var shipment = new ShipmentEntity();
-            var response = new ShipmentResponse
+            var response = new ShipmentResponse.Shipment
             {
                 Tracking = "abc123",
-                TotalChrg = 3.21,
-                BilledWeight = 4.56,
+                TotalChrg = 3.21m,
+                BilledWeight = "4.56",
                 Label = exampleLabelData
             };
 
@@ -43,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         public void Save_ClearsExistingLabels()
         {
             var shipment = new ShipmentEntity { ShipmentID = 1234 };
-            var response = new ShipmentResponse { Label = exampleLabelData };
+            var response = new ShipmentResponse.Shipment { Label = exampleLabelData };
             var testObject = mock.Create<OnTracDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(response));
 
             testObject.Save();
@@ -55,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         public void Save_SavesLabelData_WhenFormatIsSet()
         {
             var shipment = new ShipmentEntity { ShipmentID = 1234, ActualLabelFormat = 1 };
-            var response = new ShipmentResponse { Label = "a" };
+            var response = new ShipmentResponse.Shipment { Label = "a" };
             var testObject = mock.Create<OnTracDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(response));
 
             testObject.Save();
@@ -67,19 +70,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         public void Save_SavesLabelData_WhenFormatIsNotSet()
         {
             var shipment = new ShipmentEntity { ShipmentID = 1234 };
-            var response = new ShipmentResponse { Label = exampleLabelData };
+            var response = new ShipmentResponse.Shipment { Label = exampleLabelData };
             var testObject = mock.Create<OnTracDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(response));
 
             testObject.Save();
 
-            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(label, 1234, "LabelPrimary"));
+            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromPdf(
+                                                             PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(),
+                                                             shipment.ShipmentID, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
         }
 
         [Fact]
         public void Save_ThrowsShippingException_WhenFormatIsNotSetAndImageIsInvalid()
         {
             var shipment = new ShipmentEntity();
-            var response = new ShipmentResponse { Label = "a" };
+            var response = new ShipmentResponse.Shipment { Label = "a" };
             var testObject = mock.Create<OnTracDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(response));
 
             Assert.Throws<ShippingException>(() => testObject.Save());

@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Import Project="..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props" Condition="Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props')" />
+  <Import Project="..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props" Condition="Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props')" />
+  <Import Project="..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props" Condition="Exists('..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props')" />
+  <Import Project="..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props" Condition="Exists('..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,6 +19,7 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
     <ApplicationIcon>Resources\shipworks.ico</ApplicationIcon>
+    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -978,6 +983,27 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotification.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationManager.cs" />
+    <Compile Include="Stores\Orders\Archive\IArchiveNotificationViewModel.cs" />
+    <Compile Include="Data\Administration\IShipWorksDatabaseUtility.cs" />
+    <Compile Include="Data\Administration\ISqlDatabaseDetail.cs" />
+    <Compile Include="Data\Administration\ShipWorksDatabaseUtilityWrapper.cs" />
+    <Compile Include="Data\Connection\EmptyConnectionScope.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveDataAccess.cs" />
+    <Compile Include="Stores\Orders\Archive\ArchiveConstants.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveFilterRegenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveSqlGenerator.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorDialog.cs" />
+    <Compile Include="Stores\Orders\Archive\ISingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Stores\Orders\Archive\OrderArchiverOrderDataComparisonType.cs" />
+    <Compile Include="Data\Administration\OrderArchiveUpgradeDatabaseScope.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiveOrchestrator.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
@@ -1022,6 +1048,7 @@
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlServerEditionType.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\IVersionSpecificUpdate.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_24_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_16_01_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\SqlServerCompatibilityFix.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00.cs" />
@@ -1343,6 +1370,12 @@
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
     <Compile Include="Shipping\Carriers\IShipmentDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.cs">
+      <DependentUpon>EasyTrackResponse.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.cs">
+      <DependentUpon>OnTracDirectPostShipmentRequest.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -8645,16 +8678,21 @@
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />
+    <Compile Include="Users\IUserLoginWorkflow.cs" />
+    <Compile Include="Users\Security\ISecurityContextFactory.cs" />
     <Compile Include="Users\IUserConditionalNotification.cs" />
     <Compile Include="Users\IUserService.cs" />
     <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Logon\LogonCredentials.cs" />
+    <Compile Include="Users\Security\SecurityContextFactory.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Users\Security\AddStorePermissionsDlg.Designer.cs">
       <DependentUpon>AddStorePermissionsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Security\ArchiveSecurityContext.cs" />
+    <Compile Include="Users\Security\BaseSecurityContext.cs" />
     <Compile Include="Users\Security\ISecurityContext.cs" />
     <Compile Include="Users\Security\PermissionAwareDeleter.cs" />
     <Compile Include="Users\Security\PermissionBinding.cs" />
@@ -8700,6 +8738,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
     <Compile Include="Users\UserServiceLogonResultType.cs" />
@@ -8869,6 +8908,15 @@
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v12.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ValidationAvailabilityAndCommitmentService_v6.wsdl" />
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\EasyTrackResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracDirectPostShipmentResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -10745,6 +10793,12 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <Content Include="Resources\data_16.png" />
+    <Content Include="Resources\data_error_16.png" />
+    <Content Include="Resources\data_ok_16.png" />
+    <Content Include="Resources\data_time.png" />
+    <Content Include="Resources\data_time_16.png" />
+    <Content Include="Resources\data_unknown_16.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />
@@ -11153,6 +11207,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Archiving\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
@@ -11182,6 +11237,19 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets')" />
+  <Import Project="..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets" Condition="Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

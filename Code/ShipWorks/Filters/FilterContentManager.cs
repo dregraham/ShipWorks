@@ -365,7 +365,7 @@ namespace ShipWorks.Filters
                 ExceptionMonitor.WrapWorkItem(InitiateCalculationThread),
                 new object[] { initial, operationToken });
 
-            // Wait for it to finish.  It's ok if it doesnt.
+            // Wait for it to finish.  It's ok if it doesn't.
             calculatingEvent.WaitOne(wait, false);
         }
 
@@ -604,7 +604,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Prepares the given node for having its full counts taken.
         /// </summary>
-        public static FilterNodeContentEntity CreateNewFilterContent(IFilterContentSqlGenerator sqlProvider, SqlAdapter adapter)
+        public static FilterNodeContentEntity CreateNewFilterContent(IFilterContentSqlGenerator sqlProvider, ISqlAdapter adapter)
         {
             if (sqlProvider == null)
             {

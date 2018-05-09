@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Common;
+using System.Reactive;
+using System.Threading.Tasks;
 using Common.Logging;
 using Interapptive.Shared.Data;
 
@@ -105,6 +107,41 @@ namespace ShipWorks.Data.Connection
             {
                 command.Transaction = ScopedTransaction;
                 return commandAction(command);
+            }
+        }
+
+        /// <summary>
+        /// Execute the specified action with a pre-built connection and command
+        /// </summary>
+        public static Task<Unit> ExecuteWithCommandAsync(Func<DbCommand, Task<Unit>> commandAction)
+        {
+            return ExecuteWithCommandAsync<Unit>(async x =>
+            {
+                await commandAction(x).ConfigureAwait(false);
+                return Unit.Default;
+            });
+        }
+
+        /// <summary>
+        /// Execute the specified action with a pre-built connection and command
+        /// </summary>
+        public static async Task<T> ExecuteWithCommandAsync<T>(Func<DbCommand, Task<T>> commandAction)
+        {
+            if (ScopedConnection == null)
+            {
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand command = DbCommandProvider.Create(con))
+                    {
+                        return await commandAction(command).ConfigureAwait(false);
+                    }
+                }
+            }
+
+            using (DbCommand command = DbCommandProvider.Create(ScopedConnection))
+            {
+                command.Transaction = ScopedTransaction;
+                return await commandAction(command).ConfigureAwait(false);
             }
         }
 

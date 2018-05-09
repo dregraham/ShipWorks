@@ -368,8 +368,7 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("Saint Christopher", "SW");
             countries.Add("Saint Eustatius", "EU");
             countries.Add("Saint John", "UV");
-            countries.Add("Saint Maaretn", "MB");
-            countries.Add("Saint Martin", "TB");
+            countries.Add("Saint Martin", "MF");
             countries.Add("Sint Maarten", "SX");
             countries.Add("Saint Thomas", "VL");
             countries.Add("Sudan", "SD");

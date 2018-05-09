@@ -41,19 +41,20 @@ namespace ShipWorks.Users
         /// <summary>
         /// Logs the user in with the given credentials
         /// </summary>
-        public bool Logon(LogonCredentials credentials)
-        {
-            return UserSession.Logon(credentials.Username, credentials.Password, credentials.Remember);
-        }
+        public bool Logon(LogonCredentials credentials) =>
+            UserSession.Logon(credentials.Username, credentials.Password, credentials.Remember);
+
+        /// <summary>
+        /// Logs the given user in
+        /// </summary>
+        public bool Logon(UserEntity user, bool audit) =>
+            UserSession.Logon(user, audit);
 
         /// <summary>
         /// Logs in using the last logged in user
         /// </summary>
         /// <returns></returns>
-        public bool LogonLastUser()
-        {
-            return UserSession.LogonLastUser();
-        }
+        public bool LogonLastUser() => UserSession.LogonLastUser();
 
         /// <summary>
         /// Is a user logged on

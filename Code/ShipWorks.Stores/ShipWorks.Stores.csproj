@@ -156,6 +156,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
@@ -165,6 +166,25 @@
     <Compile Include="Communication\OnDemandDownloader.cs" />
     <Compile Include="Communication\OnDemandDownloaderFactory.cs" />
     <Compile Include="Communication\SingleScanOnDemandDownloader.cs" />
+    <Compile Include="Orders\Archive\ArchiveManagerDataAccess.cs" />
+    <Compile Include="Orders\Archive\ArchiveManagerDialogViewModel.cs" />
+    <Compile Include="Orders\Archive\ArchiveNotificationManager.cs" />
+    <Compile Include="Orders\Archive\ArchiveNotificationViewModel.cs" />
+    <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
+    <Compile Include="Orders\Archive\Errors\Errors.cs" />
+    <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
+    <Compile Include="Orders\Archive\IOrderArchiver.cs" />
+    <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
+    <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveDataAccess.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveFilterRegenerator.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveOrchestrator.cs" />
+    <Compile Include="Orders\Archive\OrderArchiver.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveResult.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
+    <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
+    <Compile Include="Orders\Archive\SingleDatabaseSelectorViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
     <Compile Include="Orders\Combine\Actions\IStoreSpecificCombineOrderAction.cs" />
     <Compile Include="Orders\Split\Actions\IStoreSpecificSplitOrderAction.cs" />
@@ -263,6 +283,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorSplitOrderAction.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSql.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemsResult.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
@@ -883,7 +904,15 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Orders\Archive\ArchiveOrderData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Orders\Archive\CopyDatabase.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

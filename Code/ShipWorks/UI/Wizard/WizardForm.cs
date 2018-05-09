@@ -662,7 +662,7 @@ namespace ShipWorks.UI.Wizard
             }
 
             // Tell the current page we are about to step into it
-            page.RaiseSteppingInto(args);
+            await page.RaiseSteppingInto(args).ConfigureAwait(true);
 
             // See if they changed the page we are supposed to go to
             return args.Skip ?

@@ -384,6 +384,7 @@
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
+    <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\ShippingProfileApplicationStrategyFactory.cs" />
@@ -405,7 +406,9 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsPrefetchProvider.cs" />
     <Compile Include="Carriers\Ups\UpsPrefetchProvider.cs" />
+    <Compile Include="Services\IRatesRetrieverService.cs" />
     <Compile Include="Services\IShippingProfileFactory.cs" />
+    <Compile Include="Services\RatesRetrieverServiceFactory.cs" />
     <Compile Include="Services\ShippingProfileFactory.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileService.cs" />

@@ -1,6 +1,16 @@
 DECLARE @started DATETIME
 SET @started = GETDATE()
 
+DECLARE @isArchive BIT;
+IF (EXISTS(SELECT * FROM [Configuration] WHERE CONVERT(NVARCHAR(MAX), ArchivalSettingsXml) = '<ArchivalSettings/>'))
+BEGIN
+	SET @isArchive = 0
+END
+ELSE
+BEGIN
+	SET @isArchive = 1
+END
+
 IF OBJECT_ID('tempdb.dbo.#Removed') IS NOT NULL
   DROP TABLE #Removed
 
@@ -45,11 +55,14 @@ DELETE FilterNodeContentDetail
 
 SET @deleteCount = @@rowCount;
    
-INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
-   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then CAST(TopComputer.ComputerID as varchar(150)) ELSE t.ComputerLimitedList END, r.ObjectID, 0, 0
-   FROM ActionFilterTrigger t, #Removed r CROSS APPLY (SELECT MAX(ComputerID) as ComputerID FROM #DirtyObjects WHERE r.ObjectID = ObjectID) AS TopComputer
-   WHERE t.FilterNodeID = @filterNodeID AND
-         t.Direction = 0
+IF (@isArchive = 0)
+BEGIN
+	INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+	   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then CAST(TopComputer.ComputerID as varchar(150)) ELSE t.ComputerLimitedList END, r.ObjectID, 0, 0
+	   FROM ActionFilterTrigger t, #Removed r CROSS APPLY (SELECT MAX(ComputerID) as ComputerID FROM #DirtyObjects WHERE r.ObjectID = ObjectID) AS TopComputer
+	   WHERE t.FilterNodeID = @filterNodeID AND
+			 t.Direction = 0
+END
 
 INSERT INTO FilterNodeContentDetail (FilterNodeContentID, ObjectID)
 		OUTPUT inserted.ObjectID INTO #Added
@@ -60,11 +73,14 @@ INSERT INTO FilterNodeContentDetail (FilterNodeContentID, ObjectID)
 
 SET @insertCount = @@rowcount
 
-INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
-   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then CAST(TopComputer.ComputerID as varchar(150)) ELSE t.ComputerLimitedList END, a.ObjectID, 0, 0
-   FROM ActionFilterTrigger t, #Added a CROSS APPLY (SELECT MAX(ComputerID) as ComputerID  FROM #DirtyObjects WHERE a.ObjectID = ObjectID) AS TopComputer
-   WHERE t.FilterNodeID = @filterNodeID AND
-         t.Direction = 1
+IF (@isArchive = 0)
+BEGIN
+	INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+	   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then CAST(TopComputer.ComputerID as varchar(150)) ELSE t.ComputerLimitedList END, a.ObjectID, 0, 0
+	   FROM ActionFilterTrigger t, #Added a CROSS APPLY (SELECT MAX(ComputerID) as ComputerID  FROM #DirtyObjects WHERE a.ObjectID = ObjectID) AS TopComputer
+	   WHERE t.FilterNodeID = @filterNodeID AND
+			 t.Direction = 1
+END
 
 DECLARE @countChanged int
 SET @countChanged = 0

@@ -539,5 +539,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 new PostalPackageAdapter(shipment, shipment.Postal.Endicia)
             };
         }
+
+        /// <summary>
+        /// Track the given Endicia shipment
+        /// </summary>
+        public override Tracking.TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            return new EndiciaApiClient().TrackShipment(shipment);
+        }
     }
 }

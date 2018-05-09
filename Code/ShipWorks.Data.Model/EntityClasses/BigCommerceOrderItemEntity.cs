@@ -343,6 +343,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EventDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EventName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ParentOrderProductID", fieldHashtable);
 		}
 		#endregion
 
@@ -444,6 +446,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)BigCommerceOrderItemFieldIndex.EventName, true); }
 			set	{ SetValue((int)BigCommerceOrderItemFieldIndex.EventName, value); }
+		}
+
+		/// <summary> The ParentOrderProductID property of the Entity BigCommerceOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."ParentOrderProductID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ParentOrderProductID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)BigCommerceOrderItemFieldIndex.ParentOrderProductID, false); }
+			set	{ SetValue((int)BigCommerceOrderItemFieldIndex.ParentOrderProductID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

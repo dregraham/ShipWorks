@@ -1,12 +1,11 @@
-﻿using NDesk.Options;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Common.Logging;
+using NDesk.Options;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Services.Hosting.Background;
 using ShipWorks.ApplicationCore.Services.Hosting.Windows;
-using System.Collections.Generic;
-using System.Text;
-using System;
-using Common.Logging;
-
 
 namespace ShipWorks.ApplicationCore.Services.Installers
 {
@@ -31,15 +30,17 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         /// Executes the command with the given options.
         /// If the options are not valid for the command, a CommandLineCommandArgumentException is thrown.
         /// </summary>
-        public void Execute(List<string> options)
+        public Task Execute(List<string> options)
         {
             IServiceRegistrar registrar = null;
 
             var parser = new OptionSet()
-                .Add("w|windows", "Install as Windows services.", x => {
+                .Add("w|windows", "Install as Windows services.", x =>
+                {
                     registrar = new WindowsServiceRegistrar();
                 })
-                .Add("b|background", "Install as background services (run at user log-on).", x => {
+                .Add("b|background", "Install as background services (run at user log-on).", x =>
+                {
                     registrar = new BackgroundServiceRegistrar();
                 });
 
@@ -63,6 +64,8 @@ namespace ShipWorks.ApplicationCore.Services.Installers
 
             // Register the current one
             registrar.RegisterAll();
+
+            return Task.CompletedTask;
         }
     }
 }

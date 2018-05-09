@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -12,7 +12,6 @@
     <Name>ShipWorks.SingleScan</Name>
     <Name>ShipWorks.Stores</Name>
     <Name>ShipWorks.Stores.UI</Name>
-    <Name>ShipWorks.ThirdPartyApi</Name>
     <Name>ShipWorks.UI</Name>
   </Assemblies>
   <FrameworkAssemblies>
@@ -4259,7 +4258,7 @@ select new { m }
 
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
-warnif count > 60
+warnif count > 49
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreComplexMethod*") 
@@ -4279,7 +4278,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
-warnif count > 38
+warnif count > 12
 
 from m in JustMyCode.Types.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongTypes*") 
@@ -4287,7 +4286,7 @@ from m in JustMyCode.Types.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
-warnif count > 319
+warnif count > 281
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongMethod*") 

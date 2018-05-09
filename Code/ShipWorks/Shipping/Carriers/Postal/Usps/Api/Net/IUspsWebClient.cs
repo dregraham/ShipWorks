@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -76,5 +77,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Get the USPS URL of the given urlType
         /// </summary>
         string GetUrl(IUspsAccountEntity account, UrlType urlType);
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        TrackingResult TrackShipment(ShipmentEntity shipment);
     }
 }
