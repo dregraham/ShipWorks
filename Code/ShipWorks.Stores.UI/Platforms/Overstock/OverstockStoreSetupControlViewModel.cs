@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.UI.Platforms.Overstock
             OverstockStoreEntity testStore = new OverstockStoreEntity()
             {
                 Username = Username,
-                Password = Password
+                Password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(Username).Encrypt(Password)
             };
 
             bool result = webClient.TestConnection(testStore).Result;
