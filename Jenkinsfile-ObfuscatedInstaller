@@ -14,7 +14,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'bundle exec rake build:public_installer[0.0.0]'
+				bat 'bundle exec rake build:public_installer[5.24.0]'
 				archiveArtifacts artifacts: 'Artifacts/Distribute/*.*,Artifacts/Logs/*.*', fingerprint: true
 			}
 		}
