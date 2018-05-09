@@ -212,6 +212,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\XmlTextWriterExtensions.cs" />
+    <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
