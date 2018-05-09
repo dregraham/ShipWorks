@@ -291,3 +291,10 @@ VALUES
 (3, 87, '', 0),
 (0, 121, '-PL-', 3)
 GO
+
+INSERT INTO Shortcut (ModifierKeys, VirtualKey, Barcode, [Action])
+VALUES 
+(null, null, '$TB$', 4),
+(null, null, '$ES$', 5),
+(null, null, '$CR$', 6);
+GO
