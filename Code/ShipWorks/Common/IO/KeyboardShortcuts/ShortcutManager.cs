@@ -30,14 +30,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         // Shortcuts reserved for future use
         private readonly KeyboardShortcutData[] reservedShortcuts = 
         {
-            new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.D, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.F, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.O, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.D, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.F, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.O, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null)
         };
 
         /// <summary>
