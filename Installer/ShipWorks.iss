@@ -22,6 +22,8 @@
     #define EditionAppConfig 'App.Ups.config'
 #endif
 
+#define CurrentYear GetDateTimeString('yyyy', '', '');
+
 [Setup]
 AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
@@ -57,7 +59,7 @@ VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2017
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-{#= CurrentYear}
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 DisableDirPage=no
