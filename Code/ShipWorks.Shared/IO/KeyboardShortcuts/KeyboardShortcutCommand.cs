@@ -32,6 +32,24 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Create a label
         /// </summary>
         [Description("create label")]
-        CreateLabel = 3
+        CreateLabel = 3,
+        
+        /// <summary>
+        /// Simulates a Tab key press
+        /// </summary>
+        [Description("Press Tab key")]
+        Tab = 4,
+        
+        /// <summary>
+        /// Simulates an Escape key press
+        /// </summary>
+        [Description("Press Escape key")]
+        Escape = 5,
+        
+        /// <summary>
+        /// Simulates an Enter key press
+        /// </summary>
+        [Description("Press Enter key")]
+        Enter = 6
     }
 }
