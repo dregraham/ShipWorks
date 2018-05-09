@@ -65,7 +65,7 @@
                    TextWrapping="WrapWithOverflow">
             For help finding your user name or password, 
             <Hyperlink
-                NavigateUri="http://support.shipworks.com/support/solutions/articles/TBD" ui:Link.OpenInBrowser="true">
+                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000122601-adding-an-overstock-store" ui:Link.OpenInBrowser="true">
                 click here.
             </Hyperlink>
         </TextBlock>
