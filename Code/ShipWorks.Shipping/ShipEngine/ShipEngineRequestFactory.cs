@@ -60,7 +60,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private AddressDTO CreateAddress(PersonAdapter personAdapter)
         {
-            AddressDTO address = new AddressDTO()
+            string countryCode = personAdapter.CountryCode == "UK" ? "GB" : personAdapter.CountryCode;
+            AddressDTO address = new AddressDTO
             {
                 AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,
                 Name = personAdapter.UnparsedName,
@@ -72,7 +73,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 CityLocality = personAdapter.City,
                 StateProvince = personAdapter.StateProvCode,
                 PostalCode = personAdapter.PostalCode,
-                CountryCode = personAdapter.CountryCode
+                CountryCode =  countryCode
             };
 
             return address;
