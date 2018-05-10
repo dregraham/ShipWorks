@@ -6960,6 +6960,21 @@ PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
 GO
 ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [PK_OverstockOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_OverstockOrderID] ON [dbo].[OverstockOrder]
+(
+	[OverstockOrderID] ASC
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_ChannelName] ON [dbo].[OverstockOrder]
+(
+	[ChannelName] ASC
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseName] ON [dbo].[OverstockOrder]
+(
+	[WarehouseName] ASC
+) ON [PRIMARY]
+GO
 PRINT N'Creating [dbo].[OverstockOrderItem]'
 GO
 CREATE TABLE [dbo].[OverstockOrderItem]

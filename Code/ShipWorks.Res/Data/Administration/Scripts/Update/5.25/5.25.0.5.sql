@@ -85,3 +85,21 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_OverstockStore_Store]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[OverstockStore]', 'U'))
 ALTER TABLE [dbo].[OverstockStore] ADD CONSTRAINT [FK_OverstockStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_ChannelName')
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_ChannelName] ON [dbo].[OverstockOrder]
+(
+	[ChannelName] ASC
+) ON [PRIMARY]
+GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_OverstockOrderID')
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_OverstockOrderID] ON [dbo].[OverstockOrder]
+(
+	[OverstockOrderID] ASC
+) ON [PRIMARY]
+GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_WarehouseName')
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseName] ON [dbo].[OverstockOrder]
+(
+	[WarehouseName] ASC
+) ON [PRIMARY]
+GO

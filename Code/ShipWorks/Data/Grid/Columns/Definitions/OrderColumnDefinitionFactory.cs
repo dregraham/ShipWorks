@@ -773,7 +773,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{8AE72261-8FDB-4412-871A-789F1EB9A841}", false,
                         new GridEnumDisplayType<CombineSplitStatusType>(EnumSortMethod.Description), 
-                        "Combine/Split", CombineSplitStatusType.Combined, OrderFields.CombineSplitStatus)
+                        "Combine/Split", CombineSplitStatusType.Combined, OrderFields.CombineSplitStatus),
+
+                    new GridColumnDefinition("{B5465229-898D-4F81-9B4A-27AC86A35662}",
+                        new GridTextDisplayType(), "Warehouse", "Warehouse A",
+                        OverstockOrderFields.WarehouseName)
+                    {
+                        StoreTypeCode = StoreTypeCode.Overstock
+                    },
+
+                    new GridColumnDefinition("{C999217D-DCDC-455A-9A10-CCEA612CC1B2}",
+                        new GridTextDisplayType(), "Channel", "Channel A",
+                        OverstockOrderFields.ChannelName)
+                    {
+                        StoreTypeCode = StoreTypeCode.Overstock
+                    },
                 };
 
             return definitions;
