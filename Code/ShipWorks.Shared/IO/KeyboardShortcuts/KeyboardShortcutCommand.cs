@@ -12,7 +12,7 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// <summary>
         /// Apply the weight in a scale control
         /// </summary>
-        [Description("apply weight")]
+        [Description("Apply Weight")]
         ApplyWeight = 0,
 
         /// <summary>
@@ -25,31 +25,31 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// <summary>
         /// Apply a profile
         /// </summary>
-        [Description("apply profile")]
+        [Description("Apply Profile")]
         ApplyProfile = 2,
         
         /// <summary>
         /// Create a label
         /// </summary>
-        [Description("create label")]
+        [Description("Create Label")]
         CreateLabel = 3,
         
         /// <summary>
         /// Simulates a Tab key press
         /// </summary>
-        [Description("Press Tab key")]
+        [Description("Press Tab Key")]
         Tab = 4,
         
         /// <summary>
         /// Simulates an Escape key press
         /// </summary>
-        [Description("Press Escape key")]
+        [Description("Press Escape Key")]
         Escape = 5,
         
         /// <summary>
         /// Simulates an Enter key press
         /// </summary>
-        [Description("Press Enter key")]
+        [Description("Press Enter Key")]
         Enter = 6
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
@@ -56,11 +57,10 @@ namespace ShipWorks.Templates.Printing
         {
             List<PrintableBarcode> barcodes = new List<PrintableBarcode>();
 
-            shortcutManager.Shortcuts.Where(s => s.Action == KeyboardShortcutCommand.CreateLabel)
-                .ForEach(s => barcodes.Add(new PrintableBarcode("Create Label", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
-
-            shortcutManager.Shortcuts.Where(s => s.Action == KeyboardShortcutCommand.ApplyWeight)
-                .ForEach(s => barcodes.Add(new PrintableBarcode("Apply Weight", s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
+            shortcutManager.Shortcuts
+                .Where(s => s.Action != KeyboardShortcutCommand.FocusQuickSearch && 
+                            s.Action != KeyboardShortcutCommand.ApplyProfile)
+                .ForEach(s => barcodes.Add(new PrintableBarcode(EnumHelper.GetDescription(s.Action), s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
 
             return barcodes;
         }
