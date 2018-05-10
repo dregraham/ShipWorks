@@ -259,6 +259,10 @@ namespace ShipWorks.Stores.Communication
                 {
                     string combineSplitStatus = EnumHelper.GetDescription(order.CombineSplitStatus);
                     log.InfoFormat($"{ order.OrderNumberComplete } was { combineSplitStatus }, skipping");
+
+                    // Increment the quantity saved so we show the user we are moving to the next order.
+                    QuantitySaved++;
+
                     return GenericResult.FromError<OrderEntity>(combineSplitStatus);
                 }
 

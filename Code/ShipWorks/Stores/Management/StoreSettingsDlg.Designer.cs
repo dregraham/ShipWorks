@@ -1,3 +1,6 @@
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace ShipWorks.Stores.Management
 {
     partial class StoreSettingsDlg
@@ -39,6 +42,10 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
+            this.panelDownloading = new System.Windows.Forms.Panel();
+            this.sectionAutoDownloads = new ShipWorks.UI.Controls.SectionTitle();
+            this.panelManualOrders = new System.Windows.Forms.Panel();
+            this.sectionTitleManualOrders = new ShipWorks.UI.Controls.SectionTitle();
             this.panelDefaultFilters = new System.Windows.Forms.Panel();
             this.filtersInfoTip = new ShipWorks.UI.Controls.InfoTip();
             this.createFiltersButton = new System.Windows.Forms.Button();
@@ -58,8 +65,6 @@ namespace ShipWorks.Stores.Management
             this.sectionStatus = new ShipWorks.UI.Controls.SectionTitle();
             this.label4 = new System.Windows.Forms.Label();
             this.storeDisabled = new System.Windows.Forms.CheckBox();
-            this.sectionAutoDownloads = new ShipWorks.UI.Controls.SectionTitle();
-            this.sectionTitleManualOrders = new ShipWorks.UI.Controls.SectionTitle();
             this.optionPageOnlineAccount = new ShipWorks.UI.Controls.OptionPage();
             this.optionPageStatusPreset = new ShipWorks.UI.Controls.OptionPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -83,6 +88,8 @@ namespace ShipWorks.Stores.Management
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
+            this.panelDownloading.SuspendLayout();
+            this.panelManualOrders.SuspendLayout();
             this.panelDefaultFilters.SuspendLayout();
             this.panelAddressValidation.SuspendLayout();
             this.panelStoreStatus.SuspendLayout();
@@ -199,11 +206,11 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.AutoScroll = true;
             this.optionPageSettings.BackColor = System.Drawing.Color.White;
             this.optionPageSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionPageSettings.Controls.Add(this.panelDownloading);
+            this.optionPageSettings.Controls.Add(this.panelManualOrders);
             this.optionPageSettings.Controls.Add(this.panelDefaultFilters);
             this.optionPageSettings.Controls.Add(this.panelAddressValidation);
             this.optionPageSettings.Controls.Add(this.panelStoreStatus);
-            this.optionPageSettings.Controls.Add(this.sectionAutoDownloads);
-            this.optionPageSettings.Controls.Add(this.sectionTitleManualOrders);
             this.optionPageSettings.Location = new System.Drawing.Point(153, 0);
             this.optionPageSettings.Name = "optionPageSettings";
             this.optionPageSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -211,15 +218,55 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.TabIndex = 7;
             this.optionPageSettings.Text = "Store Settings";
             // 
+            // panelDownloading
+            // 
+            this.panelDownloading.AutoSize = true;
+            this.panelDownloading.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelDownloading.Controls.Add(this.sectionAutoDownloads);
+            this.panelDownloading.Location = new System.Drawing.Point(15, 9);
+            this.panelDownloading.MaximumSize = new System.Drawing.Size(564, 0);
+            this.panelDownloading.Name = "panelDownloading";
+            this.panelDownloading.Size = new System.Drawing.Size(564, 25);
+            this.panelDownloading.TabIndex = 37;
+            // 
+            // sectionAutoDownloads
+            // 
+            this.sectionAutoDownloads.Location = new System.Drawing.Point(0, 0);
+            this.sectionAutoDownloads.Name = "sectionAutoDownloads";
+            this.sectionAutoDownloads.Size = new System.Drawing.Size(564, 22);
+            this.sectionAutoDownloads.TabIndex = 4;
+            this.sectionAutoDownloads.Text = "Downloading";
+            // 
+            // panelManualOrders
+            // 
+            this.panelManualOrders.AutoSize = true;
+            this.panelManualOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelManualOrders.Controls.Add(this.sectionTitleManualOrders);
+            this.panelManualOrders.Location = new System.Drawing.Point(15, 113);
+            this.panelManualOrders.MaximumSize = new System.Drawing.Size(564, 0);
+            this.panelManualOrders.Name = "panelManualOrders";
+            this.panelManualOrders.Size = new System.Drawing.Size(564, 25);
+            this.panelManualOrders.TabIndex = 36;
+            // 
+            // sectionTitleManualOrders
+            // 
+            this.sectionTitleManualOrders.Location = new System.Drawing.Point(0, 0);
+            this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
+            this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
+            this.sectionTitleManualOrders.TabIndex = 3;
+            this.sectionTitleManualOrders.Text = "Manual Orders";
+            // 
             // panelDefaultFilters
             // 
+            this.panelDefaultFilters.AutoSize = true;
+            this.panelDefaultFilters.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelDefaultFilters.Controls.Add(this.filtersInfoTip);
             this.panelDefaultFilters.Controls.Add(this.createFiltersButton);
             this.panelDefaultFilters.Controls.Add(this.filterDescription);
             this.panelDefaultFilters.Controls.Add(this.filterSectionTitle);
-            this.panelDefaultFilters.Location = new System.Drawing.Point(15, 431);
+            this.panelDefaultFilters.Location = new System.Drawing.Point(15, 387);
             this.panelDefaultFilters.Name = "panelDefaultFilters";
-            this.panelDefaultFilters.Size = new System.Drawing.Size(564, 68);
+            this.panelDefaultFilters.Size = new System.Drawing.Size(564, 60);
             this.panelDefaultFilters.TabIndex = 35;
             // 
             // filtersInfoTip
@@ -265,6 +312,8 @@ namespace ShipWorks.Stores.Management
             // 
             // panelAddressValidation
             // 
+            this.panelAddressValidation.AutoSize = true;
+            this.panelAddressValidation.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelAddressValidation.Controls.Add(this.internationalAddressValidationHelpLink);
             this.panelAddressValidation.Controls.Add(this.domesticAddressValidationHelpLink);
             this.panelAddressValidation.Controls.Add(this.internationalAddressValidationSetting);
@@ -273,9 +322,9 @@ namespace ShipWorks.Stores.Management
             this.panelAddressValidation.Controls.Add(this.domesticAddressValidationSetting);
             this.panelAddressValidation.Controls.Add(this.labelAddressValidationSetting);
             this.panelAddressValidation.Controls.Add(this.sectionAddressValidation);
-            this.panelAddressValidation.Location = new System.Drawing.Point(15, 314);
+            this.panelAddressValidation.Location = new System.Drawing.Point(15, 270);
             this.panelAddressValidation.Name = "panelAddressValidation";
-            this.panelAddressValidation.Size = new System.Drawing.Size(564, 107);
+            this.panelAddressValidation.Size = new System.Drawing.Size(564, 110);
             this.panelAddressValidation.TabIndex = 33;
             // 
             // internationalAddressValidationHelpLink
@@ -363,13 +412,15 @@ namespace ShipWorks.Stores.Management
             // 
             // panelStoreStatus
             // 
+            this.panelStoreStatus.AutoSize = true;
+            this.panelStoreStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelStoreStatus.Controls.Add(this.infotipStoreEnabled);
             this.panelStoreStatus.Controls.Add(this.sectionStatus);
             this.panelStoreStatus.Controls.Add(this.label4);
             this.panelStoreStatus.Controls.Add(this.storeDisabled);
-            this.panelStoreStatus.Location = new System.Drawing.Point(15, 234);
+            this.panelStoreStatus.Location = new System.Drawing.Point(15, 190);
             this.panelStoreStatus.Name = "panelStoreStatus";
-            this.panelStoreStatus.Size = new System.Drawing.Size(564, 70);
+            this.panelStoreStatus.Size = new System.Drawing.Size(564, 67);
             this.panelStoreStatus.TabIndex = 29;
             // 
             // infotipStoreEnabled
@@ -412,22 +463,6 @@ namespace ShipWorks.Stores.Management
             this.storeDisabled.Text = "I do not actively ship or download with this store.";
             this.storeDisabled.UseVisualStyleBackColor = true;
             this.storeDisabled.CheckedChanged += new System.EventHandler(this.OnChangeEnabledState);
-            // 
-            // sectionAutoDownloads
-            // 
-            this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
-            this.sectionAutoDownloads.Name = "sectionAutoDownloads";
-            this.sectionAutoDownloads.Size = new System.Drawing.Size(564, 22);
-            this.sectionAutoDownloads.TabIndex = 3;
-            this.sectionAutoDownloads.Text = "Downloading";
-            // 
-            // sectionTitleManualOrders
-            // 
-            this.sectionTitleManualOrders.Location = new System.Drawing.Point(15, 128);
-            this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
-            this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
-            this.sectionTitleManualOrders.TabIndex = 2;
-            this.sectionTitleManualOrders.Text = "Manual Orders";
             // 
             // optionPageOnlineAccount
             // 
@@ -667,6 +702,9 @@ namespace ShipWorks.Stores.Management
             this.optionControl.ResumeLayout(false);
             this.optionPageStoreDetails.ResumeLayout(false);
             this.optionPageSettings.ResumeLayout(false);
+            this.optionPageSettings.PerformLayout();
+            this.panelDownloading.ResumeLayout(false);
+            this.panelManualOrders.ResumeLayout(false);
             this.panelDefaultFilters.ResumeLayout(false);
             this.panelDefaultFilters.PerformLayout();
             this.panelAddressValidation.ResumeLayout(false);
@@ -718,8 +756,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label licenseStatus;
         private ShipWorks.UI.Controls.OptionPage optionPageSettings;
-        private ShipWorks.UI.Controls.SectionTitle sectionTitleManualOrders;
-        private UI.Controls.SectionTitle sectionAutoDownloads;
         private UI.Controls.SectionTitle sectionStatus;
         private UI.Controls.SectionTitle sectionAddressValidation;
         private System.Windows.Forms.Label label4;
@@ -740,5 +776,9 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label labelInternationalAddressValidationSetting;
         private ApplicationCore.Interaction.HelpLink internationalAddressValidationHelpLink;
         private ApplicationCore.Interaction.HelpLink domesticAddressValidationHelpLink;
+        private System.Windows.Forms.Panel panelDownloading;
+        private UI.Controls.SectionTitle sectionAutoDownloads;
+        private System.Windows.Forms.Panel panelManualOrders;
+        private UI.Controls.SectionTitle sectionTitleManualOrders;
     }
 }
