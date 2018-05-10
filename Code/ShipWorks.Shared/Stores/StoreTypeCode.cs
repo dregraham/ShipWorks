@@ -407,7 +407,7 @@ namespace ShipWorks.Stores
         Manual = 80,
 
         [Description("Overstock")]
-        [StoreTypeIdentity("Overstock", "OVS")]
+        [StoreTypeIdentity("OVERSTOCK", "OVS")]
         [StoreTypeIcon("overstock")]
         Overstock = 82
     }
