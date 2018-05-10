@@ -60,7 +60,7 @@
             this.downloadOrderStatus.Name = "downloadOrderStatus";
             this.downloadOrderStatus.Size = new System.Drawing.Size(228, 17);
             this.downloadOrderStatus.TabIndex = 5;
-            this.downloadOrderStatus.Text = "Download online order status of split orders";
+            this.downloadOrderStatus.Text = "Download online order status for split orders";
             this.downloadOrderStatus.UseVisualStyleBackColor = true;
             this.downloadOrderStatus.CheckedChanged += new System.EventHandler(this.OnDownloadOrderStatusCheckedChanged);
             // 
