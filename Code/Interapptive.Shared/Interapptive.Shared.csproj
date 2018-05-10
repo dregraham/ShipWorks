@@ -215,6 +215,7 @@
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
+    <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
     <Compile Include="Messaging\Logging\TypeConverter.cs" />
