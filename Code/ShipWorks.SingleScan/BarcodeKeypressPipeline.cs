@@ -38,7 +38,9 @@ namespace ShipWorks.SingleScan
             EndSession();
 
             subscription = messenger.OfType<ShortcutMessage>()
-                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
+                .Where(m => m.AppliesTo(KeyboardShortcutCommand.Tab) ||
+                            m.AppliesTo(KeyboardShortcutCommand.Enter) ||
+                            m.AppliesTo(KeyboardShortcutCommand.Escape))
                 .Subscribe(HandleKeypressShortcutMessage);
         }
 
