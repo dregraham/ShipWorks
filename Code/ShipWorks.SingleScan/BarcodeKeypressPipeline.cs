@@ -8,6 +8,7 @@ using ShipWorks.IO.KeyboardShortcuts;
 using Interapptive.Shared.IO.Hardware;
 using Interapptive.Shared.Win32.Native;
 using Interapptive.Shared.UI;
+using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
@@ -19,16 +20,22 @@ namespace ShipWorks.SingleScan
         private readonly IMessenger messenger;
         private readonly IVirtualKeyboard virtualKeyboard;
         private readonly IMessageHelper messageHelper;
+        private readonly ICurrentUserSettings currentUserSettings;
         private IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BarcodeKeypressPipeline(IMessenger messenger, IVirtualKeyboard virtualKeyboard, IMessageHelper messageHelper)
+        public BarcodeKeypressPipeline(
+            IMessenger messenger, 
+            IVirtualKeyboard virtualKeyboard, 
+            IMessageHelper messageHelper,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
             this.virtualKeyboard = virtualKeyboard;
             this.messageHelper = messageHelper;
+            this.currentUserSettings = currentUserSettings;
         }
 
         /// <summary>
@@ -51,7 +58,11 @@ namespace ShipWorks.SingleScan
         public void HandleKeypressShortcutMessage(ShortcutMessage shortcutMessage)
         {
             virtualKeyboard.Send(GetVirtualKey(shortcutMessage));
-            messageHelper.ShowBarcodePopup($"{shortcutMessage.Shortcut.Action}");
+
+            if (currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
+            {
+                messageHelper.ShowBarcodePopup($"{shortcutMessage.Shortcut.Action}");
+            }
         }
 
         /// <summary>
