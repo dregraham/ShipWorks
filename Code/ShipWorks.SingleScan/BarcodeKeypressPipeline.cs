@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Interapptive.Shared.Metrics;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.IO.Hardware;
 using Interapptive.Shared.Win32.Native;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// Pipeline to track shortcut telemetry
+    /// Pipeline to simulate key presses
     /// </summary>
     public class BarcodeKeypressPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
         private readonly IVirtualKeyboard virtualKeyboard;
+        private readonly IMessageHelper messageHelper;
         private IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BarcodeKeypressPipeline(IMessenger messenger, IVirtualKeyboard virtualKeyboard)
+        public BarcodeKeypressPipeline(IMessenger messenger, IVirtualKeyboard virtualKeyboard, IMessageHelper messageHelper)
         {
             this.messenger = messenger;
             this.virtualKeyboard = virtualKeyboard;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace ShipWorks.SingleScan
         public void HandleKeypressShortcutMessage(ShortcutMessage shortcutMessage)
         {
             virtualKeyboard.Send(GetVirtualKey(shortcutMessage));
+            messageHelper.ShowBarcodePopup($"{shortcutMessage.Shortcut.Action}");
         }
 
         /// <summary>

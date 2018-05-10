@@ -17,7 +17,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Pipeline to show indicator for shortcuts or barcodes being applied
     /// </summary>
-    public class ShortcutMessageIndicatorPipeline : IInitializeForCurrentUISession
+    public class ApplyProfileShortcutMessageIndicatorPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
         private readonly ICurrentUserSettings currentUserSettings;
@@ -28,7 +28,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessageIndicatorPipeline(IMessenger messenger, 
+        public ApplyProfileShortcutMessageIndicatorPipeline(IMessenger messenger, 
             ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
             ISchedulerProvider schedulerProvider)
