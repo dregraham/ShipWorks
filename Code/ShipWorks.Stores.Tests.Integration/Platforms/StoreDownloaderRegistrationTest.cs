@@ -27,6 +27,7 @@ using ShipWorks.Stores.Platforms.NetworkSolutions;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.OrderMotion;
+using ShipWorks.Stores.Platforms.Overstock;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.ProStores;
 using ShipWorks.Stores.Platforms.Sears;
@@ -119,6 +120,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.NeweggMarketplace, typeof(NeweggDownloader) },
             { StoreTypeCode.Odbc, typeof(OdbcStoreDownloader) },
             { StoreTypeCode.OrderMotion, typeof(OrderMotionDownloader) },
+            { StoreTypeCode.Overstock, typeof(OverstockDownloader) },
             { StoreTypeCode.PayPal, typeof(PayPalDownloader) },
             { StoreTypeCode.ProStores, typeof(ProStoresDownloader) },
             { StoreTypeCode.Sears, typeof(SearsDownloader) },
