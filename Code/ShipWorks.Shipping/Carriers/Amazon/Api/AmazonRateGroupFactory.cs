@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
@@ -46,17 +47,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
                 {
+                    AmazonServiceTypeEntity serviceType = serviceTypeRepository.Get().Single(s => s.ApiValue == shippingService.ShippingServiceId);
+                    
                     AmazonRateTag tag = new AmazonRateTag()
                     {
-                        Description = shippingService.ShippingServiceName ?? "Unknown",
+                        Description = serviceType.Description ?? shippingService.ShippingServiceName ?? "Unknown",
                         ShippingServiceId = shippingService.ShippingServiceId,
                         CarrierName = shippingService.CarrierName,
-                        ServiceTypeID = serviceTypeRepository.Get().Single(s => s.ApiValue == shippingService.ShippingServiceId).AmazonServiceTypeID
+                        ServiceTypeID = serviceType.AmazonServiceTypeID
                     };                    
 
-                    RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
+                    RateResult rateResult = new RateResult(tag.Description, "", shippingService.Rate.Amount, tag);
                     rateResult.ShipmentType = ShipmentTypeCode.Amazon;
-                    rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
+                    rateResult.ProviderLogo = GetProviderLogo(tag.CarrierName ?? string.Empty);
                     rateResults.Add(rateResult);
                 }
 
@@ -95,6 +98,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 case "usps":
                 case "stamps_dot_com":
                     return EnumHelper.GetImage(ShipmentTypeCode.Usps);
+                case "ontrac":
+                    return EnumHelper.GetImage(ShipmentTypeCode.OnTrac);
                 default:
                     return EnumHelper.GetImage(ShipmentTypeCode.None);
             }

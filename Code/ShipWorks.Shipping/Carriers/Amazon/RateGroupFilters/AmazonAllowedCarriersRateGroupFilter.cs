@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
     /// </summary>
     public class AmazonAllowedCarriersRateGroupFilter : IAmazonRateGroupFilter
     {
-        readonly string[] allowedCarriers = new[] { "STAMPS_DOT_COM", "USPS", "UPS", "FEDEX", "DYNAMEX" };
+        readonly string[] allowedCarriers = new[] { "STAMPS_DOT_COM", "USPS", "UPS", "FEDEX", "DYNAMEX", "ONTRAC" };
 
         /// <summary>
         /// Filter the rate groups
