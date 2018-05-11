@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when a label should be created
     /// </summary>
-    public class ApplyProfilePipeline : IShippingPanelTransientPipeline
+    public class ShippingProfilePipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly IShippingProfileService shippingProfileService;
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplyProfilePipeline(IObservable<IShipWorksMessage> messageStream,
+        public ShippingProfilePipeline(IObservable<IShipWorksMessage> messageStream,
             IShippingProfileService shippingProfileService,
             ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logManager,
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             this.shippingProfileService = shippingProfileService;
             this.schedulerProvider = schedulerProvider;
             this.messenger = messenger;
-            log = logManager(typeof(ApplyProfilePipeline));
+            log = logManager(typeof(ShippingProfilePipeline));
         }
 
         /// <summary>
