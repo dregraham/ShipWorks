@@ -29,10 +29,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         public KeyboardShortcutData(ShortcutEntity shortcutEntity)
         {
-            Command = shortcutEntity.Action;
-            ActionKey = shortcutEntity.VirtualKey;
-            Modifiers = shortcutEntity.ModifierKeys;
-            Action = shortcutEntity.Action;
+            Command = shortcutEntity?.Action;
+            ActionKey = shortcutEntity?.VirtualKey;
+            Modifiers = shortcutEntity?.ModifierKeys;
+            Action = shortcutEntity?.Action;
         }
 
         /// <summary>
