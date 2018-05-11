@@ -33,7 +33,7 @@ namespace Interapptive.Shared.IO.Hardware
                     keyToSend = "{ESC}";
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(key), key, "Unknown key sent to virtual keyboard");
+                    throw new ArgumentOutOfRangeException("key", key, "Unknown key sent to virtual keyboard");
             }
 
             SendKeys.Send(keyToSend);
