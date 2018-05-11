@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     ApiValue = apiValue,
                     //keep the descripton truncated to whatever length we support in the database
-                    Description = description.Truncate(AmazonServiceTypeFields.Description.MaxLength)
+                    Description = CleanupServiceName(description.Truncate(AmazonServiceTypeFields.Description.MaxLength))
                 };
 
                 try
@@ -99,6 +99,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     log.Info($"apiValue found already in database. Using this new value.");
                 }
             }
+        }
+
+        /// <summary>
+        /// Clean up the description for service types with known issues
+        /// </summary>
+        private string CleanupServiceName(string serviceFromAmazon)
+        {
+            return serviceFromAmazon == "ONTRAC_MFN_GROUND" ? "OnTrac Ground" : serviceFromAmazon;
         }
 
         /// <summary>

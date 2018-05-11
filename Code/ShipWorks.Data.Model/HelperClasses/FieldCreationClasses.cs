@@ -13857,6 +13857,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoVersion);}
 		}
+		/// <summary>Creates a new MagentoStoreEntity.UpdateSplitOrderOnlineStatus field instance</summary>
+		public static EntityField2 UpdateSplitOrderOnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity MarketplaceAdvisorOrderEntity</summary>

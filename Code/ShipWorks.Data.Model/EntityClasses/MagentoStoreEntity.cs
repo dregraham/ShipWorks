@@ -335,6 +335,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MagentoTrackingEmails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("MagentoVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("UpdateSplitOrderOnlineStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -406,6 +408,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)MagentoStoreFieldIndex.MagentoVersion, true); }
 			set	{ SetValue((int)MagentoStoreFieldIndex.MagentoVersion, value); }
+		}
+
+		/// <summary> The UpdateSplitOrderOnlineStatus property of the Entity MagentoStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "MagentoStore"."UpdateSplitOrderOnlineStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean UpdateSplitOrderOnlineStatus
+		{
+			get { return (System.Boolean)GetValue((int)MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus, true); }
+			set	{ SetValue((int)MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

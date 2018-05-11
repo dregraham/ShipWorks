@@ -2052,10 +2052,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits MagentoStoreEntity's mappings</summary>
 		private void InitMagentoStoreEntityMappings()
 		{
-			this.AddElementMapping("MagentoStoreEntity", @"ShipWorksLocal", @"dbo", "MagentoStore", 3, 0);
+			this.AddElementMapping("MagentoStoreEntity", @"ShipWorksLocal", @"dbo", "MagentoStore", 4, 0);
 			this.AddElementFieldMapping("MagentoStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MagentoStoreEntity", "MagentoTrackingEmails", "MagentoTrackingEmails", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("MagentoStoreEntity", "MagentoVersion", "MagentoVersion", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("MagentoStoreEntity", "UpdateSplitOrderOnlineStatus", "UpdateSplitOrderOnlineStatus", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 		}
 
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's mappings</summary>

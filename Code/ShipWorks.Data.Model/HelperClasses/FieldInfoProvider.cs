@@ -1956,6 +1956,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("MagentoStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)MagentoStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("MagentoStoreEntity", "MagentoTrackingEmails", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoTrackingEmails, 0, 0, 0);
 			this.AddElementFieldInfo("MagentoStoreEntity", "MagentoVersion", typeof(System.Int32), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoVersion, 0, 0, 10);
+			this.AddElementFieldInfo("MagentoStoreEntity", "UpdateSplitOrderOnlineStatus", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus, 0, 0, 0);
 		}
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's FieldInfo objects</summary>
 		private void InitMarketplaceAdvisorOrderEntityInfos()

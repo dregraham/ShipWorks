@@ -1694,6 +1694,7 @@
         <Fields>
           <Field Name="MagentoTrackingEmails" Type="bool" FieldIndex="0" />
           <Field Name="MagentoVersion" Type="int" FieldIndex="1" />
+          <Field Name="UpdateSplitOrderOnlineStatus" Type="bool" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="MarketplaceAdvisorOrder" ObjectID="dbefd1f4-5a4e-437d-9896-558b89937528" InheritanceType="2">
@@ -4255,7 +4256,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-07T11:50:26.9557105Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-30T14:49:25.0589982Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6752,6 +6753,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="MagentoTrackingEmails" Ordinal="2" DbType="2" />
                     <Field Name="MagentoVersion" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="UpdateSplitOrderOnlineStatus" Ordinal="4" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="MarketplaceAdvisorOrder">
@@ -11836,6 +11838,7 @@
             <FieldMapping FieldName="MagentoTrackingEmails" TargetFieldName="MagentoTrackingEmails" />
             <FieldMapping FieldName="MagentoVersion" TargetFieldName="MagentoVersion" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="UpdateSplitOrderOnlineStatus" TargetFieldName="UpdateSplitOrderOnlineStatus" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":MarketplaceAdvisorOrder" TargetName="ShipWorksLocal:dbo:MarketplaceAdvisorOrder">

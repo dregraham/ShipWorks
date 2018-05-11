@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void CreateRateRequest_PopulatesShipFromAddress()
         {
-            ShipmentEntity shipment = new ShipmentEntity()
+            ShipmentEntity shipment = new ShipmentEntity
             {
                 OriginUnparsedName = "John Snow",
                 OriginPhone = "123-456-7890",
@@ -85,6 +85,22 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal(shipment.OriginStateProvCode, request.Shipment.ShipFrom.StateProvince);
             Assert.Equal(shipment.OriginPostalCode, request.Shipment.ShipFrom.PostalCode);
             Assert.Equal(shipment.OriginCountryCode, request.Shipment.ShipFrom.CountryCode);
+        }
+        
+        [Theory]
+        [InlineData("US", "US")]
+        [InlineData("GB", "GB")]
+        [InlineData("UK", "GB")]
+        public void CreateRateRequest_CorrectCountryCodeIsUsed(string inputCountryCode, string expectedResulingCountryCode)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                OriginCountryCode = inputCountryCode
+            };
+
+            var request = testObject.CreateRateRequest(shipment);
+
+            Assert.Equal(expectedResulingCountryCode, request.Shipment.ShipFrom.CountryCode);
         }
 
         [Fact]
