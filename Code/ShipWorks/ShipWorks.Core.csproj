@@ -960,6 +960,11 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
+    <Compile Include="Properties\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
@@ -2036,6 +2041,7 @@
     <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Overstock\IOverstockStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\ProStores\IProStoresWebClient.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
@@ -2542,11 +2548,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShippingIcons.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\StoreIcons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
@@ -10842,6 +10843,7 @@
     <Resource Include="Resources\printer_redo_16_16.png" />
     <None Include="Resources\sellercloud.png" />
     <None Include="Resources\selleractive.png" />
+    <None Include="Resources\overstock.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -10964,6 +10966,7 @@
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />
     <Content Include="Resources\Stores\Icons\opencart.png" />
+    <Content Include="Resources\Stores\Icons\overstock.png" />
     <Content Include="Resources\Stores\Icons\sellerexpress.png" />
     <Content Include="Resources\Stores\Icons\powersportssupport.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
