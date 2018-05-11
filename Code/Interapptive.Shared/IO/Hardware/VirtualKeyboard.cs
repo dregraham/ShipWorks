@@ -7,7 +7,7 @@ using Interapptive.Shared.Win32.Native;
 namespace Interapptive.Shared.IO.Hardware
 {
     /// <summary>
-    /// Send key strokes programaticly
+    /// Send key strokes programmatically
     /// </summary>
     /// <remarks>
     /// Much code from https://stackoverflow.com/questions/20482338/simulate-keyboard-input-in-c-sharp
@@ -20,7 +20,7 @@ namespace Interapptive.Shared.IO.Hardware
         /// </summary>
         public void Send(VirtualKeys key)
         {
-            string keyToSend=null;
+            string keyToSend;
             switch (key)
             {
                 case VirtualKeys.Tab:

@@ -140,7 +140,7 @@
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintResult.cs" />
     <Compile Include="ApplyProfileShortcutMessageIndicatorPipeline.cs" />
-    <Compile Include="BarcodeKeypressPipeline.cs" />
+    <Compile Include="VirtualKeyboardPipeline.cs" />
     <Compile Include="ShortcutMessageTelemetryPipeline.cs" />
     <Compile Include="SingleScanAutomationSettings.cs" />
     <Compile Include="AutoPrintService.cs" />

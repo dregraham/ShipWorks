@@ -23,7 +23,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
         private readonly TestScheduler scheduler;
-        private readonly BarcodeKeypressPipeline testObject;
+        private readonly VirtualKeyboardPipeline testObject;
         private readonly Mock<IMessageHelper> messageHelper;
         private readonly Mock<ICurrentUserSettings> currentUserSettings;
         private readonly Mock<IVirtualKeyboard> virtualKeyboard;
@@ -49,7 +49,7 @@ namespace ShipWorks.SingleScan.Tests
 
             virtualKeyboard = mock.Mock<IVirtualKeyboard>();
 
-            testObject = mock.Create<BarcodeKeypressPipeline>();
+            testObject = mock.Create<VirtualKeyboardPipeline>();
         }
 
         [Fact]

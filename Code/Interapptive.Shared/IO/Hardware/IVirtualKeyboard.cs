@@ -3,7 +3,7 @@
 namespace Interapptive.Shared.IO.Hardware
 {
     /// <summary>
-    /// Send key strokes programaticly
+    /// Send key strokes programmatically
     /// </summary>
     public interface IVirtualKeyboard
     {

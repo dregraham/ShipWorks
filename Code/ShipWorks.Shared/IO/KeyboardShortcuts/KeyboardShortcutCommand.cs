@@ -19,7 +19,7 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Focus on the quick search box
         /// </summary>
         /// <remarks>This is only used for testing at the moment</remarks>
-        [Description("focus quick search")]
+        [Description("Focus Quick Search")]
         FocusQuickSearch = 1,
 
         /// <summary>

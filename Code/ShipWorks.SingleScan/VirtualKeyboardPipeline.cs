@@ -15,7 +15,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Pipeline to simulate key presses
     /// </summary>
-    public class BarcodeKeypressPipeline : IInitializeForCurrentUISession
+    public class VirtualKeyboardPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
         private readonly IVirtualKeyboard virtualKeyboard;
@@ -26,7 +26,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public BarcodeKeypressPipeline(
+        public VirtualKeyboardPipeline(
             IMessenger messenger, 
             IVirtualKeyboard virtualKeyboard, 
             IMessageHelper messageHelper,
