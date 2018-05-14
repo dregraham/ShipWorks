@@ -65,12 +65,12 @@ namespace ShipWorks.SingleScan
                 if (usersession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint)
                 {
                     usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.Scan;
-                    stateName = "ON";
+                    stateName = "OFF";
                 }
                 else
                 {
                     usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
-                    stateName = "OFF";
+                    stateName = "ON";
                 }
 
                 if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
