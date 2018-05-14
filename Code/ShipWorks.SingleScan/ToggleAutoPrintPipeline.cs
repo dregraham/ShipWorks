@@ -11,6 +11,9 @@ using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
+    /// <summary>
+    /// Toggle autoprint via hotkeys or barcode scan
+    /// </summary>
     public class ToggleAutoPrintPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
