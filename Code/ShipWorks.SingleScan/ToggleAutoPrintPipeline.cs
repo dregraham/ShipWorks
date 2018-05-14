@@ -16,6 +16,7 @@ namespace ShipWorks.SingleScan
         private readonly IMessenger messenger;
         private readonly IMessageHelper messageHelper;
         private readonly IUserSession usersession;
+        private readonly ICurrentUserSettings currentUserSettings;
         private IDisposable subscription;
 
         /// <summary>
@@ -24,11 +25,13 @@ namespace ShipWorks.SingleScan
         public ToggleAutoPrintPipeline(
             IMessenger messenger, 
             IMessageHelper messageHelper,
-            IUserSession usersession)
+            IUserSession usersession,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.usersession = usersession;
+            this.currentUserSettings = currentUserSettings;
         }
 
         /// <summary>
@@ -61,25 +64,27 @@ namespace ShipWorks.SingleScan
             if (usersession.User?.Settings?.SingleScanSettings != null && 
                 usersession.User.Settings.SingleScanSettings != (int) SingleScanSettings.Disabled)
             {
-                string stateName;
                 if (usersession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint)
                 {
                     usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.Scan;
-                    stateName = "OFF";
                 }
                 else
                 {
                     usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
-                    stateName = "ON";
                 }
 
-                if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
+                if (currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
                 {
-                    messageHelper.ShowKeyboardPopup($"{shortcutMessage.Value}: Auto Print {stateName}");
-                }
-                else
-                {
-                    messageHelper.ShowBarcodePopup($"Barcode: Auto Print {stateName}");
+                    string stateName = usersession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint ? "ON" : "OFF";
+
+                    if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
+                    {
+                        messageHelper.ShowKeyboardPopup($"{shortcutMessage.Value}: Auto Print {stateName}");
+                    }
+                    else
+                    {
+                        messageHelper.ShowBarcodePopup($"Barcode: Auto Print {stateName}");
+                    }
                 }
             }
         }
