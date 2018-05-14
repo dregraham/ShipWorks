@@ -292,5 +292,6 @@ VALUES
 (0, 121, '-PL-', 3),
 (null, null, '-TB-', 4),
 (null, null, '-ES-', 5),
-(null, null, '-CR-', 6);
+(null, null, '-CR-', 6),
+(3, 65, '-AP-', 7);
 GO
