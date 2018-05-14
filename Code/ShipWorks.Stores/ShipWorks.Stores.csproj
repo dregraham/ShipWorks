@@ -683,7 +683,6 @@
     <Compile Include="Platforms\Overstock\Content\OverstockSplitOrderAction.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockWarehouseNameCondition.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockChannelNameCondition.cs" />
-    <Compile Include="Platforms\Overstock\DTO\OverstockDto.cs" />
     <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />

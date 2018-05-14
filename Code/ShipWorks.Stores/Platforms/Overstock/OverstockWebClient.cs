@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
@@ -12,7 +13,6 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.Overstock.DTO;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -84,14 +84,14 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Make the call to Overstock to get a list of orders matching criteria
         /// </summary>
-        public async Task<GenericResult<List<OverstockOrderDto>>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime)
+        public async Task<GenericResult<XDocument>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime)
         {
             try
             {
                 // Create a request for getting orders
                 RestRequest request = new RestRequest(endpoints.GetOrdersResource(startDateTime, endDateTime));
 
-                List<OverstockOrderDto> result = await MakeRequest<RestRequest, List<OverstockOrderDto>>(request, store, "GetOrders").ConfigureAwait(false);
+                XDocument result = await MakeRequest<RestRequest>(request, store, "GetOrders").ConfigureAwait(false);
 
                 return result;
             }
@@ -128,18 +128,17 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <typeparam name="TRestRequest">Type of the request being made</typeparam>
         /// <typeparam name="TRestResponse">Type of the response from the API call</typeparam>
         /// <returns>The response from the API call</returns>
-        private async Task<TRestResponse> MakeRequest<TRestRequest, TRestResponse>(TRestRequest request, IOverstockStoreEntity store, string logAction)
+        private async Task<XDocument> MakeRequest<TRestRequest>(TRestRequest request, IOverstockStoreEntity store, string logAction)
             where TRestRequest : IRestRequest
-            where TRestResponse : new()
         {
-            TRestResponse requestResult;
+            XDocument requestResult;
             try
             {
                 // Log the request
                 ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Overstock, logAction);
                 logger.LogRequest(request.Resource);
 
-                IRestResponse<TRestResponse> restResponse = await restClientFactory.Create(store).ExecuteTaskAsync<TRestResponse>(request).ConfigureAwait(false);
+                IRestResponse<XDocument> restResponse = await restClientFactory.Create(store).ExecuteTaskAsync<XDocument>(request).ConfigureAwait(false);
                 requestResult = restResponse.Data;
 
                 // Log the response
@@ -148,11 +147,16 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 // See if there were any errors
                 CheckRestResponseForError(restResponse);
 
-                // TODO: Do de-serialization here.
+                string xml = restResponse.Content
+                    .Replace("/ns2:", "/")
+                    .Replace("ns2:", string.Empty)
+                    .Replace(" xmlns:ns2=\"api.supplieroasis.com\"", string.Empty);
+
+                requestResult = XDocument.Parse(xml);
 
                 if (request.Method == Method.PUT || request.Method == Method.POST)
                 {
-                    requestResult = (TRestResponse) restResponse;
+                    requestResult = (XDocument) restResponse;
                 }
             }
             catch (NotSupportedException ex)
