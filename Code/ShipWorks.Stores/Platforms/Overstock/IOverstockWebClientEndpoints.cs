@@ -1,28 +1,24 @@
 ﻿using System;
-using Interapptive.Shared.ComponentRegistration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
     /// <summary>
     /// API endpoints for communicating with Overstock
     /// </summary>
-    [Component]
-    public class OverstockWebClientEndpoints : IOverstockWebClientEndpoints
+    public interface IOverstockWebClientEndpoints
     {
         /// <summary>
         /// Returns the resource path for accessing a specific order's shipments.  Also used for creating a new shipment.
         /// </summary>
-        public string GetUploadShipmentResource()
-        {
-            return "shipments";
-        }
+        string GetUploadShipmentResource();
 
         /// <summary>
         /// Returns the resource path for downloading orders
         /// </summary>
-        public string GetOrdersResource(DateTime startTime, DateTime endTime)
-        {
-            return $"salesorders?startTime={startTime.ToString("o")}&endTime={endTime.ToString("o")}";
-        }
+        string GetOrdersResource(DateTime startTime, DateTime endTime);
     }
 }

@@ -25,13 +25,15 @@ namespace ShipWorks.Stores.Platforms.Overstock
         private static readonly ILog log = LogManager.GetLogger(typeof(OverstockWebClient));
         private readonly List<HttpStatusCode> successHttpStatusCodes;
         private readonly IOverstockRestClientFactory restClientFactory;
+        private readonly IOverstockWebClientEndpoints endpoints;
         private const string storeSettingMissingErrorMessage = "The Overstock {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
 
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public OverstockWebClient(IOverstockRestClientFactory restClientFactory)
+        public OverstockWebClient(IOverstockRestClientFactory restClientFactory, IOverstockWebClientEndpoints endpoints)
         {
+            this.endpoints = endpoints;
             this.restClientFactory = restClientFactory;
 
             successHttpStatusCodes = new List<HttpStatusCode>
@@ -87,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
             try
             {
                 // Create a request for getting orders
-                RestRequest request = new RestRequest(OverstockWebClientEndpoints.GetOrdersResource(startDateTime, endDateTime));
+                RestRequest request = new RestRequest(endpoints.GetOrdersResource(startDateTime, endDateTime));
 
                 List<OverstockOrderDto> result = await MakeRequest<RestRequest, List<OverstockOrderDto>>(request, store, "GetOrders").ConfigureAwait(false);
 
