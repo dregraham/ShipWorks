@@ -382,11 +382,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OverstockOrderID", fieldHashtable);
+			_fieldsCustomProperties.Add("SalesChannelName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ChannelName", fieldHashtable);
+			_fieldsCustomProperties.Add("WarehouseCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("WarehouseName", fieldHashtable);
+			_fieldsCustomProperties.Add("SalesChannelOrderNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -447,34 +447,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The OverstockOrderID property of the Entity OverstockOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrder"."OverstockOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OverstockOrderID
-		{
-			get { return (System.Int64)GetValue((int)OverstockOrderFieldIndex.OverstockOrderID, true); }
-			set	{ SetValue((int)OverstockOrderFieldIndex.OverstockOrderID, value); }
-		}
-
-		/// <summary> The ChannelName property of the Entity OverstockOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrder"."ChannelName"<br/>
+		/// <summary> The SalesChannelName property of the Entity OverstockOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrder"."SalesChannelName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ChannelName
+		public virtual System.String SalesChannelName
 		{
-			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.ChannelName, true); }
-			set	{ SetValue((int)OverstockOrderFieldIndex.ChannelName, value); }
+			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.SalesChannelName, true); }
+			set	{ SetValue((int)OverstockOrderFieldIndex.SalesChannelName, value); }
 		}
 
-		/// <summary> The WarehouseName property of the Entity OverstockOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrder"."WarehouseName"<br/>
+		/// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrder"."WarehouseCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String WarehouseName
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String WarehouseCode
 		{
-			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.WarehouseName, true); }
-			set	{ SetValue((int)OverstockOrderFieldIndex.WarehouseName, value); }
+			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.WarehouseCode, true); }
+			set	{ SetValue((int)OverstockOrderFieldIndex.WarehouseCode, value); }
+		}
+
+		/// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrder"."SalesChannelOrderNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String SalesChannelOrderNumber
+		{
+			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.SalesChannelOrderNumber, true); }
+			set	{ SetValue((int)OverstockOrderFieldIndex.SalesChannelOrderNumber, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OverstockOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -334,11 +334,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ChannelLineId", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("LineId", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ItemID", fieldHashtable);
+			_fieldsCustomProperties.Add("SalesChannelLineNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -392,34 +388,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ChannelLineId property of the Entity OverstockOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrderItem"."ChannelLineId"<br/>
+		/// <summary> The SalesChannelLineNumber property of the Entity OverstockOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrderItem"."SalesChannelLineNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ChannelLineId
+		public virtual Nullable<System.Int32> SalesChannelLineNumber
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)OverstockOrderItemFieldIndex.ChannelLineId, false); }
-			set	{ SetValue((int)OverstockOrderItemFieldIndex.ChannelLineId, value); }
-		}
-
-		/// <summary> The LineId property of the Entity OverstockOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrderItem"."LineId"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> LineId
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)OverstockOrderItemFieldIndex.LineId, false); }
-			set	{ SetValue((int)OverstockOrderItemFieldIndex.LineId, value); }
-		}
-
-		/// <summary> The ItemID property of the Entity OverstockOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrderItem"."ItemID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ItemID
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)OverstockOrderItemFieldIndex.ItemID, false); }
-			set	{ SetValue((int)OverstockOrderItemFieldIndex.ItemID, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, false); }
+			set	{ SetValue((int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

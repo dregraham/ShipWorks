@@ -777,14 +777,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{B5465229-898D-4F81-9B4A-27AC86A35662}",
                         new GridTextDisplayType(), "Warehouse", "Warehouse A",
-                        OverstockOrderFields.WarehouseName)
+                        OverstockOrderFields.WarehouseCode)
                     {
                         StoreTypeCode = StoreTypeCode.Overstock
                     },
 
                     new GridColumnDefinition("{C999217D-DCDC-455A-9A10-CCEA612CC1B2}",
                         new GridTextDisplayType(), "Channel", "Channel A",
-                        OverstockOrderFields.ChannelName)
+                        OverstockOrderFields.SalesChannelName)
                     {
                         StoreTypeCode = StoreTypeCode.Overstock
                     },

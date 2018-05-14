@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.Content
             OverstockOrderEntity order = (OverstockOrderEntity) splitOrder;
             OverstockOrderSearchEntity orderSearchEntity = order.OverstockOrderSearch.AddNew();
 
-            orderSearchEntity.OverstockOrderID = order.OverstockOrderID;
+            orderSearchEntity.SalesChannelOrderNumber = order.SalesChannelOrderNumber;
 
             orderSearchEntity.OriginalOrderID = originalOrderID;
         }

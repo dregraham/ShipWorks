@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new OverstockOrderIdentifier(((OverstockOrderEntity) order).OverstockOrderID);
+            return new AlphaNumericOrderIdentifier(((OverstockOrderEntity) order).SalesChannelOrderNumber);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            OverstockOrderEntity entity = new OverstockOrderEntity { OverstockOrderID = -1 };
+            OverstockOrderEntity entity = new OverstockOrderEntity { SalesChannelOrderNumber = string.Empty };
 
             return entity;
         }
@@ -79,9 +79,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         {
             OverstockOrderItemEntity entity = new OverstockOrderItemEntity
             {
-                ChannelLineId = -1,
-                LineId = -1,
-                ItemID = -1
+                SalesChannelLineNumber = -1
             };
 
             return entity;

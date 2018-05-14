@@ -36,9 +36,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            OverstockOrderID = source.OverstockOrderID;
-            ChannelName = source.ChannelName;
-            WarehouseName = source.WarehouseName;
+            SalesChannelName = source.SalesChannelName;
+            WarehouseCode = source.WarehouseCode;
+            SalesChannelOrderNumber = source.SalesChannelOrderNumber;
             
             
             
@@ -49,24 +49,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
-        /// <summary> The OverstockOrderID property of the Entity OverstockOrder<br/><br/>
+        /// <summary> The SalesChannelName property of the Entity OverstockOrder<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrder"."OverstockOrderID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OverstockOrderID { get; }
-        /// <summary> The ChannelName property of the Entity OverstockOrder<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrder"."ChannelName"<br/>
+        /// <remarks>Mapped on table field: "OverstockOrder"."SalesChannelName"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String ChannelName { get; }
-        /// <summary> The WarehouseName property of the Entity OverstockOrder<br/><br/>
+        public System.String SalesChannelName { get; }
+        /// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrder"."WarehouseName"<br/>
+        /// <remarks>Mapped on table field: "OverstockOrder"."WarehouseCode"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String WarehouseName { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String WarehouseCode { get; }
+        /// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OverstockOrder"."SalesChannelOrderNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String SalesChannelOrderNumber { get; }
         
         
         

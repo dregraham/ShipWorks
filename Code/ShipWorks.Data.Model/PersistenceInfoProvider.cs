@@ -2510,19 +2510,17 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("OverstockOrderEntity", @"ShipWorksLocal", @"dbo", "OverstockOrder", 4, 0);
 			this.AddElementFieldMapping("OverstockOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("OverstockOrderEntity", "OverstockOrderID", "OverstockOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("OverstockOrderEntity", "ChannelName", "ChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("OverstockOrderEntity", "WarehouseName", "WarehouseName", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SalesChannelName", "SalesChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OverstockOrderEntity", "WarehouseCode", "WarehouseCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SalesChannelOrderNumber", "SalesChannelOrderNumber", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits OverstockOrderItemEntity's mappings</summary>
 		private void InitOverstockOrderItemEntityMappings()
 		{
-			this.AddElementMapping("OverstockOrderItemEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderItem", 4, 0);
+			this.AddElementMapping("OverstockOrderItemEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderItem", 2, 0);
 			this.AddElementFieldMapping("OverstockOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("OverstockOrderItemEntity", "ChannelLineId", "ChannelLineId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("OverstockOrderItemEntity", "LineId", "LineId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("OverstockOrderItemEntity", "ItemID", "ItemID", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("OverstockOrderItemEntity", "SalesChannelLineNumber", "SalesChannelLineNumber", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 		}
 
 		/// <summary>Inits OverstockOrderSearchEntity's mappings</summary>
@@ -2531,8 +2529,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("OverstockOrderSearchEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderSearch", 4, 0);
 			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OverstockOrderSearchID", "OverstockOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OverstockOrderID", "OverstockOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
-			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "SalesChannelOrderNumber", "SalesChannelOrderNumber", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits OverstockStoreEntity's mappings</summary>

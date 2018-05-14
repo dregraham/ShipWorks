@@ -6952,28 +6952,28 @@ GO
 CREATE TABLE [dbo].[OverstockOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[OverstockOrderID] [bigint] NOT NULL,
-[ChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WarehouseName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
 GO
 ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [PK_OverstockOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_OverstockOrderID] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelOrderNumber] ON [dbo].[OverstockOrder]
 (
-	[OverstockOrderID] ASC
+	[SalesChannelOrderNumber] ASC
 ) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_ChannelName] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelName] ON [dbo].[OverstockOrder]
 (
-	[ChannelName] ASC
+	[SalesChannelName] ASC
 ) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseName] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseCode] ON [dbo].[OverstockOrder]
 (
-	[WarehouseName] ASC
+	[WarehouseCode] ASC
 ) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[OverstockOrderItem]'
@@ -6981,9 +6981,7 @@ GO
 CREATE TABLE [dbo].[OverstockOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[ChannelLineId] [int] NULL,
-[LineId] [int] NULL,
-[ItemID] [int] NULL
+[SalesChannelLineNumber] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OverstockOrderItem] on [dbo].[OverstockOrderItem]'
@@ -6996,7 +6994,7 @@ CREATE TABLE [dbo].[OverstockOrderSearch]
 (
 [OverstockOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[OverstockOrderID] [bigint] NOT NULL,
+[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalOrderID] [bigint] NOT NULL
 )
 GO

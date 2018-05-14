@@ -7920,12 +7920,12 @@ namespace ShipWorks.Data.Model
 		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>OverstockOrderID. </summary>
-		OverstockOrderID,
-		///<summary>ChannelName. </summary>
-		ChannelName,
-		///<summary>WarehouseName. </summary>
-		WarehouseName,
+		///<summary>SalesChannelName. </summary>
+		SalesChannelName,
+		///<summary>WarehouseCode. </summary>
+		WarehouseCode,
+		///<summary>SalesChannelOrderNumber. </summary>
+		SalesChannelOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7974,12 +7974,8 @@ namespace ShipWorks.Data.Model
 		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
-		///<summary>ChannelLineId. </summary>
-		ChannelLineId,
-		///<summary>LineId. </summary>
-		LineId,
-		///<summary>ItemID. </summary>
-		ItemID,
+		///<summary>SalesChannelLineNumber. </summary>
+		SalesChannelLineNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7990,10 +7986,10 @@ namespace ShipWorks.Data.Model
 		OverstockOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>OverstockOrderID. </summary>
-		OverstockOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>SalesChannelOrderNumber. </summary>
+		SalesChannelOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

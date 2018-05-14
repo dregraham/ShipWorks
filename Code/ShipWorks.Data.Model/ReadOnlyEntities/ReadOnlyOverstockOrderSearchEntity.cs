@@ -38,8 +38,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             OverstockOrderSearchID = source.OverstockOrderSearchID;
             OrderID = source.OrderID;
-            OverstockOrderID = source.OverstockOrderID;
             OriginalOrderID = source.OriginalOrderID;
+            SalesChannelOrderNumber = source.SalesChannelOrderNumber;
             
             
             OverstockOrder = (IOverstockOrderEntity) source.OverstockOrder?.AsReadOnly(objectMap);
@@ -61,18 +61,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The OverstockOrderID property of the Entity OverstockOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrderSearch"."OverstockOrderID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OverstockOrderID { get; }
         /// <summary> The OriginalOrderID property of the Entity OverstockOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OverstockOrderSearch"."OriginalOrderID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OverstockOrderSearch"."SalesChannelOrderNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String SalesChannelOrderNumber { get; }
         
         
         public IOverstockOrderEntity OverstockOrder { get; }

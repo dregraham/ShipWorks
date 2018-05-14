@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Overstock;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Overstock
 
             var orderIdentifier = testObject.CreateOrderIdentifier(order);
 
-            Assert.IsType<OverstockOrderIdentifier>(orderIdentifier);
+            Assert.IsType<AlphaNumericOrderIdentifier>(orderIdentifier);
         }
 
         public void Dispose()

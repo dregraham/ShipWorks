@@ -21,7 +21,6 @@ using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Stores.Platforms.NetworkSolutions;
 using ShipWorks.Stores.Platforms.OrderMotion;
-using ShipWorks.Stores.Platforms.Overstock;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Stores.Platforms.Shopify;
@@ -183,7 +182,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.OrderDynamics, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.OrderMotion, typeof(OrderMotionOrderIdentifier) },
             { StoreTypeCode.osCommerce, typeof(AlphaNumericOrderIdentifier) },
-            { StoreTypeCode.Overstock, typeof(OverstockOrderIdentifier) },
+            { StoreTypeCode.Overstock, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PayPal, typeof(PayPalOrderIdentifier) },
             { StoreTypeCode.PowersportsSupport, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PrestaShop, typeof(AlphaNumericOrderIdentifier) },

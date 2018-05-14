@@ -18432,20 +18432,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderID);}
 		}
-		/// <summary>Creates a new OverstockOrderEntity.OverstockOrderID field instance</summary>
-		public static EntityField2 OverstockOrderID
+		/// <summary>Creates a new OverstockOrderEntity.SalesChannelName field instance</summary>
+		public static EntityField2 SalesChannelName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OverstockOrderID);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelName);}
 		}
-		/// <summary>Creates a new OverstockOrderEntity.ChannelName field instance</summary>
-		public static EntityField2 ChannelName
+		/// <summary>Creates a new OverstockOrderEntity.WarehouseCode field instance</summary>
+		public static EntityField2 WarehouseCode
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ChannelName);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.WarehouseCode);}
 		}
-		/// <summary>Creates a new OverstockOrderEntity.WarehouseName field instance</summary>
-		public static EntityField2 WarehouseName
+		/// <summary>Creates a new OverstockOrderEntity.SalesChannelOrderNumber field instance</summary>
+		public static EntityField2 SalesChannelOrderNumber
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.WarehouseName);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelOrderNumber);}
 		}
 	}
 
@@ -18557,20 +18557,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OrderItemID);}
 		}
-		/// <summary>Creates a new OverstockOrderItemEntity.ChannelLineId field instance</summary>
-		public static EntityField2 ChannelLineId
+		/// <summary>Creates a new OverstockOrderItemEntity.SalesChannelLineNumber field instance</summary>
+		public static EntityField2 SalesChannelLineNumber
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.ChannelLineId);}
-		}
-		/// <summary>Creates a new OverstockOrderItemEntity.LineId field instance</summary>
-		public static EntityField2 LineId
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.LineId);}
-		}
-		/// <summary>Creates a new OverstockOrderItemEntity.ItemID field instance</summary>
-		public static EntityField2 ItemID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.ItemID);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.SalesChannelLineNumber);}
 		}
 	}
 
@@ -18587,15 +18577,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OrderID);}
 		}
-		/// <summary>Creates a new OverstockOrderSearchEntity.OverstockOrderID field instance</summary>
-		public static EntityField2 OverstockOrderID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OverstockOrderID);}
-		}
 		/// <summary>Creates a new OverstockOrderSearchEntity.OriginalOrderID field instance</summary>
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.SalesChannelOrderNumber field instance</summary>
+		public static EntityField2 SalesChannelOrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.SalesChannelOrderNumber);}
 		}
 	}
 

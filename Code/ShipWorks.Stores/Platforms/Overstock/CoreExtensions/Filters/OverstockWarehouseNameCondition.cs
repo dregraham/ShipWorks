@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.CoreExtensions.Filters
             // Add WarehouseName entries.
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, OverstockOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(base.GenerateSql(context.GetColumnReference(OverstockOrderFields.WarehouseName), context));
+                return scope.Adorn(base.GenerateSql(context.GetColumnReference(OverstockOrderFields.WarehouseCode), context));
             }
         }
     }

@@ -36,9 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            ChannelLineId = source.ChannelLineId;
-            LineId = source.LineId;
-            ItemID = source.ItemID;
+            SalesChannelLineNumber = source.SalesChannelLineNumber;
             
             
             
@@ -47,24 +45,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
-        /// <summary> The ChannelLineId property of the Entity OverstockOrderItem<br/><br/>
+        /// <summary> The SalesChannelLineNumber property of the Entity OverstockOrderItem<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrderItem"."ChannelLineId"<br/>
+        /// <remarks>Mapped on table field: "OverstockOrderItem"."SalesChannelLineNumber"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> ChannelLineId { get; }
-        /// <summary> The LineId property of the Entity OverstockOrderItem<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrderItem"."LineId"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> LineId { get; }
-        /// <summary> The ItemID property of the Entity OverstockOrderItem<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrderItem"."ItemID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> ItemID { get; }
+        public Nullable<System.Int32> SalesChannelLineNumber { get; }
         
         
         
