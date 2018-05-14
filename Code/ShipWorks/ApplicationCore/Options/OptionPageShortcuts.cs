@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Metrics;
@@ -7,10 +9,12 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
@@ -23,15 +27,17 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPageShortcuts : OptionPageBase
     {
         private readonly IScannerConfigurationRepository scannerRepo;
-        private readonly IUserSession userSession;
+        private IUserSession userSession;
         private readonly IMessenger messenger;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly UserSettingsEntity settings;
+        private UserSettingsEntity settings;
         private readonly IWin32Window owner;
+        private readonly ILifetimeScope scope;
         private SingleScanSettings singleScanSettingsOnLoad;
         private IPrintJobFactory pringJobFactory;
+        private IDisposable singleScanShortcutMessage;
 
         /// <summary>
         /// Constructor
@@ -48,6 +54,15 @@ namespace ShipWorks.ApplicationCore.Options
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
             settings = userSession.User.Settings;
             this.owner = owner;
+            this.scope = scope;
+
+            // Listen for the single scan setting changing so we can reload it
+            // wait 250ms so that the pipline that is making the change has time to make it
+            singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
+                .Where(s => s.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
+                .Delay(TimeSpan.FromMilliseconds(250))
+                .ObserveOn(this)
+                .Subscribe(ReloadSingleScanSetting);
         }
 
         /// <summary>
@@ -86,10 +101,11 @@ namespace ShipWorks.ApplicationCore.Options
                     adapter.SaveAndRefetch(settings);
                 }
 
+                singleScanShortcutMessage.Dispose();
                 UpdateSingleScanTelemetry(settings);
             }
         }
-
+        
         /// <summary>
         /// Load settings and populate controls
         /// </summary>
@@ -108,6 +124,19 @@ namespace ShipWorks.ApplicationCore.Options
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
             }
+        }
+
+        /// <summary>
+        /// Toggle the single scan setting
+        /// </summary>
+        private void ReloadSingleScanSetting(ShortcutMessage message)
+        {
+            // at this point we know the user settings have changed so we need a fresh copy
+            // to save our changes to otherwise we will get a concurrency error
+            userSession = scope.Resolve<IUserSession>();
+            settings = userSession.User.Settings;
+
+            autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
         }
 
         /// <summary>
