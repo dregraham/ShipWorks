@@ -58,7 +58,8 @@ namespace ShipWorks.SingleScan
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) ||
                             m.AppliesTo(KeyboardShortcutCommand.Enter) ||
                             m.AppliesTo(KeyboardShortcutCommand.Tab) ||
-                            m.AppliesTo(KeyboardShortcutCommand.Escape))
+                            m.AppliesTo(KeyboardShortcutCommand.Escape) ||
+                            m.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
                 .Subscribe(CollectTelemetryWithoutResult),
 
             messenger.OfType<ShortcutMessage>()
@@ -149,6 +150,8 @@ namespace ShipWorks.SingleScan
                 case KeyboardShortcutCommand.Tab:
                 case KeyboardShortcutCommand.Escape:
                     return $"Simulate {shortcutMessage.Shortcut.Action} key press";
+                case KeyboardShortcutCommand.ToggleAutoPrint:
+                    return $"Toggle Single Scan auto-print";
                 default:
                     return EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
             }
