@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly ILifetimeScope scope;
         private SingleScanSettings singleScanSettingsOnLoad;
         private IPrintJobFactory printJobFactory;
-        private readonly IDisposable singleScanShortcutMessage;
+        private IDisposable singleScanShortcutMessage;
 
         /// <summary>
         /// Constructor
@@ -55,14 +55,6 @@ namespace ShipWorks.ApplicationCore.Options
             settings = userSession.User.Settings;
             this.owner = owner;
             this.scope = scope;
-
-            // Listen for the single scan setting changing so we can reload it
-            // wait 250ms so that the pipeline that is making the change has time to make it
-            singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
-                .Where(s => s.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
-                .Delay(TimeSpan.FromMilliseconds(250))
-                .ObserveOn(this)
-                .Subscribe(ReloadSingleScanSetting);
         }
 
         /// <summary>
@@ -113,6 +105,16 @@ namespace ShipWorks.ApplicationCore.Options
         {
             if (userSession.IsLoggedOn)
             {
+                singleScanShortcutMessage?.Dispose();
+
+                // Listen for the single scan setting changing so we can reload it
+                // wait 250ms so that the pipeline that is making the change has time to make it
+                singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
+                    .Where(s => s.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
+                    .Delay(TimeSpan.FromMilliseconds(250))
+                    .ObserveOn(this)
+                    .Subscribe(ReloadSingleScanSetting);
+
                 displayShortcutIndicator.Checked =
                     currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator);
 
