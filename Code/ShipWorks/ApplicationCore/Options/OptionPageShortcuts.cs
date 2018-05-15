@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -52,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Options
             messenger = scope.Resolve<IMessenger>();
             printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
-            settings = userSession.User.Settings;
+            settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
         }
@@ -125,6 +126,17 @@ namespace ShipWorks.ApplicationCore.Options
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
+            }
+            else
+            {
+                Controls.Clear();
+
+                Label label = new Label();
+                label.Text = "You are not logged on.";
+                label.Location = new System.Drawing.Point(10, 10);
+                label.AutoSize = true;
+                label.Font = new Font(Font, FontStyle.Bold);
+                Controls.Add(label);
             }
         }
 
