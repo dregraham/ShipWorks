@@ -58,8 +58,7 @@ namespace ShipWorks.Templates.Printing
             List<PrintableBarcode> barcodes = new List<PrintableBarcode>();
 
             shortcutManager.Shortcuts
-                .Where(s => s.Action != KeyboardShortcutCommand.FocusQuickSearch && 
-                            s.Action != KeyboardShortcutCommand.ApplyProfile)
+                .Where(s => s.Action != KeyboardShortcutCommand.ApplyProfile)
                 .ForEach(s => barcodes.Add(new PrintableBarcode(EnumHelper.GetDescription(s.Action), s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
 
             return barcodes;
