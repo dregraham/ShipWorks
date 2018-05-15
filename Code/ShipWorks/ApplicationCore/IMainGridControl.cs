@@ -39,11 +39,6 @@ namespace ShipWorks.ApplicationCore
         bool CanFocus { get; }
 
         /// <summary>
-        /// Gets or sets the searchbox text
-        /// </summary>
-        string SearchBoxText { get; set; }
-
-        /// <summary>
         /// Get the normalized text of the basic search box.
         /// </summary>
         string GetBasicSearchText();
@@ -68,5 +63,10 @@ namespace ShipWorks.ApplicationCore
         /// Focus the searchbox
         /// </summary>
         void FocusSearch();
+
+        /// <summary>
+        /// Clear the searchbox text
+        /// </summary>
+        void ClearSearch();
     }
 }

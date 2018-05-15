@@ -87,7 +87,7 @@ namespace ShipWorks.SingleScan
         {
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
             {
-                mainGridControl.SearchBoxText = string.Empty;
+                mainGridControl.ClearSearch();
             }
             else
             {

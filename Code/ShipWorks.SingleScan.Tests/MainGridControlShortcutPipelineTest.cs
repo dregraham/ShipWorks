@@ -51,7 +51,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            mainGridControl.VerifySet(m => m.SearchBoxText = string.Empty, Times.Once());
+            mainGridControl.Verify(m => m.ClearSearch(), Times.Once());
         }
 
         [Fact]

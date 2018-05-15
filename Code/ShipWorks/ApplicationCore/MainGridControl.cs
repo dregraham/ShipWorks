@@ -1028,15 +1028,6 @@ namespace ShipWorks.ApplicationCore
         public bool IsSearchEnding { get; private set; }
 
         /// <summary>
-        /// Get or set the searchbox text
-        /// </summary>
-        public string SearchBoxText
-        {
-            get => searchBox.Text;
-            set => searchBox.Text = value;
-        }
-
-        /// <summary>
         /// As the filter definition changes, its required height will change.  We adjust to fit.
         /// </summary>
         private void OnAdvancedSearchRequiredHeightChanged(object sender, EventArgs e)
@@ -1065,5 +1056,10 @@ namespace ShipWorks.ApplicationCore
         /// Focus the searchbox
         /// </summary>
         public void FocusSearch() => searchBox.Focus();
+
+        /// <summary> 
+        /// Clear the searchbox text
+        /// </summary>
+        public void ClearSearch() => searchBox.Clear();
     }
 }
