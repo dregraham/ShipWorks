@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -9,6 +11,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -52,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Options
             messenger = scope.Resolve<IMessenger>();
             printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
-            settings = userSession.User.Settings;
+            settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
         }
@@ -93,7 +96,6 @@ namespace ShipWorks.ApplicationCore.Options
                     adapter.SaveAndRefetch(settings);
                 }
 
-                singleScanShortcutMessage.Dispose();
                 UpdateSingleScanTelemetry(settings);
             }
         }
@@ -105,6 +107,8 @@ namespace ShipWorks.ApplicationCore.Options
         {
             if (userSession.IsLoggedOn)
             {
+                singleScanShortcutMessage?.Dispose();
+
                 // Listen for the single scan setting changing so we can reload it
                 // wait 250ms so that the pipeline that is making the change has time to make it
                 singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
@@ -123,7 +127,40 @@ namespace ShipWorks.ApplicationCore.Options
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
+                UpdateToolTipHotkey();
             }
+            else
+            {
+                Controls.Clear();
+
+                Label label = new Label();
+                label.Text = "You are not logged on.";
+                label.Location = new System.Drawing.Point(10, 10);
+                label.AutoSize = true;
+                label.Font = new Font(Font, FontStyle.Bold);
+                Controls.Add(label);
+            }
+        }
+
+        /// <summary>
+        /// Update tool tips hotkey text
+        /// </summary>
+        private void UpdateToolTipHotkey()
+        {
+            IShortcutEntity toggleAutoPrintShortcut = scope.Resolve<IShortcutManager>()
+                .Shortcuts.FirstOrDefault(s => s.Action == KeyboardShortcutCommand.ToggleAutoPrint);
+            if (toggleAutoPrintShortcut != null)
+            {
+                infoTipAutoPrint.Title = $"Automatically Print Labels on Barcode Scan Search ({new KeyboardShortcutData(toggleAutoPrintShortcut).ShortcutText})";
+            }
+        }
+		
+		/// <summary>
+        /// Unsubscribe from shortcut messages
+        /// </summary>
+        private void OnHandleDestroyed(object sender, EventArgs e)
+        {
+            singleScanShortcutMessage?.Dispose();
         }
 
         /// <summary>
