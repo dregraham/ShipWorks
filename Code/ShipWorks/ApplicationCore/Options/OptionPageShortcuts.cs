@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -10,6 +11,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -125,6 +127,7 @@ namespace ShipWorks.ApplicationCore.Options
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
+                UpdateToolTipHotkey();
             }
             else
             {
@@ -140,6 +143,19 @@ namespace ShipWorks.ApplicationCore.Options
         }
 
         /// <summary>
+        /// Update tool tips hotkey text
+        /// </summary>
+        private void UpdateToolTipHotkey()
+        {
+            IShortcutEntity toggleAutoPrintShortcut = scope.Resolve<IShortcutManager>()
+                .Shortcuts.FirstOrDefault(s => s.Action == KeyboardShortcutCommand.ToggleAutoPrint);
+            if (toggleAutoPrintShortcut != null)
+            {
+                infoTipAutoPrint.Title = $"Automatically Print Labels on Barcode Scan Search ({new KeyboardShortcutData(toggleAutoPrintShortcut).ShortcutText})";
+            }
+        }
+		
+		/// <summary>
         /// Unsubscribe from shortcut messages
         /// </summary>
         private void OnHandleDestroyed(object sender, EventArgs e)
