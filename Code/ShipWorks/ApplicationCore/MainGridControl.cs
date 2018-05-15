@@ -1026,7 +1026,15 @@ namespace ShipWorks.ApplicationCore
         /// Is a search in the process of ending
         /// </summary>
         public bool IsSearchEnding { get; private set; }
-        public string SearchBoxText { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Get or set the searchbox text
+        /// </summary>
+        public string SearchBoxText
+        {
+            get => searchBox.Text;
+            set => searchBox.Text = value;
+        }
 
         /// <summary>
         /// As the filter definition changes, its required height will change.  We adjust to fit.
@@ -1053,9 +1061,9 @@ namespace ShipWorks.ApplicationCore
             filterEditor.LoadDefinition(definition);
         }
 
-        public void FocusSearch()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Focus the searchbox
+        /// </summary>
+        public void FocusSearch() => searchBox.Focus();
     }
 }
