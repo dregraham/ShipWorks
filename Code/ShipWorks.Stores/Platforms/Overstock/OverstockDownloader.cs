@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -98,31 +97,32 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Returns a sorted set of start DateTimes between a date range, split by a given timespan
         /// </summary>
-        private SortedSet<DateTime> GetDates(DateTime startDateTime, DateTime endDateTime, TimeSpan timeOffset)
-        {
-            SortedSet<DateTime> dates = new SortedSet<DateTime>();
-            DateTime tmp = startDateTime;
+        private IEnumerable<Range<DateTime>> GetDates(DateTime startDateTime, DateTime endDateTime, TimeSpan timeOffset) =>
+            Enumerable.Range(0, int.MaxValue)
+                .Select(x => startDateTime.AddHours(x))
+                .TakeWhile(x => x <= endDateTime)
+                .Select(x => x.To(x.Add(timeOffset).AddSeconds(-1)));
 
-            while (tmp <= endDateTime)
-            {
-                dates.Add(tmp);
-                tmp += timeOffset;
-            }
 
-            return dates;
-        }
+        //    SortedSet<DateTime> dates = new SortedSet<DateTime>();
+        //    DateTime tmp = startDateTime;
+
+        //    while (tmp <= endDateTime)
+        //    {
+        //        dates.Add(tmp);
+        //        tmp += timeOffset;
+        //    }
+
+        //    return dates;
+        //}
 
         /// <summary>
         /// Downloads the orders.
         /// </summary>
         private async Task DownloadOrders(DateTime initialStart, DateTime initialEnd, TimeSpan offset)
         {
-            //{
-            //    await DownloadOrders(workingDateTime, workingDateTime.Add(offset.Add(-TimeSpan.FromSeconds(1)))).ConfigureAwait(false);
-            //}
-            
             // keep going until none are left
-            foreach (DateTime start in GetDates(initialStart, initialEnd, offset))
+            foreach (Range<DateTime> downloadRange in GetDates(initialStart, initialEnd, offset))
             {
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
@@ -130,23 +130,16 @@ namespace ShipWorks.Stores.Platforms.Overstock
                     return;
                 }
 
-                DateTime end = start.Add(offset.Add(-TimeSpan.FromSeconds(1)));
-
-                var result = await webClient.GetOrders(overstockStore, start, end);
-                IEnumerable<XElement> orderElements = result.Value?.Root?.Elements("list");
+                var result = await webClient.GetOrders(overstockStore, downloadRange);
+                IEnumerable<XElement> orderElements = result?.Root?.Elements("list");
 
                 if (orderElements?.Any() == true)
                 {
                     await LoadOrders(orderElements).ConfigureAwait(false);
                 }
-                else
-                {
-                    Progress.Detail = "Done";
-
-                    // signal that none were imported
-                    return;
-                }
             }
+
+            Progress.Detail = "Done";
         }
 
         /// <summary>
@@ -171,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 anyProcessed |= await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
-//                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
+                //                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
             }
 
             return anyProcessed;
@@ -182,16 +175,17 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         private async Task<bool> LoadOrder(XElement orderElement)
         {
-            string salcesChannelOrderNumber = orderElement.GetValue("salesChannelOrderNumber");
+            string salesChannelOrderNumber = orderElement.GetValue("salesChannelOrderNumber");
 
-            GenericResult<OrderEntity> result = await InstantiateOrder(salcesChannelOrderNumber).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(salesChannelOrderNumber).ConfigureAwait(false);
             if (result.Failure)
             {
                 return false;
             }
 
             OverstockOrderEntity order = result.Value as OverstockOrderEntity;
-            
+            var isNew = order.IsNew;
+
             // last modified
             order.OnlineLastModified = DateTime.Parse(orderElement.GetValue("orderDate"));
 
@@ -207,10 +201,14 @@ namespace ShipWorks.Stores.Platforms.Overstock
             // Load Address info
             LoadAddressInfo(order, orderElement);
 
-            // Notes
-            LoadNotes(this, order, orderElement);
-            
+            if (isNew)
+            {
+                // Notes
+                LoadNotes(this, order, orderElement);
 
+                LoadItems(this, order, orderElement.Elements("processedSalesOrderLine"));
+            }
+            
             order.WarehouseCode = orderElement.Element("warehouseName")?.GetValue("code");
             order.SalesChannelName = orderElement.GetValue("salesChannelName");
 
@@ -241,43 +239,38 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         private static void LoadAddressInfo(OrderEntity order, XElement orderElement)
         {
-            LoadAddress(order, orderElement.Element("shipToAddress"), "Ship");
-            LoadAddress(order, orderElement.Element("returnAddress"), "Bill");
+            LoadAddress(order.ShipPerson, orderElement.Element("shipToAddress"));
+            LoadAddress(order.BillPerson, orderElement.Element("returnAddress"));
         }
 
         /// <summary>
         /// Loads the Billing or Shipping address detail into the order entity, depending on the 
         /// prefix specified by the caller.
         /// </summary>
-        private static void LoadAddress(OrderEntity order, XElement address, string dbPrefix)
+        private static void LoadAddress(PersonAdapter person, XElement address)
         {
             // FullName must be sent, or FirstName/MiddleName/LastName
             string fullName = address.GetValue("contactName");
 
             // parse the name for its parts
-            PersonName personName = PersonName.Parse(fullName);
+            person.ParsedName = PersonName.Parse(fullName);
+            
+            person.Company = string.Empty;
+            person.Street1 = address.GetValue("address1");
+            person.Street2 = address.GetValue("address2");
+            person.Street3 = string.Empty;
 
-            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) personName.ParseStatus);
-            order.SetNewFieldValue(dbPrefix + "UnparsedName", personName.UnparsedName.Trim());
-            order.SetNewFieldValue(dbPrefix + "FirstName", personName.First.Trim());
-            order.SetNewFieldValue(dbPrefix + "MiddleName", personName.Middle.Trim());
-            order.SetNewFieldValue(dbPrefix + "LastName", personName.Last.Trim());
+            person.City = address.GetValue("city");
+            person.StateProvCode = Geography.GetStateProvCode(address.GetValue("stateOrProvince"));
+            person.PostalCode = address.GetValue("postalCode");
+            person.CountryCode = Geography.GetCountryCode(address.GetValue("countryCode"));
 
-            order.SetNewFieldValue(dbPrefix + "Company", string.Empty);
-            order.SetNewFieldValue(dbPrefix + "Street1", address.GetValue("address1"));
-            order.SetNewFieldValue(dbPrefix + "Street2", address.GetValue("address2"));
-            order.SetNewFieldValue(dbPrefix + "Street3", string.Empty);
+            //person.ResidentialStatus = ;
 
-            order.SetNewFieldValue(dbPrefix + "City", address.GetValue("city"));
-            order.SetNewFieldValue(dbPrefix + "StateProvCode", Geography.GetStateProvCode(address.GetValue("stateOrProvince")));
-            order.SetNewFieldValue(dbPrefix + "PostalCode", address.GetValue("postalCode"));
-            order.SetNewFieldValue(dbPrefix + "CountryCode", Geography.GetCountryCode(address.GetValue("countryCode")));
-
-            order.SetNewFieldValue(dbPrefix + "Residential", true);
-            order.SetNewFieldValue(dbPrefix + "Phone", address.GetValue("phone"));
-            order.SetNewFieldValue(dbPrefix + "Fax", string.Empty);
-            order.SetNewFieldValue(dbPrefix + "Email", string.Empty);
-            order.SetNewFieldValue(dbPrefix + "Website", string.Empty);
+            person.Phone = address.GetValue("phone");
+            person.Fax = string.Empty;
+            person.Email = string.Empty;
+            person.Website = string.Empty;
         }
 
         /// <summary>
@@ -291,6 +284,23 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 {
                     factory.CreateNote(order, note, order.OrderDate, NoteVisibility.Internal);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Load items
+        /// </summary>
+        private void LoadItems(IOrderElementFactory elementFactory, OrderEntity orderEntity, IEnumerable<XElement> items)
+        {
+            foreach (var item in items)
+            {
+                var itemEntity = elementFactory.CreateItem(orderEntity);
+                itemEntity.SKU = item.GetValue("salesChannelSKU");
+                itemEntity.Name = item.GetValue("itemName");
+                itemEntity.UnitCost = item.GetDecimal("unitCost");
+                itemEntity.UnitPrice = item.GetDecimal("itemPrice");
+                itemEntity.UPC = item.GetValue("upc");
+                itemEntity.Code = item.GetValue("barcode");
             }
         }
     }

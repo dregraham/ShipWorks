@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -19,6 +16,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Returns the resource path for downloading orders
         /// </summary>
-        string GetOrdersResource(DateTime startTime, DateTime endTime);
+        string GetOrdersResource(Range<DateTime> downloadRange);
     }
 }

@@ -84,12 +84,12 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Make the call to Overstock to get a list of orders matching criteria
         /// </summary>
-        public async Task<GenericResult<XDocument>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime)
+        public async Task<XDocument> GetOrders(IOverstockStoreEntity store, Range<DateTime> downloadRange)
         {
             try
             {
                 // Create a request for getting orders
-                RestRequest request = new RestRequest(endpoints.GetOrdersResource(startDateTime, endDateTime));
+                RestRequest request = new RestRequest(endpoints.GetOrdersResource(downloadRange));
 
                 XDocument result = await MakeRequest<RestRequest>(request, store, "GetOrders").ConfigureAwait(false);
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
             // See if we can successfully call GetOrderCount, if we throw, we can't connect or login
             try
             {
-                await GetOrders(store, DateTime.Now, DateTime.Now).ConfigureAwait(false);
+                await GetOrders(store, DateTime.Now.To(DateTime.Now)).ConfigureAwait(false);
                 return true;
             }
             catch

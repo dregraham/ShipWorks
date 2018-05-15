@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Get orders overstock
         /// </summary>
-        Task<GenericResult<XDocument>> GetOrders(IOverstockStoreEntity store, DateTime startDateTime, DateTime endDateTime);
+        Task<XDocument> GetOrders(IOverstockStoreEntity store, Range<DateTime> downloadRange);
 
         /// <summary>
         /// Uploads the shipment details.

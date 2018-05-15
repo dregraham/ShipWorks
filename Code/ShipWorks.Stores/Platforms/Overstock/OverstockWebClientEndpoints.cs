@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -20,9 +21,9 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Returns the resource path for downloading orders
         /// </summary>
-        public string GetOrdersResource(DateTime startTime, DateTime endTime)
+        public string GetOrdersResource(Range<DateTime> downloadRange)
         {
-            return $"salesorders?startTime={startTime.ToString("o")}&endTime={endTime.ToString("o")}";
+            return $"salesorders?startTime={downloadRange.Start.ToString("o")}&endTime={downloadRange.End.ToString("o")}";
         }
     }
 }

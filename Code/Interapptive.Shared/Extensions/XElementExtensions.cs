@@ -9,12 +9,18 @@ namespace Interapptive.Shared.Extensions
     public static class XElementExtensions
     {
         /// <summary>
-        /// Write start document which will automatically close
+        /// Get a string value from an XElement
         /// </summary>
         public static string GetValue(this XElement element, string elementName, string defaultValue = "")
         {
             string result = element.Element(elementName)?.Value;
             return result.IsNullOrWhiteSpace() ? defaultValue : result.Trim();
         }
+
+        /// <summary>
+        /// Get a decimal value from an XElement
+        /// </summary>
+        public static decimal GetDecimal(this XElement element, string elementName, decimal defaultValue = 0) =>
+            decimal.TryParse(GetValue(element, elementName), out decimal parsedValue) ? parsedValue : defaultValue;
     }
 }
