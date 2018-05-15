@@ -10,7 +10,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -27,7 +26,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Overstock)]
     public class OverstockDownloader : StoreDownloader
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(OverstockDownloader));
         private readonly IOverstockWebClient webClient;
         private readonly OverstockStoreEntity overstockStore;
         private readonly IDownloadStartingPoint downloadStartingPoint;
