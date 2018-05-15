@@ -36,8 +36,8 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly IWin32Window owner;
         private readonly ILifetimeScope scope;
         private SingleScanSettings singleScanSettingsOnLoad;
-        private IPrintJobFactory pringJobFactory;
-        private IDisposable singleScanShortcutMessage;
+        private IPrintJobFactory printJobFactory;
+        private readonly IDisposable singleScanShortcutMessage;
 
         /// <summary>
         /// Constructor
@@ -50,14 +50,14 @@ namespace ShipWorks.ApplicationCore.Options
             sqlAdapterFactory = scope.Resolve<ISqlAdapterFactory>();
             userSession = scope.Resolve<IUserSession>();
             messenger = scope.Resolve<IMessenger>();
-            pringJobFactory = scope.Resolve<IPrintJobFactory>();
+            printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
             settings = userSession.User.Settings;
             this.owner = owner;
             this.scope = scope;
 
             // Listen for the single scan setting changing so we can reload it
-            // wait 250ms so that the pipline that is making the change has time to make it
+            // wait 250ms so that the pipeline that is making the change has time to make it
             singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
                 .Where(s => s.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
                 .Delay(TimeSpan.FromMilliseconds(250))
@@ -134,9 +134,11 @@ namespace ShipWorks.ApplicationCore.Options
             // at this point we know the user settings have changed so we need a fresh copy
             // to save our changes to otherwise we will get a concurrency error
             userSession = scope.Resolve<IUserSession>();
-            settings = userSession.User.Settings;
-
-            autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
+            if (userSession.IsLoggedOn)
+            {
+                settings = userSession.User.Settings;
+                autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
+            }
         }
 
         /// <summary>
@@ -216,7 +218,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnClickPrintShortcuts(object sender, EventArgs e)
         {
-            pringJobFactory.CreateBarcodePrintJob().PreviewAsync((Form) owner);
+            printJobFactory.CreateBarcodePrintJob().PreviewAsync((Form) owner);
         }
     }
 }

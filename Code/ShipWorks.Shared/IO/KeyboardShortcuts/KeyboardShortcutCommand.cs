@@ -55,7 +55,7 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// <summary>
         /// Toggles auto print on/off
         /// </summary>
-        [Description("Toggle Auto Print")]
+        [Description("Toggle Single Scan Auto Print")]
         ToggleAutoPrint = 7
     }
 }
