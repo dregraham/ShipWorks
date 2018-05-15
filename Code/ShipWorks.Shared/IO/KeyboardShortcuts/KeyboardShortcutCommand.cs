@@ -18,7 +18,6 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// <summary>
         /// Focus on the quick search box
         /// </summary>
-        /// <remarks>This is only used for testing at the moment</remarks>
         [Description("Focus Quick Search")]
         FocusQuickSearch = 1,
 
@@ -56,6 +55,12 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Toggles auto print on/off
         /// </summary>
         [Description("Toggle Single Scan Auto Print")]
-        ToggleAutoPrint = 7
+        ToggleAutoPrint = 7,
+
+        /// <summary>
+        /// Clears the quick search box
+        /// </summary>
+        [Description("Clear Quick Search")]
+        ClearQuickSearch = 8
     }
 }
