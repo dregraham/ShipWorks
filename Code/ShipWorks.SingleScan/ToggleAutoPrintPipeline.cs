@@ -18,7 +18,7 @@ namespace ShipWorks.SingleScan
     {
         private readonly IMessenger messenger;
         private readonly IMessageHelper messageHelper;
-        private readonly IUserSession usersession;
+        private readonly IUserSession userSession;
         private readonly ICurrentUserSettings currentUserSettings;
         private IDisposable subscription;
 
@@ -28,12 +28,12 @@ namespace ShipWorks.SingleScan
         public ToggleAutoPrintPipeline(
             IMessenger messenger,
             IMessageHelper messageHelper,
-            IUserSession usersession,
+            IUserSession userSession,
             ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
-            this.usersession = usersession;
+            this.userSession = userSession;
             this.currentUserSettings = currentUserSettings;
         }
 
@@ -46,8 +46,8 @@ namespace ShipWorks.SingleScan
 
             subscription = messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
-                .Where(m => usersession.User?.Settings?.SingleScanSettings != null &&
-                            usersession.User.Settings.SingleScanSettings != (int) SingleScanSettings.Disabled)
+                .Where(m => userSession.User?.Settings?.SingleScanSettings != null &&
+                            userSession.User.Settings.SingleScanSettings != (int) SingleScanSettings.Disabled)
                 .Subscribe(HandleToggleAutoPrint);
         }
 
@@ -66,18 +66,33 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void HandleToggleAutoPrint(ShortcutMessage shortcutMessage)
         {
-            if (usersession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint)
+            ChangeSingleScanSettings();
+            ShowShortcutIndicator(shortcutMessage);
+        }
+
+        /// <summary>
+        /// Update SingleScanSettings based on scan
+        /// </summary>
+        private void ChangeSingleScanSettings()
+        {
+            if (userSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint)
             {
-                usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.Scan;
+                userSession.User.Settings.SingleScanSettings = (int) SingleScanSettings.Scan;
             }
             else
             {
-                usersession.User.Settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
+                userSession.User.Settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
             }
+        }
 
+        /// <summary>
+        /// Show shortcut indicator
+        /// </summary>
+        private void ShowShortcutIndicator(ShortcutMessage shortcutMessage)
+        {
             if (currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
             {
-                string stateName = usersession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint ? "ON" : "OFF";
+                string stateName = userSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint ? "ON" : "OFF";
 
                 if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
                 {
