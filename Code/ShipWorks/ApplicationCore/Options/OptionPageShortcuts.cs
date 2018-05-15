@@ -94,7 +94,6 @@ namespace ShipWorks.ApplicationCore.Options
                     adapter.SaveAndRefetch(settings);
                 }
 
-                singleScanShortcutMessage.Dispose();
                 UpdateSingleScanTelemetry(settings);
             }
         }
@@ -138,6 +137,15 @@ namespace ShipWorks.ApplicationCore.Options
                 label.Font = new Font(Font, FontStyle.Bold);
                 Controls.Add(label);
             }
+        }
+
+        /// <summary>
+        /// Unsubscribe from shortcut messages
+        /// </summary>
+        private void OnHandleDestroyed(object sender, EventArgs e)
+        {
+            singleScanShortcutMessage?.Dispose();
+            base.OnHandleDestroyed(e);
         }
 
         /// <summary>
