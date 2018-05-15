@@ -39,12 +39,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 OriginalOrderID { get; }
-        /// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrderSearch<br/><br/>
+        /// <summary> The SalesChannelName property of the Entity OverstockOrderSearch<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrderSearch"."SalesChannelOrderNumber"<br/>
+        /// <remarks>Mapped on table field: "OverstockOrderSearch"."SalesChannelName"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String SalesChannelOrderNumber { get; }
+        System.String SalesChannelName { get; }
+        /// <summary> The WarehouseCode property of the Entity OverstockOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OverstockOrderSearch"."WarehouseCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String WarehouseCode { get; }
         
         
         IOverstockOrderEntity OverstockOrder { get; }

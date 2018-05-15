@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Overstock.Content
                 x => new OverstockOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    SalesChannelOrderNumber = x.SalesChannelOrderNumber,
+                    SalesChannelName = x.SalesChannelName,
+                    WarehouseCode = x.WarehouseCode,
                     OriginalOrderID = x.OrderID
                 });
         }

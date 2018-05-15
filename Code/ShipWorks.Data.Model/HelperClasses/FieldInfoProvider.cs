@@ -2380,16 +2380,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderFieldIndex), "OverstockOrderEntity");
 			this.AddElementFieldInfo("OverstockOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderFieldIndex.WarehouseCode, 50, 0, 0);
 			this.AddElementFieldInfo("OverstockOrderEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderFieldIndex.SalesChannelName, 50, 0, 0);
-			this.AddElementFieldInfo("OverstockOrderEntity", "WarehouseCode", typeof(System.String), false, false, false, false,  (int)OverstockOrderFieldIndex.WarehouseCode, 50, 0, 0);
-			this.AddElementFieldInfo("OverstockOrderEntity", "SalesChannelOrderNumber", typeof(System.String), false, false, false, false,  (int)OverstockOrderFieldIndex.SalesChannelOrderNumber, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderEntity", "SofsCreatedDate", typeof(System.DateTime), false, false, false, false,  (int)OverstockOrderFieldIndex.SofsCreatedDate, 0, 0, 0);
 		}
 		/// <summary>Inits OverstockOrderItemEntity's FieldInfo objects</summary>
 		private void InitOverstockOrderItemEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderItemFieldIndex), "OverstockOrderItemEntity");
 			this.AddElementFieldInfo("OverstockOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderItemFieldIndex.OrderItemID, 0, 0, 19);
-			this.AddElementFieldInfo("OverstockOrderItemEntity", "SalesChannelLineNumber", typeof(Nullable<System.Int32>), false, false, false, true,  (int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, 0, 0, 10);
+			this.AddElementFieldInfo("OverstockOrderItemEntity", "SalesChannelLineNumber", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, 0, 0, 19);
 		}
 		/// <summary>Inits OverstockOrderSearchEntity's FieldInfo objects</summary>
 		private void InitOverstockOrderSearchEntityInfos()
@@ -2398,7 +2398,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OverstockOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderSearchFieldIndex.OverstockOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OverstockOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
-			this.AddElementFieldInfo("OverstockOrderSearchEntity", "SalesChannelOrderNumber", typeof(System.String), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.SalesChannelOrderNumber, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.SalesChannelName, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderSearchFieldIndex.WarehouseCode, 50, 0, 0);
 		}
 		/// <summary>Inits OverstockStoreEntity's FieldInfo objects</summary>
 		private void InitOverstockStoreEntityInfos()

@@ -7920,12 +7920,12 @@ namespace ShipWorks.Data.Model
 		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>SalesChannelName. </summary>
-		SalesChannelName,
 		///<summary>WarehouseCode. </summary>
 		WarehouseCode,
-		///<summary>SalesChannelOrderNumber. </summary>
-		SalesChannelOrderNumber,
+		///<summary>SalesChannelName. </summary>
+		SalesChannelName,
+		///<summary>SofsCreatedDate. </summary>
+		SofsCreatedDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7988,8 +7988,10 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
-		///<summary>SalesChannelOrderNumber. </summary>
-		SalesChannelOrderNumber,
+		///<summary>SalesChannelName. </summary>
+		SalesChannelName,
+		///<summary>WarehouseCode. </summary>
+		WarehouseCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

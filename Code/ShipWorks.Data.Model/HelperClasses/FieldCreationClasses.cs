@@ -18432,20 +18432,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderID);}
 		}
-		/// <summary>Creates a new OverstockOrderEntity.SalesChannelName field instance</summary>
-		public static EntityField2 SalesChannelName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelName);}
-		}
 		/// <summary>Creates a new OverstockOrderEntity.WarehouseCode field instance</summary>
 		public static EntityField2 WarehouseCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.WarehouseCode);}
 		}
-		/// <summary>Creates a new OverstockOrderEntity.SalesChannelOrderNumber field instance</summary>
-		public static EntityField2 SalesChannelOrderNumber
+		/// <summary>Creates a new OverstockOrderEntity.SalesChannelName field instance</summary>
+		public static EntityField2 SalesChannelName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelOrderNumber);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.SofsCreatedDate field instance</summary>
+		public static EntityField2 SofsCreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SofsCreatedDate);}
 		}
 	}
 
@@ -18582,10 +18582,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OriginalOrderID);}
 		}
-		/// <summary>Creates a new OverstockOrderSearchEntity.SalesChannelOrderNumber field instance</summary>
-		public static EntityField2 SalesChannelOrderNumber
+		/// <summary>Creates a new OverstockOrderSearchEntity.SalesChannelName field instance</summary>
+		public static EntityField2 SalesChannelName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.SalesChannelOrderNumber);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.SalesChannelName);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.WarehouseCode field instance</summary>
+		public static EntityField2 WarehouseCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.WarehouseCode);}
 		}
 	}
 

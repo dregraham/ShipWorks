@@ -36,9 +36,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            SalesChannelName = source.SalesChannelName;
             WarehouseCode = source.WarehouseCode;
-            SalesChannelOrderNumber = source.SalesChannelOrderNumber;
+            SalesChannelName = source.SalesChannelName;
+            SofsCreatedDate = source.SofsCreatedDate;
             
             
             
@@ -49,24 +49,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
+        /// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OverstockOrder"."WarehouseCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String WarehouseCode { get; }
         /// <summary> The SalesChannelName property of the Entity OverstockOrder<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OverstockOrder"."SalesChannelName"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String SalesChannelName { get; }
-        /// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/>
+        /// <summary> The SofsCreatedDate property of the Entity OverstockOrder<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrder"."WarehouseCode"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "OverstockOrder"."SofsCreatedDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String WarehouseCode { get; }
-        /// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrder<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OverstockOrder"."SalesChannelOrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String SalesChannelOrderNumber { get; }
+        public System.DateTime SofsCreatedDate { get; }
         
         
         

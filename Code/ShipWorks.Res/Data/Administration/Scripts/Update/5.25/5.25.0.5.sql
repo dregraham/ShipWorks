@@ -8,9 +8,9 @@ IF OBJECT_ID(N'[dbo].[OverstockOrder]', 'U') IS NULL
 CREATE TABLE [dbo].[OverstockOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SofsCreatedDate] [datetime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
@@ -39,7 +39,8 @@ CREATE TABLE [dbo].[OverstockOrderSearch]
 (
 [OverstockOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [OriginalOrderID] [bigint] NOT NULL
 )
 GO
@@ -89,15 +90,15 @@ CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelName] ON [dbo].[Oversto
 	[SalesChannelName] ASC
 ) ON [PRIMARY]
 GO
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_SalesChannelOrderNumber')
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelOrderNumber] ON [dbo].[OverstockOrder]
-(
-	[SalesChannelOrderNumber] ASC
-) ON [PRIMARY]
-GO
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_WarehouseCode')
 CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseCode] ON [dbo].[OverstockOrder]
 (
 	[WarehouseCode] ASC
+) ON [PRIMARY]
+GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OverstockOrder]') AND name = N'IX_OverstockOrder_SofsCreatedDate')
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SofsCreatedDate] ON [dbo].[OverstockOrder]
+(
+	[SofsCreatedDate] ASC
 ) ON [PRIMARY]
 GO

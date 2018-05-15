@@ -2075,24 +2075,23 @@
       </EntityDefinition>
       <EntityDefinition Name="OverstockOrder" ObjectID="11900ff7-296d-439b-bb65-15c77fd8b11d" InheritanceType="2">
         <Fields>
-          <Field Name="ChannelName" Type="string" MaxLength="50" FieldIndex="1" />
-          <Field Name="OverstockOrderID" Type="long" Precision="19" FieldIndex="0" />
-          <Field Name="WarehouseName" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
+          <Field Name="SalesChannelName" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="SofsCreatedDate" Type="datetime" FieldIndex="2" />
+          <Field Name="WarehouseCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OverstockOrderItem" ObjectID="633088ce-e7f0-473e-90c3-b335c709a6cc" InheritanceType="2">
         <Fields>
-          <Field Name="ChannelLineId" Type="int" IsOptional="true" Precision="10" FieldIndex="0" />
-          <Field Name="ItemID" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
-          <Field Name="LineId" Type="int" IsOptional="true" Precision="10" FieldIndex="1" />
+          <Field Name="SalesChannelLineNumber" Type="long" Precision="19" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OverstockOrderSearch" ObjectID="9714f944-b9ff-4726-a925-28c104c71b52">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OverstockOrderID" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="OverstockOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="SalesChannelName" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="WarehouseCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OverstockStore" ObjectID="102ef9ce-2228-4f68-a69d-986c3201bc73" InheritanceType="2">
@@ -4256,7 +4255,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-30T14:49:25.0589982Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-15T16:14:14.5148455Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7277,18 +7276,16 @@
                   <PkConstraintName Name="PK_OverstockOrder" />
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="OverstockOrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseName" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="3" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SofsCreatedDate" Ordinal="4" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockOrderItem">
                   <PkConstraintName Name="PK_OverstockOrderItem" />
                   <Fields>
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ChannelLineId" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="LineId" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="ItemID" Ordinal="4" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SalesChannelLineNumber" Ordinal="2" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockOrderSearch">
@@ -7296,8 +7293,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OverstockOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -12231,26 +12229,25 @@
         </EntityMapping>
         <EntityMapping EntityName=":OverstockOrder" TargetName="ShipWorksLocal:dbo:OverstockOrder">
           <FieldMappings>
-            <FieldMapping FieldName="ChannelName" TargetFieldName="ChannelName" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OverstockOrderID" TargetFieldName="OverstockOrderID" />
-            <FieldMapping FieldName="WarehouseName" TargetFieldName="WarehouseName" />
+            <FieldMapping FieldName="SalesChannelName" TargetFieldName="SalesChannelName" />
+            <FieldMapping FieldName="SofsCreatedDate" TargetFieldName="SofsCreatedDate" />
+            <FieldMapping FieldName="WarehouseCode" TargetFieldName="WarehouseCode" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OverstockOrderItem" TargetName="ShipWorksLocal:dbo:OverstockOrderItem">
           <FieldMappings>
-            <FieldMapping FieldName="ChannelLineId" TargetFieldName="ChannelLineId" />
-            <FieldMapping FieldName="ItemID" TargetFieldName="ItemID" />
-            <FieldMapping FieldName="LineId" TargetFieldName="LineId" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+            <FieldMapping FieldName="SalesChannelLineNumber" TargetFieldName="SalesChannelLineNumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OverstockOrderSearch" TargetName="ShipWorksLocal:dbo:OverstockOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
-            <FieldMapping FieldName="OverstockOrderID" TargetFieldName="OverstockOrderID" />
             <FieldMapping FieldName="OverstockOrderSearchID" TargetFieldName="OverstockOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="SalesChannelName" TargetFieldName="SalesChannelName" />
+            <FieldMapping FieldName="WarehouseCode" TargetFieldName="WarehouseCode" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OverstockStore" TargetName="ShipWorksLocal:dbo:OverstockStore">

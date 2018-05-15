@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
 
 namespace ShipWorks.SqlServer.Filters.DirtyCounts
 {
@@ -77,7 +76,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 5;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OverstockOrder] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OverstockOrder] = 5;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

@@ -528,6 +528,7 @@
     <Compile Include="Utility\StringHash.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparer.cs" />
+    <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
     <Compile Include="Utility\XmlUtility.cs" />

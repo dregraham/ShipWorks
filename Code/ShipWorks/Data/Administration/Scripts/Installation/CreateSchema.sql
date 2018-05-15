@@ -6952,19 +6952,14 @@ GO
 CREATE TABLE [dbo].[OverstockOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SofsCreatedDate] [datetime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
 GO
 ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [PK_OverstockOrder] PRIMARY KEY CLUSTERED  ([OrderID])
-GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelOrderNumber] ON [dbo].[OverstockOrder]
-(
-	[SalesChannelOrderNumber] ASC
-) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelName] ON [dbo].[OverstockOrder]
 (
@@ -6976,6 +6971,12 @@ CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseCode] ON [dbo].[OverstockO
 	[WarehouseCode] ASC
 ) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SofsCreatedDate] ON [dbo].[OverstockOrder]
+(
+	[SofsCreatedDate] ASC
+) ON [PRIMARY]
+GO
+
 PRINT N'Creating [dbo].[OverstockOrderItem]'
 GO
 CREATE TABLE [dbo].[OverstockOrderItem]
@@ -6994,7 +6995,8 @@ CREATE TABLE [dbo].[OverstockOrderSearch]
 (
 [OverstockOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[SalesChannelOrderNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [OriginalOrderID] [bigint] NOT NULL
 )
 GO

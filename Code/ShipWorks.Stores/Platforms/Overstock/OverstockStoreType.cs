@@ -59,18 +59,14 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new AlphaNumericOrderIdentifier(((OverstockOrderEntity) order).SalesChannelOrderNumber);
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>
         /// Create the CA order entity
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            OverstockOrderEntity entity = new OverstockOrderEntity { SalesChannelOrderNumber = string.Empty };
-
-            return entity;
-        }
+        protected override OrderEntity CreateOrderInstance() =>
+            new OverstockOrderEntity();
 
         /// <summary>
         /// Creates a custom order item entity
@@ -108,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Specifies the download policy for the online store
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy => 
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
     }
 }

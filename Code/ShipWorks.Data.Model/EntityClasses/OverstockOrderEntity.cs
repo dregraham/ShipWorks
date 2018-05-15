@@ -382,11 +382,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("SalesChannelName", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("WarehouseCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("SalesChannelOrderNumber", fieldHashtable);
+			_fieldsCustomProperties.Add("SalesChannelName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SofsCreatedDate", fieldHashtable);
 		}
 		#endregion
 
@@ -447,6 +447,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
+		/// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrder"."WarehouseCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String WarehouseCode
+		{
+			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.WarehouseCode, true); }
+			set	{ SetValue((int)OverstockOrderFieldIndex.WarehouseCode, value); }
+		}
+
 		/// <summary> The SalesChannelName property of the Entity OverstockOrder<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OverstockOrder"."SalesChannelName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
@@ -457,24 +467,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OverstockOrderFieldIndex.SalesChannelName, value); }
 		}
 
-		/// <summary> The WarehouseCode property of the Entity OverstockOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrder"."WarehouseCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The SofsCreatedDate property of the Entity OverstockOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrder"."SofsCreatedDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String WarehouseCode
+		public virtual System.DateTime SofsCreatedDate
 		{
-			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.WarehouseCode, true); }
-			set	{ SetValue((int)OverstockOrderFieldIndex.WarehouseCode, value); }
-		}
-
-		/// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrder"."SalesChannelOrderNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String SalesChannelOrderNumber
-		{
-			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.SalesChannelOrderNumber, true); }
-			set	{ SetValue((int)OverstockOrderFieldIndex.SalesChannelOrderNumber, value); }
+			get { return (System.DateTime)GetValue((int)OverstockOrderFieldIndex.SofsCreatedDate, true); }
+			set	{ SetValue((int)OverstockOrderFieldIndex.SofsCreatedDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OverstockOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

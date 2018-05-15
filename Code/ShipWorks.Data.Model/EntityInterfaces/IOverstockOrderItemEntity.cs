@@ -24,9 +24,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The SalesChannelLineNumber property of the Entity OverstockOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OverstockOrderItem"."SalesChannelLineNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int32> SalesChannelLineNumber { get; }
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 SalesChannelLineNumber { get; }
         
         
         

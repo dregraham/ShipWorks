@@ -353,7 +353,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("SalesChannelOrderNumber", fieldHashtable);
+			_fieldsCustomProperties.Add("SalesChannelName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("WarehouseCode", fieldHashtable);
 		}
 		#endregion
 
@@ -482,14 +484,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OverstockOrderSearchFieldIndex.OriginalOrderID, value); }
 		}
 
-		/// <summary> The SalesChannelOrderNumber property of the Entity OverstockOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."SalesChannelOrderNumber"<br/>
+		/// <summary> The SalesChannelName property of the Entity OverstockOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."SalesChannelName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String SalesChannelOrderNumber
+		public virtual System.String SalesChannelName
 		{
-			get { return (System.String)GetValue((int)OverstockOrderSearchFieldIndex.SalesChannelOrderNumber, true); }
-			set	{ SetValue((int)OverstockOrderSearchFieldIndex.SalesChannelOrderNumber, value); }
+			get { return (System.String)GetValue((int)OverstockOrderSearchFieldIndex.SalesChannelName, true); }
+			set	{ SetValue((int)OverstockOrderSearchFieldIndex.SalesChannelName, value); }
+		}
+
+		/// <summary> The WarehouseCode property of the Entity OverstockOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."WarehouseCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String WarehouseCode
+		{
+			get { return (System.String)GetValue((int)OverstockOrderSearchFieldIndex.WarehouseCode, true); }
+			set	{ SetValue((int)OverstockOrderSearchFieldIndex.WarehouseCode, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'OverstockOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

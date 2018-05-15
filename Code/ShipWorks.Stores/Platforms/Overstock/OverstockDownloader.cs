@@ -15,9 +15,9 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -28,16 +28,20 @@ namespace ShipWorks.Stores.Platforms.Overstock
     public class OverstockDownloader : StoreDownloader
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OverstockDownloader));
-        private int totalCount;
         private readonly IOverstockWebClient webClient;
         private readonly OverstockStoreEntity overstockStore;
+        private readonly IDownloadStartingPoint downloadStartingPoint;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OverstockDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IOverstockWebClient webClient)
+        public OverstockDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IOverstockWebClient webClient,
+            IDownloadStartingPoint downloadStartingPoint)
             : base(store, storeTypeManager.GetType(store))
         {
+            this.downloadStartingPoint = downloadStartingPoint;
             this.webClient = webClient;
             overstockStore = (OverstockStoreEntity) store;
         }
@@ -52,43 +56,19 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 Progress.Detail = "Checking for orders...";
 
                 // Downloading based on the last modified time
-                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+                DateTime? lastModified = await GetOrderStartingPoint().ConfigureAwait(false);
                 if (!lastModified.HasValue)
                 {
-                    lastModified = DateTime.Now.AddHours(-1);
+                    lastModified = DateTime.UtcNow.AddHours(-1);
                 }
-
-                DateTime endDateTime = DateTime.Now;
-
-                //await GetOrderCount(lastModified.Value, endDateTime).ConfigureAwait(false);
-
-                //if (totalCount == 0)
-                //{
-                //    Progress.Detail = "No orders to download.";
-                //    Progress.PercentComplete = 100;
-                //    return;
-                //}
 
                 Progress.Detail = $"Downloading orders...";
 
                 TimeSpan offset = TimeSpan.FromHours(1);
 
-                await DownloadOrders(lastModified.Value, endDateTime, offset).ConfigureAwait(false);
-
-                //foreach (DateTime workingDateTime in GetDates(lastModified.Value, endDateTime, offset))
-                //{
-                //    await DownloadOrders(workingDateTime, workingDateTime.Add(offset.Add(-TimeSpan.FromSeconds(1)))).ConfigureAwait(false);
-                //}
+                await DownloadOrders(lastModified.Value, DateTime.UtcNow, offset).ConfigureAwait(false);
             }
-            catch (GenericModuleConfigurationException ex)
-            {
-                string message =
-                    "The ShipWorks module returned invalid configuration information. " +
-                    $"Please contact the module developer with the following information.\n\n{ex.Message}";
-
-                throw new DownloadException(message, ex);
-            }
-            catch (Exception ex) when (ex is GenericStoreException || ex is SqlForeignKeyException)
+            catch (Exception ex) when (ex is OverstockException || ex is SqlForeignKeyException)
             {
                 throw new DownloadException(ex.Message, ex);
             }
@@ -99,22 +79,11 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         private IEnumerable<Range<DateTime>> GetDates(DateTime startDateTime, DateTime endDateTime, TimeSpan timeOffset) =>
             Enumerable.Range(0, int.MaxValue)
-                .Select(x => startDateTime.AddHours(x))
-                .TakeWhile(x => x <= endDateTime)
-                .Select(x => x.To(x.Add(timeOffset).AddSeconds(-1)));
-
-
-        //    SortedSet<DateTime> dates = new SortedSet<DateTime>();
-        //    DateTime tmp = startDateTime;
-
-        //    while (tmp <= endDateTime)
-        //    {
-        //        dates.Add(tmp);
-        //        tmp += timeOffset;
-        //    }
-
-        //    return dates;
-        //}
+                .Select(x => timeOffset.MultiplyBy(x))
+                .Select(offset => startDateTime.Add(offset).AddSeconds(1))
+                .TakeWhile(start => start <= endDateTime)
+                .Select(ChangeTimeZoneTo(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")))
+                .Select(start => start.To(start.Add(timeOffset)));
 
         /// <summary>
         /// Downloads the orders.
@@ -122,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         private async Task DownloadOrders(DateTime initialStart, DateTime initialEnd, TimeSpan offset)
         {
             // keep going until none are left
-            foreach (Range<DateTime> downloadRange in GetDates(initialStart, initialEnd, offset))
+            foreach (var downloadRange in GetDates(initialStart, initialEnd, offset))
             {
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
@@ -162,9 +131,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 anyProcessed |= await LoadOrder(order).ConfigureAwait(false);
-
-                // update the status
-                //                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
             }
 
             return anyProcessed;
@@ -203,23 +169,21 @@ namespace ShipWorks.Stores.Platforms.Overstock
 
             if (isNew)
             {
-                // Notes
-                LoadNotes(this, order, orderElement);
+                var lineItems = orderElement.Elements("processedSalesOrderLine");
 
-                LoadItems(this, order, orderElement.Elements("processedSalesOrderLine"));
+                await LoadNotes(this, order, lineItems).ConfigureAwait(false);
+                LoadItems(this, order, lineItems);
             }
-            
+
             order.WarehouseCode = orderElement.Element("warehouseName")?.GetValue("code");
             order.SalesChannelName = orderElement.GetValue("salesChannelName");
-
-            //// CustomerID
-            //LoadCustomerIdentifier(order, xpath);
+            order.SofsCreatedDate = TimeZoneInfo.ConvertTimeToUtc(orderElement.GetDate("sofsCreatedDate", DateTime.Now));
 
             // Update the total
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             // Save the downloaded order
-            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OverstockDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return true;
@@ -228,9 +192,9 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Instantiate the Overstock order 
         /// </summary>
-        protected Task<GenericResult<OrderEntity>> InstantiateOrder(string salcesChannelOrderNumber)
+        protected Task<GenericResult<OrderEntity>> InstantiateOrder(string salesChannelOrderNumber)
         {
-            AlphaNumericOrderIdentifier orderIdentifier = new AlphaNumericOrderIdentifier(salcesChannelOrderNumber);
+            AlphaNumericOrderIdentifier orderIdentifier = new AlphaNumericOrderIdentifier(salesChannelOrderNumber);
             return InstantiateOrder(orderIdentifier);
         }
 
@@ -254,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
 
             // parse the name for its parts
             person.ParsedName = PersonName.Parse(fullName);
-            
+
             person.Company = string.Empty;
             person.Street1 = address.GetValue("address1");
             person.Street2 = address.GetValue("address2");
@@ -265,8 +229,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
             person.PostalCode = address.GetValue("postalCode");
             person.CountryCode = Geography.GetCountryCode(address.GetValue("countryCode"));
 
-            //person.ResidentialStatus = ;
-
             person.Phone = address.GetValue("phone");
             person.Fax = string.Empty;
             person.Email = string.Empty;
@@ -276,14 +238,11 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Loads notes 
         /// </summary>
-        private static void LoadNotes(IOrderElementFactory factory, OrderEntity order, XElement orderElement)
+        private static async Task LoadNotes(IOrderElementFactory factory, OrderEntity order, IEnumerable<XElement> items)
         {
-            foreach (var note in orderElement.Elements("processedSalesOrderLine").Select(n => n.GetValue("notes")))
+            foreach (var note in GetNotesFromItems(items))
             {
-                if (!note.IsNullOrWhiteSpace())
-                {
-                    factory.CreateNote(order, note, order.OrderDate, NoteVisibility.Internal);
-                }
+                await factory.CreateNote(order, note, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
@@ -303,5 +262,24 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 itemEntity.Code = item.GetValue("barcode");
             }
         }
+
+        /// <summary>
+        /// Get a list of notes from a list of items
+        /// </summary>
+        private static IEnumerable<string> GetNotesFromItems(IEnumerable<XElement> items) =>
+            items.Select(n => n.GetValue("notes")).Where(x => !x.IsNullOrWhiteSpace());
+
+        /// <summary>
+        /// Change the time zone of the given date to the specific time zone
+        /// </summary>
+        private Func<DateTime, DateTime> ChangeTimeZoneTo(TimeZoneInfo timeZone) =>
+            (DateTime input) => TimeZoneInfo.ConvertTimeFromUtc(input, timeZone);
+
+        /// <summary>
+        /// Gets the largest SOFS created time we have in our database for non-manual orders for this store.
+        /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
+        /// </summary>
+        private Task<DateTime?> GetOrderStartingPoint() =>
+            downloadStartingPoint.CustomDate(Store, OverstockOrderFields.SofsCreatedDate);
     }
 }
