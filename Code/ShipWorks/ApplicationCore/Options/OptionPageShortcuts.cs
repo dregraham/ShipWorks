@@ -161,7 +161,6 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnHandleDestroyed(object sender, EventArgs e)
         {
             singleScanShortcutMessage?.Dispose();
-            base.OnHandleDestroyed(e);
         }
 
         /// <summary>
