@@ -28,13 +28,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Overstock
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    [Trait("Category", "CombineSplit")]
     public class OverstockCombineTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
         private Mock<IOrderCombinationUserInteraction> combineInteraction;
-        private Mock<IAsyncMessageHelper> asyncMessageHelper;
         private readonly OverstockStoreEntity store;
         private readonly Dictionary<long, OrderEntity> orders;
 
