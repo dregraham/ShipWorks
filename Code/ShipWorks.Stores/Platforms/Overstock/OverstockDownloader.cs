@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 DateTime? lastModified = await GetOrderStartingPoint().ConfigureAwait(false);
                 if (!lastModified.HasValue)
                 {
-                    lastModified = DateTime.UtcNow.AddHours(-1);
+                    lastModified = DateTime.UtcNow.AddDays(-30);
                 }
 
                 Progress.Detail = $"Downloading orders...";
