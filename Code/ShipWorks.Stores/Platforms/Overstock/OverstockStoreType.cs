@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -106,5 +107,18 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
+
+        /// <summary>
+        /// Generate the template XML output for the given order
+        /// </summary>
+        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
+        {
+            var order = new Lazy<OverstockOrderEntity>(() => (OverstockOrderEntity) orderSource());
+
+            ElementOutline outline = container.AddElement("Overstock");
+            outline.AddElement("Warehouse", () => order.Value.WarehouseCode);
+            outline.AddElement("Channel", () => order.Value.SalesChannelName);
+            outline.AddElement("SOFS Created Date", () => order.Value.SofsCreatedDate);
+        }
     }
 }

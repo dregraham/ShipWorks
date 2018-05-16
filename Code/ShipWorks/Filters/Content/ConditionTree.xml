@@ -193,6 +193,7 @@
         <Condition identifier="OrderDynamics.AmazonOrderID" />
         <Condition identifier="OrderDynamics.IsFBA" />
         <Condition identifier="OrderDynamics.IsPrime" />
+        <Condition identifier="Overstock.SOFSCreatedDate" />
         <Condition identifier="Overstock.WarehouseName" />
         <Condition identifier="Overstock.ChannelName" />
         <Condition identifier="PowersportsSupport.AmazonOrderID" />

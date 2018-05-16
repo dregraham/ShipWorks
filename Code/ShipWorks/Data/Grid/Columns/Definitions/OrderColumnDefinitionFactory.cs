@@ -11,22 +11,19 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
+using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Grid;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Grid;
-using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.Properties;
-using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Stores.Platforms.Amazon;
-using System.Collections.Generic;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -313,12 +310,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
                         },
 
-                    new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}", 
+                    new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}",
                         false,
-                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), 
-                        "Amazon Prime", 
-                        AmazonIsPrime.Yes, 
-                        new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<AmazonIsPrime>(e, "IsPrime")), 
+                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description),
+                        "Amazon Prime",
+                        AmazonIsPrime.Yes,
+                        new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<AmazonIsPrime>(e, "IsPrime")),
                         new GridColumnSortProvider(GetAmazonIsPrimeValueDescription,  GenericModuleOrderFields.IsPrime, AmazonOrderFields.IsPrime, ChannelAdvisorOrderFields.IsPrime))
                         {
                             ApplicableTest = ShowGenericModuleAmazonColumns
@@ -772,8 +769,16 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{8AE72261-8FDB-4412-871A-789F1EB9A841}", false,
-                        new GridEnumDisplayType<CombineSplitStatusType>(EnumSortMethod.Description), 
+                        new GridEnumDisplayType<CombineSplitStatusType>(EnumSortMethod.Description),
                         "Combine/Split", CombineSplitStatusType.Combined, OrderFields.CombineSplitStatus),
+
+                    new GridColumnDefinition("{F3CB40F2-6E04-4546-91F3-B41204D01926}",
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "SOFS Created Date", DateTimeUtility.ParseEnUS("03/04/2017 1:30 PM").ToUniversalTime(),
+                        OverstockOrderFields.SofsCreatedDate)
+                    {
+                        StoreTypeCode = StoreTypeCode.Overstock
+                    },
 
                     new GridColumnDefinition("{B5465229-898D-4F81-9B4A-27AC86A35662}",
                         new GridTextDisplayType(), "Warehouse", "Warehouse A",
@@ -857,11 +862,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             {
                 if (direction == GridEbayFeedbackDirection.Left)
                 {
-                    return new GridEbayFeedbackData(direction, (EbayFeedbackType?)order.RollupFeedbackLeftType, order.RollupFeedbackLeftComments);
+                    return new GridEbayFeedbackData(direction, (EbayFeedbackType?) order.RollupFeedbackLeftType, order.RollupFeedbackLeftComments);
                 }
                 else
                 {
-                    return new GridEbayFeedbackData(direction, (EbayFeedbackType?)order.RollupFeedbackReceivedType, order.RollupFeedbackReceivedComments);
+                    return new GridEbayFeedbackData(direction, (EbayFeedbackType?) order.RollupFeedbackReceivedType, order.RollupFeedbackReceivedComments);
                 }
             }
 
@@ -879,7 +884,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
             foreach (StoreType storeType in StoreTypeManager.StoreTypes)
             {
-                sb.AppendFormat(" WHEN {0} THEN '{1}' ", (int)storeType.TypeCode, storeType.StoreTypeName);
+                sb.AppendFormat(" WHEN {0} THEN '{1}' ", (int) storeType.TypeCode, storeType.StoreTypeName);
             }
 
             sb.AppendFormat(" ELSE 'Unknown' END");
