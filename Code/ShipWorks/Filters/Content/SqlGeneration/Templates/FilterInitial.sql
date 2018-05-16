@@ -22,18 +22,18 @@ BEGIN
 	DECLARE @started DATETIME
 	SET @started = GETDATE()
 
-	IF OBJECT_ID('tempdb.dbo.#Matches') IS NOT NULL
-	  DROP TABLE #Matches
-
-	SELECT {0}.{1} as ObjectID INTO #Matches
-	   FROM {2}
-	   {3}
-   
 	DELETE FilterNodeContentDetail WHERE FilterNodeContentID = @filterNodeContentID
+		
+	;WITH TmpMatches as
+	(
+		SELECT {0}.{1} as ObjectID
+		   FROM {2}
+		   {3}
+    )
 
 	INSERT INTO FilterNodeContentDetail (FilterNodeContentID, ObjectID)
 		SELECT @filterNodeContentID, ObjectID
-		FROM #Matches
+		FROM TmpMatches
 	   
 	UPDATE FilterNodeContent
 	  SET [Status] = {4},
