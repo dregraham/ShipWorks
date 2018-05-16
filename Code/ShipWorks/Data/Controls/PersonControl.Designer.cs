@@ -84,7 +84,7 @@ namespace ShipWorks.Data.Controls
             this.labelAddress.Location = new System.Drawing.Point(2, 1);
             this.labelAddress.Name = "labelAddress";
             this.labelAddress.Size = new System.Drawing.Size(53, 13);
-            this.labelAddress.TabIndex = 48;
+            this.labelAddress.TabIndex = 0;
             this.labelAddress.Text = "Address";
             // 
             // labelWebsite
@@ -193,7 +193,7 @@ namespace ShipWorks.Data.Controls
             this.labelName.Location = new System.Drawing.Point(2, 6);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(39, 13);
-            this.labelName.TabIndex = 50;
+            this.labelName.TabIndex = 2;
             this.labelName.Text = "Name";
             // 
             // addressValidationPanel
@@ -207,7 +207,7 @@ namespace ShipWorks.Data.Controls
             this.addressValidationPanel.Location = new System.Drawing.Point(61, -2);
             this.addressValidationPanel.Name = "addressValidationPanel";
             this.addressValidationPanel.Size = new System.Drawing.Size(291, 19);
-            this.addressValidationPanel.TabIndex = 51;
+            this.addressValidationPanel.TabIndex = 1;
             // 
             // validateAddress
             // 
@@ -260,7 +260,7 @@ namespace ShipWorks.Data.Controls
             this.addressLabelPanel.Location = new System.Drawing.Point(0, 76);
             this.addressLabelPanel.Name = "addressLabelPanel";
             this.addressLabelPanel.Size = new System.Drawing.Size(355, 15);
-            this.addressLabelPanel.TabIndex = 52;
+            this.addressLabelPanel.TabIndex = 2;
             // 
             // street
             // 
@@ -276,7 +276,7 @@ namespace ShipWorks.Data.Controls
             this.street.Name = "street";
             this.street.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.street.Size = new System.Drawing.Size(266, 47);
-            this.street.TabIndex = 2;
+            this.street.TabIndex = 3;
             this.street.TextChanged += new System.EventHandler(this.OnValueChanged);
             // 
             // website
@@ -334,7 +334,7 @@ namespace ShipWorks.Data.Controls
             this.country.Name = "country";
             this.country.PromptText = "(Multiple Values)";
             this.country.Size = new System.Drawing.Size(266, 21);
-            this.country.TabIndex = 6;
+            this.country.TabIndex = 7;
             this.country.SelectedIndexChanged += new System.EventHandler(this.OnDestinationChanged);
             this.country.SelectedValueChanged += new System.EventHandler(this.OnValueChanged);
             // 
@@ -346,7 +346,7 @@ namespace ShipWorks.Data.Controls
             this.fieldLengthProvider.SetMaxLengthSource(this.postalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
             this.postalCode.Name = "postalCode";
             this.postalCode.Size = new System.Drawing.Size(266, 21);
-            this.postalCode.TabIndex = 5;
+            this.postalCode.TabIndex = 6;
             this.postalCode.TextChanged += new System.EventHandler(this.OnValueChanged);
             // 
             // state
@@ -360,7 +360,7 @@ namespace ShipWorks.Data.Controls
             this.state.Name = "state";
             this.state.PromptText = "(Multiple Values)";
             this.state.Size = new System.Drawing.Size(266, 21);
-            this.state.TabIndex = 4;
+            this.state.TabIndex = 5;
             this.state.DropDown += new System.EventHandler(this.OnStateDropDown);
             this.state.TextChanged += new System.EventHandler(this.OnValueChanged);
             // 
@@ -372,7 +372,7 @@ namespace ShipWorks.Data.Controls
             this.fieldLengthProvider.SetMaxLengthSource(this.city, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonCity);
             this.city.Name = "city";
             this.city.Size = new System.Drawing.Size(266, 21);
-            this.city.TabIndex = 3;
+            this.city.TabIndex = 4;
             this.city.TextChanged += new System.EventHandler(this.OnValueChanged);
             // 
             // company
