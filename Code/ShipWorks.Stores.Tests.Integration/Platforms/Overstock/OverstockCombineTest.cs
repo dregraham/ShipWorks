@@ -17,7 +17,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
-using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
