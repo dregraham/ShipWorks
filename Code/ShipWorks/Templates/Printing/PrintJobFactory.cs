@@ -18,7 +18,6 @@ namespace ShipWorks.Templates.Printing
     [Component]
     public class PrintJobFactory : IPrintJobFactory
     {
-        private readonly Func<string, ITrackedEvent> telemetryEventFunc;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShortcutManager shortcutManager;
 
@@ -30,7 +29,6 @@ namespace ShipWorks.Templates.Printing
             IShippingProfileService shippingProfileService, 
             IShortcutManager shortcutManager)
         {
-            this.telemetryEventFunc = telemetryEventFunc;
             this.shippingProfileService = shippingProfileService;
             this.shortcutManager = shortcutManager;
         }
@@ -47,7 +45,7 @@ namespace ShipWorks.Templates.Printing
             BarcodePage profileBarcodePage = new BarcodePage("Shipping Profiles", shippingProfileBarcodeData);
             BarcodePage shortcutsBarcodePage = new BarcodePage("ShipWorks Shortcuts", GetBuiltInShortcutData());
             
-            return new BarcodePrintJob(this, new[] { profileBarcodePage, shortcutsBarcodePage }, telemetryEventFunc);
+            return new BarcodePrintJob(this, new[] { profileBarcodePage, shortcutsBarcodePage });
         }
         
         /// <summary>

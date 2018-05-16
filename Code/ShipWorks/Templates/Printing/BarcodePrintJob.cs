@@ -14,7 +14,6 @@ namespace ShipWorks.Templates.Printing
     {
         private readonly IPrintJobFactory printJobFactory;
         private readonly IEnumerable<BarcodePage> barcodePages;
-        private readonly Func<string, ITrackedEvent> telemetryEventFunc;
         private Form owner;
         private readonly IPrintJob printJob;
 
@@ -26,15 +25,13 @@ namespace ShipWorks.Templates.Printing
         /// Constructor
         /// </summary>
         public BarcodePrintJob(IPrintJobFactory printJobFactory,
-            IEnumerable<BarcodePage> barcodePages,
-            Func<string, ITrackedEvent> telemetryEventFunc)
+            IEnumerable<BarcodePage> barcodePages)
         {
             this.printJobFactory = printJobFactory;
             this.barcodePages = barcodePages;
-            this.telemetryEventFunc = telemetryEventFunc;
             this.printJob = printJobFactory.CreatePrintJob(CreateTemplateResults());
-            this.PreviewCompleted = new PrintActionCompletedEventHandler(OnPreivewCompleted);
-            this.PrintCompleted = new PrintActionCompletedEventHandler(OnPrintCompleted);
+            this.PreviewCompleted = OnPreivewCompleted;
+            this.PrintCompleted = OnPrintCompleted;
         }
 
         /// <summary>
@@ -105,7 +102,7 @@ namespace ShipWorks.Templates.Printing
                 int barcodeCount = barcodePages.Sum(p => p.Barcodes.Where(b => !string.IsNullOrWhiteSpace(b.Barcode)).Count());
                 int hotkeyCount = barcodePages.Sum(p => p.Barcodes.Where(b => !string.IsNullOrWhiteSpace(b.KeyboardHotkey)).Count());
 
-                using (ITrackedEvent telemetryEvent = telemetryEventFunc("Shortcuts.Print"))
+                using (ITrackedEvent telemetryEvent = new TrackedEvent("Shortcuts.Print"))
                 {
                     telemetryEvent.AddProperty("Shortcuts.Print.Result", result);
                     telemetryEvent.AddProperty("Shortcuts.Print.Barcodes.Count", barcodeCount.ToString());
