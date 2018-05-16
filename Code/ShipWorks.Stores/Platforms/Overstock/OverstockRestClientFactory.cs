@@ -1,6 +1,6 @@
-﻿using RestSharp;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using RestSharp;
 using RestSharp.Authenticators;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public IRestClient Create(IOverstockStoreEntity store)
         {
-            string decryptedPassword = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.Username).Decrypt(store.Password);
+            string decryptedPassword = encryptionProviderFactory.CreateOverstockEncryptionProvider().Decrypt(store.Password);
             return new RestClient(StoreUrl)
             {
                 Authenticator = new HttpBasicAuthenticator(store.Username, decryptedPassword)

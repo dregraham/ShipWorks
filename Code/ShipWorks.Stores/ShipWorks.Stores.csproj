@@ -687,6 +687,7 @@
     <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />
+    <Compile Include="Platforms\Overstock\OverstockCipherKey.cs" />
     <Compile Include="Platforms\Overstock\OverstockDownloader.cs" />
     <Compile Include="Platforms\Overstock\OverstockException.cs" />
     <Compile Include="Platforms\Overstock\OverstockRestClientFactory.cs" />

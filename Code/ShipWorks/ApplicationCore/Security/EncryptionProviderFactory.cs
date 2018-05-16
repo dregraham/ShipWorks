@@ -88,9 +88,13 @@ namespace ShipWorks.ApplicationCore.Security
         /// Creates the ChannelAdvisor encryption provider.
         /// </summary>
         /// <returns></returns>
-        public IEncryptionProvider CreateChannelAdvisorEncryptionProvider()
-        {
-            return new AesEncryptionProvider(cipherKeyFactory[CipherContext.ChannelAdvisor]);
-        }
+        public IEncryptionProvider CreateChannelAdvisorEncryptionProvider() =>
+            new AesEncryptionProvider(cipherKeyFactory[CipherContext.ChannelAdvisor]);
+
+        /// <summary>
+        /// Creates the Overstock encryption provider.
+        /// </summary>
+        public IEncryptionProvider CreateOverstockEncryptionProvider() =>
+            new AesEncryptionProvider(cipherKeyFactory[CipherContext.Overstock]);
     }
 }

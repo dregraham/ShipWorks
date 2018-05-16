@@ -25,6 +25,9 @@ namespace ShipWorks.ApplicationCore.Security
         Walmart,
 
         [Description("ChannelAdvisor Context")]
-        ChannelAdvisor
+        ChannelAdvisor,
+
+        [Description("Overstock Context")]
+        Overstock
     }
 }
