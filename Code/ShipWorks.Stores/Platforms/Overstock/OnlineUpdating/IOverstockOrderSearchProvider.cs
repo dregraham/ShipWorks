@@ -5,7 +5,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
     /// <summary>
     /// Get order search identifiers for uploading shipment data
     /// </summary>
-    public interface IOverstockOrderSearchProvider : ICombineOrderSearchProvider<string>
+    public interface IOverstockOrderSearchProvider : ICombineOrderSearchProvider<OverstockOrderDetail>
     {
     }
 }

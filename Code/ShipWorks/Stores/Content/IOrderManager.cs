@@ -17,6 +17,11 @@ namespace ShipWorks.Stores.Content
         void PopulateOrderDetails(ShipmentEntity shipment);
 
         /// <summary>
+        /// Get a populated order from a given order
+        /// </summary>
+        void PopulateOrderDetails(OrderEntity order);
+
+        /// <summary>
         /// Calculates the order total.
         /// </summary>
         decimal CalculateOrderTotal(OrderEntity order);
@@ -49,7 +54,7 @@ namespace ShipWorks.Stores.Content
         /// This method bypasses the entity cache
         /// </remarks>
         Task<IEnumerable<OrderEntity>> LoadOrdersAsync(IEnumerable<long> orderIDs, ISqlAdapter sqlAdapter);
-        
+
         /// <summary>
         /// Load the specified order using the given prefetch path
         /// </summary>

@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
     /// Get order search identifiers for uploading shipment data
     /// </summary>
     [Component]
-    public class OverstockOrderSearchProvider : CombineOrderSearchBaseProvider<string>, IOverstockOrderSearchProvider
+    public class OverstockOrderSearchProvider : CombineOrderSearchBaseProvider<OverstockOrderDetail>, IOverstockOrderSearchProvider
     {
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        protected override async Task<IEnumerable<OverstockOrderDetail>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             QueryFactory factory = new QueryFactory();
 
@@ -36,7 +36,12 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
 
             var query = factory.Create()
                 .From(from)
-                .Select(() => OverstockOrderSearchFields.OrderID.ToValue<string>())
+                .Select(() => new OverstockOrderDetail(
+                    OrderSearchFields.OrderNumberComplete.ToValue<string>(),
+                    OverstockOrderSearchFields.SalesChannelName.ToValue<string>(),
+                    OverstockOrderSearchFields.WarehouseCode.ToValue<string>(),
+                    OverstockOrderSearchFields.OriginalOrderID.ToValue<long>(),
+                    OrderSearchFields.IsManual.ToValue<bool>()))
                 .Distinct()
                 .Where(OverstockOrderSearchFields.OrderID == order.OrderID)
                 .AndWhere(OrderSearchFields.IsManual == false);
@@ -50,7 +55,13 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        protected override string GetOnlineOrderIdentifier(IOrderEntity order) =>
-            (order as IOverstockOrderEntity)?.OrderNumberComplete ?? string.Empty;
+        protected override OverstockOrderDetail GetOnlineOrderIdentifier(IOrderEntity order) =>
+            GetOnlineOrderIdentifier((IOverstockOrderEntity) order);
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        private OverstockOrderDetail GetOnlineOrderIdentifier(IOverstockOrderEntity order) =>
+            new OverstockOrderDetail(order.OrderNumberComplete, order.SalesChannelName, order.WarehouseCode, order.OrderID, order.IsManual);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
 {
@@ -7,6 +8,22 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
     /// </summary>
     public class OverstockSupplierShipment
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OverstockSupplierShipment(OverstockOrderDetail order, IShipmentEntity shipment, IOverstockOrderItemEntity item)
+        {
+            IsManual = order.IsManual;
+            SalesChannelOrderNumber = order.OrderNumberComplete;
+            SalesChannelName = order.SalesChannelName;
+            WarehouseCode = order.WarehouseCode;
+            SalesChannelLineNumber = item.SalesChannelLineNumber;
+            Quantity = item.Quantity;
+            ShipDate = shipment.ShipDate;
+            TrackingNumber = shipment.TrackingNumber;
+            (CarrierCode, ServiceLevelCode) = OverstockCarrierServiceTranslator.GetCarrierValues(shipment);
+        }
+
         /// <summary>
         /// Is the order manual
         /// </summary>
@@ -25,12 +42,12 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Sales channel line number
         /// </summary>
-        public string SalesChannelLineNumber { get; set; }
+        public long SalesChannelLineNumber { get; set; }
 
         /// <summary>
         /// Name of the warehouse
         /// </summary>
-        public string WarehouseName { get; set; }
+        public string WarehouseCode { get; set; }
 
         /// <summary>
         /// Carrier code
@@ -50,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Quantity of the item
         /// </summary>
-        public decimal Quantity { get; set; }
+        public double Quantity { get; set; }
 
         /// <summary>
         /// Date of the shipment

@@ -692,6 +692,7 @@
     <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockCarrierServiceTranslator.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockDataAccess.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOrderDetail.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockSupplierShipment.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockShipmentDetailsUpdater.cs" />

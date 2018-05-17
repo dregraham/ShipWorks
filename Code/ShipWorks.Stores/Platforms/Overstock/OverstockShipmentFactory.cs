@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
                             new XElement("salesChannelName", oi.SalesChannelName),
                             new XElement("salesChannelOrderNumber", oi.SalesChannelOrderNumber),
                             new XElement("salesChannelLineNumber", oi.SalesChannelLineNumber),
-                            new XElement("warehouse", new XElement("code", oi.WarehouseName)),
+                            new XElement("warehouse", new XElement("code", oi.WarehouseCode)),
                             new XElement("supplierShipConfirmation",
                                 new XElement("quantity", oi.Quantity),
                                 new XElement("carrier", new XElement("code", oi.CarrierCode)),
