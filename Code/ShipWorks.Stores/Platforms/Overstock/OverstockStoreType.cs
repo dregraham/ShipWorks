@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
             ElementOutline outline = container.AddElement("Overstock");
             outline.AddElement("Warehouse", () => order.Value.WarehouseCode);
             outline.AddElement("Channel", () => order.Value.SalesChannelName);
-            outline.AddElement("SOFS Created Date", () => order.Value.SofsCreatedDate);
+            outline.AddElement("SOFSCreatedDate", () => order.Value.SofsCreatedDate);
         }
 
         /// <summary>
