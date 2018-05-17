@@ -1051,5 +1051,15 @@ namespace ShipWorks.ApplicationCore
             AdvancedSearchVisible = true;
             filterEditor.LoadDefinition(definition);
         }
+
+        /// <summary>
+        /// Focus the searchbox
+        /// </summary>
+        public void FocusSearch() => searchBox.Focus();
+
+        /// <summary> 
+        /// Clear the searchbox text
+        /// </summary>
+        public void ClearSearch() => searchBox.Clear();
     }
 }

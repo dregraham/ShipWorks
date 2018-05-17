@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Interapptive.Shared.Win32.Native;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -16,21 +15,23 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Constructor to use when you don't have a shortcut entity
         /// </summary>
         public KeyboardShortcutData(KeyboardShortcutCommand? command,
-            VirtualKeys? actionKey, KeyboardShortcutModifiers? modifiers)
+            VirtualKeys? actionKey, KeyboardShortcutModifiers? modifiers, KeyboardShortcutCommand? action)
         {
             Command = command;
             ActionKey = actionKey;
             Modifiers = modifiers;
+            Action = action;
         }
 
         /// <summary>
         /// Constructor to use when you have a shortcut entity
         /// </summary>
-        public KeyboardShortcutData(ShortcutEntity shortcutEntity)
+        public KeyboardShortcutData(IShortcutEntity shortcutEntity)
         {
-            Command = shortcutEntity.Action;
-            ActionKey = shortcutEntity.VirtualKey;
-            Modifiers = shortcutEntity.ModifierKeys;
+            Command = shortcutEntity?.Action;
+            ActionKey = shortcutEntity?.VirtualKey;
+            Modifiers = shortcutEntity?.ModifierKeys;
+            Action = shortcutEntity?.Action;
         }
 
         /// <summary>
@@ -47,6 +48,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Modifiers for the action key
         /// </summary>
         public KeyboardShortcutModifiers? Modifiers { get; }
+
+        /// <summary>
+        /// The action
+        /// </summary>
+        public KeyboardShortcutCommand? Action { get; }
 
         /// <summary>
         /// Get the shortcut text

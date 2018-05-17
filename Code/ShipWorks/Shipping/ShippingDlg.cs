@@ -8,6 +8,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -40,6 +41,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShipWorks.Core.Common.Threading;
+using Syncfusion.Windows.Forms.Tools;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -97,6 +100,7 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
+        private readonly IShortcutManager shortcutManager;
         private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
@@ -107,16 +111,25 @@ namespace ShipWorks.Shipping
         /// Constructor
         /// </summary>
         [NDependIgnoreLongMethod]
-        public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
-            IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
-            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory, Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange)
+        public ShippingDlg(OpenShippingDialogMessage message,
+            IShippingManager shippingManager,
+            IShippingErrorManager errorManager,
+            IMessenger messenger,
+            ILifetimeScope lifetimeScope,
+            Func<IShipmentProcessor> createShipmentProcessor,
+            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher,
+            IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager,
+            Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory,
+            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
+            IShortcutManager shortcutManager)
         {
             this.lifetimeScope = lifetimeScope;
             isArchiveMode = lifetimeScope.Resolve<IConfigurationData>().IsArchive();
 
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.shortcutManager = shortcutManager;
             InitializeComponent();
 
             ErrorManager = errorManager;
@@ -172,7 +185,8 @@ namespace ShipWorks.Shipping
 
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>()
+                .Subscribe(OnStampsUspsAutomaticExpeditedChanged);
             customsControlCache = new CustomsControlCache(lifetimeScope);
         }
 
@@ -268,6 +282,12 @@ namespace ShipWorks.Shipping
 
             // Start listening for keybaord shortcuts
             ListenForKeyboardShortcuts();
+
+            (string Title, string Description) toolTipText = shortcutManager.GetCreateLabelToolTipText();
+
+            ToolTipInfo toolTipInfo = createLabelToolTip.GetToolTip(processDropDownButton);
+            toolTipInfo.Header.Text = toolTipText.Title;
+            toolTipInfo.Body.Text = toolTipText.Description;
         }
 
         /// <summary>
@@ -276,14 +296,13 @@ namespace ShipWorks.Shipping
         private void ListenForKeyboardShortcuts()
         {
             keyboardShortcutSubscription?.Dispose();
-            keyboardShortcutSubscription = Messenger.Current.OfType<ShortcutMessage>().Subscribe(async m => await HandleKeyboardShortcut(m));
+            keyboardShortcutSubscription = Messenger.Current.OfType<ShortcutMessage>().Subscribe(async m => await HandleShortcut(m));
         }
         
         /// <summary>
-        /// Handle the KeyboardShortcutMessage
+        /// Handle the ShortcutMessage
         /// </summary>
-        /// <param name="shortcutMessage"></param>
-        private async Task HandleKeyboardShortcut(ShortcutMessage shortcutMessage)
+        private async Task HandleShortcut(ShortcutMessage shortcutMessage)
         {
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ApplyProfile))
             {
@@ -292,6 +311,10 @@ namespace ShipWorks.Shipping
                 {
                     await ApplyProfile(profileId.Value);
                 }
+            } 
+            else if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.CreateLabel))
+            {
+                await ProcessSelectedShipments();
             }
         }
 
@@ -2236,7 +2259,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process selected shipments
         /// </summary>
-        private async void OnProcessSelected(object sender, EventArgs e)
+        private void OnProcessSelected(object sender, EventArgs e)
+        {
+            ProcessSelectedShipments().Forget();
+        }
+
+        /// <summary>
+        /// Process selected shipments
+        /// </summary>
+        private async Task ProcessSelectedShipments()
         {
             if (shipmentControl.SelectedShipments.Any())
             {

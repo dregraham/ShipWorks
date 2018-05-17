@@ -15,19 +15,20 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 {
-    public class ProfileShortcutPipelineTest : IDisposable
+    public class LabelShortcutPipelineTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
         private readonly TestScheduler scheduler;
-        private readonly ProfileShortcutPipeline testObject;
+        private readonly LabelShortcutPipeline testObject;
         private readonly Mock<IMainForm> mainForm;
         private readonly Mock<ShippingPanelViewModel> viewModel;
 
-        public ProfileShortcutPipelineTest()
+        public LabelShortcutPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -42,38 +43,54 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             viewModel = mock.CreateMock<ShippingPanelViewModel>();
             mainForm = mock.Mock<IMainForm>();
-            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
-            testObject = mock.Create<ProfileShortcutPipeline>();
+            testObject = mock.Create<LabelShortcutPipeline>();
             testObject.Register(viewModel.Object);
         }
 
         [Fact]
-        public void Register_SendsApplyProfileMessage_WhenShortcutMessageReceived_AndAppliesToProfile()
+        public void Register_SendsCreateLabelMessage_WhenShortcutMessageReceived_AndAppliesToCreateLabel()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
-                ShortcutTriggerType.Barcode, "123");
+                new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
+                ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
-            Assert.Equal(1, testMessenger.SentMessages.OfType<ApplyProfileMessage>()
-                .Count(m => m.ShipmentID == 456 &&
-                            m.Sender == testObject &&
-                            m.ProfileID == 789));
+            Assert.Equal(1, testMessenger.SentMessages.OfType<CreateLabelMessage>()
+                .Count(m => m.ShipmentID == 456 && m.Sender == testObject));
         }
-
+        
+        
         [Fact]
-        public void Register_CallsMainFormFocus_WhenShortcutMessageReceived_AndAppliesToProfile()
+        public void Register_DoesNotSendMessage_WhenShippingPanelIsClosed()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
-                ShortcutTriggerType.Barcode, "123");
+                new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
+                ShortcutTriggerType.Barcode, "-PL-");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(false);
+
+            testMessenger.Send(message);
+            scheduler.Start();
+
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
+        }
+        
+        [Fact]
+        public void Register_CallsMainFormFocus_WhenShortcutMessageReceived_AndAppliesToCreateLabel()
+        {
+            ShortcutMessage message = new ShortcutMessage(this,
+                new ShortcutEntity { Action = KeyboardShortcutCommand.CreateLabel },
+                ShortcutTriggerType.Barcode, "-PL-");
+            viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
+            mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
@@ -89,58 +106,64 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
-            Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
         }
-
+        
         [Fact]
-        public void Register_DoesNotSendApplyProfileMessage_ViewModelDoesNotHaveShipment()
+        public void Register_DoesNotSendMessage_ViewModelDoesNotHaveShipment()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyWeight, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
 
             viewModel.SetupGet(v => v.Shipment).Returns((ShipmentEntity) null);
 
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
-            Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
         }
 
         [Fact]
-        public void Register_DoesNotSendApplyProfileMessage_WhenAdditionalFormsAreOpen()
+        public void Register_DoesNotSendMessage_WhenAdditionalFormsAreOpen()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyWeight, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
+            
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(true);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
-            Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
         }
         
         [Fact]
-        public void Register_DoesNotSendApplyProfileMessage_WhenShipmentIsProcessed()
+        public void Register_DoesNotSendMessage_WhenShipmentIsProcessed()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                                                          new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
-                                                          ShortcutTriggerType.Barcode, "123");
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyWeight, RelatedObjectID = 789 },
+                ShortcutTriggerType.Barcode, "123");
+            
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456) {Processed = true});
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testMessenger.Send(message);
             scheduler.Start();
 
-            Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
+            Assert.Empty(testMessenger.SentMessages.OfType<CreateLabelMessage>());
         }
         
         public void Dispose()

@@ -17,5 +17,10 @@ namespace ShipWorks.ApplicationCore
         /// Focus the control
         /// </summary>
         bool Focus();
+
+        /// <summary>
+        /// True if shippingPanel is Open
+        /// </summary>
+        bool IsShippingPanelOpen();
     }
 }

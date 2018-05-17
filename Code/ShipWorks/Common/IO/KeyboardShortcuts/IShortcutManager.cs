@@ -47,5 +47,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Get the weigh shortcut
         /// </summary>
         ShortcutEntity GetWeighShortcut();
+
+        /// <summary>
+        /// Gets the title and description for the CreateLabel tool tip
+        /// </summary>
+        (string Title, string Description) GetCreateLabelToolTipText();
     }
 }

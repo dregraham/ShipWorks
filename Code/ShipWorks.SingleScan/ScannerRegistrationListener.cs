@@ -11,7 +11,6 @@ namespace ShipWorks.SingleScan
     /// </summary>
     public class ScannerRegistrationListener : IScannerRegistrationListener
     {
-        private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private IScannerMessageFilter findScannerMessageFilter;
         private readonly IUser32Devices user32Devices;
@@ -20,11 +19,9 @@ namespace ShipWorks.SingleScan
         /// Initializes a new instance of the <see cref="ScannerRegistrationListener"/> class.
         /// </summary>
         public ScannerRegistrationListener(IUser32Devices user32Devices,
-            IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory)
         {
             this.user32Devices = user32Devices;
-            this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
         }
 
@@ -34,8 +31,8 @@ namespace ShipWorks.SingleScan
         public void Start()
         {
             findScannerMessageFilter = scannerMessageFilterFactory.CreateScannerRegistrationMessageFilter();
-            windowsMessageFilterRegistrar.AddMessageFilter(findScannerMessageFilter);
-
+            findScannerMessageFilter.Enable();
+            
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
                 UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
@@ -50,8 +47,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void Stop()
         {
-            windowsMessageFilterRegistrar.RemoveMessageFilter(findScannerMessageFilter);
-
+            findScannerMessageFilter.Disable();
+            
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
                 UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
