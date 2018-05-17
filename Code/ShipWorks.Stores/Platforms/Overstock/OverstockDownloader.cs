@@ -260,6 +260,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 itemEntity.UnitPrice = item.GetDecimal("itemPrice");
                 itemEntity.UPC = item.GetValue("upc");
                 itemEntity.Code = item.GetValue("barcode");
+                itemEntity.Quantity = item.GetDouble("quantity");
             }
         }
 

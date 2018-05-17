@@ -25,6 +25,12 @@ namespace Interapptive.Shared.Extensions
             decimal.TryParse(GetValue(element, elementName), out decimal parsedValue) ? parsedValue : defaultValue;
 
         /// <summary>
+        /// Get a double value from an XElement
+        /// </summary>
+        public static double GetDouble(this XElement element, string elementName, double defaultValue = 0) =>
+            double.TryParse(GetValue(element, elementName), out double parsedValue) ? parsedValue : defaultValue;
+
+        /// <summary>
         /// Get a DateTime value from an XElement
         /// </summary>
         public static DateTime GetDate(this XElement element, string elementName, DateTime defaultValue) =>
