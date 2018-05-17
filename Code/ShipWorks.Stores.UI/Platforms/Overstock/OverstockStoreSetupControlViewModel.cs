@@ -62,7 +62,9 @@ namespace ShipWorks.Stores.UI.Platforms.Overstock
         public void Load(OverstockStoreEntity store)
         {
             Username = store.Username;
-            Password = "          ".ToSecureString();
+            Password = string.IsNullOrWhiteSpace(store.Password) ?
+                new SecureString() :
+                "          ".ToSecureString();
         }
 
         /// <summary>
