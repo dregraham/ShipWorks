@@ -31,6 +31,7 @@
     <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
     <None Remove="Orders\Archive\OrderArchiveFilterRegeneratorTest.cs" />
     <None Remove="Platforms\Overstock\OverstockOrderIdentifierTest.cs" />
+    <None Remove="Platforms\Overstock\OverstockShipmentFactoryTest.cs" />
     <None Remove="Platforms\Overstock\OverstockStoreTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
