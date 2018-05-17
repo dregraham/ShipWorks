@@ -54,10 +54,13 @@ namespace ShipWorks.SingleScan
                     (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
                 .Subscribe(m => CollectTelemetryWithResult(m.shortcutMessage, m.profileAppliedMessage)),
 
-             messenger.OfType<ShortcutMessage>()
-                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
+            messenger.OfType<ShortcutMessage>()
+                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) ||
+                            m.AppliesTo(KeyboardShortcutCommand.Enter) ||
+                            m.AppliesTo(KeyboardShortcutCommand.Tab) ||
+                            m.AppliesTo(KeyboardShortcutCommand.Escape))
                 .Subscribe(CollectTelemetryWithoutResult),
-                      
+
             messenger.OfType<ShortcutMessage>()
                      .Where(m => m.AppliesTo(KeyboardShortcutCommand.CreateLabel))
                      .ContinueAfter(LabelCreatedSignal, TimeSpan.FromSeconds(5), schedulerProvider.Default,
@@ -142,6 +145,10 @@ namespace ShipWorks.SingleScan
                     return "ShippingProfile";
                 case KeyboardShortcutCommand.CreateLabel:
                     return "LabelPrinted";
+                case KeyboardShortcutCommand.Enter:
+                case KeyboardShortcutCommand.Tab:
+                case KeyboardShortcutCommand.Escape:
+                    return $"Simulate {shortcutMessage.Shortcut.Action} key press";
                 default:
                     return EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
             }

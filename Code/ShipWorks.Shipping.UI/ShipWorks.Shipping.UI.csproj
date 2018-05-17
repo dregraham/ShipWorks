@@ -330,7 +330,7 @@
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IPipelineRegistrationContainer.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
-    <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShippingProfilePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelTransientPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LabelShortcutPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LoadCustomsPipeline.cs" />
