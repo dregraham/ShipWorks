@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -73,7 +74,8 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
             await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
 
             var orderDetails = await dataAccess.GetOrderDetails(shipment).ConfigureAwait(false);
-            if (orderDetails.All(x => x.IsManual))
+            var ordersToUpload = orderDetails.Where(x => !x.IsManual).ToList();
+            if (orderDetails.None())
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", shipment.OrderID);
                 return;
