@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Services
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Get the store for the shipment
         /// </summary>
-        public StoreEntity GetRelatedStore(ShipmentEntity shipment) =>
+        public StoreEntity GetRelatedStore(IShipmentEntity shipment) =>
             StoreManager.GetRelatedStore(shipment.OrderID);
 
         /// <summary>

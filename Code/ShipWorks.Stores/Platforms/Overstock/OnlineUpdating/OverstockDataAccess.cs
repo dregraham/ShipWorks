@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Get details of orders for the given shipments
         /// </summary>
-        public Task<IEnumerable<OverstockSupplierShipment>> GetOrderDetails(IEnumerable<IShipmentEntity> shipmentEntity)
+        public Task<IEnumerable<OverstockSupplierShipment>> GetOrderDetails(IShipmentEntity shipmentEntity)
         {
             throw new System.NotImplementedException();
         }

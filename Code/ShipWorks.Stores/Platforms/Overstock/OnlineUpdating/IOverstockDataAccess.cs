@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// <summary>
         /// Get details of orders for the given shipments
         /// </summary>
-        Task<IEnumerable<OverstockSupplierShipment>> GetOrderDetails(IEnumerable<IShipmentEntity> shipmentEntity);
+        Task<IEnumerable<OverstockSupplierShipment>> GetOrderDetails(IShipmentEntity shipmentEntity);
     }
 }

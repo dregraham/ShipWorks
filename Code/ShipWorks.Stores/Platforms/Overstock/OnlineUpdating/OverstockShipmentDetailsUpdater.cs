@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
 
             await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
 
-            var orderDetails = await dataAccess.GetOrderDetails(new[] { shipment }).ConfigureAwait(false);
+            var orderDetails = await dataAccess.GetOrderDetails(shipment).ConfigureAwait(false);
             if (orderDetails.All(x => x.IsManual))
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", shipment.OrderID);
