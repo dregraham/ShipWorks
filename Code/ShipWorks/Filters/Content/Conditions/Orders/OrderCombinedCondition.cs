@@ -8,7 +8,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// <summary>
     /// Filter for CombineSplitStatus
     /// </summary>
-    [ConditionElement("Combined", "Order.Combined")]
+    [ConditionElement("Combined/Split", "Order.Combined")]
     public class OrderCombinedCondition : EnumCondition<CombineSplitStatusType>
     {
         /// <summary>
