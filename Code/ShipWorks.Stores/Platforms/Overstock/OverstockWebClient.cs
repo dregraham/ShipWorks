@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
@@ -12,8 +11,8 @@ using Interapptive.Shared.Utility;
 using log4net;
 using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -33,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public OverstockWebClient(IOverstockRestClientFactory restClientFactory, 
+        public OverstockWebClient(IOverstockRestClientFactory restClientFactory,
             IOverstockWebClientEndpoints endpoints, IOverstockShipmentFactory overstockShipmentFactory)
         {
             this.endpoints = endpoints;
@@ -76,11 +75,11 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
-        public async Task UploadShipmentDetails(IShipmentEntity shipment, IOverstockStoreEntity store)
+        public async Task UploadShipmentDetails(IOverstockStoreEntity store, IEnumerable<OverstockSupplierShipment> shipments)
         {
             ValidateApiAccessData(store);
 
-            XDocument shipmentXml = overstockShipmentFactory.CreateShipmentDetails(shipment);
+            XDocument shipmentXml = overstockShipmentFactory.CreateShipmentDetails(shipments);
 
             try
             {

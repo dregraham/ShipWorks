@@ -1,5 +1,6 @@
-﻿using System.Xml.Linq;
-using ShipWorks.Data.Model.EntityInterfaces;
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
+using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Create the XML for shipment upload to Overstock
         /// </summary>
-        XDocument CreateShipmentDetails(IShipmentEntity shipment);
+        XDocument CreateShipmentDetails(IEnumerable<OverstockSupplierShipment> shipments);
     }
 }

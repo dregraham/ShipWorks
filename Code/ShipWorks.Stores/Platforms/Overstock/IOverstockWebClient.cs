@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Overstock
 {
@@ -19,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        Task UploadShipmentDetails(IShipmentEntity shipment, IOverstockStoreEntity store);
+        Task UploadShipmentDetails(IOverstockStoreEntity store, IEnumerable<OverstockSupplierShipment> shipments);
 
         /// <summary>
         /// Test the connection

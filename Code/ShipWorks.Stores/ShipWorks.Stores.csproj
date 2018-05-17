@@ -543,6 +543,7 @@
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\ActionComments.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockDataAccess.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdateCommandCreator.cs" />
@@ -689,6 +690,9 @@
     <Compile Include="Platforms\Overstock\IOverstockShipmentFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockCarrierServiceTranslator.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockDataAccess.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockSupplierShipment.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Overstock\OverstockCipherKey.cs" />
