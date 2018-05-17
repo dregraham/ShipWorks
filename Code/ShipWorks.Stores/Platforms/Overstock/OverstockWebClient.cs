@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
@@ -26,15 +27,18 @@ namespace ShipWorks.Stores.Platforms.Overstock
         private readonly List<HttpStatusCode> successHttpStatusCodes;
         private readonly IOverstockRestClientFactory restClientFactory;
         private readonly IOverstockWebClientEndpoints endpoints;
+        private readonly IOverstockShipmentFactory overstockShipmentFactory;
         private const string storeSettingMissingErrorMessage = "The Overstock {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
 
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public OverstockWebClient(IOverstockRestClientFactory restClientFactory, IOverstockWebClientEndpoints endpoints)
+        public OverstockWebClient(IOverstockRestClientFactory restClientFactory, 
+            IOverstockWebClientEndpoints endpoints, IOverstockShipmentFactory overstockShipmentFactory)
         {
             this.endpoints = endpoints;
             this.restClientFactory = restClientFactory;
+            this.overstockShipmentFactory = overstockShipmentFactory;
 
             successHttpStatusCodes = new List<HttpStatusCode>
             {
@@ -72,13 +76,29 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
-        public Task UploadShipmentDetails(long overstockOrderId, ShipmentEntity shipment, IOverstockStoreEntity store)
+        public async Task UploadShipmentDetails(IShipmentEntity shipment, IOverstockStoreEntity store)
         {
             ValidateApiAccessData(store);
 
-            //TODO: Really do the update when we get to that story.
+            XDocument shipmentXml = overstockShipmentFactory.CreateShipmentDetails(shipment);
 
-            return Task.CompletedTask;
+            try
+            {
+                // Create a request for getting orders
+                RestRequest request = new RestRequest(endpoints.GetUploadShipmentResource());
+
+                request.AddXmlBody(shipmentXml.ToString());
+
+                await MakeRequest(request, store, "UploadShipmentDetails").ConfigureAwait(false);
+            }
+            catch (OverstockException overstockException)
+            {
+                throw new OverstockException("ShipWorks was unable to download orders for your Overstock store.", overstockException);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(OverstockException));
+            }
         }
 
         /// <summary>

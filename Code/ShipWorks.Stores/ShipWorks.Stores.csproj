@@ -686,6 +686,7 @@
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockWarehouseNameCondition.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockChannelNameCondition.cs" />
     <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockShipmentFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOnlineUpdateCommandCreator.cs" />
@@ -694,6 +695,7 @@
     <Compile Include="Platforms\Overstock\OverstockDownloader.cs" />
     <Compile Include="Platforms\Overstock\OverstockException.cs" />
     <Compile Include="Platforms\Overstock\OverstockRestClientFactory.cs" />
+    <Compile Include="Platforms\Overstock\OverstockShipmentFactory.cs" />
     <Compile Include="Platforms\Overstock\OverstockStoreType.cs" />
     <Compile Include="Platforms\Overstock\OverstockWebClient.cs" />
     <Compile Include="Platforms\Overstock\OverstockWebClientEndpoints.cs" />
