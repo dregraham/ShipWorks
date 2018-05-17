@@ -68,11 +68,13 @@
             // 
             this.insuranceControl.Location = new System.Drawing.Point(21, 326);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
+            this.insuranceControl.TabIndex = 78;
             // 
             // sectionExpress
             // 
             this.sectionExpress.Location = new System.Drawing.Point(3, 474);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
+            this.sectionExpress.TabIndex = 3;
             // 
             // sectionRecipient
             // 
@@ -106,6 +108,7 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 503);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
+            this.sectionReturns.TabIndex = 4;
             // 
             // sectionShipment
             // 
@@ -120,11 +123,13 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(378, 406);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 532);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
+            this.sectionLabelOptions.TabIndex = 5;
             // 
             // sectionFrom
             // 
@@ -155,7 +160,7 @@
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(371, 465);
-            this.originControl.TabIndex = 1;
+            this.originControl.TabIndex = 5;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // panelTop
@@ -170,7 +175,7 @@
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(371, 50);
-            this.panelTop.TabIndex = 5;
+            this.panelTop.TabIndex = 1;
             // 
             // linkManageUspsAccounts
             // 

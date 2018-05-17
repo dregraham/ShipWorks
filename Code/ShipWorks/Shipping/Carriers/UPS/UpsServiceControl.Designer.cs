@@ -204,8 +204,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 1583);
             this.sectionReturns.Size = new System.Drawing.Size(366, 24);
+            this.sectionReturns.TabIndex = 9;
 
             this.sectionLabelOptions.Size = new System.Drawing.Size(366, 24);
+            this.sectionLabelOptions.TabIndex = 10;
             // 
             // sectionShipment
             // 
@@ -221,6 +223,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(366, 365);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionFrom
             // 
@@ -275,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.panelTop.Location = new System.Drawing.Point(3, 3);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(370, 50);
-            this.panelTop.TabIndex = 9;
+            this.panelTop.TabIndex = 0;
             // 
             // label2
             // 
@@ -418,7 +421,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionCod.SectionName = "C.O.D.";
             this.sectionCod.SettingsKey = "{640124b8-f610-4488-b282-7e2c36618b81}";
             this.sectionCod.Size = new System.Drawing.Size(366, 24);
-            this.sectionCod.TabIndex = 9;
+            this.sectionCod.TabIndex = 7;
             // 
             // codPaymentType
             // 
@@ -491,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionOptions.SectionName = "Options & Reference";
             this.sectionOptions.SettingsKey = "{e3c1d665-00e2-42af-a748-99bc1fc7a387}";
             this.sectionOptions.Size = new System.Drawing.Size(366, 24);
-            this.sectionOptions.TabIndex = 6;
+            this.sectionOptions.TabIndex = 4;
             // 
             // confirmationAndReferenceFlowPanel
             // 
@@ -520,7 +523,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.confirmationPanel.Margin = new System.Windows.Forms.Padding(0);
             this.confirmationPanel.Name = "confirmationPanel";
             this.confirmationPanel.Size = new System.Drawing.Size(380, 30);
-            this.confirmationPanel.TabIndex = 80;
+            this.confirmationPanel.TabIndex = 0;
             // 
             // confirmation
             // 
@@ -530,7 +533,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.confirmation.Name = "confirmation";
             this.confirmation.PromptText = "(Multiple Values)";
             this.confirmation.Size = new System.Drawing.Size(175, 21);
-            this.confirmation.TabIndex = 73;
+            this.confirmation.TabIndex = 0;
             this.confirmation.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelConfirmation
@@ -583,7 +586,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.referencePanel.Margin = new System.Windows.Forms.Padding(0);
             this.referencePanel.Name = "referencePanel";
             this.referencePanel.Size = new System.Drawing.Size(380, 30);
-            this.referencePanel.TabIndex = 81;
+            this.referencePanel.TabIndex = 1;
             // 
             // referenceNumber
             // 
@@ -591,7 +594,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.referenceNumber.MaxLength = 32767;
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(210, 21);
-            this.referenceNumber.TabIndex = 79;
+            this.referenceNumber.TabIndex = 1;
             this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelReference
@@ -613,7 +616,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.reference2Panel.Margin = new System.Windows.Forms.Padding(0);
             this.reference2Panel.Name = "reference2Panel";
             this.reference2Panel.Size = new System.Drawing.Size(380, 30);
-            this.reference2Panel.TabIndex = 77;
+            this.reference2Panel.TabIndex = 2;
             // 
             // reference2Number
             // 
@@ -621,7 +624,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.reference2Number.MaxLength = 32767;
             this.reference2Number.Name = "reference2Number";
             this.reference2Number.Size = new System.Drawing.Size(210, 21);
-            this.reference2Number.TabIndex = 77;
+            this.reference2Number.TabIndex = 2;
             this.reference2Number.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // label3
@@ -643,7 +646,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.shipperReleasePanel.Margin = new System.Windows.Forms.Padding(0);
             this.shipperReleasePanel.Name = "shipperReleasePanel";
             this.shipperReleasePanel.Size = new System.Drawing.Size(380, 30);
-            this.shipperReleasePanel.TabIndex = 82;
+            this.shipperReleasePanel.TabIndex = 3;
             // 
             // shipperRelease
             // 
@@ -652,7 +655,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.shipperRelease.Location = new System.Drawing.Point(121, 8);
             this.shipperRelease.Name = "shipperRelease";
             this.shipperRelease.Size = new System.Drawing.Size(15, 14);
-            this.shipperRelease.TabIndex = 9;
+            this.shipperRelease.TabIndex = 3;
             this.shipperRelease.UseVisualStyleBackColor = false;
             this.shipperRelease.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
@@ -675,7 +678,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.carbonNeutralPanel.Margin = new System.Windows.Forms.Padding(0);
             this.carbonNeutralPanel.Name = "carbonNeutralPanel";
             this.carbonNeutralPanel.Size = new System.Drawing.Size(380, 30);
-            this.carbonNeutralPanel.TabIndex = 83;
+            this.carbonNeutralPanel.TabIndex = 4;
             // 
             // carbonNeutral
             // 
@@ -684,7 +687,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.carbonNeutral.Location = new System.Drawing.Point(121, 8);
             this.carbonNeutral.Name = "carbonNeutral";
             this.carbonNeutral.Size = new System.Drawing.Size(15, 14);
-            this.carbonNeutral.TabIndex = 9;
+            this.carbonNeutral.TabIndex = 4;
             this.carbonNeutral.UseVisualStyleBackColor = false;
             this.carbonNeutral.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
@@ -714,7 +717,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionBilling.SectionName = "Billing";
             this.sectionBilling.SettingsKey = "{7ec15092-b2c0-4faf-9ce3-27d6bb912fba}";
             this.sectionBilling.Size = new System.Drawing.Size(366, 588);
-            this.sectionBilling.TabIndex = 7;
+            this.sectionBilling.TabIndex = 5;
             // 
             // panelPayorTransport
             // 
@@ -724,7 +727,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.panelPayorTransport.Location = new System.Drawing.Point(1, 1);
             this.panelPayorTransport.Name = "panelPayorTransport";
             this.panelPayorTransport.Size = new System.Drawing.Size(475, 33);
-            this.panelPayorTransport.TabIndex = 76;
+            this.panelPayorTransport.TabIndex = 0;
             // 
             // payorTransport
             // 
@@ -756,7 +759,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.panelPayorDuties.Location = new System.Drawing.Point(1, 119);
             this.panelPayorDuties.Name = "panelPayorDuties";
             this.panelPayorDuties.Size = new System.Drawing.Size(475, 118);
-            this.panelPayorDuties.TabIndex = 75;
+            this.panelPayorDuties.TabIndex = 3;
             // 
             // panelDutiesAccount
             // 
@@ -770,7 +773,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.panelDutiesAccount.Location = new System.Drawing.Point(8, 32);
             this.panelDutiesAccount.Name = "panelDutiesAccount";
             this.panelDutiesAccount.Size = new System.Drawing.Size(455, 83);
-            this.panelDutiesAccount.TabIndex = 85;
+            this.panelDutiesAccount.TabIndex = 2;
             // 
             // labelDutiesAccount
             // 
@@ -779,7 +782,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelDutiesAccount.Location = new System.Drawing.Point(31, 7);
             this.labelDutiesAccount.Name = "labelDutiesAccount";
             this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
-            this.labelDutiesAccount.TabIndex = 83;
+            this.labelDutiesAccount.TabIndex = 0;
             this.labelDutiesAccount.Text = "Account #:";
             // 
             // dutiesPostalCode
@@ -787,14 +790,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.dutiesPostalCode.Location = new System.Drawing.Point(99, 31);
             this.dutiesPostalCode.Name = "dutiesPostalCode";
             this.dutiesPostalCode.Size = new System.Drawing.Size(173, 21);
-            this.dutiesPostalCode.TabIndex = 87;
+            this.dutiesPostalCode.TabIndex = 3;
             // 
             // dutiesAccount
             // 
             this.dutiesAccount.Location = new System.Drawing.Point(99, 4);
             this.dutiesAccount.Name = "dutiesAccount";
             this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
-            this.dutiesAccount.TabIndex = 84;
+            this.dutiesAccount.TabIndex = 1;
             // 
             // labelDutiesPostalCode
             // 
@@ -803,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelDutiesPostalCode.Location = new System.Drawing.Point(24, 34);
             this.labelDutiesPostalCode.Name = "labelDutiesPostalCode";
             this.labelDutiesPostalCode.Size = new System.Drawing.Size(68, 13);
-            this.labelDutiesPostalCode.TabIndex = 86;
+            this.labelDutiesPostalCode.TabIndex = 2;
             this.labelDutiesPostalCode.Text = "Postal Code:";
             // 
             // dutiesCountryCode
@@ -814,7 +817,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.dutiesCountryCode.Name = "dutiesCountryCode";
             this.dutiesCountryCode.PromptText = "(Multiple Values)";
             this.dutiesCountryCode.Size = new System.Drawing.Size(173, 21);
-            this.dutiesCountryCode.TabIndex = 88;
+            this.dutiesCountryCode.TabIndex = 5;
             // 
             // labelDutiesCountryCode
             // 
@@ -823,7 +826,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelDutiesCountryCode.Location = new System.Drawing.Point(42, 61);
             this.labelDutiesCountryCode.Name = "labelDutiesCountryCode";
             this.labelDutiesCountryCode.Size = new System.Drawing.Size(50, 13);
-            this.labelDutiesCountryCode.TabIndex = 85;
+            this.labelDutiesCountryCode.TabIndex = 4;
             this.labelDutiesCountryCode.Text = "Country:";
             // 
             // payorDuties
@@ -834,7 +837,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.payorDuties.Name = "payorDuties";
             this.payorDuties.PromptText = "(Multiple Values)";
             this.payorDuties.Size = new System.Drawing.Size(173, 21);
-            this.payorDuties.TabIndex = 83;
+            this.payorDuties.TabIndex = 1;
             this.payorDuties.SelectedIndexChanged += new System.EventHandler(this.OnPayorDutiesFeesChanged);
             // 
             // labelPayorDuties
@@ -844,7 +847,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPayorDuties.Location = new System.Drawing.Point(7, 10);
             this.labelPayorDuties.Name = "labelPayorDuties";
             this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
-            this.labelPayorDuties.TabIndex = 84;
+            this.labelPayorDuties.TabIndex = 0;
             this.labelPayorDuties.Text = "Bill duties/fees to:";
             // 
             // panelTransportAccount
@@ -868,7 +871,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPayorAccount.Location = new System.Drawing.Point(39, 5);
             this.labelPayorAccount.Name = "labelPayorAccount";
             this.labelPayorAccount.Size = new System.Drawing.Size(61, 13);
-            this.labelPayorAccount.TabIndex = 76;
+            this.labelPayorAccount.TabIndex = 0;
             this.labelPayorAccount.Text = "Account #:";
             // 
             // payorPostalCode
@@ -876,14 +879,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.payorPostalCode.Location = new System.Drawing.Point(107, 29);
             this.payorPostalCode.Name = "payorPostalCode";
             this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
-            this.payorPostalCode.TabIndex = 81;
+            this.payorPostalCode.TabIndex = 3;
             // 
             // payorAccount
             // 
             this.payorAccount.Location = new System.Drawing.Point(107, 2);
             this.payorAccount.Name = "payorAccount";
             this.payorAccount.Size = new System.Drawing.Size(173, 21);
-            this.payorAccount.TabIndex = 77;
+            this.payorAccount.TabIndex = 1;
             // 
             // labelPayorPostalCode
             // 
@@ -892,7 +895,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPayorPostalCode.Location = new System.Drawing.Point(32, 32);
             this.labelPayorPostalCode.Name = "labelPayorPostalCode";
             this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
-            this.labelPayorPostalCode.TabIndex = 80;
+            this.labelPayorPostalCode.TabIndex = 2;
             this.labelPayorPostalCode.Text = "Postal Code:";
             // 
             // payorCountry
@@ -903,7 +906,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.payorCountry.Name = "payorCountry";
             this.payorCountry.PromptText = "(Multiple Values)";
             this.payorCountry.Size = new System.Drawing.Size(173, 21);
-            this.payorCountry.TabIndex = 82;
+            this.payorCountry.TabIndex = 5;
             // 
             // labelPayorCountry
             // 
@@ -912,7 +915,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPayorCountry.Location = new System.Drawing.Point(50, 59);
             this.labelPayorCountry.Name = "labelPayorCountry";
             this.labelPayorCountry.Size = new System.Drawing.Size(50, 13);
-            this.labelPayorCountry.TabIndex = 78;
+            this.labelPayorCountry.TabIndex = 4;
             this.labelPayorCountry.Text = "Country:";
             // 
             // sectionEmail
@@ -955,7 +958,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionEmail.SectionName = "Quantum View Notify";
             this.sectionEmail.SettingsKey = "{a71bde8e-f7e1-49ce-8e13-635a44b963b2}";
             this.sectionEmail.Size = new System.Drawing.Size(366, 317);
-            this.sectionEmail.TabIndex = 8;
+            this.sectionEmail.TabIndex = 6;
             // 
             // emailSubject
             // 
@@ -965,7 +968,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailSubject.Name = "emailSubject";
             this.emailSubject.PromptText = "(Multiple Values)";
             this.emailSubject.Size = new System.Drawing.Size(164, 21);
-            this.emailSubject.TabIndex = 82;
+            this.emailSubject.TabIndex = 11;
             // 
             // labelEmailSubject
             // 
@@ -983,7 +986,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.fieldLengthProvider.SetMaxLengthSource(this.emailFrom, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsQvnFrom);
             this.emailFrom.Name = "emailFrom";
             this.emailFrom.Size = new System.Drawing.Size(165, 21);
-            this.emailFrom.TabIndex = 80;
+            this.emailFrom.TabIndex = 10;
             // 
             // labelEmailFrom
             // 
@@ -1013,7 +1016,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPersonalMessage.Location = new System.Drawing.Point(9, 199);
             this.labelPersonalMessage.Name = "labelPersonalMessage";
             this.labelPersonalMessage.Size = new System.Drawing.Size(144, 13);
-            this.labelPersonalMessage.TabIndex = 77;
+            this.labelPersonalMessage.TabIndex = 12;
             this.labelPersonalMessage.Text = "Personal Message (Optional)";
             // 
             // kryptonBorderEdgeEmail2
@@ -1035,7 +1038,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyOtherShip.Location = new System.Drawing.Point(224, 111);
             this.emailNotifyOtherShip.Name = "emailNotifyOtherShip";
             this.emailNotifyOtherShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherShip.TabIndex = 75;
+            this.emailNotifyOtherShip.TabIndex = 7;
             this.emailNotifyOtherShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherDelivery
@@ -1045,7 +1048,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(324, 111);
             this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
             this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherDelivery.TabIndex = 74;
+            this.emailNotifyOtherDelivery.TabIndex = 9;
             this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherException
@@ -1055,7 +1058,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyOtherException.Location = new System.Drawing.Point(267, 111);
             this.emailNotifyOtherException.Name = "emailNotifyOtherException";
             this.emailNotifyOtherException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherException.TabIndex = 73;
+            this.emailNotifyOtherException.TabIndex = 8;
             this.emailNotifyOtherException.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientShip
@@ -1065,7 +1068,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyRecipientShip.Location = new System.Drawing.Point(224, 89);
             this.emailNotifyRecipientShip.Name = "emailNotifyRecipientShip";
             this.emailNotifyRecipientShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientShip.TabIndex = 72;
+            this.emailNotifyRecipientShip.TabIndex = 3;
             this.emailNotifyRecipientShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientDelivery
@@ -1075,7 +1078,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(324, 89);
             this.emailNotifyRecipientDelivery.Name = "emailNotifyRecipientDelivery";
             this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientDelivery.TabIndex = 71;
+            this.emailNotifyRecipientDelivery.TabIndex = 5;
             this.emailNotifyRecipientDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientException
@@ -1085,7 +1088,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifyRecipientException.Location = new System.Drawing.Point(267, 89);
             this.emailNotifyRecipientException.Name = "emailNotifyRecipientException";
             this.emailNotifyRecipientException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientException.TabIndex = 70;
+            this.emailNotifyRecipientException.TabIndex = 4;
             this.emailNotifyRecipientException.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherAddress
@@ -1094,7 +1097,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyOtherAddress, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsQvnOtherAddress);
             this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
             this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
-            this.emailNotifyOtherAddress.TabIndex = 69;
+            this.emailNotifyOtherAddress.TabIndex = 6;
             // 
             // kryptonBorderEdgeEmail
             // 
@@ -1145,7 +1148,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifySenderShip.Location = new System.Drawing.Point(224, 68);
             this.emailNotifySenderShip.Name = "emailNotifySenderShip";
             this.emailNotifySenderShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderShip.TabIndex = 64;
+            this.emailNotifySenderShip.TabIndex = 0;
             this.emailNotifySenderShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifySenderDelivery
@@ -1155,7 +1158,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifySenderDelivery.Location = new System.Drawing.Point(324, 68);
             this.emailNotifySenderDelivery.Name = "emailNotifySenderDelivery";
             this.emailNotifySenderDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderDelivery.TabIndex = 63;
+            this.emailNotifySenderDelivery.TabIndex = 2;
             this.emailNotifySenderDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifySenderException
@@ -1165,7 +1168,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.emailNotifySenderException.Location = new System.Drawing.Point(267, 68);
             this.emailNotifySenderException.Name = "emailNotifySenderException";
             this.emailNotifySenderException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderException.TabIndex = 62;
+            this.emailNotifySenderException.TabIndex = 1;
             this.emailNotifySenderException.UseVisualStyleBackColor = false;
             // 
             // labelEmailDelivery
@@ -1250,7 +1253,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.sectionSurePost.SectionName = "SurePost & Mail Innovations";
             this.sectionSurePost.SettingsKey = "{b36e5a50-de19-4dcf-b42f-81399e8f1137}";
             this.sectionSurePost.Size = new System.Drawing.Size(366, 143);
-            this.sectionSurePost.TabIndex = 10;
+            this.sectionSurePost.TabIndex = 8;
             this.sectionSurePost.Visible = false;
             // 
             // costCenter
@@ -1259,7 +1262,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.costCenter.MaxLength = 32767;
             this.costCenter.Name = "costCenter";
             this.costCenter.Size = new System.Drawing.Size(210, 21);
-            this.costCenter.TabIndex = 89;
+            this.costCenter.TabIndex = 3;
             this.costCenter.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // packageID
@@ -1268,7 +1271,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.packageID.MaxLength = 32767;
             this.packageID.Name = "packageID";
             this.packageID.Size = new System.Drawing.Size(210, 21);
-            this.packageID.TabIndex = 88;
+            this.packageID.TabIndex = 5;
             this.packageID.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // labelPackageID
@@ -1278,7 +1281,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelPackageID.Location = new System.Drawing.Point(67, 64);
             this.labelPackageID.Name = "labelPackageID";
             this.labelPackageID.Size = new System.Drawing.Size(65, 13);
-            this.labelPackageID.TabIndex = 87;
+            this.labelPackageID.TabIndex = 4;
             this.labelPackageID.Text = "Package ID:";
             // 
             // irregularIndicator
@@ -1289,7 +1292,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.irregularIndicator.Name = "irregularIndicator";
             this.irregularIndicator.PromptText = "(Multiple Values)";
             this.irregularIndicator.Size = new System.Drawing.Size(210, 21);
-            this.irregularIndicator.TabIndex = 85;
+            this.irregularIndicator.TabIndex = 7;
             // 
             // labelIrregularIndicator
             // 
@@ -1298,7 +1301,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelIrregularIndicator.Location = new System.Drawing.Point(33, 91);
             this.labelIrregularIndicator.Name = "labelIrregularIndicator";
             this.labelIrregularIndicator.Size = new System.Drawing.Size(99, 13);
-            this.labelIrregularIndicator.TabIndex = 84;
+            this.labelIrregularIndicator.TabIndex = 6;
             this.labelIrregularIndicator.Text = "Irregular Indicator:";
             // 
             // labelCostCenter
@@ -1308,7 +1311,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelCostCenter.Location = new System.Drawing.Point(63, 37);
             this.labelCostCenter.Name = "labelCostCenter";
             this.labelCostCenter.Size = new System.Drawing.Size(69, 13);
-            this.labelCostCenter.TabIndex = 83;
+            this.labelCostCenter.TabIndex = 2;
             this.labelCostCenter.Text = "Cost Center:";
             // 
             // surePostClassification
@@ -1319,7 +1322,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.surePostClassification.Name = "surePostClassification";
             this.surePostClassification.PromptText = "(Multiple Values)";
             this.surePostClassification.Size = new System.Drawing.Size(210, 21);
-            this.surePostClassification.TabIndex = 6;
+            this.surePostClassification.TabIndex = 1;
             // 
             // labelClassification
             // 
@@ -1328,7 +1331,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelClassification.Location = new System.Drawing.Point(59, 10);
             this.labelClassification.Name = "labelClassification";
             this.labelClassification.Size = new System.Drawing.Size(73, 13);
-            this.labelClassification.TabIndex = 4;
+            this.labelClassification.TabIndex = 0;
             this.labelClassification.Text = "Classification:";
             // 
             // otherPackageDetails
@@ -1347,7 +1350,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.otherPackageDetails.SectionName = "Other Package Details";
             this.otherPackageDetails.SettingsKey = "d02b34e0-adb3-44fc-880d-da164c96a155";
             this.otherPackageDetails.Size = new System.Drawing.Size(366, 24);
-            this.otherPackageDetails.TabIndex = 0;
+            this.otherPackageDetails.TabIndex = 3;
             // 
             // packageDetailsControl
             // 

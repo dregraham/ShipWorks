@@ -82,6 +82,7 @@
             // 
             this.sectionExpress.Location = new System.Drawing.Point(3, 533);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
+            this.sectionExpress.TabIndex = 3;
             // 
             // sectionRecipient
             // 
@@ -115,6 +116,7 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 562);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
+            this.sectionReturns.TabIndex = 4;
             // 
             // sectionShipment
             // 
@@ -142,6 +144,7 @@
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 591);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
+            this.sectionLabelOptions.TabIndex = 5;
             // 
             // sectionFrom
             // 
