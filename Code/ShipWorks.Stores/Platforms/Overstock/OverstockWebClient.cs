@@ -155,7 +155,13 @@ namespace ShipWorks.Stores.Platforms.Overstock
             {
                 // Log the request
                 ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Overstock, logAction);
-                logger.LogRequest(request.Resource);
+
+                string logMsg = $"{request.Resource}{Environment.NewLine}";
+                foreach (var parameter in request.Parameters)
+                {
+                    logMsg += $"{parameter.Name}:{parameter.Value}{Environment.NewLine}";
+                }
+                logger.LogRequest(logMsg);
 
                 IRestResponse<XDocument> restResponse = await restClientFactory.Create(store).ExecuteTaskAsync<XDocument>(request).ConfigureAwait(false);
                 requestResult = restResponse.Data;
