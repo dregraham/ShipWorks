@@ -109,21 +109,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Overstock
             foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
             {
                 OverstockOrderItemEntity overstockOrderItem = (OverstockOrderItemEntity) orderItemEntity;
-                orderDetails.Add(
-                    new OverstockSupplierShipment()
-                    {
-                        SalesChannelOrderNumber = order.OrderNumberComplete,
-                        TrackingNumber = shipment.TrackingNumber,
-                        CarrierCode = OverstockCarrierServiceTranslator.GetCarrierValues(shipment).carrierCode,
-                        IsManual = false,
-                        Quantity = (decimal) orderItemEntity.Quantity,
-                        SalesChannelLineNumber = overstockOrderItem.SalesChannelLineNumber.ToString(),
-                        SalesChannelName = order.SalesChannelName,
-                        ServiceLevelCode = OverstockCarrierServiceTranslator.GetCarrierValues(shipment).serviceLevel,
-                        ShipDate = shipment.ShipDate,
-                        WarehouseName = order.WarehouseCode
-                    }
-                );
+
+                OverstockOrderDetail orderDetail = new OverstockOrderDetail(order.OrderNumberComplete, order.SalesChannelName, order.WarehouseCode, order.OrderID, false);
+
+                orderDetails.Add(new OverstockSupplierShipment(orderDetail, shipment, overstockOrderItem));
             }
 
             return orderDetails;
