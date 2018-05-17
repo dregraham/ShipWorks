@@ -507,7 +507,10 @@ namespace ShipWorks
                     SqlSession master = new SqlSession(SqlSession.Current);
                     master.Configuration.DatabaseName = "master";
 
-                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                    SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(master.Configuration.GetConnectionString());
+                    csb.Pooling = false;
+
+                    using (DbConnection testConnection = new SqlConnection(csb.ToString()))
                     {
                         testConnection.Open();
 

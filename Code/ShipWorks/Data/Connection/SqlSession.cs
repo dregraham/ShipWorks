@@ -196,12 +196,13 @@ namespace ShipWorks.Data.Connection
         {
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
             csb.ConnectTimeout = (int) timeout.TotalSeconds;
+            csb.Pooling = false;
 
             // First check to see if the database is in single user mode
             string originalDatabaseName = csb.InitialCatalog;
             csb.InitialCatalog = "master";
 
-            using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
+            using (DbConnection con = new SqlConnection(csb.ToString()))
             {
                 con.Open();
 
@@ -215,7 +216,7 @@ namespace ShipWorks.Data.Connection
 
             // The db isn't single user, so try connecting to it.
             csb.InitialCatalog = originalDatabaseName;
-            using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
+            using (DbConnection con = new SqlConnection(csb.ToString()))
             {
                 con.Open();
 

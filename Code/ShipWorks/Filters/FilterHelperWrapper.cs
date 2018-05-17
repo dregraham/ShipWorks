@@ -83,6 +83,8 @@ namespace ShipWorks.Filters
             // Create a new adapter
             using (SqlAdapter adapter = new SqlAdapter(connection))
             {
+                adapter.KeepConnectionOpen = true;
+
                 FilterCollection filters = new FilterCollection();
                 adapter.FetchEntityCollection(filters, null);
                 int totalFilters = filters.Count;
