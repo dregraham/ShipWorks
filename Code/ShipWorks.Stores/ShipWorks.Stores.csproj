@@ -682,10 +682,10 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Overstock\Content\OverstockCombineOrderAction.cs" />
-    <Compile Include="Platforms\Overstock\Content\OverstockSplitOrderAction.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockSofsCreatedDateCondition.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockWarehouseNameCondition.cs" />
     <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockChannelNameCondition.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockOrderSearchProvider.cs" />
     <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockShipmentFactory.cs" />
     <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
@@ -698,6 +698,7 @@
     <Compile Include="Platforms\Overstock\OverstockCipherKey.cs" />
     <Compile Include="Platforms\Overstock\OverstockDownloader.cs" />
     <Compile Include="Platforms\Overstock\OverstockException.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOrderSearchProvider.cs" />
     <Compile Include="Platforms\Overstock\OverstockRestClientFactory.cs" />
     <Compile Include="Platforms\Overstock\OverstockShipmentFactory.cs" />
     <Compile Include="Platforms\Overstock\OverstockStoreType.cs" />
@@ -937,6 +938,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

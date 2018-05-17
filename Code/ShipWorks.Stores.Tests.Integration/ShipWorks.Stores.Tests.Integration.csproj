@@ -245,6 +245,7 @@
     <Compile Include="Platforms\OrderMotion\OrderMotionCombineAndSplitTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Overstock\OverstockCombineTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
