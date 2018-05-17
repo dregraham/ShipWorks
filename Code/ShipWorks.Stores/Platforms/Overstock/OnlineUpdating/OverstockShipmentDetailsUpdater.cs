@@ -75,13 +75,13 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
 
             var orderDetails = await dataAccess.GetOrderDetails(shipment).ConfigureAwait(false);
             var ordersToUpload = orderDetails.Where(x => !x.IsManual).ToList();
-            if (orderDetails.None())
+            if (ordersToUpload.None())
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", shipment.OrderID);
                 return;
             }
 
-            await webClient.UploadShipmentDetails(store, orderDetails).ConfigureAwait(false);
+            await webClient.UploadShipmentDetails(store, ordersToUpload).ConfigureAwait(false);
         }
     }
 }
