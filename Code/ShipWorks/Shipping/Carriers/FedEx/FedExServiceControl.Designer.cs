@@ -1604,7 +1604,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
-            this.smartManifestID.TabIndex = 88;
+            this.smartManifestID.TabIndex = 9;
             this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // sectionSmartPost
@@ -1653,7 +1653,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartHubID.Name = "smartHubID";
             this.smartHubID.PromptText = "(Multiple Values)";
             this.smartHubID.Size = new System.Drawing.Size(225, 21);
-            this.smartHubID.TabIndex = 97;
+            this.smartHubID.TabIndex = 1;
             this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelSmartHubID
@@ -1663,7 +1663,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
             this.labelSmartHubID.Name = "labelSmartHubID";
             this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
-            this.labelSmartHubID.TabIndex = 96;
+            this.labelSmartHubID.TabIndex = 0;
             this.labelSmartHubID.Text = "Hub ID:";
             // 
             // smartConfirmation
@@ -1673,7 +1673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
             this.smartConfirmation.Name = "smartConfirmation";
             this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
-            this.smartConfirmation.TabIndex = 95;
+            this.smartConfirmation.TabIndex = 7;
             this.smartConfirmation.Text = "USPS Delivery Confirmation";
             this.smartConfirmation.UseVisualStyleBackColor = false;
             this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
@@ -1686,7 +1686,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartEndorsement.Name = "smartEndorsement";
             this.smartEndorsement.PromptText = "(Multiple Values)";
             this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
-            this.smartEndorsement.TabIndex = 94;
+            this.smartEndorsement.TabIndex = 5;
             this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // smartIndicia
@@ -1697,7 +1697,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
             this.smartIndicia.Size = new System.Drawing.Size(225, 21);
-            this.smartIndicia.TabIndex = 93;
+            this.smartIndicia.TabIndex = 3;
             this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
             // 
             // labelSmartAncillary
@@ -1707,7 +1707,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartAncillary.Location = new System.Drawing.Point(30, 68);
             this.labelSmartAncillary.Name = "labelSmartAncillary";
             this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
-            this.labelSmartAncillary.TabIndex = 92;
+            this.labelSmartAncillary.TabIndex = 4;
             this.labelSmartAncillary.Text = "Ancillary:";
             // 
             // labelSmartEndicia
@@ -1717,7 +1717,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartEndicia.Location = new System.Drawing.Point(39, 40);
             this.labelSmartEndicia.Name = "labelSmartEndicia";
             this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
-            this.labelSmartEndicia.TabIndex = 91;
+            this.labelSmartEndicia.TabIndex = 2;
             this.labelSmartEndicia.Text = "Indicia:";
             // 
             // labelSmartConfirmation
@@ -1727,7 +1727,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
             this.labelSmartConfirmation.Name = "labelSmartConfirmation";
             this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
-            this.labelSmartConfirmation.TabIndex = 90;
+            this.labelSmartConfirmation.TabIndex = 6;
             this.labelSmartConfirmation.Text = "Confirmation:";
             // 
             // labelSmartManifestID
@@ -1737,7 +1737,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
             this.labelSmartManifestID.Name = "labelSmartManifestID";
             this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
-            this.labelSmartManifestID.TabIndex = 89;
+            this.labelSmartManifestID.TabIndex = 8;
             this.labelSmartManifestID.Text = "Manifest ID:";
             // 
             // sectionPackageDetails
