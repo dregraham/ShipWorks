@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// Specifies the download policy for the online store
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30 };
 
         /// <summary>
         /// Generate the template XML output for the given order
