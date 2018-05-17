@@ -251,7 +251,8 @@ namespace ShipWorks.Stores.Platforms.Overstock
         {
             foreach (var item in items)
             {
-                var itemEntity = elementFactory.CreateItem(orderEntity);
+                var itemEntity = (OverstockOrderItemEntity) elementFactory.CreateItem(orderEntity);
+                itemEntity.SalesChannelLineNumber = item.GetLong("salesChannelLineNumber", 0);
                 itemEntity.SKU = item.GetValue("salesChannelSKU");
                 itemEntity.Name = item.GetValue("itemName");
                 itemEntity.UnitCost = item.GetDecimal("unitCost");

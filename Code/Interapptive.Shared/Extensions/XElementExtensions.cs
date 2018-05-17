@@ -29,5 +29,11 @@ namespace Interapptive.Shared.Extensions
         /// </summary>
         public static DateTime GetDate(this XElement element, string elementName, DateTime defaultValue) =>
             DateTime.TryParse(GetValue(element, elementName), out DateTime parsedValue) ? parsedValue : defaultValue;
+
+        /// <summary>
+        /// Get a long value from an XElement
+        /// </summary>
+        public static long GetLong(this XElement element, string elementName, long defaultValue = 0) =>
+            long.TryParse(GetValue(element, elementName), out long parsedValue) ? parsedValue : defaultValue;
     }
 }
