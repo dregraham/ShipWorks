@@ -11,10 +11,8 @@ using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Threading;
 using System.Reactive.Disposables;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using Interapptive.Shared.Utility;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {
@@ -58,7 +56,8 @@ namespace ShipWorks.SingleScan
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) ||
                             m.AppliesTo(KeyboardShortcutCommand.Enter) ||
                             m.AppliesTo(KeyboardShortcutCommand.Tab) ||
-                            m.AppliesTo(KeyboardShortcutCommand.Escape))
+                            m.AppliesTo(KeyboardShortcutCommand.Escape) ||
+                            m.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
                 .Subscribe(CollectTelemetryWithoutResult),
 
             messenger.OfType<ShortcutMessage>()
@@ -111,27 +110,11 @@ namespace ShipWorks.SingleScan
         private void CollectShortcutTelemetry(ShortcutMessage shortcutMessage, ITrackedEvent telemetryEvent)
         {
             telemetryEvent.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", (DateTime.UtcNow - shortcutMessage.CreatedDate).TotalMilliseconds);
-            telemetryEvent.AddProperty("Shortcuts.Applied.Source", GetShortcutMessageSource(shortcutMessage));
+            telemetryEvent.AddProperty("Shortcuts.Applied.Source", EnumHelper.GetDescription(shortcutMessage.Trigger));
             telemetryEvent.AddProperty("Shortcuts.Applied.Value", shortcutMessage.Value);
             telemetryEvent.AddProperty("Shortcuts.Applied.Action", GetShortcutMessageAction(shortcutMessage));
         }
-        
-        /// <summary>
-        /// Get the shortcutMessage source
-        /// </summary>
-        private string GetShortcutMessageSource(ShortcutMessage shortcutMessage)
-        {
-            switch (shortcutMessage.Trigger)
-            {
-                case ShortcutTriggerType.Hotkey:
-                    return "Keyboard";
-                case ShortcutTriggerType.Barcode:
-                    return "Barcode";
-                default:
-                    return shortcutMessage.Sender.GetType().ToString();
-            }
-        }
-        
+                
         /// <summary>
         /// Get the shortcutMessage action
         /// </summary>

@@ -208,6 +208,7 @@
             this.Name = "OptionPageShortcuts";
             this.Size = new System.Drawing.Size(550, 300);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.HandleDestroyed += OnHandleDestroyed;
             this.ResumeLayout(false);
             this.PerformLayout();
 

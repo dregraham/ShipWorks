@@ -173,13 +173,14 @@
     <Compile Include="ScannerServicePipelines\DisableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
-    <Compile Include="BarcodeKeypressPipelineTest.cs" />
+    <Compile Include="VirtualKeyboardPipelineTest.cs" />
     <Compile Include="ShortcutMessageIndicatorPipelineTest.cs" />
     <Compile Include="ShortcutMessageTelemetryPipelineTest.cs" />
     <Compile Include="SingleScanConfirmationServiceTest.cs" />
     <Compile Include="SingleScanOrderConfirmationServiceTest.cs" />
     <Compile Include="SingleScanOrderShortcutTest.cs" />
     <Compile Include="SingleScanShipmentConfirmationServiceTest.cs" />
+    <Compile Include="ToggleAutoPrintPipelineTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

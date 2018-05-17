@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Interapptive.Shared.Win32.Native;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -27,7 +26,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Constructor to use when you have a shortcut entity
         /// </summary>
-        public KeyboardShortcutData(ShortcutEntity shortcutEntity)
+        public KeyboardShortcutData(IShortcutEntity shortcutEntity)
         {
             Command = shortcutEntity?.Action;
             ActionKey = shortcutEntity?.VirtualKey;

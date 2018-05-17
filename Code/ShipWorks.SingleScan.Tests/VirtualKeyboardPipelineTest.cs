@@ -11,14 +11,13 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    public class BarcodeKeypressPipelineTest
+    public class VirtualKeyboardPipelineTest
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
@@ -30,7 +29,7 @@ namespace ShipWorks.SingleScan.Tests
 
         private readonly ScanMessageBroker scanMessageBroker = new ScanMessageBroker(null, null);
 
-        public BarcodeKeypressPipelineTest()
+        public VirtualKeyboardPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 

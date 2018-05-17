@@ -50,6 +50,12 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Simulates an Enter key press
         /// </summary>
         [Description("Press Enter Key")]
-        Enter = 6
+        Enter = 6,
+        
+        /// <summary>
+        /// Toggles auto print on/off
+        /// </summary>
+        [Description("Toggle Single Scan Auto Print")]
+        ToggleAutoPrint = 7
     }
 }
