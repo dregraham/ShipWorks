@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -156,12 +157,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 // Log the request
                 ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Overstock, logAction);
 
-                string logMsg = $"{request.Resource}{Environment.NewLine}";
-                foreach (var parameter in request.Parameters)
-                {
-                    logMsg += $"{parameter.Name}:{parameter.Value}{Environment.NewLine}";
-                }
-                logger.LogRequest(logMsg);
+                LogRequest(request, logger);
 
                 IRestResponse<XDocument> restResponse = await restClientFactory.Create(store).ExecuteTaskAsync<XDocument>(request).ConfigureAwait(false);
                 requestResult = restResponse.Data;
@@ -196,6 +192,21 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 log.Error("A Exception occurred during MakeRequest.", ex);
                 throw new OverstockException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Log the request
+        /// </summary>
+        private static void LogRequest<TRestRequest>(TRestRequest request, ApiLogEntry logger) where TRestRequest : IRestRequest
+        {
+            var builder = new StringBuilder($"{request.Resource}{Environment.NewLine}");
+
+            foreach (var parameter in request.Parameters)
+            {
+                builder.Append($"{parameter.Name}:{parameter.Value}{Environment.NewLine}");
+            }
+
+            logger.LogRequest(builder.ToString());
         }
 
         /// <summary>
