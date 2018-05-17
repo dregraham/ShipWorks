@@ -190,8 +190,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
                 log.Error("A Exception occurred during MakeRequest.", ex);
                 throw new OverstockException(ex.Message, ex);
             }
-
-            return requestResult;
         }
 
         /// <summary>
