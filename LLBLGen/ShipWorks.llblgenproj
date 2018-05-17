@@ -1694,6 +1694,7 @@
         <Fields>
           <Field Name="MagentoTrackingEmails" Type="bool" FieldIndex="0" />
           <Field Name="MagentoVersion" Type="int" FieldIndex="1" />
+          <Field Name="UpdateSplitOrderOnlineStatus" Type="bool" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="MarketplaceAdvisorOrder" ObjectID="dbefd1f4-5a4e-437d-9896-558b89937528" InheritanceType="2">
@@ -4219,7 +4220,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-30T14:49:25.0589982Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-02T15:41:38.5472706Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4588,10 +4589,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6716,6 +6717,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="MagentoTrackingEmails" Ordinal="2" DbType="2" />
                     <Field Name="MagentoVersion" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="UpdateSplitOrderOnlineStatus" Ordinal="4" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="MarketplaceAdvisorOrder">
@@ -7144,9 +7146,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -11745,6 +11747,7 @@
             <FieldMapping FieldName="MagentoTrackingEmails" TargetFieldName="MagentoTrackingEmails" />
             <FieldMapping FieldName="MagentoVersion" TargetFieldName="MagentoVersion" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="UpdateSplitOrderOnlineStatus" TargetFieldName="UpdateSplitOrderOnlineStatus" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":MarketplaceAdvisorOrder" TargetName="ShipWorksLocal:dbo:MarketplaceAdvisorOrder">

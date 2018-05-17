@@ -38,6 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             MagentoTrackingEmails = source.MagentoTrackingEmails;
             MagentoVersion = source.MagentoVersion;
+            UpdateSplitOrderOnlineStatus = source.UpdateSplitOrderOnlineStatus;
             
             
             
@@ -58,6 +59,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 MagentoVersion { get; }
+        /// <summary> The UpdateSplitOrderOnlineStatus property of the Entity MagentoStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "MagentoStore"."UpdateSplitOrderOnlineStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean UpdateSplitOrderOnlineStatus { get; }
         
         
         

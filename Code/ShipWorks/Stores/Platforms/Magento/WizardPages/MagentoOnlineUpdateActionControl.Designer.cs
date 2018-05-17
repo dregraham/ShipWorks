@@ -43,9 +43,9 @@
             this.shipmentUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.shipmentUpdate.Location = new System.Drawing.Point(12, 8);
             this.shipmentUpdate.Name = "shipmentUpdate";
-            this.shipmentUpdate.Size = new System.Drawing.Size(397, 17);
+            this.shipmentUpdate.Size = new System.Drawing.Size(368, 17);
             this.shipmentUpdate.TabIndex = 2;
-            this.shipmentUpdate.Text = "Mark and the order as Completed in Magento and upload the shipment details";
+            this.shipmentUpdate.Text = "Mark the order as complete in Magento and upload the shipment details";
             this.shipmentUpdate.UseVisualStyleBackColor = true;
             this.shipmentUpdate.CheckedChanged += new System.EventHandler(this.OnChangeTaskEnabled);
             // 
