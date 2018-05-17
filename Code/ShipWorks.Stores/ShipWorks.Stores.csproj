@@ -543,6 +543,7 @@
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\ActionComments.cs" />
+    <Compile Include="Platforms\Overstock\CoreExtensions\Actions\OverstockShipmentUploadTask.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockDataAccess.cs" />
     <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\IUserInteraction.cs" />

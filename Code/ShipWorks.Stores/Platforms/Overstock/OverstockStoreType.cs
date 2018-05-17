@@ -6,6 +6,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Overstock.CoreExtensions.Actions;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Overstock
@@ -120,5 +122,11 @@ namespace ShipWorks.Stores.Platforms.Overstock
             outline.AddElement("Channel", () => order.Value.SalesChannelName);
             outline.AddElement("SOFS Created Date", () => order.Value.SofsCreatedDate);
         }
+
+        /// <summary>
+        /// Creates the add store wizard online update action control for Overstock
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new OnlineUpdateShipmentUpdateActionControl(typeof(OverstockShipmentUploadTask));
     }
 }

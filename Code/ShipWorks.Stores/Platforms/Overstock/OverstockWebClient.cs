@@ -84,9 +84,9 @@ namespace ShipWorks.Stores.Platforms.Overstock
             try
             {
                 // Create a request for getting orders
-                RestRequest request = new RestRequest(endpoints.GetUploadShipmentResource());
+                RestRequest request = new RestRequest(endpoints.GetUploadShipmentResource(), Method.POST);
 
-                request.AddXmlBody(shipmentXml.ToString());
+                request.AddParameter("application/xml", shipmentXml.ToString(), ParameterType.RequestBody);
 
                 await MakeRequest(request, store, "UploadShipmentDetails").ConfigureAwait(false);
             }
@@ -173,10 +173,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
 
                 requestResult = XDocument.Parse(xml);
 
-                if (request.Method == Method.PUT || request.Method == Method.POST)
-                {
-                    requestResult = (XDocument) restResponse;
-                }
+                return requestResult;
             }
             catch (NotSupportedException ex)
             {
