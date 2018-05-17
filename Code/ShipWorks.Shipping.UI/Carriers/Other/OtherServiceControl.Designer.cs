@@ -1,4 +1,5 @@
-﻿namespace ShipWorks.Shipping.Carriers.Other
+﻿
+namespace ShipWorks.Shipping.Carriers.Other
 {
     partial class OtherServiceControl
     {
@@ -72,6 +73,7 @@
             //
             this.sectionReturns.Location = new System.Drawing.Point(3, 314);
             this.sectionReturns.Size = new System.Drawing.Size(398, 24);
+            this.sectionReturns.TabIndex = 99;
 
             this.sectionLabelOptions.Size = new System.Drawing.Size(398, 24);
             this.sectionLabelOptions.Visible = false;
