@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using ShipWorks.Actions;
@@ -19,8 +18,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "OdbcShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class OdbcShipmentUploadTask : StoreInstanceTaskBase
     {
-        private const long MaxBatchSize = 1000;
-
         /// <summary>
         /// Gets the type of the input entity.
         /// </summary>
@@ -66,22 +63,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
-
-            // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
-
-            // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-            if (context.CanPostpone && postponedKeys.Count < MaxBatchSize)
-            {
-                context.Postpone(inputKeys);
-            }
-            else
-            {
-                context.ConsumingPostponed();
-
-                // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
-            }
+        
+            // Upload the details, first starting with all the postponed input, plus the current input
+            await UpdloadShipmentDetails(store, inputKeys).ConfigureAwait(false);
         }
 
         /// <summary>
