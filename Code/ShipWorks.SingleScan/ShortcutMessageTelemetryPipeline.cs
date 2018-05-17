@@ -57,7 +57,9 @@ namespace ShipWorks.SingleScan
                             m.AppliesTo(KeyboardShortcutCommand.Enter) ||
                             m.AppliesTo(KeyboardShortcutCommand.Tab) ||
                             m.AppliesTo(KeyboardShortcutCommand.Escape) ||
-                            m.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
+                            m.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint) ||
+                            m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch) ||
+                            m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .Subscribe(CollectTelemetryWithoutResult),
 
             messenger.OfType<ShortcutMessage>()

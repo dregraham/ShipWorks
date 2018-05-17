@@ -58,5 +58,15 @@ namespace ShipWorks.ApplicationCore
         ///  on the thread that the control's underlying handle was created on.
         /// </summary>
         IAsyncResult BeginInvoke(Delegate method, params object[] args);
+
+        /// <summary>
+        /// Focus the searchbox
+        /// </summary>
+        void FocusSearch();
+
+        /// <summary>
+        /// Clear the searchbox text
+        /// </summary>
+        void ClearSearch();
     }
 }

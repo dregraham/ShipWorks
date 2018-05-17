@@ -70,73 +70,6 @@ namespace ShipWorks.Tests.Templates.Printing
         }
 
         [Fact]
-        public void PrintAsync_SendsTelemetryEvent_WhenNotCancelled()
-        {
-            var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
-
-            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "shortcut barcode", "abcd") });
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
-
-            trackedEventFunc.Verify(f => f("Shortcuts.Print"), Times.Once);
-        }
-        
-        [Fact]
-        public void PrintAsync_SendsNoTelemetryEvent_WhenCancelled()
-        {
-            var trackedEventFunc = mock.MockFunc<string, ITrackedEvent>();
-
-            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "shortcut barcode", "abcd") });
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, true, null));
-
-            trackedEventFunc.Verify(f => f(AnyString), Times.Never);
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty(AnyString, AnyString), Times.Never);
-        }
-
-        [Fact]
-        public void PrintAsync_SendsCorrectBarcodeCount()
-        {
-            BarcodePage page = new BarcodePage("Some Test Data", Enumerable.Repeat(new PrintableBarcode("shortcut name", "", "abcd"), 25));
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
-
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
-        }
-
-        [Fact]
-        public void PrintAsync_SendsCorrectHotkeyCount()
-        {
-            BarcodePage page = new BarcodePage("Some Test Data", Enumerable.Repeat(new PrintableBarcode("shortcut name", "", "abcd"), 25));
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
-
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Barcodes.Count", "0"), Times.Once);
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Hotkeys.Count", "25"), Times.Once);
-        }
-        
-        [Fact]
-        public void PrintAsync_SendsTelemetrySuccessEvent_WhenSuccesfull()
-        {
-            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "", "abcd") });
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, null, false, null));
-
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Success"), Times.Once);
-        }
-
-        [Fact]
-        public void PrintAsync_SendsTelemetryFailedEvent_WhenUnsuccessfull()
-        {
-            BarcodePage page = new BarcodePage("Some Test Data", new[] { new PrintableBarcode("shortcut name", "", "abcd") });
-
-            TestTelemetry(new[] { page }, new PrintActionCompletedEventArgs(PrintAction.Print, new Exception(), false, null));
-
-            mock.Mock<ITrackedEvent>().Verify(t => t.AddProperty("Shortcuts.Print.Result", "Failed"), Times.Once);
-        }
-
-        [Fact]
         public void PrintAsync_PrintCompletedIsInvoked()
         {
             var printJobFactory = mock.Mock<IPrintJobFactory>();
@@ -174,21 +107,6 @@ namespace ShipWorks.Tests.Templates.Printing
             testObject.PreviewAsync(new Form());
 
             Assert.True(eventWasDispatched);
-        }
-
-        private void TestTelemetry(IEnumerable<BarcodePage> barcodePages,
-            PrintActionCompletedEventArgs printActionCompletedEventArgs)
-        {
-            var printJobFactory = mock.Mock<IPrintJobFactory>();
-            var printJob = mock.Mock<IPrintJob>();
-            printJob.Setup(p => p.PrintAsync())
-                .Raises(p => p.PrintCompleted += null, printActionCompletedEventArgs);
-
-            printJobFactory.Setup(p => p.CreatePrintJob(It.IsAny<IList<TemplateResult>>())).Returns(printJob);
-
-            var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), barcodePages));
-
-            testObject.PrintAsync();
         }
 
         public void Dispose()
