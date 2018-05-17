@@ -160,6 +160,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
             }
 
             order.OrderDate = order.OnlineLastModified;
+            order.OnlineStatus = orderElement.GetValue("status");
             order.RequestedShipping = orderElement.Element("shippingSpecifications")?.Descendants("shippingServiceLevel")?.First().GetValue("code");
 
             // Load Address info
@@ -202,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         private static void LoadAddressInfo(OrderEntity order, XElement orderElement)
         {
             LoadAddress(order.ShipPerson, orderElement.Element("shipToAddress"));
-            LoadAddress(order.BillPerson, orderElement.Element("returnAddress"));
+            LoadAddress(order.BillPerson, orderElement.Element("shipToAddress"));
         }
 
         /// <summary>

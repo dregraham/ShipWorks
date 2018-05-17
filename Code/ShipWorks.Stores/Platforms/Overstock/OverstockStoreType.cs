@@ -90,6 +90,12 @@ namespace ShipWorks.Stores.Platforms.Overstock
         protected override string InternalLicenseIdentifier => overstockStore.Username;
 
         /// <summary>
+        /// Do we support online columns
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column) =>
+            column == OnlineGridColumnSupport.OnlineStatus;
+
+        /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
