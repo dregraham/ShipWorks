@@ -30,14 +30,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         // Shortcuts reserved for future use
         private readonly KeyboardShortcutData[] reservedShortcuts = 
         {
-            new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.D, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.F, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.O, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
-            new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift),
+            new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.D, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.F, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.O, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.P, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
+            new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null)
         };
 
         /// <summary>
@@ -157,19 +157,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
 
             for (VirtualKeys key = VirtualKeys.F5; key <= VirtualKeys.F9; key++)
             {
-                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.None, null));
             }
 
             for (VirtualKeys key = VirtualKeys.N1; key <= VirtualKeys.N9; key++)
             {
-                acceptedShortcuts.Add(
-                    new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null));
             }
 
             for (VirtualKeys key = VirtualKeys.A; key <= VirtualKeys.Z; key++)
             {
-                acceptedShortcuts.Add(
-                    new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift));
+                acceptedShortcuts.Add(new KeyboardShortcutData(null, key, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null));
             }
 
             return acceptedShortcuts;
@@ -201,6 +199,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                     return tableSynchronizer.EntityCollection;
                 }
             }
+        }
+        
+        /// <summary>
+        /// Get tooltip text for tooltip
+        /// </summary>
+        public (string Title, string Description) GetCreateLabelToolTipText()
+        {
+            string hotKey = new KeyboardShortcutData(Shortcuts.FirstOrDefault(s =>
+                                s.Action == KeyboardShortcutCommand.CreateLabel))?.ShortcutText ?? "No Shortcut Defined";
+            
+            return ($"Create Label ({hotKey})", "Create a shipping label for the selected order.");
         }
     }
 }

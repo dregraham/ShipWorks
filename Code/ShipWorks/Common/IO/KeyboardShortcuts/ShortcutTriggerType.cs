@@ -9,7 +9,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum ShortcutTriggerType
     {
-        [Description("Hotkey")]
+        [Description("Keyboard")]
         Hotkey = 0,
 
         [Description("Barcode")]

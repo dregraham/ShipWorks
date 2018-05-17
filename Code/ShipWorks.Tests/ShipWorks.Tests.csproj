@@ -617,7 +617,9 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
+    <Compile Include="Templates\Printing\BarcodePageTest.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJobTest.cs" />
+    <Compile Include="Templates\Printing\PrintableBarcodeTest.cs" />
     <Compile Include="Templates\Printing\PrintJobFactoryTest.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />

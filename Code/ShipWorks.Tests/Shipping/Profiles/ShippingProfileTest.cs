@@ -285,7 +285,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
             ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            testObject.ChangeShortcut(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.A, KeyboardShortcutModifiers.Alt), "abcd");
+            testObject.ChangeShortcut(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null), "abcd");
 
             Assert.Equal("abcd", testObject.Shortcut.Barcode);
             Assert.Equal(VirtualKeys.A, testObject.Shortcut.VirtualKey);
@@ -299,7 +299,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
             ShippingProfile testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            testObject.ChangeShortcut(new KeyboardShortcutData(null, null, null), "abcd");
+            testObject.ChangeShortcut(new KeyboardShortcutData(null, null, null, null), "abcd");
 
             Assert.Equal("abcd", testObject.Shortcut.Barcode);
             Assert.Equal(null, testObject.Shortcut.VirtualKey);

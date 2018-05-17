@@ -18,10 +18,5 @@ namespace ShipWorks.Templates.Printing
         /// Create a barcode print job for all barcodes
         /// </summary>
         IPrintJob CreateBarcodePrintJob();
-
-        /// <summary>
-        /// Create a print job with barcodes from the given shipping profiles
-        /// </summary>
-        IPrintJob CreateBarcodePrintJob(IEnumerable<IShippingProfile> shippingProfiles);
     }
 }

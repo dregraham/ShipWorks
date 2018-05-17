@@ -14,12 +14,13 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
-using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -85,7 +86,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShippingViewModelFactory shippingViewModelFactory,
             Func<Type, ILog> logFactory,
             Func<ISecurityContext> securityContextRetriever, 
-            ShipmentTypeProvider shipmentTypeProvider) : this()
+            ShipmentTypeProvider shipmentTypeProvider,
+            IShortcutManager shortcutManager) : this()
         {
             this.pipelines = pipelines;
             this.shippingManager = shippingManager;
@@ -110,6 +112,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             CreateLabelCommand = new RelayCommand(CreateLabel);
             TrackShipmentCommand = new RelayCommand(TrackShipment);
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
+
+            (string Title, string Description) toolTipText = shortcutManager.GetCreateLabelToolTipText();
+            CreateLabelTooltipTitle = toolTipText.Title;
+            CreateLabelTooltipDescription = toolTipText.Description;
         }
 
         /// <summary>
@@ -139,6 +145,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CopyTrackingNumberToClipboardCommand { get; }
+        
+        /// <summary>
+        /// Title for Tooltip for creating labels
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CreateLabelTooltipTitle { get; }
+        
+        /// <summary>
+        /// Description for Tooltip for creating labels
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CreateLabelTooltipDescription { get; }
 
         /// <summary>
         /// Current shipment adapter

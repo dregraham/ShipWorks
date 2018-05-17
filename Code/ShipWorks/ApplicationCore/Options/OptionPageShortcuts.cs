@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Metrics;
@@ -7,10 +11,13 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
@@ -23,15 +30,17 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPageShortcuts : OptionPageBase
     {
         private readonly IScannerConfigurationRepository scannerRepo;
-        private readonly IUserSession userSession;
+        private IUserSession userSession;
         private readonly IMessenger messenger;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly UserSettingsEntity settings;
+        private UserSettingsEntity settings;
         private readonly IWin32Window owner;
+        private readonly ILifetimeScope scope;
         private SingleScanSettings singleScanSettingsOnLoad;
-        private IPrintJobFactory pringJobFactory;
+        private IPrintJobFactory printJobFactory;
+        private IDisposable singleScanShortcutMessage;
 
         /// <summary>
         /// Constructor
@@ -44,10 +53,11 @@ namespace ShipWorks.ApplicationCore.Options
             sqlAdapterFactory = scope.Resolve<ISqlAdapterFactory>();
             userSession = scope.Resolve<IUserSession>();
             messenger = scope.Resolve<IMessenger>();
-            pringJobFactory = scope.Resolve<IPrintJobFactory>();
+            printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
-            settings = userSession.User.Settings;
+            settings = userSession?.User?.Settings;
             this.owner = owner;
+            this.scope = scope;
         }
 
         /// <summary>
@@ -89,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Options
                 UpdateSingleScanTelemetry(settings);
             }
         }
-
+        
         /// <summary>
         /// Load settings and populate controls
         /// </summary>
@@ -97,6 +107,16 @@ namespace ShipWorks.ApplicationCore.Options
         {
             if (userSession.IsLoggedOn)
             {
+                singleScanShortcutMessage?.Dispose();
+
+                // Listen for the single scan setting changing so we can reload it
+                // wait 250ms so that the pipeline that is making the change has time to make it
+                singleScanShortcutMessage = messenger.OfType<ShortcutMessage>()
+                    .Where(s => s.AppliesTo(KeyboardShortcutCommand.ToggleAutoPrint))
+                    .Delay(TimeSpan.FromMilliseconds(250))
+                    .ObserveOn(this)
+                    .Subscribe(ReloadSingleScanSetting);
+
                 displayShortcutIndicator.Checked =
                     currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator);
 
@@ -107,6 +127,54 @@ namespace ShipWorks.ApplicationCore.Options
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
+                UpdateToolTipHotkey();
+            }
+            else
+            {
+                Controls.Clear();
+
+                Label label = new Label();
+                label.Text = "You are not logged on.";
+                label.Location = new System.Drawing.Point(10, 10);
+                label.AutoSize = true;
+                label.Font = new Font(Font, FontStyle.Bold);
+                Controls.Add(label);
+            }
+        }
+
+        /// <summary>
+        /// Update tool tips hotkey text
+        /// </summary>
+        private void UpdateToolTipHotkey()
+        {
+            IShortcutEntity toggleAutoPrintShortcut = scope.Resolve<IShortcutManager>()
+                .Shortcuts.FirstOrDefault(s => s.Action == KeyboardShortcutCommand.ToggleAutoPrint);
+            if (toggleAutoPrintShortcut != null)
+            {
+                infoTipAutoPrint.Title = $"Automatically Print Labels on Barcode Scan Search ({new KeyboardShortcutData(toggleAutoPrintShortcut).ShortcutText})";
+            }
+        }
+		
+		/// <summary>
+        /// Unsubscribe from shortcut messages
+        /// </summary>
+        private void OnHandleDestroyed(object sender, EventArgs e)
+        {
+            singleScanShortcutMessage?.Dispose();
+        }
+
+        /// <summary>
+        /// Toggle the single scan setting
+        /// </summary>
+        private void ReloadSingleScanSetting(ShortcutMessage message)
+        {
+            // at this point we know the user settings have changed so we need a fresh copy
+            // to save our changes to otherwise we will get a concurrency error
+            userSession = scope.Resolve<IUserSession>();
+            if (userSession.IsLoggedOn)
+            {
+                settings = userSession.User.Settings;
+                autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
             }
         }
 
@@ -187,7 +255,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnClickPrintShortcuts(object sender, EventArgs e)
         {
-            pringJobFactory.CreateBarcodePrintJob().PreviewAsync((Form) owner);
+            printJobFactory.CreateBarcodePrintJob().PreviewAsync((Form) owner);
         }
     }
 }

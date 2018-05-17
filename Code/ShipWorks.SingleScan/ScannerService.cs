@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.SingleScan.ScannerServicePipelines;
 using ShipWorks.Users;
@@ -22,7 +19,6 @@ namespace ShipWorks.SingleScan
     {
         private readonly IUser32Devices user32Devices;
         private readonly IMainForm mainForm;
-        private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
         private readonly IDisposable subscriptions;
@@ -41,15 +37,14 @@ namespace ShipWorks.SingleScan
         /// </summary>
         /// <remarks>This class has too many dependencies. We could move the registrar dependency to the
         /// filters themselves.</remarks>
-        [NDependIgnoreTooManyParams]
         public ScannerService(IUser32Devices user32Devices,
-            IMainForm mainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
-            IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession,
+            IMainForm mainForm,
+            IScannerMessageFilterFactory scannerMessageFilterFactory,
+            IUserSession userSession,
             IEnumerable<IScannerServicePipeline> pipelines)
         {
             this.userSession = userSession;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
-            this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             this.user32Devices = user32Devices;
             this.mainForm = mainForm;
 
@@ -66,7 +61,7 @@ namespace ShipWorks.SingleScan
                 return;
             }
 
-            windowsMessageFilterRegistrar.RemoveMessageFilter(scannerMessageFilter);
+            scannerMessageFilter.Disable();
             scannerMessageFilter = null;
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
@@ -89,7 +84,7 @@ namespace ShipWorks.SingleScan
             }
 
             scannerMessageFilter = scannerMessageFilterFactory.CreateRegisteredScannerInputHandler();
-            windowsMessageFilterRegistrar.AddMessageFilter(scannerMessageFilter);
+            scannerMessageFilter.Enable();
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {

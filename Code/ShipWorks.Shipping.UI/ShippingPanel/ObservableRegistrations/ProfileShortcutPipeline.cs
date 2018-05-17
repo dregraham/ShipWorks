@@ -12,7 +12,7 @@
  namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
  {
      /// <summary>
-     /// Listens for applyprofile keyboard shortcuts and sends an ApplyProfileMessage when it receives one
+     /// Listens for applyprofile shortcuts and sends an ApplyProfileMessage when it receives one
      /// </summary>
      public class ProfileShortcutPipeline : IShippingPanelTransientPipeline
      {
@@ -41,7 +41,7 @@
                  .Where(m => viewModel.Shipment != null)
                  .Where(m => !viewModel.Shipment.Processed)
                  .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                 .Where(_ => !mainForm.AdditionalFormsOpen())
+                 .Where(_ => !mainForm.AdditionalFormsOpen() && mainForm.IsShippingPanelOpen())
                  .Subscribe(m =>
                  {
                      // This causes the shipping panel to save if there are unsaved changes
