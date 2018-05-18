@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wraps access to the Endicia API
     /// </summary>
-    public class EndiciaApiClient
+    public class EndiciaApiClient : IEndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
@@ -781,7 +781,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the EndiciaReseller value for the given shipment and account
         /// </summary>
-        private static EndiciaReseller GetReseller(EndiciaAccountEntity account, ShipmentEntity shipment = null)
+        private static EndiciaReseller GetReseller(IEndiciaAccountEntity account, ShipmentEntity shipment = null)
         {
             EndiciaReseller endiciaReseller = (EndiciaReseller) account.EndiciaReseller;
 
@@ -1608,6 +1608,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShippingException));
+            }
+        }
+
+        /// <summary>
+        /// Get a scan form for the given shipments
+        /// </summary>
+        public SCANResponse GetScanForm(IEndiciaAccountEntity account, IEnumerable<IShipmentEntity> shipments)
+        {
+            try
+            {
+                EndiciaReseller reseller = GetReseller(account);
+
+                using (EwsLabelService service = CreateWebService("Refund", reseller))
+                {
+                    SCANRequest request = new SCANRequest()
+                    {
+                        RequesterID = GetInterapptivePartnerID(reseller),
+                        RequestID = Guid.NewGuid().ToString("N"),
+                        CertifiedIntermediary = new CertifiedIntermediary()
+                        {
+                            AccountID = account.AccountNumber,
+                            PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                        },
+                        PicNumbers = shipments.Select(s => s.TrackingNumber).ToArray()
+                    };
+
+                    return service.GetSCAN(request);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
             }
         }
     }
