@@ -76,11 +76,13 @@
             // 
             this.insuranceControl.Location = new System.Drawing.Point(21, 385);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
+            this.insuranceControl.TabIndex = 60;
             // 
             // sectionExpress
             // 
             this.sectionExpress.Location = new System.Drawing.Point(3, 533);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
+            this.sectionExpress.TabIndex = 3;
             // 
             // sectionRecipient
             // 
@@ -114,6 +116,7 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 562);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
+            this.sectionReturns.TabIndex = 4;
             // 
             // sectionShipment
             // 
@@ -135,11 +138,13 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.pictureBoxMemoWarning);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(378, 465);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 591);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
+            this.sectionLabelOptions.TabIndex = 5;
             // 
             // sectionFrom
             // 
@@ -170,7 +175,7 @@
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(371, 488);
-            this.originControl.TabIndex = 0;
+            this.originControl.TabIndex = 5;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // panelTop
@@ -186,7 +191,7 @@
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(371, 73);
-            this.panelTop.TabIndex = 5;
+            this.panelTop.TabIndex = 3;
             // 
             // rateShop
             // 
@@ -195,7 +200,7 @@
             this.rateShop.Location = new System.Drawing.Point(79, 29);
             this.rateShop.Name = "rateShop";
             this.rateShop.Size = new System.Drawing.Size(341, 17);
-            this.rateShop.TabIndex = 6;
+            this.rateShop.TabIndex = 0;
             this.rateShop.Text = "Automatically use the USPS account with the least expensive rate";
             this.rateShop.UseVisualStyleBackColor = false;
             this.rateShop.CheckedChanged += new System.EventHandler(this.OnRateShopChanged);
@@ -210,7 +215,7 @@
             this.linkManageUspsAccounts.Location = new System.Drawing.Point(300, 51);
             this.linkManageUspsAccounts.Name = "linkManageUspsAccounts";
             this.linkManageUspsAccounts.Size = new System.Drawing.Size(57, 13);
-            this.linkManageUspsAccounts.TabIndex = 5;
+            this.linkManageUspsAccounts.TabIndex = 2;
             this.linkManageUspsAccounts.Text = "Manage...";
             this.linkManageUspsAccounts.Click += new System.EventHandler(this.OnManageUspsAccounts);
             // 
@@ -244,7 +249,7 @@
             this.uspsAccount.Name = "uspsAccount";
             this.uspsAccount.PromptText = "(Multiple Values)";
             this.uspsAccount.Size = new System.Drawing.Size(215, 21);
-            this.uspsAccount.TabIndex = 3;
+            this.uspsAccount.TabIndex = 1;
             this.uspsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // hidePostalLabel
@@ -374,7 +379,7 @@
             this.noPostage.Location = new System.Drawing.Point(90, 367);
             this.noPostage.Name = "noPostage";
             this.noPostage.Size = new System.Drawing.Size(214, 17);
-            this.noPostage.TabIndex = 60;
+            this.noPostage.TabIndex = 50;
             this.noPostage.Text = "Generate label that is not postage-paid";
             this.noPostage.UseVisualStyleBackColor = false;
             this.noPostage.CheckedChanged += new System.EventHandler(this.OnNoPostageChanged);

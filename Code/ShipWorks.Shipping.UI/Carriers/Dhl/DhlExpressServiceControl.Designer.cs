@@ -114,6 +114,7 @@
             this.sectionLabelOptions.Collapsed = false;
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
             this.sectionLabelOptions.Size = new System.Drawing.Size(389, 62);
+            this.sectionLabelOptions.TabIndex = 8;
             // 
             // cutoffDateDisplay
             // 
@@ -146,7 +147,7 @@
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
             this.sectionFrom.Size = new System.Drawing.Size(389, 24);
-            this.sectionFrom.TabIndex = 4;
+            this.sectionFrom.TabIndex = 0;
             // 
             // panelTop
             // 
@@ -159,7 +160,7 @@
             this.panelTop.Location = new System.Drawing.Point(1, 3);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(383, 50);
-            this.panelTop.TabIndex = 3;
+            this.panelTop.TabIndex = 2;
             // 
             // label2
             // 
@@ -204,7 +205,7 @@
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(383, 430);
-            this.originControl.TabIndex = 2;
+            this.originControl.TabIndex = 3;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // service
@@ -274,7 +275,7 @@
             this.saturdayDelivery.Location = new System.Drawing.Point(108, 14);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
-            this.saturdayDelivery.TabIndex = 8;
+            this.saturdayDelivery.TabIndex = 5;
             this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = false;
             // 
@@ -295,7 +296,7 @@
             this.dutyPaid.Location = new System.Drawing.Point(108, 37);
             this.dutyPaid.Name = "dutyPaid";
             this.dutyPaid.Size = new System.Drawing.Size(114, 17);
-            this.dutyPaid.TabIndex = 5;
+            this.dutyPaid.TabIndex = 7;
             this.dutyPaid.Text = "Delivery Duty Paid";
             this.dutyPaid.UseVisualStyleBackColor = false;
             // 
@@ -316,7 +317,7 @@
             this.labelNonMachinable.Location = new System.Drawing.Point(15, 61);
             this.labelNonMachinable.Name = "labelNonMachinable";
             this.labelNonMachinable.Size = new System.Drawing.Size(87, 13);
-            this.labelNonMachinable.TabIndex = 7;
+            this.labelNonMachinable.TabIndex = 8;
             this.labelNonMachinable.Text = "Non-Machinable:";
             // 
             // nonMachinable
@@ -337,7 +338,7 @@
             this.packageControl.Location = new System.Drawing.Point(2, 67);
             this.packageControl.Name = "packageControl";
             this.packageControl.Size = new System.Drawing.Size(412, 206);
-            this.packageControl.TabIndex = 4;
+            this.packageControl.TabIndex = 5;
             this.packageControl.Resize += new System.EventHandler(this.OnPackageControlSizeChanged);
             // 
             // DhlExpressServiceControl
