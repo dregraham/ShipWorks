@@ -2,6 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Settings;
@@ -9,15 +10,26 @@ using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
+    /// <summary>
+    /// Settings control for Channel Advisor stores
+    /// </summary>
     public partial class ChannelAdvisorSettingsControl : StoreSettingsControlBase
     {
+        private readonly bool showAmazonSettings;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelAdvisorSettingsControl()
         {
             InitializeComponent();
 
-            // Show Amazon control if the Amazon ctrl is configured.
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            // Show Amazon control if the Amazon carrier is configured. We need to save this to a variable
+            // because we need it later on and we can't rely on whether the Amazon control is visible because
+            // it won't be until the layout is finished.
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
+            showAmazonSettings = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            amazon.Visible = showAmazonSettings;
             daysBack.MaxDaysBack = 7;
         }
 
@@ -56,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 amazon.SaveToEntity(caStore);
                 daysBack.SaveToEntity(caStore);
             }
-            catch (Exception ex) when(ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonShippingException))
+            catch (Exception ex) when (ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonShippingException))
             {
                 MessageHelper.ShowError(this, ex.Message);
                 return false;
@@ -65,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Called when Attributes Controle is resized
+        /// Called when Attributes Control is resized
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
@@ -74,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Height = attributes.Height + consolidator.Height + daysBack.Height + 30;
 
             // Adjust height if the Amazon control is visible
-            if (amazon.Visible)
+            if (showAmazonSettings)
             {
                 Height += amazon.Height;
             }
