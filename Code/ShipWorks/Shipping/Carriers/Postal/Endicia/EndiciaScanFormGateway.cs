@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(scanResponse.SCANForm)))
             {
                 IPdfDocument doc = pdfDocumentFactory.Create(PdfDocumentType.BlackAndWhite);
-                List<byte[]> scanFormPages = doc.SavePages(stream, (MemoryStream arg1, int arg2) => { return arg1.ToArray(); }).ToList();
+                List<byte[]> scanFormPages = doc.SavePages(stream, (MemoryStream imageStream, int index) => { return imageStream.ToArray(); }).ToList();
 
                 // Notify the batch of the new scan form
                 scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, scanFormPages);
