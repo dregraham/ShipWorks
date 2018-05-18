@@ -40,6 +40,9 @@ namespace ShipWorks.Shipping.Carriers.Endicia
             builder.RegisterType<EndiciaRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Endicia)
                 .AsSelf();
+
+            builder.RegisterType<EndiciaScanFormGateway>()
+                .AsSelf();
         }
     }
 }
