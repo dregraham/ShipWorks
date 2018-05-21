@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Signup for a new Endicia account
         /// </summary>
-        void Signup(EndiciaAccountEntity account,
+        EndiciaAccountEntity Signup(EndiciaAccountEntity account,
             EndiciaAccountType endiciaAccountType,
             PersonAdapter accountAddress,
             EndiciaNewAccountCredentials accountCredentials,

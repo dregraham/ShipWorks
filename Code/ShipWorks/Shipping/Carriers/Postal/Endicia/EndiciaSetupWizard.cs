@@ -524,7 +524,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     EndiciaNewAccountCredentials credentials = new EndiciaNewAccountCredentials
                     {
                         WebPassword = internetPassword.Text,
-                        TemporaryPassPhrase = softwarePassword.Text,
+                        PassPhrase = softwarePassword.Text,
                         ChallengeQuestion = challengeQuestion.Text.Trim(),
                         ChallengeAnswer = challengeAnswer.Text.Trim()
                     };

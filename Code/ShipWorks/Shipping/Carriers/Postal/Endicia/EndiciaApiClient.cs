@@ -1643,13 +1643,253 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
             }
         }
-        public void Signup(EndiciaAccountEntity account,
+
+        public EndiciaAccountEntity Signup(EndiciaAccountEntity account,
             EndiciaAccountType accountType,
             PersonAdapter address,
             EndiciaNewAccountCredentials credentials,
             EndiciaPaymentInfo paymentInfo)
         {
+            try
+            {
+                UserSignUpRequest request = GetSignupRequest(accountType, address, credentials, paymentInfo);
+                UserSignUpResponse signupResponse = SendSignupRequest(request);
+                return ProcessUserSignupResponse(account, accountType, address, credentials, signupResponse);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
         }
 
+        /// <summary>
+        /// Sends the signup request
+        /// </summary>
+        private UserSignUpResponse SendSignupRequest(UserSignUpRequest request)
+        {
+            UserSignUpResponse userSignUpResponse;
+            using (EwsLabelService service = CreateWebService("Signup", EndiciaReseller.None))
+            {
+                userSignUpResponse = service.GetUserSignUp(request);
+            }
+
+            return userSignUpResponse;
+        }
+
+        /// <summary>
+        /// Processes the signup response
+        /// </summary>
+        private EndiciaAccountEntity ProcessUserSignupResponse(EndiciaAccountEntity account, EndiciaAccountType accountType, PersonAdapter address, EndiciaNewAccountCredentials credentials, UserSignUpResponse userSignUpResponse)
+        {
+            long confirmation = userSignUpResponse.ConfirmationNumber;
+            CheckResponseForErrors(userSignUpResponse, confirmation);
+
+            // Save the address
+            PersonAdapter.Copy(address, new PersonAdapter(account, ""));
+            account.MailingPostalCode = account.PostalCode;
+
+            // Account type and passwords
+            account.SignupConfirmation = confirmation.ToString();
+            account.WebPassword = SecureText.Encrypt(credentials.WebPassword, "Endicia");
+            account.ApiInitialPassword = SecureText.Encrypt(credentials.TemporaryPassPhrase, "Endicia");
+            account.ApiUserPassword = SecureText.Encrypt(credentials.PassPhrase, "Endicia");
+
+            account.AccountType = (int) accountType;
+            account.CreatedByShipWorks = true;
+            account.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
+
+            account.TestAccount = UseTestServer;
+            account.Description = string.Empty;
+            accountRepository.Save(account);
+
+            return account;
+        }
+
+        /// <summary>
+        /// Checks the resposne for errors. If an error is found, EndiciaException is thrown
+        /// </summary>
+        private static void CheckResponseForErrors(UserSignUpResponse userSignUpResponse, long confirmation)
+        {
+            if (confirmation == 0)
+            {
+                throw new EndiciaException("The Endicia server returned an invalid confirmation number.");
+            }
+
+            string errorMessage = userSignUpResponse.ErrorMessage;
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                if (!errorMessage.EndsWith("."))
+                {
+                    errorMessage += ".";
+                }
+
+                throw new EndiciaException(errorMessage);
+            }
+        }
+
+        /// <summary>
+        /// Gets a UserSignupRequest
+        /// </summary>
+        private UserSignUpRequest GetSignupRequest(EndiciaAccountType accountType,
+            PersonAdapter address,
+            EndiciaNewAccountCredentials credentials,
+            EndiciaPaymentInfo paymentInfo)
+        {
+            return new UserSignUpRequest()
+            {
+                RequesterID = GetInterapptivePartnerID(EndiciaReseller.None),
+                RequestID = Guid.NewGuid().ToString("N"),
+
+                AccountCredentials = new AccountCredentials()
+                {
+                    SecurityQuestion = credentials.ChallengeQuestion,
+                    SecurityAnswer = credentials.ChallengeAnswer,
+                    TemporaryPassPhrase = credentials.TemporaryPassPhrase,
+                    WebPassword = credentials.WebPassword
+                },
+                PhysicalAddress = new PhysicalPickupAddress()
+                {
+                    CompanyName = address.Company,
+                    FirstName = address.FirstName,
+                    LastName = address.LastName,
+                    Phone = address.Phone,
+                    Address = address.StreetAll,
+                    City = address.City,
+                    State = address.StateProvCode,
+                    Zip5 = address.PostalCode5,
+                    Zip4 = address.PostalCode4
+                },
+
+                FirstName = address.FirstName,
+                MiddleName = address.MiddleName,
+                LastName = address.LastName,
+                EmailAddress = address.Email,
+                PhoneNumber = address.Phone,
+                ICertify = true,
+                FaxNumber = address.Fax,
+
+                BillingType = GetBillingType(accountType),
+                PartnerID = GetInterapptivePartnerID(accountType),
+
+                CreditCard = GetCreditCard(paymentInfo),
+                CheckingAccount = GetCheckingAccount(paymentInfo),
+                PaymentDetailsDeferred = false
+            };
+        }
+
+        /// <summary>
+        /// Gets a checking account for a signup request
+        /// </summary>
+        /// <returns>Null if paymentInfo.UseCheckingForPostage is false</returns>
+        private CheckingAccount GetCheckingAccount(EndiciaPaymentInfo paymentInfo)
+        {
+            CheckingAccount checkingAccount = null;
+            if (paymentInfo.UseCheckingForPostage)
+            {
+                checkingAccount = new CheckingAccount()
+                {
+                    AccountNumber = paymentInfo.CheckingAccount,
+                    RoutingNumber = paymentInfo.CheckingRouting
+                };
+            }
+
+            return checkingAccount;
+        }
+
+        /// <summary>
+        /// Gets the CreditCard for a signup request
+        /// </summary>
+        private CreditCard GetCreditCard(EndiciaPaymentInfo paymentInfo)
+        {
+            return new CreditCard()
+            {
+                CreditCardNumber = paymentInfo.CardNumber,
+                CreditCardAddress = paymentInfo.CardBillingAddress.StreetAll,
+                CreditCardCity = paymentInfo.CardBillingAddress.City,
+                CreditCardState = paymentInfo.CardBillingAddress.StateProvCode,
+                CreditCardZip5 = paymentInfo.CardBillingAddress.PostalCode5,
+                CreditCardCountryCode = paymentInfo.CardBillingAddress.CountryCode,
+                CreditCardType = GetCreditCardType(paymentInfo.CardType),
+                CreditCardCVV = paymentInfo.CVV,
+                CreditCardMonth = GetCreditCardMonth(paymentInfo.CardExpirationMonth),
+                CreditCardYear = paymentInfo.CardExpirationYear
+            };
+        }
+
+        /// <summary>
+        /// Gets the CreditCardMonth for a signup request
+        /// </summary>
+        private CreditCardMonth GetCreditCardMonth(int numericMonth)
+        {
+            switch (numericMonth)
+            {
+                case 1:
+                    return CreditCardMonth.January;
+                case 2:
+                    return CreditCardMonth.February;
+                case 3:
+                    return CreditCardMonth.March;
+                case 4:
+                    return CreditCardMonth.April;
+                case 5:
+                    return CreditCardMonth.May;
+                case 6:
+                    return CreditCardMonth.June;
+                case 7:
+                    return CreditCardMonth.July;
+                case 8:
+                    return CreditCardMonth.August;
+                case 9:
+                    return CreditCardMonth.September;
+                case 10:
+                    return CreditCardMonth.October;
+                case 11:
+                    return CreditCardMonth.November;
+                case 12:
+                    return CreditCardMonth.December;
+                default:
+                    throw new ArgumentOutOfRangeException($"Invalid month:{numericMonth}", "numericMonth");
+            }
+        }
+
+        /// <summary>
+        /// Gets the CreditCardType for a signup request
+        /// </summary>
+        private CreditCardType GetCreditCardType(EndiciaCreditCardType cardType)
+        {
+            switch (cardType)
+            {
+                case EndiciaCreditCardType.Visa:
+                    return CreditCardType.Visa;
+                case EndiciaCreditCardType.MasterCard:
+                    return CreditCardType.Mastercard;
+                case EndiciaCreditCardType.AmericanExpress:
+                    return CreditCardType.AmericanExpress;
+                case EndiciaCreditCardType.CarteBlanche:
+                    return CreditCardType.CarteBlanche;
+                case EndiciaCreditCardType.Discover:
+                    return CreditCardType.Discover;
+                case EndiciaCreditCardType.DinersClub:
+                    return CreditCardType.DinersClub;
+                default:
+                    throw new InvalidOperationException("Invalid endicia card type: " + cardType);
+            }
+        }
+
+        /// <summary>
+        /// Gets the billing type for a signup request
+        /// </summary>
+        private string GetBillingType(EndiciaAccountType accountType)
+        {
+            switch (accountType)
+            {
+                case EndiciaAccountType.Premium:
+                    return "T8";
+                case EndiciaAccountType.Standard:
+                    return "T7";
+                default:
+                    return "TP";
+            }
+        }
     }
 }

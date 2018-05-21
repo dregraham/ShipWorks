@@ -11,9 +11,14 @@
         public string WebPassword { get; set; }
 
         /// <summary>
-        /// Softare Password
+        /// Passphrase
         /// </summary>
-        public string TemporaryPassPhrase { get; set; }
+        public string PassPhrase { get; set; }
+
+        /// <summary>
+        /// Initial Passphrase to be replaced with Passphrase
+        /// </summary>
+        public string TemporaryPassPhrase => $"{PassPhrase}_Initial";
 
         /// <summary>
         /// Challenge Question
