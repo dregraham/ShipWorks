@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// An implementation of the IScanFormGateway interface that communicates with the Endicia API
     /// for creating/obtaining SCAN forms.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class EndiciaScanFormGateway : IScanFormGateway
     {
         private readonly IPdfDocumentFactory pdfDocumentFactory;
