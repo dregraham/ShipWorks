@@ -5144,7 +5144,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExRateSelection.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExServiceType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaApiAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>

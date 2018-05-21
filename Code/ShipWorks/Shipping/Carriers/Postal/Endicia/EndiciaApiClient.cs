@@ -1710,11 +1710,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static void CheckResponseForErrors(UserSignUpResponse userSignUpResponse, long confirmation)
         {
-            if (confirmation == 0)
-            {
-                throw new EndiciaException("The Endicia server returned an invalid confirmation number.");
-            }
-
             string errorMessage = userSignUpResponse.ErrorMessage;
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
@@ -1724,6 +1719,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
 
                 throw new EndiciaException(errorMessage);
+            }
+
+            if (confirmation == 0)
+            {
+                throw new EndiciaException("The Endicia server returned an invalid confirmation number.");
             }
         }
 

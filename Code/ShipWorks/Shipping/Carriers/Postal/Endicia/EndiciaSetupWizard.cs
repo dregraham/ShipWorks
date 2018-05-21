@@ -629,15 +629,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 account.AccountNumber = accountNumber.Text.Trim();
                 account.Description = EndiciaAccountManager.GetDefaultDescription(account);
 
-                if (!account.TestAccount)
-                {
-                    // This is required to activate the account
-                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
-                        account.AccountNumber,
-                        (EndiciaReseller) account.EndiciaReseller,
-                        SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
-                        SecureText.Decrypt(account.ApiUserPassword, "Endicia"));
-                }
+                // This is required to activate the account
+                account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
+                    account.AccountNumber,
+                    (EndiciaReseller) account.EndiciaReseller,
+                    SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
+                    SecureText.Decrypt(account.ApiUserPassword, "Endicia"));
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -760,15 +757,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     account.TestAccount = EndiciaApiClient.UseTestServer;
 
-                    // change the password if this isn't a Test account
-                    if (!account.TestAccount)
-                    {
-                        // This is required to activate the account
-                        string oldPassword = passwordExisting.Text + "_initial";
-                        string newPassword = passwordExisting.Text;
-
-                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
-                    }
+                    // This is required to activate the account
+                    string oldPassword = passwordExisting.Text + "_initial";
+                    string newPassword = passwordExisting.Text;
+                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
                 }
 
                 // See if we can connect
