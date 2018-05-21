@@ -52,5 +52,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Generate a scan form for the given shipments
         /// </summary>
         SCANResponse GetScanForm(IEndiciaAccountEntity account, IEnumerable<IShipmentEntity> shipments);
+
+        /// <summary>
+        /// Signup for a new Endicia account
+        /// </summary>
+        void Signup();
     }
 }
