@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -56,6 +58,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Signup for a new Endicia account
         /// </summary>
-        void Signup();
+        void Signup(EndiciaAccountEntity account,
+            EndiciaAccountType endiciaAccountType,
+            PersonAdapter accountAddress,
+            EndiciaNewAccountCredentials accountCredentials,
+            EndiciaPaymentInfo paymentInfo);
     }
 }

@@ -8,12 +8,12 @@
         /// <summary>
         /// Internet Password
         /// </summary>
-        public string InternetPassword { get; set; }
+        public string WebPassword { get; set; }
 
         /// <summary>
         /// Softare Password
         /// </summary>
-        public string SoftwarePassword { get; set; }
+        public string TemporaryPassPhrase { get; set; }
 
         /// <summary>
         /// Challenge Question
