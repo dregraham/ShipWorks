@@ -1620,7 +1620,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 EndiciaReseller reseller = GetReseller(account);
 
-                using (EwsLabelService service = CreateWebService("Refund", reseller))
+                using (EwsLabelService service = CreateWebService("ScanForm", reseller))
                 {
                     SCANRequest request = new SCANRequest()
                     {
