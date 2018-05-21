@@ -455,7 +455,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             
             if (cvv.Text.Trim().Length == 0)
             {
-                MessageHelper.ShowInformation(this, "Please enter your cvv.");
+                MessageHelper.ShowInformation(this, "Please enter your CVV.");
                 e.NextPage = CurrentPage;
                 return;
             }

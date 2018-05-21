@@ -26,7 +26,6 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
