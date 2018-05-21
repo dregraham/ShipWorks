@@ -1,33 +1,54 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
+﻿using Interapptive.Shared.Security;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
 {
     /// <summary>
     /// Data structure for new endicia accounts credentials
     /// </summary>
-    public struct EndiciaNewAccountCredentials
+    public class EndiciaNewAccountCredentials
     {
-        /// <summary>
-        /// Internet Password
-        /// </summary>
-        public string WebPassword { get; set; }
+        private readonly string webPassword;
+        private readonly string passPhrase;
+        private readonly string challengeQuestion;
+        private readonly string challengeAnswer;
+        private readonly string temporaryPassPhrase;
 
         /// <summary>
-        /// Passphrase
+        /// Constructor
         /// </summary>
-        public string PassPhrase { get; set; }
+        public EndiciaNewAccountCredentials(string webPassword, string passPhrase, string challengeQuestion, string challengeAnswer)
+        {
+            this.webPassword = webPassword;
+            this.passPhrase = passPhrase;
+            this.challengeQuestion = challengeQuestion;
+            this.challengeAnswer = challengeAnswer;
+            temporaryPassPhrase = $"{passPhrase}_Initial";
+        }
 
         /// <summary>
-        /// Initial Passphrase to be replaced with Passphrase
+        /// Populates account entity with encrypted passwords
         /// </summary>
-        public string TemporaryPassPhrase => $"{PassPhrase}_Initial";
+        public void PopulateAccountEntity(EndiciaAccountEntity account)
+        {
+            account.WebPassword = SecureText.Encrypt(webPassword, "Endicia");
+            account.ApiInitialPassword = SecureText.Encrypt(temporaryPassPhrase, "Endicia");
+            account.ApiUserPassword = SecureText.Encrypt(passPhrase, "Endicia");
+        }
 
         /// <summary>
-        /// Challenge Question
+        /// Returns account credentials to use when creating an Endicia account
         /// </summary>
-        public string ChallengeQuestion { get; set; }
-
-        /// <summary>
-        /// Challenge Answer
-        /// </summary>
-        public string ChallengeAnswer { get; set; }
+        public AccountCredentials GetApiAccountCredentials()
+        {
+            return new AccountCredentials()
+            {
+                SecurityQuestion = challengeQuestion,
+                SecurityAnswer = challengeAnswer,
+                TemporaryPassPhrase = temporaryPassPhrase,
+                WebPassword = webPassword
+            };
+        }
     }
 }

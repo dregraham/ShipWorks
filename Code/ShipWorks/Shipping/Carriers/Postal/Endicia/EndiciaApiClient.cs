@@ -1690,12 +1690,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             PersonAdapter.Copy(address, new PersonAdapter(account, ""));
             account.MailingPostalCode = account.PostalCode;
 
+            credentials.PopulateAccountEntity(account);
+
             // Account type and passwords
             account.SignupConfirmation = confirmation.ToString();
-            account.WebPassword = SecureText.Encrypt(credentials.WebPassword, "Endicia");
-            account.ApiInitialPassword = SecureText.Encrypt(credentials.TemporaryPassPhrase, "Endicia");
-            account.ApiUserPassword = SecureText.Encrypt(credentials.PassPhrase, "Endicia");
-
             account.AccountType = (int) accountType;
             account.CreatedByShipWorks = true;
             account.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
@@ -1740,13 +1738,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RequesterID = GetInterapptivePartnerID(EndiciaReseller.None),
                 RequestID = Guid.NewGuid().ToString("N"),
 
-                AccountCredentials = new AccountCredentials()
-                {
-                    SecurityQuestion = credentials.ChallengeQuestion,
-                    SecurityAnswer = credentials.ChallengeAnswer,
-                    TemporaryPassPhrase = credentials.TemporaryPassPhrase,
-                    WebPassword = credentials.WebPassword
-                },
+                AccountCredentials = credentials.GetApiAccountCredentials(),
                 PhysicalAddress = new PhysicalPickupAddress()
                 {
                     CompanyName = address.Company,

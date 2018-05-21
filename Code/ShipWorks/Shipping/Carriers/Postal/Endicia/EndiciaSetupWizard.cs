@@ -521,13 +521,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         account.AcceptedFCMILetterWarning = false;
                     }
 
-                    EndiciaNewAccountCredentials credentials = new EndiciaNewAccountCredentials
-                    {
-                        WebPassword = internetPassword.Text,
-                        PassPhrase = softwarePassword.Text,
-                        ChallengeQuestion = challengeQuestion.Text.Trim(),
-                        ChallengeAnswer = challengeAnswer.Text.Trim()
-                    };
+                    EndiciaNewAccountCredentials credentials = new EndiciaNewAccountCredentials(
+                        internetPassword.Text,
+                        softwarePassword.Text,
+                        challengeQuestion.Text.Trim(),
+                        challengeAnswer.Text.Trim());
 
                     EndiciaAccountType accountType = freemiumEdition != null ?
                         EndiciaAccountType.Freemium :
