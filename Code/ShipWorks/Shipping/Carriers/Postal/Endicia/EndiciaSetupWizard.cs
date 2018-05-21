@@ -32,13 +32,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Endicia)]
     public partial class EndiciaSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
-        EndiciaAccountEntity account;
-        EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
+        private EndiciaAccountEntity account;
+
+        private readonly IEndiciaApiClient endiciaApiClient = new EndiciaApiClient();
         // User has completed the signup process for the account
-        bool signupCompleted = false;
+        private bool signupCompleted = false;
 
         // Will be non-null if we are in freemium signup mode
-        FreemiumFreeEdition freemiumEdition = null;
+        private FreemiumFreeEdition freemiumEdition = null;
         private bool planTypeWasShown = false;
 
         private readonly int currentYear;
@@ -131,20 +132,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Open the web page to show pricing information
-        /// </summary>
-        private void OnLinkPricing(object sender, EventArgs e)
-        {
-            // TODO: update this URL
-            WebHelper.OpenUrl("http://www.interapptive.com", this);
-        }
-
-        /// <summary>
         /// Open the USPS privacy policy
         /// </summary>
         private void OnLinkUspsPrivacy(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.usps.com/privacyoffice/privacypolicy.htm#privacyact", this);
+            WebHelper.OpenUrl("https://about.usps.com/who-we-are/privacy-policy/welcome.htm", this);
         }
 
         /// <summary>
@@ -152,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLinkPostagePrivacy(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.usps.com/cpim/ftp/hand/as353/as353apdx_051.htm", this);
+            WebHelper.OpenUrl("https://about.usps.com/handbooks/as353/as353apdx_054.htm", this);
         }
 
         /// <summary>
@@ -160,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLinkEndiciaTerms(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.endicia.com/SignUp/Notice/TermsAndConditions/", this);
+            WebHelper.OpenUrl("https://www.endicia.com/policy/terms-and-conditions", this);
         }
 
         /// <summary>
@@ -460,7 +452,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 e.NextPage = CurrentPage;
                 return;
             }
-
+            
+            if (cvv.Text.Trim().Length == 0)
+            {
+                MessageHelper.ShowInformation(this, "Please enter your cvv.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+            
             if (postagePaymentCheck.Checked)
             {
                 if (checkingAccount.Text.Trim().Length == 0)
@@ -522,15 +521,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         account.AcceptedFCMILetterWarning = false;
                     }
 
-                    EndiciaApiAccount.Signup(
-                        account,
-                        freemiumEdition != null ? EndiciaAccountType.Freemium : (radioPlanPremium.Checked ? EndiciaAccountType.Premium : EndiciaAccountType.Standard),
-                        accountAddress,
-                        internetPassword.Text,
-                        softwarePassword.Text,
-                        challengeQuestion.Text.Trim(),
-                        challengeAnswer.Text.Trim(),
-                        paymentInfo);
+                    EndiciaNewAccountCredentials credentials = new EndiciaNewAccountCredentials
+                    {
+                        WebPassword = internetPassword.Text,
+                        TemporaryPassPhrase = softwarePassword.Text,
+                        ChallengeQuestion = challengeQuestion.Text.Trim(),
+                        ChallengeAnswer = challengeAnswer.Text.Trim()
+                    };
+
+                    EndiciaAccountType accountType = freemiumEdition != null ?
+                        EndiciaAccountType.Freemium :
+                        (radioPlanPremium.Checked ? EndiciaAccountType.Premium : EndiciaAccountType.Standard);
+
+                    endiciaApiClient.Signup(account, accountType, accountAddress, credentials, paymentInfo);
 
                     // For freemium, we are now OK to create the freemium store
                     if (freemiumEdition != null)
@@ -543,7 +546,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     MessageHelper.ShowError(this, ex.Message);
 
                     e.NextPage = CurrentPage;
-                    return;
                 }
             }
             // For freemium\existing we don't create the freemium store here - we wait until we get their existing account#
@@ -567,6 +569,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             paymentInfo.CardNumber = cardNumber.Text.Trim();
             paymentInfo.CardExpirationMonth = cardExpireMonth.SelectedIndex + 1;
             paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + currentYear;
+            paymentInfo.CVV = cvv.Text.Trim();
             paymentInfo.UseCheckingForPostage = postagePaymentCheck.Checked;
             paymentInfo.CheckingAccount = checkingAccount.Text.Trim();
             paymentInfo.CheckingRouting = checkingRouting.Text.Trim();
