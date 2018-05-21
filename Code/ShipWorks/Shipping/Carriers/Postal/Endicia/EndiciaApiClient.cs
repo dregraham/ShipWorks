@@ -1644,7 +1644,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
         }
 
-        public EndiciaAccountEntity Signup(EndiciaAccountEntity account,
+        /// <summary>
+        /// Signup for a new Endicia account
+        /// </summary>
+        public void Signup(EndiciaAccountEntity account,
             EndiciaAccountType accountType,
             PersonAdapter address,
             EndiciaNewAccountCredentials credentials,
@@ -1654,7 +1657,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 UserSignUpRequest request = GetSignupRequest(accountType, address, credentials, paymentInfo);
                 UserSignUpResponse signupResponse = SendSignupRequest(request);
-                return ProcessUserSignupResponse(account, accountType, address, credentials, signupResponse);
+                ProcessUserSignupResponse(account, accountType, address, credentials, signupResponse);
             }
             catch (Exception ex)
             {
@@ -1679,7 +1682,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Processes the signup response
         /// </summary>
-        private EndiciaAccountEntity ProcessUserSignupResponse(EndiciaAccountEntity account, EndiciaAccountType accountType, PersonAdapter address, EndiciaNewAccountCredentials credentials, UserSignUpResponse userSignUpResponse)
+        private void ProcessUserSignupResponse(EndiciaAccountEntity account, EndiciaAccountType accountType, PersonAdapter address, EndiciaNewAccountCredentials credentials, UserSignUpResponse userSignUpResponse)
         {
             long confirmation = userSignUpResponse.ConfirmationNumber;
             CheckResponseForErrors(userSignUpResponse, confirmation);
@@ -1701,8 +1704,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             account.TestAccount = UseTestServer;
             account.Description = string.Empty;
             accountRepository.Save(account);
-
-            return account;
         }
 
         /// <summary>
@@ -1721,7 +1722,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException(errorMessage);
             }
 
-            if (confirmation == 0)
+            if (confirmation <= 0)
             {
                 throw new EndiciaException("The Endicia server returned an invalid confirmation number.");
             }
