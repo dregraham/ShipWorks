@@ -313,6 +313,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             return rates;
         }
 
+        /// <summary>
+        /// Get the days string to display in the rate grid
+        /// </summary>
         private static string GetDaysForRate(PostalServiceType serviceType, XPathNavigator rateNode)
         {
             string days = nonDigits.Replace(XPathUtility.Evaluate(rateNode, "CommitmentName", string.Empty), string.Empty);
