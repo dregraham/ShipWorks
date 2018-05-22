@@ -264,27 +264,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XPathNavigator rateNode = DetermineDomesticRateMatch(pair.Value, serviceType, packaging);
 
                 decimal amount = XPathUtility.Evaluate(rateNode, "Rate", 0m);
-                string days = nonDigits.Replace(XPathUtility.Evaluate(rateNode, "CommitmentName", string.Empty), string.Empty);
-                if (!string.IsNullOrWhiteSpace(days) && 
-                    DateTime.TryParse(XPathUtility.Evaluate(rateNode, "CommitmentDate", string.Empty), out DateTime commitmentDate))
-                {
-                    days = $"{days} ({commitmentDate.DayOfWeek})";
-                }
-                else
-                {
-                    days = PostalUtility.GetServiceTransitDays(serviceType);
-                }
+                string days = GetDaysForRate(serviceType, rateNode);
 
                 if (serviceType == PostalServiceType.ExpressMail)
                 {
                     rates.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType), 
+                        EnumHelper.GetDescription(serviceType),
                         days,
                         amount,
                         new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                        {
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
-                        });
+                    {
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                    });
                 }
                 else
                 {
@@ -320,6 +311,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             return rates;
+        }
+
+        private static string GetDaysForRate(PostalServiceType serviceType, XPathNavigator rateNode)
+        {
+            string days = nonDigits.Replace(XPathUtility.Evaluate(rateNode, "CommitmentName", string.Empty), string.Empty);
+            if (!string.IsNullOrWhiteSpace(days) &&
+                DateTime.TryParse(XPathUtility.Evaluate(rateNode, "CommitmentDate", string.Empty), out DateTime commitmentDate))
+            {
+                days = $"{days} ({commitmentDate.DayOfWeek})";
+            }
+            else
+            {
+                days = PostalUtility.GetServiceTransitDays(serviceType);
+            }
+
+            return days;
         }
 
         /// <summary>
