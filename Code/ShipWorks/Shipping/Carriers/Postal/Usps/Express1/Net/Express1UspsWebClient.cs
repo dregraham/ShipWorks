@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""))
+                            GetDaysForRate(uspsRate))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
                             ShipmentType = ShipmentTypeCode.Express1Usps,
@@ -319,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""),
+                            GetDaysForRate(uspsRate),
                             uspsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                         {
@@ -398,6 +398,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 // This isn't an authentication exception, so just throw the original exception
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get the days string to display in the rate grid
+        /// </summary>
+        private string GetDaysForRate(RateV14 uspsRate)
+        {
+            // In the case of a date range, don't show day of the week
+            return uspsRate.DeliverDays.Contains('-') ?
+                uspsRate.DeliverDays.Replace("Days", "") :
+                $"{uspsRate.DeliverDays.Replace("Days", "")} ({uspsRate.DeliveryDate.DayOfWeek})";
         }
 
         /// <summary>
