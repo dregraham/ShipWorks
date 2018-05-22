@@ -238,7 +238,7 @@ namespace ShipWorks.Data.Grid.Paging
                             ResultsetFields resultFields = new ResultsetFields(1);
                             resultFields.DefineField(keyField, 0, "EntityID", "");
 
-                            using (IDataReader reader = adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.CloseConnection, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
+                            using (IDataReader reader = adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.Default, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
                             {
                                 while (!canceled && reader.Read())
                                 {
@@ -250,7 +250,9 @@ namespace ShipWorks.Data.Grid.Paging
 
                         loadingComplete = true;
                     }
-                });
+                },
+                ex => ex is InvalidOperationException && 
+                      ex.Message.IndexOf("Internal connection fatal error", StringComparison.OrdinalIgnoreCase) >= 0);
             }
             finally
             {
