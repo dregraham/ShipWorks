@@ -1624,6 +1624,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     SCANRequest request = new SCANRequest()
                     {
+                        GetSCANRequestParameters = new GetSCANParameters() { ImageFormat = "PNG"},
                         RequesterID = GetInterapptivePartnerID(reseller),
                         RequestID = Guid.NewGuid().ToString("N"),
                         CertifiedIntermediary = new CertifiedIntermediary()
