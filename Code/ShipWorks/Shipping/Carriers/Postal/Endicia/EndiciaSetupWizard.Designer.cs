@@ -899,7 +899,7 @@
             this.labelPremiumDescription.Name = "labelPremiumDescription";
             this.labelPremiumDescription.Size = new System.Drawing.Size(457, 29);
             this.labelPremiumDescription.TabIndex = 6;
-            this.labelPremiumDescription.Text = "Preumium services include all of the Standard services plus the ability to create" +
+            this.labelPremiumDescription.Text = "Premium services include all of the Standard services plus the ability to create" +
     " SCAN forms.";
             // 
             // labelStandardDescription
