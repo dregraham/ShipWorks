@@ -401,17 +401,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Get the days string to display in the rate grid
-        /// </summary>
-        private string GetDaysForRate(RateV14 uspsRate)
-        {
-            // In the case of a date range, don't show day of the week
-            return uspsRate.DeliverDays.Contains('-') ?
-                uspsRate.DeliverDays.Replace("Days", "") :
-                $"{uspsRate.DeliverDays.Replace("Days", "")} ({uspsRate.DeliveryDate.DayOfWeek})";
-        }
-
-        /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
         /// </summary>
         private List<RateV14> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
