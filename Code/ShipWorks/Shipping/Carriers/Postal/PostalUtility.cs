@@ -624,7 +624,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Get the days string to display in the rate grid - 4 (Monday)
         /// </summary>
-        public static string GetDaysForRate(string deliverDays, DateTime deliveryDate) =>
-            $"{deliverDays} ({deliveryDate.DayOfWeek})";
+        public static string GetDaysForRate(string deliverDays, DateTime deliveryDate)
+        {
+            return deliveryDate == DateTime.MinValue ? deliverDays : $"{deliverDays} ({deliveryDate.DayOfWeek})";
+        }
     }
 }
