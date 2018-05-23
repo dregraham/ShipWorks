@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.UI.Controls.StoreSettings;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Controls.StoreSettings;
 
 namespace ShipWorks.Stores.UI.Platforms.Walmart
 {

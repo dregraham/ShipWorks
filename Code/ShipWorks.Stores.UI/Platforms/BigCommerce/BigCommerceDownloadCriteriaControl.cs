@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Core.UI.Controls.StoreSettings;
+using ShipWorks.UI.Controls.StoreSettings;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce
 {
