@@ -2103,6 +2103,12 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
+      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
     <Compile Include="Stores\Platforms\Volusion\IVolusionWebClient.cs" />
@@ -3840,12 +3846,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartConstants.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
-      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartException.cs" />
@@ -8455,10 +8455,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartAccountSettingsControl.resx">
       <DependentUpon>ThreeDCartAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.resx">
-      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartStoreSettingsControl.resx">
       <DependentUpon>ThreeDCartStoreSettingsControl.cs</DependentUpon>
