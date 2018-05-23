@@ -2106,9 +2106,6 @@
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
-      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
     <Compile Include="Stores\Platforms\Volusion\IVolusionWebClient.cs" />

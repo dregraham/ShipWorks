@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Control for setting days back to check for modified orders for 3dCart
     /// </summary>
-    public partial class ThreeDCartDownloadCriteriaControl : DownloadModifiedDaysBackControl
+    public class ThreeDCartDownloadCriteriaControl : DownloadModifiedDaysBackControl
     {
         /// <summary>
         /// Max number of days back allowed
