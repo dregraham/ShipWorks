@@ -75,23 +75,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             client.Verify(e => e.GetScanForm((IEndiciaAccountEntity)scanFormBatch.AccountEntity, shipments));
         }
-        
-        [Fact]
-        public void CreateScanForms_DelegatesToPdfDocumentFactory()
-        {
-            var shipments = new List<ShipmentEntity>() { new ShipmentEntity() };
-            testObject.CreateScanForms(scanFormBatch, shipments);
-
-            pdfFactory.Verify(p => p.Create(PdfDocumentType.BlackAndWhite));
-        }
-
-        [Fact]
-        public void CreateScanForms_DelegatesToPdfDocument()
-        {
-            var shipments = new List<ShipmentEntity>() { new ShipmentEntity() };
-            testObject.CreateScanForms(scanFormBatch, shipments);
-
-            pdfDoc.Verify(p => p.SavePages<byte[]>(It.IsAny<MemoryStream>(), It.IsAny<Func<MemoryStream, int, byte[]>>()));
-        }
     }
 }
