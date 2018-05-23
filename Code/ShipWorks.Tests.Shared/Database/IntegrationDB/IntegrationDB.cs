@@ -58,6 +58,7 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
             sb.DataSource = dataSource;
             sb.InitialCatalog = "master";
             sb.IntegratedSecurity = true;
+            sb.Pooling = false;
 
             return sb.ConnectionString;
         }
