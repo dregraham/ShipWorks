@@ -12,14 +12,14 @@ namespace Interapptive.Shared.Business
     /// </summary>
     public class RequiredFieldChecker
     {
-        private List<string> missingFields = new List<string>();
+        private readonly List<string> missingFields = new List<string>();
 
         /// <summary>
         /// Check that the given field has a value
         /// </summary>
         public void Check(string fieldName, string content)
         {
-            if (string.IsNullOrEmpty(content))
+            if (string.IsNullOrWhiteSpace(content))
             {
                 missingFields.Add(fieldName);
             }
@@ -38,7 +38,7 @@ namespace Interapptive.Shared.Business
             }
             else
             {
-                MessageHelper.ShowMessage(owner, result.Message.ToString());
+                MessageHelper.ShowMessage(owner, result.Message);
 
                 return false;
             }

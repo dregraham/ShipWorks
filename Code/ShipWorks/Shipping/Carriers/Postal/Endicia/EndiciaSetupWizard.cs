@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -32,13 +33,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Endicia)]
     public partial class EndiciaSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
-        EndiciaAccountEntity account;
-        EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
+        private EndiciaAccountEntity account;
+
+        private readonly IEndiciaApiClient endiciaApiClient = new EndiciaApiClient();
         // User has completed the signup process for the account
-        bool signupCompleted = false;
+        private bool signupCompleted = false;
 
         // Will be non-null if we are in freemium signup mode
-        FreemiumFreeEdition freemiumEdition = null;
+        private FreemiumFreeEdition freemiumEdition = null;
         private bool planTypeWasShown = false;
 
         private readonly int currentYear;
@@ -131,20 +133,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Open the web page to show pricing information
-        /// </summary>
-        private void OnLinkPricing(object sender, EventArgs e)
-        {
-            // TODO: update this URL
-            WebHelper.OpenUrl("http://www.interapptive.com", this);
-        }
-
-        /// <summary>
         /// Open the USPS privacy policy
         /// </summary>
         private void OnLinkUspsPrivacy(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.usps.com/privacyoffice/privacypolicy.htm#privacyact", this);
+            WebHelper.OpenUrl("https://about.usps.com/who-we-are/privacy-policy/welcome.htm", this);
         }
 
         /// <summary>
@@ -152,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLinkPostagePrivacy(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.usps.com/cpim/ftp/hand/as353/as353apdx_051.htm", this);
+            WebHelper.OpenUrl("https://about.usps.com/handbooks/as353/as353apdx_054.htm", this);
         }
 
         /// <summary>
@@ -160,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLinkEndiciaTerms(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.endicia.com/SignUp/Notice/TermsAndConditions/", this);
+            WebHelper.OpenUrl("https://www.endicia.com/policy/terms-and-conditions", this);
         }
 
         /// <summary>
@@ -215,50 +208,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Stepping next from the address page
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
             PersonAdapter person = new PersonAdapter();
             personControl.SaveToEntity(person);
 
-            if (person.FirstName.Trim().Length == 0 || person.LastName.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your contact name.");
-                e.NextPage = CurrentPage;
-                return;
-            }
+            RequiredFieldChecker fieldChecker = new RequiredFieldChecker();
+            fieldChecker.Check("Contact name", person.FirstName.Trim());
+            fieldChecker.Check("Email address", person.Email.Trim());
+            fieldChecker.Check("Phone number", person.Phone.Trim());
+            fieldChecker.Check("Street address", person.Street1.Trim());
+            fieldChecker.Check("City", person.City.Trim());
+            fieldChecker.Check("Postal code", person.PostalCode.Trim());
 
-            if (person.Email.Trim().Length == 0)
+            if (!fieldChecker.Validate(this))
             {
-                MessageHelper.ShowInformation(this, "Please enter your email address.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.Phone.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your phone number.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.Street1.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your street address.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.City.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your city.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.PostalCode.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your postal code.");
                 e.NextPage = CurrentPage;
                 return;
             }
@@ -282,14 +246,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     // We don't have a store for them in tango - determine which information we need
-                    if (radioExistingAccount.Checked)
-                    {
-                        e.NextPage = wizardPagePayment;
-                    }
-                    else
-                    {
-                        e.NextPage = wizardPagePasswords;
-                    }
+                    e.NextPage = radioExistingAccount.Checked ? wizardPagePayment : wizardPagePasswords;
                 }
             }
             else
@@ -335,7 +292,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 MessageHelper.ShowMessage(this, "Select a service level for your new Endicia account.");
                 e.NextPage = CurrentPage;
-                return;
             }
         }
 
@@ -376,7 +332,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 MessageHelper.ShowInformation(this, "You must agree to the terms and conditions.");
                 e.NextPage = CurrentPage;
-                return;
             }
         }
 
@@ -417,65 +372,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Stepping next from the payment page
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private void OnStepNextPayment(object sender, WizardStepEventArgs e)
         {
-            PersonAdapter creditPerson = new PersonAdapter();
-            personCreditCard.SaveToEntity(creditPerson);
-
-            if (freemiumEdition != null && !shipworksFeesAgree.Checked)
-            {
-                MessageHelper.ShowInformation(this,
-                    "You must agree that Interapptive can use your credit card to pay for insurance if you optionally choose to use ShipWorks Shipping Insurance.");
-
+            if (!ValidatePaymentInfo(e))
+            {                    
                 e.NextPage = CurrentPage;
                 return;
-            }
-
-            if (creditPerson.Street1.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your street address.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (creditPerson.City.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your city.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (creditPerson.PostalCode.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your postal code.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (cardNumber.Text.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your credit card number.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (postagePaymentCheck.Checked)
-            {
-                if (checkingAccount.Text.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your checking account number.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                if (checkingRouting.Text.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your checking routing number.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -492,19 +394,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     TangoWebClient.CreateFreemiumStore(freemiumEdition.Store, accountAddress, paymentInfo, "", true);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is TangoException || ex is ShipWorksLicenseException)
                 {
-                    if (ex is TangoException || ex is ShipWorksLicenseException)
-                    {
-                        MessageHelper.ShowError(this, "ShipWorks was unable to create your ShipWorks account:\n\n" + ex.Message);
+                    MessageHelper.ShowError( this, "ShipWorks was unable to create your ShipWorks account:\n\n" + ex.Message);
 
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    e.NextPage = CurrentPage;
+                    return;
                 }
             }
 
@@ -514,23 +409,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 try
                 {
-
-                    if (account == null)
-                    {
-                        account = new EndiciaAccountEntity();
-                        account.EndiciaReseller = (int) EndiciaReseller.None;
-                        account.AcceptedFCMILetterWarning = false;
-                    }
-
-                    EndiciaApiAccount.Signup(
-                        account,
-                        freemiumEdition != null ? EndiciaAccountType.Freemium : (radioPlanPremium.Checked ? EndiciaAccountType.Premium : EndiciaAccountType.Standard),
-                        accountAddress,
-                        internetPassword.Text,
-                        softwarePassword.Text,
-                        challengeQuestion.Text.Trim(),
-                        challengeAnswer.Text.Trim(),
-                        paymentInfo);
+                    CreateEndiciaAccount(accountAddress, paymentInfo);
 
                     // For freemium, we are now OK to create the freemium store
                     if (freemiumEdition != null)
@@ -543,7 +422,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     MessageHelper.ShowError(this, ex.Message);
 
                     e.NextPage = CurrentPage;
-                    return;
                 }
             }
             // For freemium\existing we don't create the freemium store here - we wait until we get their existing account#
@@ -551,6 +429,64 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 e.NextPage = wizardPageExisting;
             }
+        }
+
+        /// <summary>
+        /// Creates an Endicia account using the payment information provided
+        /// </summary>
+        private void CreateEndiciaAccount(PersonAdapter accountAddress, EndiciaPaymentInfo paymentInfo)
+        {
+            if (account == null)
+            {
+                account = new EndiciaAccountEntity();
+                account.EndiciaReseller = (int) EndiciaReseller.None;
+                account.AcceptedFCMILetterWarning = false;
+            }
+
+            EndiciaNewAccountCredentials credentials = new EndiciaNewAccountCredentials(
+                internetPassword.Text, softwarePassword.Text, challengeQuestion.Text.Trim(),
+                challengeAnswer.Text.Trim());
+
+            EndiciaAccountType accountType = freemiumEdition != null ? 
+                EndiciaAccountType.Freemium : 
+                (radioPlanPremium.Checked ? EndiciaAccountType.Premium : EndiciaAccountType.Standard);
+
+            endiciaApiClient.Signup(account, accountType, accountAddress, credentials, paymentInfo);
+        }
+
+        /// <summary>
+        /// Ensure all required payment fields are entered
+        /// </summary> 
+        /// <returns>True if all required payment fields have values, otherwise False</returns>
+        private bool ValidatePaymentInfo(WizardStepEventArgs e)
+        {
+            PersonAdapter creditPerson = new PersonAdapter();
+            personCreditCard.SaveToEntity(creditPerson);
+
+            if (freemiumEdition != null && !shipworksFeesAgree.Checked)
+            {
+                MessageHelper.ShowInformation(this,
+                    "You must agree that Interapptive can use your credit card to pay for insurance if you optionally choose to use ShipWorks Shipping Insurance.");
+
+                e.NextPage = CurrentPage;
+                // return here instead of setting isValid, because we want this message to be displayed seperately
+                return false;
+            }
+            
+            RequiredFieldChecker fieldChecker = new RequiredFieldChecker();
+            fieldChecker.Check("Street address", creditPerson.Street1.Trim());
+            fieldChecker.Check("City", creditPerson.City.Trim());
+            fieldChecker.Check("Postal code", creditPerson.PostalCode.Trim());
+            fieldChecker.Check("Credit card Number", cardNumber.Text.Trim());
+            fieldChecker.Check("CVV", cvv.Text.Trim());
+
+            if (postagePaymentCheck.Checked)
+            {
+                fieldChecker.Check("Checking account number", checkingAccount.Text.Trim());
+                fieldChecker.Check("Checking routing number", checkingRouting.Text.Trim());
+            }
+
+            return fieldChecker.Validate(this);
         }
 
         /// <summary>
@@ -567,6 +503,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             paymentInfo.CardNumber = cardNumber.Text.Trim();
             paymentInfo.CardExpirationMonth = cardExpireMonth.SelectedIndex + 1;
             paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + currentYear;
+            paymentInfo.CVV = cvv.Text.Trim();
             paymentInfo.UseCheckingForPostage = postagePaymentCheck.Checked;
             paymentInfo.CheckingAccount = checkingAccount.Text.Trim();
             paymentInfo.CheckingRouting = checkingRouting.Text.Trim();
@@ -626,15 +563,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 account.AccountNumber = accountNumber.Text.Trim();
                 account.Description = EndiciaAccountManager.GetDefaultDescription(account);
 
-                if (!account.TestAccount)
-                {
-                    // This is required to activate the account
-                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
-                        account.AccountNumber,
-                        (EndiciaReseller) account.EndiciaReseller,
-                        SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
-                        SecureText.Decrypt(account.ApiUserPassword, "Endicia"));
-                }
+                // This is required to activate the account
+                account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
+                    account.AccountNumber,
+                    (EndiciaReseller) account.EndiciaReseller,
+                    SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
+                    SecureText.Decrypt(account.ApiUserPassword, "Endicia"));
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -667,7 +601,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 MessageHelper.ShowError(this, "ShipWorks was not able to activate your account. Please check that the account number you entered is correct.\n\nError: " + ex.Message);
 
                 e.NextPage = CurrentPage;
-                return;
             }
         }
 
@@ -757,15 +690,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     account.TestAccount = EndiciaApiClient.UseTestServer;
 
-                    // change the password if this isn't a Test account
-                    if (!account.TestAccount)
-                    {
-                        // This is required to activate the account
-                        string oldPassword = passwordExisting.Text + "_initial";
-                        string newPassword = passwordExisting.Text;
-
-                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
-                    }
+                    // This is required to activate the account
+                    string oldPassword = passwordExisting.Text + "_initial";
+                    string newPassword = passwordExisting.Text;
+                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
                 }
 
                 // See if we can connect

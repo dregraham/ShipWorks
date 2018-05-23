@@ -984,6 +984,7 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentials.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\IEndiciaApiClient.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
@@ -5143,7 +5144,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExRateSelection.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExServiceType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaApiAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
