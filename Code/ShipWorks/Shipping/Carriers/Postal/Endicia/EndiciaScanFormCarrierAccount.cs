@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An IScanFormGateway object.</returns>
         public override IScanFormGateway GetGateway(ILifetimeScope lifetimeScope)
         {
-            return new EndiciaScanFormGateway();
+            return lifetimeScope.Resolve<EndiciaScanFormGateway>();
         }
 
         /// <summary>

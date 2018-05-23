@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
@@ -169,7 +170,7 @@ namespace ShipWorks.Shipping.UI
             // certificate inspector that always returns trusted
             builder.Register<ICertificateInspector>((contaner, parameters) =>
             {
-                string certVerificationData = parameters.TypedAs<string>();
+                string certVerificationData = parameters.Any() ? parameters.TypedAs<string>() : null;
 
                 if (string.IsNullOrWhiteSpace(certVerificationData))
                 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter.Xml;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -8,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.ScanForms;
 using Xunit;
+using ShipWorks.Tests.Shared;
+
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
@@ -66,7 +69,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [Fact]
         public void GetGateway_ReturnsEndiciaScanFormGateway()
         {
-            Assert.IsAssignableFrom<EndiciaScanFormGateway>(testObject.GetGateway(null));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                    Assert.IsAssignableFrom<EndiciaScanFormGateway>(testObject.GetGateway(mock.Container));
+            }
         }
 
         [Fact]
