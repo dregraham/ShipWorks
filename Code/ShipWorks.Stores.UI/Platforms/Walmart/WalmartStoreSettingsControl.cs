@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Controls.StoreSettings;
 
 namespace ShipWorks.Stores.UI.Platforms.Walmart
 {
@@ -12,75 +10,23 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Management.StoreSettingsControlBase" />
     [KeyedComponent(typeof(StoreSettingsControlBase), StoreTypeCode.Walmart)]
-    public partial class WalmartStoreSettingsControl : StoreSettingsControlBase
+    public class WalmartStoreSettingsControl : DownloadModifiedDaysBackControl
     {
-        private readonly IMessageHelper messageHelper;
+        /// <summary>
+        /// Max number of days back allowed
+        /// </summary>
+        public override int MaxDaysBack => 30;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WalmartStoreSettingsControl"/> class.
+        /// Load the days back from the store entity
         /// </summary>
-        public WalmartStoreSettingsControl(IMessageHelper messageHelper)
-        {
-            this.messageHelper = messageHelper;
-            InitializeComponent();
-
-            downloadModifiedOrdersNumberOfDays.Items.AddRange(Enumerable.Range(1, 30).Cast<object>().ToArray());
-        }
+        public override int LoadDaysBack(StoreEntity store) =>
+            ((WalmartStoreEntity) store).DownloadModifiedNumberOfDaysBack;
 
         /// <summary>
-        /// Load the store settings from the store entity
+        /// Save the days back to the store entity
         /// </summary>
-        public override void LoadStore(StoreEntity store)
-        {
-            WalmartStoreEntity walmartStore = (WalmartStoreEntity) store;
-
-            if (walmartStore.DownloadModifiedNumberOfDaysBack > 0)
-            {
-                checkBoxDownloadModifiedOrders.Checked = true;
-                downloadModifiedOrdersNumberOfDays.SelectedItem = walmartStore.DownloadModifiedNumberOfDaysBack;
-            }
-            else
-            {
-                checkBoxDownloadModifiedOrders.Checked = false;
-                downloadModifiedOrdersNumberOfDays.SelectedItem = null;
-            }
-
-            downloadModifiedOrdersNumberOfDays.Enabled = checkBoxDownloadModifiedOrders.Checked;
-        }
-
-        /// <summary>
-        /// Saves the store settings to the store entity
-        /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
-        {
-            WalmartStoreEntity walmartStore = (WalmartStoreEntity) store;
-
-            if (checkBoxDownloadModifiedOrders.Checked && downloadModifiedOrdersNumberOfDays.SelectedItem == null)
-            {
-                messageHelper.ShowError(this, "Please select a number of days back to check.");
-                return false;
-            }
-
-            if (!checkBoxDownloadModifiedOrders.Checked)
-            {
-                walmartStore.DownloadModifiedNumberOfDaysBack = 0;
-            }
-            else
-            {
-                // Number of days of modified orders to download
-                walmartStore.DownloadModifiedNumberOfDaysBack =
-                    (int)downloadModifiedOrdersNumberOfDays.SelectedItem;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Enable or disable the days back combo box based on the check box value
-        /// </summary>
-        private void OnCheckBoxDownloadModifiedOrdersCheckedChanged(object sender, EventArgs e)
-        {
-            downloadModifiedOrdersNumberOfDays.Enabled = checkBoxDownloadModifiedOrders.Checked;
-        }
+        public override void SaveDaysBack(StoreEntity store, int daysBack) =>
+            ((WalmartStoreEntity) store).DownloadModifiedNumberOfDaysBack = daysBack;
     }
 }

@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
-namespace ShipWorks.Core.UI.Controls.StoreSettings
+namespace ShipWorks.UI.Controls.StoreSettings
 {
     /// <summary>
     /// Base control for setting download modified days back
@@ -22,7 +15,7 @@ namespace ShipWorks.Core.UI.Controls.StoreSettings
         /// <summary>
         /// Constructor
         /// </summary>
-        public DownloadModifiedDaysBackControl()
+        protected DownloadModifiedDaysBackControl()
         {
             InitializeComponent();            
         }
@@ -30,7 +23,7 @@ namespace ShipWorks.Core.UI.Controls.StoreSettings
         /// <summary>
         /// Max number of days back allowed
         /// </summary>
-        public int MaxDaysBack { get; set; } = 14;
+        public abstract int MaxDaysBack { get; }
 
         /// <summary>
         /// Load the days back from the store entity

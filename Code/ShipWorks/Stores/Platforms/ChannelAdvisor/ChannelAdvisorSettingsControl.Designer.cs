@@ -1,5 +1,4 @@
-﻿using ShipWorks.Core.Stores.Platforms.ChannelAdvisor;
-using ShipWorks.Shipping.Carriers.Amazon;
+﻿using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
 
@@ -36,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
             this.amazon = new ShipWorks.Shipping.Carriers.Amazon.AmazonShippingSettingsControl();
-            this.daysBack = new ShipWorks.Core.Stores.Platforms.ChannelAdvisor.ChannelAdvisorDownloadModifiedDaysBackControl();
+            this.daysBack = new ChannelAdvisorDownloadModifiedDaysBackControl();
             this.daysBackTitle = new ShipWorks.UI.Controls.SectionTitle();
             this.daysBackPanel = new System.Windows.Forms.Panel();
             this.daysBackPanel.SuspendLayout();
@@ -75,7 +74,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // 
             this.daysBack.AutoSize = true;
             this.daysBack.Location = new System.Drawing.Point(0, 24);
-            this.daysBack.MaxDaysBack = 14;
             this.daysBack.Name = "daysBack";
             this.daysBack.Size = new System.Drawing.Size(582, 73);
             this.daysBack.TabIndex = 3;
