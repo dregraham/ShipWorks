@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Core.UI.Controls.StoreSettings
+﻿namespace ShipWorks.UI.Controls.StoreSettings
 {
     partial class DownloadModifiedDaysBackControl
     {

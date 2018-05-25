@@ -18,7 +18,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // Show Amazon control if the Amazon ctrl is configured.
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
-            daysBack.MaxDaysBack = 7;
         }
 
         /// <summary>

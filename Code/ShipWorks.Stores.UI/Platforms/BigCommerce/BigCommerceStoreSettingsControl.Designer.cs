@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
             // labelWeightUnitOfMeasure
             // 
             this.labelWeightUnitOfMeasure.AutoSize = true;
-            this.labelWeightUnitOfMeasure.Location = new System.Drawing.Point(17, 22);
+            this.labelWeightUnitOfMeasure.Location = new System.Drawing.Point(10, 22);
             this.labelWeightUnitOfMeasure.Name = "labelWeightUnitOfMeasure";
             this.labelWeightUnitOfMeasure.Size = new System.Drawing.Size(202, 13);
             this.labelWeightUnitOfMeasure.TabIndex = 20;
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
             // 
             this.weightUnitOfMeasure.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.weightUnitOfMeasure.FormattingEnabled = true;
-            this.weightUnitOfMeasure.Location = new System.Drawing.Point(221, 20);
+            this.weightUnitOfMeasure.Location = new System.Drawing.Point(214, 20);
             this.weightUnitOfMeasure.Name = "weightUnitOfMeasure";
             this.weightUnitOfMeasure.Size = new System.Drawing.Size(106, 21);
             this.weightUnitOfMeasure.TabIndex = 21;

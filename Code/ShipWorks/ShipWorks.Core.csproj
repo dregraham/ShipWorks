@@ -984,6 +984,8 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentials.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\IEndiciaApiClient.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
@@ -2103,6 +2105,9 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
     <Compile Include="Stores\Platforms\Volusion\IVolusionWebClient.cs" />
@@ -3841,12 +3846,6 @@
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartConstants.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
-      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartException.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapOnlineUpdater.cs" />
@@ -5142,7 +5141,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExRateSelection.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExServiceType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaApiAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8455,10 +8453,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartAccountSettingsControl.resx">
       <DependentUpon>ThreeDCartAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.resx">
-      <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\ThreeDCartStoreSettingsControl.resx">
       <DependentUpon>ThreeDCartStoreSettingsControl.cs</DependentUpon>
