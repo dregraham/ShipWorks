@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""))
+                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
                             ShipmentType = ShipmentTypeCode.Express1Usps,
@@ -319,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""),
+                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
                             uspsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                         {

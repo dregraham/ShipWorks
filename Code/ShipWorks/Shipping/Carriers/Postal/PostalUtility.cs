@@ -15,6 +15,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -619,5 +620,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public static bool IsPresort(IPostalShipmentEntity postalShipment) =>
             !IsGapLabel(postalShipment) && presortServiceTypes.Contains((PostalServiceType) postalShipment.Service);
+
+        /// <summary>
+        /// Get the days string to display in the rate grid - 4 (Monday)
+        /// </summary>
+        public static string GetDaysForRate(string deliverDays, DateTime deliveryDate)
+        {
+            return deliveryDate == DateTime.MinValue ? deliverDays : $"{deliverDays} ({deliveryDate.DayOfWeek})";
+        }
     }
 }
