@@ -61,6 +61,8 @@
             this.labelTaq = new System.Windows.Forms.Label();
             this.labelPasswords = new System.Windows.Forms.Label();
             this.wizardPagePayment = new ShipWorks.UI.Wizard.WizardPage();
+            this.cvv = new System.Windows.Forms.TextBox();
+            this.labelCvv = new System.Windows.Forms.Label();
             this.panelPostagePayments = new System.Windows.Forms.Panel();
             this.labelPostagePayments = new System.Windows.Forms.Label();
             this.postagePaymentCredit = new System.Windows.Forms.RadioButton();
@@ -136,14 +138,17 @@
             // next
             // 
             this.next.Location = new System.Drawing.Point(399, 542);
+            this.next.TabIndex = 1;
             // 
             // cancel
             // 
             this.cancel.Location = new System.Drawing.Point(480, 542);
+            this.cancel.TabIndex = 2;
             // 
             // back
             // 
             this.back.Location = new System.Drawing.Point(318, 542);
+            this.back.TabIndex = 0;
             // 
             // mainPanel
             // 
@@ -362,7 +367,7 @@
             this.linkUspsPrivacyAct.Name = "linkUspsPrivacyAct";
             this.linkUspsPrivacyAct.Size = new System.Drawing.Size(253, 13);
             this.linkUspsPrivacyAct.TabIndex = 9;
-            this.linkUspsPrivacyAct.Text = "Unite States Postal Service Privacy Act Statement, ";
+            this.linkUspsPrivacyAct.Text = "United States Postal Service Privacy Act Statement, ";
             this.linkUspsPrivacyAct.Click += new System.EventHandler(this.OnLinkUspsPrivacy);
             // 
             // termsAndConditions
@@ -506,6 +511,8 @@
             // 
             // wizardPagePayment
             // 
+            this.wizardPagePayment.Controls.Add(this.cvv);
+            this.wizardPagePayment.Controls.Add(this.labelCvv);
             this.wizardPagePayment.Controls.Add(this.panelPostagePayments);
             this.wizardPagePayment.Controls.Add(this.panelFreemiumSwFees);
             this.wizardPagePayment.Controls.Add(this.labelCreditCardFees);
@@ -528,6 +535,22 @@
             this.wizardPagePayment.Title = "Payment Information";
             this.wizardPagePayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPayment);
             this.wizardPagePayment.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoPayment);
+            // 
+            // cvv
+            // 
+            this.cvv.Location = new System.Drawing.Point(351, 238);
+            this.cvv.Name = "cvv";
+            this.cvv.Size = new System.Drawing.Size(36, 21);
+            this.cvv.TabIndex = 7;
+            // 
+            // labelCvv
+            // 
+            this.labelCvv.AutoSize = true;
+            this.labelCvv.Location = new System.Drawing.Point(315, 241);
+            this.labelCvv.Name = "labelCvv";
+            this.labelCvv.Size = new System.Drawing.Size(30, 13);
+            this.labelCvv.TabIndex = 20;
+            this.labelCvv.Text = "CVV:";
             // 
             // panelPostagePayments
             // 
@@ -561,7 +584,7 @@
             this.postagePaymentCredit.Location = new System.Drawing.Point(29, 26);
             this.postagePaymentCredit.Name = "postagePaymentCredit";
             this.postagePaymentCredit.Size = new System.Drawing.Size(251, 17);
-            this.postagePaymentCredit.TabIndex = 11;
+            this.postagePaymentCredit.TabIndex = 0;
             this.postagePaymentCredit.TabStop = true;
             this.postagePaymentCredit.Text = "Use the credit card information entered above.";
             this.postagePaymentCredit.UseVisualStyleBackColor = true;
@@ -573,7 +596,7 @@
             this.checkingRouting.Location = new System.Drawing.Point(183, 100);
             this.checkingRouting.Name = "checkingRouting";
             this.checkingRouting.Size = new System.Drawing.Size(206, 21);
-            this.checkingRouting.TabIndex = 17;
+            this.checkingRouting.TabIndex = 3;
             // 
             // postagePaymentCheck
             // 
@@ -581,7 +604,7 @@
             this.postagePaymentCheck.Location = new System.Drawing.Point(29, 49);
             this.postagePaymentCheck.Name = "postagePaymentCheck";
             this.postagePaymentCheck.Size = new System.Drawing.Size(237, 17);
-            this.postagePaymentCheck.TabIndex = 12;
+            this.postagePaymentCheck.TabIndex = 1;
             this.postagePaymentCheck.Text = "Deduct from the following checking account:";
             this.postagePaymentCheck.UseVisualStyleBackColor = true;
             this.postagePaymentCheck.CheckedChanged += new System.EventHandler(this.OnCheckChangedPostagePaymentType);
@@ -612,7 +635,7 @@
             this.checkingAccount.Location = new System.Drawing.Point(183, 73);
             this.checkingAccount.Name = "checkingAccount";
             this.checkingAccount.Size = new System.Drawing.Size(206, 21);
-            this.checkingAccount.TabIndex = 15;
+            this.checkingAccount.TabIndex = 2;
             // 
             // labelCheckingAccount
             // 
@@ -632,7 +655,7 @@
             this.panelFreemiumSwFees.Location = new System.Drawing.Point(23, 391);
             this.panelFreemiumSwFees.Name = "panelFreemiumSwFees";
             this.panelFreemiumSwFees.Size = new System.Drawing.Size(512, 142);
-            this.panelFreemiumSwFees.TabIndex = 18;
+            this.panelFreemiumSwFees.TabIndex = 8;
             this.panelFreemiumSwFees.Visible = false;
             // 
             // shipworksFeesAgree
@@ -643,7 +666,7 @@
             this.shipworksFeesAgree.Location = new System.Drawing.Point(35, 51);
             this.shipworksFeesAgree.Name = "shipworksFeesAgree";
             this.shipworksFeesAgree.Size = new System.Drawing.Size(372, 17);
-            this.shipworksFeesAgree.TabIndex = 13;
+            this.shipworksFeesAgree.TabIndex = 1;
             this.shipworksFeesAgree.Text = "If I optionally use ShipWorks Insurance, pay with the credit card above.";
             this.shipworksFeesAgree.UseVisualStyleBackColor = true;
             // 
@@ -652,7 +675,7 @@
             this.labelSwFreemiumFees.Location = new System.Drawing.Point(20, 19);
             this.labelSwFreemiumFees.Name = "labelSwFreemiumFees";
             this.labelSwFreemiumFees.Size = new System.Drawing.Size(473, 31);
-            this.labelSwFreemiumFees.TabIndex = 12;
+            this.labelSwFreemiumFees.TabIndex = 0;
             this.labelSwFreemiumFees.Text = "Your ShipWorks service fees are free, but if you choose to use ShipWorks Insuranc" +
     "e for your shipments a credit card is required.";
             // 
@@ -682,7 +705,7 @@
             this.cardExpireYear.Location = new System.Drawing.Point(221, 238);
             this.cardExpireYear.Name = "cardExpireYear";
             this.cardExpireYear.Size = new System.Drawing.Size(85, 21);
-            this.cardExpireYear.TabIndex = 9;
+            this.cardExpireYear.TabIndex = 6;
             // 
             // cardExpireMonth
             // 
@@ -704,7 +727,7 @@
             this.cardExpireMonth.Location = new System.Drawing.Point(118, 238);
             this.cardExpireMonth.Name = "cardExpireMonth";
             this.cardExpireMonth.Size = new System.Drawing.Size(97, 21);
-            this.cardExpireMonth.TabIndex = 8;
+            this.cardExpireMonth.TabIndex = 5;
             // 
             // labelCardExpiration
             // 
@@ -720,7 +743,7 @@
             this.cardNumber.Location = new System.Drawing.Point(118, 211);
             this.cardNumber.Name = "cardNumber";
             this.cardNumber.Size = new System.Drawing.Size(206, 21);
-            this.cardNumber.TabIndex = 6;
+            this.cardNumber.TabIndex = 4;
             // 
             // labelCardNumber
             // 
@@ -738,7 +761,7 @@
             this.cardType.Location = new System.Drawing.Point(118, 183);
             this.cardType.Name = "cardType";
             this.cardType.Size = new System.Drawing.Size(144, 21);
-            this.cardType.TabIndex = 4;
+            this.cardType.TabIndex = 3;
             // 
             // labelCardType
             // 
@@ -876,7 +899,7 @@
             this.labelPremiumDescription.Name = "labelPremiumDescription";
             this.labelPremiumDescription.Size = new System.Drawing.Size(457, 29);
             this.labelPremiumDescription.TabIndex = 6;
-            this.labelPremiumDescription.Text = "Preumium services include all of the Standard services plus the ability to create" +
+            this.labelPremiumDescription.Text = "Premium services include all of the Standard services plus the ability to create" +
     " SCAN forms.";
             // 
             // labelStandardDescription
@@ -1211,5 +1234,7 @@
         private System.Windows.Forms.Panel panelPostagePayments;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelBuyPostage;
+        private System.Windows.Forms.TextBox cvv;
+        private System.Windows.Forms.Label labelCvv;
     }
 }

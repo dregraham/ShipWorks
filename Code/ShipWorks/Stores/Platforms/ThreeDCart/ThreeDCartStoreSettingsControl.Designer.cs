@@ -56,10 +56,11 @@
             // 
             this.threeDCartDownloadCriteriaControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.threeDCartDownloadCriteriaControl.AutoSize = true;
             this.threeDCartDownloadCriteriaControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.threeDCartDownloadCriteriaControl.Location = new System.Drawing.Point(0, 155);
             this.threeDCartDownloadCriteriaControl.Name = "threeDCartDownloadCriteriaControl";
-            this.threeDCartDownloadCriteriaControl.Size = new System.Drawing.Size(489, 134);
+            this.threeDCartDownloadCriteriaControl.Size = new System.Drawing.Size(489, 73);
             this.threeDCartDownloadCriteriaControl.TabIndex = 32;
             // 
             // sectionTitleDownloadCriteria
@@ -82,8 +83,9 @@
             this.Controls.Add(this.threeDCartDownloadCriteriaControl);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ThreeDCartStoreSettingsControl";
-            this.Size = new System.Drawing.Size(489, 273);
+            this.Size = new System.Drawing.Size(489, 238);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

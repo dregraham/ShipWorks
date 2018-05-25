@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.brokerEnabled.Location = new System.Drawing.Point(11, 8);
             this.brokerEnabled.Name = "brokerEnabled";
             this.brokerEnabled.Size = new System.Drawing.Size(142, 17);
-            this.brokerEnabled.TabIndex = 45;
+            this.brokerEnabled.TabIndex = 0;
             this.brokerEnabled.Text = "Use the following broker";
             this.brokerEnabled.UseVisualStyleBackColor = false;
             // 
@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBroker.SectionName = "International Broker";
             this.sectionBroker.SettingsKey = "{4da9daec-f847-4177-b9fb-0f9bb5f1cdcc}";
             this.sectionBroker.Size = new System.Drawing.Size(572, 24);
-            this.sectionBroker.TabIndex = 3;
+            this.sectionBroker.TabIndex = 4;
             // 
             // admissibilityPackaging
             // 
@@ -248,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.admissibilityPackaging.Name = "admissibilityPackaging";
             this.admissibilityPackaging.PromptText = "(Multiple Values)";
             this.admissibilityPackaging.Size = new System.Drawing.Size(145, 21);
-            this.admissibilityPackaging.TabIndex = 9;
+            this.admissibilityPackaging.TabIndex = 15;
             // 
             // labelAdmissibilityPackaging
             // 
@@ -257,7 +257,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelAdmissibilityPackaging.Location = new System.Drawing.Point(3, 144);
             this.labelAdmissibilityPackaging.Name = "labelAdmissibilityPackaging";
             this.labelAdmissibilityPackaging.Size = new System.Drawing.Size(119, 13);
-            this.labelAdmissibilityPackaging.TabIndex = 8;
+            this.labelAdmissibilityPackaging.TabIndex = 14;
             this.labelAdmissibilityPackaging.Text = "Admissibility Packaging:";
             // 
             // documentsOnly
@@ -519,7 +519,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.ciTermsOfSale.Name = "ciTermsOfSale";
             this.ciTermsOfSale.PromptText = "(Multiple Values)";
             this.ciTermsOfSale.Size = new System.Drawing.Size(161, 21);
-            this.ciTermsOfSale.TabIndex = 1;
+            this.ciTermsOfSale.TabIndex = 2;
             // 
             // labelPurpose
             // 
@@ -566,7 +566,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.electronicTradeDocuments.Location = new System.Drawing.Point(36, 38);
             this.electronicTradeDocuments.Name = "electronicTradeDocuments";
             this.electronicTradeDocuments.Size = new System.Drawing.Size(154, 17);
-            this.electronicTradeDocuments.TabIndex = 0;
+            this.electronicTradeDocuments.TabIndex = 1;
             this.electronicTradeDocuments.Text = "File electronically";
             this.electronicTradeDocuments.UseVisualStyleBackColor = false;
             // 
@@ -635,7 +635,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionNafta.SectionName = "NAFTA";
             this.sectionNafta.SettingsKey = "{214e751c-4c94-4be8-bb4a-5421289a47a2}";
             this.sectionNafta.Size = new System.Drawing.Size(572, 170);
-            this.sectionNafta.TabIndex = 4;
+            this.sectionNafta.TabIndex = 2;
             // 
             // naftaProducerId
             // 
@@ -643,7 +643,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fieldLengthProvider.SetMaxLengthSource(this.naftaProducerId, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsTin);
             this.naftaProducerId.Name = "naftaProducerId";
             this.naftaProducerId.Size = new System.Drawing.Size(145, 21);
-            this.naftaProducerId.TabIndex = 15;
+            this.naftaProducerId.TabIndex = 6;
             // 
             // labelNaftaProducerId
             // 
@@ -652,7 +652,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelNaftaProducerId.Location = new System.Drawing.Point(50, 88);
             this.labelNaftaProducerId.Name = "labelNaftaProducerId";
             this.labelNaftaProducerId.Size = new System.Drawing.Size(98, 13);
-            this.labelNaftaProducerId.TabIndex = 14;
+            this.labelNaftaProducerId.TabIndex = 5;
             this.labelNaftaProducerId.Text = "Nafta Producer ID:";
             // 
             // netCostMethodLabel
@@ -662,7 +662,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.netCostMethodLabel.Location = new System.Drawing.Point(56, 115);
             this.netCostMethodLabel.Name = "netCostMethodLabel";
             this.netCostMethodLabel.Size = new System.Drawing.Size(92, 13);
-            this.netCostMethodLabel.TabIndex = 5;
+            this.netCostMethodLabel.TabIndex = 7;
             this.netCostMethodLabel.Text = "Net Cost Method:";
             this.netCostMethodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -733,7 +733,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.naftaNetCostMethod.Name = "naftaNetCostMethod";
             this.naftaNetCostMethod.PromptText = "(Multiple Values)";
             this.naftaNetCostMethod.Size = new System.Drawing.Size(243, 21);
-            this.naftaNetCostMethod.TabIndex = 6;
+            this.naftaNetCostMethod.TabIndex = 8;
             // 
             // electronicExportInfo
             // 

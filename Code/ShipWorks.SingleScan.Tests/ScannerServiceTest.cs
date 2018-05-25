@@ -19,11 +19,15 @@ namespace ShipWorks.SingleScan.Tests
 {
     public class ScannerServiceTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
+        private readonly Mock<IScannerMessageFilter> registeredScannerInputHandler;
 
         public ScannerServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            registeredScannerInputHandler = mock.FromFactory<IScannerMessageFilterFactory>()
+                .Mock(f => f.CreateRegisteredScannerInputHandler());
         }
 
         [Fact]
@@ -37,13 +41,10 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Enable_DelegatesToMessageFilterRegistrar()
         {
-            var messageFilter = mock.Build<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
-
             var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
-            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(messageFilter));
+            registeredScannerInputHandler.Verify(h=>h.Enable());
         }
 
         [Fact]
@@ -76,15 +77,12 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Disable_DelegatesToMessageFilterRegistrar()
         {
-            var messageFilter = mock.Build<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
-
             var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             testObject.Disable();
 
-            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.RemoveMessageFilter(messageFilter));
+            registeredScannerInputHandler.Verify(h=>h.Disable());
         }
 
         [Fact]
@@ -114,7 +112,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.Disable();
             testObject.Disable();
 
-            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.RemoveMessageFilter(It.IsAny<IScannerMessageFilter>()), Times.Once);
+            registeredScannerInputHandler.Verify(h=>h.Disable(), Times.Once);
         }
 
         [Theory]

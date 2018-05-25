@@ -2,8 +2,6 @@
 using System.Linq;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -14,11 +12,9 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using Xunit;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 {
@@ -28,12 +24,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         private readonly TestMessenger testMessenger;
         private readonly TestScheduler scheduler;
         private readonly ProfileShortcutPipeline testObject;
-        private readonly Mock<ITrackedEvent> telemetryEvent;
         private readonly Mock<IMainForm> mainForm;
-
-        private readonly ScanMessageBroker scanMessageBroker = new ScanMessageBroker(null, null);
-
-        private Mock<ShippingPanelViewModel> viewModel;
+        private readonly Mock<ShippingPanelViewModel> viewModel;
 
         public ProfileShortcutPipelineTest()
         {
@@ -48,10 +40,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(scheduler);
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
-            telemetryEvent = mock.Mock<ITrackedEvent>();
-
             viewModel = mock.CreateMock<ShippingPanelViewModel>();
             mainForm = mock.Mock<IMainForm>();
+            mainForm.Setup(m => m.IsShippingPanelOpen()).Returns(true);
 
             testObject = mock.Create<ProfileShortcutPipeline>();
             testObject.Register(viewModel.Object);
@@ -61,7 +52,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_SendsApplyProfileMessage_WhenShortcutMessageReceived_AndAppliesToProfile()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
@@ -79,7 +70,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_CallsMainFormFocus_WhenShortcutMessageReceived_AndAppliesToProfile()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
@@ -94,7 +85,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_DoesNotSendMessage_WhenShortcutActionDoesNotApply()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyWeight, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyWeight, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
@@ -109,7 +100,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_DoesNotSendApplyProfileMessage_ViewModelDoesNotHaveShipment()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
 
             viewModel.SetupGet(v => v.Shipment).Returns((ShipmentEntity) null);
@@ -126,7 +117,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_DoesNotSendApplyProfileMessage_WhenAdditionalFormsAreOpen()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
                 ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456));
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(true);
@@ -141,7 +132,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_DoesNotSendApplyProfileMessage_WhenShipmentIsProcessed()
         {
             ShortcutMessage message = new ShortcutMessage(this,
-                                                          new ShortcutEntity() { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
+                                                          new ShortcutEntity { Action = KeyboardShortcutCommand.ApplyProfile, RelatedObjectID = 789 },
                                                           ShortcutTriggerType.Barcode, "123");
             viewModel.SetupGet(v => v.Shipment).Returns(new ShipmentEntity(456) {Processed = true});
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
@@ -151,7 +142,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             Assert.Empty(testMessenger.SentMessages.OfType<ApplyProfileMessage>());
         }
-
+        
         public void Dispose()
         {
             mock.Dispose();

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.returnContents = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.returnService = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -45,7 +46,8 @@
             this.returnContents.MaxLength = 32767;
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(190, 21);
-            this.returnContents.TabIndex = 10;
+            this.returnContents.TabIndex = 4;
+            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // label5
             // 
@@ -54,7 +56,7 @@
             this.label5.Location = new System.Drawing.Point(94, 50);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 13);
-            this.label5.TabIndex = 8;
+            this.label5.TabIndex = 3;
             this.label5.Text = "Contents:";
             // 
             // returnService
@@ -65,7 +67,7 @@
             this.returnService.Name = "returnService";
             this.returnService.PromptText = "(Multiple Values)";
             this.returnService.Size = new System.Drawing.Size(207, 21);
-            this.returnService.TabIndex = 6;
+            this.returnService.TabIndex = 1;
             this.returnService.SelectedIndexChanged += new System.EventHandler(this.OnReturnServiceChanged);
             // 
             // returnEmailPanel
@@ -76,14 +78,14 @@
             this.returnEmailPanel.Location = new System.Drawing.Point(11, 73);
             this.returnEmailPanel.Name = "returnEmailPanel";
             this.returnEmailPanel.Size = new System.Drawing.Size(340, 28);
-            this.returnEmailPanel.TabIndex = 9;
+            this.returnEmailPanel.TabIndex = 5;
             // 
             // returnUndeliverableEmail
             // 
             this.returnUndeliverableEmail.Location = new System.Drawing.Point(141, 5);
             this.returnUndeliverableEmail.Name = "returnUndeliverableEmail";
             this.returnUndeliverableEmail.Size = new System.Drawing.Size(191, 21);
-            this.returnUndeliverableEmail.TabIndex = 3;
+            this.returnUndeliverableEmail.TabIndex = 1;
             // 
             // label4
             // 
@@ -91,7 +93,7 @@
             this.label4.Location = new System.Drawing.Point(35, 8);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 13);
-            this.label4.TabIndex = 2;
+            this.label4.TabIndex = 0;
             this.label4.Text = "Undeliverable email:";
             // 
             // returnDescription
@@ -102,7 +104,7 @@
             this.returnDescription.Location = new System.Drawing.Point(94, 28);
             this.returnDescription.Name = "returnDescription";
             this.returnDescription.Size = new System.Drawing.Size(138, 13);
-            this.returnDescription.TabIndex = 7;
+            this.returnDescription.TabIndex = 2;
             this.returnDescription.Text = "All about the return service";
             // 
             // label3
@@ -112,7 +114,7 @@
             this.label3.Location = new System.Drawing.Point(3, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 13);
-            this.label3.TabIndex = 5;
+            this.label3.TabIndex = 0;
             this.label3.Text = " UPS Returns® :";
             // 
             // UpsOltReturnsControl
@@ -126,7 +128,6 @@
             this.Controls.Add(this.returnEmailPanel);
             this.Controls.Add(this.returnDescription);
             this.Controls.Add(this.label3);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "UpsOltReturnsControl";
             this.Size = new System.Drawing.Size(353, 110);
             this.returnEmailPanel.ResumeLayout(false);

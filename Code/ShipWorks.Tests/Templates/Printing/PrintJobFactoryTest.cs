@@ -28,16 +28,6 @@ namespace ShipWorks.Tests.Templates.Printing
 
             mock.Mock<IShippingProfileService>().Verify(s => s.GetConfiguredShipmentTypeProfiles());
         }
-        
-        [Fact]
-        public void CreateBarcodePrintJob_ReturnsBarcodePrintJob()
-        {
-            var testObject = mock.Create<PrintJobFactory>();
-
-            IPrintJob result = testObject.CreateBarcodePrintJob(new List<IShippingProfile>());
-
-            Assert.IsType(typeof(BarcodePrintJob), result);
-        }
 
         [Fact]
         public void CreateBarcodePrintJob_ReturnsPrintJob()

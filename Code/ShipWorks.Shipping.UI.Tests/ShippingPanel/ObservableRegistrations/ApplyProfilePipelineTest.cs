@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Divelements.SandRibbon;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using Moq;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -15,12 +17,12 @@ using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 {
-    public class ApplyProfilePipelineTest : IDisposable
+    public class ShippingProfilePipelineTest : IDisposable
     {
         readonly AutoMock mock;
         readonly Subject<IShipWorksMessage> messenger;
 
-        public ApplyProfilePipelineTest()
+        public ShippingProfilePipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -32,7 +34,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotDelegateToShipmentTypeManager_WhenShipmentDoesNotMatchViewModel()
         {
-            ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
+            ShippingProfilePipeline testObject = mock.Create<ShippingProfilePipeline>();
             testObject.Register(mock.Create<ShippingPanelViewModel>());
 
             messenger.OnNext(new ApplyProfileMessage(this, 1234, 0));
@@ -56,7 +58,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 .Setup(x => x.Get(123))
                 .Returns(shippingProfile);
 
-            ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
+            ShippingProfilePipeline testObject = mock.Create<ShippingProfilePipeline>();
             testObject.Register(viewModel.Object);
 
             messenger.OnNext(new ApplyProfileMessage(this, 12, profile.ShippingProfileID));
@@ -77,7 +79,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             mock.Mock<IShippingProfileService>().Setup(s => s.Get(It.IsAny<long>())).Returns(profile);
 
-            ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
+            ShippingProfilePipeline testObject = mock.Create<ShippingProfilePipeline>();
             testObject.Register(viewModel.Object);
 
             messenger.OnNext(new ApplyProfileMessage(this, 12, 0));
