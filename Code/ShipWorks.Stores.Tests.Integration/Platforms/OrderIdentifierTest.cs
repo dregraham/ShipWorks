@@ -182,6 +182,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.OrderDynamics, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.OrderMotion, typeof(OrderMotionOrderIdentifier) },
             { StoreTypeCode.osCommerce, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.Overstock, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PayPal, typeof(PayPalOrderIdentifier) },
             { StoreTypeCode.PowersportsSupport, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PrestaShop, typeof(AlphaNumericOrderIdentifier) },

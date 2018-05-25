@@ -47,6 +47,13 @@ namespace ShipWorks.Stores.Communication
             GetDateStartingPoint(OrderFields.OrderDate, store);
 
         /// <summary>
+        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
+        /// will be used to calculate the initial number of days back to.
+        /// </summary>
+        public Task<DateTime?> CustomDate(IStoreEntity store, EntityField2 field) =>
+            GetDateStartingPoint(field, store);
+
+        /// <summary>
         /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>

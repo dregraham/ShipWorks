@@ -15,6 +15,7 @@ using ShipWorks.Common.Threading;
 using Interapptive.Shared.Win32;
 using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
+using Interapptive.Shared.Data;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -141,7 +142,7 @@ namespace ShipWorks.ApplicationCore.Interaction
             {
                 get
                 {
-                    if (databaseDependent)
+                    if (databaseDependent || SqlUtility.IsSingleUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName))
                     {
                         // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
                         // or we know something is wrong with the connection - bail.

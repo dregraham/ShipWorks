@@ -131,6 +131,7 @@ namespace ShipWorks.ApplicationCore.Logging
         UpsLocalRating,
         GoogleMaps,
         Jet,
+        Overstock,
 
         [ApiPrivateLogSource]
         ShipEngine,

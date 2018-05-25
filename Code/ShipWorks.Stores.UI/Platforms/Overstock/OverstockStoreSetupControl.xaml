@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Overstock.OverstockStoreSetupControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Overstock"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             mc:Ignorable="d" 
+             
+             FontFamily="Tahoma"
+             FontSize="8.25 pt"
+             FontStyle="Normal"
+             FontStretch="Normal"
+             FontWeight="Normal"
+             
+             d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+            <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" 
+               Grid.Column="0" 
+               Grid.ColumnSpan="3"
+               HorizontalAlignment="Left">Enter the user name and password you use to login to Overstock:</Label>
+
+        <Label Grid.Row="1" 
+               Grid.Column="1" 
+               HorizontalAlignment="Right">User name:</Label>
+        <TextBox Grid.Row="1" 
+                 Grid.Column="2"
+                 Height="23"
+                 VerticalContentAlignment="Center"
+                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+        
+        <Label Grid.Row="2" 
+               Grid.Column="1"
+               HorizontalAlignment="Right">Password:</Label>
+        <PasswordBox Grid.Row="2" 
+                     Grid.Column="2"
+                     Height="23"
+                     VerticalContentAlignment="Center">
+            <i:Interaction.Behaviors>
+                <ui:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </i:Interaction.Behaviors>
+        </PasswordBox>
+        <TextBlock Grid.Column="2"
+                   Grid.Row="3" 
+                   TextWrapping="WrapWithOverflow">
+            For help finding your user name or password, 
+            <Hyperlink
+                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000122601-adding-an-overstock-store" ui:Link.OpenInBrowser="true">
+                click here.
+            </Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

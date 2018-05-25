@@ -30,6 +30,9 @@
     <None Remove="Platforms\Manual\ManualStoreTypeTest.cs" />
     <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
     <None Remove="Orders\Archive\OrderArchiveFilterRegeneratorTest.cs" />
+    <None Remove="Platforms\Overstock\OverstockOrderIdentifierTest.cs" />
+    <None Remove="Platforms\Overstock\OverstockShipmentFactoryTest.cs" />
+    <None Remove="Platforms\Overstock\OverstockStoreTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (222 + 0));
+			this.InitClass( (226 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -185,6 +185,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitOrderSearchEntityInfos();
 			InitOtherProfileEntityInfos();
 			InitOtherShipmentEntityInfos();
+			InitOverstockOrderEntityInfos();
+			InitOverstockOrderItemEntityInfos();
+			InitOverstockOrderSearchEntityInfos();
+			InitOverstockStoreEntityInfos();
 			InitPackageProfileEntityInfos();
 			InitPayPalOrderEntityInfos();
 			InitPayPalOrderSearchEntityInfos();
@@ -2370,6 +2374,40 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OtherShipmentEntity", "Service", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Service, 50, 0, 0);
 			this.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("OtherShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)OtherShipmentFieldIndex.Insurance, 0, 0, 0);
+		}
+		/// <summary>Inits OverstockOrderEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderFieldIndex), "OverstockOrderEntity");
+			this.AddElementFieldInfo("OverstockOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderFieldIndex.WarehouseCode, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderFieldIndex.SalesChannelName, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderEntity", "SofsCreatedDate", typeof(System.DateTime), false, false, false, false,  (int)OverstockOrderFieldIndex.SofsCreatedDate, 0, 0, 0);
+		}
+		/// <summary>Inits OverstockOrderItemEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderItemFieldIndex), "OverstockOrderItemEntity");
+			this.AddElementFieldInfo("OverstockOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderItemEntity", "SalesChannelLineNumber", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, 0, 0, 19);
+		}
+		/// <summary>Inits OverstockOrderSearchEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderSearchEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderSearchFieldIndex), "OverstockOrderSearchEntity");
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OverstockOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderSearchFieldIndex.OverstockOrderSearchID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OverstockOrderSearchFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.SalesChannelName, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderSearchFieldIndex.WarehouseCode, 50, 0, 0);
+		}
+		/// <summary>Inits OverstockStoreEntity's FieldInfo objects</summary>
+		private void InitOverstockStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockStoreFieldIndex), "OverstockStoreEntity");
+			this.AddElementFieldInfo("OverstockStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OverstockStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)OverstockStoreFieldIndex.Username, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)OverstockStoreFieldIndex.Password, 50, 0, 0);
 		}
 		/// <summary>Inits PackageProfileEntity's FieldInfo objects</summary>
 		private void InitPackageProfileEntityInfos()

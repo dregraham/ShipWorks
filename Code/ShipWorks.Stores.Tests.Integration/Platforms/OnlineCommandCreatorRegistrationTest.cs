@@ -23,6 +23,7 @@ using ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Newegg.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
 using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
@@ -136,6 +137,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.OrderDynamics, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.OrderMotion, typeof(OrderMotionOnlineUpdateCommandCreator) },
             { StoreTypeCode.osCommerce, typeof(GenericModuleOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Overstock, typeof(OverstockOnlineUpdateCommandCreator) },
             { StoreTypeCode.PowersportsSupport, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.PrestaShop, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.ProStores, typeof(ProStoresOnlineUpdateCommandCreator) },

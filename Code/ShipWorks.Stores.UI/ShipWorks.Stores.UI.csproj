@@ -454,6 +454,22 @@
     <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.Designer.cs">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Overstock\OverstockAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Overstock\OverstockAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>OverstockAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Overstock\OverstockStoreSetupControl.xaml.cs">
+      <DependentUpon>OverstockStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Overstock\OverstockStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Overstock\OverstockStoreSetupControlHost.Designer.cs">
+      <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Overstock\OverstockStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml.cs">
       <DependentUpon>ShopSiteAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -663,6 +679,12 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.resx">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Overstock\OverstockAccountSettingsControlHost.resx">
+      <DependentUpon>OverstockAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Overstock\OverstockStoreSetupControlHost.resx">
+      <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -822,6 +844,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Overstock\OverstockStoreSetupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Get the store for the related Shipment
         /// </summary>
-        StoreEntity GetRelatedStore(ShipmentEntity shipment);
+        StoreEntity GetRelatedStore(IShipmentEntity shipment);
 
         /// <summary>
         /// Saves the store.

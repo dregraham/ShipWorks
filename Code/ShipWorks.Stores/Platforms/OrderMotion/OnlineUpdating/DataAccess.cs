@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
         /// </summary>
         public async Task<IEnumerable<OrderDetail>> GetOrderDetails(long orderID)
         {
-            var order = await dataProvider.GetEntityAsync<OrderMotionOrderEntity>(orderID).ConfigureAwait(false);
+            OrderEntity order = await dataProvider.GetEntityAsync<OrderEntity>(orderID).ConfigureAwait(false);
             return await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
         }
     }

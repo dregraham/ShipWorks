@@ -2799,6 +2799,86 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty OverstockOrderEntity objects.</summary>
+	[Serializable]
+	public partial class OverstockOrderEntityFactory : EntityFactoryBase2<OverstockOrderEntity> {
+		/// <summary>CTor</summary>
+		public OverstockOrderEntityFactory() : base("OverstockOrderEntity", ShipWorks.Data.Model.EntityType.OverstockOrderEntity, true) { }
+		
+		/// <summary>Creates a new OverstockOrderEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OverstockOrderEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOverstockOrderUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty OverstockOrderItemEntity objects.</summary>
+	[Serializable]
+	public partial class OverstockOrderItemEntityFactory : EntityFactoryBase2<OverstockOrderItemEntity> {
+		/// <summary>CTor</summary>
+		public OverstockOrderItemEntityFactory() : base("OverstockOrderItemEntity", ShipWorks.Data.Model.EntityType.OverstockOrderItemEntity, true) { }
+		
+		/// <summary>Creates a new OverstockOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OverstockOrderItemEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOverstockOrderItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty OverstockOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class OverstockOrderSearchEntityFactory : EntityFactoryBase2<OverstockOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public OverstockOrderSearchEntityFactory() : base("OverstockOrderSearchEntity", ShipWorks.Data.Model.EntityType.OverstockOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new OverstockOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OverstockOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOverstockOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty OverstockStoreEntity objects.</summary>
+	[Serializable]
+	public partial class OverstockStoreEntityFactory : EntityFactoryBase2<OverstockStoreEntity> {
+		/// <summary>CTor</summary>
+		public OverstockStoreEntityFactory() : base("OverstockStoreEntity", ShipWorks.Data.Model.EntityType.OverstockStoreEntity, true) { }
+		
+		/// <summary>Creates a new OverstockStoreEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OverstockStoreEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOverstockStoreUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty PackageProfileEntity objects.</summary>
 	[Serializable]
 	public partial class PackageProfileEntityFactory : EntityFactoryBase2<PackageProfileEntity> {
@@ -4955,6 +5035,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.OtherShipmentEntity:
 					factoryToUse = new OtherShipmentEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderEntity:
+					factoryToUse = new OverstockOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderItemEntity:
+					factoryToUse = new OverstockOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderSearchEntity:
+					factoryToUse = new OverstockOrderSearchEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockStoreEntity:
+					factoryToUse = new OverstockStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.PackageProfileEntity:
 					factoryToUse = new PackageProfileEntityFactory();

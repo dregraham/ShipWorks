@@ -274,6 +274,7 @@ BEGIN
 	exec PurgeEntities 'LemonStandOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'ShopifyOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'NeweggOrderItem', 'OrderItemID', 'OrderItemID'
+	exec PurgeEntities 'OverstockOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'OrderItemAttribute', 'OrderItemID', 'OrderItemAttributeID'
 	exec PurgeEntities 'SearsOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'ThreeDCartOrderItem', 'OrderItemID', 'OrderItemID'
@@ -300,6 +301,7 @@ BEGIN
 	/*******************************************************************/
 	exec PurgeEntities 'AmazonOrderSearch', 'OrderID', 'AmazonOrderSearchID'
 	exec PurgeEntities 'ChannelAdvisorOrderSearch', 'OrderID', 'ChannelAdvisorOrderSearchID'
+	exec PurgeEntities 'OverstockOrderSearch', 'OrderID', 'OverstockOrderSearchID'
 	exec PurgeEntities 'ClickCartProOrderSearch', 'OrderID', 'ClickCartProOrderSearchID'
 	exec PurgeEntities 'CommerceInterfaceOrderSearch', 'OrderID', 'CommerceInterfaceOrderSearchID'
 	exec PurgeEntities 'EbayCombinedOrderRelation', 'OrderID', 'EbayCombinedOrderRelationID'
@@ -321,6 +323,7 @@ BEGIN
 	exec PurgeEntities 'AmazonOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ProStoresOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ChannelAdvisorOrder', 'OrderID', 'OrderID'
+	exec PurgeEntities 'OverstockOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ClickCartProOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'CommerceInterfaceOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'EbayOrder', 'OrderID', 'OrderID'

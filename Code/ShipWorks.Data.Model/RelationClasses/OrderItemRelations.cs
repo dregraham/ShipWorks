@@ -202,6 +202,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderItemEntity and OverstockOrderItemEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeOverstockOrderItemEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(OrderItemFields.OrderItemID, OverstockOrderItemFields.OrderItemID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between OrderItemEntity and SearsOrderItemEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeSearsOrderItemEntity
 		{
@@ -289,6 +300,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeLemonStandOrderItemEntity;
 				case "NeweggOrderItemEntity":
 					return this.RelationToSubTypeNeweggOrderItemEntity;
+				case "OverstockOrderItemEntity":
+					return this.RelationToSubTypeOverstockOrderItemEntity;
 				case "SearsOrderItemEntity":
 					return this.RelationToSubTypeSearsOrderItemEntity;
 				case "ShopifyOrderItemEntity":
