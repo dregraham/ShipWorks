@@ -1498,6 +1498,7 @@
           <Field Name="ChannelSKUProvided" Type="string" MaxLength="255" FieldIndex="1" />
           <Field Name="FulfillmentLineItemID" Type="string" MaxLength="255" FieldIndex="2" />
           <Field Name="GrouponLineItemID" Type="string" MaxLength="255" FieldIndex="4" />
+          <Field Name="GrouponPO" Type="string" MaxLength="255" FieldIndex="5" />
           <Field Name="Permalink" Type="string" MaxLength="255" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -4255,7 +4256,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-15T16:14:14.5148455Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-29T18:13:12.5000565Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4624,10 +4625,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6513,6 +6514,7 @@
                     <Field Name="FulfillmentLineItemID" Ordinal="4" DbType="12" Length="255" />
                     <Field Name="BomSKU" Ordinal="5" DbType="12" Length="255" />
                     <Field Name="GrouponLineItemID" Ordinal="6" DbType="12" Length="255" />
+                    <Field Name="GrouponPO" Ordinal="7" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderSearch">
@@ -7181,9 +7183,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7293,9 +7295,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -11628,6 +11630,7 @@
             <FieldMapping FieldName="ChannelSKUProvided" TargetFieldName="ChannelSKUProvided" />
             <FieldMapping FieldName="FulfillmentLineItemID" TargetFieldName="FulfillmentLineItemID" />
             <FieldMapping FieldName="GrouponLineItemID" TargetFieldName="GrouponLineItemID" />
+            <FieldMapping FieldName="GrouponPO" TargetFieldName="GrouponPO" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="Permalink" TargetFieldName="Permalink" />
           </FieldMappings>

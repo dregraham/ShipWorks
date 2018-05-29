@@ -343,6 +343,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BomSKU", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GrouponLineItemID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("GrouponPO", fieldHashtable);
 		}
 		#endregion
 
@@ -444,6 +446,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, true); }
 			set	{ SetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, value); }
+		}
+
+		/// <summary> The GrouponPO property of the Entity GrouponOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."GrouponPO"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String GrouponPO
+		{
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.GrouponPO, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.GrouponPO, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

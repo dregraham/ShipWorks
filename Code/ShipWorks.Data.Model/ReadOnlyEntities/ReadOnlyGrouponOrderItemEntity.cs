@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FulfillmentLineItemID = source.FulfillmentLineItemID;
             BomSKU = source.BomSKU;
             GrouponLineItemID = source.GrouponLineItemID;
+            GrouponPO = source.GrouponPO;
             
             
             
@@ -79,6 +80,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String GrouponLineItemID { get; }
+        /// <summary> The GrouponPO property of the Entity GrouponOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GrouponOrderItem"."GrouponPO"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String GrouponPO { get; }
         
         
         

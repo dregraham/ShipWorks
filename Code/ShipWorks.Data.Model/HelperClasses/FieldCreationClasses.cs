@@ -10802,6 +10802,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.GrouponLineItemID);}
 		}
+		/// <summary>Creates a new GrouponOrderItemEntity.GrouponPO field instance</summary>
+		public static EntityField2 GrouponPO
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.GrouponPO);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GrouponOrderSearchEntity</summary>

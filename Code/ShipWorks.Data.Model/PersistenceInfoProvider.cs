@@ -1801,13 +1801,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderItemEntity's mappings</summary>
 		private void InitGrouponOrderItemEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderItemEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderItem", 6, 0);
+			this.AddElementMapping("GrouponOrderItemEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderItem", 7, 0);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "Permalink", "Permalink", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "ChannelSKUProvided", "ChannelSKUProvided", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "FulfillmentLineItemID", "FulfillmentLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "BomSKU", "BomSKU", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "GrouponLineItemID", "GrouponLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("GrouponOrderItemEntity", "GrouponPO", "GrouponPO", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits GrouponOrderSearchEntity's mappings</summary>

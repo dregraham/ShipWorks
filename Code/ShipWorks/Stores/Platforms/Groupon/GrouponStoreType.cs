@@ -134,7 +134,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 ChannelSKUProvided = string.Empty,
                 FulfillmentLineItemID = string.Empty,
                 BomSKU = string.Empty,
-                GrouponLineItemID = string.Empty
+                GrouponLineItemID = string.Empty,
+                GrouponPO = string.Empty
             };
         }
 
