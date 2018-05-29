@@ -396,7 +396,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         
                         new GridColumnDefinition("{6DA4253C-04F1-4970-B7FD-A239090D36FC}", false,
                             new GridTextDisplayType(), "PO Number", "A123456",
-                            GrouponOrderItemFields.GrouponPO)
+                            GrouponOrderItemFields.PONumber)
                         {
                             StoreTypeCode = StoreTypeCode.Groupon
                         },

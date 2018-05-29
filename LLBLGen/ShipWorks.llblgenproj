@@ -1498,8 +1498,8 @@
           <Field Name="ChannelSKUProvided" Type="string" MaxLength="255" FieldIndex="1" />
           <Field Name="FulfillmentLineItemID" Type="string" MaxLength="255" FieldIndex="2" />
           <Field Name="GrouponLineItemID" Type="string" MaxLength="255" FieldIndex="4" />
-          <Field Name="GrouponPO" Type="string" MaxLength="255" FieldIndex="5" />
           <Field Name="Permalink" Type="string" MaxLength="255" FieldIndex="0" />
+          <Field Name="PONumber" Type="string" MaxLength="255" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponOrderSearch" ObjectID="cf72da0d-0d1d-44a7-bfc8-90c3dc5ef60e">
@@ -6514,7 +6514,7 @@
                     <Field Name="FulfillmentLineItemID" Ordinal="4" DbType="12" Length="255" />
                     <Field Name="BomSKU" Ordinal="5" DbType="12" Length="255" />
                     <Field Name="GrouponLineItemID" Ordinal="6" DbType="12" Length="255" />
-                    <Field Name="GrouponPO" Ordinal="7" DbType="12" Length="255" />
+                    <Field Name="PONumber" Ordinal="7" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderSearch">
@@ -11630,9 +11630,9 @@
             <FieldMapping FieldName="ChannelSKUProvided" TargetFieldName="ChannelSKUProvided" />
             <FieldMapping FieldName="FulfillmentLineItemID" TargetFieldName="FulfillmentLineItemID" />
             <FieldMapping FieldName="GrouponLineItemID" TargetFieldName="GrouponLineItemID" />
-            <FieldMapping FieldName="GrouponPO" TargetFieldName="GrouponPO" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="Permalink" TargetFieldName="Permalink" />
+            <FieldMapping FieldName="PONumber" TargetFieldName="PONumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponOrderSearch" TargetName="ShipWorksLocal:dbo:GrouponOrderSearch">

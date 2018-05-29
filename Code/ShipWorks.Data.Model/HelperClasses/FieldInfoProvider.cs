@@ -1729,7 +1729,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
-			this.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponPO", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponPO, 255, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderItemEntity", "PONumber", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.PONumber, 255, 0, 0);
 		}
 		/// <summary>Inits GrouponOrderSearchEntity's FieldInfo objects</summary>
 		private void InitGrouponOrderSearchEntityInfos()

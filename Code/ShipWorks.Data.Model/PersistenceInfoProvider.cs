@@ -1808,7 +1808,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "FulfillmentLineItemID", "FulfillmentLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "BomSKU", "BomSKU", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "GrouponLineItemID", "GrouponLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("GrouponOrderItemEntity", "GrouponPO", "GrouponPO", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("GrouponOrderItemEntity", "PONumber", "PONumber", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits GrouponOrderSearchEntity's mappings</summary>

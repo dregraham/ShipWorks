@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             item.FulfillmentLineItemID = grouponItem.FulfillmentLineitemId;
             item.BomSKU = grouponItem.BomSku;
             item.GrouponLineItemID = grouponItem.GrouponLineitemId;
-            item.GrouponPO = grouponItem.PoNumber;
+            item.PONumber = grouponItem.PoNumber;
         }
 
         /// <summary>

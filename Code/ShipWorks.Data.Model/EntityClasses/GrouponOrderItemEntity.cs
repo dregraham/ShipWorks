@@ -344,7 +344,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GrouponLineItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("GrouponPO", fieldHashtable);
+			_fieldsCustomProperties.Add("PONumber", fieldHashtable);
 		}
 		#endregion
 
@@ -448,14 +448,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, value); }
 		}
 
-		/// <summary> The GrouponPO property of the Entity GrouponOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GrouponOrderItem"."GrouponPO"<br/>
+		/// <summary> The PONumber property of the Entity GrouponOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."PONumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String GrouponPO
+		public virtual System.String PONumber
 		{
-			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.GrouponPO, true); }
-			set	{ SetValue((int)GrouponOrderItemFieldIndex.GrouponPO, value); }
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.PONumber, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.PONumber, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

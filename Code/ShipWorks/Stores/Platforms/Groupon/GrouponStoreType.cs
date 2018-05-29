@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 FulfillmentLineItemID = string.Empty,
                 BomSKU = string.Empty,
                 GrouponLineItemID = string.Empty,
-                GrouponPO = string.Empty
+                PONumber = string.Empty
             };
         }
 
@@ -160,9 +160,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             ElementOutline outline = container.AddElement("Groupon");
             outline.AddElement("BOMSKU", () => item.Value.BomSKU);
-            outline.AddElement("Permalink", () => item.Value.Permalink;
+            outline.AddElement("Permalink", () => item.Value.Permalink);
             outline.AddElement("ChannelSku", () => item.Value.ChannelSKUProvided);
-            outline.AddElement("GrouponPO", () => item.Value.GrouponPO);
+            outline.AddElement("PONumber", () => item.Value.PONumber);
         }
 
         /// <summary>
