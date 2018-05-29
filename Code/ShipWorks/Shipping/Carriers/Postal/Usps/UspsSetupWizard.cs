@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
@@ -38,6 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Setup wizard for processing shipments with USPS
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Usps)]
+    [Component(RegistrationType.Self)]
     public partial class UspsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private UspsRegistration uspsRegistration;
