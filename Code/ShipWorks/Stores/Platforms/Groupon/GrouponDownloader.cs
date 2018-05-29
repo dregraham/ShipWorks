@@ -250,6 +250,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             item.Weight = GetWeight(itemWeight, itemWeightUnit);
             item.UnitPrice = Convert.ToDecimal(grouponItem.UnitPrice);
             item.Quantity = Convert.ToInt16(grouponItem.Quantity);
+            item.UnitCost = Convert.ToDecimal(grouponItem.GrouponCost);
 
             //Groupon fields
             item.Permalink = grouponItem.Permalink;
@@ -257,6 +258,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             item.FulfillmentLineItemID = grouponItem.FulfillmentLineitemId;
             item.BomSKU = grouponItem.BomSku;
             item.GrouponLineItemID = grouponItem.GrouponLineitemId;
+            item.GrouponPO = grouponItem.PoNumber;
         }
 
         /// <summary>
