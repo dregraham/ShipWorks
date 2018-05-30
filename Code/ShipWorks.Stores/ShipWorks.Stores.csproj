@@ -173,8 +173,9 @@
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
     <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
-    <Compile Include="Orders\Archive\IOrderArchiver.cs" />
+    <Compile Include="Orders\Archive\IScheduleOrderArchiveDialog.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
+    <Compile Include="Orders\Archive\IScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\OrderArchiveFilterRegenerator.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Orders\Archive\OrderArchiveResult.cs" />
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
+    <Compile Include="Orders\Archive\ScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\SingleDatabaseSelectorViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />

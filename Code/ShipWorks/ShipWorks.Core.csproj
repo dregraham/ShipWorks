@@ -595,6 +595,7 @@
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
+    <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
@@ -983,6 +984,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentials.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\IEndiciaApiClient.cs" />
