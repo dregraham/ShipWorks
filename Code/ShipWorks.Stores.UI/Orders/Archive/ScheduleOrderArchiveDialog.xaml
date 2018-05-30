@@ -29,6 +29,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
             <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:PluralizingValueConverter x:Key="PluralizingValue" />
 
             <ObjectDataProvider x:Key="DayValues" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -112,12 +113,11 @@
                 <Run>Want to learn more about archiving?</Run>
                 <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
             </TextBlock>
-            
+
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                
-                
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding Saving, Converter={StaticResource InvertBoolean}}">
                 <Button Padding="8, 4"
                         Style="{StaticResource Button.Link}"
                         Foreground="{StaticResource Blue}"

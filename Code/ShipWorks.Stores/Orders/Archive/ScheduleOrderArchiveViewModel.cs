@@ -7,7 +7,6 @@ using System.Windows.Input;
 using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
@@ -16,11 +15,11 @@ using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Orders.Archive.Errors;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -38,6 +37,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IActionManager actionManager;
         private int numberOfDaysToKeep;
         private bool enabled;
+        private bool saving;
         private DayOfWeek dayOfWeek;
         private const string AutoArchiveActionTaskName = "Auto archive action";
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            ConfirmSchedule = new RelayCommand(ConfirmScheduleAction, CanSchedule);
+            ConfirmSchedule = new RelayCommand(() => ConfirmScheduleAction().Forget(), CanSchedule);
             CancelSchedule = new RelayCommand(CancelScheduleAction);
 
             Enabled = true;
@@ -102,6 +102,16 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             get { return enabled; }
             set { handler.Set(nameof(Enabled), ref enabled, value); }
+        }
+
+        /// <summary>
+        /// Are we saving?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Saving
+        {
+            get { return saving; }
+            set { handler.Set(nameof(Saving), ref saving, value); }
         }
 
         /// <summary>
@@ -157,13 +167,13 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Persist the action
         /// </summary>
-        private void Save()
+        private async Task Save()
         {
             var actionAndTask = LoadAction();
 
             if (actionAndTask.action == null)
             {
-                CreateAction();
+                await CreateAction().ConfigureAwait(false);
             }
             else
             {
@@ -176,7 +186,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 schedule.ExecuteOnDay = DayOfWeek;
 
                 // Transacted since we affect multiple action tables
-                sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
+                await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>
                 {
                     SqlAdapter adapter = (SqlAdapter) sqlAdapter;
                     actionAndTask.autoArchiveTask.Save(actionAndTask.action, adapter);
@@ -189,15 +199,15 @@ namespace ShipWorks.Stores.Orders.Archive
 
                     transaction.Commit();
 
-                    return true;
-                });
+                    return Task.FromResult(true);
+                }).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Create the auto archive action
         /// </summary>
-        private void CreateAction()
+        private async Task CreateAction()
         {
             ActionTriggerType actionTriggerType = ActionTriggerType.Scheduled;
 
@@ -251,7 +261,7 @@ namespace ShipWorks.Stores.Orders.Archive
             actionTask.NumberOfDaysToKeep = NumberOfDaysToKeep;
 
             // Transacted since we affect multiple action tables
-            sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
+            await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>
             {
                 SqlAdapter adapter = (SqlAdapter) sqlAdapter;
 
@@ -278,8 +288,8 @@ namespace ShipWorks.Stores.Orders.Archive
 
                 transaction.Commit();
 
-                return true;
-            });
+                return Task.FromResult(true);
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -296,17 +306,21 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Handle the confirmation of archiving orders
         /// </summary>
-        private void ConfirmScheduleAction()
+        private async Task ConfirmScheduleAction()
         {
+            Saving = true;
+
             try
             {
-                Save();
+                await Save().ConfigureAwait(true);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+
+            Saving = false;
 
             scheduleArchiveOrdersDialog.DialogResult = true;
             scheduleArchiveOrdersDialog.Close();
