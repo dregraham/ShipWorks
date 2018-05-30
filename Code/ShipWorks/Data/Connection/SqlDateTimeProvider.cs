@@ -11,12 +11,12 @@ namespace ShipWorks.Data.Connection
     /// </summary>
     public class SqlDateTimeProvider : ISqlDateTimeProvider
     {
-        static readonly ISqlDateTimeProvider current = new SqlDateTimeProvider();
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlDateTimeProvider));
-
-        DateTime serverDateLocal;
-        DateTime serverDateUtc;
-        Stopwatch timeSinceTimeTaken;
+        private static readonly ISqlDateTimeProvider current = new SqlDateTimeProvider();
+        private static readonly ILog log = LogManager.GetLogger(typeof(SqlDateTimeProvider));
+        private DateTime serverDateLocal;
+        private DateTime serverDateUtc;
+        private Stopwatch timeSinceTimeTaken;
+        private bool resetCache = true;
 
         /// <summary>
         /// Current instance of the SQL date time lookup
@@ -52,35 +52,34 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Reset the cached time
         /// </summary>
-        public void ResetCache() => timeSinceTimeTaken = null;
+        public void ResetCache() => resetCache = true;
 
         /// <summary>
         /// Ensure that the cached SQL server time is reasonably fresh
         /// </summary>
         private void RefreshSqlDateTime()
         {
-            if (timeSinceTimeTaken != null && timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
+            if (resetCache || timeSinceTimeTaken?.Elapsed > TimeSpan.FromMinutes(30))
             {
-                return;
-            }
-
-            // Get the server times if our cache is stale
-            ExistingConnectionScope.ExecuteWithCommand(cmd =>
-            {
-                cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
-
-                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                // Get the server times if our cache is stale
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
                 {
-                    reader.Read();
+                    cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
 
-                    serverDateLocal = (DateTime) reader["ServerDateLocal"];
-                    serverDateUtc = (DateTime) reader["ServerDateUtc"];
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                    {
+                        reader.Read();
 
-                    log.Info($"Server LocalDate ({serverDateLocal}), UTC ({serverDateUtc})");
+                        serverDateLocal = (DateTime) reader["ServerDateLocal"];
+                        serverDateUtc = (DateTime) reader["ServerDateUtc"];
 
-                    timeSinceTimeTaken = Stopwatch.StartNew();
-                }
-            });
+                        log.Info($"Server LocalDate ({serverDateLocal}), UTC ({serverDateUtc})");
+
+                        timeSinceTimeTaken = Stopwatch.StartNew();
+                        resetCache = false;
+                    }
+                });
+            }
         }
     }
 }
