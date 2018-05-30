@@ -34,6 +34,8 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IScheduleOrderArchiveDialog scheduleArchiveOrdersDialog;
         private readonly PropertyChangedHandler handler;
         private readonly ILifetimeScope lifetimeScope;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IActionManager actionManager;
         private int numberOfDaysToKeep;
         private bool enabled;
         private DayOfWeek dayOfWeek;
@@ -45,11 +47,15 @@ namespace ShipWorks.Stores.Orders.Archive
         public ScheduleOrderArchiveViewModel(
             IAsyncMessageHelper messageHelper,
             IScheduleOrderArchiveDialog scheduleArchiveOrdersDialog,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IActionManager actionManager,
             ILifetimeScope lifetimeScope)
         {
             this.scheduleArchiveOrdersDialog = scheduleArchiveOrdersDialog;
             this.messageHelper = messageHelper;
             this.lifetimeScope = lifetimeScope;
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.actionManager = actionManager;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -58,16 +64,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             Enabled = true;
             NumberOfDaysToKeep = 90;
-            DayOfWeek = DayOfWeek.Thursday;
-
-            var actionAndTask = LoadAction();
-
-            if (actionAndTask.action != null)
-            {
-                Enabled = actionAndTask.action.Enabled;
-                NumberOfDaysToKeep = actionAndTask.autoArchiveTask.NumberOfDaysToKeep;
-                DayOfWeek = actionAndTask.autoArchiveTask.ExecuteOnDayOfWeek;
-            }
+            DayOfWeek = DayOfWeek.Sunday;
         }
 
         /// <summary>
@@ -118,15 +115,27 @@ namespace ShipWorks.Stores.Orders.Archive
         }
 
         /// <summary>
+        /// Bind the UI elements to the entities
+        /// </summary>
+        private void BindToUi()
+        {
+            var actionAndTask = LoadAction();
+
+            if (actionAndTask.action != null)
+            {
+                Enabled = actionAndTask.action.Enabled;
+                NumberOfDaysToKeep = actionAndTask.autoArchiveTask.NumberOfDaysToKeep;
+                DayOfWeek = actionAndTask.autoArchiveTask.ExecuteOnDayOfWeek;
+            }
+        }
+
+        /// <summary>
         /// Save the schedule info
         /// </summary>
         public Task Show()
         {
             return messageHelper
-                .ShowDialog(SetupDialog)
-                .Bind(x => x == true ?
-                    Task.FromResult(Enabled) :
-                    Task.FromException<bool>(Error.Canceled));
+                .ShowDialog(SetupDialog);
         }
 
         /// <summary>
@@ -135,15 +144,11 @@ namespace ShipWorks.Stores.Orders.Archive
         private (ActionEntity action, AutoArchiveTask autoArchiveTask) LoadAction()
         {
             AutoArchiveTask autoArchiveTask = null;
-            var action = ActionManager.Actions.FirstOrDefault(a => a.Name == AutoArchiveActionTaskName);
+            ActionEntity action = actionManager.Actions.FirstOrDefault(a => a.Name == AutoArchiveActionTaskName);
 
             if (action != null)
             {
-                Enabled = action.Enabled;
-
-                autoArchiveTask = (AutoArchiveTask) ActionManager.LoadTasks(lifetimeScope, action).FirstOrDefault();
-                NumberOfDaysToKeep = autoArchiveTask.NumberOfDaysToKeep;
-                DayOfWeek = autoArchiveTask.ExecuteOnDayOfWeek;
+                autoArchiveTask = (AutoArchiveTask) actionManager.LoadTasks(lifetimeScope, action).FirstOrDefault();
             }
 
             return (action, autoArchiveTask);
@@ -152,7 +157,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Persist the action
         /// </summary>
-        private bool Save()
+        private void Save()
         {
             var actionAndTask = LoadAction();
 
@@ -166,26 +171,27 @@ namespace ShipWorks.Stores.Orders.Archive
                 actionAndTask.autoArchiveTask.NumberOfDaysToKeep = NumberOfDaysToKeep;
                 actionAndTask.autoArchiveTask.ExecuteOnDayOfWeek = DayOfWeek;
 
-                ScheduledTrigger actionTrigger = (ScheduledTrigger) ActionManager.LoadTrigger(actionAndTask.action);
+                ScheduledTrigger actionTrigger = (ScheduledTrigger) actionManager.LoadTrigger(actionAndTask.action);
                 MonthlyActionSchedule schedule = (MonthlyActionSchedule) actionTrigger.Schedule;
                 schedule.ExecuteOnDay = DayOfWeek;
 
                 // Transacted since we affect multiple action tables
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
                 {
+                    SqlAdapter adapter = (SqlAdapter) sqlAdapter;
                     actionAndTask.autoArchiveTask.Save(actionAndTask.action, adapter);
 
                     // Give the new trigger a chance to save its state
                     actionTrigger.SaveExtraState(actionAndTask.action, adapter);
 
                     // Save the action
-                    ActionManager.SaveAction(actionAndTask.action, adapter);
+                    actionManager.SaveAction(actionAndTask.action, adapter);
 
-                    adapter.Commit();
-                }
+                    transaction.Commit();
+
+                    return true;
+                });
             }
-
-            return true;
         }
 
         /// <summary>
@@ -240,13 +246,15 @@ namespace ShipWorks.Stores.Orders.Archive
             actionTaskEntity.FilterConditionNodeID = -1;
 
             actionTaskEntity.TaskSettings = triggerXml;
-            actionTask = (AutoArchiveTask) ActionManager.InstantiateTask(lifetimeScope, actionTaskEntity);
+            actionTask = (AutoArchiveTask) actionManager.InstantiateTask(lifetimeScope, actionTaskEntity);
 
             actionTask.NumberOfDaysToKeep = NumberOfDaysToKeep;
 
             // Transacted since we affect multiple action tables
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
             {
+                SqlAdapter adapter = (SqlAdapter) sqlAdapter;
+
                 // If the action is new, we have to save it once up front to get its PK.  Require's two trip's to save,
                 // but some of the SaveExtraState functions can require the ID... but then that can affect there XML Settings serialization,
                 // which requires the final save to the DB
@@ -266,10 +274,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 action.IsDirty = true;
 
                 // Save the action
-                ActionManager.SaveAction(action, adapter);
+                actionManager.SaveAction(action, adapter);
 
-                adapter.Commit();
-            }
+                transaction.Commit();
+
+                return true;
+            });
         }
 
         /// <summary>
@@ -277,6 +287,8 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private IDialog SetupDialog()
         {
+            BindToUi();
+
             scheduleArchiveOrdersDialog.DataContext = this;
             return scheduleArchiveOrdersDialog;
         }
@@ -286,7 +298,15 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void ConfirmScheduleAction()
         {
-            Save();
+            try
+            {
+                Save();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             scheduleArchiveOrdersDialog.DialogResult = true;
             scheduleArchiveOrdersDialog.Close();

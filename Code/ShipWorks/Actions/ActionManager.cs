@@ -230,7 +230,7 @@ namespace ShipWorks.Actions
         /// Saves the given ActionEntity.  Does not save the trigger or tasks.  The purpose of using this method is to
         /// get the proper exception translations.
         /// </summary>
-        public static void SaveAction(ActionEntity action, SqlAdapter adapter)
+        public static void SaveAction(ActionEntity action, ISqlAdapter adapter)
         {
             try
             {
