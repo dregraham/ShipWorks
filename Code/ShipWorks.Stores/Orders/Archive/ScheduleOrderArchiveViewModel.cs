@@ -153,6 +153,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private (ActionEntity action, AutoArchiveTask autoArchiveTask) LoadAction()
         {
+            actionManager.CheckForChangesNeeded();
             AutoArchiveTask autoArchiveTask = null;
             ActionEntity action = actionManager.Actions.FirstOrDefault(a => a.Name == AutoArchiveActionTaskName);
 
@@ -184,6 +185,8 @@ namespace ShipWorks.Stores.Orders.Archive
                 ScheduledTrigger actionTrigger = (ScheduledTrigger) actionManager.LoadTrigger(actionAndTask.action);
                 MonthlyActionSchedule schedule = (MonthlyActionSchedule) actionTrigger.Schedule;
                 schedule.ExecuteOnDay = DayOfWeek;
+
+                actionAndTask.action.TriggerSettings = actionTrigger.GetXml();
 
                 // Transacted since we affect multiple action tables
                 await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>
@@ -262,6 +265,7 @@ namespace ShipWorks.Stores.Orders.Archive
             actionTask = (AutoArchiveTask) actionManager.InstantiateTask(lifetimeScope, actionTaskEntity);
 
             actionTask.NumberOfDaysToKeep = NumberOfDaysToKeep;
+            actionTask.ExecuteOnDayOfWeek = DayOfWeek;
 
             // Transacted since we affect multiple action tables
             await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>

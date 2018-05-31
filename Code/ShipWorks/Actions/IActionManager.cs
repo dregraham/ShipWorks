@@ -37,5 +37,10 @@ namespace ShipWorks.Actions
         /// Instantiate an existing task instance
         /// </summary>
         ActionTask InstantiateTask(ILifetimeScope lifetimeScope, ActionTaskEntity taskEntity);
+
+        /// <summary>
+        /// Check for any changes made in the database since initialization or the last check
+        /// </summary>
+        void CheckForChangesNeeded();
     }
 }
