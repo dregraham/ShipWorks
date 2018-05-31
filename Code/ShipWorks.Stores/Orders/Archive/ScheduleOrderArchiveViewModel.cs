@@ -235,7 +235,7 @@ namespace ShipWorks.Stores.Orders.Archive
             ActionEntity action = new ActionEntity()
             {
                 Name = AutoArchiveActionTaskName,
-                Enabled = true,
+                Enabled = Enabled,
                 ComputerLimitedType = (int) ComputerLimitedType.None,
                 ComputerLimitedList = new long[0],
                 StoreLimited = false,
