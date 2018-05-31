@@ -241,21 +241,24 @@ namespace ShipWorks.Stores.Orders.Archive
                 TriggerSettings = triggerXml,
                 TaskSummary = "Auto archive task summary"
             };
-            ActionTaskEntity actionTaskEntity = new ActionTaskEntity();
             AutoArchiveTask actionTask = new AutoArchiveTask();
 
             ActionTaskDescriptor descriptor = new ActionTaskDescriptor(actionTask.GetType());
-            actionTaskEntity.TaskIdentifier = descriptor.Identifier;
-            actionTaskEntity.FlowError = (int) ActionTaskFlowOption.NextStep;
-            actionTaskEntity.StepIndex = 0;
-            actionTaskEntity.InputSource = (int) ActionTaskInputSource.Nothing;
-            actionTaskEntity.FlowSuccess = (int) ActionTaskFlowOption.NextStep;
-            actionTaskEntity.FlowSkipped = (int) ActionTaskFlowOption.NextStep;
-            actionTaskEntity.InputFilterNodeID = -1;
-            actionTaskEntity.FilterCondition = false;
-            actionTaskEntity.FilterConditionNodeID = -1;
 
-            actionTaskEntity.TaskSettings = triggerXml;
+            ActionTaskEntity actionTaskEntity = new ActionTaskEntity
+            {
+                TaskIdentifier = descriptor.Identifier,
+                FlowError = (int) ActionTaskFlowOption.NextStep,
+                StepIndex = 0,
+                InputSource = (int) ActionTaskInputSource.Nothing,
+                FlowSuccess = (int) ActionTaskFlowOption.NextStep,
+                FlowSkipped = (int) ActionTaskFlowOption.NextStep,
+                InputFilterNodeID = -1,
+                FilterCondition = false,
+                FilterConditionNodeID = -1,
+                TaskSettings = triggerXml
+            };
+
             actionTask = (AutoArchiveTask) actionManager.InstantiateTask(lifetimeScope, actionTaskEntity);
 
             actionTask.NumberOfDaysToKeep = NumberOfDaysToKeep;
