@@ -39,7 +39,7 @@ namespace ShipWorks.Actions.Tasks.Common
             log = LogManager.GetLogger(typeof(AutoArchiveTask));
             this.dateTimeProvider = dateTimeProvider;
 
-            TimeoutInMinutes = int.MaxValue;
+            TimeoutInMinutes = 2 * 60;  // If the action wasn't started within two hours, don't start it.
             ExecuteOnDayOfWeek = DayOfWeek.Sunday;
             NumberOfDaysToKeep = 90;
         }
@@ -107,7 +107,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             try
             {
-                DateTime cutoffDate = DateTime.UtcNow.AddDays(-1 * NumberOfDaysToKeep);
+                DateTime cutoffDate = dateTimeProvider.UtcNow.AddDays(-1 * NumberOfDaysToKeep);
 
                 ScheduledTrigger scheduledTrigger = new ScheduledTrigger(context.Step.TaskSettings);
                 TimeSpan startTimeOfDay = scheduledTrigger.Schedule.StartDateTimeInUtc.TimeOfDay;
@@ -128,10 +128,10 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             catch (Exception ex)
             {
-                string message = string.Format("An error occurred while running the task to auto archive. {0}", ex.Message);
+                string message = $"An error occurred while running the task to auto archive. {ex.Message}";
                 log.Error(message, ex);
 
-                throw;
+                throw new ActionTaskRunException(ex.Message, ex);
             }
         }
     }
