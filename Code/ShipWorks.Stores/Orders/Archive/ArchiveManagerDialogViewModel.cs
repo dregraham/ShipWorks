@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Open the auto archive dialog
         /// </summary>
-        private async Task AutoArchiveAction()
+        public async Task AutoArchiveAction()
         {
             await createSchedulingViewModel().Show().ConfigureAwait(true);
         }
