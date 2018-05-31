@@ -1,24 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Transactions;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
-using System.Runtime.InteropServices;
-using System.Transactions;
-using System.Text;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Connection
 {
@@ -86,7 +86,7 @@ namespace ShipWorks.Data.Connection
                 return Interlocked.Read(ref connections);
             }
         }
-        
+
         /// <summary>
         /// The current status of the connection monitor
         /// </summary>
@@ -283,12 +283,13 @@ namespace ShipWorks.Data.Connection
                             {
                                 SqlSession master = new SqlSession(SqlSession.Current);
                                 master.Configuration.DatabaseName = "master";
+                                var connectionString = master.Configuration.GetConnectionString();
 
-                                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
                                 {
                                     testConnection.Open();
 
-                                    isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                                    isSingleUser = SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName);
                                 }
                             }
                             catch (Exception textEx)
@@ -513,7 +514,7 @@ namespace ShipWorks.Data.Connection
         {
             IEnumerable<Exception> exceptions = ex.GetAllExceptions();
             IEnumerable<SqlException> sqlExceptions = exceptions.OfType<SqlException>();
-            
+
             if (sqlExceptions.Any())
             {
                 List<int> errors = sqlExceptions.Select(e => e.Number).ToList();
