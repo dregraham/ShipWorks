@@ -242,7 +242,8 @@ namespace ShipWorks.Stores.Orders.Archive
                 StoreLimitedList = new long[0],
                 TriggerType = (int) ActionTriggerType.Scheduled,
                 TriggerSettings = triggerXml,
-                TaskSummary = "Auto archive task summary"
+                TaskSummary = "Auto archive task summary",
+                InternalOwner = "AutoArchive"
             };
             AutoArchiveTask actionTask = new AutoArchiveTask();
 
