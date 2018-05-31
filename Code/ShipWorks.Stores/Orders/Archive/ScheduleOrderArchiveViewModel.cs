@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Orders.Archive
             ConfirmSchedule = new RelayCommand(() => ConfirmScheduleAction().Forget(), CanSchedule);
             CancelSchedule = new RelayCommand(CancelScheduleAction);
 
-            Enabled = true;
+            Enabled = false;
             NumberOfDaysToKeep = 90;
             DayOfWeek = DayOfWeek.Sunday;
         }
