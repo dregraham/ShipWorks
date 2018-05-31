@@ -48,19 +48,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap"
-                   Grid.Row="0">
-                <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
-                <LineBreak />
-                <LineBreak />
-                <Run Foreground="Transparent">MM</Run>
-                <Run>Archiving orders cannot be undone.</Run>
-                <LineBreak />
-                <Run Foreground="Transparent">MM</Run>
-                <Run>Archived orders are removed from the current ShipWorks database.</Run>
-                <LineBreak />
-                <Run Foreground="Transparent">MM</Run>
-                <Run>ShipWorks cannot be used during the archiving process.</Run>
+        <TextBlock TextWrapping="Wrap" Grid.Row="0">
+            <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- Archiving orders cannot be undone.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- Archived orders are removed from the current ShipWorks database.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- ShipWorks cannot be used during the archiving process.</Run>
         </TextBlock>
 
         <Grid Grid.Row="1"
