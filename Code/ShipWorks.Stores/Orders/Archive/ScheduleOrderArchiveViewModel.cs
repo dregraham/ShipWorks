@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly ILifetimeScope lifetimeScope;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IActionManager actionManager;
+        private readonly IDateTimeProvider dateTimeProvider;
         private int numberOfDaysToKeep;
         private bool enabled;
         private bool saving;
@@ -57,6 +58,7 @@ namespace ShipWorks.Stores.Orders.Archive
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.actionManager = actionManager;
 
+            dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             ConfirmSchedule = new RelayCommand(() => ConfirmScheduleAction().Forget(), CanSchedule);
@@ -219,7 +221,7 @@ namespace ShipWorks.Stores.Orders.Archive
 
             MonthlyActionSchedule schedule = new MonthlyActionSchedule()
             {
-                StartDateTimeInUtc = DateTime.Now.Date.ToUniversalTime(),
+                StartDateTimeInUtc = dateTimeProvider.UtcNow.Date,
                 EndsOnType = ActionEndsOnType.Never,
                 CalendarType = MonthlyCalendarType.Day,
                 ExecuteOnDay = DayOfWeek,
@@ -245,7 +247,8 @@ namespace ShipWorks.Stores.Orders.Archive
                 TaskSummary = "Auto archive task summary",
                 InternalOwner = "AutoArchive"
             };
-            AutoArchiveTask actionTask = new AutoArchiveTask();
+
+            AutoArchiveTask actionTask = lifetimeScope.Resolve<AutoArchiveTask>();
 
             ActionTaskDescriptor descriptor = new ActionTaskDescriptor(actionTask.GetType());
 

@@ -5,10 +5,7 @@ using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Common;
 using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -20,22 +17,16 @@ namespace ShipWorks.Actions.Tasks.Common
     [Component]
     public class AutoArchiveTask : ActionTask
     {
+        private readonly IOrderArchiver orderArchiver;
         private readonly ILog log;
         private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoArchiveTask"/> class.
-        /// </summary>
-        public AutoArchiveTask() : this(new DateTimeProvider())
-        { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AutoArchiveTask" /> class.
         /// </summary>
-        /// <param name="dateTimeProvider">The date time provider.</param>
-        public AutoArchiveTask(IDateTimeProvider dateTimeProvider)
+        public AutoArchiveTask(IDateTimeProvider dateTimeProvider, IOrderArchiver orderArchiver)
         {
-            //this.log = log;
+            this.orderArchiver = orderArchiver;
             log = LogManager.GetLogger(typeof(AutoArchiveTask));
             this.dateTimeProvider = dateTimeProvider;
 
@@ -118,11 +109,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     using (new LoggedStopwatch(log, "Auto archive Total Time."))
                     {
-                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                        {
-                            IOrderArchiver orchestrator = scope.Resolve<IOrderArchiver>();
-                            await orchestrator.Archive(cutoffDate).ConfigureAwait(false);
-                        }
+                        await orderArchiver.Archive(cutoffDate).ConfigureAwait(false);
                     }
                 }
             }

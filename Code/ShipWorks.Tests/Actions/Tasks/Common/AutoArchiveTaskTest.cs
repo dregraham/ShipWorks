@@ -8,6 +8,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 
@@ -32,26 +33,54 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             dateTimeProvider = new Mock<IDateTimeProvider>();
             orderArchiver = new Mock<IOrderArchiver>();
 
-            string taskSettings = @"<Settings>
-                                              <NumberOfDaysToKeep value=""90"" />
-                                              <ExecuteOnDayOfWeek value=""0"" />
-                                              <TimeoutInMinutes value=""120"" />
-                                           </Settings>";
+            string triggerSettings = $@"<Settings>
+                                          <MonthlyActionSchedule>
+                                            <ScheduleType>4</ScheduleType>
+                                            <StartDateTimeInUtc>{DefaultStartDateTimeInUtc:o}</StartDateTimeInUtc>
+                                            <ActionEndsOnType>0</ActionEndsOnType>
+                                            <EndDateTimeInUtc>2018-05-31T19:00:00.8258434Z</EndDateTimeInUtc>
+                                            <CalendarType>1</CalendarType>
+                                            <ExecuteOnDay>Sunday</ExecuteOnDay>
+                                            <ExecuteOnAnyDay>false</ExecuteOnAnyDay>
+                                            <ExecuteOnWeek>0</ExecuteOnWeek>
+                                            <ExecuteOnDayMonths>0</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>1</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>2</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>3</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>4</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>5</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>6</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>7</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>8</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>9</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>10</ExecuteOnDayMonths>
+                                            <ExecuteOnDayMonths>11</ExecuteOnDayMonths>
+                                          </MonthlyActionSchedule>
+                                    </Settings>";
+
+            string taskSettings = $@"<Settings>
+                                        <NumberOfDaysToKeep value=""90"" />
+                                        <ExecuteOnDayOfWeek value=""0"" />
+                                        <StartDateTimeInUtc value=""{DefaultStartDateTimeInUtc:o}"" />
+                                    </Settings>";
 
             actionTaskEntity = new ActionTaskEntity()
             {
-                Action = new ActionEntity(),
+                Action = new ActionEntity()
+                {
+                    TriggerSettings = triggerSettings
+                },
                 TaskSettings = taskSettings,
                 TaskIdentifier = "AutoArchiveTask"
             };
 
-            testObject = new AutoArchiveTask(dateTimeProvider.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
 
             ActionQueueEntity queueEntity = new ActionQueueEntity();
             queueEntity.ActionVersion = GetBytes("167C");
 
             ActionQueueStepEntity stepEntity = new ActionQueueStepEntity();
-            stepEntity.TaskSettings = taskSettings;
+            stepEntity.TaskSettings = triggerSettings;
 
             actionStepContext = new ActionStepContext(queueEntity, stepEntity, null);
         }
@@ -72,7 +101,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void TimeoutInMinutes_IsDefaultedTo120()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
 
             Assert.Equal(120, testObject.TimeoutInMinutes);
         }
@@ -80,7 +109,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void NumberOfDaysToKeep_IsDefaultedTo90()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
 
             Assert.Equal(90, testObject.NumberOfDaysToKeep);
         }
@@ -88,7 +117,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void ExecuteOnDayOfWeek_IsDefaultedToSunday()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
 
             Assert.Equal(DayOfWeek.Sunday, testObject.ExecuteOnDayOfWeek);
         }
@@ -156,24 +185,35 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void RunAsync_DoesNotArchive_WhenScheduledEndTimeHasLapsed_ByOneHour()
+        public async Task RunAsync_DoesNotArchive_WhenScheduledEndTimeHasLapsed_ByOneHour()
         {
             DateTime elapsedByOneHourDate = DefaultStartDateTimeInUtc.AddHours(testObject.TimeoutInMinutes / 60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneHourDate);
 
-            testObject.Run(new List<long>(), actionStepContext);
+            await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
 
             orderArchiver.Verify(m => m.Archive(ParameterShorteners.AnyDate), Times.Never());
         }
 
         [Fact]
-        public void RunAsync_DoesArchive_WhenScheduledEndTimeHasNotLapsed()
+        public async Task RunAsync_DoesArchive_WhenScheduledEndTimeHasNotLapsed()
         {
             dateTimeProvider.Setup(date => date.UtcNow).Returns(DefaultStartDateTimeInUtc.AddMinutes(1));
 
-            testObject.Run(new List<long>(), actionStepContext);
+            await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
 
-            orderArchiver.Verify(m => m.Archive(ParameterShorteners.AnyDate), Times.Never());
+            orderArchiver.Verify(m => m.Archive(ParameterShorteners.AnyDate), Times.Once);
+        }
+
+        [Fact]
+        public async Task RunAsync_Archives_WithCorrectCutoffDate()
+        {
+            dateTimeProvider.Setup(date => date.UtcNow).Returns(DefaultStartDateTimeInUtc);
+            DateTime cutoffDate = dateTimeProvider.Object.UtcNow.AddDays(-1 * testObject.NumberOfDaysToKeep);
+
+            await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
+
+            orderArchiver.Verify(m => m.Archive(cutoffDate), Times.Once);
         }
 
         [Fact]
