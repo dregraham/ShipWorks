@@ -446,6 +446,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\Rates\OnTracRateRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Shipment\OnTracShipmentRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Tracking\OnTracTrackingRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
@@ -617,7 +618,9 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
+    <Compile Include="Templates\Printing\BarcodePageTest.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJobTest.cs" />
+    <Compile Include="Templates\Printing\PrintableBarcodeTest.cs" />
     <Compile Include="Templates\Printing\PrintJobFactoryTest.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />

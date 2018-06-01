@@ -365,9 +365,9 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Perform a left join on an enumerable
         /// </summary>
-        public static IEnumerable<Tuple<TLeft, TRight>> LeftJoin<TLeft, TRight, TKey>(this IEnumerable<TLeft> left,
+        public static IEnumerable<(TLeft Left, TRight Right)> LeftJoin<TLeft, TRight, TKey>(this IEnumerable<TLeft> left,
             IEnumerable<TRight> right, Func<TLeft, TKey> getLeftKey, Func<TRight, TKey> getRightKey) =>
-            left.GroupJoin(right, getLeftKey, getRightKey, (x, y) => Tuple.Create(x, y.FirstOrDefault()));
+            left.GroupJoin(right, getLeftKey, getRightKey, (x, y) => (x, y.FirstOrDefault()));
 
         /// <summary>
         /// Perform an async select, showing a progress dialog
@@ -444,5 +444,10 @@ namespace Interapptive.Shared.Collections
         {
             return listA.Intersect(listB, new LambdaComparer<T>(lambda));
         }
+
+        /// <summary>
+        /// Flatten an enumerable of enumerables
+        /// </summary>
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> source) => source.SelectMany(x => x);
     }
 }

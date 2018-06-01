@@ -62,6 +62,13 @@
             // 
             // sectionContents
             // 
+            // 
+            // sectionContents.ContentPanel
+            // 
+            this.sectionContents.ContentPanel.Controls.Add(this.itemsGrid);
+            this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
+            this.sectionContents.ContentPanel.Controls.Add(this.delete);
+            this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.Location = new System.Drawing.Point(6, 120);
             this.sectionContents.Size = new System.Drawing.Size(555, 362);
             // 
@@ -80,12 +87,14 @@
             // 
             // sectionGeneral.ContentPanel
             // 
+            this.sectionGeneral.ContentPanel.Controls.Add(this.label1);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsValue);
             this.sectionGeneral.ContentPanel.Controls.Add(this.descriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDescriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(555, 110);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 110);
             // 
             // groupSelectedContent
             // 
@@ -99,7 +108,7 @@
             // 
             this.delete.Location = new System.Drawing.Point(483, 37);
             // 
-            // sandGrid
+            // itemsGrid
             // 
             this.itemsGrid.Size = new System.Drawing.Size(469, 116);
             // 
@@ -178,7 +187,7 @@
             this.extraDocuments.Location = new System.Drawing.Point(119, 29);
             this.extraDocuments.Name = "extraDocuments";
             this.extraDocuments.Size = new System.Drawing.Size(263, 17);
-            this.extraDocuments.TabIndex = 96;
+            this.extraDocuments.TabIndex = 2;
             this.extraDocuments.Text = "My shipment requires additional paper documents";
             this.extraDocuments.UseVisualStyleBackColor = false;
             // 
@@ -189,7 +198,7 @@
             this.extraDocumentsLabel.Location = new System.Drawing.Point(21, 30);
             this.extraDocumentsLabel.Name = "extraDocumentsLabel";
             this.extraDocumentsLabel.Size = new System.Drawing.Size(93, 13);
-            this.extraDocumentsLabel.TabIndex = 95;
+            this.extraDocumentsLabel.TabIndex = 1;
             this.extraDocumentsLabel.Text = "Extra Documents:";
             // 
             // label7
@@ -199,7 +208,7 @@
             this.label7.Location = new System.Drawing.Point(27, 158);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(87, 13);
-            this.label7.TabIndex = 94;
+            this.label7.TabIndex = 11;
             this.label7.Text = "Insurance costs:";
             // 
             // label6
@@ -209,7 +218,7 @@
             this.label6.Location = new System.Drawing.Point(28, 185);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(86, 13);
-            this.label6.TabIndex = 93;
+            this.label6.TabIndex = 13;
             this.label6.Text = "Additional costs:";
             // 
             // label5
@@ -219,7 +228,7 @@
             this.label5.Location = new System.Drawing.Point(41, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(73, 13);
-            this.label5.TabIndex = 92;
+            this.label5.TabIndex = 9;
             this.label5.Text = "Freight costs:";
             // 
             // ciAdditional
@@ -228,11 +237,12 @@
             0,
             0,
             0,
-            65536});
+            131072});
+            this.ciAdditional.IgnoreSet = false;
             this.ciAdditional.Location = new System.Drawing.Point(120, 182);
             this.ciAdditional.Name = "ciAdditional";
             this.ciAdditional.Size = new System.Drawing.Size(95, 21);
-            this.ciAdditional.TabIndex = 6;
+            this.ciAdditional.TabIndex = 14;
             this.ciAdditional.Text = "$0.00";
             // 
             // ciInsurance
@@ -241,11 +251,12 @@
             0,
             0,
             0,
-            65536});
+            131072});
+            this.ciInsurance.IgnoreSet = false;
             this.ciInsurance.Location = new System.Drawing.Point(120, 155);
             this.ciInsurance.Name = "ciInsurance";
             this.ciInsurance.Size = new System.Drawing.Size(95, 21);
-            this.ciInsurance.TabIndex = 5;
+            this.ciInsurance.TabIndex = 12;
             this.ciInsurance.Text = "$0.00";
             // 
             // ciFreight
@@ -254,7 +265,8 @@
             0,
             0,
             0,
-            65536});
+            131072});
+            this.ciFreight.IgnoreSet = false;
             this.ciFreight.Location = new System.Drawing.Point(120, 131);
             this.ciFreight.Name = "ciFreight";
             this.ciFreight.Size = new System.Drawing.Size(95, 21);
@@ -269,7 +281,7 @@
             this.ciPurpose.Name = "ciPurpose";
             this.ciPurpose.PromptText = "(Multiple Values)";
             this.ciPurpose.Size = new System.Drawing.Size(161, 21);
-            this.ciPurpose.TabIndex = 2;
+            this.ciPurpose.TabIndex = 6;
             // 
             // ciTermsOfSale
             // 
@@ -279,7 +291,7 @@
             this.ciTermsOfSale.Name = "ciTermsOfSale";
             this.ciTermsOfSale.PromptText = "(Multiple Values)";
             this.ciTermsOfSale.Size = new System.Drawing.Size(161, 21);
-            this.ciTermsOfSale.TabIndex = 1;
+            this.ciTermsOfSale.TabIndex = 4;
             // 
             // labelPurpose
             // 
@@ -288,7 +300,7 @@
             this.labelPurpose.Location = new System.Drawing.Point(64, 80);
             this.labelPurpose.Name = "labelPurpose";
             this.labelPurpose.Size = new System.Drawing.Size(50, 13);
-            this.labelPurpose.TabIndex = 86;
+            this.labelPurpose.TabIndex = 5;
             this.labelPurpose.Text = "Purpose:";
             // 
             // ciComments
@@ -296,7 +308,7 @@
             this.ciComments.Location = new System.Drawing.Point(119, 104);
             this.ciComments.Name = "ciComments";
             this.ciComments.Size = new System.Drawing.Size(161, 21);
-            this.ciComments.TabIndex = 3;
+            this.ciComments.TabIndex = 8;
             // 
             // labelComments
             // 
@@ -305,7 +317,7 @@
             this.labelComments.Location = new System.Drawing.Point(53, 107);
             this.labelComments.Name = "labelComments";
             this.labelComments.Size = new System.Drawing.Size(61, 13);
-            this.labelComments.TabIndex = 84;
+            this.labelComments.TabIndex = 7;
             this.labelComments.Text = "Comments:";
             // 
             // labelTermsOfSale
@@ -315,7 +327,7 @@
             this.labelTermsOfSale.Location = new System.Drawing.Point(39, 53);
             this.labelTermsOfSale.Name = "labelTermsOfSale";
             this.labelTermsOfSale.Size = new System.Drawing.Size(75, 13);
-            this.labelTermsOfSale.TabIndex = 83;
+            this.labelTermsOfSale.TabIndex = 3;
             this.labelTermsOfSale.Text = "Terms of sale:";
             // 
             // usePaperlessInvoice

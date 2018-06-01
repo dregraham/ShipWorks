@@ -21,7 +21,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
         private readonly TestScheduler scheduler;
-        private readonly ShortcutMessageIndicatorPipeline testObject;
+        private readonly ApplyProfileShortcutMessageIndicatorPipeline testObject;
         private readonly Mock<IMessageHelper> messageHelper;
         private readonly Mock<ICurrentUserSettings> currentUserSettings;
 
@@ -44,7 +44,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(scheduler);
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
             
-            testObject = mock.Create<ShortcutMessageIndicatorPipeline>();
+            testObject = mock.Create<ApplyProfileShortcutMessageIndicatorPipeline>();
         }
 
         [Fact]

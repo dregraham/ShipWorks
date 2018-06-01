@@ -409,7 +409,16 @@
                         <Button Style="{StaticResource Button.CreateLabel}"
                                 Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
-                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}"/>
+                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}">
+                            <Button.ToolTip>
+                                <ToolTip Background="White">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="Bold" Text="{Binding CreateLabelTooltipTitle}"/>
+                                        <TextBlock Text="{Binding CreateLabelTooltipDescription}"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
 
                     </StackPanel>
 

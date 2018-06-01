@@ -7,6 +7,7 @@ using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
@@ -19,6 +20,7 @@ namespace ShipWorks.SingleScan
     {
         private readonly IUser32Input user32Input;
         private readonly IScanBuffer scanBuffer;
+        private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly ILog log;
 
         private readonly HashSet<VirtualKeys> pressedKeys = new HashSet<VirtualKeys>();
@@ -27,10 +29,14 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerRegistrationMessageFilter(IUser32Input user32Input, IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
+        public ScannerRegistrationMessageFilter(IUser32Input user32Input,
+            IScanBuffer scanBuffer,
+            IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
+            Func<Type, ILog> getLogger)
         {
             this.user32Input = user32Input;
             this.scanBuffer = scanBuffer;
+            this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             log = getLogger(GetType());
         }
 
@@ -58,6 +64,16 @@ namespace ShipWorks.SingleScan
 
             return false;
         }
+
+        /// <summary>
+        /// Disable ScannerRegistrationMessageFilter
+        /// </summary>
+        public void Disable() => windowsMessageFilterRegistrar.RemoveMessageFilter(this);
+
+        /// <summary>
+        /// Enable ScannerRegistrationMessageFilter
+        /// </summary>
+        public void Enable() => windowsMessageFilterRegistrar.AddMessageFilter(this);
 
         /// <summary>
         /// Handle raw input message

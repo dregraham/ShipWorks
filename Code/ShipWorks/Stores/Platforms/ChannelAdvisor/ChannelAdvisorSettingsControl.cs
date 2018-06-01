@@ -30,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             showAmazonSettings = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
             amazon.Visible = showAmazonSettings;
-            daysBack.MaxDaysBack = 7;
         }
 
         /// <summary>

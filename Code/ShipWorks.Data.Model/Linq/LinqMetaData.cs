@@ -467,6 +467,18 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.OtherShipmentEntity:
 					toReturn = this.OtherShipment;
 					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderEntity:
+					toReturn = this.OverstockOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderItemEntity:
+					toReturn = this.OverstockOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockOrderSearchEntity:
+					toReturn = this.OverstockOrderSearch;
+					break;
+				case ShipWorks.Data.Model.EntityType.OverstockStoreEntity:
+					toReturn = this.OverstockStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.PackageProfileEntity:
 					toReturn = this.PackageProfile;
 					break;
@@ -1552,6 +1564,30 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<OtherShipmentEntity> OtherShipment
 		{
 			get { return new DataSource2<OtherShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OverstockOrderEntity instances in the database.</summary>
+		public DataSource2<OverstockOrderEntity> OverstockOrder
+		{
+			get { return new DataSource2<OverstockOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OverstockOrderItemEntity instances in the database.</summary>
+		public DataSource2<OverstockOrderItemEntity> OverstockOrderItem
+		{
+			get { return new DataSource2<OverstockOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OverstockOrderSearchEntity instances in the database.</summary>
+		public DataSource2<OverstockOrderSearchEntity> OverstockOrderSearch
+		{
+			get { return new DataSource2<OverstockOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OverstockStoreEntity instances in the database.</summary>
+		public DataSource2<OverstockStoreEntity> OverstockStore
+		{
+			get { return new DataSource2<OverstockStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting PackageProfileEntity instances in the database.</summary>

@@ -211,9 +211,12 @@
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Extensions\XmlTextWriterExtensions.cs" />
+    <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
+    <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
     <Compile Include="Messaging\Logging\TypeConverter.cs" />
@@ -527,6 +530,7 @@
     <Compile Include="Utility\StringHash.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparer.cs" />
+    <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
     <Compile Include="Utility\XmlUtility.cs" />

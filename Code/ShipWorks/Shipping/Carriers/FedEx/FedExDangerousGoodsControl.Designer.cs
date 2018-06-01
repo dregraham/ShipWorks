@@ -31,6 +31,8 @@
             this.dangerousGoodsEnabled = new System.Windows.Forms.CheckBox();
             this.panelDangerousGoodsDetails = new System.Windows.Forms.Panel();
             this.batteryDetailsGroup = new System.Windows.Forms.GroupBox();
+            this.batteryRegulatorySubtype = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.batteryPacking = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.batteryMaterial = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.batteryMaterialLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -76,8 +78,6 @@
             this.offeror = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.dangerousGoodsMaterialType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.emergencyContactPhone = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.batteryPacking = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.batteryRegulatorySubtype = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.panelDangerousGoodsDetails.SuspendLayout();
             this.batteryDetailsGroup.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -137,9 +137,31 @@
             this.batteryDetailsGroup.Location = new System.Drawing.Point(9, 588);
             this.batteryDetailsGroup.Name = "batteryDetailsGroup";
             this.batteryDetailsGroup.Size = new System.Drawing.Size(294, 116);
-            this.batteryDetailsGroup.TabIndex = 18;
+            this.batteryDetailsGroup.TabIndex = 19;
             this.batteryDetailsGroup.TabStop = false;
             this.batteryDetailsGroup.Text = "Battery Details";
+            // 
+            // batteryRegulatorySubtype
+            // 
+            this.batteryRegulatorySubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryRegulatorySubtype.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryRegulatorySubtype.FormattingEnabled = true;
+            this.batteryRegulatorySubtype.Location = new System.Drawing.Point(109, 82);
+            this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
+            this.batteryRegulatorySubtype.PromptText = "(Multiple Values)";
+            this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
+            this.batteryRegulatorySubtype.TabIndex = 5;
+            // 
+            // batteryPacking
+            // 
+            this.batteryPacking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryPacking.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryPacking.FormattingEnabled = true;
+            this.batteryPacking.Location = new System.Drawing.Point(109, 55);
+            this.batteryPacking.Name = "batteryPacking";
+            this.batteryPacking.PromptText = "(Multiple Values)";
+            this.batteryPacking.Size = new System.Drawing.Size(171, 21);
+            this.batteryPacking.TabIndex = 3;
             // 
             // batteryMaterial
             // 
@@ -150,7 +172,7 @@
             this.batteryMaterial.Name = "batteryMaterial";
             this.batteryMaterial.PromptText = "(Multiple Values)";
             this.batteryMaterial.Size = new System.Drawing.Size(171, 21);
-            this.batteryMaterial.TabIndex = 23;
+            this.batteryMaterial.TabIndex = 1;
             // 
             // batteryMaterialLabel
             // 
@@ -158,7 +180,7 @@
             this.batteryMaterialLabel.Location = new System.Drawing.Point(59, 31);
             this.batteryMaterialLabel.Name = "batteryMaterialLabel";
             this.batteryMaterialLabel.Size = new System.Drawing.Size(49, 13);
-            this.batteryMaterialLabel.TabIndex = 18;
+            this.batteryMaterialLabel.TabIndex = 0;
             this.batteryMaterialLabel.Text = "Material:";
             this.batteryMaterialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -168,7 +190,7 @@
             this.label2.Location = new System.Drawing.Point(1, 85);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
-            this.label2.TabIndex = 22;
+            this.label2.TabIndex = 4;
             this.label2.Text = "Regulatory Subtype:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -178,7 +200,7 @@
             this.batteryPackingLabel.Location = new System.Drawing.Point(61, 58);
             this.batteryPackingLabel.Name = "batteryPackingLabel";
             this.batteryPackingLabel.Size = new System.Drawing.Size(47, 13);
-            this.batteryPackingLabel.TabIndex = 20;
+            this.batteryPackingLabel.TabIndex = 2;
             this.batteryPackingLabel.Text = "Packing:";
             this.batteryPackingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -189,7 +211,7 @@
             this.containerTypeLabel.Location = new System.Drawing.Point(32, 169);
             this.containerTypeLabel.Name = "containerTypeLabel";
             this.containerTypeLabel.Size = new System.Drawing.Size(85, 13);
-            this.containerTypeLabel.TabIndex = 17;
+            this.containerTypeLabel.TabIndex = 13;
             this.containerTypeLabel.Text = "Container Type:";
             this.containerTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -199,7 +221,7 @@
             this.containerType.Location = new System.Drawing.Point(118, 166);
             this.containerType.Name = "containerType";
             this.containerType.Size = new System.Drawing.Size(171, 21);
-            this.containerType.TabIndex = 13;
+            this.containerType.TabIndex = 14;
             // 
             // numberOfContainersLabel
             // 
@@ -218,7 +240,7 @@
             this.numberOfContainers.Location = new System.Drawing.Point(118, 193);
             this.numberOfContainers.Name = "numberOfContainers";
             this.numberOfContainers.Size = new System.Drawing.Size(171, 21);
-            this.numberOfContainers.TabIndex = 14;
+            this.numberOfContainers.TabIndex = 16;
             // 
             // groupBox1
             // 
@@ -231,7 +253,7 @@
             this.groupBox1.Location = new System.Drawing.Point(9, 222);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(294, 116);
-            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Dangerous Goods Signatory";
             // 
@@ -240,7 +262,7 @@
             this.signatoryPlace.Location = new System.Drawing.Point(109, 82);
             this.signatoryPlace.Name = "signatoryPlace";
             this.signatoryPlace.Size = new System.Drawing.Size(171, 21);
-            this.signatoryPlace.TabIndex = 23;
+            this.signatoryPlace.TabIndex = 5;
             // 
             // signatoryContactNameLabel
             // 
@@ -248,7 +270,7 @@
             this.signatoryContactNameLabel.Location = new System.Drawing.Point(21, 31);
             this.signatoryContactNameLabel.Name = "signatoryContactNameLabel";
             this.signatoryContactNameLabel.Size = new System.Drawing.Size(87, 13);
-            this.signatoryContactNameLabel.TabIndex = 18;
+            this.signatoryContactNameLabel.TabIndex = 0;
             this.signatoryContactNameLabel.Text = "Signatory Name:";
             this.signatoryContactNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -257,7 +279,7 @@
             this.signatoryContactName.Location = new System.Drawing.Point(109, 28);
             this.signatoryContactName.Name = "signatoryContactName";
             this.signatoryContactName.Size = new System.Drawing.Size(171, 21);
-            this.signatoryContactName.TabIndex = 19;
+            this.signatoryContactName.TabIndex = 1;
             // 
             // signatoryPlaceLabel
             // 
@@ -265,7 +287,7 @@
             this.signatoryPlaceLabel.Location = new System.Drawing.Point(23, 85);
             this.signatoryPlaceLabel.Name = "signatoryPlaceLabel";
             this.signatoryPlaceLabel.Size = new System.Drawing.Size(85, 13);
-            this.signatoryPlaceLabel.TabIndex = 22;
+            this.signatoryPlaceLabel.TabIndex = 4;
             this.signatoryPlaceLabel.Text = "Signatory Place:";
             this.signatoryPlaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -275,7 +297,7 @@
             this.signatoryTitleLabel.Location = new System.Drawing.Point(28, 58);
             this.signatoryTitleLabel.Name = "signatoryTitleLabel";
             this.signatoryTitleLabel.Size = new System.Drawing.Size(80, 13);
-            this.signatoryTitleLabel.TabIndex = 20;
+            this.signatoryTitleLabel.TabIndex = 2;
             this.signatoryTitleLabel.Text = "Signatory Title:";
             this.signatoryTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -284,7 +306,7 @@
             this.signatoryTitle.Location = new System.Drawing.Point(109, 55);
             this.signatoryTitle.Name = "signatoryTitle";
             this.signatoryTitle.Size = new System.Drawing.Size(171, 21);
-            this.signatoryTitle.TabIndex = 21;
+            this.signatoryTitle.TabIndex = 3;
             // 
             // aircraftLabel
             // 
@@ -367,7 +389,7 @@
             this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 344);
             this.hazardousMaterialGroupBox.Name = "hazardousMaterialGroupBox";
             this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(294, 238);
-            this.hazardousMaterialGroupBox.TabIndex = 13;
+            this.hazardousMaterialGroupBox.TabIndex = 18;
             this.hazardousMaterialGroupBox.TabStop = false;
             this.hazardousMaterialGroupBox.Text = "Hazardous Material Details";
             // 
@@ -376,7 +398,7 @@
             this.packingInstructions.Location = new System.Drawing.Point(109, 208);
             this.packingInstructions.Name = "packingInstructions";
             this.packingInstructions.Size = new System.Drawing.Size(171, 21);
-            this.packingInstructions.TabIndex = 13;
+            this.packingInstructions.TabIndex = 15;
             // 
             // packingInstructionsLabel
             // 
@@ -384,7 +406,7 @@
             this.packingInstructionsLabel.Location = new System.Drawing.Point(1, 211);
             this.packingInstructionsLabel.Name = "packingInstructionsLabel";
             this.packingInstructionsLabel.Size = new System.Drawing.Size(107, 13);
-            this.packingInstructionsLabel.TabIndex = 15;
+            this.packingInstructionsLabel.TabIndex = 14;
             this.packingInstructionsLabel.Text = "Packing Instructions:";
             this.packingInstructionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -395,7 +417,7 @@
             this.packingDetailsAircraftOnlyLabel.Location = new System.Drawing.Point(61, 186);
             this.packingDetailsAircraftOnlyLabel.Name = "packingDetailsAircraftOnlyLabel";
             this.packingDetailsAircraftOnlyLabel.Size = new System.Drawing.Size(47, 13);
-            this.packingDetailsAircraftOnlyLabel.TabIndex = 13;
+            this.packingDetailsAircraftOnlyLabel.TabIndex = 12;
             this.packingDetailsAircraftOnlyLabel.Text = "Aircraft:";
             this.packingDetailsAircraftOnlyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -405,7 +427,7 @@
             this.packingDetailsAircraftOnly.Location = new System.Drawing.Point(109, 185);
             this.packingDetailsAircraftOnly.Name = "packingDetailsAircraftOnly";
             this.packingDetailsAircraftOnly.Size = new System.Drawing.Size(116, 17);
-            this.packingDetailsAircraftOnly.TabIndex = 12;
+            this.packingDetailsAircraftOnly.TabIndex = 13;
             this.packingDetailsAircraftOnly.Text = "Cargo aircraft only";
             this.packingDetailsAircraftOnly.UseVisualStyleBackColor = true;
             // 
@@ -586,28 +608,6 @@
             this.emergencyContactPhone.Name = "emergencyContactPhone";
             this.emergencyContactPhone.Size = new System.Drawing.Size(171, 21);
             this.emergencyContactPhone.TabIndex = 5;
-            // 
-            // batteryPacking
-            // 
-            this.batteryPacking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.batteryPacking.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.batteryPacking.FormattingEnabled = true;
-            this.batteryPacking.Location = new System.Drawing.Point(109, 55);
-            this.batteryPacking.Name = "batteryPacking";
-            this.batteryPacking.PromptText = "(Multiple Values)";
-            this.batteryPacking.Size = new System.Drawing.Size(171, 21);
-            this.batteryPacking.TabIndex = 24;
-            // 
-            // batteryRegulatorySubtype
-            // 
-            this.batteryRegulatorySubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.batteryRegulatorySubtype.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.batteryRegulatorySubtype.FormattingEnabled = true;
-            this.batteryRegulatorySubtype.Location = new System.Drawing.Point(109, 82);
-            this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
-            this.batteryRegulatorySubtype.PromptText = "(Multiple Values)";
-            this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
-            this.batteryRegulatorySubtype.TabIndex = 25;
             // 
             // FedExDangerousGoodsControl
             // 

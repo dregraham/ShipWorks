@@ -17,6 +17,7 @@ using System.Web;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Carriers.BestRate;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -25,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     /// </summary>
     public static class PostalWebClientRates
     {
+        private static readonly Regex nonDigits = new Regex(@"[^\d]");
+
         /// <summary>
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
@@ -261,23 +264,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XPathNavigator rateNode = DetermineDomesticRateMatch(pair.Value, serviceType, packaging);
 
                 decimal amount = XPathUtility.Evaluate(rateNode, "Rate", 0m);
+                string days = GetDaysForRate(serviceType, rateNode);
 
                 if (serviceType == PostalServiceType.ExpressMail)
                 {
                     rates.Add(new RateResult(
                         EnumHelper.GetDescription(serviceType),
-                        PostalUtility.GetServiceTransitDays(serviceType),
+                        days,
                         amount,
                         new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                        {
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
-                        });
+                    {
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                    });
                 }
                 else
                 {
-                    rates.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType),
-                        PostalUtility.GetServiceTransitDays(serviceType))
+                    rates.Add(new RateResult(EnumHelper.GetDescription(serviceType), days)
                     {
                         Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery),
                         ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
@@ -309,6 +311,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             return rates;
+        }
+
+        /// <summary>
+        /// Get the days string to display in the rate grid
+        /// </summary>
+        private static string GetDaysForRate(PostalServiceType serviceType, XPathNavigator rateNode)
+        {
+            string days = nonDigits.Replace(XPathUtility.Evaluate(rateNode, "CommitmentName", string.Empty), string.Empty);
+            if (!string.IsNullOrWhiteSpace(days) &&
+                DateTime.TryParse(XPathUtility.Evaluate(rateNode, "CommitmentDate", string.Empty), out DateTime commitmentDate))
+            {
+                days = $"{days} ({commitmentDate.DayOfWeek})";
+            }
+            else
+            {
+                days = PostalUtility.GetServiceTransitDays(serviceType);
+            }
+
+            return days;
         }
 
         /// <summary>

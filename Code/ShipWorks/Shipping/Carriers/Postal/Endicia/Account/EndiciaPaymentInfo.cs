@@ -66,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
         }
 
         /// <summary>
+        /// Credit card CVV
+        /// </summary>
+        public string CVV { get; set; }
+
+        /// <summary>
         /// Indicates if postage should come out of a checking account
         /// </summary>
         public bool UseCheckingForPostage

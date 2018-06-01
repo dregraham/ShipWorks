@@ -13857,6 +13857,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoVersion);}
 		}
+		/// <summary>Creates a new MagentoStoreEntity.UpdateSplitOrderOnlineStatus field instance</summary>
+		public static EntityField2 UpdateSplitOrderOnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity MarketplaceAdvisorOrderEntity</summary>
@@ -18041,6 +18046,726 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OtherShipmentFieldIndex.Insurance);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OverstockOrderEntity</summary>
+	public partial class OverstockOrderFields
+	{
+		/// <summary>Creates a new OverstockOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.CombineSplitStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.WarehouseCode field instance</summary>
+		public static EntityField2 WarehouseCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.WarehouseCode);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.SalesChannelName field instance</summary>
+		public static EntityField2 SalesChannelName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SalesChannelName);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.SofsCreatedDate field instance</summary>
+		public static EntityField2 SofsCreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.SofsCreatedDate);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OverstockOrderItemEntity</summary>
+	public partial class OverstockOrderItemFields
+	{
+		/// <summary>Creates a new OverstockOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.SalesChannelLineNumber field instance</summary>
+		public static EntityField2 SalesChannelLineNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.SalesChannelLineNumber);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OverstockOrderSearchEntity</summary>
+	public partial class OverstockOrderSearchFields
+	{
+		/// <summary>Creates a new OverstockOrderSearchEntity.OverstockOrderSearchID field instance</summary>
+		public static EntityField2 OverstockOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OverstockOrderSearchID);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.SalesChannelName field instance</summary>
+		public static EntityField2 SalesChannelName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.SalesChannelName);}
+		}
+		/// <summary>Creates a new OverstockOrderSearchEntity.WarehouseCode field instance</summary>
+		public static EntityField2 WarehouseCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderSearchFieldIndex.WarehouseCode);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OverstockStoreEntity</summary>
+	public partial class OverstockStoreFields
+	{
+		/// <summary>Creates a new OverstockStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InternationalAddressValidationSetting);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Username field instance</summary>
+		public static EntityField2 Username
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Username);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.Password field instance</summary>
+		public static EntityField2 Password
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.Password);}
 		}
 	}
 

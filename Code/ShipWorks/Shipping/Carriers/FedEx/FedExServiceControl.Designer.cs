@@ -114,23 +114,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelEmailAddress = new System.Windows.Forms.Label();
             this.labelEmailInfo = new System.Windows.Forms.Label();
             this.picturEmailInfo = new System.Windows.Forms.PictureBox();
-            this.multiValueTextBox1 = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.multiValueTextBox2 = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -260,6 +249,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionReturns.Location = new System.Drawing.Point(3, 764);
             this.sectionReturns.SectionName = "FedEx® Returns";
             this.sectionReturns.Size = new System.Drawing.Size(487, 24);
+            this.sectionReturns.TabIndex = 12;
             // 
             // sectionShipment
             // 
@@ -278,11 +268,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionShipment.ContentPanel.Controls.Add(this.labelPackaging);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(487, 371);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 822);
             this.sectionLabelOptions.Size = new System.Drawing.Size(487, 24);
+            this.sectionLabelOptions.TabIndex = 14;
             //
             // sectionHoldAtLocation
             // 
@@ -300,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
             this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
             this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
-            this.sectionHoldAtLocation.TabIndex = 18;
+            this.sectionHoldAtLocation.TabIndex = 10;
             // 
             // fedExHoldAtLocationControl
             // 
@@ -828,7 +820,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.SectionName = "Signature & Reference";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(487, 24);
-            this.sectionOptions.TabIndex = 5;
+            this.sectionOptions.TabIndex = 4;
             // 
             // referenceShipmentIntegrity
             // 
@@ -936,6 +928,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionEmail.Collapsed = true;
+            this.sectionEmail.TabIndex = 7;
             // 
             // sectionEmail.ContentPanel
             // 
@@ -971,23 +964,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailAddress);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailInfo);
             this.sectionEmail.ContentPanel.Controls.Add(this.picturEmailInfo);
-            this.sectionEmail.ContentPanel.Controls.Add(this.multiValueTextBox1);
             this.sectionEmail.ContentPanel.Controls.Add(this.label4);
             this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge1);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox3);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox4);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox5);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox1);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox2);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox6);
-            this.sectionEmail.ContentPanel.Controls.Add(this.multiValueTextBox2);
             this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge2);
             this.sectionEmail.ContentPanel.Controls.Add(this.label5);
             this.sectionEmail.ContentPanel.Controls.Add(this.label6);
             this.sectionEmail.ContentPanel.Controls.Add(this.label7);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox7);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox8);
-            this.sectionEmail.ContentPanel.Controls.Add(this.checkBox9);
             this.sectionEmail.ContentPanel.Controls.Add(this.label8);
             this.sectionEmail.ContentPanel.Controls.Add(this.label9);
             this.sectionEmail.ContentPanel.Controls.Add(this.label10);
@@ -1001,7 +983,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.SectionName = "Email Notifications";
             this.sectionEmail.SettingsKey = "{2a314180-f0db-4a03-ba4c-dcc418010bca}";
             this.sectionEmail.Size = new System.Drawing.Size(487, 24);
-            this.sectionEmail.TabIndex = 7;
             // 
             // emailNotifyBrokerShip
             // 
@@ -1010,7 +991,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyBrokerShip.Location = new System.Drawing.Point(221, 108);
             this.emailNotifyBrokerShip.Name = "emailNotifyBrokerShip";
             this.emailNotifyBrokerShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerShip.TabIndex = 23;
+            this.emailNotifyBrokerShip.TabIndex = 7;
             this.emailNotifyBrokerShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyBrokerDelivery
@@ -1020,7 +1001,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(321, 108);
             this.emailNotifyBrokerDelivery.Name = "emailNotifyBrokerDelivery";
             this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerDelivery.TabIndex = 25;
+            this.emailNotifyBrokerDelivery.TabIndex = 9;
             this.emailNotifyBrokerDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyBrokerEstimatedDelivery
@@ -1030,7 +1011,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(395, 108);
             this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
             this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 25;
+            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 10;
             this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyBrokerException
@@ -1040,7 +1021,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyBrokerException.Location = new System.Drawing.Point(264, 108);
             this.emailNotifyBrokerException.Name = "emailNotifyBrokerException";
             this.emailNotifyBrokerException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerException.TabIndex = 24;
+            this.emailNotifyBrokerException.TabIndex = 8;
             this.emailNotifyBrokerException.UseVisualStyleBackColor = false;
             // 
             // labelEmailBroker
@@ -1062,7 +1043,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyMessage.Name = "emailNotifyMessage";
             this.emailNotifyMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.emailNotifyMessage.Size = new System.Drawing.Size(319, 61);
-            this.emailNotifyMessage.TabIndex = 10;
+            this.emailNotifyMessage.TabIndex = 16;
             // 
             // labelPersonalMessage
             // 
@@ -1092,7 +1073,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyOtherShip.Location = new System.Drawing.Point(221, 131);
             this.emailNotifyOtherShip.Name = "emailNotifyOtherShip";
             this.emailNotifyOtherShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherShip.TabIndex = 7;
+            this.emailNotifyOtherShip.TabIndex = 12;
             this.emailNotifyOtherShip.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherDelivery
@@ -1102,7 +1083,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(321, 131);
             this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
             this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherDelivery.TabIndex = 9;
+            this.emailNotifyOtherDelivery.TabIndex = 14;
             this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherEstimatedDelivery
@@ -1112,7 +1093,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(395, 131);
             this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
             this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherEstimatedDelivery.TabIndex = 9;
+            this.emailNotifyOtherEstimatedDelivery.TabIndex = 15;
             this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
             // 
             // emailNotifyOtherException
@@ -1122,7 +1103,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyOtherException.Location = new System.Drawing.Point(264, 131);
             this.emailNotifyOtherException.Name = "emailNotifyOtherException";
             this.emailNotifyOtherException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherException.TabIndex = 8;
+            this.emailNotifyOtherException.TabIndex = 13;
             this.emailNotifyOtherException.UseVisualStyleBackColor = false;
             // 
             // emailNotifyRecipientShip
@@ -1171,7 +1152,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyOtherAddress, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyOtherAddress);
             this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
             this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
-            this.emailNotifyOtherAddress.TabIndex = 6;
+            this.emailNotifyOtherAddress.TabIndex = 11;
             // 
             // kryptonBorderEdgeEmail
             // 
@@ -1325,17 +1306,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.picturEmailInfo.TabIndex = 0;
             this.picturEmailInfo.TabStop = false;
             // 
-            // multiValueTextBox1
-            // 
-            this.multiValueTextBox1.Location = new System.Drawing.Point(17, 178);
-            this.multiValueTextBox1.MaxLength = 120;
-            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox1, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyMessage);
-            this.multiValueTextBox1.Multiline = true;
-            this.multiValueTextBox1.Name = "multiValueTextBox1";
-            this.multiValueTextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.multiValueTextBox1.Size = new System.Drawing.Size(319, 61);
-            this.multiValueTextBox1.TabIndex = 10;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -1356,74 +1326,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(385, 1);
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.BackColor = System.Drawing.Color.White;
-            this.checkBox3.Location = new System.Drawing.Point(221, 131);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(15, 14);
-            this.checkBox3.TabIndex = 7;
-            this.checkBox3.UseVisualStyleBackColor = false;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.BackColor = System.Drawing.Color.White;
-            this.checkBox4.Location = new System.Drawing.Point(321, 131);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(15, 14);
-            this.checkBox4.TabIndex = 9;
-            this.checkBox4.UseVisualStyleBackColor = false;
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.BackColor = System.Drawing.Color.White;
-            this.checkBox5.Location = new System.Drawing.Point(264, 131);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(15, 14);
-            this.checkBox5.TabIndex = 8;
-            this.checkBox5.UseVisualStyleBackColor = false;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(221, 87);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(15, 14);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.UseVisualStyleBackColor = false;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.BackColor = System.Drawing.Color.White;
-            this.checkBox2.Location = new System.Drawing.Point(321, 87);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(15, 14);
-            this.checkBox2.TabIndex = 5;
-            this.checkBox2.UseVisualStyleBackColor = false;
-            // 
-            // checkBox6
-            // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.BackColor = System.Drawing.Color.White;
-            this.checkBox6.Location = new System.Drawing.Point(264, 87);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(15, 14);
-            this.checkBox6.TabIndex = 4;
-            this.checkBox6.UseVisualStyleBackColor = false;
-            // 
-            // multiValueTextBox2
-            // 
-            this.multiValueTextBox2.Location = new System.Drawing.Point(49, 128);
-            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox2, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyOtherAddress);
-            this.multiValueTextBox2.Name = "multiValueTextBox2";
-            this.multiValueTextBox2.Size = new System.Drawing.Size(154, 21);
-            this.multiValueTextBox2.TabIndex = 6;
             // 
             // kryptonBorderEdge2
             // 
@@ -1465,36 +1367,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.label7.Size = new System.Drawing.Size(41, 13);
             this.label7.TabIndex = 9;
             this.label7.Text = "Sender";
-            // 
-            // checkBox7
-            // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.BackColor = System.Drawing.Color.White;
-            this.checkBox7.Location = new System.Drawing.Point(221, 66);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(15, 14);
-            this.checkBox7.TabIndex = 0;
-            this.checkBox7.UseVisualStyleBackColor = false;
-            // 
-            // checkBox8
-            // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.BackColor = System.Drawing.Color.White;
-            this.checkBox8.Location = new System.Drawing.Point(321, 66);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(15, 14);
-            this.checkBox8.TabIndex = 2;
-            this.checkBox8.UseVisualStyleBackColor = false;
-            // 
-            // checkBox9
-            // 
-            this.checkBox9.AutoSize = true;
-            this.checkBox9.BackColor = System.Drawing.Color.White;
-            this.checkBox9.Location = new System.Drawing.Point(264, 66);
-            this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(15, 14);
-            this.checkBox9.TabIndex = 1;
-            this.checkBox9.UseVisualStyleBackColor = false;
             // 
             // label8
             // 
@@ -1582,7 +1454,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D.";
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
             this.sectionCOD.Size = new System.Drawing.Size(487, 24);
-            this.sectionCOD.TabIndex = 10;
+            this.sectionCOD.TabIndex = 11;
             // 
             // taxInfoLabel
             // 
@@ -1732,7 +1604,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
-            this.smartManifestID.TabIndex = 88;
+            this.smartManifestID.TabIndex = 9;
             this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // sectionSmartPost
@@ -1761,7 +1633,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.SectionName = "FedEx SmartPost®";
             this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
             this.sectionSmartPost.Size = new System.Drawing.Size(487, 24);
-            this.sectionSmartPost.TabIndex = 17;
+            this.sectionSmartPost.TabIndex = 5;
             // 
             // infotipSmartPostConfirmation
             // 
@@ -1781,7 +1653,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartHubID.Name = "smartHubID";
             this.smartHubID.PromptText = "(Multiple Values)";
             this.smartHubID.Size = new System.Drawing.Size(225, 21);
-            this.smartHubID.TabIndex = 97;
+            this.smartHubID.TabIndex = 1;
             this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelSmartHubID
@@ -1791,7 +1663,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
             this.labelSmartHubID.Name = "labelSmartHubID";
             this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
-            this.labelSmartHubID.TabIndex = 96;
+            this.labelSmartHubID.TabIndex = 0;
             this.labelSmartHubID.Text = "Hub ID:";
             // 
             // smartConfirmation
@@ -1801,7 +1673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
             this.smartConfirmation.Name = "smartConfirmation";
             this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
-            this.smartConfirmation.TabIndex = 95;
+            this.smartConfirmation.TabIndex = 7;
             this.smartConfirmation.Text = "USPS Delivery Confirmation";
             this.smartConfirmation.UseVisualStyleBackColor = false;
             this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
@@ -1814,7 +1686,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartEndorsement.Name = "smartEndorsement";
             this.smartEndorsement.PromptText = "(Multiple Values)";
             this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
-            this.smartEndorsement.TabIndex = 94;
+            this.smartEndorsement.TabIndex = 5;
             this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // smartIndicia
@@ -1825,7 +1697,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
             this.smartIndicia.Size = new System.Drawing.Size(225, 21);
-            this.smartIndicia.TabIndex = 93;
+            this.smartIndicia.TabIndex = 3;
             this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
             // 
             // labelSmartAncillary
@@ -1835,7 +1707,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartAncillary.Location = new System.Drawing.Point(30, 68);
             this.labelSmartAncillary.Name = "labelSmartAncillary";
             this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
-            this.labelSmartAncillary.TabIndex = 92;
+            this.labelSmartAncillary.TabIndex = 4;
             this.labelSmartAncillary.Text = "Ancillary:";
             // 
             // labelSmartEndicia
@@ -1845,7 +1717,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartEndicia.Location = new System.Drawing.Point(39, 40);
             this.labelSmartEndicia.Name = "labelSmartEndicia";
             this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
-            this.labelSmartEndicia.TabIndex = 91;
+            this.labelSmartEndicia.TabIndex = 2;
             this.labelSmartEndicia.Text = "Indicia:";
             // 
             // labelSmartConfirmation
@@ -1855,7 +1727,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
             this.labelSmartConfirmation.Name = "labelSmartConfirmation";
             this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
-            this.labelSmartConfirmation.TabIndex = 90;
+            this.labelSmartConfirmation.TabIndex = 6;
             this.labelSmartConfirmation.Text = "Confirmation:";
             // 
             // labelSmartManifestID
@@ -1865,7 +1737,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
             this.labelSmartManifestID.Name = "labelSmartManifestID";
             this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
-            this.labelSmartManifestID.TabIndex = 89;
+            this.labelSmartManifestID.TabIndex = 8;
             this.labelSmartManifestID.Text = "Manifest ID:";
             // 
             // sectionPackageDetails
@@ -1884,7 +1756,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionPackageDetails.SectionName = "Other Package Details";
             this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
             this.sectionPackageDetails.Size = new System.Drawing.Size(487, 24);
-            this.sectionPackageDetails.TabIndex = 19;
+            this.sectionPackageDetails.TabIndex = 3;
             // 
             // otherPackageHolder
             // 
@@ -1931,7 +1803,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.SectionName = "Service Options";
             this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
             this.sectionServiceOptions.Size = new System.Drawing.Size(487, 24);
-            this.sectionServiceOptions.TabIndex = 20;
+            this.sectionServiceOptions.TabIndex = 13;
             // 
             // returnsClearance
             // 
@@ -2009,7 +1881,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFimsOptions.SectionName = "FIMS Options";
             this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
             this.sectionFimsOptions.Size = new System.Drawing.Size(487, 99);
-            this.sectionFimsOptions.TabIndex = 21;
+            this.sectionFimsOptions.TabIndex = 15;
             // 
             // fimsOptionsControl
             // 
@@ -2243,23 +2115,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private ShipWorks.UI.Controls.MultiValueComboBox smartHubID;
         private System.Windows.Forms.Label labelSmartHubID;
         private UI.Controls.InfoTip infotipSmartPostConfirmation;
-        private UI.Controls.MultiValueTextBox multiValueTextBox1;
         private System.Windows.Forms.Label label4;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private UI.Controls.MultiValueTextBox multiValueTextBox2;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;

@@ -78,11 +78,13 @@
             // 
             this.insuranceControl.Location = new System.Drawing.Point(14, 282);
             this.insuranceControl.Size = new System.Drawing.Size(349, 50);
+            this.insuranceControl.TabIndex = 99;
             // 
             // sectionExpress
             // 
             this.sectionExpress.Location = new System.Drawing.Point(3, 553);
             this.sectionExpress.Size = new System.Drawing.Size(375, 24);
+            this.sectionExpress.TabIndex = 4;
             // 
             // sectionRecipient
             // 
@@ -98,8 +100,10 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 682);
             this.sectionReturns.Size = new System.Drawing.Size(375, 24);
+            this.sectionReturns.TabIndex = 6;
 
             this.sectionLabelOptions.Size = new System.Drawing.Size(375, 24);
+            this.sectionLabelOptions.TabIndex = 7;
             // 
             // sectionShipment
             // 
@@ -112,6 +116,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelStealth);
             this.sectionShipment.Location = new System.Drawing.Point(3, 161);
             this.sectionShipment.Size = new System.Drawing.Size(375, 358);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionFrom
             // 
@@ -164,7 +169,7 @@
             this.panelTop.Location = new System.Drawing.Point(4, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(360, 50);
-            this.panelTop.TabIndex = 11;
+            this.panelTop.TabIndex = 0;
             // 
             // label2
             // 
@@ -225,7 +230,7 @@
             this.sectionRubberStamps.SectionName = "Rubber Stamps";
             this.sectionRubberStamps.SettingsKey = "{364567aa-cc02-475f-8261-d980a4b0ccf9}";
             this.sectionRubberStamps.Size = new System.Drawing.Size(375, 24);
-            this.sectionRubberStamps.TabIndex = 5;
+            this.sectionRubberStamps.TabIndex = 3;
             // 
             // labelReferenceIdInfo
             // 
@@ -395,7 +400,7 @@
             this.sectionEntryFacility.SectionName = "Entry Facility";
             this.sectionEntryFacility.SettingsKey = "{d3354c1d-46db-4293-b79f-e9e88d1cca7b}";
             this.sectionEntryFacility.Size = new System.Drawing.Size(375, 95);
-            this.sectionEntryFacility.TabIndex = 13;
+            this.sectionEntryFacility.TabIndex = 5;
             // 
             // labelEntryFacility
             // 
@@ -448,7 +453,7 @@
             this.Controls.Add(this.sectionRubberStamps);
             this.Controls.Add(this.sectionEntryFacility);
             this.Name = "EndiciaServiceControl";
-            this.Size = new System.Drawing.Size(381, 1019);
+            this.Size = new System.Drawing.Size(381, 1119);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionEntryFacility, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);

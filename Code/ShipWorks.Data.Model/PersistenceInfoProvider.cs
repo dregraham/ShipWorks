@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(222);
+			this.InitClass(226);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -182,6 +182,10 @@ namespace ShipWorks.Data.Model
 			InitOrderSearchEntityMappings();
 			InitOtherProfileEntityMappings();
 			InitOtherShipmentEntityMappings();
+			InitOverstockOrderEntityMappings();
+			InitOverstockOrderItemEntityMappings();
+			InitOverstockOrderSearchEntityMappings();
+			InitOverstockStoreEntityMappings();
 			InitPackageProfileEntityMappings();
 			InitPayPalOrderEntityMappings();
 			InitPayPalOrderSearchEntityMappings();
@@ -2048,10 +2052,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits MagentoStoreEntity's mappings</summary>
 		private void InitMagentoStoreEntityMappings()
 		{
-			this.AddElementMapping("MagentoStoreEntity", @"ShipWorksLocal", @"dbo", "MagentoStore", 3, 0);
+			this.AddElementMapping("MagentoStoreEntity", @"ShipWorksLocal", @"dbo", "MagentoStore", 4, 0);
 			this.AddElementFieldMapping("MagentoStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MagentoStoreEntity", "MagentoTrackingEmails", "MagentoTrackingEmails", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("MagentoStoreEntity", "MagentoVersion", "MagentoVersion", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("MagentoStoreEntity", "UpdateSplitOrderOnlineStatus", "UpdateSplitOrderOnlineStatus", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 		}
 
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's mappings</summary>
@@ -2498,6 +2503,44 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OtherShipmentEntity", "Service", "Service", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("OtherShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("OtherShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+		}
+
+		/// <summary>Inits OverstockOrderEntity's mappings</summary>
+		private void InitOverstockOrderEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderEntity", @"ShipWorksLocal", @"dbo", "OverstockOrder", 4, 0);
+			this.AddElementFieldMapping("OverstockOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderEntity", "WarehouseCode", "WarehouseCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SalesChannelName", "SalesChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SofsCreatedDate", "SofsCreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
+		}
+
+		/// <summary>Inits OverstockOrderItemEntity's mappings</summary>
+		private void InitOverstockOrderItemEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderItemEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderItem", 2, 0);
+			this.AddElementFieldMapping("OverstockOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderItemEntity", "SalesChannelLineNumber", "SalesChannelLineNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+		}
+
+		/// <summary>Inits OverstockOrderSearchEntity's mappings</summary>
+		private void InitOverstockOrderSearchEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderSearchEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderSearch", 5, 0);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OverstockOrderSearchID", "OverstockOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "SalesChannelName", "SalesChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "WarehouseCode", "WarehouseCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
+		}
+
+		/// <summary>Inits OverstockStoreEntity's mappings</summary>
+		private void InitOverstockStoreEntityMappings()
+		{
+			this.AddElementMapping("OverstockStoreEntity", @"ShipWorksLocal", @"dbo", "OverstockStore", 3, 0);
+			this.AddElementFieldMapping("OverstockStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockStoreEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OverstockStoreEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits PackageProfileEntity's mappings</summary>

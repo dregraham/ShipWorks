@@ -9,6 +9,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Tests.Shared;
@@ -69,6 +70,69 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsEnter()
+        {
+            testObject.InitializeForCurrentSession();
+
+            ShortcutEntity shortcut = new ShortcutEntity()
+            {
+                Action = KeyboardShortcutCommand.Enter
+            };
+
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
+            testMessenger.Send(shortcutMessage);
+
+            scheduler.Start();
+
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "Simulate Enter key press"));
+        }
+
+        [Fact]
+        public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsTab()
+        {
+            testObject.InitializeForCurrentSession();
+
+            ShortcutEntity shortcut = new ShortcutEntity()
+            {
+                Action = KeyboardShortcutCommand.Tab
+            };
+
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
+            testMessenger.Send(shortcutMessage);
+
+            scheduler.Start();
+
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "Simulate Tab key press"));
+        }
+
+        [Fact]
+        public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsEscape()
+        {
+            testObject.InitializeForCurrentSession();
+
+            ShortcutEntity shortcut = new ShortcutEntity()
+            {
+                Action = KeyboardShortcutCommand.Escape
+            };
+
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
+            testMessenger.Send(shortcutMessage);
+
+            scheduler.Start();
+
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "Simulate Escape key press"));
+        }
+
+        [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsApplyProfileAndProfileAppliedMessageIsSent()
         {
             testObject.InitializeForCurrentSession();
@@ -94,8 +158,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
         }
-
-
+        
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsApplyProfileAndProfileAppliedMessageIsNotSent()
         {
@@ -143,6 +206,55 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
+        }
+        
+        [Fact]
+        public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsCreateLabelAndProcessShipmentMessageIsSent()
+        {
+            testObject.InitializeForCurrentSession();
+
+            ShortcutEntity shortcut = new ShortcutEntity
+            {
+                Action = KeyboardShortcutCommand.CreateLabel
+            };
+
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
+            testMessenger.Send(shortcutMessage);
+
+            ShippingProfile profile = mock.Create<ShippingProfile>();
+            profile.Shortcut = shortcut;
+
+            testMessenger.Send(new ProcessShipmentsMessage(this, new[] { new ShipmentEntity() }, new[] { new ShipmentEntity() }, null));
+
+            scheduler.Start();
+
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "Success"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "LabelPrinted"));
+        }
+        
+        [Fact]
+        public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsCreateLabelAndProcessShipmentMessageIsNotSent()
+        {
+            testObject.InitializeForCurrentSession();
+
+            ShortcutEntity shortcut = new ShortcutEntity()
+            {
+                Action = KeyboardShortcutCommand.CreateLabel
+            };
+
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
+            testMessenger.Send(shortcutMessage);
+
+            scheduler.Start();
+
+            telemetryEvent.Verify(t => t.AddMetric("Shortcuts.Applied.ResponseTimeInMilliseconds", It.IsAny<double>()));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Result", "Unknown"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Source", "Barcode"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
+            telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "LabelPrinted"));
         }
     }
 }

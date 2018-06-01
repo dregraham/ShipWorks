@@ -1694,6 +1694,7 @@
         <Fields>
           <Field Name="MagentoTrackingEmails" Type="bool" FieldIndex="0" />
           <Field Name="MagentoVersion" Type="int" FieldIndex="1" />
+          <Field Name="UpdateSplitOrderOnlineStatus" Type="bool" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="MarketplaceAdvisorOrder" ObjectID="dbefd1f4-5a4e-437d-9896-558b89937528" InheritanceType="2">
@@ -2070,6 +2071,33 @@
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="3" />
           <Field Name="Service" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="OverstockOrder" ObjectID="11900ff7-296d-439b-bb65-15c77fd8b11d" InheritanceType="2">
+        <Fields>
+          <Field Name="SalesChannelName" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="SofsCreatedDate" Type="datetime" FieldIndex="2" />
+          <Field Name="WarehouseCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="OverstockOrderItem" ObjectID="633088ce-e7f0-473e-90c3-b335c709a6cc" InheritanceType="2">
+        <Fields>
+          <Field Name="SalesChannelLineNumber" Type="long" Precision="19" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="OverstockOrderSearch" ObjectID="9714f944-b9ff-4726-a925-28c104c71b52">
+        <Fields>
+          <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="OverstockOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="SalesChannelName" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="WarehouseCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="4" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="OverstockStore" ObjectID="102ef9ce-2228-4f68-a69d-986c3201bc73" InheritanceType="2">
+        <Fields>
+          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Username" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="PackageProfile" ObjectID="c25efa99-0738-45a5-9df8-b13ba4c43852" InheritanceType="2">
@@ -3797,6 +3825,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="OverstockOrderSearch.OverstockOrder-OverstockOrder.OverstockOrderSearch" Start=":OverstockOrderSearch" End=":OverstockOrder" StartNavigator="OverstockOrder" EndNavigator="OverstockOrderSearch" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="PackageProfile.ShippingProfile-ShippingProfile.Packages" Start=":PackageProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -4159,6 +4192,9 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":OdbcStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":OrderMotionOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":OrderMotionStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":OverstockOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":OverstockOrderItem" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":OverstockStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":PayPalOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
@@ -4219,7 +4255,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-04-30T14:49:25.0589982Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-15T16:14:14.5148455Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4588,10 +4624,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6716,6 +6752,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="MagentoTrackingEmails" Ordinal="2" DbType="2" />
                     <Field Name="MagentoVersion" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="UpdateSplitOrderOnlineStatus" Ordinal="4" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="MarketplaceAdvisorOrder">
@@ -7144,9 +7181,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7233,6 +7270,40 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="Insurance" Ordinal="5" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="OverstockOrder">
+                  <PkConstraintName Name="PK_OverstockOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="3" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SofsCreatedDate" Ordinal="4" DbType="4" />
+                  </Fields>
+                </Table>
+                <Table Name="OverstockOrderItem">
+                  <PkConstraintName Name="PK_OverstockOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelLineNumber" Ordinal="2" DbType="0" Precision="19" />
+                  </Fields>
+                </Table>
+                <Table Name="OverstockOrderSearch">
+                  <PkConstraintName Name="PK_OverstockOrderSearch" />
+                  <Fields>
+                    <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="OverstockStore">
+                  <PkConstraintName Name="PK_OverstockStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="Username" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="PackageProfile">
@@ -9760,6 +9831,26 @@
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:OtherShipment:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OverstockOrder:FK_OverstockOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:OverstockOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OverstockOrderItem:FK_OverstockOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:OverstockOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OverstockOrderSearch:FK_OverstockOrderSearch_OverstockOrder" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OverstockOrder:OrderID" FkField="dbo:OverstockOrderSearch:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OverstockStore:FK_OverstockStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OverstockStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:PackageProfile:FK_PackageProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:PackageProfile:ShippingProfileID" />
@@ -11745,6 +11836,7 @@
             <FieldMapping FieldName="MagentoTrackingEmails" TargetFieldName="MagentoTrackingEmails" />
             <FieldMapping FieldName="MagentoVersion" TargetFieldName="MagentoVersion" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="UpdateSplitOrderOnlineStatus" TargetFieldName="UpdateSplitOrderOnlineStatus" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":MarketplaceAdvisorOrder" TargetName="ShipWorksLocal:dbo:MarketplaceAdvisorOrder">
@@ -12133,6 +12225,36 @@
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OverstockOrder" TargetName="ShipWorksLocal:dbo:OverstockOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="SalesChannelName" TargetFieldName="SalesChannelName" />
+            <FieldMapping FieldName="SofsCreatedDate" TargetFieldName="SofsCreatedDate" />
+            <FieldMapping FieldName="WarehouseCode" TargetFieldName="WarehouseCode" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OverstockOrderItem" TargetName="ShipWorksLocal:dbo:OverstockOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+            <FieldMapping FieldName="SalesChannelLineNumber" TargetFieldName="SalesChannelLineNumber" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OverstockOrderSearch" TargetName="ShipWorksLocal:dbo:OverstockOrderSearch">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
+            <FieldMapping FieldName="OverstockOrderSearchID" TargetFieldName="OverstockOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="SalesChannelName" TargetFieldName="SalesChannelName" />
+            <FieldMapping FieldName="WarehouseCode" TargetFieldName="WarehouseCode" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OverstockStore" TargetName="ShipWorksLocal:dbo:OverstockStore">
+          <FieldMappings>
+            <FieldMapping FieldName="Password" TargetFieldName="Password" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="Username" TargetFieldName="Username" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":PackageProfile" TargetName="ShipWorksLocal:dbo:PackageProfile">

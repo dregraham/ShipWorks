@@ -487,7 +487,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""))
+                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
                         {
                             Tag = new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account),
                             ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
@@ -497,7 +497,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            uspsRate.DeliverDays.Replace("Days", ""),
+                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
                             uspsRate.Amount,
                             new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
                         {

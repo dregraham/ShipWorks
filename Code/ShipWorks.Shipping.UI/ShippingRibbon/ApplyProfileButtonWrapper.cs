@@ -1,7 +1,6 @@
 ﻿using System;
-using ShipWorks.Core.UI.SandRibbon;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {

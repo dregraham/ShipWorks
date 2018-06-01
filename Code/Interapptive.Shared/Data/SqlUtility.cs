@@ -142,14 +142,6 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Determines if the specified database is in SINGLE_USER mode using the given connection
-        /// </summary>
-        public static bool IsSingleUser(DbConnection conn, string databaseName)
-        {
-            return IsSingleUser(conn.ConnectionString, databaseName);
-        }
-
-        /// <summary>
         /// Checks to see if there is an archiving database that didn't get renamed, possibly due to a crash,
         /// and renames it to what is expected.
         /// </summary>

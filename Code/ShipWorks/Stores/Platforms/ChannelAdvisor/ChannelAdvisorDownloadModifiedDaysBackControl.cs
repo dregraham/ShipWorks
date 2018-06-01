@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Core.UI.Controls.StoreSettings;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.StoreSettings;
 
-namespace ShipWorks.Core.Stores.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// Channel Advisor implementation of DownloadModifiedDaysBackControl
     /// </summary>
     public class ChannelAdvisorDownloadModifiedDaysBackControl : DownloadModifiedDaysBackControl
     {
+        /// <summary>
+        /// Max number of days back allowed
+        /// </summary>
+        public override int MaxDaysBack => 7;
+
         /// <summary>
         /// Load the days back from the store entity
         /// </summary>

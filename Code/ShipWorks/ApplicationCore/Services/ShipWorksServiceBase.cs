@@ -216,11 +216,13 @@ namespace ShipWorks.ApplicationCore.Services
                 // If the database is in SINGLE_USER, don't even try to connect
                 SqlSession master = new SqlSession(SqlSession.Current);
                 master.Configuration.DatabaseName = "master";
-                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                var connectionString = master.Configuration.GetConnectionString();
+
+                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
                 {
                     testConnection.Open();
 
-                    return SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                    return SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName);
                 }
             }
             catch (SqlException ex)
@@ -302,11 +304,13 @@ namespace ShipWorks.ApplicationCore.Services
                     // If the database is in SINGLE_USER, don't even try to connect
                     SqlSession master = new SqlSession(SqlSession.Current);
                     master.Configuration.DatabaseName = "master";
-                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                    var connectionString = master.Configuration.GetConnectionString();
+
+                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        if (SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName))
                         {
                             LogThrottledWarn(string.Format("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName));
 

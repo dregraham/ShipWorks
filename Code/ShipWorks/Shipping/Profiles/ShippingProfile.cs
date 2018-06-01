@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Profiles
         [Obfuscation(Exclude = true)]
         public string ShortcutKey =>
             Shortcut?.VirtualKey != null && Shortcut.ModifierKeys != null ?
-                new KeyboardShortcutData(null, Shortcut.VirtualKey.Value, Shortcut.ModifierKeys.Value).ShortcutText :
+                new KeyboardShortcutData(Shortcut).ShortcutText :
                 string.Empty;
 
         /// <summary>

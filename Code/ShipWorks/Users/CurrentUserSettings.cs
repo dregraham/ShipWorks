@@ -73,6 +73,8 @@ namespace ShipWorks.Users
             if (settings != null)
             {
                 settings.DismissedNotifications = settings.DismissedNotifications.Except(new[] { notificationType }).ToArray();
+                settings.NotificationDialogSettings = settings.NotificationDialogSettings.Where(s => s.Type != notificationType).ToArray();
+
                 userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
             }
         }

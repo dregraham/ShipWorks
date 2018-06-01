@@ -48,7 +48,6 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -58,7 +57,6 @@ using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -509,8 +507,9 @@ namespace ShipWorks
 
                     SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(master.Configuration.GetConnectionString());
                     csb.Pooling = false;
+                    var connectionString = csb.ToString();
 
-                    using (DbConnection testConnection = new SqlConnection(csb.ToString()))
+                    using (DbConnection testConnection = new SqlConnection(connectionString))
                     {
                         testConnection.Open();
 
@@ -519,7 +518,7 @@ namespace ShipWorks
                             canConnect = SqlSession.Current.CanConnect();
                         }
 
-                        if (!canConnect && SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        if (!canConnect && SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName))
                         {
                             using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {
@@ -1514,13 +1513,21 @@ namespace ShipWorks
             }
 
             // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
-            if (shipmentDock.Value?.IsOpen != true)
+            if (!IsShippingPanelOpen())
             {
                 ribbon.SetEditingContext(null);
                 return;
             }
 
             ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        /// <summary>
+        /// True if shippingPanel is Open
+        /// </summary>
+        public bool IsShippingPanelOpen()
+        {
+            return shipmentDock.Value?.IsOpen == true;
         }
 
         /// <summary>

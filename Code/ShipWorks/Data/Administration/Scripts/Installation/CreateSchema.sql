@@ -2571,7 +2571,8 @@ CREATE TABLE [dbo].[MagentoStore]
 (
 [StoreID] [bigint] NOT NULL,
 [MagentoTrackingEmails] [bit] NOT NULL,
-[MagentoVersion] [int] NOT NULL
+[MagentoVersion] [int] NOT NULL,
+[UpdateSplitOrderOnlineStatus] BIT NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoStore] on [dbo].[MagentoStore]'
@@ -6941,6 +6942,96 @@ GO
 PRINT N'Adding foreign keys to [dbo].[YahooOrderSearch]'
 GO
 ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID]) ON DELETE CASCADE
+GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[OverstockOrder]'
+GO
+CREATE TABLE [dbo].[OverstockOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SofsCreatedDate] [datetime] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
+GO
+ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [PK_OverstockOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelName] ON [dbo].[OverstockOrder]
+(
+	[SalesChannelName] ASC
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseCode] ON [dbo].[OverstockOrder]
+(
+	[WarehouseCode] ASC
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SofsCreatedDate] ON [dbo].[OverstockOrder]
+(
+	[SofsCreatedDate] ASC
+) ON [PRIMARY]
+GO
+
+PRINT N'Creating [dbo].[OverstockOrderItem]'
+GO
+CREATE TABLE [dbo].[OverstockOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[SalesChannelLineNumber] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OverstockOrderItem] on [dbo].[OverstockOrderItem]'
+GO
+ALTER TABLE [dbo].[OverstockOrderItem] ADD CONSTRAINT [PK_OverstockOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+PRINT N'Creating [dbo].[OverstockOrderSearch]'
+GO
+CREATE TABLE [dbo].[OverstockOrderSearch]
+(
+[OverstockOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
+[OrderID] [bigint] NOT NULL,
+[SalesChannelName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WarehouseCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[OriginalOrderID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OverstockOrderSearch] on [dbo].[OverstockOrderSearch]'
+GO
+ALTER TABLE [dbo].[OverstockOrderSearch] ADD CONSTRAINT [PK_OverstockOrderSearch] PRIMARY KEY CLUSTERED  ([OverstockOrderSearchID])
+GO
+PRINT N'Creating [dbo].[OverstockStore]'
+GO
+CREATE TABLE [dbo].[OverstockStore]
+(
+[StoreID] [bigint] NOT NULL,
+[Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OverstockStore] on [dbo].[OverstockStore]'
+GO
+ALTER TABLE [dbo].[OverstockStore] ADD CONSTRAINT [PK_OverstockStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OverstockOrderItem]'
+GO
+ALTER TABLE [dbo].[OverstockOrderItem] ADD CONSTRAINT [FK_OverstockOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OverstockOrderSearch]'
+GO
+ALTER TABLE [dbo].[OverstockOrderSearch] ADD CONSTRAINT [FK_OverstockOrderSearch_OverstockOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[OverstockOrder] ([OrderID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[OverstockOrder]'
+GO
+ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [FK_OverstockOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OverstockStore]'
+GO
+ALTER TABLE [dbo].[OverstockStore] ADD CONSTRAINT [FK_OverstockStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Creating custom types'
 GO
