@@ -8745,6 +8745,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\BackgroundUserLoginWorkflow.cs" />
     <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />

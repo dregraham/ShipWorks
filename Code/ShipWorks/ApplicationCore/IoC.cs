@@ -239,6 +239,11 @@ namespace ShipWorks.ApplicationCore
             KeyedComponentAttribute.Register(builder, registrationCache, allAssemblies);
             NamedComponentAttribute.Register(builder, registrationCache, allAssemblies);
 
+            builder.Register((c, _) => Program.ExecutionMode.IsUISupported ?
+                    (IUserLoginWorkflow) c.Resolve<UserLoginWorkflow>() :
+                    c.Resolve<BackgroundUserLoginWorkflow>())
+                .As<IUserLoginWorkflow>();
+
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();

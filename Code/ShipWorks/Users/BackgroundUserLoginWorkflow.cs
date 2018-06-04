@@ -7,14 +7,14 @@ namespace ShipWorks.Users
     /// User login workflow
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class UserLoginWorkflow : IUserLoginWorkflow
+    public class BackgroundUserLoginWorkflow : IUserLoginWorkflow
     {
         readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UserLoginWorkflow(IUserSession userSession)
+        public BackgroundUserLoginWorkflow(IUserSession userSession)
         {
             this.userSession = userSession;
         }
@@ -30,7 +30,7 @@ namespace ShipWorks.Users
         /// <remarks>
         /// This method goes through MainForm so that we get the full logon flow
         /// </remarks>
-        public void Logon(UserEntity user) => Program.MainForm.InitiateLogon(user);
+        public void Logon(UserEntity user) => userSession.Logon(user, true);
 
         /// <summary>
         /// Log off the currently logged on user.
@@ -38,6 +38,6 @@ namespace ShipWorks.Users
         /// <remarks>
         /// This method goes through MainForm so that we get the full logoff flow
         /// </remarks>
-        public bool Logoff(bool clearRememberMe) => Program.MainForm.InitiateLogoff(clearRememberMe);
+        public bool Logoff(bool clearRememberMe) => userSession.Logoff(clearRememberMe);
     }
 }
