@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Management
         private ShipWorksLicense license;
         private TrialDetail trialDetail;
         private ILicenseAccountDetail accountDetail;
-        
+
         // The account settings control
         private AccountSettingsControlBase accountControl;
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Management
         private void OnLoad(object sender, EventArgs e)
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
-            
+
             // Load title
             titleStoreName.Text = store.StoreName;
             titleStoreType.Text = storeType.StoreTypeName;
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Management
                 manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
                 manualOrderSettingsControl.Location = new Point(32, 45);
                 manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
-                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top |  AnchorStyles.Right;
+                manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(manualOrderSettingsControl);
                 sectionTitleManualOrders.Location = new Point(15, 15);
             }
@@ -270,7 +270,7 @@ namespace ShipWorks.Stores.Management
         {
             UpdateStoreEnabledDisplay();
         }
-        
+
         /// <summary>
         /// Configure the Download settings control
         /// </summary>
@@ -318,14 +318,7 @@ namespace ShipWorks.Stores.Management
             storeSettingsControl = storeType.CreateStoreSettingsControl();
             if (storeSettingsControl != null)
             {
-                storeSettingsControl.AutoSize = true;
-                storeSettingsControl.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-
-                // Store settings if present
-                if (storeSettingsControl != null)
-                {
-                    storeSettingsControl.LoadStore(store);
-                }
+                storeSettingsControl.LoadStore(store);
 
                 // Settings control gets location and width of the section title, so that each settings control can simply
                 // set its titles to go all the way across with anchors.
@@ -344,7 +337,7 @@ namespace ShipWorks.Stores.Management
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
-            
+
             // Validation Settings
             domesticAddressValidationSetting.SelectedValue = store.DomesticAddressValidationSetting;
             internationalAddressValidationSetting.SelectedValue = store.InternationalAddressValidationSetting;
@@ -353,7 +346,6 @@ namespace ShipWorks.Stores.Management
 
             // Manual orders
             manualOrderSettingsControl.LoadStore(store);
-
 
             // Store status
             storeDisabled.Checked = !store.Enabled;
