@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
@@ -16,22 +16,8 @@ namespace ShipWorks.UI
     /// All the methods return tasks that will resolve when the UI operation completes
     /// </remarks>
     [Component(RegistrationType.Self)]
-    public class AsyncMessageHelper : IAsyncMessageHelper
+    public class BackgroundAsyncMessageHelper : IAsyncMessageHelper
     {
-        readonly Func<Control> ownerFactory;
-        readonly IMessageHelper messageHelper;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ownerFactory">Get the owner of the UI operation</param>
-        /// <param name="messageHelper">Message helper that will be used for most operations</param>
-        public AsyncMessageHelper(Func<Control> ownerFactory, IMessageHelper messageHelper)
-        {
-            this.messageHelper = messageHelper;
-            this.ownerFactory = ownerFactory;
-        }
-
         /// <summary>
         /// Show a message box with the given text.
         /// </summary>
@@ -39,11 +25,7 @@ namespace ShipWorks.UI
         /// <returns>
         /// Task that will complete when the dialog is closed
         /// </returns>
-        public Task ShowMessage(string message)
-        {
-            var owner = ownerFactory();
-            return owner.InvokeAsync(() => messageHelper.ShowMessage(owner, message));
-        }
+        public Task ShowMessage(string message) => Task.CompletedTask;
 
         /// <summary>
         /// Show an error message box with the given error text.
@@ -52,11 +34,7 @@ namespace ShipWorks.UI
         /// <returns>
         /// Task that will complete when the dialog is closed
         /// </returns>
-        public Task ShowError(string message)
-        {
-            var owner = ownerFactory();
-            return owner.InvokeAsync(() => messageHelper.ShowError(owner, message));
-        }
+        public Task ShowError(string message) => Task.CompletedTask;
 
         /// <summary>
         /// Show a dialog and get the results
@@ -64,11 +42,7 @@ namespace ShipWorks.UI
         /// <param name="createDialog">Create the dialog that should be shown</param>
         /// <returns>Returns the result of the dialog</returns>
         /// <remarks>The createDialog func will be called on the UI thread</remarks>
-        public Task<bool?> ShowDialog(Func<IDialog> createDialog)
-        {
-            var owner = ownerFactory();
-            return owner.InvokeAsync(() => ShowDialog(owner, createDialog));
-        }
+        public Task<bool?> ShowDialog(Func<IDialog> createDialog) => Task.FromResult<bool?>(true);
 
         /// <summary>
         /// Set the cursor, then set it back when the result is disposed
@@ -77,37 +51,23 @@ namespace ShipWorks.UI
         /// <returns>
         /// Disposable that will restore the original cursor when disposed
         /// </returns>
-        public Task<IDisposable> SetCursor(Cursor cursor) =>
-            ownerFactory().InvokeAsync(() => messageHelper.SetCursor(cursor));
+        public Task<IDisposable> SetCursor(Cursor cursor) => Task.FromResult(Disposable.Empty);
 
         /// <summary>
         /// Show a new progress dialog
         /// </summary>
         public Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description) =>
-            ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description));
+            Task.FromResult<ISingleItemProgressDialog>(new BackgroundSingleItemProgressDialog());
 
         /// <summary>
         /// Show a new progress dialog
         /// </summary>
         public Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan) =>
-            ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description, progressProvider, timeSpan));
+            Task.FromResult(Disposable.Empty);
 
         /// <summary>
         /// Create a progress provider
         /// </summary>
         public IProgressProvider CreateProgressProvider() => new ProgressProvider();
-
-        /// <summary>
-        /// Show a dialog
-        /// </summary>
-        /// <param name="owner">Owner of the dialog</param>
-        /// <param name="createDialog">Func that creates the dialog that should be shown</param>
-        /// <returns></returns>
-        private bool? ShowDialog(Control owner, Func<IDialog> createDialog)
-        {
-            var dialog = createDialog();
-            dialog.LoadOwner(owner);
-            return dialog.ShowDialog();
-        }
     }
 }

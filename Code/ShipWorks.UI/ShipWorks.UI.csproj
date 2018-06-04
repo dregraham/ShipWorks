@@ -148,6 +148,7 @@
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
+    <Compile Include="BackgroundAsyncMessageHelper.cs" />
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />

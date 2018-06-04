@@ -93,6 +93,11 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelsOutOfSyncBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.ClientChannelsAccountedFor);
+
+            builder.Register((c, p) => Program.ExecutionMode.IsUISupported ?
+                    (IAsyncMessageHelper) c.Resolve<AsyncMessageHelper>() :
+                    c.Resolve<BackgroundAsyncMessageHelper>())
+                .AsImplementedInterfaces();
         }
     }
 }
