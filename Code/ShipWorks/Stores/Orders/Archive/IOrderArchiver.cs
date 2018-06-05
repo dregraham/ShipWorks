@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        Task<Unit> Archive(DateTime cutoffDate);
+        Task<IResult> Archive(DateTime cutoffDate);
     }
 }

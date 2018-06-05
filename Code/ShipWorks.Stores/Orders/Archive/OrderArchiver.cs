@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
@@ -59,7 +60,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public Task<Unit> Archive(DateTime cutoffDate)
+        public Task<IResult> Archive(DateTime cutoffDate)
         {
             return Functional.UsingAsync(
                 new TrackedDurationEvent("Orders.Archiving"),
@@ -70,12 +71,12 @@ namespace ShipWorks.Stores.Orders.Archive
                     if (ordersToPurgeCount == 0)
                     {
                         AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, OrderArchiveResult.Succeeded);
-                        return Unit.Default;
+                        return Result.FromSuccess();
                     }
 
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result))
-                        .Map(_ => Unit.Default);
+                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value))
+                        .Map(result => (IResult) result);
                 });
         }
 
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        public async Task<OrderArchiveResult> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
+        public async Task<GenericResult<OrderArchiveResult>> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
         {
             UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
@@ -115,15 +116,21 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     using (new LoggedStopwatch(log, "OrderArchive: Archive orders - "))
                     {
+                        Exception exception = null;
+
                         await orderArchiveDataAccess
                             .WithMultiUserConnectionAsync(connection =>
                                 PerformArchive(connection, cutoffDate, prepareProgress, archiveProgress, trackedDurationEvent))
                             .Bind(ContinueArchive(cutoffDate, trackedDurationEvent, filterProgress, syncProgress))
-                            .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
+                            .Recover(ex =>
+                            {
+                                exception = ex;
+                                return TerminateNonStartedTasks(ex, new[] {prepareProgress, archiveProgress, syncProgress, filterProgress});
+                            })
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? OrderArchiveResult.Failed : OrderArchiveResult.Succeeded;
+                        return progressProvider.HasErrors ? GenericResult.FromError(exception, OrderArchiveResult.Failed) : OrderArchiveResult.Succeeded;
                     }
                 }
             }
@@ -178,11 +185,26 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             log.Error("Archive failed", ex);
 
+            // Fail any progress reporters that are running
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Running))
             {
                 progressReporter.Failed(ex);
             }
 
+            // Now if there are no failed progress reporters, that means we were between progress reporters
+            // when the exception occurred.  So, we'll grab the first pending one, start it, and immediate fail
+            // it so that the UI has something to show the exception.
+            if (progressReporters.None(pr => pr.Status == ProgressItemStatus.Failure))
+            {
+                var progressReporter = progressReporters.First(x => x.Status == ProgressItemStatus.Pending);
+                if (progressReporter != null)
+                {
+                    progressReporter.Starting();
+                    progressReporter.Failed(ex);
+                }
+            }
+
+            // Now terminate any remaining pending ones.
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Pending))
             {
                 progressReporter.Terminate();

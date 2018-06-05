@@ -4,6 +4,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Orders.Archive;
@@ -109,7 +110,12 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     using (new LoggedStopwatch(log, "Auto archive Total Time."))
                     {
-                        await orderArchiver.Archive(cutoffDate).ConfigureAwait(false);
+                        IResult result = await orderArchiver.Archive(cutoffDate).ConfigureAwait(false);
+
+                        if (result.Failure)
+                        {
+                            throw result.Exception;
+                        }
                     }
                 }
             }
