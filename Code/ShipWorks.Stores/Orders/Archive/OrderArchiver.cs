@@ -176,6 +176,8 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private Unit TerminateNonStartedTasks(Exception ex, IProgressReporter[] progressReporters)
         {
+            log.Error("Archive failed", ex);
+
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Running))
             {
                 progressReporter.Failed(ex);
