@@ -200,12 +200,14 @@ namespace ShipWorks.Stores.Orders.Archive
             string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(archivingDbName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
             currentDbArchiveSql += $"{Environment.NewLine}ALTER DATABASE [{archivingDbName}] MODIFY NAME = [{currentDatabaseName}]";
 
-            return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database",
-                    sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName),
-                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
-                .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data",
-                    currentDbArchiveSql,
-                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
+            string copyDatabaseSql = sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName) +
+                                     Environment.NewLine +
+                                     sqlGenerator.DisableAutoProcessingSettingsSql(archiveDatabaseName);
+
+            return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", copyDatabaseSql,
+                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
+                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", currentDbArchiveSql,
+                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
         }
 
         /// <summary>
@@ -215,8 +217,6 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             string archiveDbArchiveSql =
                 sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual) +
-                Environment.NewLine +
-                sqlGenerator.DisableAutoProcessingSettingsSql() +
                 Environment.NewLine +
                 sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn));
 
