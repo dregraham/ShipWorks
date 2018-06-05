@@ -63,7 +63,7 @@ namespace ShipWorks.UI
         /// Show a new progress dialog
         /// </summary>
         public Task<IDisposable> ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan) =>
-            Task.FromResult(Disposable.Empty);
+            Task.FromResult<IDisposable>(new BackgroundProgressDlg(progressProvider));
 
         /// <summary>
         /// Create a progress provider
