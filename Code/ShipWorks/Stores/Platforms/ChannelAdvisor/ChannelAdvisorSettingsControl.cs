@@ -22,13 +22,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorSettingsControl()
         {
-            InitializeComponent();
-
             // Show Amazon control if the Amazon carrier is configured. We need to save this to a variable
             // because we need it later on and we can't rely on whether the Amazon control is visible because
             // it won't be until the layout is finished.
             IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             showAmazonSettings = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+
+            InitializeComponent();
+
             amazon.Visible = showAmazonSettings;
         }
 
