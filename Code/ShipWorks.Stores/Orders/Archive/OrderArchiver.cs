@@ -67,6 +67,12 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     var (totalOrderCount, ordersToPurgeCount) = await orderArchiveDataAccess.GetOrderCountsForTelemetry(cutoffDate);
 
+                    if (ordersToPurgeCount == 0)
+                    {
+                        AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, OrderArchiveResult.Succeeded);
+                        return await Task.FromResult(Unit.Default);
+                    }
+
                     return await ArchiveAsync(cutoffDate, evt)
                         .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result))
                         .Map(_ => Unit.Default);
