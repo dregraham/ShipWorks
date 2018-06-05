@@ -30,7 +30,7 @@ namespace ShipWorks.Users
         /// <remarks>
         /// This method goes through MainForm so that we get the full logon flow
         /// </remarks>
-        public void Logon(UserEntity user) => userSession.Logon(user, true);
+        public void Logon(UserEntity user) => userSession.Logon(user, false);
 
         /// <summary>
         /// Log off the currently logged on user.
