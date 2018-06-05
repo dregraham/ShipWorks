@@ -51,6 +51,10 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Setup(x => x.WithMultiUserConnection(It.IsAny<Action<DbConnection>>()))
                 .Callback((Action<DbConnection> x) => x(connectionMock.Object));
 
+            mock.Mock<IOrderArchiveDataAccess>()
+                .Setup(x => x.GetOrderCountsForTelemetry(AnyDate))
+                .ReturnsAsync((5, 5));
+
             preparingProgress = mock.CreateMock<IProgressReporter>();
             archivingProgress = mock.CreateMock<IProgressReporter>();
             filterProgress = mock.CreateMock<IProgressReporter>();

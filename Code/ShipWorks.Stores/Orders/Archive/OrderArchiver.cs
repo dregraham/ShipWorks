@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Orders.Archive
                     if (ordersToPurgeCount == 0)
                     {
                         AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, OrderArchiveResult.Succeeded);
-                        return await Task.FromResult(Unit.Default);
+                        return Unit.Default;
                     }
 
                     return await ArchiveAsync(cutoffDate, evt)
