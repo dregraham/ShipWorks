@@ -32,6 +32,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             dateTimeProvider = new Mock<IDateTimeProvider>();
             orderArchiver = new Mock<IOrderArchiver>();
+            orderArchiver.Setup(oa => oa.Archive(It.IsAny<DateTime>())).ReturnsAsync(Result.FromSuccess());
 
             string triggerSettings = $@"<Settings>
                                           <MonthlyActionSchedule>
