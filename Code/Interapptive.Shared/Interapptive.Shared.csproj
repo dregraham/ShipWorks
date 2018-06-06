@@ -217,6 +217,11 @@
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
+    <Compile Include="IO\UnblockFiles\IZoneIdentifier.cs" />
+    <Compile Include="IO\UnblockFiles\STGM.cs" />
+    <Compile Include="IO\UnblockFiles\URLZONE.cs" />
+    <Compile Include="IO\UnblockFiles\ZoneHelper.cs" />
+    <Compile Include="IO\UnblockFiles\ZoneIdentifier.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
     <Compile Include="Messaging\Logging\TypeConverter.cs" />
@@ -574,6 +579,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="IO\UnblockFiles\LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
