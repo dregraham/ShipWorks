@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
+using log4net;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 
@@ -18,14 +17,16 @@ namespace ShipWorks.Stores.Communication
     {
         private readonly IDownloadManager downloadManager;
         private readonly IMessageHelper messageHelper;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnDemandDownloader(IDownloadManager downloadManager, IMessageHelper messageHelper)
+        public OnDemandDownloader(IDownloadManager downloadManager, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
         {
             this.downloadManager = downloadManager;
             this.messageHelper = messageHelper;
+            this.log = logFactory(typeof(OnDemandDownloader));
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Communication
                 }
                 catch (SqlAppResourceLockException)
                 {
-                    messageHelper.ShowWarning("Someone else just searched for this order. Please search again.");
+                    log.Info("skipping download because another downloader is downloading that order number currently.");
                 }
             }
         }
