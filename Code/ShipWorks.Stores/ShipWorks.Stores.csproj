@@ -187,6 +187,7 @@
     <Compile Include="Orders\Archive\ScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\SingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Orders\Archive\TelemetricScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
     <Compile Include="Orders\Combine\Actions\IStoreSpecificCombineOrderAction.cs" />
     <Compile Include="Orders\Split\Actions\IStoreSpecificSplitOrderAction.cs" />
