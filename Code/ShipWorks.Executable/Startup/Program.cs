@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CefSharp;
-using Interapptive.Shared.IO.UnblockFiles;
 using Interapptive.Shared.Messaging.Logging;
 using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.Win32;
@@ -67,7 +66,7 @@ namespace ShipWorks.Startup
             // Make sure you set performDependencyCheck false
             Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
 
-            ShipWorks.Program.Main().GetAwaiter().GetResult();
+			ShipWorks.Program.Main().GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -84,31 +83,11 @@ namespace ShipWorks.Startup
 
                 if (File.Exists(archSpecificPath))
                 {
-                    return LoadAssembly(archSpecificPath);
+                    return Assembly.LoadFile(archSpecificPath);
                 }
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Load the assembly
-        /// </summary>
-        /// <remarks>
-        /// It's possible that the assembly could be blocked in Windows since it is from a downloaded zip file.
-        /// We get a NotSupportedException if this is the case, so we'll try to remove the block and try to load again.
-        /// </remarks>
-        private static Assembly LoadAssembly(string path)
-        {
-            try
-            {
-                return Assembly.LoadFile(path);
-            }
-            catch (NotSupportedException)
-            {
-                ZoneHelper.Remove(path);
-                return Assembly.LoadFile(path);
-            }
         }
     }
 }
