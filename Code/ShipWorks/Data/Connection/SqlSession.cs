@@ -206,7 +206,7 @@ namespace ShipWorks.Data.Connection
             {
                 con.Open();
 
-                if (SqlUtility.IsSingleUser(con, originalDatabaseName))
+                if (SqlUtility.IsSingleUser(csb.ToString(), originalDatabaseName))
                 {
                     return false;
                 }

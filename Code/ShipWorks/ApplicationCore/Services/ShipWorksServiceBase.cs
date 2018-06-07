@@ -211,14 +211,25 @@ namespace ShipWorks.ApplicationCore.Services
                 return false;
             }
 
-            // If the database is in SINGLE_USER, don't even try to connect
-            SqlSession master = new SqlSession(SqlSession.Current);
-            master.Configuration.DatabaseName = "master";
-            using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+            try
             {
-                testConnection.Open();
+                // If the database is in SINGLE_USER, don't even try to connect
+                SqlSession master = new SqlSession(SqlSession.Current);
+                master.Configuration.DatabaseName = "master";
+                var connectionString = master.Configuration.GetConnectionString();
 
-                return SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
+                {
+                    testConnection.Open();
+
+                    return SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName);
+                }
+            }
+            catch (SqlException ex)
+            {
+                // If the test fails, assume we're not in single user mode so that subsequent error handling can take over
+                log.Error("Could not test whether in single user mode", ex);
+                return false;
             }
         }
 
@@ -293,11 +304,13 @@ namespace ShipWorks.ApplicationCore.Services
                     // If the database is in SINGLE_USER, don't even try to connect
                     SqlSession master = new SqlSession(SqlSession.Current);
                     master.Configuration.DatabaseName = "master";
-                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                    var connectionString = master.Configuration.GetConnectionString();
+
+                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        if (SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName))
                         {
                             LogThrottledWarn(string.Format("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName));
 
@@ -352,7 +365,7 @@ namespace ShipWorks.ApplicationCore.Services
 
                     return hasChanged;
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     if (ConnectionMonitor.IsDbConnectionException(ex))
                     {

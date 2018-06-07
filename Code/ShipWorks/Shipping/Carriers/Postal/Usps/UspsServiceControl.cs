@@ -119,6 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
+            uspsAccount.SelectedIndexChanged -= OnChangeUspsAccount;
             originControl.DestinationChanged -= OnOriginDestinationChanged;
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             originControl.DestinationChanged += OnOriginDestinationChanged;
@@ -141,6 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
             }
 
+            uspsAccount.SelectedIndexChanged += OnChangeUspsAccount;
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
@@ -297,6 +299,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnNoPostageChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// The selected USPS account has changed
+        /// </summary>
+        void OnChangeUspsAccount(object sender, EventArgs e)
+        {
+            if (uspsAccount.SelectedValue != null)
+            {
+                long accountID = (long) uspsAccount.SelectedValue;
+
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    shipment.Postal.Usps.UspsAccountID = accountID;
+                }
+
+                originControl.NotifySelectedAccountChanged();
+            }
         }
     }
 }
