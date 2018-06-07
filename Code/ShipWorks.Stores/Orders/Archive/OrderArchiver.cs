@@ -161,8 +161,6 @@ namespace ShipWorks.Stores.Orders.Archive
         private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount,
             long ordersToPurgeCount, OrderArchiveResult result)
         {
-            var megabyte = (1024 * 1024);
-
             try
             {
                 int retentionPeriodInDays = DateTime.UtcNow.Subtract(cutoffDate).Days;
@@ -172,8 +170,8 @@ namespace ShipWorks.Stores.Orders.Archive
                 trackedDurationEvent.AddProperty("Orders.Archiving.RetentionPeriodInDays", retentionPeriodInDays.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersArchived", ordersToPurgeCount.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersRetained", (totalOrderCount - ordersToPurgeCount).ToString());
-                trackedDurationEvent.AddProperty("Orders.Archiving.ArchiveDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(archiveDatabaseName) / megabyte).ToString("#0.0"));
-                trackedDurationEvent.AddProperty("Orders.Archiving.TransactionalDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(currentDatabaseName) / megabyte).ToString("#0.0"));
+                trackedDurationEvent.AddProperty("Orders.Archiving.ArchiveDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(archiveDatabaseName) / Telemetry.Megabyte).ToString("#0.0"));
+                trackedDurationEvent.AddProperty("Orders.Archiving.TransactionalDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(currentDatabaseName) / Telemetry.Megabyte).ToString("#0.0"));
             }
             catch
             {

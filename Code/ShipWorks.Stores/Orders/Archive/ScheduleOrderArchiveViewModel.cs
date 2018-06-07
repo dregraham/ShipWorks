@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
@@ -26,8 +27,8 @@ namespace ShipWorks.Stores.Orders.Archive
     /// <summary>
     /// View Model for the scheduling archive orders dialog
     /// </summary>
-    [Component(Service = typeof(IScheduleOrderArchiveViewModel))]
-    public class ScheduleOrderArchiveViewModel : IScheduleOrderArchiveViewModel, INotifyPropertyChanged
+    [Component(RegistrationType.Self)]
+    public class ScheduleOrderArchiveViewModel : INotifyPropertyChanged
     {
         private readonly IAsyncMessageHelper messageHelper;
         private readonly IScheduleOrderArchiveDialog scheduleArchiveOrdersDialog;
@@ -144,11 +145,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Save the schedule info
         /// </summary>
-        public Task Show()
-        {
-            return messageHelper
-                .ShowDialog(SetupDialog);
-        }
+        public Task<(bool result, bool enabled, int numberOfDaysToKeep)> Show() =>
+            messageHelper
+                .ShowDialog(SetupDialog)
+                .Map(result => (result.GetValueOrDefault(), Enabled, NumberOfDaysToKeep));
 
         /// <summary>
         /// Load the auto archive action and task.
