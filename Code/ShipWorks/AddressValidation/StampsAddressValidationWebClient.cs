@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -106,6 +107,10 @@ namespace ShipWorks.AddressValidation
                 }
             }
             catch (UspsException ex)
+            {
+                validationResult.AddressValidationError = ex.Message;
+            }
+            catch (InvalidOperationException ex)
             {
                 validationResult.AddressValidationError = ex.Message;
             }
