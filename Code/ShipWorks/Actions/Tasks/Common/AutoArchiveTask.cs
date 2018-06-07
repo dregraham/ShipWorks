@@ -110,7 +110,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     using (new LoggedStopwatch(log, "Auto archive Total Time."))
                     {
-                        IResult result = await orderArchiver.Archive(cutoffDate).ConfigureAwait(false);
+                        IResult result = await orderArchiver.Archive(cutoffDate, false).ConfigureAwait(false);
 
                         if (result.Failure)
                         {

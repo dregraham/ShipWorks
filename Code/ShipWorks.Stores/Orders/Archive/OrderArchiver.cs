@@ -36,6 +36,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IOrderArchiveSqlGenerator sqlGenerator;
         private readonly string archiveDatabaseName;
         private readonly string currentDatabaseName;
+        private bool manualArchive = true;
 
         /// <summary>
         /// Constructor
@@ -60,8 +61,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public Task<IResult> Archive(DateTime cutoffDate)
+        public Task<IResult> Archive(DateTime cutoffDate, bool isManualArchive)
         {
+            manualArchive = isManualArchive;
+
             return Functional.UsingAsync(
                 new TrackedDurationEvent("Orders.Archiving"),
                 async evt =>
@@ -165,7 +168,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 int retentionPeriodInDays = DateTime.UtcNow.Subtract(cutoffDate).Days;
 
                 trackedDurationEvent.AddProperty("Orders.Archiving.Result", EnumHelper.GetApiValue(result));
-                trackedDurationEvent.AddProperty("Orders.Archiving.Type", "Manual");
+                trackedDurationEvent.AddProperty("Orders.Archiving.Type", manualArchive ? "Manual" : "Automatic");
                 trackedDurationEvent.AddProperty("Orders.Archiving.RetentionPeriodInDays", retentionPeriodInDays.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersArchived", ordersToPurgeCount.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersRetained", (totalOrderCount - ordersToPurgeCount).ToString());

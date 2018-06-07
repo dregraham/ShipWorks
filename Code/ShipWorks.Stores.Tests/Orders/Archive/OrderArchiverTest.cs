@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public async Task Archive_DelegatesToOrderArchiveDataAccess()
         {
-            await testObject.Archive(DateTime.Now);
+            await testObject.Archive(DateTime.Now, AnyBool);
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public async Task Archive_DelegatesToFilterHelper()
         {
-            await testObject.Archive(DateTime.Now);
+            await testObject.Archive(DateTime.Now, AnyBool);
 
             mock.Mock<IFilterHelper>().Verify(x => x.RegenerateFilters(It.IsAny<DbConnection>()));
         }

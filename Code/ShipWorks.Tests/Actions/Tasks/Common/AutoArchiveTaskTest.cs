@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.ExtensionMethods;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             dateTimeProvider = new Mock<IDateTimeProvider>();
             orderArchiver = new Mock<IOrderArchiver>();
-            orderArchiver.Setup(oa => oa.Archive(It.IsAny<DateTime>())).ReturnsAsync(Result.FromSuccess());
+            orderArchiver.Setup(oa => oa.Archive(AnyDate, AnyBool)).ReturnsAsync(Result.FromSuccess());
 
             string triggerSettings = $@"<Settings>
                                           <MonthlyActionSchedule>
@@ -193,7 +194,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
 
-            orderArchiver.Verify(m => m.Archive(ParameterShorteners.AnyDate), Times.Never());
+            orderArchiver.Verify(m => m.Archive(AnyDate, false), Times.Never());
         }
 
         [Fact]
@@ -203,7 +204,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
 
-            orderArchiver.Verify(m => m.Archive(ParameterShorteners.AnyDate), Times.Once);
+            orderArchiver.Verify(m => m.Archive(AnyDate, false), Times.Once);
         }
 
         [Fact]
@@ -214,7 +215,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             await testObject.RunAsync(new List<long>(), actionStepContext).ConfigureAwait(false);
 
-            orderArchiver.Verify(m => m.Archive(cutoffDate), Times.Once);
+            orderArchiver.Verify(m => m.Archive(cutoffDate, false), Times.Once);
         }
 
         [Fact]

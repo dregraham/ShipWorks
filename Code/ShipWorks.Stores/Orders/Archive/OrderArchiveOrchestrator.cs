@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             return userSecurity.RequestPermission(PermissionType.DatabaseArchive, null)
                 .Bind(viewModel.GetArchiveDateFromUser)
-                .Bind(archiver.Archive)
+                .Bind(d => archiver.Archive(d, true))
                 .Do(DisplaySuccess, DisplayError)
                 .Map(_ => Unit.Default);
         }
