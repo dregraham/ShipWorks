@@ -7,6 +7,9 @@ using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.CommerceV3
 {
+    /// <summary>
+    /// Store specific integration into ShipWorks
+    /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.CommerceV3)]
     [Component(RegistrationType.Self)]
     public class CommerceV3StoreType : GenericModuleStoreType
