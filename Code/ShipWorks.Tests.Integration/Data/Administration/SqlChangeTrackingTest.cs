@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text;
 using Interapptive.Shared.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -65,10 +66,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             // the appropriate tables (i.e. seed database)
             List<string> expectedTableNames = GetTablesWithChangeTrackingEnabledFromDatabase();
 
+            StringBuilder sb = new StringBuilder();
             foreach (string tableName in expectedTableNames)
             {
-                Assert.True(testObject.TablesRequiringChangeTracking.Contains(tableName));
+                if (!testObject.TablesRequiringChangeTracking.Contains(tableName))
+                {
+                    sb.AppendLine(tableName);
+                }
             }
+
+            Assert.True(sb.Length == 0, sb.ToString());
         }
 
         [Fact]
