@@ -16,6 +16,8 @@ using Interapptive.Shared.Win32;
 using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Magento.WebServices;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -73,6 +75,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         class IdleWork
         {
+            static readonly ILog log = LogManager.GetLogger(typeof(IdleWork));
             Guid workID = Guid.NewGuid();
 
             string name;
@@ -271,6 +274,13 @@ namespace ShipWorks.ApplicationCore.Interaction
                 {
                     // Do the work
                     workInvoker();
+                }
+                // If the work can't be done due to a db issue, just log it and carry on.  Any clean up
+                // tasks will be tried again later.
+                catch (Exception ex) when (ex.HasExceptionType<SqlException>() || 
+                                           ex.HasExceptionType<ORMQueryExecutionException>())
+                {
+                    log.Error($"Exception occurred while IdleWatcher was running.", ex);
                 }
                 finally
                 {
