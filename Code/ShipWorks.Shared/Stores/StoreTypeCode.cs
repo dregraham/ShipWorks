@@ -413,7 +413,7 @@ namespace ShipWorks.Stores
 
         [Description("CommerceV3")]
         [StoreTypeIdentity("CV3", "CV3")]
-        [StoreTypeIcon("shipworks")]
+        [StoreTypeIcon("cv3")]
         CommerceV3 = 83
     }
 }
