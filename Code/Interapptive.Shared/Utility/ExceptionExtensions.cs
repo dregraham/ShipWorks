@@ -12,6 +12,16 @@ namespace Interapptive.Shared.Utility
     public static class ExceptionExtensions
     {
         /// <summary>
+        /// Determines if the given exception is or has 
+        /// </summary>
+        /// <typeparam name="T">The type of exception to check for</typeparam>
+        /// <param name="value">The exception to compare against</param>
+        /// <returns>True if value is of type T or if any of the inner exceptions are of type T</returns>
+        public static bool HasExceptionType<T>(this Exception value) where T : Exception => 
+            value != null && 
+            (value is T || value.GetAllExceptions().OfType<T>().Any());
+
+        /// <summary>
         /// Returns true if exception is in list of exceptions
         /// </summary>
         public static bool IsExceptionType(this Exception value, params Type[] exceptions)
