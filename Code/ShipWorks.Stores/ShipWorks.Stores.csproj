@@ -362,9 +362,6 @@
     <Compile Include="Platforms\CommerceInterface\CoreExtensions\Filters\Orders\CommerceInterfaceIsPrimeCondition.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\CommerceV3\CommerceV3StoreType.cs" />
-    <Compile Include="Platforms\CommerceV3\CoreExtensions\Filters\Orders\CommerceV3AmazonOrderIDCondition.cs" />
-    <Compile Include="Platforms\CommerceV3\CoreExtensions\Filters\Orders\CommerceV3IsFBACondition.cs" />
-    <Compile Include="Platforms\CommerceV3\CoreExtensions\Filters\Orders\CommerceV3IsPrimeCondition.cs" />
     <Compile Include="Platforms\Ebay\Content\EbaySplitOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
