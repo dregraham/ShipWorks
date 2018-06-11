@@ -153,6 +153,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.ClickCartPro, typeof(ClickCartProOrderIdentifier) },
             { StoreTypeCode.CloudConversion, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CommerceInterface, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.CommerceV3, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CreLoaded, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CsCart, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Ebay, typeof(EbayOrderIdentifier) },
