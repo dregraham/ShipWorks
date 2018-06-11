@@ -409,6 +409,11 @@ namespace ShipWorks.Stores
         [Description("Overstock")]
         [StoreTypeIdentity("OVERSTOCK", "OVS")]
         [StoreTypeIcon("overstock")]
-        Overstock = 82
+        Overstock = 82,
+
+        [Description("CommerceV3")]
+        [StoreTypeIdentity("CV3", "CV3")]
+        [StoreTypeIcon("shipworks")]
+        CommerceV3 = 83
     }
 }
