@@ -13,25 +13,47 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public static class Functional
     {
-        /// <summary>
-        /// Cast a method group as a function
-        /// </summary>
-        public static Func<TResult> ToFunc<TResult>(Func<TResult> func) => func;
+        private static readonly TimeSpan defaultRetryDelay = TimeSpan.FromMilliseconds(1);
 
         /// <summary>
         /// Cast a method group as a function
         /// </summary>
-        public static Func<T, TResult> ToFunc<T, TResult>(Func<T, TResult> func) => func;
+        public static Func<TResult> ToFunc<TResult>(this Func<TResult> func) => func;
 
         /// <summary>
         /// Cast a method group as a function
         /// </summary>
-        public static Func<T1, T2, TResult> ToFunc<T1, T2, TResult>(Func<T1, T2, TResult> func) => func;
+        public static Func<T, TResult> ToFunc<T, TResult>(this Func<T, TResult> func) => func;
 
         /// <summary>
         /// Cast a method group as a function
         /// </summary>
-        public static Func<T1, T2, T3, TResult> ToFunc<T1, T2, T3, TResult>(Func<T1, T2, T3, TResult> func) => func;
+        public static Func<T1, T2, TResult> ToFunc<T1, T2, TResult>(this Func<T1, T2, TResult> func) => func;
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
+        public static Func<T1, T2, T3, TResult> ToFunc<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> func) => func;
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
+        public static Func<Unit> ToFunc(this Action func) => () => { func(); return Unit.Default; };
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
+        public static Func<T, Unit> ToFunc<T>(this Action<T> func) => (x) => { func(x); return Unit.Default; };
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
+        public static Func<T1, T2, Unit> ToFunc<T1, T2>(this Action<T1, T2> func) => (x, y) => { func(x, y); return Unit.Default; };
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
+        public static Func<T1, T2, T3, Unit> ToFunc<T1, T2, T3>(this Action<T1, T2, T3> func) => (x, y, z) => { func(x, y, z); return Unit.Default; };
 
         /// <summary>
         /// Call a method with a disposable object
@@ -130,7 +152,17 @@ namespace Interapptive.Shared.Utility
         /// <param name="retries">Max number of retries</param>
         /// <param name="shouldRetry">Can the function be retried?</param>
         public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, Func<Exception, bool> shouldRetry) =>
-            Retry(func, retries, shouldRetry, (l, t, p) => Unit.Default);
+            Retry(func, retries, defaultRetryDelay, shouldRetry);
+
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, TimeSpan retryDelay, Func<Exception, bool> shouldRetry) =>
+            Retry(func, retries, retryDelay, shouldRetry, (l, t, p) => Unit.Default);
 
         /// <summary>
         /// Retry a function a specified number of times
@@ -141,7 +173,18 @@ namespace Interapptive.Shared.Utility
         /// <param name="shouldRetry">Can the function be retried?</param>
         /// <param name="logger">Logger to use to on failure</param>
         public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
-            Retry(func, retries, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
+            Retry(func, retries, defaultRetryDelay, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
+
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        /// <param name="logger">Logger to use to on failure</param>
+        public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, TimeSpan retryDelay, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
+            Retry(func, retries, retryDelay, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
 
         /// <summary>
         /// Retry a function a specified number of times
@@ -160,9 +203,30 @@ namespace Interapptive.Shared.Utility
         /// <param name="func">Function to retry</param>
         /// <param name="retries">Max number of retries</param>
         /// <param name="shouldRetry">Can the function be retried?</param>
+        public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, TimeSpan retryDelay, Func<Exception, bool> shouldRetry) =>
+            RetryAsync(func, retries, retryDelay, shouldRetry, (l, t, p) => Unit.Default);
+
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
         /// <param name="logger">Logger to use to on failure</param>
         public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
-            RetryAsync(func, retries, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
+            RetryAsync(func, retries, defaultRetryDelay, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
+
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        /// <param name="logger">Logger to use to on failure</param>
+        public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, TimeSpan retryDelay, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
+            RetryAsync(func, retries, retryDelay, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
 
         /// <summary>
         /// Retry a function a specified number of times
@@ -175,14 +239,15 @@ namespace Interapptive.Shared.Utility
         private static GenericResult<TReturn> Retry<TReturn>(
                 this Func<TReturn> func,
                 int retries,
+                TimeSpan retryDelay,
                 Func<Exception, Result> shouldRetry,
                 Func<Level, string, object[], Unit> logger) =>
             Try(func)
                 .Match(
                     x => x,
                     ex => CanRetry(retries, shouldRetry, logger, ex)
-                        .Do(() => Thread.Sleep(1))
-                        .Bind(() => Retry(func, retries - 1, shouldRetry, logger)));
+                        .Do(() => Thread.Sleep(retryDelay))
+                        .Bind(() => Retry(func, retries - 1, retryDelay, shouldRetry, logger)));
 
         /// <summary>
         /// Retry a function a specified number of times
@@ -195,14 +260,15 @@ namespace Interapptive.Shared.Utility
         private static Task<TReturn> RetryAsync<TReturn>(
                 this Func<Task<TReturn>> func,
                 int retries,
+                TimeSpan retryDelay,
                 Func<Exception, Result> shouldRetry,
                 Func<Level, string, object[], Unit> logger) =>
             TryAsync(func)
                 .Bind(
                     x => Task.FromResult(x),
                     ex => CanRetry(retries, shouldRetry, logger, ex)
-                        .BindAsync(() => Task.Delay(1).ToTyped<Unit>())
-                        .Bind(_ => RetryAsync(func, retries - 1, shouldRetry, logger)));
+                        .BindAsync(() => Task.Delay(retryDelay).ToTyped<Unit>())
+                        .Bind(_ => RetryAsync(func, retries - 1, retryDelay, shouldRetry, logger)));
 
         /// <summary>
         /// Can the function be retried
@@ -215,7 +281,7 @@ namespace Interapptive.Shared.Utility
         private static Result CanRetry(int retries, Func<Exception, Result> shouldRetry, Func<Level, string, object[], Unit> logger, Exception ex) =>
             shouldRetry(ex)
                 .Do(() => LogRetryWarning(logger, ex.GetType().Name, retries))
-                .Bind(() => AreRetriesExhausted(retries).OnFailure(_ => LogRetryError(logger)));
+                .Bind(() => AreRetriesExhausted(retries, ex).OnFailure(_ => LogRetryError(logger)));
 
         /// <summary>
         /// Log a warning if the method fails
@@ -238,7 +304,7 @@ namespace Interapptive.Shared.Utility
         /// <param name="retries"></param>
         /// <param name="ex"></param>
         /// <returns></returns>
-        private static Result AreRetriesExhausted(int retries) =>
-            retries > 0 ? Result.FromSuccess() : Result.FromError(string.Empty);
+        private static Result AreRetriesExhausted(int retries, Exception ex) =>
+            retries > 0 ? Result.FromSuccess() : ex;
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Data.Administration.Retry
 {
@@ -80,8 +81,8 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetry(method, () => SqlAdapter.Create(true), exceptionCheck);
+        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetry(method, () => SqlAdapter.Create(true), isHandleableException);
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -102,7 +103,7 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter, Func<Exception, bool> exceptionCheck) =>
+        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter, Func<Exception, bool> isHandleableException) =>
             ExecuteWithRetry(() =>
             {
                 using (new SqlDeadlockPriorityScope(deadlockPriority))
@@ -118,7 +119,7 @@ namespace ShipWorks.Data.Administration.Retry
                         return;
                     }
                 }
-            }, exceptionCheck);
+            }, isHandleableException);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
@@ -133,39 +134,11 @@ namespace ShipWorks.Data.Administration.Retry
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public void ExecuteWithRetry(Action method, Func<Exception, bool> exceptionCheck)
-        {
-            int retryCounter = retries;
-
-            lock (lockObject)
-            {
-                using (new LoggedStopwatch(log, string.Format("ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
-                {
-                    while (retryCounter >= 0)
-                    {
-                        try
-                        {
-                            method();
-
-                            return;
-                        }
-                        catch (Exception ex)
-                        {
-                            var result = HandleException(ex, retryCounter, exceptionCheck);
-
-                            if (result.Success)
-                            {
-                                retryCounter = result.Value;
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        public void ExecuteWithRetry(Action method, Func<Exception, bool> isHandleableException) =>
+            Using(
+                new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {deadlockPriority}."),
+                _ => method.ToFunc().Retry(retries, retryDelay, ShouldRetry(isHandleableException)))
+            .ThrowOnFailure();
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
@@ -173,43 +146,23 @@ namespace ShipWorks.Data.Administration.Retry
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
         public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method) =>
-            ExecuteWithRetryAsync<T>(x => method(), ex => false);
+            ExecuteWithRetryAsync<T>(method, ex => false);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public async Task<T> ExecuteWithRetryAsync<T>(Func<int, Task<T>> method, Func<Exception, bool> exceptionCheck)
-        {
-            int retryCounter = retries;
+        public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method, Func<Exception, bool> isHandleableException) =>
+            UsingAsync(
+                new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {deadlockPriority}."),
+                _ => method.RetryAsync(retries, retryDelay, ShouldRetry(isHandleableException)));
 
-            using (new LoggedStopwatch(log, string.Format("ExecuteWithRetryAsync for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
-            {
-                while (retryCounter >= 0)
-                {
-                    try
-                    {
-                        return await method(retries - retryCounter).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        var result = await HandleExceptionAsync(ex, retryCounter, exceptionCheck).ConfigureAwait(false);
-
-                        if (result.Success)
-                        {
-                            retryCounter = result.Value;
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                return default(T);
-            }
-        }
+        /// <summary>
+        /// Should the method be retried
+        /// </summary>
+        private Func<Exception, bool> ShouldRetry(Func<Exception, bool> isHandleableException) =>
+             ex => ex is TException || (ex.InnerException is TException) || isHandleableException(ex);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
@@ -224,20 +177,8 @@ namespace ShipWorks.Data.Administration.Retry
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public Task ExecuteWithRetryAsync(Func<Task> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetryAsync(x => method(), exceptionCheck);
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public Task ExecuteWithRetryAsync(Func<int, Task> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetryAsync(async (x) =>
-            {
-                await method(x).ConfigureAwait(false);
-                return Unit.Default;
-            }, exceptionCheck);
+        public Task ExecuteWithRetryAsync(Func<Task> method, Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetryAsync(() => method().ToTyped<Unit>(), isHandleableException);
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -275,53 +216,5 @@ namespace ShipWorks.Data.Administration.Retry
                     }
                 }
             });
-
-        /// <summary>
-        /// Handle the exception, if possible
-        /// </summary>
-        private GenericResult<int> HandleException(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
-        {
-            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
-            {
-                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                if (retryCounter == 0)
-                {
-                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                    return GenericResult.FromError<int>(ex);
-                }
-
-                // Wait before trying again, give the other guy some time to resolve itself
-                Thread.Sleep(retryDelay);
-
-                return GenericResult.FromSuccess(retryCounter - 1);
-            }
-
-            return GenericResult.FromError<int>(ex);
-        }
-
-        /// <summary>
-        /// Handle the exception, if possible
-        /// </summary>
-        private async Task<GenericResult<int>> HandleExceptionAsync(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
-        {
-            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
-            {
-                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                if (retryCounter == 0)
-                {
-                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                    return GenericResult.FromError<int>(ex);
-                }
-
-                // Wait before trying again, give the other guy some time to resolve itself
-                await Task.Delay(retryDelay).ConfigureAwait(false);
-
-                return GenericResult.FromSuccess(retryCounter - 1);
-            }
-
-            return GenericResult.FromError<int>(ex);
-        }
     }
 }

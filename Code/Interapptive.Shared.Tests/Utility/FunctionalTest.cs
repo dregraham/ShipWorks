@@ -64,7 +64,7 @@ namespace Interapptive.Shared.Tests.Utility
         {
             var count = 0;
 
-            var result = Functional
+            Functional
                 .Retry<Unit>(() =>
                 {
                     count += 1;
@@ -181,7 +181,7 @@ namespace Interapptive.Shared.Tests.Utility
         {
             var count = 0;
 
-            var result = await Functional
+            await Functional
                 .RetryAsync<Unit>(() =>
                 {
                     count += 1;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Tests.Shared;
@@ -288,7 +290,9 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 }
 
                 return Task.CompletedTask;
-            }, ex => true);
+            }, ex => true)
+            .ToTyped<Unit>()
+            .Recover(_ => Unit.Default);
 
             Assert.Equal(2, calls);
         }
@@ -396,7 +400,8 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 }
 
                 return Task.FromResult(0);
-            }, ex => true);
+            }, ex => true)
+            .Recover(_ => 2);
 
             Assert.Equal(2, calls);
         }
