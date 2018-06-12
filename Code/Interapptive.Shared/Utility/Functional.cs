@@ -1,4 +1,5 @@
-﻿using log4net.Core;
+﻿using Interapptive.Shared.Extensions;
+using log4net.Core;
 using System;
 using System.Linq;
 using System.Reactive;
@@ -12,9 +13,24 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public static class Functional
     {
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
         public static Func<TResult> ToFunc<TResult>(Func<TResult> func) => func;
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
         public static Func<T, TResult> ToFunc<T, TResult>(Func<T, TResult> func) => func;
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
         public static Func<T1, T2, TResult> ToFunc<T1, T2, TResult>(Func<T1, T2, TResult> func) => func;
+
+        /// <summary>
+        /// Cast a method group as a function
+        /// </summary>
         public static Func<T1, T2, T3, TResult> ToFunc<T1, T2, T3, TResult>(Func<T1, T2, T3, TResult> func) => func;
 
         /// <summary>
@@ -71,6 +87,42 @@ namespace Interapptive.Shared.Utility
                 GenericResult.FromError<bool>($"Could not parse {arg} as bool");
 
         /// <summary>
+        /// Try executing a function
+        /// </summary>
+        /// <typeparam name="T">Return type of the function</typeparam>
+        /// <param name="func">Function to execute</param>
+        /// <returns>Value if function succeeds, failure otherwise</returns>
+        public static GenericResult<T> Try<T>(Func<T> func)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        /// <summary>
+        /// Try executing a function
+        /// </summary>
+        /// <typeparam name="T">Return type of the function</typeparam>
+        /// <param name="func">Function to execute</param>
+        /// <returns>Value if function succeeds, failure otherwise</returns>
+        public static Task<T> TryAsync<T>(Func<Task<T>> func)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<T>(ex);
+            }
+        }
+
+        /// <summary>
         /// Retry a function a specified number of times
         /// </summary>
         /// <typeparam name="TReturn">Type of return value</typeparam>
@@ -88,109 +140,105 @@ namespace Interapptive.Shared.Utility
         /// <param name="retries">Max number of retries</param>
         /// <param name="shouldRetry">Can the function be retried?</param>
         /// <param name="logger">Logger to use to on failure</param>
-        public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger)
-        {
-            GenericResult<int> retryCounter = retries;
-
-            while (retryCounter.Success)
-            {
-                try
-                {
-                    return func();
-                }
-                catch (Exception ex)
-                {
-                    retryCounter = retryCounter.Bind(counter => HandleException(TimeSpan.FromSeconds(1), ex, counter, shouldRetry, logger));
-                }
-            }
-
-            return retryCounter.Exception;
-        }
-
-
-        ///// <summary>
-        ///// Retry a function a specified number of times
-        ///// </summary>
-        ///// <typeparam name="TReturn">Type of return value</typeparam>
-        ///// <param name="func">Function to retry</param>
-        ///// <param name="retries">Max number of retries</param>
-        ///// <param name="shouldRetry">Can the function be retried?</param>
-        //public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, Func<Exception, bool> shouldRetry) =>
-        //    RetryAsync(func, retries, shouldRetry, (l, t, p) => Unit.Default);
-
-        ///// <summary>
-        ///// Retry a function a specified number of times
-        ///// </summary>
-        ///// <typeparam name="TReturn">Type of return value</typeparam>
-        ///// <param name="func">Function to retry</param>
-        ///// <param name="retries">Max number of retries</param>
-        ///// <param name="shouldRetry">Can the function be retried?</param>
-        ///// <param name="logger">Logger to use to on failure</param>
-        //public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger)
-        //{
-        //    GenericResult<int> retryCounter = retries;
-
-        //    while (retryCounter.Success)
-        //    {
-        //        try
-        //        {
-        //            return func();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            retryCounter = retryCounter.Bind(counter => HandleException(TimeSpan.FromSeconds(1), ex, counter, shouldRetry, logger));
-        //        }
-        //    }
-
-        //    return retryCounter.Exception;
-        //}
+        public static GenericResult<TReturn> Retry<TReturn>(this Func<TReturn> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
+            Retry(func, retries, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
 
         /// <summary>
-        /// Handle the exception, if possible
+        /// Retry a function a specified number of times
         /// </summary>
-        private static GenericResult<int> HandleException(TimeSpan retryDelay, Exception ex, int retryCounter, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger)
-        {
-            if (shouldRetry(ex))
-            {
-                logger(Level.Warn, "{0} detected while trying to execute.  Retrying {1} more times.", new object[] { ex.GetType().Name, retryCounter });
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, Func<Exception, bool> shouldRetry) =>
+            RetryAsync(func, retries, shouldRetry, (l, t, p) => Unit.Default);
 
-                if (retryCounter == 0)
-                {
-                    logger(Level.Error, "Could not execute due to maximum retry failures reached.", Enumerable.Empty<object>().ToArray());
-                    return ex;
-                }
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        /// <param name="logger">Logger to use to on failure</param>
+        public static Task<TReturn> RetryAsync<TReturn>(this Func<Task<TReturn>> func, int retries, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger) =>
+            RetryAsync(func, retries, ex => shouldRetry(ex) ? Result.FromSuccess() : ex, logger);
 
-                // Wait before trying again, give the other guy some time to resolve itself
-                Thread.Sleep(retryDelay);
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        /// <param name="logger">Logger to use to on failure</param>
+        private static GenericResult<TReturn> Retry<TReturn>(
+                this Func<TReturn> func,
+                int retries,
+                Func<Exception, Result> shouldRetry,
+                Func<Level, string, object[], Unit> logger) =>
+            Try(func)
+                .Match(
+                    x => x,
+                    ex => CanRetry(retries, shouldRetry, logger, ex)
+                        .Do(() => Thread.Sleep(1))
+                        .Bind(() => Retry(func, retries - 1, shouldRetry, logger)));
 
-                return retryCounter - 1;
-            }
+        /// <summary>
+        /// Retry a function a specified number of times
+        /// </summary>
+        /// <typeparam name="TReturn">Type of return value</typeparam>
+        /// <param name="func">Function to retry</param>
+        /// <param name="retries">Max number of retries</param>
+        /// <param name="shouldRetry">Can the function be retried?</param>
+        /// <param name="logger">Logger to use to on failure</param>
+        private static Task<TReturn> RetryAsync<TReturn>(
+                this Func<Task<TReturn>> func,
+                int retries,
+                Func<Exception, Result> shouldRetry,
+                Func<Level, string, object[], Unit> logger) =>
+            TryAsync(func)
+                .Bind(
+                    x => Task.FromResult(x),
+                    ex => CanRetry(retries, shouldRetry, logger, ex)
+                        .BindAsync(() => Task.Delay(1).ToTyped<Unit>())
+                        .Bind(_ => RetryAsync(func, retries - 1, shouldRetry, logger)));
 
-            return ex;
-        }
+        /// <summary>
+        /// Can the function be retried
+        /// </summary>
+        /// <param name="retries">How many times can we retry</param>
+        /// <param name="shouldRetry">Should the function be retried</param>
+        /// <param name="logger">Logger to use for failures</param>
+        /// <param name="ex">Exception that caused the failure</param>
+        /// <returns></returns>
+        private static Result CanRetry(int retries, Func<Exception, Result> shouldRetry, Func<Level, string, object[], Unit> logger, Exception ex) =>
+            shouldRetry(ex)
+                .Do(() => LogRetryWarning(logger, ex.GetType().Name, retries))
+                .Bind(() => AreRetriesExhausted(retries).OnFailure(_ => LogRetryError(logger)));
 
-        ///// <summary>
-        ///// Handle the exception, if possible
-        ///// </summary>
-        //private static async Task<GenericResult<int>> HandleExceptionAsync(TimeSpan retryDelay, Exception ex, int retryCounter, Func<Exception, bool> shouldRetry, Func<Level, string, object[], Unit> logger)
-        //{
-        //    if (shouldRetry(ex))
-        //    {
-        //        logger(Level.Warn, "{0} detected while trying to execute.  Retrying {1} more times.", new object[] { ex.GetType().Name, retryCounter });
+        /// <summary>
+        /// Log a warning if the method fails
+        /// </summary>
+        /// <param name="logger">Logger to use</param>
+        /// <param name="arguments">Arguments to log</param>
+        private static void LogRetryWarning(Func<Level, string, object[], Unit> logger, params object[] arguments) =>
+            logger(Level.Warn, "{0} detected while trying to execute.  Retrying {1} more times.", arguments);
 
-        //        if (retryCounter == 0)
-        //        {
-        //            logger(Level.Error, "Could not execute due to maximum retry failures reached.", Enumerable.Empty<object>().ToArray());
-        //            return ex;
-        //        }
+        /// <summary>
+        /// Log an error if there were too many retries
+        /// </summary>
+        /// <param name="logger">Logger to use</param>
+        private static void LogRetryError(Func<Level, string, object[], Unit> logger) =>
+            logger(Level.Error, "Could not execute due to maximum retry failures reached.", Enumerable.Empty<object>().ToArray());
 
-        //        // Wait before trying again, give the other guy some time to resolve itself
-        //        await Task.Delay(retryDelay).ConfigureAwait(false);
-
-        //        return retryCounter - 1;
-        //    }
-
-        //    return ex;
-        //}
+        /// <summary>
+        /// Can the function be retried based on the retry count
+        /// </summary>
+        /// <param name="retries"></param>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        private static Result AreRetriesExhausted(int retries) =>
+            retries > 0 ? Result.FromSuccess() : Result.FromError(string.Empty);
     }
 }

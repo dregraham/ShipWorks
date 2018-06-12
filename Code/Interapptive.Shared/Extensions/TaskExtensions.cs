@@ -18,9 +18,18 @@ namespace Interapptive.Shared.Extensions
             {
                 if (x.IsFaulted && x.Exception != null)
                 {
-                    getOwner().BeginInvoke((Action) (() => { throw x.Exception; }));
+                    getOwner().BeginInvoke((Action)(() => { throw x.Exception; }));
                 }
             });
+        }
+
+        /// <summary>
+        /// Convert the task into a Task(Of T)
+        /// </summary>
+        public static async Task<T> ToTyped<T>(this Task task)
+        {
+            await task.ConfigureAwait(false);
+            return default(T);
         }
 
         /// <summary>

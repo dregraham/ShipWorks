@@ -53,7 +53,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get a successful result
         /// </summary>
-        public static Result FromSuccess() => new Result(true, (string) null);
+        public static Result FromSuccess() => new Result(true, (string)null);
 
         /// <summary>
         /// Get an error result
@@ -77,6 +77,15 @@ namespace Interapptive.Shared.Utility
         /// <returns>
         /// A GenericResult containing the mapped value, or the original error
         /// </returns>
+        public Result Bind(Func<Result> map) =>
+            Match(map, ex => Result.FromError(ex));
+
+        /// <summary>
+        /// Bind the value of the result
+        /// </summary>
+        /// <returns>
+        /// A GenericResult containing the mapped value, or the original error
+        /// </returns>
         public GenericResult<TResult> Bind<TResult>(Func<GenericResult<TResult>> map) =>
             Match(map, ex => GenericResult.FromError<TResult>(ex));
 
@@ -86,16 +95,7 @@ namespace Interapptive.Shared.Utility
         /// <returns>
         /// A Task containing the mapped value, or the original error
         /// </returns>
-        public Task Bind(Func<Task> map) =>
-            Match(map, ex => Result.FromError(ex));
-
-        /// <summary>
-        /// Bind the value of the result
-        /// </summary>
-        /// <returns>
-        /// A Task containing the mapped value, or the original error
-        /// </returns>
-        public Task<TResult> Bind<TResult>(Func<Task<TResult>> map) =>
+        public Task<TResult> BindAsync<TResult>(Func<Task<TResult>> map) =>
             Match(map, ex => Task.FromException<TResult>(ex));
 
         /// <summary>
@@ -117,6 +117,12 @@ namespace Interapptive.Shared.Utility
         public Result Do(Action map) =>
             Match(() => { map(); return Result.FromSuccess(); },
                 ex => Result.FromError(ex));
+
+        /// <summary>
+        /// Perform an action when the result has failed
+        /// </summary>
+        public Result OnFailure(Action<Exception> action) =>
+            Match(() => Result.FromSuccess(), ex => { action(ex); return ex; });
 
         /// <summary>
         /// Match on the result, calling the first method on success and the second on failure
