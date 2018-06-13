@@ -1,4 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -27,13 +34,7 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 Progress.Detail = "Connecting to eBay...";
 
                 // Get the official eBay time in UTC
-                var token = EbayToken.FromStore((EbayStoreEntity)Store);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
                 eBayOfficialTime = webClient.GetOfficialTime(token);
 
                 bool morePages = await DownloadOrders().ConfigureAwait(false);
@@ -132,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
             }
 
-            var token = EbayToken.FromStore((EbayStoreEntity)Store);
+            var token = EbayToken.FromStore((EbayStoreEntity) Store);
             int page = 1;
 
             // Keep going until the user cancels or there aren't any more.
@@ -211,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return;
             }
 
-            EbayOrderEntity order = (EbayOrderEntity)result.Value;
+            EbayOrderEntity order = (EbayOrderEntity) result.Value;
 
             // Special processing for canceled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
@@ -274,13 +275,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
             // Online status
-            order.OnlineStatusCode = (int)orderType.OrderStatus;
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
 
             // SellingManager Pro
             order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ?
                 orderType.ShippingDetails.SellingManagerSalesRecordNumber :
-                (int?)null;
+                (int?) null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -343,7 +344,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             foreach (long orderID in abandonedItems.Select(i => i.OrderID).Distinct())
             {
                 // Load the order and all of it's items (which, will duplicate any abandoned item entities)
-                OrderEntity affectedOrder = (OrderEntity)DataProvider.GetEntity(orderID);
+                OrderEntity affectedOrder = (OrderEntity) DataProvider.GetEntity(orderID);
                 affectedOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(orderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
 
                 affectedOrders.Add(affectedOrder);
@@ -353,11 +354,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             int retryNumber = 0;
 
-            return sqlDeadlockRetry.ExecuteWithRetryAsync(
+            return ExecuteWithRetryAsync(
+                $"EbayDownloader.ProcessOrder for entity {order.OrderID}",
                 async () =>
                 {
                     await PerformSave(order, abandonedItems, retryNumber, affectedOrders);
-                    retryNumber += 1;
+                    return retryNumber += 1;
                 },
                 ex => ex is ORMEntityOutOfSyncException);
         }
@@ -474,7 +476,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 shipment.Order = toOrder;
 
                 // Mark all the carrier-specific stuff as new
-                foreach (IEntityCore entity in ((IEntityCore)shipment).GetDependingRelatedEntities())
+                foreach (IEntityCore entity in ((IEntityCore) shipment).GetDependingRelatedEntities())
                 {
                     EntityUtility.MarkAsNew(entity);
                 }
@@ -571,7 +573,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // See if we need to create a band new order item, we need to create it
                 if (orderItem == null)
                 {
-                    orderItem = (EbayOrderItemEntity)InstantiateOrderItem(order);
+                    orderItem = (EbayOrderItemEntity) InstantiateOrderItem(order);
 
                     orderItem.LocalEbayOrderID = orderItem.OrderID;
                     orderItem.EbayItemID = long.Parse(transaction.Item.ItemID);
@@ -643,7 +645,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
-            order.ShipNameParseStatus = (int)personName.ParseStatus;
+            order.ShipNameParseStatus = (int) personName.ParseStatus;
             order.ShipUnparsedName = personName.UnparsedName;
             order.ShipFirstName = personName.First;
             order.ShipMiddleName = personName.Middle;
@@ -677,7 +679,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             DateTime? onlineLastModifiedStartingPoint = await base.GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
-            if (((EbayStoreEntity)Store).DownloadOlderOrders)
+            if (((EbayStoreEntity) Store).DownloadOlderOrders)
             {
                 // We need to calculate the starting point for the initial starting point of
                 // a download cycle
@@ -742,7 +744,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             DynamicQuery<DateTime> query = factory.Create()
                 .Select(() => DownloadFields.Started.ToValue<DateTime>())
                 .Where(DownloadFields.StoreID == Store.StoreID)
-                .AndWhere(DownloadFields.Result == (int)DownloadResult.Success)
+                .AndWhere(DownloadFields.Result == (int) DownloadResult.Success)
                 .AndWhere(DownloadFields.QuantityTotal > 0)
                 .OrderBy(DownloadFields.DownloadID.Descending())
                 .Limit(previousDownloadCount);
@@ -777,11 +779,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails != null &&
                 orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost != null)
             {
-                shipping.Amount = (decimal)orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost.Value;
+                shipping.Amount = (decimal) orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost.Value;
             }
             else if (orderType.ShippingServiceSelected.ShippingServiceCost != null)
             {
-                shipping.Amount = (decimal)orderType.ShippingServiceSelected.ShippingServiceCost.Value;
+                shipping.Amount = (decimal) orderType.ShippingServiceSelected.ShippingServiceCost.Value;
             }
             else
             {
@@ -795,8 +797,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void UpdateAdjustmentCharges(EbayOrderEntity order, OrderType orderType)
         {
             // Only use the adjustment value if the order is considered complete.  Otherwise ebay seems to put an adjustment on non-complete orders that sets the total to zero.
-            decimal adjustment = (order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed) ?
-                (decimal)orderType.AdjustmentAmount.Value :
+            decimal adjustment = (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed) ?
+                (decimal) orderType.AdjustmentAmount.Value :
                 0m;
 
             OrderChargeEntity adjust = GetCharge(order, "ADJUST", "Adjustment", adjustment != 0);
@@ -817,7 +819,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (orderType.ShippingDetails.SalesTax != null && orderType.ShippingDetails.SalesTax.SalesTaxAmount != null)
             {
-                salesTax = (decimal)orderType.ShippingDetails.SalesTax.SalesTaxAmount.Value;
+                salesTax = (decimal) orderType.ShippingDetails.SalesTax.SalesTaxAmount.Value;
             }
 
             // Tax
@@ -852,7 +854,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
 
                 // See if we need to download paypal details
-                if (((EbayStoreEntity)Store).DownloadPayPalDetails)
+                if (((EbayStoreEntity) Store).DownloadPayPalDetails)
                 {
                     // If we don't have the transaction id yet, try to find it
                     if (transactionID.Length == 0)
@@ -885,7 +887,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             foreach (EbayOrderItemEntity item in order.OrderItems.OfType<EbayOrderItemEntity>())
             {
                 item.PayPalTransactionID = transactionID;
-                item.PayPalAddressStatus = (int)addressStatus;
+                item.PayPalAddressStatus = (int) addressStatus;
             }
         }
 
@@ -906,13 +908,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
 
-            orderItem.UnitPrice = (decimal)transaction.TransactionPrice.Value;
+            orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
             orderItem.Quantity = transaction.QuantityPurchased;
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
-            orderItem.PaymentMethod = (int)orderType.CheckoutStatus.PaymentMethod;
-            orderItem.PaymentStatus = (int)orderType.CheckoutStatus.eBayPaymentStatus;
-            orderItem.CompleteStatus = (int)orderType.CheckoutStatus.Status;
+            orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
+            orderItem.PaymentStatus = (int) orderType.CheckoutStatus.eBayPaymentStatus;
+            orderItem.CompleteStatus = (int) orderType.CheckoutStatus.Status;
 
             // My eBay statuses - we set this at the line-item level, but the API provides them at the order level.
             orderItem.MyEbayPaid = orderType.PaidTimeSpecified;
@@ -998,7 +1000,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     if (weightMajor.unit == "POUNDS" || weightMajor.unit == "lbs")
                     {
-                        orderItem.Weight = (double)(weightMajor.Value + weightMinor.Value / 16.0m);
+                        orderItem.Weight = (double) (weightMajor.Value + weightMinor.Value / 16.0m);
                     }
                 }
             }
@@ -1010,7 +1012,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void UpdateTransactionExtraDetails(EbayOrderItemEntity orderItem, TransactionType transaction)
         {
             // If updating external stuff is turned off, don't do it
-            if (!((EbayStoreEntity)Store).DownloadItemDetails)
+            if (!((EbayStoreEntity) Store).DownloadItemDetails)
             {
                 return;
             }
@@ -1023,7 +1025,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                var token = EbayToken.FromStore((EbayStoreEntity)Store);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
                 ItemType ebayItem = webClient.GetItem(token, transaction.Item.ItemID);
                 UpdateWeight(orderItem, ebayItem);
                 UpdateTransactionImages(orderItem, ebayItem);
@@ -1109,7 +1111,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             if (order.OrderTotal != Convert.ToDecimal(amountPaid) &&
-                order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
+                order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
                 !order.CombinedLocally) // Don't bother trying to reconcile a locally combined order
             {
                 OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other");
@@ -1161,13 +1163,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Reset the reference ID and the shipping method to standard
             order.GspReferenceID = string.Empty;
 
-            if (order.SelectedShippingMethod != (int)EbayShippingMethod.DirectToBuyerOverridden)
+            if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
             {
                 // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
                 // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
                 // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
                 // to the combined order).
-                order.SelectedShippingMethod = (int)EbayShippingMethod.DirectToBuyer;
+                order.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer;
             }
         }
 
@@ -1234,11 +1236,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
             }
 
-            if (order.IsNew || order.SelectedShippingMethod != (int)EbayShippingMethod.DirectToBuyerOverridden)
+            if (order.IsNew || order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
             {
                 // The seller has the choice to NOT ship GSP, so only default the shipping program to GSP for new orders
                 // or orders if the selected shipping method has not been manually overridden
-                order.SelectedShippingMethod = (int)EbayShippingMethod.GlobalShippingProgram;
+                order.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
             }
         }
 
@@ -1407,7 +1409,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // return the item entity
-            long itemID = (long)objItemID;
+            long itemID = (long) objItemID;
 
             EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
 
@@ -1439,7 +1441,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 PayPalWebClient paypalClient = new PayPalWebClient(new PayPalAccountAdapter(Store, "PayPal"));
 
-                response = (TransactionSearchResponseType)paypalClient.ExecuteRequest(search);
+                response = (TransactionSearchResponseType) paypalClient.ExecuteRequest(search);
                 if (response.PaymentTransactions == null)
                 {
                     // no transaction found that matches the criteria
@@ -1480,7 +1482,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (candidates.Count > 1)
                 {
                     // Pick the first one that matches the gross amount, if there's only one
-                    var matches = candidates.Where(p => Math.Abs(Convert.ToDecimal(p.GrossAmount.Value)) == (decimal)amount).ToList();
+                    var matches = candidates.Where(p => Math.Abs(Convert.ToDecimal(p.GrossAmount.Value)) == (decimal) amount).ToList();
                     if (matches.Any())
                     {
                         return matches.First().TransactionID;
@@ -1508,14 +1510,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
             try
             {
                 PayPalWebClient client = new PayPalWebClient(new PayPalAccountAdapter(Store, "PayPal"));
-                GetTransactionDetailsResponseType response = (GetTransactionDetailsResponseType)client.ExecuteRequest(request);
+                GetTransactionDetailsResponseType response = (GetTransactionDetailsResponseType) client.ExecuteRequest(request);
 
                 // TODO: need to specify which item it's for
                 await InstantiateNote(order, response.PaymentTransactionDetails.PaymentItemInfo.Memo,
                     response.PaymentTransactionDetails.PaymentInfo.PaymentDate, NoteVisibility.Public, true)
                     .ConfigureAwait(false);
 
-                return (PayPalAddressStatus)(int)response.PaymentTransactionDetails.PayerInfo.Address.AddressStatus;
+                return (PayPalAddressStatus) (int) response.PaymentTransactionDetails.PayerInfo.Address.AddressStatus;
             }
             catch (PayPalException ex)
             {
@@ -1545,7 +1547,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             Progress.Detail = "Checking for feedback...";
             Progress.PercentComplete = 0;
 
-            DateTime? downloadThrough = ((EbayStoreEntity)Store).FeedbackUpdatedThrough;
+            DateTime? downloadThrough = ((EbayStoreEntity) Store).FeedbackUpdatedThrough;
 
             // The date to stop looking at feedback, even if more exists
             if (downloadThrough == null)
@@ -1601,7 +1603,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                var token = EbayToken.FromStore((EbayStoreEntity)Store);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
                 GetFeedbackResponseType response = webClient.GetFeedback(token, feedbackType, page);
 
                 // Quit if eBay says there aren't any more
@@ -1642,7 +1644,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void SaveFeedbackCheckpoint(DateTime newestFeedback)
         {
-            EbayStoreEntity eBayStore = (EbayStoreEntity)Store;
+            EbayStoreEntity eBayStore = (EbayStoreEntity) Store;
 
             eBayStore.FeedbackUpdatedThrough = newestFeedback;
             SqlAdapter.Default.SaveAndRefetch(eBayStore);
@@ -1651,35 +1653,48 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given feedback
         /// </summary>
-        private void ProcessFeedback(FeedbackDetailType feedback)
+        private void ProcessFeedback(FeedbackDetailType feedback) =>
+            ExecuteWithRetry(
+                $"EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {feedback.OrderLineItemID}",
+                adapter => ProcessFeedbackInternal(feedback, adapter),
+                sqlAdapterFactory.Create,
+                CanHandleFeedbackException);
+
+        /// <summary>
+        /// Actually process the given feedback
+        /// </summary>
+        private void ProcessFeedbackInternal(FeedbackDetailType feedback, ISqlAdapter adapter)
         {
-            SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {0}", feedback.OrderLineItemID));
-            sqlDeadlockRetry.ExecuteWithRetry(adapter =>
+            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+
+            if (item == null)
             {
-                EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+                return;
+            }
 
-                if (item == null)
-                {
-                    return;
-                }
+            log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
 
-                log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
+            // Feedback we've received
+            if (feedback.Role == TradingRoleCodeType.Seller)
+            {
+                item.FeedbackReceivedType = (int) feedback.CommentType;
+                item.FeedbackReceivedComments = feedback.CommentText;
+            }
+            else
+            {
+                item.FeedbackLeftType = (int) feedback.CommentType;
+                item.FeedbackLeftComments = feedback.CommentText;
+            }
 
-                // Feedback we've received
-                if (feedback.Role == TradingRoleCodeType.Seller)
-                {
-                    item.FeedbackReceivedType = (int)feedback.CommentType;
-                    item.FeedbackReceivedComments = feedback.CommentText;
-                }
-                else
-                {
-                    item.FeedbackLeftType = (int)feedback.CommentType;
-                    item.FeedbackLeftComments = feedback.CommentText;
-                }
-
-                adapter.SaveEntity(item);
-            }, ex => ex is SqlDeadlockException);
+            adapter.SaveEntity(item);
         }
+
+        /// <summary>
+        /// Can we handle the exception raised while processing feedback
+        /// </summary>
+        private static bool CanHandleFeedbackException(Exception ex) =>
+            ex.GetAllExceptions().OfType<SqlException>().Any() ||
+            ex.GetAllExceptions().OfType<SqlDeadlockException>().Any();
 
         /// <summary>
         /// Gets the smallest order date, combined or not, for this store in the database
@@ -1693,7 +1708,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     null, AggregateFunction.Min,
                     OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?)result;
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
 
                 log.InfoFormat("MIN(OrderDate) = {0:u}", dateTime);
 

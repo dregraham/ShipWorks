@@ -3,21 +3,23 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
 
 namespace ShipWorks.Tests.Data.Administration.Retry
 {
     public class SqlAdapterRetryTest : IDisposable
     {
         readonly AutoMock mock;
+        private readonly SqlAdapterRetryOptions testOptions;
 
         public SqlAdapterRetryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testOptions = new SqlAdapterRetryOptions(retryDelay: TimeSpan.FromMilliseconds(1), retries: 1);
         }
 
         [Fact]
@@ -26,7 +28,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            testObject.ExecuteWithRetry(() => calls += 1);
+            ExecuteWithRetry("Foo", testOptions, () => calls += 1, ex => true);
 
             Assert.Equal(1, calls);
         }
@@ -35,36 +37,19 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         public void ExecuteWithRetry_CallsMethodTwice_WhenExceptionIsThrownFirst()
         {
             int calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            testObject.ExecuteWithRetry(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
+            ExecuteWithRetry("Foo",
+                testOptions,
+                () =>
                 {
-                    throw new Exception();
-                }
-            });
+                    calls += 1;
 
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
-        public void ExecuteWithRetry_CallsMethodTwice_WhenInnerExceptionIsThrownFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            testObject.ExecuteWithRetry(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new InvalidOperationException());
-                }
-            });
+                    if (calls == 1)
+                    {
+                        throw new Exception();
+                    }
+                },
+                ex => true);
 
             Assert.Equal(2, calls);
         }
@@ -74,19 +59,20 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         {
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            Assert.Throws<Exception>(() => testObject.ExecuteWithRetry(() => { throw new Exception(); }));
+            ExecuteWithRetry("Foo", testOptions, () => throw new Exception(), ex => true)
+                .Do(_ => Assert.True(false))
+                .OnFailure(ex => Assert.IsAssignableFrom<Exception>(ex));
         }
 
         [Fact]
         public void ExecuteWithRetry_DefaultDelayIsOneSecond()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             try
             {
-                testObject.ExecuteWithRetry(() => { throw new Exception(); });
+                ExecuteWithRetry("Foo", new SqlAdapterRetryOptions(retries: 1), () => throw new Exception(), ex => true);
             }
             catch (Exception)
             {
@@ -98,23 +84,12 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         }
 
         [Fact]
-        public void ExecuteWithRetry_ThrowsException_WhenRetryLimitIsExceededAndInnerExceptionIsExceptionType()
-        {
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            Assert.Throws<ArgumentException>(() => testObject.ExecuteWithRetry(() =>
-            {
-                throw new ArgumentException("foo", new InvalidOperationException());
-            }));
-        }
-
-        [Fact]
         public void ExecuteWithRetryAndAdapter_CallsMethod_Once()
         {
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            testObject.ExecuteWithRetry(x => calls += 1, () => mock.Build<ISqlAdapter>());
+            ExecuteWithRetry("Foo", x => calls += 1, () => mock.Build<ISqlAdapter>(), ex => true);
 
             Assert.Equal(1, calls);
         }
@@ -125,15 +100,19 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            testObject.ExecuteWithRetry(x =>
-            {
-                calls += 1;
-
-                if (calls == 1)
+            ExecuteWithRetry("Foo",
+                testOptions,
+                x =>
                 {
-                    throw new Exception();
-                }
-            }, () => mock.Build<ISqlAdapter>());
+                    calls += 1;
+
+                    if (calls == 1)
+                    {
+                        throw new Exception();
+                    }
+                },
+                () => mock.Build<ISqlAdapter>(),
+                ex => true);
 
             Assert.Equal(2, calls);
         }
@@ -142,15 +121,18 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         public void ExecuteWithRetryAndAdapter_CreatesTwoAdapters_WhenExceptionIsThrownFirst()
         {
             var calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
             try
             {
-                testObject.ExecuteWithRetry(x => { throw new Exception(); }, () =>
-                {
-                    calls += 1;
-                    return mock.Build<ISqlAdapter>();
-                });
+                ExecuteWithRetry("Foo",
+                    testOptions,
+                    x => throw new Exception(),
+                    () =>
+                    {
+                        calls += 1;
+                        return mock.Build<ISqlAdapter>();
+                    },
+                    ex => true);
             }
             catch (Exception)
             {
@@ -161,45 +143,27 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         }
 
         [Fact]
-        public void ExecuteWithRetryAndAdapter_CallsMethodTwice_WhenInnerExceptionIsThrownFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            testObject.ExecuteWithRetry(x =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new InvalidOperationException());
-                }
-            }, () => mock.Build<ISqlAdapter>());
-
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
         public void ExecuteWithRetryAndAdapter_ThrowsException_WhenRetryLimitIsExceeded()
         {
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            Assert.Throws<Exception>(() => testObject.ExecuteWithRetry(x => { throw new Exception(); }, () => mock.Build<ISqlAdapter>()));
+            ExecuteWithRetry("Foo", testOptions, x => throw new Exception(), () => mock.Build<ISqlAdapter>(), ex => true)
+                .Do(_ => Assert.True(false))
+                .OnFailure(ex => Assert.IsAssignableFrom<Exception>(ex));
         }
 
         [Fact]
         public void ExecuteWithRetryAndAdapter_DefaultDelayIsOneSecond()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             try
             {
-                testObject.ExecuteWithRetry(x =>
-                {
-                    throw new Exception();
-                }, () => mock.Build<ISqlAdapter>());
+                ExecuteWithRetry("Foo",
+                    x => throw new Exception(),
+                    () => mock.Build<ISqlAdapter>(),
+                    ex => true);
             }
             catch (Exception)
             {
@@ -211,23 +175,12 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         }
 
         [Fact]
-        public void ExecuteWithRetryAndAdapter_ThrowsException_WhenRetryLimitIsExceededAndInnerExceptionIsExceptionType()
-        {
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            Assert.Throws<ArgumentException>(() => testObject.ExecuteWithRetry(x =>
-            {
-                throw new ArgumentException("foo", new InvalidOperationException());
-            }, () => mock.Build<ISqlAdapter>()));
-        }
-
-        [Fact]
         public async Task ExecuteWithRetryAsyncTask_CallsMethod_Once()
         {
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(() => { calls += 1; return Task.CompletedTask; });
+            await ExecuteWithRetryAsync("Foo", testOptions, () => { calls += 1; return Task.FromResult(Unit.Default); }, ex => true);
 
             Assert.Equal(1, calls);
         }
@@ -238,61 +191,21 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
+            await ExecuteWithRetryAsync(
+                "Foo",
+                testOptions,
+                () =>
                 {
-                    throw new Exception();
-                }
+                    calls += 1;
 
-                return Task.CompletedTask;
-            });
+                    if (calls == 1)
+                    {
+                        throw new Exception();
+                    }
 
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncTask_CallsMethodTwice_WhenInnerExceptionIsThrownFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new InvalidOperationException());
-                }
-
-                return Task.CompletedTask;
-            });
-
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncTask_CallsMethodTwice_WhenCustomExceptionCheckerMatchesFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new Exception());
-                }
-
-                return Task.CompletedTask;
-            }, ex => true)
-            .ToTyped<Unit>()
-            .Recover(_ => Unit.Default);
+                    return Task.FromResult(Unit.Default);
+                },
+                ex => true);
 
             Assert.Equal(2, calls);
         }
@@ -302,10 +215,11 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         {
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await Assert.ThrowsAsync<Exception>(() => testObject.ExecuteWithRetryAsync(() =>
-            {
-                throw new Exception();
-            }));
+            await Assert.ThrowsAsync<Exception>(() => ExecuteWithRetryAsync<Unit>(
+                "Foo",
+                testOptions,
+                () => throw new Exception(),
+                ex => true));
         }
 
         [Fact]
@@ -317,10 +231,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
 
             try
             {
-                await testObject.ExecuteWithRetryAsync(() =>
-                {
-                    throw new Exception();
-                });
+                await ExecuteWithRetryAsync<Unit>("Foo", () => throw new Exception(), ex => true);
             }
             catch (Exception)
             {
@@ -329,17 +240,6 @@ namespace ShipWorks.Tests.Data.Administration.Retry
 
             stopwatch.Stop();
             Assert.True(stopwatch.ElapsedMilliseconds >= 1000);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncTask_ThrowsException_WhenRetryLimitIsExceededAndInnerExceptionIsExceptionType()
-        {
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await Assert.ThrowsAsync<ArgumentException>(() => testObject.ExecuteWithRetryAsync(() =>
-            {
-                throw new ArgumentException("foo", new InvalidOperationException());
-            }));
         }
 
         [Fact]
@@ -348,7 +248,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(() => Task.FromResult(calls += 1));
+            await ExecuteWithRetryAsync("Foo", testOptions, () => Task.FromResult(calls += 1), ex => true);
 
             Assert.Equal(1, calls);
         }
@@ -356,9 +256,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         [Fact]
         public async Task ExecuteWithRetryAsyncTaskT_ReturnsValue_ThatWasReturnedFromInnerFunc()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            var result = await testObject.ExecuteWithRetryAsync(() => Task.FromResult(36));
+            var result = await ExecuteWithRetryAsync("Foo", testOptions, () => Task.FromResult(36), ex => true);
 
             Assert.Equal(36, result);
         }
@@ -367,62 +265,22 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         public async Task ExecuteWithRetryAsyncTaskT_CallsMethodTwice_WhenExceptionIsThrownFirst()
         {
             int calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
+            await ExecuteWithRetryAsync(
+                "Foo",
+                testOptions,
+                () =>
                 {
-                    throw new Exception();
-                }
+                    calls += 1;
 
-                return Task.FromResult(0);
-            });
+                    if (calls == 1)
+                    {
+                        throw new Exception();
+                    }
 
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncTaskT_CallsMethodTwice_WhenCustomExceptionCheckerMatchesFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<ArgumentException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception();
-                }
-
-                return Task.FromResult(0);
-            }, ex => true)
-            .Recover(_ => 2);
-
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncTaskT_CallsMethodTwice_WhenInnerExceptionIsThrownFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await testObject.ExecuteWithRetryAsync(() =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new InvalidOperationException());
-                }
-
-                return Task.FromResult(0);
-            });
+                    return Task.FromResult(0);
+                },
+                ex => true);
 
             Assert.Equal(2, calls);
         }
@@ -430,24 +288,19 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         [Fact]
         public async Task ExecuteWithRetryAsyncTaskT_ThrowsException_WhenRetryLimitIsExceeded()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await Assert.ThrowsAsync<Exception>(() => testObject.ExecuteWithRetryAsync<int>(() =>
-            {
-                throw new Exception();
-            }));
+            await Assert.ThrowsAsync<Exception>(() =>
+                ExecuteWithRetryAsync<int>("Foo", testOptions, () => throw new Exception(), ex => true));
         }
 
         [Fact]
         public async Task ExecuteWithRetryAsyncTaskT_DefaultDelayIsOneSecond()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             try
             {
-                await testObject.ExecuteWithRetryAsync<int>(() => { throw new Exception(); });
+                await ExecuteWithRetryAsync<int>("Foo", () => throw new Exception(), ex => true);
             }
             catch (Exception)
             {
@@ -459,23 +312,16 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         }
 
         [Fact]
-        public async Task ExecuteWithRetryAsyncTaskT_ThrowsException_WhenRetryLimitIsExceededAndInnerExceptionIsExceptionType()
-        {
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo");
-
-            await Assert.ThrowsAsync<ArgumentException>(() => testObject.ExecuteWithRetryAsync<int>(() =>
-            {
-                throw new ArgumentException("foo", new InvalidOperationException());
-            }));
-        }
-
-        [Fact]
         public async Task ExecuteWithRetryAsyncAndAdapter_CallsMethod_Once()
         {
             int calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(x => { calls += 1; return Task.CompletedTask; }, () => mock.Build<ISqlAdapter>());
+            await ExecuteWithRetryAsync(
+                "Foo",
+                testOptions,
+                x => { calls += 1; return Task.FromResult(Unit.Default); },
+                () => mock.Build<ISqlAdapter>(),
+                ex => true);
 
             Assert.Equal(1, calls);
         }
@@ -484,19 +330,23 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         public async Task ExecuteWithRetryAsyncAndAdapter_CallsMethodTwice_WhenExceptionIsThrownFirst()
         {
             int calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(x =>
-            {
-                calls += 1;
-
-                if (calls == 1)
+            await ExecuteWithRetryAsync(
+                "Foo",
+                testOptions,
+                x =>
                 {
-                    throw new Exception();
-                }
+                    calls += 1;
 
-                return Task.CompletedTask;
-            }, () => mock.Build<ISqlAdapter>());
+                    if (calls == 1)
+                    {
+                        throw new Exception();
+                    }
+
+                    return Task.FromResult(Unit.Default);
+                },
+                () => mock.Build<ISqlAdapter>(),
+                ex => true);
 
             Assert.Equal(2, calls);
         }
@@ -505,15 +355,19 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         public async Task ExecuteWithRetryAsyncAndAdapter_CreatesTwoAdapters_WhenExceptionIsThrownFirst()
         {
             var calls = 0;
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
             try
             {
-                await testObject.ExecuteWithRetryAsync(x => { throw new Exception(); }, () =>
-                {
-                    calls += 1;
-                    return mock.Build<ISqlAdapter>();
-                });
+                await ExecuteWithRetryAsync<Unit>(
+                    "Foo",
+                    testOptions,
+                    x => throw new Exception(),
+                    () =>
+                    {
+                        calls += 1;
+                        return mock.Build<ISqlAdapter>();
+                    },
+                    ex => true);
             }
             catch (Exception)
             {
@@ -524,35 +378,14 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         }
 
         [Fact]
-        public async Task ExecuteWithRetryAsyncAndAdapter_CallsMethodTwice_WhenInnerExceptionIsThrownFirst()
-        {
-            int calls = 0;
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await testObject.ExecuteWithRetryAsync(x =>
-            {
-                calls += 1;
-
-                if (calls == 1)
-                {
-                    throw new Exception("Foo", new InvalidOperationException());
-                }
-
-                return Task.CompletedTask;
-            }, () => mock.Build<ISqlAdapter>());
-
-            Assert.Equal(2, calls);
-        }
-
-        [Fact]
         public async Task ExecuteWithRetryAsyncAndAdapter_ThrowsException_WhenRetryLimitIsExceeded()
         {
-            var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await Assert.ThrowsAsync<Exception>(() => testObject.ExecuteWithRetryAsync(x =>
-            {
-                throw new Exception();
-            }, () => mock.Build<ISqlAdapter>()));
+            await Assert.ThrowsAsync<Exception>(() => ExecuteWithRetryAsync<Unit>(
+                "Foo",
+                testOptions,
+                x => throw new Exception(),
+                () => mock.Build<ISqlAdapter>(),
+                ex => true));
         }
 
         [Fact]
@@ -564,10 +397,11 @@ namespace ShipWorks.Tests.Data.Administration.Retry
 
             try
             {
-                await testObject.ExecuteWithRetryAsync(x =>
-                {
-                    throw new Exception();
-                }, () => mock.Build<ISqlAdapter>());
+                await ExecuteWithRetryAsync<Unit>(
+                    "Foo",
+                    x => throw new Exception(),
+                    () => mock.Build<ISqlAdapter>(),
+                    ex => true);
             }
             catch (Exception)
             {
@@ -576,17 +410,6 @@ namespace ShipWorks.Tests.Data.Administration.Retry
 
             stopwatch.Stop();
             Assert.True(stopwatch.ElapsedMilliseconds >= 1000);
-        }
-
-        [Fact]
-        public async Task ExecuteWithRetryAsyncAndAdapter_ThrowsException_WhenRetryLimitIsExceededAndInnerExceptionIsExceptionType()
-        {
-            var testObject = new SqlAdapterRetry<InvalidOperationException>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
-
-            await Assert.ThrowsAsync<ArgumentException>(() => testObject.ExecuteWithRetryAsync(x =>
-            {
-                throw new ArgumentException("foo", new InvalidOperationException());
-            }, () => mock.Build<ISqlAdapter>()));
         }
 
         public void Dispose()

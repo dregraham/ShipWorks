@@ -18,7 +18,7 @@ namespace Interapptive.Shared.Extensions
             {
                 if (x.IsFaulted && x.Exception != null)
                 {
-                    getOwner().BeginInvoke((Action)(() => { throw x.Exception; }));
+                    getOwner().BeginInvoke((Action) (() => { throw x.Exception; }));
                 }
             });
         }

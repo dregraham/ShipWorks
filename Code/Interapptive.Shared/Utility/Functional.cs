@@ -1,10 +1,10 @@
-﻿using Interapptive.Shared.Extensions;
-using log4net.Core;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Extensions;
+using log4net.Core;
 
 namespace Interapptive.Shared.Utility
 {
@@ -92,9 +92,9 @@ namespace Interapptive.Shared.Utility
         /// <returns>Value returned by func</returns>
         public static async Task<TResult> UsingAsync<TDisposable, TResult>(Task<TDisposable> disposable, Func<TDisposable, Task<TResult>> func) where TDisposable : IDisposable
         {
-            using (var x = await disposable.ConfigureAwait(false))
+            using (var x = await disposable.ConfigureAwait(true))
             {
-                return await func(x).ConfigureAwait(false);
+                return await func(x).ConfigureAwait(true);
             }
         }
 
