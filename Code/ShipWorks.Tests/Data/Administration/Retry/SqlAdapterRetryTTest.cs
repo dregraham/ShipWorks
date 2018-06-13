@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             }
 
             stopwatch.Stop();
-            Assert.True(stopwatch.ElapsedMilliseconds >= 1000);
+            Assert.InRange(stopwatch.ElapsedMilliseconds, 1000, long.MaxValue);
         }
 
         [Fact]
