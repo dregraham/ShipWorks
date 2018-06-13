@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Quartz.Util;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
@@ -9,7 +9,11 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.ShipSense
 {
-    public class ShipSenseSynchronizer
+    /// <summary>
+    /// ShipSense Synchronizer
+    /// </summary>
+    [Component(RegistrationType.Self)]
+    public class ShipSenseSynchronizer : IShipSenseSynchronizer
     {
         private readonly bool isShipSenseEnabled;
         private readonly string shipSenseUniquenessXml;

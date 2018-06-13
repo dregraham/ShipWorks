@@ -263,6 +263,12 @@ namespace ShipWorks.ApplicationCore
                         (IKnowledgebase) c.Resolve<Knowledgebase>() :
                         c.Resolve<NullKnowledgebase>())
                 .As<IKnowledgebase>();
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IShipSenseSynchronizer) c.Resolve<ShipSenseSynchronizer>() :
+                        c.Resolve<NullShipSenseSynchronizer>())
+                .As<IShipSenseSynchronizer>();
         }
 
         /// <summary>
