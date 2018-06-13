@@ -699,12 +699,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
+                string transitDaysDescription = string.Empty;
+                ServiceLevelType serviceLevel = ServiceLevelType.Anytime;
 
                 if (rateDetail.DeliveryTimestampSpecified)
                 {
                     // Transite time
                     deliveryDate = rateDetail.DeliveryTimestamp;
                     transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    serviceLevel = GetServiceLevel(serviceType, transitDays);
                 }
                 else if (rateDetail.TransitTimeSpecified)
                 {
@@ -717,6 +721,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     else
                     {
                         deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                    }
+
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    serviceLevel = GetServiceLevel(serviceType, transitDays);
+
+                    if (serviceType == FedExServiceType.SmartPost)
+                    {
+                        CommitDetail commitDetail = rateDetail.CommitDetails.FirstOrDefault();
+                        if (commitDetail?.MaximumTransitTimeSpecified == true)
+                        {
+                            int smartPostTransitDays = GetTransitDays(commitDetail.MaximumTransitTime);
+                            serviceLevel = GetServiceLevel(serviceType, smartPostTransitDays);
+                            deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(smartPostTransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                        }
                     }
                 }
 
@@ -734,13 +752,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Add the ShipWorks rate object
                 results.Add(new RateResult(
                     EnumHelper.GetDescription(serviceType),
-                    GetTransitDaysDescription(transitDays, deliveryDate),
+                    transitDaysDescription, 
                     cost,
                     GetCurrencyCode(currency),
                     new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ServiceLevel = serviceLevel, 
                     ShipmentType = ShipmentTypeCode.FedEx,
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
                 });
