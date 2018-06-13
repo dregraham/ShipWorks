@@ -2,6 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
@@ -17,9 +18,7 @@ namespace ShipWorks.Shipping.ShipSense
     {
         private readonly bool isShipSenseEnabled;
         private readonly string shipSenseUniquenessXml;
-
         private readonly IKnowledgebase knowledgebase;
-
         private readonly Dictionary<string, List<ShipmentEntity>> shipmentDictionary;
         private readonly Dictionary<string, KnowledgebaseEntry> knowledgebaseEntryDictionary;
         private readonly ShipSenseUniquenessXmlParser parser;
@@ -28,23 +27,17 @@ namespace ShipWorks.Shipping.ShipSense
         /// Initializes a new instance of the <see cref="ShipSenseSynchronizer" /> class.
         /// </summary>
         /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
-        public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments)
-            : this(shipments, ShippingSettings.Fetch(), new Knowledgebase())
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShipSenseSynchronizer" /> class.
-        /// </summary>
-        /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         /// <param name="shippingSettings">The shipping settings.</param>
         /// <param name="knowledgebase">The knowledge base that entries should be retrieved from.</param>
-        public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments, ShippingSettingsEntity shippingSettings, IKnowledgebase knowledgebase)
+        public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments, IShippingSettings shippingSettings, IKnowledgebase knowledgebase)
         {
             IEnumerable<ShipmentEntity> shipmentEntities = shipments as IList<ShipmentEntity> ?? shipments.ToList();
 
             this.knowledgebase = knowledgebase;
-            isShipSenseEnabled = shippingSettings.ShipSenseEnabled;
-            shipSenseUniquenessXml = shippingSettings.ShipSenseUniquenessXml;
+
+            IShippingSettingsEntity shippingSettingsEntity = shippingSettings.FetchReadOnly();
+            isShipSenseEnabled = shippingSettingsEntity.ShipSenseEnabled;
+            shipSenseUniquenessXml = shippingSettingsEntity.ShipSenseUniquenessXml;
 
             parser = new ShipSenseUniquenessXmlParser();
 

@@ -4,6 +4,7 @@ using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -16,8 +17,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         private Mock<IKnowledgebase> knowledgebase;
         private Mock<IKnowledgebaseHash> hashingStrategy;
         private Mock<IShipSenseOrderItemKeyFactory> keyFactory;
-        
-        private ShippingSettingsEntity shippingSettings;
+        private Mock<IShippingSettings> shippingSettings;
+
+        private ShippingSettingsEntity shippingSettingsEntity;
         private List<ShipmentEntity> shipments;
 
         public ShipSenseSynchronizerTest()
@@ -66,11 +68,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                              return entry;
                          });
 
-            shippingSettings = new ShippingSettingsEntity
+            shippingSettingsEntity = new ShippingSettingsEntity
             {
                 ShipSenseEnabled = true,
                 ShipSenseUniquenessXml = "<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>"
             };
+            shippingSettings = new Mock<IShippingSettings>();
+            shippingSettings.Setup(s => s.FetchReadOnly()).Returns(shippingSettingsEntity);
 
             shipments = new List<ShipmentEntity>
             {
@@ -82,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 GetSinglePackageShipmentForOrder1(6)
             };
 
-            testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
+            testObject = new ShipSenseSynchronizer(shipments, shippingSettings.Object, knowledgebase.Object);
         }
 
         [Fact]
@@ -247,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_RemovesProcessedShipments_WhenShipSenseIsDisabled()
         {
-            shippingSettings.ShipSenseEnabled = false;
+            shippingSettingsEntity.ShipSenseEnabled = false;
             shipments[2].Processed = true;
 
             int originalCount = testObject.MonitoredShipments.Count();
@@ -260,7 +264,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_RemovesProcessedShipments_WhenShipSenseIsEnabled()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
             shipments[2].Processed = true;
 
             int originalCount = testObject.MonitoredShipments.Count();
@@ -273,7 +277,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_LeavesStatusAsNotApplied_WhenShipmentShipSenseStatusIsNotApplied_AndShipSenseIsDisabled()
         {
-            shippingSettings.ShipSenseEnabled = false;
+            shippingSettingsEntity.ShipSenseEnabled = false;
 
             ShipmentEntity shipment = shipments[0];
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
@@ -286,7 +290,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_LeavesStatusAsNotApplied_WhenShipmentShipSenseStatusIsNotApplied_AndShipSenseIsEnabled()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             ShipmentEntity shipment = shipments[0];
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
@@ -299,7 +303,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_SetsStatusToOverwritten_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsEnabled()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             // Based on the mocked knowledge base, the shipment should be seen as overwritten
             ShipmentEntity shipment = shipments[0];
@@ -313,7 +317,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_SetsStatusToOverwritten_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsDisabled()
         {
-            shippingSettings.ShipSenseEnabled = false;
+            shippingSettingsEntity.ShipSenseEnabled = false;
 
             // Based on the mocked knowledge base, the shipment should be seen as overwritten
             ShipmentEntity shipment = shipments[0];
@@ -327,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_SetsStatusToApplied_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsEnabled()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             ShipmentEntity shipment = shipments[0];
             shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
@@ -345,7 +349,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_SetsStatusToApplied_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsDisabled()
         {
-            shippingSettings.ShipSenseEnabled = false;
+            shippingSettingsEntity.ShipSenseEnabled = false;
 
             ShipmentEntity shipment = shipments[0];
             shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
@@ -363,7 +367,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_DoesNotChangeMatchingShipments_WhenShipSenseIsDisabled()
         {
-            shippingSettings.ShipSenseEnabled = false;
+            shippingSettingsEntity.ShipSenseEnabled = false;
 
             // Shipment[0] is for order1 based on the initialization, so all elements 
             // should still have their original values
@@ -387,7 +391,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_SynchronizesMatchingShipments_WhenShipSenseIsEnabled()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             // Shipment[0] is for order1 based on the initialization, so all elements 
             // should still have their original values
@@ -413,7 +417,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsSameAsSourcedShipment_WhenShipSenseIsEnabled_AndMatchedShipmentsAndSourcedShipmentHaveShipSenseApplied()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
             
             foreach (ShipmentEntity entity in shipments)
             {
@@ -445,7 +449,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsApplied_WhenShipSenseIsEnabled_AndSourcedShipmentHasNotHadShipSenseApplied_AndSourcedShipmentMatchesEntry()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             foreach (ShipmentEntity entity in shipments)
             {
@@ -473,7 +477,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsOverwritten_WhenShipSenseIsEnabled_AndSourcedShipmentHasNotHadShipSenseApplied_AndSourcedShipmentDoesNotMatchEntry()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             foreach (ShipmentEntity entity in shipments)
             {
@@ -500,7 +504,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsNotApplied_WhenShipSenseIsEnabled_AndSourcedShipmentHasHadShipSenseApplied_AndSourcedShipmentDoesNotMatchEntry()
         {
-            shippingSettings.ShipSenseEnabled = true;
+            shippingSettingsEntity.ShipSenseEnabled = true;
 
             foreach (ShipmentEntity entity in shipments)
             {
@@ -590,7 +594,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 GetSinglePackageShipmentForOrder1(6)
             };
 
-            testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
+            testObject = new ShipSenseSynchronizer(shipments, shippingSettings.Object, knowledgebase.Object);
 
             ShipmentEntity multiPackageShipment = shipments[1];
             ShipmentType shipmentType = ShipmentTypeManager.GetType(multiPackageShipment);
@@ -610,7 +614,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void SynchronizeWith_DoesNotThrowKeyNotFoundException_WhenNoShipmentsExist()
         {
-            testObject = new ShipSenseSynchronizer(new List<ShipmentEntity>(), shippingSettings, knowledgebase.Object);
+            testObject = new ShipSenseSynchronizer(new List<ShipmentEntity>(), shippingSettings.Object, knowledgebase.Object);
 
             try
             {
