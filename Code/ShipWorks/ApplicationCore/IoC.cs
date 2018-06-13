@@ -266,6 +266,12 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register((c, _) =>
                     c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IShipSenseLoaderGateway) c.Resolve<ShipSenseLoaderGateway>() :
+                        c.Resolve<NullShipSenseLoaderGateway>())
+                .As<IShipSenseLoaderGateway>();
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
                         (IShipSenseSynchronizer) c.Resolve<ShipSenseSynchronizer>() :
                         c.Resolve<NullShipSenseSynchronizer>())
                 .As<IShipSenseSynchronizer>();
