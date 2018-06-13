@@ -43,13 +43,11 @@ namespace ShipWorks.Shipping.ShipSense
         bool IsOverwritten(ShipmentEntity shipment);
 
         /// <summary>
-        /// Resets/truncates the underlying knowledge base data on a background thread causing
-        /// the knowledge base to be reset as if it were new.
+        /// Gets the hash result for the given order.
         /// </summary>
-        /// <param name="initiatedBy">The initiated by.</param>
-        /// <param name="progressReporter">The progress reporter.</param>
-        /// <returns>The Task that is executing the operation.</returns>
-        Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter);
+        /// <param name="order">The order.</param>
+        /// <returns>A KnowledgebaseHashResult object.</returns>
+        KnowledgebaseHashResult GetHashResult(OrderEntity order);
 
         /// <summary>
         /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught

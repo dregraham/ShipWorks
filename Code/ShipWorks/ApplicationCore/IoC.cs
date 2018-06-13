@@ -39,6 +39,8 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
@@ -255,6 +257,12 @@ namespace ShipWorks.ApplicationCore
             {
                 builder.RegisterType(taskDescriptor.SystemType).AsSelf();
             }
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IKnowledgebase) c.Resolve<Knowledgebase>() :
+                        c.Resolve<NullKnowledgebase>())
+                .As<IKnowledgebase>();
         }
 
         /// <summary>

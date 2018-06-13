@@ -164,7 +164,7 @@ namespace ShipWorks.ApplicationCore.Options
 
                     // The reset could take a few seconds depending on the size of the database, so
                     // reset the knowledge base on a separate thread
-                    Task resetTask = new Knowledgebase().ResetAsync(UserSession.User, progressItem);
+                    Task resetTask = Knowledgebase.ResetAsync(UserSession.User, progressItem);
                     Task reloadTask = null;
 
                     if (isReloadRequested)

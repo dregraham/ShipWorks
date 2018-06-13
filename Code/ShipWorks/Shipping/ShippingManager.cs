@@ -246,7 +246,8 @@ namespace ShipWorks.Shipping
             if (shipment.ShipSenseStatus != (int) ShipSenseStatus.NotApplied)
             {
                 // Make sure the status is correct in case a rule/profile changed a shipment after ShipSense was applied
-                KnowledgebaseEntry entry = new Knowledgebase().GetEntry(shipment.Order);
+                IKnowledgebase kb = lifetimeScope.Resolve<IKnowledgebase>();
+                KnowledgebaseEntry entry = kb.GetEntry(shipment.Order);
                 shipment.ShipSenseStatus = entry.Matches(shipment) ? (int) ShipSenseStatus.Applied : (int) ShipSenseStatus.Overwritten;
             }
 
@@ -471,7 +472,7 @@ namespace ShipWorks.Shipping
         private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment, IOrderManager orderManager,
             IShipmentTypeManager shipmentTypeManager)
         {
-            if (!shipment.Processed)
+            if (!shipment.Processed && ShippingSettings.FetchReadOnly().ShipSenseEnabled)
             {
                 // Ensure the order details are populated, so we get the correct hash key
                 orderManager.PopulateOrderDetails(shipment);
@@ -485,8 +486,7 @@ namespace ShipWorks.Shipping
                 // Now compress the entry so we can record the ShipSense data for this shipment; this will be used
                 // for quickly comparing/updating the ShipSense status of unprocessed shipments as new shipments
                 // get processed.
-                Knowledgebase knowledgebase = new Knowledgebase();
-                shipment.ShipSenseEntry = knowledgebase.CompressEntry(entry);
+                shipment.ShipSenseEntry = entry.Compress();
             }
         }
 
