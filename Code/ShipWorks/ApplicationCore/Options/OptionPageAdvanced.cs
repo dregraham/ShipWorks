@@ -65,6 +65,8 @@ namespace ShipWorks.ApplicationCore.Options
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             enableShipSense.Checked = settings.ShipSenseEnabled;
             clearKnowledgebase.Visible = UserSession.User.IsAdmin;
+            editShipSenseSettings.Enabled = enableShipSense.Checked;
+            relearnShipSense.Enabled = enableShipSense.Checked;
 
             autoCreateShipments.Checked = settings.AutoCreateShipments;
 
@@ -272,6 +274,15 @@ namespace ShipWorks.ApplicationCore.Options
             reloadKnowledgebaTask.ContinueWith(t => loader.Dispose());
 
             return reloadKnowledgebaTask;
+        }
+
+        /// <summary>
+        /// Update visibility of ShipSense buttons based on ShipSense enabled/disabled.
+        /// </summary>
+        private void OnEnableShipSenseCheckedChanged(object sender, EventArgs e)
+        {
+            editShipSenseSettings.Enabled = enableShipSense.Checked;
+            relearnShipSense.Enabled = enableShipSense.Checked;
         }
     }
 }

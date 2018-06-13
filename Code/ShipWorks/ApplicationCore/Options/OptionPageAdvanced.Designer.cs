@@ -53,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.enableShipSense = new System.Windows.Forms.CheckBox();
             this.labelShipSenseInfo = new System.Windows.Forms.Label();
             this.editShipSenseSettings = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.relearnShipSense = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.autoCreateShipments = new System.Windows.Forms.CheckBox();
@@ -281,7 +281,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.clearKnowledgebase.Image = global::ShipWorks.Properties.Resources.delete16;
             this.clearKnowledgebase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clearKnowledgebase.Location = new System.Drawing.Point(32, 819);
+            this.clearKnowledgebase.Location = new System.Drawing.Point(66, 819);
             this.clearKnowledgebase.Name = "clearKnowledgebase";
             this.clearKnowledgebase.Size = new System.Drawing.Size(168, 23);
             this.clearKnowledgebase.TabIndex = 37;
@@ -298,6 +298,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.enableShipSense.TabIndex = 35;
             this.enableShipSense.Text = "Automatically configure my shipments based on my shipping history";
             this.enableShipSense.UseVisualStyleBackColor = true;
+            this.enableShipSense.CheckedChanged += new System.EventHandler(this.OnEnableShipSenseCheckedChanged);
             // 
             // labelShipSenseInfo
             // 
@@ -305,14 +306,14 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelShipSenseInfo.Name = "labelShipSenseInfo";
             this.labelShipSenseInfo.Size = new System.Drawing.Size(423, 40);
             this.labelShipSenseInfo.TabIndex = 36;
-            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remembers what you do, and then automatically se" +
-    "ts the weights, dimensions, and customs information of future shipments.";
+            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remembers what you do, and then automatically s" +
+    "ets the weights, dimensions, and customs information of future shipments.";
             // 
             // editShipSenseSettings
             // 
             this.editShipSenseSettings.Image = global::ShipWorks.Properties.Resources.edit16;
             this.editShipSenseSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.editShipSenseSettings.Location = new System.Drawing.Point(33, 759);
+            this.editShipSenseSettings.Location = new System.Drawing.Point(67, 759);
             this.editShipSenseSettings.Name = "editShipSenseSettings";
             this.editShipSenseSettings.Size = new System.Drawing.Size(167, 23);
             this.editShipSenseSettings.TabIndex = 38;
@@ -320,21 +321,21 @@ namespace ShipWorks.ApplicationCore.Options
             this.editShipSenseSettings.UseVisualStyleBackColor = true;
             this.editShipSenseSettings.Click += new System.EventHandler(this.OnEditShipSenseClick);
             // 
-            // button1
+            // relearnShipSense
             // 
-            this.button1.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(32, 849);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 23);
-            this.button1.TabIndex = 39;
-            this.button1.Text = "Relearn from history";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.OnReloadKnowledgebase);
+            this.relearnShipSense.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
+            this.relearnShipSense.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.relearnShipSense.Location = new System.Drawing.Point(66, 849);
+            this.relearnShipSense.Name = "relearnShipSense";
+            this.relearnShipSense.Size = new System.Drawing.Size(168, 23);
+            this.relearnShipSense.TabIndex = 39;
+            this.relearnShipSense.Text = "Relearn from history";
+            this.relearnShipSense.UseVisualStyleBackColor = true;
+            this.relearnShipSense.Click += new System.EventHandler(this.OnReloadKnowledgebase);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(17, 723);
+            this.label2.Location = new System.Drawing.Point(51, 723);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(352, 32);
             this.label2.TabIndex = 40;
@@ -343,7 +344,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(17, 797);
+            this.label3.Location = new System.Drawing.Point(51, 797);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(423, 20);
             this.label3.TabIndex = 41;
@@ -502,7 +503,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.autoCreateShipments);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.relearnShipSense);
             this.Controls.Add(this.editShipSenseSettings);
             this.Controls.Add(this.clearKnowledgebase);
             this.Controls.Add(this.enableShipSense);
@@ -564,7 +565,7 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.CheckBox enableShipSense;
         private System.Windows.Forms.Label labelShipSenseInfo;
         private System.Windows.Forms.Button editShipSenseSettings;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button relearnShipSense;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox autoCreateShipments;
