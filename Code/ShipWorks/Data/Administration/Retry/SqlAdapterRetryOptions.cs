@@ -24,7 +24,7 @@ namespace ShipWorks.Data.Administration.Retry
         /// Constructor
         /// </summary>
         public SqlAdapterRetryOptions(int retryDelayInSeconds = 1, int retries = 5, int deadlockPriority = -5, ILog log = null) :
-            this(TimeSpan.FromSeconds(retryDelayInSeconds), retries, deadlockPriority)
+            this(TimeSpan.FromSeconds(retryDelayInSeconds), retries, deadlockPriority, log)
         {
 
         }
