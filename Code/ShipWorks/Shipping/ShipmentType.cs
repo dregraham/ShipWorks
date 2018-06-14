@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using Autofac;
+using Autofac.Core.Lifetime;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -534,7 +535,7 @@ namespace ShipWorks.Shipping
                 shippingProfile.Apply(shipment);
 
                 // Now apply ShipSense
-                ApplyShipSense(shipment);
+                ApplyShipSense(shipment, lifetimeScope);
 
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
@@ -560,16 +561,16 @@ namespace ShipWorks.Shipping
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void ApplyShipSense(ShipmentEntity shipment)
+        private void ApplyShipSense(ShipmentEntity shipment, ILifetimeScope lifetimeScope)
         {
             if (!ShouldApplyShipSense)
             {
                 return;
             }
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            if (!settings.ShipSenseEnabled)
+            IShippingSettings shippingSettings = lifetimeScope.Resolve<IShippingSettings>();
+            bool shipSenseEnabled = shippingSettings.FetchReadOnly().ShipSenseEnabled;
+            if (!shipSenseEnabled)
             {
                 return;
             }
@@ -586,8 +587,7 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Get our knowledge base entry for this shipment
-            Knowledgebase knowledgebase = new Knowledgebase();
-
+            IKnowledgebase knowledgebase = lifetimeScope.Resolve<IKnowledgebase>();
             KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
             knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = !SupportsMultiplePackages;
 
