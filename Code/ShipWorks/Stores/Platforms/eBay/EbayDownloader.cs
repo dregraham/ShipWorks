@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -14,10 +13,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -353,6 +354,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             return ExecuteWithRetryAsync(
                 $"EbayDownloader.ProcessOrder for entity {order.OrderID}",
+                new SqlAdapterRetryOptions(log: log),
                 async () =>
                 {
                     await PerformSave(order, abandonedItems, retryNumber, affectedOrders);
@@ -1653,6 +1655,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessFeedback(FeedbackDetailType feedback) =>
             ExecuteWithRetry(
                 $"EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {feedback.OrderLineItemID}",
+                new SqlAdapterRetryOptions(log: log),
                 adapter => ProcessFeedbackInternal(feedback, adapter),
                 sqlAdapterFactory.Create,
                 CanHandleFeedbackException);

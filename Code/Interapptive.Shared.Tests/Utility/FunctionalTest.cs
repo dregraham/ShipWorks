@@ -1,12 +1,13 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
+using log4net;
 using log4net.Core;
 using Moq;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Reactive;
-using System.Threading.Tasks;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -105,11 +106,11 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void Retry_DoesNotCallLogger_WhenMethodSucceeds()
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
 
-            Functional.Retry(() => 1, 1, ex => true, logMock.Object.Log);
+            Functional.Retry(() => 1, 1, ex => true, logMock.Object);
 
-            logMock.Verify(x => x.Log(It.IsAny<Level>(), AnyString, It.IsAny<object[]>()), Times.Never);
+            logMock.Verify(x => x.Warn(AnyString, It.IsAny<Exception>()), Times.Never);
         }
 
         [Theory]
@@ -118,24 +119,26 @@ namespace Interapptive.Shared.Tests.Utility
         [InlineData(20)]
         public void Retry_CallsLoggerWithWarning_ForEachFailure(int times)
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
+            var exception = new InvalidOperationException("Failed");
 
-            Functional.Retry<Unit>(() => throw new InvalidOperationException("Failed"), times, ex => true, logMock.Object.Log);
+            Functional.Retry<Unit>(() => throw exception, times, ex => true, logMock.Object);
 
             for (int i = times; i >= 0; i--)
             {
-                logMock.Verify(x => x.Log(Level.Warn, "{0} detected while trying to execute.  Retrying {1} more times.", new object[] { "InvalidOperationException", i }));
+                logMock.Verify(x => x.Warn($"InvalidOperationException detected while trying to execute.  Retrying {i} more times.", exception));
             }
         }
 
         [Fact]
         public void Retry_CallsLoggerWithError_AfterLastFailure()
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
+            var exception = new InvalidOperationException("Failed");
 
-            Functional.Retry<Unit>(() => throw new InvalidOperationException("Failed"), 1, ex => true, logMock.Object.Log);
+            Functional.Retry<Unit>(() => throw exception, 1, ex => true, logMock.Object);
 
-            logMock.Verify(x => x.Log(Level.Error, "Could not execute due to maximum retry failures reached.", new object[] { }));
+            logMock.Verify(x => x.Error("Could not execute due to maximum retry failures reached.", exception));
         }
 
         [Fact]
@@ -224,11 +227,11 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public async Task RetryAsync_DoesNotCallLogger_WhenMethodSucceeds()
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
 
-            await Functional.RetryAsync(() => Task.FromResult(1), 1, ex => true, logMock.Object.Log);
+            await Functional.RetryAsync(() => Task.FromResult(1), 1, ex => true, logMock.Object);
 
-            logMock.Verify(x => x.Log(It.IsAny<Level>(), AnyString, It.IsAny<object[]>()), Times.Never);
+            logMock.Verify(x => x.Warn(AnyString, It.IsAny<Exception>()), Times.Never);
         }
 
         [Theory]
@@ -237,28 +240,30 @@ namespace Interapptive.Shared.Tests.Utility
         [InlineData(20)]
         public async Task RetryAsync_CallsLoggerWithWarning_ForEachFailure(int times)
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
+            var exception = new InvalidOperationException("Failed");
 
             await Functional
-                .RetryAsync<Unit>(() => throw new InvalidOperationException("Failed"), times, ex => true, logMock.Object.Log)
+                .RetryAsync<Unit>(() => throw exception, times, ex => true, logMock.Object)
                 .Recover(_ => Unit.Default);
 
             for (int i = times; i >= 0; i--)
             {
-                logMock.Verify(x => x.Log(Level.Warn, "{0} detected while trying to execute.  Retrying {1} more times.", new object[] { "InvalidOperationException", i }));
+                logMock.Verify(x => x.Warn($"InvalidOperationException detected while trying to execute.  Retrying {i} more times.", exception));
             }
         }
 
         [Fact]
         public async Task RetryAsync_CallsLoggerWithError_AfterLastFailure()
         {
-            var logMock = new Mock<IInternalLogger>();
+            var logMock = new Mock<ILog>();
+            var exception = new InvalidOperationException("Failed");
 
             await Functional
-                .RetryAsync<Unit>(() => throw new InvalidOperationException("Failed"), 1, ex => true, logMock.Object.Log)
+                .RetryAsync<Unit>(() => throw exception, 1, ex => true, logMock.Object)
                 .Recover(_ => Unit.Default);
 
-            logMock.Verify(x => x.Log(Level.Error, "Could not execute due to maximum retry failures reached.", new object[] { }));
+            logMock.Verify(x => x.Error("Could not execute due to maximum retry failures reached.", exception));
         }
 
         public interface IInternalLogger

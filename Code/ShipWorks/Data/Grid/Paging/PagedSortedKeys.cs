@@ -8,8 +8,10 @@ using System.Linq;
 using System.Threading;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
@@ -25,6 +27,7 @@ namespace ShipWorks.Data.Grid.Paging
     /// </summary>
     public class PagedSortedKeys : IEnumerable<long>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(PagedSortedKeys));
         List<long> loadedKeys;
         volatile int loadedKeyCount;
 
@@ -230,6 +233,7 @@ namespace ShipWorks.Data.Grid.Paging
                 semaphore.DisposableWait(),
                 _ => ExecuteWithRetry(
                         "PagedSortedKeys.AsyncExecuteQuery",
+                        new SqlAdapterRetryOptions(log: log),
                         () => PerformQuery(keyField, queryBucket, sortExpression),
                         CanHandleQueryException));
 

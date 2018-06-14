@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Administration.Retry
                 Func<Exception, bool> isHandleableException) =>
             Using(
                 new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {options.DeadlockPriority}."),
-                _ => method.ToFunc().Retry(options.Retries, options.RetryDelay, isHandleableException));
+                _ => method.ToFunc().Retry(options.Retries, options.RetryDelay, isHandleableException, options.Log));
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
