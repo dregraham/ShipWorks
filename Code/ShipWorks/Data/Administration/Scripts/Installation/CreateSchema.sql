@@ -528,10 +528,6 @@ PRINT N'Creating index [IX_OnlineLastModified_StoreID_IsManual] on [dbo].[Order]
 GO
 CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual] ON [dbo].[Order] ([OnlineLastModified] DESC, [StoreID], [IsManual])
 GO
-PRINT N'Creating index [IX_Auto_StoreID] on [dbo].[Order]'
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_StoreID] ON [dbo].[Order] ([StoreID]) INCLUDE ([IsManual], [OrderDate])
-GO
 PRINT N'Creating index [IX_Auto_CustomerID] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_CustomerID] ON [dbo].[Order] ([CustomerID])
@@ -675,6 +671,10 @@ GO
 PRINT N'Creating index [IX_Order_ShipAddressValidationStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Order_ShipAddressValidationStatus] ON [dbo].[Order] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderDate])
+GO
+PRINT N'Creating index [IX_Order_StoreIDIsManual] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Order_StoreIDIsManual] ON [dbo].[Order] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderDate], [OrderNumber])
 GO
 PRINT N'Creating index [IX_Auto_ShipFirstName] on [dbo].[Order]'
 GO
@@ -6528,6 +6528,10 @@ GO
 PRINT N'Creating index [IX_OrderSearch_OrderNumberComplete] on [dbo].[OrderSearch]'
 GO
 CREATE NONCLUSTERED INDEX [IX_OrderSearch_OrderNumberComplete] ON [dbo].[OrderSearch] ([OrderNumberComplete]) INCLUDE ([OrderID], [StoreID])
+GO
+PRINT N'Creating index [IX_OrderSearch_StoreIDIsManual] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_OrderSearch_StoreIDIsManual] ON [dbo].[OrderSearch] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderNumber])
 GO
 PRINT N'Adding foreign keys to [dbo].[OrderSearch]'
 GO
