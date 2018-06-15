@@ -6,6 +6,9 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
@@ -13,6 +16,8 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
+using static Interapptive.Shared.Utility.Functional;
+using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -22,6 +27,7 @@ namespace ShipWorks.Data.Grid.Paging
     /// </summary>
     public class PagedSortedKeys : IEnumerable<long>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(PagedSortedKeys));
         List<long> loadedKeys;
         volatile int loadedKeyCount;
 
@@ -222,43 +228,48 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Fetch the keys defined by the given field, query, and sort
         /// </summary>
-        private void AsyncExecuteQuery(EntityField2 keyField, RelationPredicateBucket queryBucket, SortExpression sortExpression)
+        private void AsyncExecuteQuery(EntityField2 keyField, RelationPredicateBucket queryBucket, SortExpression sortExpression) =>
+            Using(
+                semaphore.DisposableWait(),
+                _ => ExecuteWithRetry(
+                        "PagedSortedKeys.AsyncExecuteQuery",
+                        new SqlAdapterRetryOptions(log: log),
+                        () => PerformQuery(keyField, queryBucket, sortExpression),
+                        CanHandleQueryException));
+
+        /// <summary>
+        /// Perform the query
+        /// </summary>
+        private void PerformQuery(EntityField2 keyField, RelationPredicateBucket queryBucket, SortExpression sortExpression)
         {
-            semaphore.Wait();
-
-            try
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "PagedSortedKeys.AsyncExecuteQuery.");
-                sqlAdapterRetry.ExecuteWithRetry(() =>
+                if (!canceled)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter())
+                    ResultsetFields resultFields = new ResultsetFields(1);
+                    resultFields.DefineField(keyField, 0, "EntityID", "");
+
+                    using (IDataReader reader = adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.Default, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
                     {
-                        if (!canceled)
+                        while (!canceled && reader.Read())
                         {
-                            ResultsetFields resultFields = new ResultsetFields(1);
-                            resultFields.DefineField(keyField, 0, "EntityID", "");
-
-                            using (IDataReader reader = adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.Default, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
-                            {
-                                while (!canceled && reader.Read())
-                                {
-                                    loadedKeys.Add(reader.GetInt64(0));
-                                    loadedKeyCount = loadedKeys.Count;
-                                }
-                            }
+                            loadedKeys.Add(reader.GetInt64(0));
+                            loadedKeyCount = loadedKeys.Count;
                         }
-
-                        loadingComplete = true;
                     }
-                },
-                ex => ex is InvalidOperationException && 
-                      ex.Message.IndexOf("Internal connection fatal error", StringComparison.OrdinalIgnoreCase) >= 0);
-            }
-            finally
-            {
-                semaphore.Release();
+                }
+
+                loadingComplete = true;
             }
         }
+
+        /// <summary>
+        /// Can the query exception be handled
+        /// </summary>
+        private static bool CanHandleQueryException(Exception ex) =>
+            ex.GetAllExceptions().OfType<SqlException>().Any() ||
+            ex.GetAllExceptions().OfType<InvalidOperationException>()
+                .Any(x => x.Message.IndexOf("Internal connection fatal error", StringComparison.OrdinalIgnoreCase) >= 0);
 
         /// <summary>
         /// Fetch the keys related to the given sourceKeys, based on the specified definition
