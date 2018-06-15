@@ -142,6 +142,6 @@ namespace ShipWorks.Data.Administration.Retry
                 Func<Exception, bool> isHandleableException) =>
             UsingAsync(
                 new LoggedStopwatch(log, $"ExecuteWithRetryAsync for {commandDescription}, deadlock priority {options.DeadlockPriority}."),
-                _ => method.RetryAsync(options.Retries, options.RetryDelay, isHandleableException));
+                _ => method.RetryAsync(options.Retries, options.RetryDelay, isHandleableException, options.Log));
     }
 }

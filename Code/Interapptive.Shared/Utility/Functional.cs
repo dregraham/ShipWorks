@@ -279,8 +279,9 @@ namespace Interapptive.Shared.Utility
         /// <returns></returns>
         private static Result CanRetry(int retries, Func<Exception, Result> shouldRetry, ILog logger, Exception ex) =>
             shouldRetry(ex)
-                .Do(() => LogRetryWarning(logger, ex, retries))
-                .Bind(() => AreRetriesExhausted(retries, ex).OnFailure(ex2 => LogRetryError(logger, ex2)));
+                .Bind(() => AreRetriesExhausted(retries, ex)
+                    .Do(() => LogRetryWarning(logger, ex, retries))
+                    .OnFailure(ex2 => LogRetryError(logger, ex2)));
 
         /// <summary>
         /// Log a warning if the method fails
