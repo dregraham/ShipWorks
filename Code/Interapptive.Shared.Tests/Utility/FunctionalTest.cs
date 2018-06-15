@@ -124,10 +124,12 @@ namespace Interapptive.Shared.Tests.Utility
 
             Functional.Retry<Unit>(() => throw exception, times, ex => true, logMock.Object);
 
-            for (int i = times; i >= 0; i--)
+            for (int i = times; i >= 1; i--)
             {
                 logMock.Verify(x => x.Warn($"InvalidOperationException detected while trying to execute.  Retrying {i} more times.", exception));
             }
+
+            logMock.Verify(x => x.Error("Could not execute due to maximum retry failures reached.", exception));
         }
 
         [Fact]
@@ -247,10 +249,12 @@ namespace Interapptive.Shared.Tests.Utility
                 .RetryAsync<Unit>(() => throw exception, times, ex => true, logMock.Object)
                 .Recover(_ => Unit.Default);
 
-            for (int i = times; i >= 0; i--)
+            for (int i = times; i >= 1; i--)
             {
                 logMock.Verify(x => x.Warn($"InvalidOperationException detected while trying to execute.  Retrying {i} more times.", exception));
             }
+
+            logMock.Verify(x => x.Error("Could not execute due to maximum retry failures reached.", exception));
         }
 
         [Fact]
