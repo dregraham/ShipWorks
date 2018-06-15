@@ -68,8 +68,8 @@ pipeline {
 								/param:SQLServ=localhost\\ranorex ^
 								/reportlevel:Debug ^
 								/zr ^
-								/zrf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
-								/rf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
+								/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+								/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
 								/ju
 						"""
 				}
