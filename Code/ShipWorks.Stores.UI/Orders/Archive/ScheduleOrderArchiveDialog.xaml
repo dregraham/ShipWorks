@@ -1,0 +1,135 @@
+﻿<Window x:Class="ShipWorks.Stores.UI.Orders.Archive.ScheduleOrderArchiveDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Archive"
+        xmlns:ui="http://schemas.shipworks.com/ui"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:DesignModeScheduleArchiveViewModel, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+
+        FontFamily="Tahoma"
+        FontSize="8.25 pt"
+        FontStyle="Normal"
+        FontStretch="Normal"
+        FontWeight="Normal"
+
+        SizeToContent="Height"
+        Title="Auto Archive Orders"
+        Width="450"
+        MinHeight="260" MinWidth="450">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:PluralizingValueConverter x:Key="PluralizingValue" />
+
+            <ObjectDataProvider x:Key="DayValues" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="System:DayOfWeek" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock TextWrapping="Wrap" Grid.Row="0">
+            <Run>Archiving orders moves order and associated information into a new, read-only database.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- Archiving orders cannot be undone.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- Archived orders are removed from the current ShipWorks database.</Run>
+            <LineBreak />
+            <Run Foreground="Transparent">MM</Run>
+            <Run>- ShipWorks cannot be used during the archiving process.</Run>
+        </TextBlock>
+
+        <Grid Grid.Row="1"
+              Margin="0, 14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <CheckBox Grid.Row="0" 
+                      FontWeight="Bold" 
+                      IsChecked="{Binding Enabled}"
+                      VerticalContentAlignment="Center">Enable auto archiving</CheckBox>
+
+            <StackPanel Grid.Row="1"
+                        Margin="21, 0, 0, 0"
+                        IsEnabled="{Binding Enabled, Mode=OneWay}">
+                <ui:AlignmentWrapPanel Grid.Row="1" 
+                                       Margin="0, 4, 0, 0"
+                                       VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center">Archive orders older than</TextBlock>
+                    <TextBox VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="5,0,3,0"
+                     Width="50"
+                     Text="{Binding NumberOfDaysToKeep}"/>
+                    <TextBlock Width="50" HorizontalAlignment="Left" VerticalAlignment="Center">days.</TextBlock>
+                </ui:AlignmentWrapPanel>
+
+                <ui:AlignmentWrapPanel Grid.Row="2" 
+                                       Margin="0, 4, 0, 0"
+                                       VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center">Run on the first</TextBlock>
+                    <ComboBox VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="5,0,3,0"
+                     Width="85"
+                     ItemsSource="{Binding Source={StaticResource DayValues}}"
+                     SelectedValue="{Binding DayOfWeek}">
+                    </ComboBox>
+                    <TextBlock Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center">of the month at midnight.</TextBlock>
+                </ui:AlignmentWrapPanel>
+            </StackPanel>
+        </Grid>
+
+        <ui:AlignmentWrapPanel Grid.Row="4">
+            <TextBlock VerticalAlignment="Center">
+                <Run>Want to learn more about archiving?</Run>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
+            </TextBlock>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding Saving, Converter={StaticResource InvertBoolean}}">
+                <Button Padding="8, 4"
+                        Style="{StaticResource Button.Link}"
+                        Foreground="{StaticResource Blue}"
+                        VerticalAlignment="Center"
+                        IsCancel="True"
+                        Margin="12,0"
+                        Command="{Binding CancelSchedule}">Cancel</Button>
+
+                <Button Grid.Row="2"
+                    Padding="8, 4"
+                    IsDefault="True"
+                    Command="{Binding ConfirmSchedule}" Content="Save"/>
+            </StackPanel>
+        </ui:AlignmentWrapPanel>
+    </Grid>
+</Window>

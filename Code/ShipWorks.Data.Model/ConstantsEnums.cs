@@ -4664,6 +4664,8 @@ namespace ShipWorks.Data.Model
 		BomSKU,
 		///<summary>GrouponLineItemID. </summary>
 		GrouponLineItemID,
+		///<summary>PONumber. </summary>
+		PONumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2850,11 +2850,7 @@ ALTER TABLE [dbo].[DhlExpressShipment] ADD CONSTRAINT [FK_DhlExpressShipment_Shi
 GO
 PRINT N'Creating index [IX_OnTracShipment_Service] on [dbo].[OnTracShipment]'
 GO
-
 CREATE NONCLUSTERED INDEX [IX_DhlExpressShipment_Service] ON [dbo].[DhlExpressShipment] ([Service])
-GO
-
-ALTER TABLE [dbo].[DhlExpressShipment] ENABLE CHANGE_TRACKING
 GO
 
 PRINT N'Creating [dbo].[DhlExpressPackage]'
@@ -2954,8 +2950,6 @@ GO
 PRINT N'Creating index [IX_AsendiaShipment_Service] on [dbo].[AsendiaShipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
-GO
-ALTER TABLE [dbo].[AsendiaShipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[Customer]'
 GO
@@ -5987,7 +5981,8 @@ CREATE TABLE [dbo].[GrouponOrderItem]
 [ChannelSKUProvided] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FulfillmentLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BomSKU] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[GrouponLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[GrouponLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PONumber] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderItem] on [dbo].[GrouponOrderItem]'

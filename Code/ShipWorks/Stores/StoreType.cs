@@ -433,7 +433,7 @@ namespace ShipWorks.Stores
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                object result = adapter.GetScalar(OrderFields.OrderNumber, null, AggregateFunction.Max, OrderFields.StoreID == Store.StoreID);
+                object result = adapter.GetScalar(OrderFields.OrderNumber, null, AggregateFunction.Max, OrderFields.StoreID == Store.StoreID & OrderFields.OrderNumber >= 0);
                 if (!(result is DBNull))
                 {
                     orderNumber = Convert.ToInt64(result) + 1;

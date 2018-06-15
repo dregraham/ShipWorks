@@ -25,10 +25,10 @@ namespace ShipWorks.Stores.Orders.Archive
     {
         private readonly Func<IOrderArchiveOrchestrator> createArchiveOrchestrator;
         private readonly Func<IArchiveManagerDialogViewModel, IArchiveManagerDialog> createDialog;
+        private readonly Func<IScheduleOrderArchiveViewModel> createSchedulingViewModel;
         private readonly IArchiveManagerDataAccess dataAccess;
         private readonly Func<IAsyncMessageHelper> messageHelper;
         private readonly PropertyChangedHandler handler;
-
         private bool working;
         private bool loadingArchives;
         private bool noArchives;
@@ -43,12 +43,14 @@ namespace ShipWorks.Stores.Orders.Archive
         public ArchiveManagerDialogViewModel(
             Func<IOrderArchiveOrchestrator> createArchiveOrchestrator,
             Func<IArchiveManagerDialogViewModel, IArchiveManagerDialog> createDialog,
+            Func<IScheduleOrderArchiveViewModel> createSchedulingViewModel,
             IArchiveManagerDataAccess dataAccess,
             Func<IAsyncMessageHelper> messageHelper)
         {
             this.dataAccess = dataAccess;
             this.messageHelper = messageHelper;
             this.createDialog = createDialog;
+            this.createSchedulingViewModel = createSchedulingViewModel;
             this.createArchiveOrchestrator = createArchiveOrchestrator;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -56,6 +58,7 @@ namespace ShipWorks.Stores.Orders.Archive
             Archives = Enumerable.Empty<ISqlDatabaseDetail>();
             ArchiveNow = new RelayCommand(() => ArchiveNowAction().Forget());
             ConnectToArchive = new RelayCommand(() => ConnectToArchiveAction(), () => SelectedArchive != null);
+            AutoArchive = new RelayCommand(() => AutoArchiveAction().Forget(), () => true);
             Close = new RelayCommand(() => dialog?.Close());
         }
 
@@ -75,6 +78,12 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ConnectToArchive { get; }
+
+        /// <summary>
+        /// Start auto archive manager dialog
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand AutoArchive { get; }
 
         /// <summary>
         /// Close the dialog
@@ -193,6 +202,14 @@ namespace ShipWorks.Stores.Orders.Archive
                 ShowManager();
                 working = false;
             }
+        }
+
+        /// <summary>
+        /// Open the auto archive dialog
+        /// </summary>
+        public async Task AutoArchiveAction()
+        {
+            await createSchedulingViewModel().Show().ConfigureAwait(true);
         }
     }
 }

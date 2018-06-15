@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
 
             await testObject.Archive().Recover(ex => Unit.Default);
 
-            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(AnyDate), Times.Never);
+            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(AnyDate, true), Times.Never);
         }
 
         [Theory]
@@ -58,14 +58,14 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
 
             await testObject.Archive();
 
-            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(parsedDate));
+            mock.Mock<IOrderArchiver>().Verify(x => x.Archive(parsedDate, true));
         }
 
         [Fact]
         public async Task Archive_ShowsError_WhenProcessFails()
         {
             mock.Mock<IOrderArchiver>()
-                .Setup(x => x.Archive(AnyDate))
+                .Setup(x => x.Archive(AnyDate, true))
                 .ThrowsAsync(new InvalidOperationException("Failed"));
 
             await testObject.Archive().Recover(ex => Unit.Default);

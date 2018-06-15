@@ -379,6 +379,27 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             StoreTypeCode = StoreTypeCode.Groupon
                         },
+                        
+                        new GridColumnDefinition("{8863B7B6-0011-491A-8E9C-719456306F2F}", false,
+                            new GridTextDisplayType(), "Permalink", "A123456",
+                            GrouponOrderItemFields.Permalink)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
+                        new GridColumnDefinition("{997C0126-9D3F-41A8-93E3-07119B41BFCD}", false,
+                            new GridTextDisplayType(), "Channel SKU", "A123456",
+                            GrouponOrderItemFields.ChannelSKUProvided)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+                        
+                        new GridColumnDefinition("{6DA4253C-04F1-4970-B7FD-A239090D36FC}", false,
+                            new GridTextDisplayType(), "PO Number", "A123456",
+                            GrouponOrderItemFields.PONumber)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
 
                 #endregion
 

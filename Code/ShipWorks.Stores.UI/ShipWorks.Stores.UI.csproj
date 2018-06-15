@@ -143,7 +143,11 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Orders\Archive\DesignModeScheduleArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\DesignModeSingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Orders\Archive\ScheduleOrderArchiveDialog.xaml.cs">
+      <DependentUpon>ScheduleOrderArchiveDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Orders\Archive\SchemaVersionStatusConverter.cs" />
     <Compile Include="Orders\Archive\SingleDatabaseSelectorDialog.xaml.cs">
       <DependentUpon>SingleDatabaseSelectorDialog.xaml</DependentUpon>
@@ -759,6 +763,10 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Orders\Archive\ScheduleOrderArchiveDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Orders\Archive\SingleDatabaseSelectorDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -57,6 +57,15 @@ namespace ShipWorks.Users
         public bool LogonLastUser() => UserSession.LogonLastUser();
 
         /// <summary>
+        /// Log off the currently logged on user.
+        /// </summary>
+        public bool Logoff(bool clearRememberMe)
+        {
+            UserSession.Logoff(clearRememberMe);
+            return true;
+        }
+
+        /// <summary>
         /// Is a user logged on
         /// </summary>
         public bool IsLoggedOn => UserSession.IsLoggedOn;

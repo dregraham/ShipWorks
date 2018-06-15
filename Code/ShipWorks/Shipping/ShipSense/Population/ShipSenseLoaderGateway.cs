@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
     /// <summary>
     ///  Implementation for the ShipSenseLoader to get/save database entries
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class ShipSenseLoaderGateway : IShipSenseLoaderGateway
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoaderGateway));

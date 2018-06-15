@@ -72,5 +72,8 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
 
         [JsonProperty("quantity")]
         public string Quantity { get; set; }
+        
+        [JsonProperty("groupon_cost")]
+        public string GrouponCost { get; set; }
     }
 }

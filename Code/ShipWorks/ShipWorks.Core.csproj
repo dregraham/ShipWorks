@@ -595,6 +595,7 @@
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
+    <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
@@ -983,6 +984,13 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\Threading\BackgroundProgressDlg.cs" />
+    <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
+    <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
+    <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\Population\NullShipSenseLoaderGateway.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetryOptions.cs" />
@@ -8745,6 +8753,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\BackgroundUserLoginWorkflow.cs" />
     <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />

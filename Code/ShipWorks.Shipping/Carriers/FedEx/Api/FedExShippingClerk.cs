@@ -693,31 +693,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             // Translate them to rate results
             foreach (RateReplyDetail rateDetail in rateDetails.Where(r => r.ServiceType != ServiceType.FEDEX_FIRST_FREIGHT))
             {
-                FedExServiceType serviceType;
-
-                serviceType = GetFedExServiceType(rateDetail, shipment);
+                FedExServiceType serviceType = GetFedExServiceType(rateDetail, shipment);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
+                string transitDaysDescription = string.Empty;
+                ServiceLevelType serviceLevel = ServiceLevelType.Anytime;
 
                 if (rateDetail.DeliveryTimestampSpecified)
                 {
                     // Transite time
                     deliveryDate = rateDetail.DeliveryTimestamp;
                     transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    serviceLevel = GetServiceLevel(serviceType, transitDays);
                 }
                 else if (rateDetail.TransitTimeSpecified)
                 {
                     transitDays = GetTransitDays(rateDetail.TransitTime);
 
-                    if (serviceType == FedExServiceType.GroundHomeDelivery)
-                    {
-                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday);
-                    }
-                    else
-                    {
-                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
-                    }
+                    deliveryDate = serviceType == FedExServiceType.GroundHomeDelivery ? ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday) : ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    serviceLevel = GetServiceLevel(serviceType, transitDays);
+
+                    serviceLevel = DetermineSmartPostDeliveryInfo(serviceType, rateDetail, serviceLevel, ref deliveryDate);
                 }
 
                 // Cost
@@ -734,19 +734,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Add the ShipWorks rate object
                 results.Add(new RateResult(
                     EnumHelper.GetDescription(serviceType),
-                    GetTransitDaysDescription(transitDays, deliveryDate),
+                    transitDaysDescription, 
                     cost,
                     GetCurrencyCode(currency),
                     new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ServiceLevel = serviceLevel, 
                     ShipmentType = ShipmentTypeCode.FedEx,
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
                 });
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Get SmartPost delivery info
+        /// </summary>
+        private static ServiceLevelType DetermineSmartPostDeliveryInfo(FedExServiceType serviceType, RateReplyDetail rateDetail, 
+            ServiceLevelType serviceLevel, ref DateTime? deliveryDate)
+        {
+            if (serviceType == FedExServiceType.SmartPost)
+            {
+                CommitDetail commitDetail = rateDetail.CommitDetails.FirstOrDefault();
+                if (commitDetail?.MaximumTransitTimeSpecified == true)
+                {
+                    int smartPostTransitDays = GetTransitDays(commitDetail.MaximumTransitTime);
+                    serviceLevel = GetServiceLevel(serviceType, smartPostTransitDays);
+                    deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(smartPostTransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                }
+            }
+
+            return serviceLevel;
         }
 
         /// <summary>

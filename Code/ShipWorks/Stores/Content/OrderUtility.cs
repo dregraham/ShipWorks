@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -393,12 +395,15 @@ namespace ShipWorks.Stores.Content
         /// <param name="order">The order.</param>
         public static void UpdateShipSenseHashKey(OrderEntity order)
         {
-            // Use the knowledge base to determine the hash key as well, so the values sync up with
-            // what actually is used by the knowledge base
-            Knowledgebase knowledgebase = new Knowledgebase();
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                // Use the knowledge base to determine the hash key as well, so the values sync up with
+                // what actually is used by the knowledge base
+                IKnowledgebase knowledgebase = lifetimeScope.Resolve<IKnowledgebase>();
 
-            KnowledgebaseHashResult hash = knowledgebase.GetHashResult(order);
-            order.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
+                KnowledgebaseHashResult hash = knowledgebase.GetHashResult(order);
+                order.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
+            }
         }
     }
 }

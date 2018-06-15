@@ -224,6 +224,7 @@
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\AutoArchiveTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTaskTests.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
