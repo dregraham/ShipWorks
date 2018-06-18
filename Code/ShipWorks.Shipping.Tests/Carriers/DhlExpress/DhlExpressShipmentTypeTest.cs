@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -225,6 +227,31 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             Assert.Equal(expectedSummary, testResult.Summary);
         }
 
+        [Theory]
+        [InlineData(true, 1.1, 1.2, 2.3)]
+        [InlineData(false, 1.1, 1.2, 1.2)]
+        [InlineData(true, 0, 1.2, 1.2)]
+        [InlineData(false, 0, 1.2, 1.2)]
+        public void GetParcelDetail_HasCorrectTotalWeight(bool dimsAddWeight, double dimsWeight, double weight, double expectedTotalWeight)
+        {
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            var shipment = new ShipmentEntity()
+            {
+                TrackingNumber = "test",
+                DhlExpress = new DhlExpressShipmentEntity()
+            };
+            shipment.DhlExpress.Packages.Add(new DhlExpressPackageEntity()
+            {
+                DimsAddWeight = dimsAddWeight,
+                DimsWeight = dimsWeight,
+                Weight = weight
+            });
+
+            var parcelDetail = testObject.GetParcelDetail(shipment, 0);
+
+            Assert.Equal(expectedTotalWeight, parcelDetail.TotalWeight);
+        }
         public void Dispose()
         {
             mock.Dispose();

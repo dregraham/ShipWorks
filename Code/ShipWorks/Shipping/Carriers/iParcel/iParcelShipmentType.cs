@@ -428,7 +428,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     new InsuranceChoice(shipment, package, package, package),
                     new DimensionsAdapter(package))
                 {
-                    TotalWeight = package.Weight + package.DimsWeight
+                    TotalWeight = package.Weight + (package.DimsAddWeight ? package.DimsWeight : 0)
                 };
             }
 

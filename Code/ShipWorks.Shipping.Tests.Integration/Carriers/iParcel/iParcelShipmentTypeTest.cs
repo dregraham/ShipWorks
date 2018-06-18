@@ -111,6 +111,26 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.iParcel
             Assert.Empty(dirtyEntities);
         }
 
+        [Theory]
+        [InlineData(true, 1.1, 1.2, 2.3)]
+        [InlineData(false, 1.1, 1.2, 1.2)]
+        [InlineData(true, 0, 1.2, 1.2)]
+        [InlineData(false, 0, 1.2, 1.2)]
+        public void GetParcelDetail_HasCorrectTotalWeight(bool dimsAddWeight, double dimsWeight, double weight, double expectedTotalWeight)
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsIParcel(x => x.WithPackage(p => p.Set(p2 => p2.DimsAddWeight = dimsAddWeight)
+                    .Set(p2 => p2.DimsWeight = dimsWeight)
+                    .Set(p2 => p2.Weight = weight)))
+                .Save();
+
+            var testObject = context.Mock.Create<iParcelShipmentType>();
+
+            var parcelDetail = testObject.GetParcelDetail(shipment, 0);
+
+            Assert.Equal(expectedTotalWeight, parcelDetail.TotalWeight);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }
