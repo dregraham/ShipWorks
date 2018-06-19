@@ -113,6 +113,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         void OnConnectionChanged()
         {
+            // Reset the last connection string so that we rebuild it.
+            lastConnectionString.Value = string.Empty;
+
             var handlers = ConnectionChanged;
 
             if (null != handlers)
