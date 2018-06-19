@@ -343,7 +343,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     new DhlExpressInsuranceChoice(shipment, package),
                     new DimensionsAdapter(package))
                 {
-                    TotalWeight = package.Weight + package.DimsWeight
+                    TotalWeight = package.Weight + (package.DimsAddWeight ? package.DimsWeight : 0)
                 };
             }
 
