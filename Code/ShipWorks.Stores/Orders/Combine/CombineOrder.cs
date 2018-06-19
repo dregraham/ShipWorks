@@ -99,6 +99,9 @@ namespace ShipWorks.Stores.Orders.Combine
                 {
                     using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                     {
+                        sqlAdapter.OpenConnection();
+                        sqlAdapter.KeepConnectionOpen = true;
+
                         SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("CombineOrder.Combine for new order number {0}", newOrderNumber));
                         result = await sqlDeadlockRetry.ExecuteWithRetryAsync(() => PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter)).ConfigureAwait(false);
                     }

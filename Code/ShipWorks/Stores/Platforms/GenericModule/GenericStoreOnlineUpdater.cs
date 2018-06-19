@@ -10,6 +10,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Orders.Combine;
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, object code, string comment)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
             await UpdateOrderStatus(orderID, code, comment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

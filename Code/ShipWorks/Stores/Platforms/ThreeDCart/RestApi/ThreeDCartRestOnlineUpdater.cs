@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -18,13 +23,8 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
-using Interapptive.Shared.Enums;
-using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, int statusID)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
             await UpdateOrderStatus(orderID, statusID, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

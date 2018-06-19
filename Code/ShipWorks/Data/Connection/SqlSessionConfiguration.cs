@@ -267,7 +267,12 @@ namespace ShipWorks.Data.Connection
         {
             if (string.IsNullOrEmpty(ServerInstance))
             {
-                return "";
+                return string.Empty;
+            }
+
+            if (!lastConnectionString.Value.IsNullOrWhiteSpace())
+            {
+                return lastConnectionString.Value;
             }
 
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
@@ -284,9 +289,6 @@ namespace ShipWorks.Data.Connection
                 csb.UserID = Username;
                 csb.Password = Password;
             }
-
-            // The WorkstationID is how we pass the UserID and ComputerID to use for auditing on this connection
-            csb.WorkstationID = UserSession.WorkstationID;
 
             // Timeout for connect
             csb.ConnectTimeout = (int) defaultTimeout.TotalSeconds;

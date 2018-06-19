@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -59,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
                 return;
             }
 
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
             await UpdateOnlineStatus(store, shipment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

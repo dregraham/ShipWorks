@@ -6,6 +6,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
         /// </summary>
         public async Task UpdateOrderStatus(IInfopiaStoreEntity store, long orderID, string status)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
             await UpdateOrderStatus(store, orderID, status, unitOfWork).ConfigureAwait(false);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
