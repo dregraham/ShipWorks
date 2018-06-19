@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
                 return;
             }
 
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOnlineStatus(store, shipment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

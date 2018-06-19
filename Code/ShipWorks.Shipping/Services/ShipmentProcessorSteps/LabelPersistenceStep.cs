@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
+                        log.Info("LabelPersistenceStep.SaveLabel: LabelData.Save");
                         result.LabelData.Save();
 
                         log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
@@ -76,11 +77,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         DispatchShipmentProcessedActions(shipment, adapter);
 
+                        log.Info("LabelPersistenceStep.SaveLabel: adapter.Commit()");
                         adapter.Commit();
                     }
                 }
                 catch (Exception ex)
                 {
+                    log.Error($"Exception during LabelPersistenceStep.SaveLabel", ex);
                     return new LabelPersistenceResult(result, ex);
                 }
             }
@@ -93,6 +96,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private void MarkShipmentAsProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
         {
+            log.Info("LabelPersistenceStep.MarkShipmentAsProcessed");
+
             shipment.Processed = true;
             shipment.ProcessedDate = dateTimeProvider.UtcNow;
             shipment.ProcessedUserID = userSession.User.UserID;
@@ -106,6 +111,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private void DispatchShipmentProcessedActions(IShipmentEntity shipment, ISqlAdapter adapter)
         {
+            log.Info("LabelPersistenceStep.DispatchShipmentProcessedActions");
+
             // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
             if (!shipment.ProcessingCompletesExternally())
             {
@@ -118,8 +125,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Reset the address changes that were made temporarily for services like GSP
         /// </summary>
-        private static void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
+        private void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
         {
+            log.Info("LabelPersistenceStep.ResetTemporaryAddressChanges");
+
             // Now that the label is generated, we can reset the shipping fields the store changed back to their
             // original values before saving to the database
             foreach (ShipmentFieldIndex fieldIndex in result.FieldsToRestore)

@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, int statusID)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(orderID, statusID, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

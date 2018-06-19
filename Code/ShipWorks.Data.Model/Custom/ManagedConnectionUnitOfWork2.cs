@@ -10,7 +10,7 @@ namespace ShipWorks.Data.Model.Custom
     /// <remarks>
     /// This class ensures that PrepareConnection is called on the ConnectionMonitor so the DB context is set correctly.
     /// </remarks>
-    public class OpeningUnitOfWork2 : UnitOfWork2
+    public class ManagedConnectionUnitOfWork2 : UnitOfWork2
     {
         /// <summary>
         /// Commits this unit of work. It will first add all entities in the added collections
@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.Custom
         /// <exception cref="System.ArgumentNullException">when adapterToUse is null</exception>
         public override async Task<int> CommitAsync(IDataAccessAdapter adapterToUse, bool autoCommit, CancellationToken cancellationToken)
         {
-            await adapterToUse.OpenConnectionAsync().ConfigureAwait(false);
+            await adapterToUse.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
             return await base.CommitAsync(adapterToUse, autoCommit, cancellationToken).ConfigureAwait(false);
         }
     }

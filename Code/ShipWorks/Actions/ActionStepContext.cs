@@ -27,7 +27,7 @@ namespace ShipWorks.Actions
         string identifier;
         ActionStepPostponementActivity postponementActivity = ActionStepPostponementActivity.None;
 
-        UnitOfWork2 commitWork = new OpeningUnitOfWork2();
+        UnitOfWork2 commitWork = new ManagedConnectionUnitOfWork2();
 
         /// <summary>
         /// Constructor

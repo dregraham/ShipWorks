@@ -529,9 +529,6 @@ namespace ShipWorks.Actions
                                 // Start Transaction - AFTER the 'Run' phase
                                 adapter = new SqlAdapter(true);
 
-                                // Explicitly open the connection so that we get the correct CONTEXT_INFO values set
-                                adapter.OpenConnection();
-
                                 // Here the task commits anything it needs saved.  If its a short task, then it could do its actual "Run" here too.
                                 log.InfoFormat("ActionStep - Start - Phase2 (Commit)");
                                 await actionTask.Commit(inputKeys, stepContext, adapter).ConfigureAwait(false);
@@ -554,7 +551,7 @@ namespace ShipWorks.Actions
                             step.StepStatus = (int) ActionQueueStepStatus.Error;
                             step.AttemptError = ex.Message;
 
-                            log.Error("RunSetp encountered an exception.", ex);
+                            log.Error("RunStep encountered an exception.", ex);
                         }
                     }
 

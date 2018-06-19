@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Commit a unit of work
         /// </summary>
-        public IUnitOfWorkCore GetUnitOfWork() => new OpeningUnitOfWork2();
+        public IUnitOfWorkCore GetUnitOfWork() => new ManagedConnectionUnitOfWork2();
 
         /// <summary>
         /// Get combined order details

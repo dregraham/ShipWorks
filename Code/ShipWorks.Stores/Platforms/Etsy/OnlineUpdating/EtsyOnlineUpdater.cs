@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// </summary>
         public async Task UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork).ConfigureAwait(false);
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// </summary>
         public async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             await UpdateOnlineStatus(order, markAsPaid, markAsShipped, "", unitOfWork).ConfigureAwait(false);
 
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                 return;
             }
 
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             await UploadShipmentDetails(order, shipment, unitOfWork).ConfigureAwait(false);
 

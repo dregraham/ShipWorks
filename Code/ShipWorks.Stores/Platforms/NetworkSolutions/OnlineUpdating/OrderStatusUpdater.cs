@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// </summary>
         public async Task UpdateOrderStatus(NetworkSolutionsStoreEntity store, long orderID, long statusCode, string comments)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(store, orderID, statusCode, comments, unitOfWork).ConfigureAwait(false);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())

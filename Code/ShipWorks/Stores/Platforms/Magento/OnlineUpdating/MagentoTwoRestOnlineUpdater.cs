@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         /// </summary>
         public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

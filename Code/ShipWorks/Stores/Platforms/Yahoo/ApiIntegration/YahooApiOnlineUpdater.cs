@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         private void SaveOrderStatus(long orderID, string status)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             // Update the local database with the new status
             OrderEntity basePrototype = new OrderEntity(orderID)

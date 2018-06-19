@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public async Task UploadShipmentDetails(IVolusionStoreEntity store, ShipmentEntity shipment, bool sendEmail)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UploadShipmentDetails(store, shipment, sendEmail, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

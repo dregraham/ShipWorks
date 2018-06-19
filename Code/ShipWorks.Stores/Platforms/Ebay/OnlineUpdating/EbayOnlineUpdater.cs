@@ -281,7 +281,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// </summary>
         public void UpdateOnlineStatus(IEbayStoreEntity store, long orderID, bool? paid, bool? shipped)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             UpdateOnlineStatus(store, orderID, paid, shipped, unitOfWork);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

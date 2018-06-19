@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// </summary>
         public async Task UpdateOrderStatus(IAmeriCommerceStoreEntity store, long orderID, int statusCode)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(store, orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

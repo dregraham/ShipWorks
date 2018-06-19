@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
         /// </summary>
         public async Task UpdateOrderStatus(IInfopiaStoreEntity store, long orderID, string status)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(store, orderID, status, unitOfWork).ConfigureAwait(false);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())

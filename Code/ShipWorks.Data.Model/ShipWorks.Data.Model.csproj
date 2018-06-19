@@ -240,7 +240,7 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include="Custom\ICarrierAccount.cs" />
-    <Compile Include="Custom\OpeningUnitOfWork2.cs" />
+    <Compile Include="Custom\ManagedConnectionUnitOfWork2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />

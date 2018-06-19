@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="wasShipped">If null, leaves unchanged.</param>
         public static void UpdateOrderStatus(EtsyOrderEntity order, bool? wasPaid, bool? wasShipped)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             UpdateOrderStatus(order, wasPaid, wasShipped, unitOfWork);
 
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static void MarkOrderAsNotFound(EtsyOrderEntity missingOrder)
         {
-            UnitOfWork2 unitOfWork = new OpeningUnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             MarkOrderAsNotFound(missingOrder, unitOfWork);
 
