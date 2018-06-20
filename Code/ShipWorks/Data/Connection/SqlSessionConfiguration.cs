@@ -113,9 +113,6 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         void OnConnectionChanged()
         {
-            // Reset the last connection string so that we rebuild it.
-            lastConnectionString.Value = string.Empty;
-
             var handlers = ConnectionChanged;
 
             if (null != handlers)
@@ -271,11 +268,6 @@ namespace ShipWorks.Data.Connection
             if (string.IsNullOrEmpty(ServerInstance))
             {
                 return string.Empty;
-            }
-
-            if (!lastConnectionString.Value.IsNullOrWhiteSpace())
-            {
-                return lastConnectionString.Value;
             }
 
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
