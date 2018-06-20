@@ -130,16 +130,22 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private void LogTransactionInfo(Exception ex)
         {
-            // This is probably an MSDTC or "remote/network transactions" exception.  
-            // We're trying to find out why this is happening, so get some extra logging info
-            TransactionInformation tranInfo = Transaction.Current?.TransactionInformation;
-            
-            if (tranInfo != null)
+            try
             {
-                msg.AppendLine("TransactionInfo:");
-                msg.AppendLine($"     DistributedIdentifier: { tranInfo.DistributedIdentifier }");
-                msg.AppendLine($"     LocalIdentifier: { tranInfo.LocalIdentifier }");
-                msg.AppendLine($"     Status: { tranInfo.Status }");
+                // This is probably an MSDTC or "remote/network transactions" exception.  
+                // We're trying to find out why this is happening, so get some extra logging info
+                TransactionInformation tranInfo = Transaction.Current?.TransactionInformation;
+
+                if (tranInfo != null)
+                {
+                    msg.AppendLine("TransactionInfo:");
+                    msg.AppendLine($"     DistributedIdentifier: { tranInfo.DistributedIdentifier }");
+                    msg.AppendLine($"     LocalIdentifier: { tranInfo.LocalIdentifier }");
+                    msg.AppendLine($"     Status: { tranInfo.Status }");
+                }
+            }
+            catch
+            {
             }
         }
     }
