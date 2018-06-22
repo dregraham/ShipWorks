@@ -145,6 +145,11 @@ namespace ShipWorks.ApplicationCore.Interaction
             {
                 get
                 {
+                    if (SqlSession.Current?.Configuration == null)
+                    {
+                        return false;
+                    }
+
                     if (databaseDependent || SqlUtility.IsSingleUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName))
                     {
                         // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
