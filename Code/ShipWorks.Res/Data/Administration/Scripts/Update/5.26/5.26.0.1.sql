@@ -8,3 +8,10 @@ BEGIN
 	ALTER TABLE [dbo].[GrouponOrderItem] DROP CONSTRAINT [DF_GrouponOrderItem_PONumber]
 END
 GO
+
+PRINT N'Disabling table change tracking'
+GO
+ALTER TABLE [dbo].[AsendiaShipment] DISABLE CHANGE_TRACKING
+GO
+ALTER TABLE [dbo].[DhlExpressShipment] DISABLE CHANGE_TRACKING
+GO
