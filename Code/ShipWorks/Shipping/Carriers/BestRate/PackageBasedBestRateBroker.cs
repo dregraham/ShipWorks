@@ -53,8 +53,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 packages.Clear();
 
-                // Apply the default profile for the shipment
-                ShipmentType.ConfigureNewShipment(shipment);
+                BestRateShipmentType.ConfigureNewShipmentForRating(ShipmentType, shipment);
 
                 packages = Packages(shipment);
 
