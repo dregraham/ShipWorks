@@ -2854,9 +2854,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_DhlExpressShipment_Service] ON [dbo].[DhlExpressShipment] ([Service])
 GO
 
-ALTER TABLE [dbo].[DhlExpressShipment] ENABLE CHANGE_TRACKING
-GO
-
 PRINT N'Creating [dbo].[DhlExpressPackage]'
 GO
 CREATE TABLE [dbo].[DhlExpressPackage](
@@ -2954,8 +2951,6 @@ GO
 PRINT N'Creating index [IX_AsendiaShipment_Service] on [dbo].[AsendiaShipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
-GO
-ALTER TABLE [dbo].[AsendiaShipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[Customer]'
 GO
