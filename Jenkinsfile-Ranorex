@@ -52,7 +52,7 @@ pipeline {
 			}
 			steps {
 				bat '(Taskkill -im Shipworks* -f 2>NUL) || type NUL>NUL'
-				bat "type '\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\master\\obfuscated\\2018-06-166-135454.rxlog.junit.xml' > ${WORKSPACE.replaceAll('/', '\\\\')}\\result.xml"
+				bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\master\\obfuscated\\2018-06-166-135454.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\result.xml"
 
 				//bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
 				//bat 'powershell "mkdir -f ranorex"'
