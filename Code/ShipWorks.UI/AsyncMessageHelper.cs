@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.UI
 {
@@ -17,7 +15,7 @@ namespace ShipWorks.UI
     /// <remarks>
     /// All the methods return tasks that will resolve when the UI operation completes
     /// </remarks>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class AsyncMessageHelper : IAsyncMessageHelper
     {
         readonly Func<Control> ownerFactory;
@@ -98,14 +96,6 @@ namespace ShipWorks.UI
         /// Create a progress provider
         /// </summary>
         public IProgressProvider CreateProgressProvider() => new ProgressProvider();
-
-        /// <summary>
-        /// Get a connection sensitive scope
-        /// </summary>
-        public Task<IConnectionSensitiveScope> GetConnectionSensitiveScope(string text) =>
-            Task.FromResult(ConnectionSensitiveScope.IsActive ?
-                ConnectionSensitiveScope.Empty :
-                new ConnectionSensitiveScope("archive database", ownerFactory()));
 
         /// <summary>
         /// Show a dialog

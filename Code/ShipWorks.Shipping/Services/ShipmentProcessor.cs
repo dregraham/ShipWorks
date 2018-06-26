@@ -193,20 +193,22 @@ namespace ShipWorks.Shipping.Services
         private void RefreshShipSenseStatusForUnprocessedShipments(ICarrierConfigurationShipmentRefresher shipmentRefresher,
             IEnumerable<ShipmentEntity> shipmentsToProcess, IEnumerable<string> orderHashes)
         {
-            // Exclude shipments that are in the current context but are not being processed,
-            // like the list of shipments in the shipping dialog
-            IEnumerable<long> otherShipments = shipmentRefresher.RetrieveShipments?.Invoke().Select(s => s.ShipmentID) ??
+            if (shippingSettings.FetchReadOnly().ShipSenseEnabled)
+            {
+                // Exclude shipments that are in the current context but are not being processed,
+                // like the list of shipments in the shipping dialog
+                IEnumerable<long> otherShipments = shipmentRefresher.RetrieveShipments?.Invoke().Select(s => s.ShipmentID) ??
                 Enumerable.Empty<long>();
 
-            // Exclude the shipments that are currently being processed, as well
-            List<long> shipmentIdsToIgnore = otherShipments
-                .Union(shipmentsToProcess.Select(x => x.ShipmentID))
-                .ToList();
+                // Exclude the shipments that are currently being processed, as well
+                List<long> shipmentIdsToIgnore = otherShipments
+                    .Union(shipmentsToProcess.Select(x => x.ShipmentID))
+                    .ToList();
 
-            Knowledgebase knowledgebase = new Knowledgebase();
-            foreach (string hash in orderHashes.Distinct())
-            {
-                knowledgebase.RefreshShipSenseStatus(hash, shipmentIdsToIgnore);
+                foreach (string hash in orderHashes.Distinct())
+                {
+                    Knowledgebase.RefreshShipSenseStatus(hash, shipmentIdsToIgnore);
+                }
             }
         }
 

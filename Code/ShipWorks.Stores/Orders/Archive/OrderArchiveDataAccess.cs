@@ -255,7 +255,7 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             using (ISqlAdapter adapter = new SqlAdapter(conn))
             {
-                adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql());
+                adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql(conn.Database));
             }
         }
 

@@ -39,12 +39,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
             }
 
             Assert.True(stopWatch.ElapsedMilliseconds < 5000);
-
-            Console.WriteLine(@"===================================================================================================");
-            Console.WriteLine(@"====                           ShipSense Loader                                                ====");
-            Console.WriteLine(@"===================================================================================================");
-            Console.WriteLine(@"Elapsed time: {0} seconds", stopWatch.ElapsedMilliseconds / 1000.0M);
-            Console.WriteLine(@"===================================================================================================");
         }
     }
 }

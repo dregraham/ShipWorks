@@ -35,6 +35,15 @@ namespace ShipWorks.Data.Administration
             DropAssembly(sqlServer, con, transaction);
 
             DeployAssembly(sqlServer, con, transaction);
+
+            // Force the ShipSense triggers to update appropriately since they will be enabled
+            // after deploying assemblies.
+            using (DbCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = "UPDATE ShippingSettings SET ShipSenseEnabled = ShipSenseEnabled";
+                cmd.Transaction = transaction;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>

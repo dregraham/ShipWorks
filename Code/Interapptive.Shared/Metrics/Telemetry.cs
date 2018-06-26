@@ -30,6 +30,7 @@ namespace Interapptive.Shared.Metrics
         public const string TotalShipmentsKey = "TotalShipments";
         public const string TotalSuccessfulShipmentsKey = "TotalSuccessfulShipments";
         public const string ParallelActionQueueUsed = "ParallelActionQueueUsed";
+        public const long Megabyte = 1024 * 1024;
 
         /// <summary>
         /// Static constructor

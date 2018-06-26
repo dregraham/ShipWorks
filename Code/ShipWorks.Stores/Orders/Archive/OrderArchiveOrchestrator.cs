@@ -1,11 +1,12 @@
-﻿using System;
-using System.Reactive;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Orders.Archive.Errors;
 using ShipWorks.Users.Security;
+using System;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -41,15 +42,16 @@ namespace ShipWorks.Stores.Orders.Archive
         public Task<Unit> Archive()
         {
             return userSecurity.RequestPermission(PermissionType.DatabaseArchive, null)
-                .Bind(viewModel.GetArchiveDateFromUser)
-                .Bind(archiver.Archive)
-                .Do(DisplaySuccess, DisplayError);
+                .BindAsync(viewModel.GetArchiveDateFromUser)
+                .Bind(d => archiver.Archive(d, true))
+                .Do(DisplaySuccess, DisplayError)
+                .Map(_ => Unit.Default);
         }
 
         /// <summary>
         /// Display a success message
         /// </summary>
-        private Task DisplaySuccess(Unit _) =>
+        private Task DisplaySuccess(IResult _) =>
             Task.CompletedTask;
 
         /// <summary>

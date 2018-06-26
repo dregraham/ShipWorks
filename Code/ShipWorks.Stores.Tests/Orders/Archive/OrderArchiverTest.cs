@@ -51,6 +51,10 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Setup(x => x.WithMultiUserConnection(It.IsAny<Action<DbConnection>>()))
                 .Callback((Action<DbConnection> x) => x(connectionMock.Object));
 
+            mock.Mock<IOrderArchiveDataAccess>()
+                .Setup(x => x.GetOrderCountsForTelemetry(AnyDate))
+                .ReturnsAsync((5, 5));
+
             preparingProgress = mock.CreateMock<IProgressReporter>();
             archivingProgress = mock.CreateMock<IProgressReporter>();
             filterProgress = mock.CreateMock<IProgressReporter>();
@@ -69,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public async Task Archive_DelegatesToOrderArchiveDataAccess()
         {
-            await testObject.Archive(DateTime.Now);
+            await testObject.Archive(DateTime.Now, AnyBool);
 
             mock.Mock<IOrderArchiveDataAccess>()
                 .Verify(x => x.ExecuteSqlAsync(
@@ -91,7 +95,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         [Fact]
         public async Task Archive_DelegatesToFilterHelper()
         {
-            await testObject.Archive(DateTime.Now);
+            await testObject.Archive(DateTime.Now, AnyBool);
 
             mock.Mock<IFilterHelper>().Verify(x => x.RegenerateFilters(It.IsAny<DbConnection>()));
         }

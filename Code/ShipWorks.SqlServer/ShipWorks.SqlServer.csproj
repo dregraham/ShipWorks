@@ -155,6 +155,7 @@
     <Compile Include="Shipping\ResetShipSenseProcedure.cs" />
     <Compile Include="Shipping\ShipmentDeleteTrigger.cs" />
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
+    <Compile Include="Shipping\ShippingSettingsShipSenseTrigger.cs" />
     <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
     <Compile Include="Shipping\UpsPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\WorldShipProcessedInvalidShipmentIdTrigger.cs" />

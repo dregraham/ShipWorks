@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 
             IOrderArchiver orderArchiver = context.Mock.Create<IOrderArchiver>();
 
-            await orderArchiver.Archive(maxOrderDate).ConfigureAwait(false);
+            await orderArchiver.Archive(maxOrderDate, AnyBool).ConfigureAwait(false);
 
             using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
             {

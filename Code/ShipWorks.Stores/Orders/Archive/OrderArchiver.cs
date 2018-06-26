@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
@@ -35,6 +36,7 @@ namespace ShipWorks.Stores.Orders.Archive
         private readonly IOrderArchiveSqlGenerator sqlGenerator;
         private readonly string archiveDatabaseName;
         private readonly string currentDatabaseName;
+        private bool manualArchive = true;
 
         /// <summary>
         /// Constructor
@@ -59,17 +61,25 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public Task<Unit> Archive(DateTime cutoffDate)
+        public Task<IResult> Archive(DateTime cutoffDate, bool isManualArchive)
         {
+            manualArchive = isManualArchive;
+
             return Functional.UsingAsync(
                 new TrackedDurationEvent("Orders.Archiving"),
                 async evt =>
                 {
                     var (totalOrderCount, ordersToPurgeCount) = await orderArchiveDataAccess.GetOrderCountsForTelemetry(cutoffDate);
 
+                    if (ordersToPurgeCount == 0)
+                    {
+                        AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, OrderArchiveResult.Succeeded);
+                        return Result.FromSuccess();
+                    }
+
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result))
-                        .Map(_ => Unit.Default);
+                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value))
+                        .Map(result => (IResult) result);
                 });
         }
 
@@ -79,7 +89,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <param name="cutoffDate">Date before which orders will be archived</param>
         /// <returns>Task of Unit, where Unit is just a placeholder to let us treat this method
         /// as a Func instead of an Action for easier composition.</returns>
-        public async Task<OrderArchiveResult> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
+        public async Task<GenericResult<OrderArchiveResult>> ArchiveAsync(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent)
         {
             UserEntity loggedInUser = userLoginWorkflow.CurrentUser;
 
@@ -109,15 +119,21 @@ namespace ShipWorks.Stores.Orders.Archive
                 {
                     using (new LoggedStopwatch(log, "OrderArchive: Archive orders - "))
                     {
+                        Exception exception = null;
+
                         await orderArchiveDataAccess
                             .WithMultiUserConnectionAsync(connection =>
                                 PerformArchive(connection, cutoffDate, prepareProgress, archiveProgress, trackedDurationEvent))
                             .Bind(ContinueArchive(cutoffDate, trackedDurationEvent, filterProgress, syncProgress))
-                            .Recover(ex => TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress }))
+                            .Recover(ex =>
+                            {
+                                exception = ex;
+                                return TerminateNonStartedTasks(ex, new[] {prepareProgress, archiveProgress, syncProgress, filterProgress});
+                            })
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? OrderArchiveResult.Failed : OrderArchiveResult.Succeeded;
+                        return progressProvider.HasErrors ? GenericResult.FromError(exception, OrderArchiveResult.Failed) : OrderArchiveResult.Succeeded;
                     }
                 }
             }
@@ -145,19 +161,17 @@ namespace ShipWorks.Stores.Orders.Archive
         private void AddTelemetryProperties(DateTime cutoffDate, TrackedDurationEvent trackedDurationEvent, long totalOrderCount,
             long ordersToPurgeCount, OrderArchiveResult result)
         {
-            var megabyte = (1024 * 1024);
-
             try
             {
                 int retentionPeriodInDays = DateTime.UtcNow.Subtract(cutoffDate).Days;
 
                 trackedDurationEvent.AddProperty("Orders.Archiving.Result", EnumHelper.GetApiValue(result));
-                trackedDurationEvent.AddProperty("Orders.Archiving.Type", "Manual");
+                trackedDurationEvent.AddProperty("Orders.Archiving.Type", manualArchive ? "Manual" : "Automatic");
                 trackedDurationEvent.AddProperty("Orders.Archiving.RetentionPeriodInDays", retentionPeriodInDays.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersArchived", ordersToPurgeCount.ToString());
                 trackedDurationEvent.AddProperty("Orders.Archiving.OrdersRetained", (totalOrderCount - ordersToPurgeCount).ToString());
-                trackedDurationEvent.AddProperty("Orders.Archiving.ArchiveDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(archiveDatabaseName) / megabyte).ToString("#0.0"));
-                trackedDurationEvent.AddProperty("Orders.Archiving.TransactionalDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(currentDatabaseName) / megabyte).ToString("#0.0"));
+                trackedDurationEvent.AddProperty("Orders.Archiving.ArchiveDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(archiveDatabaseName) / Telemetry.Megabyte).ToString("#0.0"));
+                trackedDurationEvent.AddProperty("Orders.Archiving.TransactionalDb.SizeInMB", (SqlDiskUsage.GetDatabaseSpaceUsed(currentDatabaseName) / Telemetry.Megabyte).ToString("#0.0"));
             }
             catch
             {
@@ -170,11 +184,28 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private Unit TerminateNonStartedTasks(Exception ex, IProgressReporter[] progressReporters)
         {
+            log.Error("Archive failed", ex);
+
+            // Fail any progress reporters that are running
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Running))
             {
                 progressReporter.Failed(ex);
             }
 
+            // Now if there are no failed progress reporters, that means we were between progress reporters
+            // when the exception occurred.  So, we'll grab the first pending one, start it, and immediate fail
+            // it so that the UI has something to show the exception.
+            if (progressReporters.None(pr => pr.Status == ProgressItemStatus.Failure))
+            {
+                var progressReporter = progressReporters.First(x => x.Status == ProgressItemStatus.Pending);
+                if (progressReporter != null)
+                {
+                    progressReporter.Starting();
+                    progressReporter.Failed(ex);
+                }
+            }
+
+            // Now terminate any remaining pending ones.
             foreach (var progressReporter in progressReporters.Where(x => x.Status == ProgressItemStatus.Pending))
             {
                 progressReporter.Terminate();
@@ -192,12 +223,14 @@ namespace ShipWorks.Stores.Orders.Archive
             string currentDbArchiveSql = sqlGenerator.ArchiveOrderDataSql(archivingDbName, cutoffDate, OrderArchiverOrderDataComparisonType.LessThan);
             currentDbArchiveSql += $"{Environment.NewLine}ALTER DATABASE [{archivingDbName}] MODIFY NAME = [{currentDatabaseName}]";
 
-            return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database",
-                    sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName),
-                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
-                .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data",
-                    currentDbArchiveSql,
-                    (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
+            string copyDatabaseSql = sqlGenerator.CopyDatabaseSql(archiveDatabaseName, cutoffDate, currentDatabaseName) +
+                                     Environment.NewLine +
+                                     sqlGenerator.DisableAutoProcessingSettingsSql(archiveDatabaseName);
+
+            return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", copyDatabaseSql,
+                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
+                    .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", currentDbArchiveSql,
+                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
         }
 
         /// <summary>
@@ -207,8 +240,6 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             string archiveDbArchiveSql =
                 sqlGenerator.ArchiveOrderDataSql(archiveDatabaseName, cutoffDate, OrderArchiverOrderDataComparisonType.GreaterThanOrEqual) +
-                Environment.NewLine +
-                sqlGenerator.DisableAutoProcessingSettingsSql() +
                 Environment.NewLine +
                 sqlGenerator.EnableArchiveTriggersSql(new SqlAdapter(conn));
 

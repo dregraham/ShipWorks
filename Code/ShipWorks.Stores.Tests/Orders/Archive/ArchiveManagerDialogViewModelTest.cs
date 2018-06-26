@@ -163,6 +163,18 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             Assert.True(result.IsCompleted);
         }
 
+        [Fact]
+        public async Task AutoArchiveAction_Calls_ScheduleViewModelShow()
+        {
+            mock.Mock<IScheduleOrderArchiveViewModel>()
+                .ResetCalls();
+
+            await testObject.AutoArchiveAction();
+
+            mock.Mock<IScheduleOrderArchiveViewModel>()
+                .Verify(x => x.Show());
+        }
+
         public void Dispose()
         {
             mock.Dispose();

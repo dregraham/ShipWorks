@@ -31,6 +31,6 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Generate SQL for disabling auto processing settings.  (Auto download, auto create shipments, etc...)
         /// </summary>
-        string DisableAutoProcessingSettingsSql();
+        string DisableAutoProcessingSettingsSql(string databaseName);
     }
 }

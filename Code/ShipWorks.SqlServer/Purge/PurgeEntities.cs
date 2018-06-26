@@ -101,8 +101,9 @@ BEGIN
 		
 	INSERT INTO DeletePurgeBatch (EntityID)
 		SELECT DISTINCT @tablePrimaryKeyName@ FROM [dbo].[@tableName@] WHERE @tableColumnName@ IN (SELECT EntityID FROM [EntityIDsToDelete] with (nolock))
-			
-    RAISERROR ('OrderArchiveInfo:Archiving data from @tableName@', 0, 1) WITH NOWAIT
+	
+    DECLARE @RaiseErrorMsg NVARCHAR(200) = 'OrderArchiveInfo: (' + db_name() + ') - Archiving data from @tableName@.'
+    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM DeletePurgeBatch)
 				
 	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from DeletePurgeBatch);

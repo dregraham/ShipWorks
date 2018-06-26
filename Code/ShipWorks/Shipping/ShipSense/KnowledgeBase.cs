@@ -8,6 +8,7 @@ using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -23,21 +24,23 @@ namespace ShipWorks.Shipping.ShipSense
     /// <summary>
     /// Acts as the data source for ShipSense: knowledge base entries can be saved and fetched.
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class Knowledgebase : IKnowledgebase
     {
         private readonly ILog log;
         private readonly IKnowledgebaseHash hashingStrategy;
         private readonly IShipSenseOrderItemKeyFactory keyFactory;
         private readonly ShipSenseUniquenessXmlParser shipSenseUniquenessXmlParser;
+        private readonly IShippingSettings shippingSettings;
+        private readonly bool shipSenseEnabled;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
         public Knowledgebase()
-            : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(), LogManager.GetLogger)
+            : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(),
+                LogManager.GetLogger, new ShippingSettingsWrapper(new Messenger()))
         {
-
         }
 
         /// <summary>
@@ -46,12 +49,16 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="hashingStrategy">The hashing strategy that will be used to identify knowledge base entries.</param>
         /// <param name="keyFactory">The key factory used to generate the ShipsenseOrderItemKey objects.</param>
         /// <param name="createLog">Function to create the logger.</param>
-        public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory, Func<Type, ILog> createLog)
+        public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory,
+            Func<Type, ILog> createLog, IShippingSettings shippingSettings)
         {
             shipSenseUniquenessXmlParser = new ShipSenseUniquenessXmlParser();
             this.hashingStrategy = hashingStrategy;
             this.keyFactory = keyFactory;
-            this.log = createLog(GetType());
+            log = createLog(GetType());
+            this.shippingSettings = shippingSettings;
+
+            shipSenseEnabled = shippingSettings.FetchReadOnly().ShipSenseEnabled;
         }
 
         /// <summary>
@@ -77,6 +84,11 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="order">The order.</param>
         public void Save(KnowledgebaseEntry entry, OrderEntity order)
         {
+            if (!shipSenseEnabled)
+            {
+                return;
+            }
+
             // Populate the order item attributes so we can compute the hash
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -113,7 +125,7 @@ namespace ShipWorks.Shipping.ShipSense
                 }
 
                 // Update the compressed JSON of the entity to reflect the latest KB entry
-                entity.Entry = CompressEntry(entry);
+                entity.Entry = entry.Compress();
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -154,7 +166,7 @@ namespace ShipWorks.Shipping.ShipSense
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to
             // reduce the number of database calls
-            string shipSenseXml = ShippingSettings.FetchReadOnly().ShipSenseUniquenessXml;
+            string shipSenseXml = shippingSettings.FetchReadOnly().ShipSenseUniquenessXml;
             IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
 
             return hashingStrategy.ComputeHash(keys);
@@ -168,6 +180,11 @@ namespace ShipWorks.Shipping.ShipSense
         /// <returns>An instance of a a KnowledgebaseEntr; the package data will be empty if there is not an entry in the knowledge base.</returns>
         public KnowledgebaseEntry GetEntry(OrderEntity order)
         {
+            if (!shipSenseEnabled)
+            {
+                return new KnowledgebaseEntry();
+            }
+
             ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
 
             if (entity != null)
@@ -190,6 +207,11 @@ namespace ShipWorks.Shipping.ShipSense
         public bool IsOverwritten(ShipmentEntity shipment)
         {
             bool isOverwritten = false;
+
+            if (!shipSenseEnabled)
+            {
+                return isOverwritten;
+            }
 
             // Make sure we have all of the order information
             OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
@@ -220,16 +242,16 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="initiatedBy">The initiated by.</param>
         /// <param name="progressReporter">The progress reporter.</param>
         /// <returns>The Task that is executing the operation.</returns>
-        public Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter)
+        public static Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter)
         {
-            return new Task(() => Reset(initiatedBy, progressReporter));
+            return new Task(() => Reset(initiatedBy, progressReporter, LogManager.GetLogger(typeof(Knowledgebase))));
         }
 
         /// <summary>
         /// Resets/truncates the underlying knowledge base data causing the knowledge base
         /// to be reset as if it were new.
         /// </summary>
-        private void Reset(UserEntity initiatedBy, IProgressReporter progressReporter)
+        private static void Reset(UserEntity initiatedBy, IProgressReporter progressReporter, ILog log)
         {
             progressReporter.Starting();
             progressReporter.Detail = "Deleting ShipSense data...";
@@ -261,7 +283,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         /// <param name="hashKey">The hash key.</param>
         /// <param name="excludedShipmentIDs">The excluded shipment IDs.</param>
-        public void RefreshShipSenseStatus(string hashKey, IEnumerable<long> excludedShipmentIDs)
+        public static void RefreshShipSenseStatus(string hashKey, IEnumerable<long> excludedShipmentIDs)
         {
             // Build the shipment XML for the excluded shipments
             StringBuilder shipmentXml = new StringBuilder();
@@ -282,6 +304,11 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         public void LogShipment(ShipmentType shipmentType, ShipmentEntity shipment)
         {
+            if (!shipSenseEnabled)
+            {
+                return;
+            }
+
             try
             {
                 if (shipment.ShipSenseStatus == (int) ShipSenseStatus.Applied && IsOverwritten(shipment))
