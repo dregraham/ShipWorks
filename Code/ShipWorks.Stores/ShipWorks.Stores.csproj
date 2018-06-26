@@ -361,6 +361,7 @@
     <Compile Include="Platforms\CommerceInterface\CoreExtensions\Filters\Orders\CommerceInterfaceIsFBACondition.cs" />
     <Compile Include="Platforms\CommerceInterface\CoreExtensions\Filters\Orders\CommerceInterfaceIsPrimeCondition.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\CommerceV3\CommerceV3StoreType.cs" />
     <Compile Include="Platforms\Ebay\Content\EbaySplitOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />

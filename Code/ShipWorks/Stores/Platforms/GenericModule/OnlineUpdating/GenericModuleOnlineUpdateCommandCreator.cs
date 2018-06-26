@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.CloudConversion)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.CreLoaded)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.CsCart)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.CommerceV3)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Fortune3)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GeekSeller)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.InfiPlex)]
