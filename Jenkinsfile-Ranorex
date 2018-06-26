@@ -41,9 +41,9 @@ pipeline {
 			}
 		}
 		stage('Test') {
-			environment {
-				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
-			}
+			//environment {
+			//	BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			//}
 			agent {
 				node {
 					label 'ranorex'
