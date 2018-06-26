@@ -72,7 +72,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         ResetTemporaryAddressChanges(result, shipment);
 
-                        MarkShipmentAsProcessed(shipment, adapter);
+                        MarkShipmentAsProcessed(shipment);
+
+                        SaveShipment(shipment, adapter);
 
                         DispatchShipmentProcessedActions(shipment, adapter);
 
@@ -89,16 +91,29 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         }
 
         /// <summary>
+        /// Save the shipment before dispatching.
+        /// </summary>
+        private void SaveShipment(ShipmentEntity shipment, ISqlAdapter sqlAdapter)
+        {
+            sqlAdapter.SaveAndRefetch(shipment);
+
+            // SafeAndRefetch doesn't delete the entities, so force the delete here.
+            if (shipment.CustomsItems.RemovedEntitiesTracker?.Count > 0)
+            {
+                sqlAdapter.DeleteEntityCollection(shipment.CustomsItems.RemovedEntitiesTracker);
+                shipment.CustomsItems.RemovedEntitiesTracker.Clear();
+            }
+        }
+
+        /// <summary>
         /// Mark the shipment as processed
         /// </summary>
-        private void MarkShipmentAsProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
+        private void MarkShipmentAsProcessed(ShipmentEntity shipment)
         {
             shipment.Processed = true;
             shipment.ProcessedDate = dateTimeProvider.UtcNow;
             shipment.ProcessedUserID = userSession.User.UserID;
             shipment.ProcessedComputerID = userSession.Computer.ComputerID;
-
-            adapter.SaveAndRefetch(shipment);
         }
 
         /// <summary>

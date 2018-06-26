@@ -886,7 +886,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The InternalBestRateExcludedShipmentTypes property of the Entity ShippingSettings<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."BestRateExcludedShipmentTypes"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String InternalBestRateExcludedShipmentTypes
 		{
