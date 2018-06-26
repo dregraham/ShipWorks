@@ -107,6 +107,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.ClickCartPro, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CloudConversion, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CommerceInterface, typeof(CommerceInterfaceOnlineUpdateCommandCreator) },
+            { StoreTypeCode.CommerceV3, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CreLoaded, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CsCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Ebay, typeof(EbayOnlineUpdateCommandCreator) },
