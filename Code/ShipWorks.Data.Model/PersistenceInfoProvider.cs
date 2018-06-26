@@ -3093,7 +3093,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingSettingsEntity", "Express1UspsSingleSource", "Express1UspsSingleSource", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 39);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 40);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 41);
-			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 42);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 42);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseEnabled", "ShipSenseEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 43);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseUniquenessXml", "ShipSenseUniquenessXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 44);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 45);

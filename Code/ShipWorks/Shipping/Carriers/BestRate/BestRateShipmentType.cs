@@ -214,6 +214,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Configure a new shipment for Best Rate rating.  
+        /// </summary>
+        public static void ConfigureNewShipmentForRating(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            ShipmentCustomsItemEntity[] originalCustomsItemEntities = new ShipmentCustomsItemEntity[shipment.CustomsItems.Count];
+            shipment.CustomsItems.CopyTo(originalCustomsItemEntities, 0);
+
+            shipmentType.ConfigureNewShipment(shipment);
+
+            shipment.CustomsItems.Clear();
+            shipment.CustomsItems.AddRange(originalCustomsItemEntities);
+            shipment.CustomsItems.RemovedEntitiesTracker?.Clear();
+        }
+
+        /// <summary>
         /// Update any data that could have changed dynamically or externally
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)

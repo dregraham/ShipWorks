@@ -2575,7 +2575,7 @@
           <Field Name="InsuranceLastAgreed" Type="datetime" IsOptional="true" FieldIndex="8" />
           <Field Name="InsurancePolicy" Type="string" MaxLength="40" FieldIndex="7" />
           <Field Name="InternalActivated" Type="string" MaxLength="45" FieldIndex="1" />
-          <Field Name="InternalBestRateExcludedShipmentTypes" Type="string" MaxLength="30" FieldIndex="42" />
+          <Field Name="InternalBestRateExcludedShipmentTypes" Type="string" MaxLength="100" FieldIndex="42" />
           <Field Name="InternalConfigured" Type="string" MaxLength="45" FieldIndex="2" />
           <Field Name="InternalExcluded" Type="string" MaxLength="45" FieldIndex="3" />
           <Field Name="IParcelInsurancePennyOne" Type="bool" FieldIndex="38" />
@@ -4256,7 +4256,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-05-29T18:13:12.5000565Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-06-20T12:09:16.4775442Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8072,7 +8072,7 @@
                     <Field Name="Express1UspsSingleSource" Ordinal="40" DbType="2" />
                     <Field Name="UpsMailInnovationsEnabled" Ordinal="41" DbType="2" />
                     <Field Name="WorldShipMailInnovationsEnabled" Ordinal="42" DbType="2" />
-                    <Field Name="BestRateExcludedShipmentTypes" Ordinal="43" DbType="12" Length="30" />
+                    <Field Name="BestRateExcludedShipmentTypes" Ordinal="43" DbType="12" Length="100" />
                     <Field Name="ShipSenseEnabled" Ordinal="44" DbType="2" />
                     <Field Name="ShipSenseUniquenessXml" Ordinal="45" DbType="26" Length="2147483647" />
                     <Field Name="ShipSenseProcessedShipmentID" Ordinal="46" DbType="0" Precision="19" />

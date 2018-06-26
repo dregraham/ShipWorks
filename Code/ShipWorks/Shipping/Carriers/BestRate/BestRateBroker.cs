@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 clonedShipmentEntity.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
 
                 CreateShipmentChild(clonedShipmentEntity);
-                ShipmentType.ConfigureNewShipment(clonedShipmentEntity);
+                BestRateShipmentType.ConfigureNewShipmentForRating(ShipmentType, clonedShipmentEntity);
                 UpdateChildShipmentSettings(clonedShipmentEntity, shipment, account);
 
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(clonedShipmentEntity);
@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 testRateShipment.BestRate.InsuranceValue = 0;
 
                 CreateShipmentChild(testRateShipment);
-                ShipmentType.ConfigureNewShipment(testRateShipment);
+                BestRateShipmentType.ConfigureNewShipmentForRating(ShipmentType, testRateShipment);
                 UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
                 // Denote whether the rate is a counter or not based on the broker
@@ -404,12 +404,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             try
             {
+                ShipmentCustomsItemEntity[] originalCustomsItemEntities = new ShipmentCustomsItemEntity[selectedShipment.CustomsItems.Count];
+                selectedShipment.CustomsItems.CopyTo(originalCustomsItemEntities, 0);
+
                 ShippingManager.EnsureShipmentLoaded(selectedShipment);
+
+                selectedShipment.CustomsItems.Clear();
+                selectedShipment.CustomsItems.AddRange(originalCustomsItemEntities);
+                selectedShipment.CustomsItems.RemovedEntitiesTracker?.Clear();
             }
             catch (NotFoundException)
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(selectedShipment);
-                shipmentType.ConfigureNewShipment(selectedShipment);
+                BestRateShipmentType.ConfigureNewShipmentForRating(shipmentType, selectedShipment);
             }
         }
 
@@ -437,6 +444,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.ContentWeight = originalShipment.ContentWeight;
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
+
+            // Attempt to keep the customs items in sync, so ignore any that just got 
+            // added, and add the ones that were removed.
+            if (currentShipment.CustomsItems.RemovedEntitiesTracker?.Count > 0)
+            {
+                currentShipment.CustomsItems.Clear();
+                foreach (ShipmentCustomsItemEntity sci in currentShipment.CustomsItems.RemovedEntitiesTracker)
+                {
+                    currentShipment.CustomsItems.Add(sci);
+                }
+                currentShipment.CustomsItems.RemovedEntitiesTracker.Clear();
+            }
         }
 
         /// <summary>
