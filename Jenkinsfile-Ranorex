@@ -76,7 +76,7 @@ pipeline {
 			}
 			post {
 				always {
-					junit "//intfs01/development/Testing/Automated Smoketest Results/master/obfuscated/2018-06-166-135454.rxlog.junit.xml"
+					junit "\\\\intfs01\\development\\Testing\\Automated Smoketest Results\\master\\obfuscated\\2018-06-166-135454.rxlog.junit.xml"
 				}
 			}
 		}
