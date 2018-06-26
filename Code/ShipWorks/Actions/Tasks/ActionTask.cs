@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
@@ -104,12 +105,9 @@ namespace ShipWorks.Actions.Tasks
         /// This should not perform any long-running operations, but should simply save to the database.
         ///
         /// </summary>
-        public virtual async Task Commit(List<long> inputKeys, ActionStepContext context)
+        public virtual async Task Commit(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                await context.CommitWork.CommitAsync(adapter).ConfigureAwait(false);
-            }
+            await context.CommitWork.CommitAsync(adapter).ConfigureAwait(false);
         }
 
         /// <summary>

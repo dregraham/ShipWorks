@@ -127,6 +127,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
@@ -165,6 +166,7 @@
     <Compile Include="Data\DataAccessAdapterTest.cs" />
     <Compile Include="Data\DeletionServiceTest.cs" />
     <Compile Include="Data\DataProviderRegistrationTest.cs" />
+    <Compile Include="Data\TransactionDtcTest.cs" />
     <Compile Include="Filters\FilterHelperWrapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\CustomsControlCacheTest.cs" />

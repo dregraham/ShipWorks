@@ -564,6 +564,7 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
+    <Compile Include="SqlUtilityFunctionsTest.cs" />
     <Compile Include="Stores\Content\Combine\OrderCombineValidatorTest.cs" />
     <Compile Include="Stores\Content\SplitOrder\SplitOrderValidatorTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsResponseHandlerTest.cs" />

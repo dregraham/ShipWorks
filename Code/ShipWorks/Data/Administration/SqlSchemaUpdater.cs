@@ -167,6 +167,8 @@ namespace ShipWorks.Data.Administration
                     // Put the SuperUser in scope, and don't audit
                     using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                     {
+                        SqlSession.Current.Configuration.ForceWorkstationID = true;
+
                         using (new ExistingConnectionScope())
                         {
                             using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
@@ -199,6 +201,10 @@ namespace ShipWorks.Data.Administration
                 {
                     log.Error("UpdateDatabase failed", ex);
                     throw;
+                }
+                finally
+                {
+                    SqlSession.Current.Configuration.ForceWorkstationID = false;
                 }
             }
         }

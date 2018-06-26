@@ -261,6 +261,13 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Opens a SQL connection
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override Task OpenConnectionAsync(CancellationToken cancellationToken) =>
+            Task.Run(() => this.OpenConnection());
+
+        /// <summary>
         /// Intercept creation of the connection to override connection if necessary
         /// </summary>
         protected override DbConnection CreateNewPhysicalConnection(string connectionString)
