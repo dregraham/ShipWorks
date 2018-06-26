@@ -23,9 +23,9 @@ pipeline {
 			}
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'bundle exec rake build:public_installer[0.0.0]'
-				bat 'powershell -command "mkdir -f Artifacts/Distribute"'
-				bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
+				//bat 'bundle exec rake build:public_installer[0.0.0]'
+				//bat 'powershell -command "mkdir -f Artifacts/Distribute"'
+				//bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
 				stash includes: '/Artifacts/Distribute/*.*,.build-label', name: 'installer'
 			}
 		}
@@ -52,31 +52,31 @@ pipeline {
 			}
 			steps {
 				bat '(Taskkill -im Shipworks* -f 2>NUL) || type NUL>NUL'
-				bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
-				bat 'powershell "mkdir -f ranorex"'
-				dir('ranorex') {
-					svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
-				}
-				dir('ranorex/Test Solutions/SmokeTest') {
-					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
-				}
-				dir('ranorex/Test Solutions/SmokeTest/SmokeTest/bin/Debug') {
-					bat """
-							SmokeTest.exe ^
-								/runconfig:Complete ^
-								/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
-								/param:SQLServ=localhost\\ranorex ^
-								/reportlevel:Debug ^
-								/zr ^
-								/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-								/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-								/ju
-						"""
-				}
+				//bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
+				//bat 'powershell "mkdir -f ranorex"'
+				//dir('ranorex') {
+				//	svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
+				//}
+				//dir('ranorex/Test Solutions/SmokeTest') {
+				//	bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
+				//}
+				//dir('ranorex/Test Solutions/SmokeTest/SmokeTest/bin/Debug') {
+				//	bat """
+				//			SmokeTest.exe ^
+				//				/runconfig:Complete ^
+				//				/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+				//				/param:SQLServ=localhost\\ranorex ^
+				//				/reportlevel:Debug ^
+				//				/zr ^
+				//				/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+				//				/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+				//				/ju
+				//		"""
+				//}
 			}
 			post {
 				always {
-					junit "/2018-06-170-132916.rxlog.junit.xml"
+					junit "//intfs01/development/Testing/Automated Smoketest Results/master/obfuscated/2018-06-166-135454.rxlog.junit.xml"
 				}
 			}
 		}
