@@ -23,7 +23,7 @@ pipeline {
 			}
 			steps {
 				echo "Build on ${NODE_NAME}"
-				//bat 'bundle exec rake build:public_installer[0.0.0]'
+				bat 'bundle exec rake build:public_installer[0.0.0]'
 				bat 'powershell -command "mkdir -f Artifacts/Distribute"'
 				bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
 				stash includes: '/Artifacts/Distribute/*.*,.build-label', name: 'installer'
@@ -41,9 +41,9 @@ pipeline {
 			}
 		}
 		stage('Test') {
-			//environment {
-			//	BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
-			//}
+			environment {
+				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			}
 			agent {
 				node {
 					label 'ranorex'
@@ -52,34 +52,32 @@ pipeline {
 			}
 			steps {
 				bat '(Taskkill -im Shipworks* -f 2>NUL) || type NUL>NUL'
-				bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\master\\obfuscated\\2018-06-166-135454.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\result.xml"
-				touch "result.xml"
-
-				//bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
-				//bat 'powershell "mkdir -f ranorex"'
-				//dir('ranorex') {
-				//	svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
-				//}
-				//dir('ranorex/Test Solutions/SmokeTest') {
-				//	bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
-				//}
-				//dir('ranorex/Test Solutions/SmokeTest/SmokeTest/bin/Debug') {
-				//	bat """
-				//			SmokeTest.exe ^
-				//				/runconfig:Complete ^
-				//				/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
-				//				/param:SQLServ=localhost\\ranorex ^
-				//				/reportlevel:Debug ^
-				//				/zr ^
-				//				/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-				//				/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-				//				/ju
-				//		"""
-				//}
+				bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
+				bat 'powershell "mkdir -f ranorex"'
+				dir('ranorex') {
+					svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
+				}
+				dir('ranorex/Test Solutions/SmokeTest') {
+					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
+				}
+				dir('ranorex/Test Solutions/SmokeTest/SmokeTest/bin/Debug') {
+					bat """
+							SmokeTest.exe ^
+								/runconfig:Complete ^
+								/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+								/param:SQLServ=localhost\\ranorex ^
+								/reportlevel:Debug ^
+								/zr ^
+								/zrf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
+								/rf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
+								/ju
+						"""
+				}
+				bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\results.junit.xml"
 			}
 			post {
 				always {
-					junit "result.xml"
+					junit "results.junit.xml"
 				}
 			}
 		}
