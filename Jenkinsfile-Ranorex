@@ -24,8 +24,8 @@ pipeline {
 			steps {
 				echo "Build on ${NODE_NAME}"
 				//bat 'bundle exec rake build:public_installer[0.0.0]'
-				//bat 'powershell -command "mkdir -f Artifacts/Distribute"'
-				//bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
+				bat 'powershell -command "mkdir -f Artifacts/Distribute"'
+				bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
 				stash includes: '/Artifacts/Distribute/*.*,.build-label', name: 'installer'
 			}
 		}
