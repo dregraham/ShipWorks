@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Process the shipment for iParcel
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             try
             {
@@ -54,8 +54,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // i-parcel requires that we upload item information, so fetch the order and order items
                 orderManager.PopulateOrderDetails(shipment);
 
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                telemetricResult.StartTimedEvent("GetLabel");
                 DataSet dataSet = serviceGateway.SubmitShipment(credentials, shipment);
-                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, dataSet));
+                telemetricResult.StopTimedEvent("GetLabel");
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, dataSet));,
+
+                return Task.FromResult(telemetricResult);
             }
             catch (iParcelException ex)
             {

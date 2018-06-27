@@ -95,7 +95,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void Combine(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
-            resultToAdd.Telemetry.ForEach(t => AddProperty(t.Key, t.Value));
+            resultToAdd.telemetry.ForEach(t => AddProperty(t.Key, t.Value));
             totalElapsed += resultToAdd.totalElapsed;
 
             if (useNewResultsValue)
