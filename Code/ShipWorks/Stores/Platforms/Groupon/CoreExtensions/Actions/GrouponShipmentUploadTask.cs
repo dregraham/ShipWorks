@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -20,13 +17,18 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
     public class GrouponShipmentUploadTask : StoreInstanceTaskBase
     {
         private IGrouponOnlineUpdater grouponOnlineUpdater;
+        private readonly IShippingManager shippingManager;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponShipmentUploadTask(IGrouponOnlineUpdater grouponOnlineUpdater)
+        public GrouponShipmentUploadTask(IGrouponOnlineUpdater grouponOnlineUpdater, IShippingManager shippingManager,
+            IStoreManager storeManager)
         {
             this.grouponOnlineUpdater = grouponOnlineUpdater;
+            this.shippingManager = shippingManager;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            GrouponStoreEntity store = StoreManager.GetStore(StoreID) as GrouponStoreEntity;
+            GrouponStoreEntity store = storeManager.GetStore(StoreID) as GrouponStoreEntity;
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -95,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
             {
                 foreach (long shipmentKey in shipmentKeys)
                 {
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+                    ShipmentEntity shipment = shippingManager.GetShipment(shipmentKey).Shipment;
 
                     await grouponOnlineUpdater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
                 }
