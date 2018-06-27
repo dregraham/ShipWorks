@@ -1,7 +1,7 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
 def WORKSPACE = 'c:/jenkins-builds/SR_' + BUILD_FOLDER
 //def REVISION = new File('//INTFS01/Development/CruiseControl/Configuration/Versioning/ShipWorks/NextRevision.txt').text.trim()
-def TIMESTAMP = new Date().format("YYYY-MM-DD-HHmmss")
+def TIMESTAMP = new Date().format("YYYY-MM-dd-HHmmss")
 
 pipeline {
 	agent {
