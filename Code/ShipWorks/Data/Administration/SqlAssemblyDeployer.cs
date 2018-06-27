@@ -36,11 +36,28 @@ namespace ShipWorks.Data.Administration
 
             DeployAssembly(sqlServer, con, transaction);
 
+            UpdateSettingBasedTriggers(con, transaction);
+        }
+
+        /// <summary>
+        /// Update triggers based on settings
+        /// </summary>
+        private static void UpdateSettingBasedTriggers(DbConnection con, DbTransaction transaction)
+        {
             // Force the ShipSense triggers to update appropriately since they will be enabled
             // after deploying assemblies.
             using (DbCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = "UPDATE ShippingSettings SET ShipSenseEnabled = ShipSenseEnabled";
+                cmd.Transaction = transaction;
+                cmd.ExecuteNonQuery();
+            }
+
+            // Force the Audit triggers to update appropriately since they will be enabled
+            // after deploying assemblies.
+            using (DbCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = "UPDATE Configuration SET AuditEnabled = AuditEnabled";
                 cmd.Transaction = transaction;
                 cmd.ExecuteNonQuery();
             }
