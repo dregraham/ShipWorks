@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
@@ -40,13 +41,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the label
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
             if (string.IsNullOrEmpty(shipment.Amazon.ShippingServiceID))
             {
+                telemetricResult.StartTimedEvent("GetRates");
                 GenericResult<RateGroup> rateResult = ratesRetriever.GetRates(shipment);
+                telemetricResult.StopTimedEvent("GetRates");
                 
                 if (rateResult.Success)
                 {
@@ -55,9 +59,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
             }
 
+            telemetricResult.StartTimedEvent("GetLabel");
             AmazonShipment labelResponse = createShipmentRequest.Submit(shipment);
+            telemetricResult.StopTimedEvent("GetLabel");
 
-            return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, labelResponse));
+            AmazonDownloadedLabelData labelData = createDownloadedLabelData(shipment, labelResponse);
+            telemetricResult.SetValue(labelData);
+            
+            return Task.FromResult(telemetricResult);
         }
 
         /// <summary>
