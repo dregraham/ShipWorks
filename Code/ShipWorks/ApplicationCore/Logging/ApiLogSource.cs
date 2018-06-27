@@ -133,6 +133,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Jet,
         Overstock,
         CommerceV3,
+        Zentail,
 
         [ApiPrivateLogSource]
         ShipEngine,

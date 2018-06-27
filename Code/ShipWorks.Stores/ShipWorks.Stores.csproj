@@ -880,6 +880,7 @@
     <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
     <Compile Include="Platforms\Yahoo\Content\YahooCombineOrderAction.cs" />
+    <Compile Include="Platforms\Zentail\ZentailStoreType.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryIsFBACondition.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryIsPrimeCondition.cs" />

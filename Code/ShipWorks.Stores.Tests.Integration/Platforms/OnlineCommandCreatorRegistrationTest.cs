@@ -166,6 +166,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.XCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Yahoo, typeof(YahooOnlineUpdateCommandCreator) },
             { StoreTypeCode.ZenCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Zentail, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Zenventory, typeof(GenericModuleOnlineUpdateCommandCreator) }
         };
     }
