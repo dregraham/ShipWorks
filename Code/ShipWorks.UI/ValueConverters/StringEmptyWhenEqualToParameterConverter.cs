@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.ValueConverters
 {
@@ -10,32 +9,14 @@ namespace ShipWorks.UI.ValueConverters
     /// </summary>
     public class StringEmptyWhenEqualToParameterConverter : IValueConverter
     {
-        private readonly bool isDesignMode;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public StringEmptyWhenEqualToParameterConverter() : this(DesignModeDetector.IsDesignerHosted())
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public StringEmptyWhenEqualToParameterConverter(bool isDesignMode)
-        {
-            this.isDesignMode = isDesignMode;
-        }
-
         /// <summary>
         /// Convert to an empty string if the value is the parameter
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool b = Equals(value.ToString().Trim(), parameter.ToString());
+            var valueAsString = value?.ToString().Trim();
 
-            return b ? string.Empty : value.ToString().Trim();
+            return Equals(valueAsString, parameter?.ToString()) ? string.Empty : valueAsString;
         }
 
         /// <summary>
