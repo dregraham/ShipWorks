@@ -92,6 +92,13 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         [Description("Split Order")]
         [ImageResource("split_icon_16x16")]
-        SplitOrder = 11
+        SplitOrder = 11,
+
+        /// <summary>
+        /// Auditing state changed
+        /// </summary>
+        [Description("Auditing state changed")]
+        [ImageResource("edit16")]
+        AuditStateChanged = 12,
     }
 }
