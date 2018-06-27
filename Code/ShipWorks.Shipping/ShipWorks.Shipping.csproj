@@ -410,6 +410,7 @@
     <Compile Include="Services\IShippingProfileFactory.cs" />
     <Compile Include="Services\RatesRetrieverServiceFactory.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\ILabelRetrievalStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\TelemetricLabelRetrievalStep.cs" />
     <Compile Include="Services\ShippingProfileFactory.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileService.cs" />
