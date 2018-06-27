@@ -585,6 +585,7 @@
           <Field Name="AllowEbayCombineLocally" Type="bool" FieldIndex="14" />
           <Field Name="ArchivalSettingsXml" Type="string" MaxLength="2147483647" FieldIndex="15" />
           <Field Name="AuditDeletedOrders" Type="bool" FieldIndex="11" />
+          <Field Name="AuditEnabled" Type="bool" FieldIndex="16" />
           <Field Name="AuditNewOrders" Type="bool" FieldIndex="10" />
           <Field Name="ConfigurationID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="CustomerCompareAddress" Type="bool" FieldIndex="5" />
@@ -4818,6 +4819,7 @@
                     <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                     <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
+                    <Field Name="AuditEnabled" Ordinal="17" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -10705,6 +10707,7 @@
             <FieldMapping FieldName="AllowEbayCombineLocally" TargetFieldName="AllowEbayCombineLocally" />
             <FieldMapping FieldName="ArchivalSettingsXml" TargetFieldName="ArchivalSettingsXml" />
             <FieldMapping FieldName="AuditDeletedOrders" TargetFieldName="AuditDeletedOrders" />
+            <FieldMapping FieldName="AuditEnabled" TargetFieldName="AuditEnabled" />
             <FieldMapping FieldName="AuditNewOrders" TargetFieldName="AuditNewOrders" />
             <FieldMapping FieldName="ConfigurationID" TargetFieldName="ConfigurationID" />
             <FieldMapping FieldName="CustomerCompareAddress" TargetFieldName="CustomerCompareAddress" />
