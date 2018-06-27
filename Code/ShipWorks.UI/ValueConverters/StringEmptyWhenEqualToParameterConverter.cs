@@ -10,7 +10,7 @@ namespace ShipWorks.UI.ValueConverters
     /// </summary>
     public class StringEmptyWhenEqualToParameterConverter : IValueConverter
     {
-        private bool isDesignMode;
+        private readonly bool isDesignMode;
 
         /// <summary>
         /// Constructor
