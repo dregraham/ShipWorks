@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Processes the OnTrac shipment
         /// </summary>
         /// <param name="shipment"></param>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             try
             {
@@ -57,10 +57,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     shipment,
                     account.AccountNumber);
 
+                TelemetricResult<IDownloadedLabelData> telemetricResult =
+                    new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                
+                
                 // Get new shipment from OnTrac and save the shipment info
+                telemetricResult.StartTimedEvent("GetLabel");
                 Schemas.ShipmentResponse.Shipment shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest);
+                telemetricResult.StopTimedEvent("GetLabel");
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, shipmentResponse));
 
-                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, shipmentResponse));
+                return Task.FromResult(telemetricResult);
             }
             catch (OnTracException ex)
             {
