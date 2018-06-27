@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Creates the Endicia Express1 label
         /// </summary>
         /// <param name="shipment"></param>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             express1EndiciaShipmentType.ValidateShipment(shipment);
 
@@ -41,8 +42,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 EndiciaApiClient client = new EndiciaApiClient(express1EndiciaShipmentType.AccountRepository,
                     express1EndiciaShipmentType.LogEntryFactory,
                     express1EndiciaShipmentType.CertificateInspector);
+                
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                telemetricResult.StartTimedEvent("GetLabel");
                 LabelRequestResponse response = client.ProcessShipment(shipment, express1EndiciaShipmentType);
-                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, response));
+                telemetricResult.StopTimedEvent("GetLabel");
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
+                
+                return Task.FromResult(telemetricResult);
             }
             catch (EndiciaException ex)
             {

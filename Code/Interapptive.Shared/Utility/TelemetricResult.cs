@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Interapptive.Shared.Collections;
 
 namespace Interapptive.Shared.Utility
 {
@@ -10,12 +11,12 @@ namespace Interapptive.Shared.Utility
     public class TelemetricResult<T>
     {
         private readonly string baseTelemetryName;
-        private Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
         private long totalElapsed;
         private readonly Dictionary<string, string> telemetry;
         private string currentEventName;
 
-        /// <summary>Ac
+        /// <summary>
         /// Contsructor
         /// </summary>
         public TelemetricResult(string baseTelemetryName)
@@ -82,6 +83,25 @@ namespace Interapptive.Shared.Utility
             totalElapsed += elapsed;
             
             stopwatch.Reset();
+        }
+
+        /// <summary>
+        /// Add property to telemetry items
+        /// </summary>
+        public void AddProperty(string propertyName, string value) => telemetry.Add(propertyName, value);
+
+        /// <summary>
+        /// Add another telemetric result's properties and totalElapsedTime to this one
+        /// </summary>
+        public void Combine(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
+        {
+            resultToAdd.Telemetry.ForEach(t => AddProperty(t.Key, t.Value));
+            totalElapsed += resultToAdd.totalElapsed;
+
+            if (useNewResultsValue)
+            {
+                Value = resultToAdd.Value;
+            }
         }
 
         /// <summary>
