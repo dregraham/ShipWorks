@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows.Data;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.ValueConverters
@@ -7,12 +8,14 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Returns string.Empty or value based on whether a bound property is equal to the converter parameter
     /// </summary>
-    public class StringEmptyWhenEqualToParameterConverter : ValueEqualToParameterConverter
+    public class StringEmptyWhenEqualToParameterConverter : IValueConverter
     {
+        private bool isDesignMode;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public StringEmptyWhenEqualToParameterConverter() : this(false, DesignModeDetector.IsDesignerHosted())
+        public StringEmptyWhenEqualToParameterConverter() : this(DesignModeDetector.IsDesignerHosted())
         {
 
         }
@@ -20,27 +23,25 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Constructor
         /// </summary>
-        public StringEmptyWhenEqualToParameterConverter(bool invert, bool isDesignMode) : base(invert, isDesignMode)
+        public StringEmptyWhenEqualToParameterConverter(bool isDesignMode)
         {
-
+            this.isDesignMode = isDesignMode;
         }
 
         /// <summary>
-        /// Return Visible if the bound value is equal to the converter parameter, else collapsed
+        /// Convert to an empty string if the value is the parameter
         /// </summary>
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool b = (bool) base.Convert(value.ToString().Trim(), typeof(bool), parameter.ToString(), culture);
+            bool b = Equals(value.ToString().Trim(), parameter.ToString());
 
             return b ? string.Empty : value.ToString().Trim();
         }
 
         /// <summary>
-        /// Converting back does not make sense here
+        /// Convert to the parameter if the value is an empty string
         /// </summary>
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+            (value?.ToString().Trim() == string.Empty) ? parameter : value;
     }
 }
