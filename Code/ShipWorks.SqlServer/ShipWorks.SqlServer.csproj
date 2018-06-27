@@ -65,6 +65,7 @@
     <Compile Include="Data\Auditing\AuditState.cs" />
     <Compile Include="Data\Auditing\AuditTableInfo.cs" />
     <Compile Include="Data\Auditing\AuditTriggers.cs" />
+    <Compile Include="Data\Auditing\ConfigurationSettingsAuditEnabledTrigger.cs" />
     <Compile Include="Data\GetEntityTableNumber.cs" />
     <Compile Include="Data\Grid\ValidateGridLayouts.cs" />
     <Compile Include="Data\Labels\CustomerLabelTrigger.cs" />
