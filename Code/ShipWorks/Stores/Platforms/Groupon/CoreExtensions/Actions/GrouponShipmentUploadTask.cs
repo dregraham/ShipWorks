@@ -19,7 +19,15 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "GrouponShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class GrouponShipmentUploadTask : StoreInstanceTaskBase
     {
-        const long maxBatchSize = 1000;
+        private IGrouponOnlineUpdater grouponOnlineUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GrouponShipmentUploadTask(IGrouponOnlineUpdater grouponOnlineUpdater)
+        {
+            this.grouponOnlineUpdater = grouponOnlineUpdater;
+        }
 
         /// <summary>
         /// Should the ActionTask be run async
@@ -74,40 +82,22 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
-
-            // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-            if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
-            {
-                context.Postpone(inputKeys);
-            }
-            else
-            {
-                context.ConsumingPostponed();
-
-                // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
-            }
+            // Upload the details, first starting with all the postponed input, plus the current input
+            await UpdloadShipmentDetails(store, inputKeys).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private static async Task UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                foreach (long shipmentKey in shipmentKeys)
                 {
-                    IGrouponOnlineUpdater updater = lifetimeScope.Resolve<IGrouponOnlineUpdater>();
+                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    foreach (long shipmentKey in shipmentKeys)
-                    {
-                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
-
-                        await updater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
-                    }
+                    await grouponOnlineUpdater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
                 }
             }
             catch (GrouponException ex)
