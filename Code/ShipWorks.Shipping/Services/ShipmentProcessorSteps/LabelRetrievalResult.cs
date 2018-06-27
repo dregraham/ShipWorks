@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -44,13 +45,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelRetrievalResult(IShipmentPreparationResult result, IDownloadedLabelData labelData,
+        public LabelRetrievalResult(IShipmentPreparationResult result, TelemetricResult<IDownloadedLabelData> labelData,
             ShipmentEntity shipment, ShipmentEntity clone,
             List<ShipmentFieldIndex> fieldsToRestore) :
             this(result)
         {
             Index = result.Index;
-            LabelData = labelData;
+            LabelData = labelData.Value;
+            Telemetry = labelData.Telemetry;
             OriginalShipment = shipment;
             Clone = clone;
             FieldsToRestore = fieldsToRestore;
@@ -105,5 +107,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Was the get label phase successful
         /// </summary>
         public bool Success => Exception == null && !Canceled;
+
+        /// <summary>
+        /// Telemetry properties related to this result
+        /// </summary>
+        public Dictionary<string, string> Telemetry { get; }
     }
 }

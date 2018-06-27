@@ -59,5 +59,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Was the get label phase successful
         /// </summary>
         bool Success { get; }
+        
+        /// <summary>
+        /// Telemetry properties related to this result
+        /// </summary>
+        Dictionary<string, string> Telemetry { get; }
     }
 }
