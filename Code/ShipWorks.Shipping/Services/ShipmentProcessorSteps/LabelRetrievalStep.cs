@@ -22,8 +22,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     /// <summary>
     /// Get the label for the shipment
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class LabelRetrievalStep
+    [NamedComponent("LabelRetrievalStep", typeof(ILabelRetrievalStep))]
+    public class LabelRetrievalStep : ILabelRetrievalStep
     {
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ILabelServiceFactory labelServiceFactory;
