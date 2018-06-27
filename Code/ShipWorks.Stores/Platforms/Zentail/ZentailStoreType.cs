@@ -36,6 +36,6 @@ namespace ShipWorks.Stores.Platforms.Zentail
         /// <summary>
         /// Gets the account settings help URL
         /// </summary>
-        public override string AccountSettingsHelpUrl => "";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000125142-adding-zentail-to-shipworks";
     }
 }
