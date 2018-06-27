@@ -68,15 +68,15 @@ pipeline {
 								/param:SQLServ=localhost\\ranorex ^
 								/reportlevel:Debug ^
 								/zr ^
-								/zrf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
-								/rf:\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP} ^
+								/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+								/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
 								/ju
 						"""
 				}
-				bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\results.junit.xml"
 			}
 			post {
 				always {
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\results.junit.xml"
 					junit "results.junit.xml"
 				}
 			}
