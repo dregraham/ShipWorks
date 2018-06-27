@@ -59,8 +59,11 @@ namespace ShipWorks.ApplicationCore.Options
             EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderShippingAddressChanged);
             orderShippingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping;
 
+            auditEnabled.Checked = config.AuditEnabled;
             auditNewOrders.Checked = config.AuditNewOrders;
+            auditNewOrders.Enabled = auditEnabled.Checked;
             auditDeletedOrders.Checked = config.AuditDeletedOrders;
+            auditDeletedOrders.Enabled = auditEnabled.Checked;
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             enableShipSense.Checked = settings.ShipSenseEnabled;
@@ -108,6 +111,7 @@ namespace ShipWorks.ApplicationCore.Options
             config.CustomerUpdateModifiedBilling = (int) orderBillingAddressChanged.SelectedValue;
             config.CustomerUpdateModifiedShipping = (int) orderShippingAddressChanged.SelectedValue;
 
+            config.AuditEnabled = auditEnabled.Checked;
             config.AuditNewOrders = auditNewOrders.Checked;
             config.AuditDeletedOrders = auditDeletedOrders.Checked;
 
@@ -283,6 +287,15 @@ namespace ShipWorks.ApplicationCore.Options
         {
             editShipSenseSettings.Enabled = enableShipSense.Checked;
             relearnShipSense.Enabled = enableShipSense.Checked;
+        }
+
+        /// <summary>
+        /// Update visibility of auditing buttons based on audit enabled/disabled.
+        /// </summary>
+        private void OnAuditEnableChanged(object sender, EventArgs e)
+        {
+            auditNewOrders.Enabled = auditEnabled.Checked;
+            auditDeletedOrders.Enabled = auditEnabled.Checked;
         }
     }
 }
