@@ -415,7 +415,7 @@ namespace ShipWorks.Stores
 
         [Description("Zentail")]
         [StoreTypeIdentity("WISH", "ZTL")]
-        [StoreTypeIcon("shipworks")]
+        [StoreTypeIcon("zentail")]
         Zentail = 84
     }
 }
