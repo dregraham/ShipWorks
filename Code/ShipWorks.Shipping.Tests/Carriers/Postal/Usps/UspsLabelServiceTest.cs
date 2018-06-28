@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(webClientMock);
 
             webClientMock.Setup(w => w.ProcessShipment(shipment))
-                .ReturnsAsync(new UspsLabelResponse());
+                         .ReturnsAsync(new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds"));
 
             Mock<IIndex<ShipmentTypeCode, IUspsShipmentType>> shipmentTypeRepo = mock.MockRepository.Create<IIndex<ShipmentTypeCode, IUspsShipmentType>>();
             shipmentTypeRepo.Setup(x => x[ShipmentTypeCode.Usps])

@@ -35,9 +35,8 @@ namespace Interapptive.Shared.Tests.Utility
         public void Populate_PopulatesTrackedDurationWithEvent()
         {
             var testObject = new TelemetricResult<int>("base");
-            testObject.StartTimedEvent("event1");
-            testObject.StopTimedEvent("event1");
-
+            testObject.TimedEvent("event1", ()=>{});
+            
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.Populate(telemetricEvent.Object);
             
@@ -75,12 +74,10 @@ namespace Interapptive.Shared.Tests.Utility
         public void Combine_CombinesEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
-            testObject.StartTimedEvent("event1");
-            testObject.StopTimedEvent("event1");
+            testObject.TimedEvent("event1", ()=>{});
 
             var toCombine = new TelemetricResult<int>("base2");
-            toCombine.StartTimedEvent("event2");
-            toCombine.StopTimedEvent("event2");
+            testObject.TimedEvent("event2", ()=>{});
 
             testObject.Combine(toCombine, true);
 
@@ -95,15 +92,12 @@ namespace Interapptive.Shared.Tests.Utility
         public void Combine_LastTimeIsTheSumOfBothEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
-            testObject.StartTimedEvent("event1");
-            Thread.Sleep(10);
-            testObject.StopTimedEvent("event1");
+            testObject.TimedEvent("event1", ()=> Thread.Sleep(10));
+            
             int originalTestObjectTime = GetLastTime(testObject);
 
             var toCombine = new TelemetricResult<int>("base2");
-            toCombine.StartTimedEvent("event2");
-            Thread.Sleep(20);
-            toCombine.StopTimedEvent("event2");
+            testObject.TimedEvent("event2", ()=> Thread.Sleep(20));
             int originalToCombineTestObjectTime = GetLastTime(toCombine);
 
             testObject.Combine(toCombine, true);

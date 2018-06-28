@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         [Fact]
         public void Submit_ReturnsResponseFromShipResult()
         {
-            var shipmentReply = new ProcessShipmentReply();
+            var shipmentReply = new TelemetricResult<GenericResult<ProcessShipmentReply>>("API.ResponseTimeInMilliseconds");
             var response = mock.CreateMock<IFedExShipResponse>();
             response.Setup(x => x.ApplyManipulators(It.IsAny<ProcessShipmentRequest>()))
                 .Returns(GenericResult.FromSuccess(response.Object));
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             var testObject = mock.Create<FedExShipRequest>();
             var result = testObject.Submit(shipmentEntity, 0);
 
-            Assert.Equal(response.Object, result.Value);
+            Assert.Equal(response.Object, result.Value.Value);
         }
     }
 }

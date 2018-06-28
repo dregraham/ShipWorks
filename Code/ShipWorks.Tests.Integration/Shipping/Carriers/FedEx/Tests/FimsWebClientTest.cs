@@ -86,8 +86,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 var testObject = mock.Create<FimsWebClient>();
                 var response = testObject.Ship(mockShipRequest.Object);
-                Assert.NotNull(response.LabelData);
-                Assert.Equal("Z", response.LabelFormat);
+                Assert.NotNull(response.Value.LabelData);
+                Assert.Equal("Z", response.Value.LabelFormat);
             }
         }
     }
