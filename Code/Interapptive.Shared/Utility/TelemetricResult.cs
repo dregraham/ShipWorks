@@ -10,7 +10,7 @@ namespace Interapptive.Shared.Utility
     /// <summary>
     /// Generic class that can be used to return telemetry data along with a result
     /// </summary>
-    public class TelemetricResult<T>
+    public class TelemetricResult<T> : ITelemetryCollection
     {
         private readonly string baseTelemetryName;
         private readonly Stopwatch stopwatch;
@@ -103,6 +103,20 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Copy all of the telemetry to the destination
+        /// </summary>
+        public void CopyTo(ITelemetryCollection destination)
+        {
+            foreach (KeyValuePair<string, List<long>> item in telemetry)
+            {
+                foreach (long metric in item.Value)
+                {
+                    destination.AddEntry(item.Key, metric);
+                }
+            }
+        }
+
+        /// <summary>
         /// Add internal telemetric events to the passed in TrackedDurationEvent
         /// </summary>
         public void Populate(ITrackedDurationEvent trackedDurationEvent)
@@ -130,7 +144,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Adds an entry to telemetry
         /// </summary>
-        private void AddEntry(string name, long time)
+        public void AddEntry(string name, long time)
         {
             if (!telemetry.ContainsKey(name))
             {

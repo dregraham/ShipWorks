@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -50,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// To simulate a successfully request, use "success" as the Username.
         /// For a failed request, send "failure" as the Username.
         /// </summary>
-        public IFimsShipResponse Ship(IFimsShipRequest fimsShipRequest)
+        public TelemetricResult<IFimsShipResponse> Ship(IFimsShipRequest fimsShipRequest)
         {
             if (fimsShipRequest == null)
             {
@@ -61,9 +62,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
 
-            string response = Submit(soapRequestText);
+            TelemetricResult<string> response = Submit(soapRequestText);
+            TelemetricResult<IFimsShipResponse> result = new TelemetricResult<IFimsShipResponse>("API.ResponseTimeInMilliseconds");
 
-            return ProcessResponse(response);
+            response.CopyTo(result);
+            result.SetValue(ProcessResponse(response.Value));
+            return result;
         }
 
         /// <summary>
@@ -201,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Submit the data to FIMS to get the label.
         /// </summary>
-        private string Submit(string soapRequest)
+        private TelemetricResult<string> Submit(string soapRequest)
         {
             IHttpRequestSubmitter requestSubmitter = requestSubmitterFactory.GetHttpTextPostRequestSubmitter(soapRequest, "");
             requestSubmitter.Uri = productionUri;
@@ -209,13 +213,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             IApiLogEntry logger = apiLogEntryFactory.GetLogEntry(ApiLogSource.FedExFims, "Ship", LogActionType.Other);
             logger.LogRequest(requestSubmitter);
 
+            TelemetricResult<string> result = new TelemetricResult<string>("API.ResponseTimeInMilliseconds");
+
             try
             {
+                result.StartTimedEvent("GetLabel");
                 using (IHttpResponseReader reader = requestSubmitter.GetResponse())
                 {
+                    result.StopTimedEvent("GetLabel");
                     string responseText = reader.ReadResult();
                     logger.LogResponse(responseText, "xml");
-                    return responseText;
+
+                    result.SetValue(responseText);
+                    return result;
                 }
             }
             catch (WebException ex)

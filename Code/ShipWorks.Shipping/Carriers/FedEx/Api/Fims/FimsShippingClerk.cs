@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity)
+        public TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -76,8 +76,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
                 FimsShipRequest fimsShipRequest = new FimsShipRequest(shipmentEntity, settings.FedExFimsUsername, settings.FedExFimsPassword);
 
-                IFimsShipResponse fimsShipResponse = webClient.Ship(fimsShipRequest);
-                return GenericResult.FromSuccess<IEnumerable<IFedExShipResponse>>(new[] { new FimsCarrierResponse(shipmentEntity, fimsShipResponse, labelRepository) }.AsEnumerable());
+                TelemetricResult<IFimsShipResponse> fimsShipResponse = webClient.Ship(fimsShipRequest);
+                GenericResult<IEnumerable<IFedExShipResponse>> result = GenericResult.FromSuccess<IEnumerable<IFedExShipResponse>>(new[] { new FimsCarrierResponse(shipmentEntity, fimsShipResponse.Value, labelRepository) }.AsEnumerable());
+
+                TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricResult = new TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>>("");
+
+                fimsShipResponse.CopyTo(telemetricResult);
+                telemetricResult.SetValue(result);
+                return telemetricResult;
             }
             catch (Exception ex)
             {

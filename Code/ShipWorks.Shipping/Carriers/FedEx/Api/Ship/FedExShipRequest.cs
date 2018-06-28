@@ -41,17 +41,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         /// Submits the request to the FedEx API to ship an order/create a label.
         /// </summary>
         /// <returns>An ICarrierResponse containing the carrier-specific results of the request.</returns>
-        public GenericResult<IFedExShipResponse> Submit(ShipmentEntity shipment, int sequenceNumber)
+        public TelemetricResult<GenericResult<IFedExShipResponse>> Submit(ShipmentEntity shipment, int sequenceNumber)
         {
-            return manipulatorFactory
-                .Select(x => x(settingsRepository))
-                .Where(x => x.ShouldApply(shipment, sequenceNumber))
-                .Aggregate(
+            IEnumerable<IFedExShipRequestManipulator> manipulators = manipulatorFactory
+                .Select(x => x(settingsRepository)).Where(x => x.ShouldApply(shipment, sequenceNumber));
+
+            GenericResult<ProcessShipmentRequest> request = manipulators.Aggregate(
                     new ProcessShipmentRequest(),
-                    (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber))
-                .Bind(x => serviceGatewayFactory.Create(shipment, settingsRepository).Ship(x).Map(r => new { Reply = r, Request = x }))
-                .Map(x => new { Response = createShipResponse(shipment, x.Reply), x.Request })
+                    (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber));
+
+            TelemetricResult<GenericResult<IFedExShipResponse>> telemetricResult = new TelemetricResult<GenericResult<IFedExShipResponse>>("");
+
+            var processResult = request.Bind(
+                x => 
+                {
+                    TelemetricResult<GenericResult<ProcessShipmentReply>> result = serviceGatewayFactory.Create(shipment, settingsRepository).Ship(x);
+                    result.CopyTo(telemetricResult);
+                    
+                    return result.Value.Map(r => new { Reply = r, Request = x });
+                }).Map(x => new { Response = createShipResponse(shipment, x.Reply), x.Request })
                 .Bind(x => x.Response.ApplyManipulators(x.Request));
+            
+            telemetricResult.SetValue(processResult);
+            return telemetricResult;
         }
     }
 }
