@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -41,10 +42,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Creates a label for the given Shipment
         /// </summary>
-        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            IDownloadedLabelData uspsDownloadedLabelData;
-
+            
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
             uspsShipmentType.ValidateShipment(shipment);
 
@@ -52,14 +54,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
                 {
-                    uspsDownloadedLabelData = await ProcessShipmentWithRates(shipment).ConfigureAwait(false);
+                    TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData = await ProcessShipmentWithRates(shipment).ConfigureAwait(false);
                 }
                 else
                 {
                     termsAndConditions.Validate(shipment);
 
-                    UspsLabelResponse uspsLabelResponse = await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
-                    uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
+                    TelemetricResult<UspsLabelResponse> telemetricLabelResponse =
+                        await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
+                    
+                    telemetricLabelResponse.CopyTo(telemetricResult);
+
+                    IDownloadedLabelData uspsDownloadedLabelData = createDownloadedLabelData(telemetricLabelResponse.Value);
+                    telemetricResult.SetValue(uspsDownloadedLabelData);
                 }
             }
             catch (UspsException ex)
@@ -71,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException(ex.Message, ex);
             }
 
-            return uspsDownloadedLabelData;
+            return telemetricResult;
         }
 
         /// <summary>
@@ -94,9 +101,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Process the shipment using the account with the cheapest rate for the requested service
         /// </summary>
-        private async Task<IDownloadedLabelData> ProcessShipmentWithRates(ShipmentEntity shipment)
+        private async Task<TelemetricResult<IDownloadedLabelData>> ProcessShipmentWithRates(ShipmentEntity shipment)
         {
-            IDownloadedLabelData uspsDownloadedLabelData = null;
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
@@ -127,7 +134,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         IUspsShipmentType express1UspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Express1Usps];
                         express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
 
-                        uspsDownloadedLabelData = await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
+                        TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData =
+                            await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
+                        telemetricResult.Combine(uspsDownloadedLabelData, true);
                     }
                     else
                     {
@@ -136,9 +145,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
                         IUspsWebClient client = uspsShipmentType.CreateWebClient();
-                        UspsLabelResponse uspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
-
-                        uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
+                        
+                        TelemetricResult<UspsLabelResponse> telemetricUspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
+                        
+                        telemetricUspsLabelResponse.CopyTo(telemetricResult);
+                        telemetricResult.SetValue(createDownloadedLabelData(telemetricUspsLabelResponse.Value));
                     }
 
                     break;
@@ -152,7 +163,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
             }
 
-            return uspsDownloadedLabelData;
+            return telemetricResult;
         }
     }
 }

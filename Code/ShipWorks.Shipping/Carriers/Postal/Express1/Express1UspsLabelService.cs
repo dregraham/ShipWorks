@@ -40,11 +40,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 // Express1 for USPS requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
+
+
+                TelemetricResult<UspsLabelResponse> uspsLabelResponse =
+                    await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
                 
-                telemetricResult.StartTimedEvent("GetLabel");
-                UspsLabelResponse uspsLabelResponse = await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
-                telemetricResult.StopTimedEvent("GetLabel");
-                telemetricResult.SetValue(createDownloadedLabelData(uspsLabelResponse));
+                uspsLabelResponse.CopyTo(telemetricResult);
+                telemetricResult.SetValue(createDownloadedLabelData(uspsLabelResponse.Value));
             }
             catch (UspsException ex)
             {

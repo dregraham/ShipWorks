@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 
@@ -58,6 +59,25 @@ namespace Interapptive.Shared.Utility
                 throw;
             }
         }
+        
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        public async Task TimedEventAsync(string eventName, Func<Task> eventToTime)
+        {
+            StartTimedEvent(eventName);
+            try
+            {
+                await eventToTime();
+                StopTimedEvent(eventName);
+            }
+            catch (Exception)
+            {
+                StopTimedEvent(eventName);
+                throw;
+            }
+        }
+        
         /// <summary>
         /// Start timing an event
         /// </summary>
