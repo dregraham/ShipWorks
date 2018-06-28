@@ -70,6 +70,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.useParallelActionProcessing = new System.Windows.Forms.CheckBox();
             this.printingPriorityInfoTip = new ShipWorks.UI.Controls.InfoTip();
             this.auditEnabled = new System.Windows.Forms.CheckBox();
+            this.linkAuditInfo = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -447,7 +448,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infoTip1.Caption = "Larger batch sizes mean more shipments can be processed at once, but require more" +
     " system resources.";
-            this.infoTip1.Location = new System.Drawing.Point(430, 943);
+            this.infoTip1.Location = new System.Drawing.Point(430, 963);
             this.infoTip1.Name = "infoTip1";
             this.infoTip1.Size = new System.Drawing.Size(12, 12);
             this.infoTip1.TabIndex = 54;
@@ -494,12 +495,24 @@ namespace ShipWorks.ApplicationCore.Options
             this.auditEnabled.UseVisualStyleBackColor = true;
             this.auditEnabled.CheckedChanged += new System.EventHandler(this.OnAuditEnableChanged);
             // 
+            // linkAuditInfo
+            // 
+            this.linkAuditInfo.AutoSize = true;
+            this.linkAuditInfo.Location = new System.Drawing.Point(125, 572);
+            this.linkAuditInfo.Name = "linkAuditInfo";
+            this.linkAuditInfo.Size = new System.Drawing.Size(64, 13);
+            this.linkAuditInfo.TabIndex = 60;
+            this.linkAuditInfo.TabStop = true;
+            this.linkAuditInfo.Text = "more info...";
+            this.linkAuditInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnAuditInfoClicked);
+            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.linkAuditInfo);
             this.Controls.Add(this.auditEnabled);
             this.Controls.Add(this.printingPriorityInfoTip);
             this.Controls.Add(this.useParallelActionProcessing);
@@ -595,5 +608,6 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.CheckBox useParallelActionProcessing;
         private UI.Controls.InfoTip printingPriorityInfoTip;
         private System.Windows.Forms.CheckBox auditEnabled;
+        private System.Windows.Forms.LinkLabel linkAuditInfo;
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -324,6 +325,14 @@ namespace ShipWorks.ApplicationCore.Options
         {
             auditNewOrders.Enabled = auditEnabled.Checked;
             auditDeletedOrders.Enabled = auditEnabled.Checked;
+        }
+
+        /// <summary>
+        /// Open a browser to the auditing help article.
+        /// </summary>
+        private void OnAuditInfoClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000125442-audit-records-in-shipworks", this);
         }
     }
 }
