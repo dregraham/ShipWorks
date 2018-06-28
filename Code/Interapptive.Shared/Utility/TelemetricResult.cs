@@ -81,7 +81,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Start timing an event
         /// </summary>
-        public void StartTimedEvent(string eventName)
+        private void StartTimedEvent(string eventName)
         {
             Debug.Assert(stopwatch.IsRunning == false);
 
@@ -92,7 +92,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// End timing of an event and store the result
         /// </summary>
-        public void StopTimedEvent(string eventName)
+        private void StopTimedEvent(string eventName)
         {
             Debug.Assert(stopwatch.IsRunning);
 

@@ -217,10 +217,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             try
             {
-                result.StartTimedEvent("GetLabel");
-                using (IHttpResponseReader reader = requestSubmitter.GetResponse())
+                IHttpResponseReader reader = null;
+                result.TimedEvent("GetLabel", () => reader = requestSubmitter.GetResponse());
+                using (reader)
                 {
-                    result.StopTimedEvent("GetLabel");
                     string responseText = reader.ReadResult();
                     logger.LogResponse(responseText, "xml");
 

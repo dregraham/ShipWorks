@@ -44,9 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     express1EndiciaShipmentType.CertificateInspector);
                 
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-                telemetricResult.StartTimedEvent("GetLabel");
-                LabelRequestResponse response = client.ProcessShipment(shipment, express1EndiciaShipmentType);
-                telemetricResult.StopTimedEvent("GetLabel");
+                LabelRequestResponse response = null;
+                telemetricResult.TimedEvent("GetLabel", () => response = client.ProcessShipment(shipment, express1EndiciaShipmentType));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
                 
                 return Task.FromResult(telemetricResult);

@@ -54,9 +54,12 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-                telemetricResult.StartTimedEvent("GetLabel");
-                Label label = await shipEngineWebClient.PurchaseLabel(request, ApiLogSource).ConfigureAwait(false);
-                telemetricResult.StopTimedEvent("GetLabel");
+                Label label = null;
+                await telemetricResult.TimedEventAsync("GetLabel", 
+                                                       async () => label = await shipEngineWebClient
+                                                                         .PurchaseLabel(request, ApiLogSource)
+                                                                         .ConfigureAwait(false));
+                
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
 
                 return telemetricResult;

@@ -84,12 +84,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                telemetricResult.StartTimedEvent("GetLabel");
-                LabelRequestResponse response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType);
-                telemetricResult.StopTimedEvent("GetLabel");
-
-                EndiciaDownloadedLabelData labelData = createDownloadedLabelData(shipment, response);
-                telemetricResult.SetValue(labelData);
+                LabelRequestResponse response = null;
+                telemetricResult.TimedEvent("GetLabel", () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
                 
                 return Task.FromResult(telemetricResult);
             }
@@ -122,10 +119,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Check Endicia amount
                 // Per John: We don't differentiate between Express1 and Endicia rates because
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
-                telemetricResult.StartTimedEvent("GetRates");
-                RateResult endiciaRate = GetEndiciaRate(shipment, endiciaApiClient);
-                telemetricResult.StopTimedEvent("GetRates");
-
+                RateResult endiciaRate = null;
+                telemetricResult.TimedEvent("GetRates", () => endiciaRate = GetEndiciaRate(shipment, endiciaApiClient));
+                
                 // Change the shipment to Express1
                 shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
@@ -134,10 +130,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Check Express1 amount
                 // Per John: We don't differentiate between Express1 and Endicia rates because
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
-                telemetricResult.StartTimedEvent("GetRates");
-                RateResult express1Rate = GetExpress1Rate(shipment);
-                telemetricResult.StopTimedEvent("GetRates");
-
+                RateResult express1Rate = null;
+                telemetricResult.TimedEvent("GetRates", () => express1Rate = GetExpress1Rate(shipment));
+                
                 useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
             }
             catch (EndiciaApiException apiException)
