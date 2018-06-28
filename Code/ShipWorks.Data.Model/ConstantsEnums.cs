@@ -1904,6 +1904,8 @@ namespace ShipWorks.Data.Model
 		AllowEbayCombineLocally,
 		///<summary>ArchivalSettingsXml. </summary>
 		ArchivalSettingsXml,
+		///<summary>AuditEnabled. </summary>
+		AuditEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}

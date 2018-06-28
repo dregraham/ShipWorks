@@ -328,6 +328,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AllowEbayCombineLocally", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ArchivalSettingsXml", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AuditEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -544,6 +546,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.ArchivalSettingsXml, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.ArchivalSettingsXml, value); }
+		}
+
+		/// <summary> The AuditEnabled property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AuditEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AuditEnabled
+		{
+			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditEnabled, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AuditEnabled, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

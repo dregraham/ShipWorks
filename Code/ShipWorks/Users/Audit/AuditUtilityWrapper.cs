@@ -44,7 +44,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Audit the given event for the current user on the current computer.
         /// </summary>
-        public async Task AuditAsync(long entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter)
+        public async Task AuditAsync(long? entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter)
         {
             AuditEntity audit = new AuditEntity
             {

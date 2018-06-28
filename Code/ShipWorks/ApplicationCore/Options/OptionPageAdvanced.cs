@@ -2,11 +2,14 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared.Enums;
+using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
@@ -24,6 +27,8 @@ namespace ShipWorks.ApplicationCore.Options
     /// </summary>
     public partial class OptionPageAdvanced : OptionPageBase
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(OptionPageAdvanced));
         ConfigurationEntity config;
 
         /// <summary>
@@ -59,8 +64,11 @@ namespace ShipWorks.ApplicationCore.Options
             EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderShippingAddressChanged);
             orderShippingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping;
 
+            auditEnabled.Checked = config.AuditEnabled;
             auditNewOrders.Checked = config.AuditNewOrders;
+            auditNewOrders.Enabled = auditEnabled.Checked;
             auditDeletedOrders.Checked = config.AuditDeletedOrders;
+            auditDeletedOrders.Enabled = auditEnabled.Checked;
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             enableShipSense.Checked = settings.ShipSenseEnabled;
@@ -108,8 +116,7 @@ namespace ShipWorks.ApplicationCore.Options
             config.CustomerUpdateModifiedBilling = (int) orderBillingAddressChanged.SelectedValue;
             config.CustomerUpdateModifiedShipping = (int) orderShippingAddressChanged.SelectedValue;
 
-            config.AuditNewOrders = auditNewOrders.Checked;
-            config.AuditDeletedOrders = auditDeletedOrders.Checked;
+            SaveAuditSettings();
 
             config.UseParallelActionQueue = useParallelActionProcessing.Checked;
 
@@ -120,6 +127,32 @@ namespace ShipWorks.ApplicationCore.Options
             ShippingSettings.Save(settings);
 
             ConfigurationData.Save(config);
+        }
+
+        /// <summary>
+        /// Save audit settings
+        /// </summary>
+        private void SaveAuditSettings()
+        {
+            if (config.AuditEnabled != auditEnabled.Checked)
+            {
+                log.Info($"AuditEnabled changed from {config.AuditEnabled} to {auditEnabled.Checked}");
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IAuditUtility auditUtility = lifetimeScope.Resolve<IAuditUtility>();
+                    string from = config.AuditEnabled ? "Enabled" : "Disabled";
+                    string to = auditEnabled.Checked ? "Enabled" : "Disabled";
+                    AuditReason auditReason = new AuditReason(AuditReasonType.AuditStateChanged, 
+                        $"Auditing state changed from {from} to {to}");
+
+                    auditUtility.AuditAsync(null, AuditActionType.AuditStateChanged, auditReason, SqlAdapter.Default);
+                }
+            }
+
+            config.AuditEnabled = auditEnabled.Checked;
+            config.AuditNewOrders = auditNewOrders.Checked;
+            config.AuditDeletedOrders = auditDeletedOrders.Checked;
         }
 
         /// <summary>
@@ -283,6 +316,23 @@ namespace ShipWorks.ApplicationCore.Options
         {
             editShipSenseSettings.Enabled = enableShipSense.Checked;
             relearnShipSense.Enabled = enableShipSense.Checked;
+        }
+
+        /// <summary>
+        /// Update visibility of auditing buttons based on audit enabled/disabled.
+        /// </summary>
+        private void OnAuditEnableChanged(object sender, EventArgs e)
+        {
+            auditNewOrders.Enabled = auditEnabled.Checked;
+            auditDeletedOrders.Enabled = auditEnabled.Checked;
+        }
+
+        /// <summary>
+        /// Open a browser to the auditing help article.
+        /// </summary>
+        private void OnAuditInfoClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000125442-audit-records-in-shipworks", this);
         }
     }
 }
