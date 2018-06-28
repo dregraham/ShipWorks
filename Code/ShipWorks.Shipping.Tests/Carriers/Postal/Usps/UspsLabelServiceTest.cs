@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             RateResult rateResult = new RateResult("rate", "5", 5, postalRateSelectionMock.Object);
 
             mock.Mock<IUspsRatingService>()
-                .Setup(s => s.GetRates(shipment))
+                .Setup(s => s.GetRates(shipment, null))
                 .Returns(new RateGroup(new[] { rateResult }));
 
             UspsLabelService testObject = mock.Create<UspsLabelService>();
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             RateResult rateResult = new RateResult("rate", "5", 5, postalRateSelectionMock.Object);
 
             mock.Mock<IUspsRatingService>()
-                .Setup(s => s.GetRates(shipment))
+                .Setup(s => s.GetRates(shipment, null))
                 .Returns(new RateGroup(new[] { rateResult }));
 
             var labelServiceMock = mock.CreateMock<ILabelService>();
