@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<ClassDiagram Zoom="1" MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="SmokeTest.ProcessUPSDomestic" Collapsed="False">
+    <Position X="0.5" Y="0.5" Width="2.808376" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.ProcessUPSMailInnovations" Collapsed="False">
+    <Position X="0.5" Y="5.9" Width="3.44109" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.Program" Collapsed="False">
+    <Position X="0.5" Y="8.7" Width="1.029215" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupAmazonShipping" Collapsed="False">
+    <Position X="0.5" Y="10" Width="2.886149" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupBestRate" Collapsed="False">
+    <Position X="0.5" Y="12.8" Width="2.102399" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupExpress1" Collapsed="False">
+    <Position X="0.5" Y="15.5" Width="2.114967" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupExpress1Endicia" Collapsed="False">
+    <Position X="0.5" Y="18.2" Width="2.860797" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupFedex" Collapsed="False">
+    <Position X="0.5" Y="20.9" Width="1.920158" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupiParcel" Collapsed="False">
+    <Position X="0.5" Y="23.7" Width="1.920158" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupOnTrac" Collapsed="False">
+    <Position X="0.5" Y="26.4" Width="1.925905" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupOther" Collapsed="False">
+    <Position X="0.5" Y="29.1" Width="1.920158" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupUSPSEndicia" Collapsed="False">
+    <Position X="0.5" Y="31.8" Width="2.533268" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupUSPSNoPostage" Collapsed="False">
+    <Position X="0.5" Y="34.6" Width="2.908493" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupUSPSStamps" Collapsed="False">
+    <Position X="0.5" Y="37.3" Width="2.555612" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupAmazon" Collapsed="False">
+    <Position X="0.5" Y="40" Width="2.001637" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupUPS" Collapsed="False">
+    <Position X="0.5" Y="42.9" Width="1.920158" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SetupUPSWorldship" Collapsed="False">
+    <Position X="0.5" Y="45.6" Width="2.646276" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SmokeTestRepository" Collapsed="False">
+    <Position X="0.5" Y="48.3" Width="4.219821" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.SmokeTestRepositoryFolders" Collapsed="False">
+    <Position X="0.5" Y="59.9" Width="5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.Recording1" Collapsed="False">
+    <Position X="0.5" Y="309.1" Width="1.920158" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+  <Class Name="SmokeTest.ProcessUPSInternational" Collapsed="False">
+    <Position X="0.5" Y="3.2" Width="3.11238" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="False" />
+      <Compartment Name="Methods" Collapsed="False" />
+      <Compartment Name="Fields" Collapsed="False" />
+    </Compartments>
+  </Class>
+</ClassDiagram>

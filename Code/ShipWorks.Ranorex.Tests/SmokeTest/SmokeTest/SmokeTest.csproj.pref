@@ -1,0 +1,35 @@
+﻿<Properties>
+  <Array name="active">
+    <Element value="SmokeTest.rxtst" />
+  </Array>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="InstallShipWorks.rxrec" />
+    <Element value="SetupDatabase.rxrec" />
+    <Element value="SmokeTest.rxtst" />
+    <Element value="SetupDatabase.UserCode.cs" />
+    <Element value="CheckShipWorksVersion.rxrec" />
+    <Element value="ModuleChecker.UserCode.cs" />
+    <Element value="SetupAmazonShipping.rxrec" />
+    <Element value="diffpdfcCommands.rxrec" />
+    <Element value="ModuleChecker.rxrec" />
+    <Element value="SendInfoEmail.rxrec" />
+    <Element value="SendInfoEmail.UserCode.cs" />
+    <Element value="InstallShipWorks.UserCode.cs" />
+    <Element value="diffpdfcCommands.UserCode.cs" />
+    <Element value="Class\FileName.cs" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections">
+      <Element value="SmokeTest.InstallShipWorks.InstallChromium()" />
+      <Element value="SmokeTest.SendResultsEmail.SendEmail()" />
+      <Element value="SmokeTest.GetComparisonReportDirectory.GetDirectory()" />
+      <Element value="SmokeTest.CheckShipWorksVersion.GrabVersion()" />
+      <Element value="SmokeTest.CheckShipWorksVersion.Get_Value_Version()" />
+      <Element value="SmokeTest.Recording2.gggg()" />
+    </Array>
+  </Properties>
+</Properties>

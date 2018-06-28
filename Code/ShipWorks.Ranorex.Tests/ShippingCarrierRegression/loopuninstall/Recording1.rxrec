@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="6.0"
+id="08e87d98-7414-487f-8c72-c66dc980103e"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		Recording1
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="Recording1"
+	namespace="loopuninstall"/>
+	<variables/>
+	<recorditems/>
+	<repository
+	name="loopuninstallRepository"
+	id="80f8852d-aefc-4faa-a162-387cebf4d4a4"
+	rxversion="6.0"
+	relativepath="loopuninstallRepository.rxrep">
+		<codegen
+		classname="loopuninstallRepository"
+		namespace="loopuninstall"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="077dcf1d-2888-4666-ae2f-6e850d88ffc1"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		Recording1.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

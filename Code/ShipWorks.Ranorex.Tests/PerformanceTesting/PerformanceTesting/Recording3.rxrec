@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="5636b63f-039c-4043-882f-63c72218c985"
+mode="Global"
+rxversion="8.0">
+	<name>
+		Recording3
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="Recording3"
+	namespace="PerformanceTesting">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<keysequenceitem
+		KeySequence="yay"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="03fe5d08-41fc-425e-86ac-be3410ae6285">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+	</recorditems>
+	<repository
+	id="7a1a4c69-517f-4d9a-8a77-8f418af60cb5"
+	name="PerformanceTestingRepository"
+	relativepath="PerformanceTestingRepository.rxrep"
+	rxversion="7.1">
+		<codegen
+		classname="PerformanceTestingRepository"
+		namespace="PerformanceTesting">
+		</codegen>
+		<rootfolder
+		id="c68153a2-733b-40f8-8fae-1a73b84e55f5"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		Recording3.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

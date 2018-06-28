@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="c418a500-3142-41ff-8efe-04db6ee2d0f5"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		ProcessVoidShipment_Validate_CloseShipOrders2
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ProcessVoidShipment_Validate_CloseShipOrders2"
+	namespace="UIResponsiveness"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="69e1b527-5614-433b-8a50-65dae8ceaedd"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click &quot;Create Label&quot;
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="2a3e73e4-a2ab-415d-b313-b1a9d6cb7fee">
+				<path>
+					/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']/rawtext[@row='0' and @column='0']
+				</path>
+			</info>
+		</mouseitem>
+		<WaitForRecordItem
+		enabled="True"
+		optional="False"
+		searchpropertyid="5b4357d9-b39e-4b0b-9097-39e8ce77d982"
+		waittimeout="60000ms"
+		waitaction="NotExists">
+			<comment>
+				Wait for the &quot;Processing&quot; modal to disappear (for up to 1 minute)
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="0b9a476b-4d79-47bb-a452-ec34726a39ef">
+				<path>
+					/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']
+				</path>
+			</info>
+		</WaitForRecordItem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="e586d624-f56a-4b1c-b4d9-388a63da273d"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click &quot;Void&quot;
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="06b1840e-33f1-4c52-b907-1ebb09cbe2b9">
+				<path>
+					/form[@controlname='ShippingDlg']/?/?/button[@controlname='voidSelected']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="5c1582a8-ad9b-4f66-939c-20361ce0f81b"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click &quot;Yes&quot; on the &quot;Void all of the selected shipments&quot; message
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="d7aea3ad-891c-4c1a-abe6-cb43126481f4">
+				<path>
+					/form[@controlname='ShipmentVoidConfirmDlg']/button[@controlname='ok']
+				</path>
+			</info>
+		</mouseitem>
+		<WaitForRecordItem
+		enabled="True"
+		optional="False"
+		searchpropertyid="6f2accd4-0cff-46cf-9ad3-d1427d6d7ea8"
+		waittimeout="60000ms"
+		waitaction="NotExists">
+			<comment>
+				Wait for the &quot;Voiding&quot; modal to disappear (for up to 1 minute)
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="bd1994d7-0b46-4a0e-9b55-33a34c2ee1f5">
+				<path>
+					/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Voiding Shipments']
+				</path>
+			</info>
+		</WaitForRecordItem>
+		<explicitdelayitem
+		enabled="True"
+		optional="False"
+		duration="500ms">
+			<comment>
+				Delay 500ms
+			</comment>
+			<bindings/>
+		</explicitdelayitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="4b3350c4-caa4-4d7d-b351-cfd2c5da107b"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Close out of the Ship Orders UI
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="fdd6907b-6426-45ff-921c-4f3ad2d0c35d">
+				<path>
+					/form[@controlname='ShippingDlg']/button[@controlname='close']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	name="SmokeTestRepository"
+	id="e60d7cd6-302c-4e11-a480-edbca6931390"
+	rxversion="5.4.5.19886"
+	relativepath="SmokeTestRepository.rxrep">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="UIResponsiveness"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ProcessVoidShipment_Validate_CloseShipOrders2.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{87D65121-D18E-4127-A081-6A780DCFEE10}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>loopuninstall</RootNamespace>
+    <AssemblyName>loopuninstall</AssemblyName>
+    <RanorexVersion>6.0</RanorexVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <projectdefaultrepository>3f8dc366-3ef1-4e84-8412-b39abd7bd16f</projectdefaultrepository>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ranorex.Core" />
+    <Reference Include="Ranorex.Plugin.ChromeWeb" />
+    <Reference Include="Ranorex.Plugin.Flex" />
+    <Reference Include="Ranorex.Plugin.Java" />
+    <Reference Include="Ranorex.Plugin.Mobile" />
+    <Reference Include="Ranorex.Plugin.MozillaWeb" />
+    <Reference Include="Ranorex.Plugin.Msaa" />
+    <Reference Include="Ranorex.Plugin.Office" />
+    <Reference Include="Ranorex.Plugin.Qt" />
+    <Reference Include="Ranorex.Plugin.RawText" />
+    <Reference Include="Ranorex.Plugin.Sap" />
+    <Reference Include="Ranorex.Plugin.Uia" />
+    <Reference Include="Ranorex.Plugin.Web" />
+    <Reference Include="Ranorex.Plugin.Win32" />
+    <Reference Include="Ranorex.Plugin.WinForms" />
+    <Reference Include="Ranorex.Plugin.Wpf" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <id>0ad1538f-8c58-4062-875c-92092d0528e0</id>
+    </Compile>
+    <Compile Include="loopuninstallRepository.cs">
+      <BoundTo>3f8dc366-3ef1-4e84-8412-b39abd7bd16f</BoundTo>
+      <DependentUpon>loopuninstallRepository.rxrep</DependentUpon>
+      <RepositoryCode>true</RepositoryCode>
+      <id>8113482e-1c3d-4750-a0f8-fc0acc4a85b1</id>
+    </Compile>
+    <Compile Include="Recording1.cs">
+      <BoundTo>6049e1d0-f693-460d-9fac-891fd698ec4d</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2b001355-4ffe-4e7e-8330-be0743973897</id>
+    </Compile>
+    <Compile Include="Recording1.UserCode.cs">
+      <BoundTo>6049e1d0-f693-460d-9fac-891fd698ec4d</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>99b48d27-86f2-4916-9053-410284f398a8</id>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="loopuninstallRepository.rximg">
+      <BoundTo>3f8dc366-3ef1-4e84-8412-b39abd7bd16f</BoundTo>
+      <DependentUpon>loopuninstallRepository.rxrep</DependentUpon>
+      <imageblob>true</imageblob>
+      <id>3ed152f1-02fd-4cb8-95be-294e138dd6c4</id>
+    </None>
+    <None Include="loopuninstallRepository.rxrep">
+      <id>3f8dc366-3ef1-4e84-8412-b39abd7bd16f</id>
+      <repoid>80f8852d-aefc-4faa-a162-387cebf4d4a4</repoid>
+      <reporootid>077dcf1d-2888-4666-ae2f-6e850d88ffc1</reporootid>
+    </None>
+    <None Include="Recording1.rxrec">
+      <id>6049e1d0-f693-460d-9fac-891fd698ec4d</id>
+      <recordtableid>08e87d98-7414-487f-8c72-c66dc980103e</recordtableid>
+      <BoundTo>3f8dc366-3ef1-4e84-8412-b39abd7bd16f</BoundTo>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="loopuninstall.rxtmg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>10f3970f-6409-4c22-b72d-63cdacea525a</id>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets" Condition="Exists('$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets')" />
+</Project>
