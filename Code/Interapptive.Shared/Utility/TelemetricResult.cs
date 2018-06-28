@@ -14,7 +14,7 @@ namespace Interapptive.Shared.Utility
     {
         private readonly string baseTelemetryName;
         private readonly Stopwatch stopwatch;
-        private readonly Dictionary<string, long> telemetry;
+        private readonly Dictionary<string, List<long>> telemetry;
         private string currentEventName;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Interapptive.Shared.Utility
             this.baseTelemetryName = baseTelemetryName;
             currentEventName = string.Empty;
             stopwatch = new Stopwatch();
-            telemetry = new Dictionary<string, long>();
+            telemetry = new Dictionary<string, List<long>>();
         }
 
         /// <summary>
@@ -41,6 +41,23 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public T Value { get; private set; }
 
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        public void TimedEvent(string eventName, Action eventToTime)
+        {
+            StartTimedEvent(eventName);
+            try
+            {
+                eventToTime();
+                StopTimedEvent(eventName);
+            }
+            catch (Exception)
+            {
+                StopTimedEvent(eventName);
+                throw;
+            }
+        }
         /// <summary>
         /// Start timing an event
         /// </summary>
@@ -67,7 +84,7 @@ namespace Interapptive.Shared.Utility
             stopwatch.Stop();
             
             long elapsed = stopwatch.ElapsedMilliseconds;
-            telemetry.Add($"{baseTelemetryName}.{eventName}", elapsed);
+            AddEntry($"{baseTelemetryName}.{eventName}", elapsed);
             
             stopwatch.Reset();
         }
@@ -77,7 +94,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void Combine(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
-            resultToAdd.telemetry.ForEach(t => telemetry.Add(t.Key, t.Value));
+            resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 
             if (useNewResultsValue)
             {
@@ -90,8 +107,33 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void Populate(ITrackedDurationEvent trackedDurationEvent)
         {
+            foreach (KeyValuePair<string, List<long>> telemetryEventType in telemetry)
+            {
+                if (telemetryEventType.Value.Count > 1)
+                {
+                    for (int i = 0; i < telemetryEventType.Value.Count; i++)
+                    {
+                        trackedDurationEvent.AddProperty($"{telemetryEventType.Key}.{i + 1}",
+                            telemetryEventType.Value[i].ToString());
+                    }
+                }
+            }
+
             telemetry.ForEach(t => trackedDurationEvent.AddProperty(t.Key, t.Value.ToString()));
-            trackedDurationEvent.AddProperty(baseTelemetryName, telemetry.Sum(x=>x.Value).ToString());
+            trackedDurationEvent.AddProperty(baseTelemetryName, telemetry.Sum(x => x.Value).ToString());
+        }
+
+        /// <summary>
+        /// Adds an entry to telemetry
+        /// </summary>
+        private void AddEntry(string name, long time)
+        {
+            if (!telemetry.ContainsKey(name))
+            {
+                telemetry[name] = new List<long>();
+            }
+            
+            telemetry[name].Add(time);
         }
     }
 }

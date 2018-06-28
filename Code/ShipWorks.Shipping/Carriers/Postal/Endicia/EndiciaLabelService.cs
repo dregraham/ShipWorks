@@ -120,9 +120,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 // Check Endicia amount
-                telemetricResult.StartTimedEvent("GetEndiciaRates");
+                // Per John: We don't differentiate between Express1 and Endicia rates because
+                // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
+                telemetricResult.StartTimedEvent("GetRates");
                 RateResult endiciaRate = GetEndiciaRate(shipment, endiciaApiClient);
-                telemetricResult.StopTimedEvent("GetEndiciaRates");
+                telemetricResult.StopTimedEvent("GetRates");
 
                 // Change the shipment to Express1
                 shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
@@ -130,9 +132,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
                 // Check Express1 amount
-                telemetricResult.StartTimedEvent("GetExpress1Rates");
+                // Per John: We don't differentiate between Express1 and Endicia rates because
+                // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
+                telemetricResult.StartTimedEvent("GetRates");
                 RateResult express1Rate = GetExpress1Rate(shipment);
-                telemetricResult.StopTimedEvent("GetExpress1Rates");
+                telemetricResult.StopTimedEvent("GetRates");
 
                 useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
             }
