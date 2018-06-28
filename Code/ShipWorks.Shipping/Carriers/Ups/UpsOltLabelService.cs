@@ -40,9 +40,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
                 
-                UpsLabelResponse upsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
+                TelemetricResult<UpsLabelResponse> telemetricUpsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
                 
-                telemetricResult.SetValue(createDownloadedLabelData(upsLabelResponse));
+                telemetricUpsLabelResponse.CopyTo(telemetricResult);
+                telemetricResult.SetValue(createDownloadedLabelData(telemetricUpsLabelResponse.Value));
+                
                 return Task.FromResult(telemetricResult);
             }
             catch (UpsApiException ex)
