@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.EasyTrackResponse;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -77,7 +75,7 @@ namespace Interapptive.Shared.Tests.Utility
             testObject.TimedEvent("event1", ()=>{});
 
             var toCombine = new TelemetricResult<int>("base2");
-            testObject.TimedEvent("event2", ()=>{});
+            toCombine.TimedEvent("event2", ()=>{});
 
             testObject.Combine(toCombine, true);
 
@@ -93,11 +91,10 @@ namespace Interapptive.Shared.Tests.Utility
         {
             var testObject = new TelemetricResult<int>("base1");
             testObject.TimedEvent("event1", ()=> Thread.Sleep(10));
-            
             int originalTestObjectTime = GetLastTime(testObject);
 
             var toCombine = new TelemetricResult<int>("base2");
-            testObject.TimedEvent("event2", ()=> Thread.Sleep(20));
+            toCombine.TimedEvent("event2", ()=> Thread.Sleep(20));
             int originalToCombineTestObjectTime = GetLastTime(toCombine);
 
             testObject.Combine(toCombine, true);
