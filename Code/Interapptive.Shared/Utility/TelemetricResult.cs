@@ -107,6 +107,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void Populate(ITrackedDurationEvent trackedDurationEvent)
         {
+            long overallTime = 0;
             foreach (KeyValuePair<string, List<long>> telemetryEventType in telemetry)
             {
                 if (telemetryEventType.Value.Count > 1)
@@ -117,10 +118,13 @@ namespace Interapptive.Shared.Utility
                             telemetryEventType.Value[i].ToString());
                     }
                 }
-            }
 
-            telemetry.ForEach(t => trackedDurationEvent.AddProperty(t.Key, t.Value.ToString()));
-            trackedDurationEvent.AddProperty(baseTelemetryName, telemetry.Sum(x => x.Value).ToString());
+                long totalTimeForEventType = telemetryEventType.Value.Sum(v => v);
+                overallTime += totalTimeForEventType;
+                trackedDurationEvent.AddProperty($"{telemetryEventType.Key}", totalTimeForEventType.ToString());
+            }
+            
+            trackedDurationEvent.AddProperty(baseTelemetryName, overallTime.ToString());
         }
 
         /// <summary>
