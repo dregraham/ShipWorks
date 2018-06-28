@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="9026e307-9580-4142-b594-58e04d2be78d"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		PressEscape5Times
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="PressEscape5Times"
+	namespace="UIResponsiveness"/>
+	<variables/>
+	<recorditems>
+		<keysequenceitem
+		enabled="True"
+		optional="False"
+		duration="100ms"
+		searchpropertyid="7df4636a-d44f-4f8c-bec6-180494ada50c"
+		KeySequence="{Escape}{Escape}{Escape}{Escape}{Escape}"
+		presstime="100ms">
+			<comment>
+				Press Escape button 5 times, this is in an effort to attempt to prevent the test suite from failing
+			</comment>
+			<bindings/>
+		</keysequenceitem>
+	</recorditems>
+	<repository
+	name="SoakPerformanceTestRepository"
+	id="bd7b687b-0efc-4b09-ae67-240649718516"
+	rxversion="5.4.5.19886"
+	relativepath="SoakPerformanceTestRepository.rxrep">
+		<codegen
+		classname="SoakPerformanceTestRepository"
+		namespace="UIResponsiveness"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="ae0c01ae-9da3-4f2c-95c5-6e24580e0462"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		PressEscape5Times.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

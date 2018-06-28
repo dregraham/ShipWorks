@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="6.0">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="Create1000Orders"
+      id="97da8402-deb1-4bc5-9b41-ddef1a87328f"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="Create1000Orders"
+      id="97da8402-deb1-4bc5-9b41-ddef1a87328f"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

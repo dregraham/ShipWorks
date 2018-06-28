@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="c47b3272-f191-49b3-9af3-f2cb96bc34e4"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		ProcessDoNotVoidShipment_Validate_CloseShipOrders
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ProcessDoNotVoidShipment_Validate_CloseShipOrders"
+	namespace="SoakPerformanceTest"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="69e1b527-5614-433b-8a50-65dae8ceaedd"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click &quot;Create Label&quot;
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="28994b08-f9e2-4fb6-b17d-0d2dcac53f13">
+				<path>
+					/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']/rawtext[@row='0' and @column='0']
+				</path>
+			</info>
+		</mouseitem>
+		<WaitForRecordItem
+		enabled="True"
+		optional="False"
+		searchpropertyid="5b4357d9-b39e-4b0b-9097-39e8ce77d982"
+		waittimeout="60000ms"
+		waitaction="NotExists">
+			<comment>
+				Wait for the &quot;Processing&quot; modal to disappear (for up to 1 minute)
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="1eeab451-063b-4d2e-bd8c-94563bb3ea8f">
+				<path>
+					/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']
+				</path>
+			</info>
+		</WaitForRecordItem>
+		<explicitdelayitem
+		enabled="True"
+		optional="False"
+		duration="500ms">
+			<comment>
+				Delay 500ms
+			</comment>
+			<bindings/>
+		</explicitdelayitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="4b3350c4-caa4-4d7d-b351-cfd2c5da107b"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Close out of the Ship Orders UI
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="4df7c55c-256c-4aa4-bfbd-290cf80709aa">
+				<path>
+					/form[@controlname='ShippingDlg']/button[@controlname='close']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	name="SoakPerformanceTestRepository"
+	id="27a54e36-d55b-41c3-b88f-9e8b75ccd8bb"
+	rxversion="5.4.5.19886"
+	relativepath="SoakPerformanceTestRepository.rxrep">
+		<codegen
+		classname="SoakPerformanceTestRepository"
+		namespace="SoakPerformanceTest"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="ae0c01ae-9da3-4f2c-95c5-6e24580e0462"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ProcessDoNotVoidShipment_Validate_CloseShipOrders.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

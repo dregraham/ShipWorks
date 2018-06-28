@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+id="e6e0c247-8e9d-4ae9-b344-9fc80d5a0e59"
+name="DownloadManyStoresRepository"
+rxversion="8.1">
+	<codegen
+	classname="DownloadManyStoresRepository"
+	namespace="DownloadManyStores">
+	</codegen>
+	<rootfolder
+	capname="unknown"
+	id="acac629f-069f-451b-8f20-c07118d148f6"
+	isrooted="True"
+	name="Root"
+	searchtimeout="30000ms"
+	usecache="True">
+		<basepath>
+		</basepath>
+	</rootfolder>
+	<variables>
+	</variables>
+</repository>

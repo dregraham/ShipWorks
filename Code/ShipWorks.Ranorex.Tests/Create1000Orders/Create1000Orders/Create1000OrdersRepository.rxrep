@@ -1,0 +1,161 @@
+﻿<repository
+name="Create1000OrdersRepository"
+id="bb7a4068-ba07-455c-9be2-7b6d2fd7f64d"
+rxversion="6.0">
+	<codegen
+	classname="Create1000OrdersRepository"
+	namespace="Create1000Orders"/>
+	<rootfolder
+	name="Root"
+	id="f2235957-cf06-4396-a170-9b0efb4a1be2"
+	searchtimeout="0ms"
+	capname="unknown"
+	isrooted="True"
+	usecache="True">
+		<appfolder
+		name="MainForm"
+		id="9793b585-13b2-4ec6-b9ac-af02291a8523"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='MainForm' and @title='ShipWorks - bbadvanced4@fake.com']"
+		addcaps="form,control,nativewindow"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="RawTextNew"
+			id="b9c23b07-ae3d-438c-bc37-6ffeab750f74"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="4c67e741-b1cd-40e5-8d1a-b26745d21a91">
+				/form[@title~'^ShipWorks\ -\ bbadvanced4@f']/?/?/element[@controlname='ribbonTabHome']/rawtext[@rawtext='New']
+			</item>
+			<basepath>
+				/form[@title~'^ShipWorks\ -\ bbadvanced4@f']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJMSURBVDhPtZBdSNNRGMYPBLZpF9FN6I3ZzJxJ
+NUERTLooUySjT6WCtCQrsIi8mNYqCiWIWZF60UWlQbgZgVPbMqaYtNrK0H38MyepW/tmYpsySmpP
+Z+vM/Odue+DHOYf3eZ4DL/kvMjlCR5qG3KNXnllxUzEOWbsJB+W6EXJWdS75ek8is61UF7BKPz0P
+T3AR30I/8dEZwg21DQqdA5efcyCnu0Fqus3MHl/3dD4MTy1EidwNru+REMgZVYxBZo2v+j4bWl67
+oTLOQto7g6dckF9Q061k1vg638EhwoV2S/S8Nez9p6CnhVnjq6JZj4rmd0tUdlr/himCauVVZuUr
+PFlW7hoq9GRIB5Al1TJeoeDu+2W/q9Da0Ai7vA7mvUUPRlO3rSVhbxdd+RsgYAB8SixOXMRIzzHs
+lslpoA9Jdf3R7T++1gR37VFw6WKMpm6GTVYPTpIL8mtswzjM2cDXO4BxHcLT5fAbSuFQr4ZTkwDf
+w0YE3r7ArFYBT8dthP12jKVmYCwtE8aNYpCgvkw9rz+MH19aEdQfR0B3iIYTaFhIEWBaVg1/7yP4
+FPcx01CF0If+aDAG8QzsbPNqC+HV7qAUUPLZ738KrCdLMVlVgolKyolizD2R8wscmpRLTk0KNScz
+1vMKPhXngyvJA7eHUpQLl/QUv8CuXnPAoU6ioeUIlgrMkq2w5GTDJKHQc2r/Ln5BTE5NYptTEwkn
+sgLBHBsRc/oWkVEkXjBuysLnnO3RoCkts5aN+XJohPvcL4V57LlCFpG4k12pCPkNtP3MDxHi5EQA
+AAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		name="AddOrderWizard"
+		id="b1b624cb-11c2-4b5d-abfd-d84e09b98322"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='AddOrderWizard']"
+		addcaps="form,control,nativewindow"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="RadioAssignCustomer"
+			id="8e7b7f6a-3074-4273-9fa5-11d388befc90"
+			searchtimeout="30000ms"
+			capname="radiobutton"
+			addcaps="radiobutton,control,nativewindow"
+			refimgid="85b7f4fc-be95-4f99-9af1-6aa4fb05f5e7">
+				/form[@controlname='AddOrderWizard']/container[@controlname='mainPanel']//radiobutton[@controlname='radioAssignCustomer'][@enabled='true']
+			</item>
+			<item
+			name="Select"
+			id="bd8b606e-89ce-4b34-92b2-11a0b504ae05"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="94582195-34ae-4d6a-95d7-f353ef62b570">
+				/form[@controlname='AddOrderWizard']/container[@controlname='mainPanel']//text[@controlname='linkSelectCustomer']/rawtext[@rawtext='Select...'][@enabled='true']
+			</item>
+			<item
+			name="Next"
+			id="69d029f8-d2fb-4d56-b819-416fb3c18791"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="7a05726b-1c74-4d07-912f-da7e97e74f35">
+				/form[@controlname='AddOrderWizard']/?/?/rawtext[@rawtext='Next &gt;' and @row='0'][@enabled='true']
+			</item>
+			<item
+			name="Finish"
+			id="ddc46a98-65d5-4e33-8fd7-824cbf9cff11"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="0104e45d-cf2f-4b38-aab8-698611e266f3">
+				/form[@controlname='AddOrderWizard']/?/?/rawtext[@rawtext='Finish' and @row='0'][@enabled='true']
+			</item>
+			<basepath>
+				/form[@controlname='AddOrderWizard']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		name="EntityPickerDlg"
+		id="bdc8ab56-8112-4b46-b0cd-0178c633efc8"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='EntityPickerDlg']"
+		addcaps="form,control,nativewindow"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="Eman"
+			id="aafe9cff-fc35-485a-98a4-e2d3614b1897"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="79c2efca-20ac-497f-b272-d3231f324c99">
+				/form[@controlname='EntityPickerDlg']/container[@controlname='splitContainer']//container[@controlname='gridPanel']/?/?/rawtext[@rawtext='Eman'][@enabled='true']
+			</item>
+			<item
+			name="ButtonOk"
+			id="1f207d7e-46b7-4a3c-85db-1e9095a5e4ab"
+			searchtimeout="30000ms"
+			capname="button"
+			addcaps="button,control,nativewindow"
+			refimgid="1f4990c6-3686-4027-8413-7b2aff79684e">
+				/form[@controlname='EntityPickerDlg']/button[@controlname='ok'][@enabled='true']
+			</item>
+			<basepath>
+				/form[@controlname='EntityPickerDlg']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<basepath/>
+	</rootfolder>
+	<variables/>
+</repository>

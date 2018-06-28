@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="ae102777-092d-4454-8ce3-6498907b99b9"
+mode="Global"
+rxversion="7.0">
+	<name>
+		ChooseUPSExpressBoxSmall
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ChooseUPSExpressBoxSmall"
+	namespace="ShippingCarrierRegression">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<invokeactionrecorditem
+		action="Focus"
+		enabled="True"
+		optional="False"
+		searchpropertyid="83d23549-8d2e-4222-b370-abc218db7f3a"
+		varname="">
+			<comment>
+				Focus on package type
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="ea072683-544a-4e21-8cb2-6feba8edc81e"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/combobox[@controlname='packagingType']
+				</path>
+			</info>
+			<arguments
+			id="fb68986f-7dcc-4240-9520-9e031a8fc5ef">
+			</arguments>
+		</invokeactionrecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="86e2f8e8-9674-432b-92ae-ed654b6feb45"
+		sx="910"
+		sy="325"
+		warnoutofbounds="False">
+			<comment>
+				Move to package type
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="ea072683-544a-4e21-8cb2-6feba8edc81e"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/combobox[@controlname='packagingType']
+				</path>
+			</info>
+		</mouseitem>
+		<setvaluerecorditem
+		attrname="SelectedItemText"
+		enabled="True"
+		optional="False"
+		searchpropertyid="3bc258b5-257d-47f9-bf3a-74b9228feb10">
+			<comment>
+				Set Packaging: FedEx Large Box
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="ea072683-544a-4e21-8cb2-6feba8edc81e"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/combobox[@controlname='packagingType']
+				</path>
+			</info>
+			<AttributeValue>
+				UPS Express&#174; Box - Small
+			</AttributeValue>
+		</setvaluerecorditem>
+	</recorditems>
+	<repository
+	id="1746c819-e390-458c-9b66-d168eb35b96c"
+	name="ShippingCarrierRegressionRepository"
+	relativepath="ShippingCarrierRegressionRepository.rxrep"
+	rxversion="7.0">
+		<codegen
+		classname="ShippingCarrierRegressionRepository"
+		namespace="ShippingCarrierRegression">
+		</codegen>
+		<rootfolder
+		id="8b3666b0-4472-487b-baaa-0a31e8982b7d"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ChooseUPSExpressBoxSmall.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

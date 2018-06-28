@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="bd4418eb-6900-4b58-8694-2ab3473ead47"
+mode="Global"
+rxversion="8.1">
+	<name>
+		EnableUPSMailInnovations
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="EnableUPSMailInnovations"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="31f46ba3-43fb-453f-8c4c-034eb9eab2c6"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="0b8c48b8-fe40-4668-8dc8-f260417edb49"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@title~'ShipWorks']/?/?/rawtext[@rawtext='Home' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="5eb25af4-319c-42d1-a3e1-1781d0776b10"
+		sx="439"
+		sy="112"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="0b8c48b8-fe40-4668-8dc8-f260417edb49"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="3"
+				prefcap="rawtext"
+				rect="423,108,27,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Home
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						2
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#15428B
+					</attribute>
+				</element>
+				<path>
+					/form[@title~'ShipWorks']/?/?/rawtext[@rawtext='Home']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="cd1c18fc-4a5f-4ef8-8a05-79b63de6b517">
+				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
+Gm23dWP/AAI1copAf//Z
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="a946b733-37a4-46b0-82bd-4f5258a280f5"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Mouse Move to avoid click inconsistency
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2d5a292a-ea64-4286-afc3-9959d09ba6b9"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='MainForm']/?/?/rawtext[@rawtext='Manage']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="a946b733-37a4-46b0-82bd-4f5258a280f5"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click: Manage ribbon buttons
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2d5a292a-ea64-4286-afc3-9959d09ba6b9"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='MainForm']/?/?/rawtext[@rawtext='Manage']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="35d9785d-582c-42c2-8d8e-bef89faf3bdc"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Mouse Move to avoid click inconsistency
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d84819f3-58f2-4513-871c-2207e3f27994"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Shipping']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="35d9785d-582c-42c2-8d8e-bef89faf3bdc"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click: Shipping Settings button
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d84819f3-58f2-4513-871c-2207e3f27994"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Shipping']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="8fbc1b95-1d4e-496f-8594-019f643e93f1"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Mouse Move to avoid click inconsistency
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="39d0317c-bbcd-41c3-a7fe-a15d7b9f06f0"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/list/?/?/listitem[@accessiblename='UPS' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="51678602-45db-409d-b6a7-b5572d8e5796"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click: UPS (Provider)
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="39d0317c-bbcd-41c3-a7fe-a15d7b9f06f0"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/list/?/?/listitem[@accessiblename='UPS']
+				</path>
+			</info>
+		</mouseitem>
+		<invokeactionrecorditem
+		action="Focus"
+		enabled="True"
+		optional="False"
+		searchpropertyid="ed04308c-6f43-40b0-8f97-89325e676219"
+		varname="">
+			<comment>
+				Give Focus
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="f2956291-59b0-4016-b27e-f3f90e50a8e8"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/container[@caption='UPS']//tabpage[@controlname='tabPageSettings']/?/?/container[@controlname='upsMailInnovationsOptions']/checkbox[@controlname='mailInnovations']
+				</path>
+			</info>
+			<arguments
+			id="8d00dd82-cdf6-4776-b4c0-a1bd22138b21">
+			</arguments>
+		</invokeactionrecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="7082956a-96b7-44ed-8825-c17db72096ea"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Mouse Move to avoid click inconsistency
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="f2956291-59b0-4016-b27e-f3f90e50a8e8"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/container[@caption='UPS']//tabpage[@controlname='tabPageSettings']/?/?/container[@controlname='upsMailInnovationsOptions']/checkbox[@controlname='mailInnovations' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<setvaluerecorditem
+		attrname="Checked"
+		enabled="True"
+		optional="False"
+		searchpropertyid="88ac6911-78b6-4db9-b365-cceb1ed2e9b0">
+			<comment>
+				Set Checked: UPS Mail Innovations checkbox
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="f2956291-59b0-4016-b27e-f3f90e50a8e8"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/container[@caption='UPS']//tabpage[@controlname='tabPageSettings']/?/?/container[@controlname='upsMailInnovationsOptions']/checkbox[@controlname='mailInnovations']
+				</path>
+			</info>
+			<AttributeValue>
+				true
+			</AttributeValue>
+		</setvaluerecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="bd96a382-784a-4568-9f22-d42bb8adeda0"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Mouse Move to avoid click inconsistency
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2b64dba7-0d3a-4d89-bfbd-58102dc02f40"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/button[@controlname='close']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="bd96a382-784a-4568-9f22-d42bb8adeda0"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click: Close
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2b64dba7-0d3a-4d89-bfbd-58102dc02f40"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/button[@controlname='close']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		EnableUPSMailInnovations.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>
