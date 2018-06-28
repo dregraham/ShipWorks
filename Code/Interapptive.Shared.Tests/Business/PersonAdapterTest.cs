@@ -7,6 +7,18 @@ namespace Interapptive.Shared.Tests.Business
 {
     public class PersonAdapterTest
     {
+        [Theory]
+        [InlineData(null, null, true)]
+        [InlineData("", "", true)]
+        [InlineData("Foo", null, false)]
+        [InlineData(null, "Foo", false)]
+        [InlineData("Foo", "Bar", false)]
+        public void IsAddressEmpty_ReturnsValue_DependingOnCityAndPostalCode(string city, string postalCode, bool result)
+        {
+            var address = new PersonAdapter { City = city, PostalCode = postalCode };
+            Assert.Equal(result, PersonAdapter.IsAddressEmpty(address));
+        }
+
         [Fact]
         public void ParsedName_GetsValues_AsPersonName()
         {
