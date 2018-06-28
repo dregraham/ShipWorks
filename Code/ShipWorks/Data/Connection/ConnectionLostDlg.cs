@@ -141,7 +141,7 @@ namespace ShipWorks.Data.Connection
                 DialogResult = DialogResult.Abort;
                 return false;
             }
-            catch (Exception ex) when(ConnectionMonitor.IsDbConnectionException(ex))
+            catch (Exception ex) when (ConnectionMonitor.IsDbConnectionException(ex))
             {
                 log.Error("Reconnect failed", ex);
 
