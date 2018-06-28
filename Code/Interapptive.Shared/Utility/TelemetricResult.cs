@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 
 namespace Interapptive.Shared.Utility
 {
@@ -12,8 +14,7 @@ namespace Interapptive.Shared.Utility
     {
         private readonly string baseTelemetryName;
         private readonly Stopwatch stopwatch;
-        private long totalElapsed;
-        private readonly Dictionary<string, string> telemetry;
+        private readonly Dictionary<string, long> telemetry;
         private string currentEventName;
 
         /// <summary>
@@ -22,10 +23,9 @@ namespace Interapptive.Shared.Utility
         public TelemetricResult(string baseTelemetryName)
         {
             this.baseTelemetryName = baseTelemetryName;
-            totalElapsed = 0;
             currentEventName = string.Empty;
             stopwatch = new Stopwatch();
-            telemetry = new Dictionary<string, string>();
+            telemetry = new Dictionary<string, long>();
         }
 
         /// <summary>
@@ -40,18 +40,6 @@ namespace Interapptive.Shared.Utility
         /// The actual result
         /// </summary>
         public T Value { get; private set; }
-
-        /// <summary>
-        /// The telemetry data associated with the result
-        /// </summary>
-        public Dictionary<string, string> Telemetry 
-        {
-            get
-            {
-                AddTotalTime();
-                return telemetry;
-            }
-        }
 
         /// <summary>
         /// Start timing an event
@@ -79,24 +67,17 @@ namespace Interapptive.Shared.Utility
             stopwatch.Stop();
             
             long elapsed = stopwatch.ElapsedMilliseconds;
-            telemetry.Add($"{baseTelemetryName}.{eventName}", elapsed.ToString());
-            totalElapsed += elapsed;
+            telemetry.Add($"{baseTelemetryName}.{eventName}", elapsed);
             
             stopwatch.Reset();
         }
-
-        /// <summary>
-        /// Add property to telemetry items
-        /// </summary>
-        public void AddProperty(string propertyName, string value) => telemetry.Add(propertyName, value);
 
         /// <summary>
         /// Add another telemetric result's properties and totalElapsedTime to this one
         /// </summary>
         public void Combine(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
-            resultToAdd.telemetry.ForEach(t => AddProperty(t.Key, t.Value));
-            totalElapsed += resultToAdd.totalElapsed;
+            resultToAdd.telemetry.ForEach(t => telemetry.Add(t.Key, t.Value));
 
             if (useNewResultsValue)
             {
@@ -105,13 +86,12 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Add up the total time and store the result
+        /// Add internal telemetric events to the passed in TrackedDurationEvent
         /// </summary>
-        private void AddTotalTime()
+        public void Populate(ITrackedDurationEvent trackedDurationEvent)
         {
-            Debug.Assert(stopwatch.IsRunning == false);
-            
-            telemetry[baseTelemetryName] = totalElapsed.ToString();
+            telemetry.ForEach(t => trackedDurationEvent.AddProperty(t.Key, t.Value.ToString()));
+            trackedDurationEvent.AddProperty(baseTelemetryName, telemetry.Sum(x=>x.Value).ToString());
         }
     }
 }

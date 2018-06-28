@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -63,6 +64,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Telemetry properties related to this result
         /// </summary>
-        Dictionary<string, string> Telemetry { get; }
+        TelemetricResult<IDownloadedLabelData> Telemetry { get; }
     }
 }

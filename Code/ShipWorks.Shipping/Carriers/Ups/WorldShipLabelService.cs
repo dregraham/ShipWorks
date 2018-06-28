@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -25,13 +26,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public override Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             try
             {
                 base.Create(shipment);
 
-                return Task.FromResult(createDownloadedLabelData(new UpsLabelResponse { Shipment = shipment }));
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                IDownloadedLabelData downloadedLabelData = createDownloadedLabelData(new UpsLabelResponse { Shipment = shipment });
+                telemetricResult.SetValue(downloadedLabelData);
+                
+                return Task.FromResult(telemetricResult);
             }
             catch (CarrierException ex)
             {

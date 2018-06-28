@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data;
@@ -119,7 +120,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             ILabelService labelService = labelServiceFactory.Create(modifiedShipment.ShipmentTypeCode);
             Debug.Assert(Transaction.Current == null, "No transaction should exist at this point.");
 
-            IDownloadedLabelData labelData = await labelService.Create(modifiedShipment).ConfigureAwait(false);
+            TelemetricResult<IDownloadedLabelData> labelData = await labelService.Create(modifiedShipment).ConfigureAwait(false);
 
             return new LabelRetrievalResult(result, labelData, modifiedShipment, clone, fieldsToRestore);
         }

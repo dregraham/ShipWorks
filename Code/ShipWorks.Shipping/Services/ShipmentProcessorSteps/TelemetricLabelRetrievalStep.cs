@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                                                            })[shipmentAdapter.ServiceType];
 
             // Add carrier specific properties
-            labelResult.Telemetry.ForEach(t => telemetryEvent.AddProperty(t.Key, t.Value));
+            labelResult.Telemetry.Populate(telemetryEvent);
             
             // Add label/shipment properties
             telemetryEvent.AddProperty("Label.Creation.IsSuccessful", labelResult.Success.ToString());

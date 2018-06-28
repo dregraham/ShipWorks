@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public virtual Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public virtual Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
             UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
-            return Task.FromResult<IDownloadedLabelData>(new NullDownloadedLabelData());
+            return Task.FromResult(new TelemetricResult<IDownloadedLabelData>("Not used upstream"));
         }
 
         /// <summary>

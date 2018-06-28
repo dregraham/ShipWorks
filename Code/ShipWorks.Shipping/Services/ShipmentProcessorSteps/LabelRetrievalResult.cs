@@ -45,14 +45,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelRetrievalResult(IShipmentPreparationResult result, TelemetricResult<IDownloadedLabelData> labelData,
+        public LabelRetrievalResult(IShipmentPreparationResult result, TelemetricResult<IDownloadedLabelData> telemetricLabelData,
             ShipmentEntity shipment, ShipmentEntity clone,
             List<ShipmentFieldIndex> fieldsToRestore) :
             this(result)
         {
             Index = result.Index;
-            LabelData = labelData.Value;
-            Telemetry = labelData.Telemetry;
+            LabelData = telemetricLabelData.Value;
+            Telemetry = telemetricLabelData;
             OriginalShipment = shipment;
             Clone = clone;
             FieldsToRestore = fieldsToRestore;
@@ -111,6 +111,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Telemetry properties related to this result
         /// </summary>
-        public Dictionary<string, string> Telemetry { get; }
+        public TelemetricResult<IDownloadedLabelData> Telemetry { get; }
     }
 }
