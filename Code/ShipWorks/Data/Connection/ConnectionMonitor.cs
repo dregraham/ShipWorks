@@ -63,6 +63,7 @@ namespace ShipWorks.Data.Connection
                 596,   // SQL: Cannot continue the execution because the session is in the kill state
                 59,    // SQL: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - An unexpected network error occurred.)
                 1130,  // Win32: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - Not enough server storage is available to process this command.)
+                2,     // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Shared Memory Provider, error: 40 - Could not open a connection to SQL Server)
             });
 
         /// <summary>
@@ -515,7 +516,7 @@ namespace ShipWorks.Data.Connection
             IEnumerable<Exception> exceptions = ex.GetAllExceptions();
             IEnumerable<SqlException> sqlExceptions = exceptions.OfType<SqlException>();
 
-            if (sqlExceptions.Any())
+            if (sqlExceptions.Any() || exceptions.Any())
             {
                 List<int> errors = sqlExceptions.Select(e => e.Number).ToList();
 

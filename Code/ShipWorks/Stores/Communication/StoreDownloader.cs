@@ -1116,10 +1116,10 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
             Justification = "Identifier is not being used for data binding")]
-        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior,
+        public static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior,
             PersonAdapter orderAddress, PersonAdapter customerAddress, AddressAdapter originalAddress)
         {
-            if (!shouldUpdate || IsAddressEmpty(orderAddress))
+            if (!shouldUpdate || PersonAdapter.IsAddressEmpty(orderAddress))
             {
                 return;
             }
@@ -1151,19 +1151,13 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static bool ShouldCopyIfBlankOrMatching(AddressAdapter originalAddress, PersonAdapter address)
         {
-            if (IsAddressEmpty(address))
+            if (PersonAdapter.IsAddressEmpty(address))
             {
                 return true;
             }
 
             return originalAddress == null || originalAddress.Equals(address);
         }
-
-        /// <summary>
-        /// Is the entity's address considered empty?
-        /// </summary>
-        private static bool IsAddressEmpty(PersonAdapter address) =>
-            string.IsNullOrEmpty(address.City) && string.IsNullOrEmpty(address.PostalCode);
 
         /// <summary>
         /// Apply address casing to the order
