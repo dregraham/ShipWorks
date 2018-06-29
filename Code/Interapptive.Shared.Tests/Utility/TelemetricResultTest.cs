@@ -63,7 +63,7 @@ namespace Interapptive.Shared.Tests.Utility
             var toCombine = new TelemetricResult<int>("base2");
             toCombine.SetValue(2);
             
-            testObject.Combine(toCombine, useNewValue);
+            testObject.CopyFrom(toCombine, useNewValue);
             
             Assert.Equal(expectedValue, testObject.Value);
         }
@@ -77,7 +77,7 @@ namespace Interapptive.Shared.Tests.Utility
             var toCombine = new TelemetricResult<int>("base2");
             toCombine.RunTimedEvent("event2", ()=>{});
 
-            testObject.Combine(toCombine, true);
+            testObject.CopyFrom(toCombine, true);
 
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
@@ -97,7 +97,7 @@ namespace Interapptive.Shared.Tests.Utility
             toCombine.RunTimedEvent("event2", ()=> Thread.Sleep(20));
             int originalToCombineTestObjectTime = GetLastTime(toCombine);
 
-            testObject.Combine(toCombine, true);
+            testObject.CopyFrom(toCombine, true);
             int combinedTime = GetLastTime(testObject);
 
             Assert.Equal(originalTestObjectTime + originalToCombineTestObjectTime, combinedTime);

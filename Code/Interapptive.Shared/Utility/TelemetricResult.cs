@@ -113,9 +113,9 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Add another telemetric result's properties and totalElapsedTime to this one
+        /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        public void Combine(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
+        public void CopyFrom(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
             resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 

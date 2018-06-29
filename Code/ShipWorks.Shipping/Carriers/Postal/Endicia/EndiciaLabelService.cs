@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
 
             Task<TelemetricResult<IDownloadedLabelData>> express1LabelData = express1EndiciaLabelService.Create(shipment);
-            telemetricResult.Combine(express1LabelData.Result, true);
+            telemetricResult.CopyFrom(express1LabelData.Result, true);
 
             return Task.FromResult(telemetricResult);
         }
