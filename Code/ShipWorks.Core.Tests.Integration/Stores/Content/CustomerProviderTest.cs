@@ -137,6 +137,35 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Content
             }
         }
 
+        [Fact]
+        public async Task AcquireCustomer_UpdatesBothCustomerAddresses_WhenOrderAddressesAreNotEmpty()
+        {
+            Modify.Order(context.Order)
+                .Set(x => x.ShipCity = "Foo")
+                .Set(x => x.ShipPostalCode = "Bar")
+                .Set(x => x.BillCity = "Baz")
+                .Set(x => x.BillPostalCode = "Quux")
+                .Save();
+
+            var storeTypeCode = context.Container.Resolve<IStoreTypeManager>().GetType(context.Store.StoreTypeCode);
+
+            using (var sqlAdapter = context.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                await CustomerProvider.AcquireCustomer(context.Order, storeTypeCode, sqlAdapter);
+            }
+
+            using (var sqlAdapter = context.Container.Resolve<ISqlAdapterFactory>().Create())
+            {
+                var customer = new CustomerEntity { CustomerID = context.Customer.CustomerID };
+                sqlAdapter.FetchEntity(customer);
+
+                Assert.Equal("Foo", customer.ShipCity);
+                Assert.Equal("Bar", customer.ShipPostalCode);
+                Assert.Equal("Baz", customer.BillCity);
+                Assert.Equal("Quux", customer.BillPostalCode);
+            }
+        }
+
         public void Dispose() => context.Dispose();
     }
 }

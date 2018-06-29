@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Content
                     IConfigurationEntity config = ConfigurationData.FetchReadOnly();
 
                     var updated =
-                        UpdateCustomerAddress(config.CustomerUpdateBilling, order.BillPerson, customer.BillPerson) ||
+                        UpdateCustomerAddress(config.CustomerUpdateBilling, order.BillPerson, customer.BillPerson) |
                         UpdateCustomerAddress(config.CustomerUpdateShipping, order.ShipPerson, customer.ShipPerson);
 
                     if (updated || customer.IsDirty)
