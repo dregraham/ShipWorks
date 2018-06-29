@@ -966,7 +966,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>("API.ResponseTimeInMilliseconds");
             
             XmlDocument acceptResponse = null;
-            telemetricResult.RunTimedEvent("CreateLabel", () => acceptResponse = UpsWebClient.ProcessRequest(xmlWriter));
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => acceptResponse = UpsWebClient.ProcessRequest(xmlWriter));
 
             UpsLabelResponse upsLabelResponse = new UpsLabelResponse
             {

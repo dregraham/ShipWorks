@@ -48,17 +48,17 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public void RunTimedEvent(string eventName, Action eventToTime)
+        public void RunTimedEvent(TelemetricEventType eventType, Action eventToTime)
         {
-            StartTimedEvent(eventName);
+            StartTimedEvent(EnumHelper.GetDescription(eventType));
             try
             {
                 eventToTime();
-                StopTimedEvent(eventName);
+                StopTimedEvent(EnumHelper.GetDescription(eventType));
             }
             catch (Exception)
             {
-                StopTimedEvent(eventName);
+                StopTimedEvent(EnumHelper.GetDescription(eventType));
                 throw;
             }
         }
@@ -66,17 +66,17 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public async Task RunTimedEventAsync(string eventName, Func<Task> eventToTime)
+        public async Task RunTimedEventAsync(TelemetricEventType eventType, Func<Task> eventToTime)
         {
-            StartTimedEvent(eventName);
+            StartTimedEvent(EnumHelper.GetDescription(eventType));
             try
             {
                 await eventToTime();
-                StopTimedEvent(eventName);
+                StopTimedEvent(EnumHelper.GetDescription(eventType));
             }
             catch (Exception)
             {
-                StopTimedEvent(eventName);
+                StopTimedEvent(EnumHelper.GetDescription(eventType));
                 throw;
             }
         }

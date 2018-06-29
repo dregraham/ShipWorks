@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 LabelRequestResponse response = null;
-                telemetricResult.RunTimedEvent("GetLabel", () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
                 
                 return Task.FromResult(telemetricResult);
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Per John: We don't differentiate between Express1 and Endicia rates because
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
                 RateResult endiciaRate = null;
-                telemetricResult.RunTimedEvent("GetRates", () => endiciaRate = GetEndiciaRate(shipment, endiciaApiClient));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => endiciaRate = GetEndiciaRate(shipment, endiciaApiClient));
                 
                 // Change the shipment to Express1
                 shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Per John: We don't differentiate between Express1 and Endicia rates because
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
                 RateResult express1Rate = null;
-                telemetricResult.RunTimedEvent("GetRates", () => express1Rate = GetExpress1Rate(shipment));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => express1Rate = GetExpress1Rate(shipment));
                 
                 useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
             }

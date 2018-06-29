@@ -33,12 +33,12 @@ namespace Interapptive.Shared.Tests.Utility
         public void Populate_PopulatesTrackedDurationWithEvent()
         {
             var testObject = new TelemetricResult<int>("base");
-            testObject.RunTimedEvent("event1", ()=>{});
+            testObject.RunTimedEvent(TelemetricEventType.CleanseAddress, ()=>{});
             
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
             
-            telemetricEvent.Verify(t=>t.AddProperty("base.event1", AnyString), Times.Once);
+            telemetricEvent.Verify(t=>t.AddProperty("base.CleanseAddress", AnyString), Times.Once);
         }
 
         [Fact]
@@ -72,29 +72,29 @@ namespace Interapptive.Shared.Tests.Utility
         public void Combine_CombinesEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
-            testObject.RunTimedEvent("event1", ()=>{});
+            testObject.RunTimedEvent(TelemetricEventType.GetLabel, ()=>{});
 
             var toCombine = new TelemetricResult<int>("base2");
-            toCombine.RunTimedEvent("event2", ()=>{});
+            toCombine.RunTimedEvent(TelemetricEventType.GetRates, ()=>{});
 
             testObject.CopyFrom(toCombine, true);
 
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
 
-            telemetricEvent.Verify(t => t.AddProperty("base1.event1", AnyString), Times.Once);
-            telemetricEvent.Verify(t => t.AddProperty("base2.event2", AnyString), Times.Once);
+            telemetricEvent.Verify(t => t.AddProperty("base1.GetLabel", AnyString), Times.Once);
+            telemetricEvent.Verify(t => t.AddProperty("base2.GetRates", AnyString), Times.Once);
         }
         
         [Fact]
         public void Combine_LastTimeIsTheSumOfBothEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
-            testObject.RunTimedEvent("event1", ()=> Thread.Sleep(10));
+            testObject.RunTimedEvent(TelemetricEventType.GetRates, ()=> Thread.Sleep(10));
             int originalTestObjectTime = GetLastTime(testObject);
 
             var toCombine = new TelemetricResult<int>("base2");
-            toCombine.RunTimedEvent("event2", ()=> Thread.Sleep(20));
+            toCombine.RunTimedEvent(TelemetricEventType.GetLabel, ()=> Thread.Sleep(20));
             int originalToCombineTestObjectTime = GetLastTime(toCombine);
 
             testObject.CopyFrom(toCombine, true);

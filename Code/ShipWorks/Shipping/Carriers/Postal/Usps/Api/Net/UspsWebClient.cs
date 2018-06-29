@@ -1037,7 +1037,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     rate.PrintLayout = "EnvelopePersonal";
 
                     // A separate service call is used for processing envelope according to USPS as of v. 22
-                    telemetricResult.RunTimedEvent("CreateLabel", () =>
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () =>
                         result = webService.CreateEnvelopeIndicium(
                             new CreateEnvelopeIndiciumParameters
                             {
@@ -1058,7 +1058,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 else
                 {
                     // Labels for all other package types other than envelope get created via the CreateIndicium method
-                    telemetricResult.RunTimedEvent("CreateLabel", () =>
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () =>
                         result = webService.CreateIndicium(
                             new CreateIndiciumParameters
                             {
@@ -1141,14 +1141,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
-                await telemetricResult.RunTimedEventAsync("CleanseAddress",
+                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
                     async () => toAddress = await CleanseAddress(account, shipment.OriginPerson, false).ConfigureAwait(false));
                 fromAddress = CreateAddress(shipment.ShipPerson);
             }
             else
             {
                 fromAddress = CreateAddress(shipment.OriginPerson);
-                await telemetricResult.RunTimedEventAsync("CleanseAddress",
+                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
                     async () => toAddress =
                         await CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation)
                             .ConfigureAwait(false));

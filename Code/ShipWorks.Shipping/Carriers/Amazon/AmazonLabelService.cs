@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             if (string.IsNullOrEmpty(shipment.Amazon.ShippingServiceID))
             {
                 GenericResult<RateGroup> rateResult = new GenericResult<RateGroup>();
-                telemetricResult.RunTimedEvent("GetRates", () => rateResult = ratesRetriever.GetRates(shipment));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => rateResult = ratesRetriever.GetRates(shipment));
                 
                 if (rateResult.Success)
                 {
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonShipment labelResponse = null;
-            telemetricResult.RunTimedEvent("GetLabel", () => labelResponse = createShipmentRequest.Submit(shipment));
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => labelResponse = createShipmentRequest.Submit(shipment));
             telemetricResult.SetValue(createDownloadedLabelData(shipment, labelResponse));
             
             return Task.FromResult(telemetricResult);

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
             PostalWebToolsLabelResponse response = null;
-            telemetricResult.RunTimedEvent("GetLabel", () => response = PostalWebClientShipping.ProcessShipment(shipment.Postal));
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = PostalWebClientShipping.ProcessShipment(shipment.Postal));
             telemetricResult.SetValue(createDownloadedLabelData(response));
             
             // Process the shipment

@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (telemetricResult!=null)
                 {
-                    telemetricResult.RunTimedEvent("GetRates",
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetRates,
                         () => rateGroupsToConsolidate = GetRateGroupsForAllAccounts(shipment, uspsAccounts));
                 }
                 else
@@ -293,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             if (telemetricResult!=null)
             {
-                telemetricResult.RunTimedEvent("GetRates", ()=>uspsRates = CreateWebClient().GetRates(shipment));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, ()=>uspsRates = CreateWebClient().GetRates(shipment));
             }
             else
             {
