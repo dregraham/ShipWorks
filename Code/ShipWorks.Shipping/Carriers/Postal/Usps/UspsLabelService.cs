@@ -126,17 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     if (account.UspsReseller == (int) UspsResellerType.Express1)
                     {
-                        shipment.ShipmentType = (int) ShipmentTypeCode.Express1Usps;
-
-                        shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
-                        uspsShipmentType.UseAccountForShipment(account, shipment);
-
-                        IUspsShipmentType express1UspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Express1Usps];
-                        express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
-
-                        TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData =
-                            await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
-                        telemetricResult.CopyFrom(uspsDownloadedLabelData, true);
+                        await CreateUspsExpress1Label(shipment, uspsShipmentType, account, telemetricResult);
                     }
                     else
                     {
@@ -164,6 +154,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             return telemetricResult;
+        }
+
+        /// <summary>
+        /// Create label for USPS Express 1
+        /// </summary>
+        private async Task CreateUspsExpress1Label(ShipmentEntity shipment, IUspsShipmentType uspsShipmentType,
+                                                   IUspsAccountEntity account, TelemetricResult<IDownloadedLabelData> telemetricResult)
+        {
+            shipment.ShipmentType = (int) ShipmentTypeCode.Express1Usps;
+
+            shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
+            uspsShipmentType.UseAccountForShipment(account, shipment);
+
+            IUspsShipmentType express1UspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Express1Usps];
+            express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
+
+            TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData =
+                await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
+            telemetricResult.CopyFrom(uspsDownloadedLabelData, true);
         }
     }
 }
