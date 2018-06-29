@@ -115,13 +115,13 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        public void CopyFrom(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
+        public void CopyFrom<A>(TelemetricResult<A> resultToAdd, bool useNewResultsValue)
         {
             resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 
-            if (useNewResultsValue)
+            if (useNewResultsValue && GetType() == resultToAdd.Value.GetType())
             {
-                Value = resultToAdd.Value;
+                Value = (T) Convert.ChangeType(resultToAdd.Value, typeof(T));
             }
         }
 

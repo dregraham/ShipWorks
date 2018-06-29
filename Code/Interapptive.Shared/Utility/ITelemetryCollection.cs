@@ -13,6 +13,11 @@ namespace Interapptive.Shared.Utility
         void AddEntry(string name, long time);
 
         /// <summary>
+        /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
+        /// </summary>
+        void CopyFrom<A>(TelemetricResult<A> resultToAdd, bool useNewResultsValue);
+
+        /// <summary>
         /// Copy to the destination 
         /// </summary>
         void CopyTo(ITelemetryCollection destination);
