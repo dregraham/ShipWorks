@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                     new ProcessShipmentRequest(),
                     (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber));
 
-            TelemetricResult<GenericResult<IFedExShipResponse>> telemetricResult = new TelemetricResult<GenericResult<IFedExShipResponse>>("");
+            TelemetricResult<GenericResult<IFedExShipResponse>> telemetricResult = new TelemetricResult<GenericResult<IFedExShipResponse>>("FedExShipRequest");
 
             var processResult = request.Bind(
                 x => 

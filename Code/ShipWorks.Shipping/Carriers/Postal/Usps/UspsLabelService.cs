@@ -44,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
             
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
@@ -55,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
                 {
                     TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData = await ProcessShipmentWithRates(shipment).ConfigureAwait(false);
+                    return uspsDownloadedLabelData;
                 }
                 else
                 {
