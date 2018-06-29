@@ -34,7 +34,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void SetValue(T value)
         {
-            if (Value != null)
+            if (value != null)
             {
                 Value = value;
             }
