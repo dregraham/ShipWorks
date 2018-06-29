@@ -5,7 +5,7 @@ namespace Interapptive.Shared.Utility
     /// <summary>
     /// Interface that represents a collection of telemetry data
     /// </summary>
-    public interface ITelemetryCollection
+    public interface ITelemetryCollection<T>
     {
         /// <summary>
         /// Add an entry to the collection
@@ -15,12 +15,12 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        void CopyFrom<A>(TelemetricResult<A> resultToAdd, bool useNewResultsValue);
+        void CopyFrom<A>(TelemetricResult<T> resultToAdd, bool useNewResultsValue);
 
         /// <summary>
         /// Copy to the destination 
         /// </summary>
-        void CopyTo(ITelemetryCollection destination);
+        void CopyTo<A>(ITelemetryCollection<A> destination);
 
         /// <summary>
         /// Write telemetric events to the passed in TrackedDurationEvent

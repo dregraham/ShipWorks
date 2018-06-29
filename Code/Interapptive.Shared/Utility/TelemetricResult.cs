@@ -11,7 +11,7 @@ namespace Interapptive.Shared.Utility
     /// <summary>
     /// Generic class that can be used to return telemetry data along with a result
     /// </summary>
-    public class TelemetricResult<T> : ITelemetryCollection
+    public class TelemetricResult<T> : ITelemetryCollection<T>
     {
         private readonly string baseTelemetryName;
         private readonly Stopwatch stopwatch;
@@ -115,20 +115,20 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        public void CopyFrom<A>(TelemetricResult<A> resultToAdd, bool useNewResultsValue)
+        public void CopyFrom<A>(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
             resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 
-            if (useNewResultsValue && Value.GetType() == resultToAdd.Value.GetType())
+            if (useNewResultsValue)
             {
-                Value = (T) Convert.ChangeType(resultToAdd.Value, typeof(T));
+                Value = resultToAdd.Value;
             }
         }
 
         /// <summary>
         /// Copy all of the telemetry to the destination
         /// </summary>
-        public void CopyTo(ITelemetryCollection destination)
+        public void CopyTo<A>(ITelemetryCollection<A> destination)
         {
             foreach (KeyValuePair<string, List<long>> item in telemetry)
             {

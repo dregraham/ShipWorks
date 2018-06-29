@@ -119,7 +119,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(new RateGroup(new[] { rateResult }));
 
             var labelServiceMock = mock.CreateMock<ILabelService>();
-            labelServiceMock.Setup(s => s.Create(AnyShipment)).ReturnsAsync(new TelemetricResult<IDownloadedLabelData>(""));
+            var telemetricResult = new TelemetricResult<IDownloadedLabelData>("");
+            telemetricResult.SetValue(mock.Mock<IDownloadedLabelData>().Object);
+            labelServiceMock.Setup(s => s.Create(AnyShipment)).ReturnsAsync(telemetricResult);
 
             Mock<IIndex<ShipmentTypeCode, ILabelService>> labelServicesRepo = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ILabelService>>();
             labelServicesRepo.Setup(x => x[ShipmentTypeCode.Express1Usps])

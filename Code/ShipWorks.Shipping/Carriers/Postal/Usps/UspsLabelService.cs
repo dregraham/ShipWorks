@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData =
                 await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
-            telemetricResult.CopyFrom(uspsDownloadedLabelData, true);
+            telemetricResult.CopyFrom<int>(uspsDownloadedLabelData, true);
         }
     }
 }
