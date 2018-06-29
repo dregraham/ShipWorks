@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
@@ -30,7 +31,31 @@ namespace Interapptive.Shared.Tests.Utility
         }
 
         [Fact]
-        public void Populate_PopulatesTrackedDurationWithEvent()
+        public void RunTimedEvent_AddsMetricForEvent()
+        {
+            var eventToWriteTo = mock.CreateMock<ITrackedDurationEvent>();
+            
+            var testObject = new TelemetricResult<int>("bar");
+            testObject.RunTimedEvent(TelemetricEventType.GetLabel, () => {});
+            testObject.WriteTo(eventToWriteTo.Object);
+            
+            eventToWriteTo.Verify(e => e.AddMetric("bar.GetLabel", AnyDouble), Times.Once);
+        }
+        
+        [Fact]
+        public async Task RunTimedEventAsync_AddsMetricForEvent()
+        {
+            var eventToWriteTo = mock.CreateMock<ITrackedDurationEvent>();
+            
+            var testObject = new TelemetricResult<int>("bar");
+            await testObject.RunTimedEventAsync(TelemetricEventType.GetLabel, () => Task.CompletedTask);
+            testObject.WriteTo(eventToWriteTo.Object);
+            
+            eventToWriteTo.Verify(e => e.AddMetric("bar.GetLabel", AnyDouble), Times.Once);
+        }
+
+        [Fact]
+        public void WriteTo_PopulatesTrackedDurationWithEvent()
         {
             var testObject = new TelemetricResult<int>("base");
             testObject.RunTimedEvent(TelemetricEventType.CleanseAddress, ()=>{});
@@ -38,24 +63,24 @@ namespace Interapptive.Shared.Tests.Utility
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
             
-            telemetricEvent.Verify(t=>t.AddProperty("base.CleanseAddress", AnyString), Times.Once);
+            telemetricEvent.Verify(t=>t.AddMetric("base.CleanseAddress", AnyDouble), Times.Once);
         }
 
         [Fact]
-        public void Populate_PopulatesTotalTime_AsBaseTelemetryName()
+        public void WriteTo_PopulatesTotalTime_AsBaseTelemetryName()
         {
             var testObject = new TelemetricResult<int>("base");
 
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
             
-            telemetricEvent.Verify(t=>t.AddProperty("base", "0"), Times.Once);
+            telemetricEvent.Verify(t=>t.AddMetric("base", 0), Times.Once);
         }
 
         [Theory]
         [InlineData(true, 2)]
         [InlineData(false, 1)]
-        public void Combine_UsesCorrectValue_BasedOnUseNewResultsValue(bool useNewValue, int expectedValue)
+        public void CopyFrom_UsesCorrectValue_BasedOnUseNewResultsValue(bool useNewValue, int expectedValue)
         {
             var testObject = new TelemetricResult<int>("base1");
             testObject.SetValue(1);
@@ -69,7 +94,7 @@ namespace Interapptive.Shared.Tests.Utility
         }
 
         [Fact]
-        public void Combine_CombinesEvents()
+        public void CopyFrom_CopiesEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
             testObject.RunTimedEvent(TelemetricEventType.GetLabel, ()=>{});
@@ -82,37 +107,37 @@ namespace Interapptive.Shared.Tests.Utility
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
             testObject.WriteTo(telemetricEvent.Object);
 
-            telemetricEvent.Verify(t => t.AddProperty("base1.GetLabel", AnyString), Times.Once);
-            telemetricEvent.Verify(t => t.AddProperty("base2.GetRates", AnyString), Times.Once);
+            telemetricEvent.Verify(t => t.AddMetric("base1.GetLabel", AnyDouble), Times.Once);
+            telemetricEvent.Verify(t => t.AddMetric("base2.GetRates", AnyDouble), Times.Once);
         }
         
         [Fact]
-        public void Combine_LastTimeIsTheSumOfBothEvents()
+        public void CopyFrom_LastTimeIsTheSumOfBothEvents()
         {
             var testObject = new TelemetricResult<int>("base1");
             testObject.RunTimedEvent(TelemetricEventType.GetRates, ()=> Thread.Sleep(10));
-            int originalTestObjectTime = GetLastTime(testObject);
+            double originalTestObjectTime = GetLastTime(testObject);
 
             var toCombine = new TelemetricResult<int>("base2");
             toCombine.RunTimedEvent(TelemetricEventType.GetLabel, ()=> Thread.Sleep(20));
-            int originalToCombineTestObjectTime = GetLastTime(toCombine);
+            double originalToCombineTestObjectTime = GetLastTime(toCombine);
 
             testObject.CopyFrom(toCombine, true);
-            int combinedTime = GetLastTime(testObject);
+            double combinedTime = GetLastTime(testObject);
 
             Assert.Equal(originalTestObjectTime + originalToCombineTestObjectTime, combinedTime);
         }
 
-        private int GetLastTime(TelemetricResult<int> result)
+        private double GetLastTime(TelemetricResult<int> result)
         {
-            string lastTime = string.Empty;
+            double lastTime = 0;
             var telemetricEvent = mock.CreateMock<ITrackedDurationEvent>();
-            telemetricEvent.Setup(t => t.AddProperty(AnyString, AnyString))
-                .Callback<string, string>((name, time) => lastTime = time);
+            telemetricEvent.Setup(t => t.AddMetric(AnyString, AnyDouble))
+                .Callback<string, double>((name, time) => lastTime = time);
 
             result.WriteTo(telemetricEvent.Object);
-            
-            return int.Parse(lastTime);
+
+            return lastTime;
         }
 
         public void Dispose()

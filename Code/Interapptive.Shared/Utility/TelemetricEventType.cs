@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Event being timed
     /// </summary>
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
     public enum TelemetricEventType
     {
         [Description("GetLabel")]

@@ -8,12 +8,18 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
+    /// <summary>
+    /// Decorator for the LabelRetrievalStep that collects telemetry
+    /// </summary>
     public class TelemetricLabelRetrievalStep : ILabelRetrievalStep
     {
         private readonly ILabelRetrievalStep labelRetrievalStep;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public TelemetricLabelRetrievalStep(ILabelRetrievalStep labelRetrievalStep, ICarrierShipmentAdapterFactory shipmentAdapterFactory,
                                             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory)
         {
@@ -21,7 +27,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
         }
-        
+
+        /// <summary>
+        /// Get a label for a shipment and collect telemetry
+        /// </summary>
         public async Task<ILabelRetrievalResult> GetLabel(IShipmentPreparationResult result)
         {
             ILabelRetrievalResult labelRetrievalResult = await labelRetrievalStep.GetLabel(result);

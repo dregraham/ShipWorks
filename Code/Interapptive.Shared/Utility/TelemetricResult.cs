@@ -119,7 +119,7 @@ namespace Interapptive.Shared.Utility
         {
             resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 
-            if (useNewResultsValue && GetType() == resultToAdd.Value.GetType())
+            if (useNewResultsValue && Value.GetType() == resultToAdd.Value.GetType())
             {
                 Value = (T) Convert.ChangeType(resultToAdd.Value, typeof(T));
             }

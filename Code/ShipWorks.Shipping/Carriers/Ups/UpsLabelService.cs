@@ -46,7 +46,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
-            return Task.FromResult(new TelemetricResult<IDownloadedLabelData>("Not used upstream"));
+            TelemetricResult<IDownloadedLabelData> telemetricResult = 
+                new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            telemetricResult.SetValue(new NullDownloadedLabelData());
+            
+            return Task.FromResult(telemetricResult);
         }
 
         /// <summary>
