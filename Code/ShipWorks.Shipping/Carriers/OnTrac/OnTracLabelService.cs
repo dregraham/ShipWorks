@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 
                 // Get new shipment from OnTrac and save the shipment info
                 Schemas.ShipmentResponse.Shipment shipmentResponse = null;
-                telemetricResult.TimedEvent("GetLabel", () => shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest));
+                telemetricResult.RunTimedEvent("GetLabel", () => shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, shipmentResponse));
 
                 return Task.FromResult(telemetricResult);

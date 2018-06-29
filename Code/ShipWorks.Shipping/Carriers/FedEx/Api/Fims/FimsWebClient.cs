@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             try
             {
                 IHttpResponseReader reader = null;
-                result.TimedEvent("GetLabel", () => reader = requestSubmitter.GetResponse());
+                result.RunTimedEvent("GetLabel", () => reader = requestSubmitter.GetResponse());
                 using (reader)
                 {
                     string responseText = reader.ReadResult();

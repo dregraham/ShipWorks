@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
                 LabelRequestResponse response = null;
-                telemetricResult.TimedEvent("GetLabel", () => response = client.ProcessShipment(shipment, express1EndiciaShipmentType));
+                telemetricResult.RunTimedEvent("GetLabel", () => response = client.ProcessShipment(shipment, express1EndiciaShipmentType));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
                 
                 return Task.FromResult(telemetricResult);

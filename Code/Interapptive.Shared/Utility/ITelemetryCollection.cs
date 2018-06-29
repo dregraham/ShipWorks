@@ -1,5 +1,4 @@
-﻿using System;
-using Interapptive.Shared.Metrics;
+﻿using Interapptive.Shared.Metrics;
 
 namespace Interapptive.Shared.Utility
 {
@@ -17,5 +16,10 @@ namespace Interapptive.Shared.Utility
         /// Copy to the destination 
         /// </summary>
         void CopyTo(ITelemetryCollection destination);
+
+        /// <summary>
+        /// Write telemetric events to the passed in TrackedDurationEvent
+        /// </summary>
+        void WriteTo(ITrackedDurationEvent trackedDurationEvent);
     }
 }

@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // The request should already be configured at this point, so we just need to send
                 // it across the wire to FedEx
                 ProcessShipmentReply processReply = null;
-                result.TimedEvent("GetLabel", () => processReply = service.processShipment(nativeShipmentRequest));
+                result.RunTimedEvent("GetLabel", () => processReply = service.processShipment(nativeShipmentRequest));
 
                 // If we are an Interapptive user, save for certification
                 if (InterapptiveOnly.IsInterapptiveUser && nativeShipmentRequest.TransactionDetail != null)

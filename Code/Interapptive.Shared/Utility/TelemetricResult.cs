@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Utility
         private string currentEventName;
 
         /// <summary>
-        /// Contsructor
+        /// Constructor
         /// </summary>
         public TelemetricResult(string baseTelemetryName)
         {
@@ -34,7 +34,10 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void SetValue(T value)
         {
-            Value = value;
+            if (Value != null)
+            {
+                Value = value;
+            }
         }
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public void TimedEvent(string eventName, Action eventToTime)
+        public void RunTimedEvent(string eventName, Action eventToTime)
         {
             StartTimedEvent(eventName);
             try
@@ -63,7 +66,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public async Task TimedEventAsync(string eventName, Func<Task> eventToTime)
+        public async Task RunTimedEventAsync(string eventName, Func<Task> eventToTime)
         {
             StartTimedEvent(eventName);
             try
@@ -137,9 +140,9 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Add internal telemetric events to the passed in TrackedDurationEvent
+        /// Write telemetric events to the passed in TrackedDurationEvent
         /// </summary>
-        public void Populate(ITrackedDurationEvent trackedDurationEvent)
+        public void WriteTo(ITrackedDurationEvent trackedDurationEvent)
         {
             long overallTime = 0;
             foreach (KeyValuePair<string, List<long>> telemetryEventType in telemetry)
@@ -148,17 +151,16 @@ namespace Interapptive.Shared.Utility
                 {
                     for (int i = 0; i < telemetryEventType.Value.Count; i++)
                     {
-                        trackedDurationEvent.AddProperty($"{telemetryEventType.Key}.{i + 1}",
-                            telemetryEventType.Value[i].ToString());
+                        trackedDurationEvent.AddMetric($"{telemetryEventType.Key}.{i + 1}", telemetryEventType.Value[i]);
                     }
                 }
 
                 long totalTimeForEventType = telemetryEventType.Value.Sum(v => v);
                 overallTime += totalTimeForEventType;
-                trackedDurationEvent.AddProperty($"{telemetryEventType.Key}", totalTimeForEventType.ToString());
+                trackedDurationEvent.AddMetric($"{telemetryEventType.Key}", totalTimeForEventType);
             }
             
-            trackedDurationEvent.AddProperty(baseTelemetryName, overallTime.ToString());
+            trackedDurationEvent.AddMetric(baseTelemetryName, overallTime);
         }
 
         /// <summary>

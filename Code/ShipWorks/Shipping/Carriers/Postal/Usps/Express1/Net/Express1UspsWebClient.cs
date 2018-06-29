@@ -661,7 +661,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             Address fromAddress = new Address();
             Address toAddress = new Address();
 
-            telemetricResult.TimedEvent("CleanseAddress",
+            telemetricResult.RunTimedEvent("CleanseAddress",
                 () => FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress));
 
             RateV14 rate = CreateRateForProcessing(shipment, account);
@@ -725,7 +725,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     rate.PrintLayout = "EnvelopePersonal";
                     string envelopeAuth = string.Empty;
 
-                    telemetricResult.TimedEvent("CreateLabel",
+                    telemetricResult.RunTimedEvent("CreateLabel",
                         () => envelopeAuth = webService.CreateEnvelopeIndicium(GetAuthenticator(account), ref integratorGuid,
                             ref rate,
                             fromAddress,
@@ -751,7 +751,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 using (SwsimV36 webService = CreateWebService("Process"))
                 {
                     string auth = string.Empty;
-                    telemetricResult.TimedEvent("CreateLabel", () => webService.CreateIndicium(GetAuthenticator(account),
+                    telemetricResult.RunTimedEvent("CreateLabel", () => webService.CreateIndicium(GetAuthenticator(account),
                         ref integratorGuid,
                         ref tracking,
                         ref rate,

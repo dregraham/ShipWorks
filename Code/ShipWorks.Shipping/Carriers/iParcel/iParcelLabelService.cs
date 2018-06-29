@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
                 DataSet dataSet = null;
-                telemetricResult.TimedEvent("GetLabel", () => dataSet = serviceGateway.SubmitShipment(credentials, shipment));
+                telemetricResult.RunTimedEvent("GetLabel", () => dataSet = serviceGateway.SubmitShipment(credentials, shipment));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, dataSet));
 
                 return Task.FromResult(telemetricResult);
