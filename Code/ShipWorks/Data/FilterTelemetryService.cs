@@ -56,12 +56,12 @@ namespace ShipWorks.Data
                 using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = @"
-                    SELECT fnode.Purpose as FilterType, f.State as Enabled, fcont.Count, fcont.Cost
-                        FROM [FilterNode] fnode 
-                        INNER JOIN [FilterSequence] fseq ON fnode.FilterSequenceID = fseq.FilterSequenceID 
-                        INNER JOIN [Filter] f ON f.FilterID = fseq.FilterID 
-                        INNER JOIN [FilterNodeContent] fcont ON fnode.FilterNodeContentID = fcont.FilterNodeContentID
-                        WHERE fnode.FilterNodeID > 0";
+                    SELECT filterNode.Purpose, filter.State, filterNodeContent.Count, filterNodeContent.Cost
+                        FROM [FilterNode] filterNode WITH (NOLOCK)
+                        INNER JOIN [FilterSequence] filterSequence WITH (NOLOCK) ON filterNode.FilterSequenceID = filterSequence.FilterSequenceID 
+                        INNER JOIN [Filter] filter WITH (NOLOCK) ON filter.FilterID = filterSequence.FilterID 
+                        INNER JOIN [FilterNodeContent] filterNodeContent WITH (NOLOCK) ON filterNode.FilterNodeContentID = filterNodeContent.FilterNodeContentID
+                        WHERE filterNode.FilterNodeID > 0";
 
                     using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                     {

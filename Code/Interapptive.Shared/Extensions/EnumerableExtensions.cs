@@ -99,7 +99,7 @@ namespace Interapptive.Shared.Extensions
         public static double StandardDeviation(this IEnumerable<int> values)
         {
             double avg = values.Average();
-            return Math.Sqrt(values.Average(v=>Math.Pow(v-avg,2)));
+            return Math.Sqrt(values.Average(v => Math.Pow(v - avg, 2)));
         }
     }
 }
