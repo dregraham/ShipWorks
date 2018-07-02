@@ -92,5 +92,14 @@ namespace Interapptive.Shared.Extensions
         /// <returns>Sequence that contains the distinct results</returns>
         public static IEnumerable<T> Distinct<T, TProp>(this IEnumerable<T> source, Func<T, TProp> propertyAccessor) where T : class =>
             source.Distinct(new GenericPropertyEqualityComparer<T, TProp>(propertyAccessor));
+        
+        /// <summary>
+        /// Calculates the standard deviation of a list of numbers
+        /// </summary>
+        public static double StandardDeviation(this IEnumerable<int> values)
+        {
+            double avg = values.Average();
+            return Math.Sqrt(values.Average(v=>Math.Pow(v-avg,2)));
+        }
     }
 }
