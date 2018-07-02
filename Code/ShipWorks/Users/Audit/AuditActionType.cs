@@ -100,5 +100,12 @@ namespace ShipWorks.Users.Audit
         [Description("Auditing state changed")]
         [ImageResource("edit16")]
         AuditStateChanged = 12,
+
+        /// <summary>
+        /// An archive was performed
+        /// </summary>
+        [Description("Archive")]
+        [ImageResource("data_time_16")]
+        Archive = 13,
     }
 }
