@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
-using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
@@ -37,7 +36,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
@@ -47,7 +45,7 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Services
+namespace ShipWorks.Shipping.Tests.Integration.Services
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]

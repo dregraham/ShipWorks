@@ -75,6 +75,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
+        /// Get the service type name
+        /// </summary>
+        public override string ServiceTypeName => serviceTypeRepository.Get()
+            .FirstOrDefault(s => s.ApiValue == Shipment.Amazon.ShippingServiceID).Description;
+
+        /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
         /// </summary>
         /// <returns></returns>

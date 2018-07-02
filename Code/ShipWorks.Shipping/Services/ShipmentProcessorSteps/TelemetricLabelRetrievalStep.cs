@@ -15,17 +15,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     {
         private readonly ILabelRetrievalStep labelRetrievalStep;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
-        private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricLabelRetrievalStep(ILabelRetrievalStep labelRetrievalStep, ICarrierShipmentAdapterFactory shipmentAdapterFactory,
-                                            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory)
+        public TelemetricLabelRetrievalStep(ILabelRetrievalStep labelRetrievalStep, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.labelRetrievalStep = labelRetrievalStep;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
-            this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
         }
 
         /// <summary>
@@ -51,19 +48,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipment);
 
-            string service = shipmentServicesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
-                                                           .BuildServiceTypeDictionary(new[]
-                                                           {
-                                                               shipmentAdapter.Shipment
-                                                           })[shipmentAdapter.ServiceType];
-
             // Add carrier specific properties
-            labelResult.Telemetry.WriteTo(telemetryEvent);
+            labelResult.Telemetry?.WriteTo(telemetryEvent);
             
             // Add label/shipment properties
             telemetryEvent.AddProperty("Label.Creation.IsSuccessful", labelResult.Success.ToString());
             telemetryEvent.AddProperty("Carrier.Name", EnumHelper.GetDescription(shipmentAdapter.ShipmentTypeCode));
-            telemetryEvent.AddProperty("Carrier.ServiceName", service);
+            telemetryEvent.AddProperty("Carrier.ServiceName", shipmentAdapter.ServiceTypeName);
             telemetryEvent.AddProperty("Label.IsDomestic", shipmentAdapter.IsDomestic.ToString());
             telemetryEvent.AddProperty("Label.ShipDate", shipmentAdapter.ShipDate.ToShortDateString());
             telemetryEvent.AddMetric("Shipment.WeightInPounds", shipmentAdapter.TotalWeight);

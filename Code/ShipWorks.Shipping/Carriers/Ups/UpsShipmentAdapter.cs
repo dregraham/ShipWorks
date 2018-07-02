@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -65,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             get { return Shipment.Ups.Service; }
             set { Shipment.Ups.Service = value; }
         }
+
+        /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((PostalServiceType) ServiceType);
 
         /// <summary>
         /// Add a new package to the shipment

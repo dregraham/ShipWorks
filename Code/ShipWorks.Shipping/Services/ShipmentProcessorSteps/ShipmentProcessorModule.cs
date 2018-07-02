@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterDecorator<ILabelRetrievalStep>(
-                (c, inner) => new TelemetricLabelRetrievalStep(inner, c.Resolve<ICarrierShipmentAdapterFactory>(), c.Resolve<IShipmentServicesBuilderFactory>()),
+                (c, inner) => new TelemetricLabelRetrievalStep(inner, c.Resolve<ICarrierShipmentAdapterFactory>()),
                 "LabelRetrievalStep");
         }
     }
