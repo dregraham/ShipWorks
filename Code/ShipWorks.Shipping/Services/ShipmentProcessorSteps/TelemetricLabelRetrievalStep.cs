@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             
             // Add label/shipment properties
             telemetryEvent.AddProperty("Label.Creation.IsSuccessful", labelResult.Success.ToString());
-            telemetryEvent.AddProperty("Carrier.Name", EnumHelper.GetDescription(shipmentAdapter.ShipmentTypeCode));
+            telemetryEvent.AddProperty("Carrier.Name", GetCarrierName(shipment));
             telemetryEvent.AddProperty("Carrier.ServiceName", shipmentAdapter.ServiceTypeName);
             telemetryEvent.AddProperty("Label.IsDomestic", shipmentAdapter.IsDomestic.ToString());
             telemetryEvent.AddProperty("Label.ShipDate", shipmentAdapter.ShipDate.ToShortDateString());
@@ -61,6 +61,20 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             SetPackageTelemetryProperties(telemetryEvent, shipmentAdapter.GetPackageAdapters());
             telemetryEvent.AddProperty("StoreType", EnumHelper.GetDescription(shipmentAdapter.Store.StoreTypeCode));
             telemetryEvent.AddProperty("Label.IsReturn", shipment.ReturnShipment.ToString());
+        }
+
+        /// <summary>
+        /// Gets the carrier name
+        /// </summary>
+        private static string GetCarrierName(ShipmentEntity shipment)
+        {
+            string carrierName = EnumHelper.GetDescription(shipment.ShipmentTypeCode);
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                carrierName = $"{carrierName} - {shipment.Other.Carrier}";
+            }
+
+            return carrierName;
         }
 
         /// <summary>
