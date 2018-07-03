@@ -596,7 +596,7 @@
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
     <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
-    <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
+    <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
@@ -1112,9 +1112,6 @@
     <Compile Include="Email\EmailCommunicatorWrapper.cs" />
     <Compile Include="Email\IEmailCommunicatorWrapper.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
-    <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
-    <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
-    <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetryT.cs" />
     <Compile Include="Filters\Content\Conditions\EnumEqualityOperator.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
