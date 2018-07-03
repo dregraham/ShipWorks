@@ -92,7 +92,13 @@ namespace Interapptive.Shared.Data
                 // Open the embedded stream
                 string resourceToLoad = resourcePath + "." + name;
 
-                Assembly assembly = assemblies.First(a => a.GetManifestResourceNames().Contains(resourceToLoad));
+                Assembly assembly = assemblies.FirstOrDefault(a => a.GetManifestResourceNames().Contains(resourceToLoad));
+
+                if (assembly == null)
+                {
+                    resourceToLoad = name;
+                    assembly = assemblies.First(a => a.GetManifestResourceNames().Contains(resourceToLoad));
+                }
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceToLoad))
                 {

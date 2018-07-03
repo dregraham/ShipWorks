@@ -32,6 +32,9 @@ namespace ShipWorks.Data.Administration
         // Used for executing scripts
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
 
+        // Used for loading \ executing support sql
+        private static readonly SqlScriptLoader supportSqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Support");
+
         /// <summary>
         /// Get the database schema version that is required by this version of ShipWorks
         /// </summary>
@@ -175,6 +178,9 @@ namespace ShipWorks.Data.Administration
                             {
                                 // Update the tables
                                 UpdateScripts(installedSchema, progressScripts);
+
+                                // Execute any support scripts
+                                ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
 
                                 // Functionality starting
                                 progressFunctionality.Starting();
@@ -561,6 +567,25 @@ namespace ShipWorks.Data.Administration
                 (version.Minor << 16) +
                 (version.Build << 8) +
                 (version.Revision);
+        }
+
+        /// <summary>
+        /// Execute any support SQL scripts
+        /// </summary>
+        private static void ExecuteSupportSql(DbConnection con)
+        {
+            try
+            {
+                foreach (string scriptName in supportSqlLoader.ScriptResources)
+                {
+                    supportSqlLoader[scriptName].Execute(con);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"An error occurred while adding support sql scripts.", ex);
+                throw;
+            }
         }
     }
 }
