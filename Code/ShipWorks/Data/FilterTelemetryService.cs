@@ -67,7 +67,7 @@ namespace ShipWorks.Data
                     {
                         while (reader.Read())
                         {
-                            FilterNodePurpose filterType = (FilterNodePurpose) reader["FilterType"];
+                            FilterNodePurpose filterType = (FilterNodePurpose) reader["Purpose"];
                             
                             if (filterType == FilterNodePurpose.Quick)
                             {
@@ -78,7 +78,7 @@ namespace ShipWorks.Data
                                 searchFilterCount++;
                             }
                             
-                            if ((byte) reader["Enabled"] == 0)
+                            if ((byte) reader["State"] == 0)
                             {
                                 disabledFilterCount++;
                             }
