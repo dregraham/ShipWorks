@@ -483,6 +483,13 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\OlaHallengren\MaintenanceSolution.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_Blitz.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzCache.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzFirst.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzIndex.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzQueryStore.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzWho.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
