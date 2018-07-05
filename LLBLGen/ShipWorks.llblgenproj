@@ -9186,12 +9186,6 @@
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
                   </Parameters>
                 </StoredProcedure>
-                <StoredProcedure Name="RebuildTableIndex">
-                  <Parameters>
-                    <Parameter Name="@tableName" Direction="1" Ordinal="1" DbType="12" Length="4000" />
-                    <Parameter Name="@indexName" Direction="1" Ordinal="2" DbType="12" Length="4000" />
-                  </Parameters>
-                </StoredProcedure>
                 <StoredProcedure Name="ResetShipSense" />
                 <StoredProcedure Name="ShipmentShipSenseProcedure">
                   <Parameters>
