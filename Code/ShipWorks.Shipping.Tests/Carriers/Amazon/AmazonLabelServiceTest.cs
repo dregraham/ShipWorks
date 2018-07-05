@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonLabelService>();
             var result = await testObject.Create(defaultShipment);
 
-            Assert.Equal(response, result);
+            Assert.Equal(response, result.Value);
         }
 
         [Fact]

@@ -111,7 +111,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipResponse.Setup(r => r.Process());
 
             shippingRequest = mock.Mock<IFedExShipRequest>();
-            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(GenericResult.FromSuccess(shipResponse.Object));
+            var telemetricShipResponse = new TelemetricResult<GenericResult<IFedExShipResponse>>("API.ResponseTimeInMilliseconds");
+            telemetricShipResponse.SetValue(GenericResult.FromSuccess(shipResponse.Object));
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(telemetricShipResponse);
 
             groundCloseResponse = new Mock<ICarrierResponse>();
             groundCloseResponse.Setup(r => r.Process());
@@ -213,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipResponse = mock.CreateMock<IFedExShipResponse>();
             shippingRequest = mock.CreateMock<IFedExShipRequest>(x =>
             {
-                x.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(GenericResult.FromSuccess(shipResponse.Object));
+                x.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(telemetricShipResponse);
             });
 
             requestFactory.Setup(x => x.CreateRateRequest())

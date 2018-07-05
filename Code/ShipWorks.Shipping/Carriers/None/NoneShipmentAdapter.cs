@@ -75,6 +75,11 @@ namespace ShipWorks.Shipping.Carriers.None
         public override int ServiceType { get; set; } = 0;
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => "None";
+
+        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)

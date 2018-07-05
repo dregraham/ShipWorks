@@ -67,6 +67,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return Shipment.IParcel.Service; }
             set { Shipment.IParcel.Service = value; }
         }
+        
+        /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((iParcelServiceType) ServiceType);
 
         /// <summary>
         /// Add a new package to the shipment

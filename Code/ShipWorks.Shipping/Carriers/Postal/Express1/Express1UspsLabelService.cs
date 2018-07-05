@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -29,26 +30,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Creates the Usps(stamps.com) Express1 label
         /// </summary>
         /// <param name="shipment"></param>
-        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            IDownloadedLabelData uspsDownloadedLabelData;
-
             express1UspsShipmentType.ValidateShipment(shipment);
 
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
             try
             {
                 // Express1 for USPS requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
-                UspsLabelResponse uspsLabelResponse = await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
-                uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
+
+
+                TelemetricResult<UspsLabelResponse> uspsLabelResponse =
+                    await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
+                
+                uspsLabelResponse.CopyTo(telemetricResult);
+                telemetricResult.SetValue(createDownloadedLabelData(uspsLabelResponse.Value));
             }
             catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
 
-            return uspsDownloadedLabelData;
+            return telemetricResult;
         }
 
         /// <summary>

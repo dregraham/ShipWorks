@@ -65,7 +65,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
+        public override RateGroup GetRates(ShipmentEntity shipment) => GetRates(shipment, null);
+        
+        /// <summary>
+        /// Gets rates for the given shipment
+        /// </summary>
+        public RateGroup GetRates(ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             // Take this opportunity to try to update contract type of the account
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -76,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             try
             {
                 RateGroup rates = accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
-                    GetRatesInternal(shipment) :
+                    GetRatesInternal(shipment, telemetricResult) :
                     GetCounterRates(shipment);
 
                 SortRateGroup(rates);
@@ -88,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException(ex.Message, ex);
             }
         }
-
+        
         /// <summary>
         /// Get rates includes Express1 rates if specified
         /// </summary>
@@ -137,14 +142,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
+        /// <param name="telemetricResult"></param>
+        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment,
+            TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
             Task<RateGroup> express1RateTask = GetExpress1RatesIfNecessary(shipment);
 
             RateGroup rateGroup = shipment.Postal.Usps.RateShop ?
-                GetRatesForAllAccounts(shipment) :
-                GetRatesForSpecifiedAccount(shipment);
+                GetRatesForAllAccounts(shipment, telemetricResult) :
+                GetRatesForSpecifiedAccount(shipment, telemetricResult);
 
             return new UspsExpress1RateConsolidator().Consolidate(rateGroup, express1RateTask);
         }
@@ -211,24 +218,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get rates for all available accounts
         /// </summary>
-        private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
+        private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             List<UspsAccountEntity> uspsAccounts = accountRepository.Accounts.ToList();
             shouldRetrieveExpress1Rates = false;
 
             try
             {
-                List<Task<RateGroup>> tasks =
-                    uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                        .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount)))
-                        .ToList();
+                List<RateGroup> rateGroupsToConsolidate = null;
 
-                foreach (Task<RateGroup> task in tasks)
+                if (telemetricResult!=null)
                 {
-                    task.Wait();
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetRates,
+                        () => rateGroupsToConsolidate = GetRateGroupsForAllAccounts(shipment, uspsAccounts));
+                }
+                else
+                {
+                    rateGroupsToConsolidate = GetRateGroupsForAllAccounts(shipment, uspsAccounts);
                 }
 
-                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(task => task.Result).ToList());
+                return new UspsRateGroupConsolidator().Consolidate(rateGroupsToConsolidate);
             }
             catch (AggregateException ex)
             {
@@ -256,11 +265,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets all rates groups for all accounts asynchornously
+        /// </summary>
+        private List<RateGroup> GetRateGroupsForAllAccounts(ShipmentEntity shipment, List<UspsAccountEntity> uspsAccounts)
+        {
+            List<Task<RateGroup>> tasks =
+                uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount)))
+                    .ToList();
+
+            foreach (Task<RateGroup> task in tasks)
+            {
+                task.Wait();
+            }
+
+            List<RateGroup> rateGroupsToConsolidate = tasks.Select(task => task.Result).ToList();
+            return rateGroupsToConsolidate;
+        }
+
+        /// <summary>
         /// Get rates for the account specified in the shipment
         /// </summary>
-        private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment)
+        private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment,
+            TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
-            List<RateResult> uspsRates = CreateWebClient().GetRates(shipment);
+            List<RateResult> uspsRates = null;
+            
+            if (telemetricResult!=null)
+            {
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, ()=>uspsRates = CreateWebClient().GetRates(shipment));
+            }
+            else
+            {
+                uspsRates = CreateWebClient().GetRates(shipment);
+            }
+            
             uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode.Usps);
 
             RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, uspsRates));

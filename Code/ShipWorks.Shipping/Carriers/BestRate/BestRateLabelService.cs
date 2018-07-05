@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Creates the label
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             // This is by design. The best rate shipment type should never actually
             // process a shipment due to the pre-process functionality

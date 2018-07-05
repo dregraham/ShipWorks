@@ -85,6 +85,11 @@ namespace ShipWorks.Shipping.Services
         int ServiceType { get; set; }
 
         /// <summary>
+        /// The name of the service type
+        /// </summary>
+        string ServiceTypeName { get; }
+
+        /// <summary>
         /// Clone the shipment adapter and shipment
         /// </summary>
         ICarrierShipmentAdapter Clone();

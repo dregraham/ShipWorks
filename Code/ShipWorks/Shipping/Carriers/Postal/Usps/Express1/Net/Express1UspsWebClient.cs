@@ -584,9 +584,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment)
+        public Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
-            UspsLabelResponse uspsLabelResponse = null;
+            TelemetricResult<UspsLabelResponse> telemetricLabelResponse = null;
+            
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
@@ -597,7 +598,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 AuthenticationWrapper(() =>
                 {
-                    uspsLabelResponse = ProcessShipmentInternal(shipment, account);
+                    telemetricLabelResponse = ProcessShipmentInternal(shipment, account);
                     return true;
                 }, account);
             }
@@ -624,7 +625,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 throw;
             }
 
-            return Task.FromResult(uspsLabelResponse);
+            return Task.FromResult(telemetricLabelResponse);
         }
 
         /// <summary>
@@ -649,16 +650,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
         [NDependIgnoreLongMethod]
-        private UspsLabelResponse ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private TelemetricResult<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            Guid uspsGuid;
+            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
+            
+            Guid uspsGuid = Guid.Empty;
             string tracking = string.Empty;
-            string labelUrl;
+            string labelUrl = string.Empty;
 
-            Address fromAddress;
-            Address toAddress;
+            Address fromAddress = new Address();
+            Address toAddress = new Address();
 
-            FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
+            telemetricResult.RunTimedEvent(TelemetricEventType.CleanseAddress,
+                () => FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress));
 
             RateV14 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
@@ -719,22 +723,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
+                    string envelopeAuth = string.Empty;
 
-                    string envelopeAuth = webService.CreateEnvelopeIndicium(GetAuthenticator(account), ref integratorGuid,
-                        ref rate,
-                        fromAddress,
-                        toAddress,
-                        null,
-                        isSampleOnly ? CreateIndiciumModeV1.Sample : CreateIndiciumModeV1.Normal,
-                        ImageType.Png,
-                        0, // cost code ID
-                        false, // do not hide the facing identification mark (FIM)
-                        out tracking,
-                        out uspsGuid,
-                        out labelUrl,
-                        out postageBalance,
-                        out mac_Unused,
-                        out postageHash);
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel,
+                        () => envelopeAuth = webService.CreateEnvelopeIndicium(GetAuthenticator(account), ref integratorGuid,
+                            ref rate,
+                            fromAddress,
+                            toAddress,
+                            null,
+                            isSampleOnly ? CreateIndiciumModeV1.Sample : CreateIndiciumModeV1.Normal,
+                            ImageType.Png,
+                            0, // cost code ID
+                            false, // do not hide the facing identification mark (FIM)
+                            out tracking,
+                            out uspsGuid,
+                            out labelUrl,
+                            out postageBalance,
+                            out mac_Unused,
+                            out postageHash));
 
                     usernameAuthenticatorMap[account.Username] = envelopeAuth;
                 }
@@ -744,7 +750,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
                 using (SwsimV36 webService = CreateWebService("Process"))
                 {
-                    string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
+                    string auth = string.Empty;
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => webService.CreateIndicium(GetAuthenticator(account),
+                        ref integratorGuid,
                         ref tracking,
                         ref rate,
                         fromAddress,
@@ -752,7 +760,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         null,
                         customs,
                         isSampleOnly,
-                        thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
+                        thermalType == null
+                            ? ImageType.Png
+                            : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
                         UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
@@ -777,7 +787,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         out postageBalance,
                         out mac_Unused,
                         out postageHash,
-                        out imageData);
+                        out imageData));
 
                     usernameAuthenticatorMap[account.Username] = auth;
                 }
@@ -790,12 +800,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            return new UspsLabelResponse()
+            UspsLabelResponse uspsLabelResponse =  new UspsLabelResponse
             {
                 Shipment = shipment,
                 ImageData = imageData,
                 LabelUrl = labelUrl
             };
+            
+            telemetricResult.SetValue(uspsLabelResponse);
+            return telemetricResult;
         }
 
         /// <summary>

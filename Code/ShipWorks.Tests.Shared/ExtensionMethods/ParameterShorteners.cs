@@ -34,6 +34,11 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         public static int AnyInt => It.IsAny<int>();
 
         /// <summary>
+        /// Any double
+        /// </summary>
+        public static double AnyDouble => It.IsAny<double>();
+
+        /// <summary>
         /// Any date
         /// </summary>
         public static DateTime AnyDate => It.IsAny<DateTime>();
