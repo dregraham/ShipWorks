@@ -30,6 +30,9 @@ namespace ShipWorks.Users.Audit
         SplitOrder = 5,
 
         [Description("Audit State Changed")]
-        AuditStateChanged = 6
+        AuditStateChanged = 6,
+
+        [Description("Archive")]
+        Archive = 7
     }
 }

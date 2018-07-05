@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 
@@ -27,7 +28,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Audit the given event for the current user on the current computer.
         /// </summary>
-        Task AuditAsync(long? entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter);
+        Task<Unit> AuditAsync(long? entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter);
 
         /// <summary>
         /// Show the detail for the given audit record
