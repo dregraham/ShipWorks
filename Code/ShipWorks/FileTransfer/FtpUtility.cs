@@ -1,10 +1,9 @@
-﻿extern alias rebex2015;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Security;
 using log4net;
-using rebex2015::Rebex.Net;
+using Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.FileTransfer
@@ -367,14 +366,11 @@ namespace ShipWorks.FileTransfer
         /// </summary>
         private static IFtp OpenFtpConnection(FtpAccountEntity account)
         {
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             Ftp ftp = new Ftp();
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
 
-            ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+            ftp.Connect(account.Host, account.Port, (SslMode) account.SecurityType);
 
             return ftp;
         }
@@ -384,15 +380,12 @@ namespace ShipWorks.FileTransfer
         /// </summary>
         private static async Task<IFtp> OpenFtpConnectionAsync(FtpAccountEntity account)
         {
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             Ftp ftp = new Ftp();
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
             ftp.Settings.SslAcceptAllCertificates = true;
 
-            await ftp.ConnectAsync(account.Host, account.Port, (FtpSecurity) account.SecurityType).ConfigureAwait(false);
+            await ftp.ConnectAsync(account.Host, account.Port, (SslMode) account.SecurityType).ConfigureAwait(false);
 
             return ftp;
         }
