@@ -589,6 +589,7 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\ManageIndexStateTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
