@@ -45,6 +45,7 @@ public partial class StoredProcedures
 		                  and indexUsage.IsUnique = 0
 		                  and indexUsage.IsEnabled = 1
 		                  and indexUsage.UserQueries <= 50
+		                  and indexUsage.IndexName like 'IX_SWDefault_%'
 		                  and indexUsage.TableName not like 'Action%'
 		                  and indexUsage.TableName not like 'Audit%'
 		                  and indexUsage.TableName not like 'Download%'
