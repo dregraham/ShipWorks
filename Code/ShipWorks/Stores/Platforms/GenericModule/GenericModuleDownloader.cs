@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WPeCommerce)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.XCart)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ZenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zentail)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zenventory)]
     public class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {

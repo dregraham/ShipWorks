@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace ShipWorks.Stores
 {
@@ -414,6 +411,11 @@ namespace ShipWorks.Stores
         [Description("CommerceV3")]
         [StoreTypeIdentity("CV3", "CV3")]
         [StoreTypeIcon("cv3")]
-        CommerceV3 = 83
+        CommerceV3 = 83,
+
+        [Description("Zentail")]
+        [StoreTypeIdentity("ZENTAIL", "ZTL")]
+        [StoreTypeIcon("zentail")]
+        Zentail = 84
     }
 }
