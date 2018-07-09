@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <returns></returns>
         private IEnumerable<ShipWorksOdbcMappableField> CreateShipWorksOrderItemFields()
 	    {
-	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>()
+	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
                 new ShipWorksOdbcMappableField(OrderItemFields.Name, OdbcOrderFieldDescription.ItemName, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Code, OdbcOrderFieldDescription.ItemCode, OdbcFieldValueResolutionStrategy.Default),
@@ -98,6 +98,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Length, OdbcOrderFieldDescription.ItemLength, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Width, OdbcOrderFieldDescription.ItemWidth, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Height, OdbcOrderFieldDescription.ItemHeight, OdbcFieldValueResolutionStrategy.Default)
             };
 
 	        return fields;
