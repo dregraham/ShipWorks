@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(17, testObject.CreateOrderItemFieldMap(null, 0, 0).Entries.Count());
+            Assert.Equal(20, testObject.CreateOrderItemFieldMap(null, 0, 0).Entries.Count());
         }
 
         [Fact]
