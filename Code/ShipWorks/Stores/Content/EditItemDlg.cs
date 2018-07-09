@@ -72,6 +72,9 @@ namespace ShipWorks.Stores.Content
             description.Text = item.Description;
             thumbnailUrl.Text = item.Thumbnail;
             imageUrl.Text = item.Image;
+            length.Text = item.Length.ToString();
+            width.Text = item.Width.ToString();
+            height.Text = item.Height.ToString();
 
             LoadAttributes();
 
@@ -272,16 +275,13 @@ namespace ShipWorks.Stores.Content
         [NDependIgnoreLongMethod]
         private void OnOK(object sender, EventArgs e)
         {
-            double quantityValue;
-            if (!double.TryParse(quantity.Text, NumberStyles.Any, null, out quantityValue))
+            if (!ValidateNumericFields())
             {
-                MessageHelper.ShowMessage(this, "Enter a valid quantity for the item.");
                 return;
             }
-
+            
             item.Name = name.Text;
             item.Code = code.Text;
-            item.Quantity = quantityValue;
             item.UnitPrice = price.Amount;
             item.LocalStatus = status.Tag.ToString();
 
@@ -377,6 +377,59 @@ namespace ShipWorks.Stores.Content
 
                 DialogResult = DialogResult.Abort;
             }
+        }
+
+        /// <summary>
+        /// Ensure numeric fields have a numeric value before attempting to save
+        /// </summary>
+        private bool ValidateNumericFields()
+        {
+            List<string> validationErrorFields = new List<string>();
+
+            if (double.TryParse(quantity.Text, NumberStyles.Any, null, out double quantityValue))
+            {
+                item.Quantity = quantityValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Quantity\n");
+            }
+
+            if(double.TryParse(length.Text, out double lengthValue))
+            {
+                item.Length = lengthValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Length\n");
+            }
+
+            if(double.TryParse(width.Text, out double widthValue))
+            {
+                item.Width = widthValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Width\n");
+            }
+
+            if(double.TryParse(height.Text, out double heightValue))
+            {
+                item.Height = heightValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Height\n");
+            }
+
+            if (validationErrorFields.Any())
+            {
+                MessageHelper.ShowError(this, "Please enter a valid number for the following fields:\n" +
+                    $"{string.Join(string.Empty, validationErrorFields)}");
+                return false;
+            }
+
+            return true;
         }
     }
 }
