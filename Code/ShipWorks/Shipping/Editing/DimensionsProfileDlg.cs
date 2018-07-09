@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Editing
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.Message.Contains("IX_DimensionsProfile_Name"))
+                if (ex.Message.Contains("IX_SWDefault_DimensionsProfile_Name"))
                 {
                     MessageHelper.ShowMessage(this, "A profile with the specified name already exists.");
                 }

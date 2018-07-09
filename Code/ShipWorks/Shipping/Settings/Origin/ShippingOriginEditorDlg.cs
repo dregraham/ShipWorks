@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Settings.Origin
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.Message.Contains("IX_ShippingOrigin_Description"))
+                if (ex.Message.Contains("IX_SWDefault_ShippingOrigin_Description"))
                 {
                     MessageHelper.ShowMessage(this, "A shipper with the selected name or description already exists.");
                 }
