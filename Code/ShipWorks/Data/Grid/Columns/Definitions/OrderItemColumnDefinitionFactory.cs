@@ -90,6 +90,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnDefinition("{47FACE52-9D1C-45ad-B0E6-4217517935EB}", true,
                             new GridTextDisplayType(), "Status", "In Stock",
                             OrderItemFields.LocalStatus),    
+                         
+                         new GridColumnDefinition("{11e7920e-ba78-44bb-b661-82b8e075745f}", false,
+                             new GridTextDisplayType(), "Dimensions", "5x5x29",
+                             new GridColumnFunctionValueProvider(FormatDimensions),
+                             new GridColumnSortProvider(OrderItemFields.Length)),
 
                         #region Infopia
 
@@ -456,6 +461,18 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                      };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Return formatted dimensions like "LxWxH"
+        /// </summary>
+        private static string FormatDimensions(EntityBase2 item)
+        {
+            if (item is OrderItemEntity orderItem)
+            {
+                return $"{orderItem.Length}x{orderItem.Width}x{orderItem.Height}";
+            }
+            return string.Empty;
         }
 
         /// <summary>
