@@ -395,7 +395,7 @@ namespace ShipWorks.FileTransfer
         /// </summary>
         /// <remarks>Convert from our FtpSecurityType to Rebex SslMode</remarks>
         private static SslMode GetSslMode(FtpAccountEntity account) =>
-            account.SecurityType == 3 ? SslMode.Explicit : (SslMode) account.SecurityType;
+            (FtpSecurityType) account.SecurityType == FtpSecurityType.Sftp ? SslMode.Explicit : (SslMode) account.SecurityType;
 
         /// <summary>
         /// Connect an login to the given FTP account
