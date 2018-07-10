@@ -370,7 +370,7 @@ namespace ShipWorks.FileTransfer
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
 
-            ftp.Connect(account.Host, account.Port, (SslMode) account.SecurityType);
+            ftp.Connect(account.Host, account.Port, GetSslMode(account));
 
             return ftp;
         }
@@ -385,10 +385,17 @@ namespace ShipWorks.FileTransfer
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
             ftp.Settings.SslAcceptAllCertificates = true;
 
-            await ftp.ConnectAsync(account.Host, account.Port, (SslMode) account.SecurityType).ConfigureAwait(false);
+            await ftp.ConnectAsync(account.Host, account.Port, GetSslMode(account)).ConfigureAwait(false);
 
             return ftp;
         }
+
+        /// <summary>
+        /// Get the SslMode for the account
+        /// </summary>
+        /// <remarks>Convert from our FtpSecurityType to Rebex SslMode</remarks>
+        private static SslMode GetSslMode(FtpAccountEntity account) =>
+            account.SecurityType == 3 ? SslMode.Explicit : (SslMode) account.SecurityType;
 
         /// <summary>
         /// Connect an login to the given FTP account
