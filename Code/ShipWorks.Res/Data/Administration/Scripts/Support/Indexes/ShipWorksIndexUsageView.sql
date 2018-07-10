@@ -2,7 +2,7 @@ IF EXISTS(SELECT 1 FROM sys.views WHERE name='ShipWorksIndexUsage' and type='v')
 	DROP VIEW IF EXISTS [dbo].[ShipWorksIndexUsage]
 GO
 
-CREATE VIEW ShipWorksIndexUsage  as
+CREATE VIEW ShipWorksIndexUsage WITH ENCRYPTION AS
 	WITH IndexUsage AS
 	(
 		SELECT t.name AS TableName, i.name AS IndexName, i.is_primary_key as IsPrimaryKey, i.is_unique as IsUnique, i.index_id, i.object_id,

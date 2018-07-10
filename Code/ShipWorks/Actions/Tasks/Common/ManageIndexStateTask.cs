@@ -23,6 +23,7 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         private readonly ILog log;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlSession sqlSession;
         private const int timeoutHours = 3;
         private readonly int timeoutSeconds = (int) TimeSpan.FromHours(timeoutHours).TotalSeconds;
         private string sqlConnectionString;
@@ -31,10 +32,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageIndexStateTask" /> class.
         /// </summary>
-        public ManageIndexStateTask(IDateTimeProvider dateTimeProvider, Func<Type, ILog> logFactory)
+        public ManageIndexStateTask(IDateTimeProvider dateTimeProvider, Func<Type, ILog> logFactory, ISqlSession sqlSession)
         {
             this.dateTimeProvider = dateTimeProvider;
             log = logFactory(typeof(ManageIndexStateTask));
+            this.sqlSession = sqlSession;
 
             TimeoutInMinutes = 180;
         }
@@ -126,10 +128,8 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             using (new LoggedStopwatch(log, "Finished disabling unused indexes."))
             {
-                using (DbConnection sqlConnection = DataAccessAdapter.CreateConnection(ConnectionString))
+                using (DbConnection sqlConnection = sqlSession.OpenConnection(timeoutSeconds))
                 {
-                    sqlConnection.Open();
-
                     if (sqlConnection is SqlConnection connection)
                     {
                         void infoHandler(object sender, SqlInfoMessageEventArgs e) => log.Info(e.Message);
@@ -148,25 +148,6 @@ namespace ShipWorks.Actions.Tasks.Common
                         sqlCommand.ExecuteNonQuery();
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets a connection string, based on SqlAdapter.Default.ConnectionString, and modifies it to have a new
-        /// number of minutes for the timeout.
-        /// </summary>
-        private string ConnectionString
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(sqlConnectionString))
-                {
-                    SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(SqlAdapter.Default.ConnectionString);
-                    sqlConnectionStringBuilder.ConnectTimeout = timeoutSeconds;
-                    sqlConnectionString = sqlConnectionStringBuilder.ConnectionString;
-                }
-
-                return sqlConnectionString;
             }
         }
     }
