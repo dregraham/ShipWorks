@@ -254,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates a new field map from the entries
         /// </summary>
-        public OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
+        public IOdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
 		{
             OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
 
