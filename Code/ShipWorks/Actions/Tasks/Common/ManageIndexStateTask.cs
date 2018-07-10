@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using System.Reactive.Disposables;
@@ -98,7 +99,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 DateTime scheduledEndTimeInUtc = scheduledStart + TimeSpan.FromMinutes(TimeoutInMinutes);
 
                 XDocument doc = XDocument.Parse(context.Step.TaskSettings);
-                XElement daysBackElement = doc.Element("DaysBack");
+                XElement daysBackElement = doc.Descendants("DaysBack").FirstOrDefault();
                 if (daysBackElement != null)
                 {
                     int.TryParse(daysBackElement.Value, out daysBack);
