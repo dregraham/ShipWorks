@@ -24,13 +24,13 @@ namespace ShipWorks.Stores.Content
     /// </summary>
     public partial class EditItemDlg : Form
     {
-        OrderItemEntity item;
-        long storeID;
-        PanelDataMode dataMode;
+        readonly OrderItemEntity item;
+        readonly long storeID;
+        readonly PanelDataMode dataMode;
 
-        List<OrderItemAttributeEntity> allAttributes = new List<OrderItemAttributeEntity>();
-        List<OrderItemAttributeEntity> addedAttributes = new List<OrderItemAttributeEntity>();
-        List<OrderItemAttributeEntity> deletedAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> allAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> addedAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> deletedAttributes = new List<OrderItemAttributeEntity>();
 
         /// <summary>
         /// Constructor.  StoreID is necessary b\c there is no way to know the store when dataMode is local.
@@ -395,7 +395,7 @@ namespace ShipWorks.Stores.Content
                 validationErrorFields.Add("\t- Quantity\n");
             }
 
-            if(double.TryParse(length.Text, out double lengthValue))
+            if(decimal.TryParse(length.Text, out decimal lengthValue))
             {
                 item.Length = lengthValue;
             }
@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Content
                 validationErrorFields.Add("\t- Length\n");
             }
 
-            if(double.TryParse(width.Text, out double widthValue))
+            if(decimal.TryParse(width.Text, out decimal widthValue))
             {
                 item.Width = widthValue;
             }
@@ -413,7 +413,7 @@ namespace ShipWorks.Stores.Content
                 validationErrorFields.Add("\t- Width\n");
             }
 
-            if(double.TryParse(height.Text, out double heightValue))
+            if(decimal.TryParse(height.Text, out decimal heightValue))
             {
                 item.Height = heightValue;
             }
