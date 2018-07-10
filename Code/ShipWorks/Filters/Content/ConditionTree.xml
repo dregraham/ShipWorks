@@ -336,7 +336,7 @@
       <Condition identifier="OrderItem.UnitCost" displayAs="Unit Cost" />
       <Condition identifier="OrderItem.UnitPrice" displayAs="Unit Price" />
       <Condition identifier="OrderItem.UnitWeight" displayAs="Unit Weight" />
-      <Condition identifier="OrderItem.Legnth" displayAs="Length" />
+      <Condition identifier="OrderItem.Length" displayAs="Length" />
       <Condition identifier="OrderItem.Width" displayAs="Width" />
       <Condition identifier="OrderItem.Height" displayAs="Height" />
       <Condition identifier="OrderItem.UPC" displayAs="UPC" />

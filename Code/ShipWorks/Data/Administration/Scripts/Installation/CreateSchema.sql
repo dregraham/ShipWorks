@@ -779,9 +779,9 @@ CREATE TABLE [dbo].[OrderItem]
 [TotalWeight] AS ([Weight]*[Quantity]),
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalOrderID] [BIGINT] NOT NULL,
-[Length] [float] NOT NULL,
-[Width] [float] NOT NULL,
-[Height] [float] NOT NULL
+[Length] [decimal] (29, 9) NOT NULL,
+[Width] [decimal] (29, 9) NOT NULL,
+[Height] [decimal] (29, 9) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
