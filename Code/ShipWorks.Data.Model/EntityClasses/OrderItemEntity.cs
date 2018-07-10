@@ -755,31 +755,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Length property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Length"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double Length
+		public virtual System.Decimal Length
 		{
-			get { return (System.Double)GetValue((int)OrderItemFieldIndex.Length, true); }
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Length, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Length, value); }
 		}
 
 		/// <summary> The Width property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Width"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double Width
+		public virtual System.Decimal Width
 		{
-			get { return (System.Double)GetValue((int)OrderItemFieldIndex.Width, true); }
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Width, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Width, value); }
 		}
 
 		/// <summary> The Height property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Height"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double Height
+		public virtual System.Decimal Height
 		{
-			get { return (System.Double)GetValue((int)OrderItemFieldIndex.Height, true); }
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Height, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Height, value); }
 		}
 
