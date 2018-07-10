@@ -3,7 +3,6 @@ IF EXISTS(SELECT 1 FROM sys.views WHERE name='ShipWorksIndexUsage' and type='v')
 GO
 
 CREATE VIEW ShipWorksIndexUsage  as
-
 	WITH IndexUsage AS
 	(
 		SELECT t.name AS TableName, i.name AS IndexName, i.is_primary_key as IsPrimaryKey, i.is_unique as IsUnique, i.index_id, i.object_id,
@@ -11,10 +10,10 @@ CREATE VIEW ShipWorksIndexUsage  as
 				WHEN 1 THEN 0
 				ELSE 1
 			END as 'IsEnabled',
-			CASE LEN(COALESCE(constraints.CONSTRAINT_NAME, ''))
+			MAX(CASE LEN(COALESCE(constraints.CONSTRAINT_NAME, ''))
 				WHEN 0 THEN 0
 				ELSE 1
-			END as 'HasConstraintColumn',
+			END) as 'HasConstraintColumn',
 			sum(ius.user_seeks) + sum(ius.user_scans) + sum(ius.user_lookups) as 'UserQueries',
 			max(lastQuery.QueryDate) as 'MaxLastQueryDate'
 		FROM sys.dm_db_index_usage_stats ius
@@ -39,7 +38,7 @@ CREATE VIEW ShipWorksIndexUsage  as
 				WHERE A.TABLE_NAME = t.name and A.COLUMN_NAME = c.name and ic.is_included_column = 0
 			) as constraints
 		WHERE ius.database_id = db_id() 
-		group by t.name, i.name, I.is_disabled, i.is_primary_key, i.is_unique, constraints.CONSTRAINT_NAME, i.index_id, i.object_id
+		group by t.name, i.name, I.is_disabled, i.is_primary_key, i.is_unique,  i.index_id, i.object_id
 	)
 	select *, 
 		CASE IsPrimaryKey
