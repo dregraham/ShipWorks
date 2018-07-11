@@ -144,19 +144,19 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Length property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Length"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Length { get; }
         /// <summary> The Width property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Width"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Width { get; }
         /// <summary> The Height property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Height"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Height { get; }
         
