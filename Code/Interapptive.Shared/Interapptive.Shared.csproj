@@ -193,6 +193,8 @@
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IConnectionSensitiveScope.cs" />
+    <Compile Include="Data\ISqlScript.cs" />
+    <Compile Include="Data\SqlScriptWithMetadata.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />
     <Compile Include="Enums\AsendiaServiceType.cs" />

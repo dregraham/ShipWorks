@@ -20,12 +20,12 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Manage Index State", "ManageIndexState", ActionTaskCategory.Administration, true)]
     public class ManageIndexStateTask : ActionTask
     {
+        private const int DefaultDaysBack = 14;
         private readonly ILog log;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlSession sqlSession;
         private const int timeoutHours = 3;
         private readonly int timeoutSeconds = (int) TimeSpan.FromHours(timeoutHours).TotalSeconds;
-        private int daysBack = 14;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageIndexStateTask" /> class.
@@ -97,16 +97,13 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 XDocument doc = XDocument.Parse(context.Step.TaskSettings);
                 XElement daysBackElement = doc.Descendants("DaysBack").FirstOrDefault();
-                if (daysBackElement != null)
-                {
-                    int.TryParse(daysBackElement.Value, out daysBack);
-                }
+                var daysBack = Functional.ParseInt(daysBackElement?.Value).Match(x => x, _ => 14);
 
                 if (dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
                 {
                     using (new LoggedStopwatch(log, $"Manage Index State Total Time. Days back: {daysBack}"))
                     {
-                        DisableUnusedIndexes();
+                        DisableUnusedIndexes(daysBack);
                     }
                 }
             }
@@ -122,7 +119,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Disable unused indexes.
         /// </summary>
-        private void DisableUnusedIndexes()
+        private void DisableUnusedIndexes(int daysBack)
         {
             using (new LoggedStopwatch(log, "Finished disabling unused indexes."))
             {

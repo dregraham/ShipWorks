@@ -108,6 +108,14 @@ namespace Interapptive.Shared.Utility
                 GenericResult.FromError<bool>($"Could not parse {arg} as bool");
 
         /// <summary>
+        /// Parse an integer value
+        /// </summary>
+        public static GenericResult<int> ParseInt(string value) =>
+            int.TryParse(value, out int result) ?
+                result :
+                GenericResult.FromError<int>($"Could not parse {value} as int");
+
+        /// <summary>
         /// Try executing a function
         /// </summary>
         /// <typeparam name="T">Return type of the function</typeparam>

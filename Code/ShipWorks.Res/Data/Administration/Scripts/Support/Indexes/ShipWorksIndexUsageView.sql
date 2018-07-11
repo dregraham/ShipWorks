@@ -1,5 +1,5 @@
 IF EXISTS(SELECT 1 FROM sys.views WHERE name='ShipWorksIndexUsage' and type='v')
-	DROP VIEW IF EXISTS [dbo].[ShipWorksIndexUsage]
+	DROP VIEW [dbo].[ShipWorksIndexUsage]
 GO
 
 CREATE VIEW ShipWorksIndexUsage WITH ENCRYPTION AS

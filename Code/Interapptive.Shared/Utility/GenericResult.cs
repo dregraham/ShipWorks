@@ -12,7 +12,7 @@ namespace Interapptive.Shared.Utility
         /// Get a successful result
         /// </summary>
         public static GenericResult<T> FromSuccess<T>(T value) =>
-            new GenericResult<T>(true, value, (string)null);
+            new GenericResult<T>(true, value, (string) null);
 
         /// <summary>
         /// Get a successful result
