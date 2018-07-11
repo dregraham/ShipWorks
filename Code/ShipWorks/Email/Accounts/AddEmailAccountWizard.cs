@@ -224,7 +224,7 @@ namespace ShipWorks.Email.Accounts
                     // Copy SMTP server settings
                     emailAccount.OutgoingServer = e.SearchResult.SmtpHost;
                     emailAccount.OutgoingPort = e.SearchResult.SmtpPort;
-                    emailAccount.OutgoingSecurityType = (int) e.SearchResult.SmtpSecurity;
+                    emailAccount.OutgoingSecurityType = (int) e.SearchResult.SslMode;
 
                     // Determine SMTP credentials
                     if (e.SearchResult.IncomingUsername == e.SearchResult.SmtpUsername &&

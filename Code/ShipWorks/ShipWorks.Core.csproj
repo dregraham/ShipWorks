@@ -251,52 +251,29 @@
       <HintPath>..\..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Common.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Common.2.5.6755\lib\net40\Rebex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Ftp.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Ftp, Version=4.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Ftp.4.0.6755\lib\net40\Rebex.Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    <Reference Include="Rebex.Imap, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Imap.2.0.6755\lib\net40\Rebex.Imap.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Imap">
-      <HintPath>..\..\Components\Rebex.Net.Imap.dll</HintPath>
+    <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Pop3, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.Pop3.dll</HintPath>
+    <Reference Include="Rebex.Networking, Version=3.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Networking.3.5.6755\lib\net40\Rebex.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.ProxySocket, Version=2.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.ProxySocket.dll</HintPath>
+    <Reference Include="Rebex.Pop3, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Pop3.2.0.6755\lib\net40\Rebex.Pop3.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.SecureSocket, Version=3.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.SecureSocket.dll</HintPath>
+    <Reference Include="Rebex.Sftp, Version=3.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Sftp.3.0.6755\lib\net40\Rebex.Sftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Smtp, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.Smtp.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
-    </Reference>
-    <Reference Include="Rebex.Security, Version=1.5.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Sftp.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Smtp, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Smtp.2.0.6755\lib\net40\Rebex.Smtp.dll</HintPath>
     </Reference>
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

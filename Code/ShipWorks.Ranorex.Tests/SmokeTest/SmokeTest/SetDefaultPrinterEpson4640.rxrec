@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="73748e19-6a5b-4363-b964-b957f3c0596a"
+mode="Global"
+rxversion="8.1">
+	<name>
+		SetDefaultPrinterEpson4640
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="SetDefaultPrinterEpson4640"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="SetDefaultPrinterEpson4640"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="SetDefaultPrinter"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+				Sets default printer to 'Epson 4640'
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="d90c0d78-879b-4cbf-82f8-56b71cc600ff">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		SetDefaultPrinterEpson4640.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

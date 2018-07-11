@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Create1000Orders</RootNamespace>
+    <AssemblyName>Create1000Orders</AssemblyName>
+    <RanorexVersion>6.0</RanorexVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <projectdefaultrepository>7833c9b0-06d6-4ce9-b9b8-86eee8a73c56</projectdefaultrepository>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ranorex.Core" />
+    <Reference Include="Ranorex.Plugin.ChromeWeb" />
+    <Reference Include="Ranorex.Plugin.Flex" />
+    <Reference Include="Ranorex.Plugin.Java" />
+    <Reference Include="Ranorex.Plugin.Mobile" />
+    <Reference Include="Ranorex.Plugin.MozillaWeb" />
+    <Reference Include="Ranorex.Plugin.Msaa" />
+    <Reference Include="Ranorex.Plugin.Office" />
+    <Reference Include="Ranorex.Plugin.Qt" />
+    <Reference Include="Ranorex.Plugin.RawText" />
+    <Reference Include="Ranorex.Plugin.Sap" />
+    <Reference Include="Ranorex.Plugin.Uia" />
+    <Reference Include="Ranorex.Plugin.Web" />
+    <Reference Include="Ranorex.Plugin.Win32" />
+    <Reference Include="Ranorex.Plugin.WinForms" />
+    <Reference Include="Ranorex.Plugin.Wpf" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <id>f79d6670-cb61-4917-930c-191b9c0afb44</id>
+    </Compile>
+    <Compile Include="Create1000OrdersRepository.cs">
+      <BoundTo>7833c9b0-06d6-4ce9-b9b8-86eee8a73c56</BoundTo>
+      <DependentUpon>Create1000OrdersRepository.rxrep</DependentUpon>
+      <RepositoryCode>true</RepositoryCode>
+      <id>5fbee088-b817-455d-a3f8-5f0fc6d6a233</id>
+    </Compile>
+    <Compile Include="Program.cs">
+      <id>d258333b-6389-4936-a152-9aa48017b760</id>
+    </Compile>
+    <Compile Include="Recording1.cs">
+      <BoundTo>57ee1b6f-2e46-4c9d-a954-a0f93932ccf3</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>f532bed9-3518-47f9-8e9b-d7424e7ec60e</id>
+    </Compile>
+    <Compile Include="Recording1.UserCode.cs">
+      <BoundTo>57ee1b6f-2e46-4c9d-a954-a0f93932ccf3</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>d739e12c-8d12-4a7c-8594-7ab77cf19008</id>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <id>efe2831a-c1bf-4981-aae7-73f75784f479</id>
+    </None>
+    <None Include="Create1000OrdersRepository.rximg">
+      <BoundTo>7833c9b0-06d6-4ce9-b9b8-86eee8a73c56</BoundTo>
+      <DependentUpon>Create1000OrdersRepository.rxrep</DependentUpon>
+      <imageblob>true</imageblob>
+      <id>6988c3a3-0523-4ca6-88ce-447a456da521</id>
+    </None>
+    <None Include="Create1000OrdersRepository.rxrep">
+      <id>7833c9b0-06d6-4ce9-b9b8-86eee8a73c56</id>
+      <repoid>bb7a4068-ba07-455c-9be2-7b6d2fd7f64d</repoid>
+      <reporootid>f2235957-cf06-4396-a170-9b0efb4a1be2</reporootid>
+    </None>
+    <None Include="Recording1.rxrec">
+      <BoundTo>7833c9b0-06d6-4ce9-b9b8-86eee8a73c56</BoundTo>
+      <id>57ee1b6f-2e46-4c9d-a954-a0f93932ccf3</id>
+      <recordtableid>aab7191b-0fef-4208-a12f-01d219ebb4f1</recordtableid>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Create1000Orders.rxtmg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>62d6bed2-69e1-4105-a052-260c1fe2ed2c</id>
+    </Content>
+    <Content Include="Create1000Orders.rxtst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>8409653d-5d55-4591-8e9d-c7b9225de803</id>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets" Condition="Exists('$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets')" />
+</Project>

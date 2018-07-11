@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="6.0">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="loopuninstall"
+      id="0b379fdf-d006-476a-b667-5190390516e6"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="loopuninstall"
+      id="0b379fdf-d006-476a-b667-5190390516e6"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

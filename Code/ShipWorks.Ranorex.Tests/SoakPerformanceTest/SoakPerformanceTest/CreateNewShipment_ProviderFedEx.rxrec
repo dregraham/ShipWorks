@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="4d2cc676-a089-4ee3-8dac-1395419a8843"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		CreateNewShipment_ProviderFedEx
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="CreateNewShipment_ProviderFedEx"
+	namespace="SoakPerformanceTest"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="880f14da-b5aa-4833-b5fe-f817b4c04cb2"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click Create New to create new shipment
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="9f000004-ee6e-421d-ad8e-6c49cf502e32">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/rawtext[@rawtext='Create New']
+				</path>
+			</info>
+		</mouseitem>
+		<setvaluerecorditem
+		enabled="True"
+		optional="False"
+		searchpropertyid="b3918d34-f1d2-41bb-a637-999d45583d1e"
+		attrname="SelectedItemText">
+			<comment>
+				Set Provider: FedEx
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="987d7c0b-744f-40e5-b288-eb48b549e8b5">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType']
+				</path>
+			</info>
+			<AttributeValue>
+				FedEx
+			</AttributeValue>
+		</setvaluerecorditem>
+	</recorditems>
+	<repository
+	name="SmokeTestRepository"
+	id="e4c46dea-34df-43f6-b976-1122433ac20a"
+	rxversion="5.4.5.19886"
+	relativepath="SmokeTestRepository.rxrep">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SoakPerformanceTest"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		CreateNewShipment_ProviderFedEx.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

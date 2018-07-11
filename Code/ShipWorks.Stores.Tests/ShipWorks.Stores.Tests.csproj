@@ -23,6 +23,7 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Communication\StoreDownloaderTest.cs" />
     <None Remove="Orders\Archive\ArchiveManagerDataAccessTest.cs" />
     <None Remove="Orders\Archive\ArchiveManagerDialogViewModelTest.cs" />
     <None Remove="Orders\Archive\ArchiveNotificationViewModelTest.cs" />
@@ -92,6 +93,7 @@
     <PackageReference Include="Moq" Version="4.7.145" />
     <PackageReference Include="MvvmLightLibs" Version="5.3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Rebex.Mail" Version="2.0.6755" />
     <PackageReference Include="RestSharpSigned" Version="105.2.3" />
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
@@ -119,12 +121,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
-    <Reference Include="Rebex.Mail">
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Networking">
-      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>

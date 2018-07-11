@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>{243BAA5D-375D-4164-A4E7-28155B441700}</string>
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution DownloadManyStores[DownloadManyStores[DownloadManyStoresRepository.rxrep[]]]]&#xD;&#xA;Solution DownloadManyStores\DownloadManyStores\DownloadManyStores.rxtst&#xD;&#xA;Solution DownloadManyStores" />
+  <StartupProject value="{243BAA5D-375D-4164-A4E7-28155B441700}" />
+</Properties>

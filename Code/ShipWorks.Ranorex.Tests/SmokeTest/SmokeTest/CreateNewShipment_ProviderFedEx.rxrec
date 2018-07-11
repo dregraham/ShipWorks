@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="3abfd772-9a86-4cce-af3b-d6c68431f012"
+mode="Global"
+rxversion="8.1">
+	<name>
+		CreateNewShipment_ProviderFedEx
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="CreateNewShipment_ProviderFedEx"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="4fbadd14-14e4-4b77-bcf8-11f1653d8449"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to avoid click inconsistency.
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="9f000004-ee6e-421d-ad8e-6c49cf502e32"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/rawtext[@rawtext='Create New' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="880f14da-b5aa-4833-b5fe-f817b4c04cb2"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click Create New to create new shipment
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="9f000004-ee6e-421d-ad8e-6c49cf502e32"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/rawtext[@rawtext='Create New']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="4fbadd14-14e4-4b77-bcf8-11f1653d8449"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to avoid click inconsistency.
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="987d7c0b-744f-40e5-b288-eb48b549e8b5"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<setvaluerecorditem
+		attrname="SelectedItemText"
+		enabled="True"
+		optional="False"
+		searchpropertyid="b3918d34-f1d2-41bb-a637-999d45583d1e">
+			<comment>
+				Set Provider: FedEx
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="987d7c0b-744f-40e5-b288-eb48b549e8b5"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType']
+				</path>
+			</info>
+			<AttributeValue>
+				FedEx
+			</AttributeValue>
+		</setvaluerecorditem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		CreateNewShipment_ProviderFedEx.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>
