@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using System.Xml.Linq;
 using static Interapptive.Shared.Utility.Functional;
 
@@ -73,7 +74,7 @@ namespace Interapptive.Shared.Data
         /// Is the script required
         /// </summary>
         private bool IsRequired() =>
-            ParseBool(metadata.Document.Element("required")?.Value).Match(x => x, _ => true);
+            ParseBool(metadata.Descendants("required").FirstOrDefault()?.Value).Match(x => x, _ => true);
 
         /// <summary>
         /// Handle the batch completed event
