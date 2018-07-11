@@ -1,18 +1,16 @@
-﻿using Interapptive.Shared.Utility;
-using log4net;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.ApplicationCore.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using System.Reactive.Disposables;
 using System.Xml.Linq;
-using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -27,7 +25,6 @@ namespace ShipWorks.Actions.Tasks.Common
         private readonly ISqlSession sqlSession;
         private const int timeoutHours = 3;
         private readonly int timeoutSeconds = (int) TimeSpan.FromHours(timeoutHours).TotalSeconds;
-        private string sqlConnectionString;
         private int daysBack = 14;
 
         /// <summary>
