@@ -490,6 +490,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzIndex.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzQueryStore.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzWho.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzQueryStore.sql.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

@@ -12,23 +12,17 @@ namespace Interapptive.Shared.Data
     /// <summary>
     /// Represents a SQL script that can be executed
     /// </summary>
-    public class SqlScript
+    public class SqlScript : ISqlScript
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SqlScript));
-
-        string name;
-        string sql;
 
         List<string> batches;
 
         /// <summary>
         /// Gets the name of the script
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Raised when a batch has successfully completed
@@ -40,33 +34,24 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public SqlScript(string name, string sql)
         {
-            this.name = name;
-            this.sql = sql;
+            Name = name;
+            Content = sql;
 
-            this.batches = Regex.Split(sql, @"^\s*?GO(?!TO)", RegexOptions.Multiline).Select(b => b.Trim()).Where(b => b.Length != 0).ToList();
+            batches = Regex.Split(sql, @"^\s*?GO(?!TO)", RegexOptions.Multiline)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x.Trim())
+                .ToList();
         }
 
         /// <summary>
         /// The SQL that makes up the script
         /// </summary>
-        public string Content
-        {
-            get
-            {
-                return sql;
-            }
-        }
+        public string Content { get; }
 
         /// <summary>
         /// The ScriptContent broken down into batches that can be sent to SQL Server as individual commands
         /// </summary>
-        public IList<string> Batches
-        {
-            get
-            {
-                return batches.AsReadOnly();
-            }
-        }
+        public IList<string> Batches => batches.AsReadOnly();
 
         /// <summary>
         /// Executes the script on the given connection
@@ -80,11 +65,11 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Executes the script on the given connection with the given transaction
+        /// Executes the script on the given command
         /// </summary>
         public void Execute(DbCommand cmd)
         {
-            log.InfoFormat("Running script {0}", name);
+            log.InfoFormat("Running script {0}", Name);
 
             // Because this is primarily used for schema modifications, set the timeout to a very large amount
             // since not completing execution means an upgrade or install failed.
@@ -116,7 +101,7 @@ namespace Interapptive.Shared.Data
                             //  Reissue the statement after the current backup or file manipulation operation is completed."
                             if (ex.Number == 3023)
                             {
-                                log.Warn(string.Format("Failed executing batch {0} in script {1}, will retry {2} times.", i, name, tries), ex);
+                                log.Warn(string.Format("Failed executing batch {0} in script {1}, will retry {2} times.", i, Name, tries), ex);
                                 Thread.Sleep(250);
 
                                 continue;
@@ -137,11 +122,11 @@ namespace Interapptive.Shared.Data
                 }
                 catch (SqlException ex)
                 {
-                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
+                    throw new SqlScriptException(Name, i, ex) { ShowScriptDetails = batches.Count > 1 };
                 }
                 catch (Exception ex)
                 {
-                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
+                    throw new SqlScriptException(Name, i, ex) { ShowScriptDetails = batches.Count > 1 };
                 }
             }
         }
