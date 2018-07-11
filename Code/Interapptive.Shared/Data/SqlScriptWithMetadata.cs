@@ -60,7 +60,7 @@ namespace Interapptive.Shared.Data
             {
                 func();
             }
-            catch (SqlScriptException ex)
+            catch (SqlScriptException)
             {
                 if (IsRequired())
                 {
