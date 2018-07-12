@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -15,7 +16,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         ShopifyEndpoints Endpoints { get; }
 
         /// <summary>
-        /// Gets the JSON representation of the Shop from Shopify
+        /// Gets shop information for a Shopify store
+        /// </summary>
+        ShopifyShop GetShop();
+
+        /// <summary>
+        /// Update store information from Shopify
         /// </summary>
         void RetrieveShopInformation();
 
@@ -58,5 +64,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Update the online status of the given orders
         /// </summary>
         void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl);
+
+        /// <summary>
+        /// Get inventory levels for a list of inventory ids
+        /// </summary>
+        IEnumerable<ShopifyInventoryLevel> GetInventoryLevels(IEnumerable<long> itemInventoryIdList);
     }
 }

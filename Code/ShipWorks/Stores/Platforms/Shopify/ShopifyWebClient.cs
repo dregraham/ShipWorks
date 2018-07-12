@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -619,6 +620,22 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return JObject.Parse(risks)?
                 .SelectToken("risks")
                 .Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets shop information for a Shopify store
+        /// </summary>
+        public ShopifyShop GetShop()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Get inventory levels for a list of inventory ids
+        /// </summary>
+        public IEnumerable<ShopifyInventoryLevel> GetInventoryLevels(IEnumerable<long> itemInventoryIdList)
+        {
+            throw new NotImplementedException();
         }
     }
 }
