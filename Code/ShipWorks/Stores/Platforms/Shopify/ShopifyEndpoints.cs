@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -29,7 +31,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         // Shop Url Format
         private const string ShopUrlFormat = "{0}shop.json";
 
-        private const string InventoryLevelUrlFormat = "{0}inventory_levels.json";
+        // InventoryLevel Url Format
+        private const string InventoryLevelUrlFormat = "{0}inventory_levels.json?inventory_item_ids={1}";
 
         // Scopes we need
         private const string Scopes = "write_customers,write_orders,write_products,write_shipping";
@@ -78,7 +81,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
-        public string InventoryLevelUrl => string.Format(InventoryLevelUrlFormat, ApiBaseUrl);
+        /// <summary>
+        /// The url to get inventory information
+        /// </summary>
+        public string InventoryLevelUrl(IEnumerable<long> InventoryItemIDs)
+        {
+            var itemList = InventoryItemIDs.Select(x => x.ToString());
+            var itemStrings = string.Join(",", itemList.ToArray());
+
+            return string.Format(InventoryLevelUrlFormat, ApiBaseUrl, itemStrings);
+        }
 
         /// <summary>
         /// The url to which the user is sent for granting ShipWorks access

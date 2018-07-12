@@ -617,6 +617,7 @@
     <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyEndpointsTest.cs" />
     <Compile Include="Stores\Sears\SearsUtilityTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionWebClientTest.cs" />
