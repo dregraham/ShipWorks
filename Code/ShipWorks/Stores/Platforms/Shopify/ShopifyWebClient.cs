@@ -411,7 +411,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Upload the shipment details for an order
         /// </summary>
-        public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl)
+        public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl, IEnumerable<long> itemIDs)
         {
             try
             {
