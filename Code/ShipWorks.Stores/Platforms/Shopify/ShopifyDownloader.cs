@@ -572,8 +572,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // We need the variantID to get the image and barcode
             long variantID = lineItem.GetValue<long>("variant_id");
 
+            SetVariantInfo(item, shopifyProduct, variantID);
             GetImage(item, shopifyProduct, variantID);
-            GetBarcode(item, shopifyProduct, variantID);
         }
 
         /// <summary>
@@ -598,9 +598,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Retrieves the corresponding variant barcode from the Shopify product and stores it as the UPC of the ShopifyOrderItemEntity
+        /// Retrieves the corresponding variant info from the Shopify product
         /// </summary>
-        private void GetBarcode(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
+        private void SetVariantInfo(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
         {
             // Grab all the variants of the product
             JToken variants = shopifyProduct.SelectToken("product.variants");
@@ -610,6 +610,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (variant != null)
             {
                 item.UPC = variant.GetValue<string>("barcode");
+                item.InventoryItemID = variant.GetValue<long?>("inventory_item_id");
             }
         }
 
