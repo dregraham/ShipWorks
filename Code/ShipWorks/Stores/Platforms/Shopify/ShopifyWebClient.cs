@@ -651,7 +651,37 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public IEnumerable<ShopifyInventoryLevel> GetInventoryLevels(IEnumerable<long> itemInventoryIdList)
         {
-            throw new NotImplementedException();
+            try
+            {
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
+                request.Uri = new Uri(Endpoints.InventoryLevelUrl(itemInventoryIdList));
+
+                // Make the call and get the response
+                string inventoryLevelsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetInventoryLevels, progress);
+
+                JToken inventoryLevels = JObject.Parse(inventoryLevelsString);
+
+                if (inventoryLevels != null)
+                {
+                    List<ShopifyInventoryLevel> shopifyInventoryLevels = new List<ShopifyInventoryLevel>();
+                    foreach (JToken inventoryLevel in inventoryLevels.SelectToken("inventory_levels"))
+                        {
+                        shopifyInventoryLevels.Add(new ShopifyInventoryLevel(inventoryLevel));
+                    }
+
+                    return shopifyInventoryLevels;
+                }
+                else
+                {
+                    throw new ShopifyException("Shopify returned an invalid response to ShipWorks.");
+                }
+            }
+            catch (JsonException ex)
+            {
+                log.Error("An error occurred during JObect.Parse", ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving inventory levels information.", ex);
+            }
         }
     }
 }
