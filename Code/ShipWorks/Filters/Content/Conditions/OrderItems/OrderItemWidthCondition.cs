@@ -7,7 +7,7 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
     /// Condition that compares against the Width of an OrderItem
     /// </summary>
     [ConditionElement("Item Width", "OrderItem.Width")]
-    public class OrderItemWidthCondition : StringCondition
+    public class OrderItemWidthCondition : NumericCondition<decimal>
     {
         /// <summary>
         /// Generate the sql
