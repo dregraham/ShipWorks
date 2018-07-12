@@ -411,23 +411,19 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Upload the shipment details for an order
         /// </summary>
-        public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl, IEnumerable<long> itemIDs)
+        public void UploadOrderShipmentDetails(ShopifyUploadDetails details)
         {
             try
             {
-                string url = Endpoints.ApiFulfillmentsUrl(shopifyOrderID);
-
-                if (string.IsNullOrEmpty(trackingNumber))
-                {
-                    trackingNumber = "null";
-                }
+                string url = Endpoints.ApiFulfillmentsUrl(details.ShopifyOrderID);
+                var trackingNumber = string.IsNullOrEmpty(details.TrackingNumber) ? "null" : details.TrackingNumber;
 
                 JObject fulfillmentReq = new JObject(
                     new JProperty("fulfillment",
                     new JObject(
-                        new JProperty("tracking_company", carrier),
+                        new JProperty("tracking_company", details.Carrier),
                         new JProperty("tracking_number", trackingNumber),
-                        new JProperty("custom_tracking_url", carrierTrackingUrl),
+                        new JProperty("custom_tracking_url", details.CarrierTrackingUrl),
                         new JProperty("notify_customer", store.ShopifyNotifyCustomer))));
 
                 string jsonRequest = fulfillmentReq.ToString();

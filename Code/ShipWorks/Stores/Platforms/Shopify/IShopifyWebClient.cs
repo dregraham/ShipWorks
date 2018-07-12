@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Update the online status of the given orders
         /// </summary>
-        void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl, IEnumerable<long> itemIDs);
+        void UploadOrderShipmentDetails(ShopifyUploadDetails details);
 
         /// <summary>
         /// Get inventory levels for a list of inventory ids

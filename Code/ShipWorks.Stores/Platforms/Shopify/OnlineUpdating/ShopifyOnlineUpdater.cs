@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
     {
         private readonly ILog log;
         private readonly IShopifyOrderSearchProvider orderSearchProvider;
+        private readonly IShopifyLocationService locationService;
         private readonly Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> createWebClient;
 
         /// <summary>
@@ -34,10 +35,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         /// </summary>
         public ShopifyOnlineUpdater(IShopifyOrderSearchProvider orderSearchProvider,
             Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> createWebClient,
+            IShopifyLocationService locationService,
             Func<Type, ILog> createLogger)
         {
             this.createWebClient = createWebClient;
             this.orderSearchProvider = orderSearchProvider;
+            this.locationService = locationService;
             log = createLogger(GetType());
         }
 
@@ -167,7 +170,9 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         {
             try
             {
-                webClient.UploadOrderShipmentDetails(shopifyOrderID, trackingNumber, carrier, carrierTrackingUrl);
+                var primaryLocationID = locationService.GetPrimaryLocationID(webClient);
+
+                webClient.UploadOrderShipmentDetails(new ShopifyUploadDetails(shopifyOrderID, trackingNumber, carrier, carrierTrackingUrl, primaryLocationID));
             }
             catch (ShopifyAlreadyUploadedException ex)
             {
