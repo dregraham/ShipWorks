@@ -7,7 +7,7 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
     /// Condition that compares against the Height of an OrderItem
     /// </summary>
     [ConditionElement("Item Height", "OrderItem.Height")]
-    public class OrderItemHeightCondition : StringCondition
+    public class OrderItemHeightCondition : NumericCondition<decimal>
     {
         /// <summary>
         /// Generate the sql
