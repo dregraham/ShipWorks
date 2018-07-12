@@ -171,29 +171,19 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             try
             {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
-                request.Uri = new Uri(Endpoints.ShopUrl);
+                ShopifyShop shopifyShop = GetShop();
 
-                // Make the call and get the response
-                string shopAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetShop, progress);
-
-                JToken shop = JObject.Parse(shopAsString);
-
-                if (shop?["shop"] != null)
+                if (shopifyShop != null)
                 {
-                    shop = shop["shop"];
-
-                    store.StoreName = shop.GetValue("name", "Shopify Store");
+                    store.StoreName = shopifyShop.StoreName;
                     store.ShopifyShopDisplayName = store.StoreName;
-
-                    store.Street1 = shop.GetValue("address1", string.Empty);
-                    store.City = shop.GetValue("city", string.Empty);
-                    store.StateProvCode = Geography.GetStateProvCode(shop.GetValue("province", string.Empty));
-                    store.PostalCode = shop.GetValue("zip", string.Empty);
-                    store.CountryCode = Geography.GetCountryCode(shop.GetValue("country", string.Empty));
-
-                    store.Email = shop.GetValue("email", string.Empty);
-                    store.Phone = shop.GetValue("phone", string.Empty);
+                    store.Street1 = shopifyShop.Street1;
+                    store.City = shopifyShop.City;
+                    store.StateProvCode = shopifyShop.StateProvCode;
+                    store.PostalCode = shopifyShop.PostalCode;
+                    store.CountryCode = shopifyShop.CountryCode;
+                    store.Email = shopifyShop.Email;
+                    store.Phone = shopifyShop.Phone;
                 }
                 else
                 {
@@ -623,7 +613,37 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public ShopifyShop GetShop()
         {
-            throw new NotImplementedException();
+            ShopifyShop shopifyShop = null;
+
+            try
+            {
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
+                request.Uri = new Uri(Endpoints.ShopUrl);
+
+                // Make the call and get the response
+                string shopAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetShop, progress);
+
+                JToken shop = JObject.Parse(shopAsString);
+
+                if (shop?["shop"] != null)
+                {
+                    shop = shop["shop"];
+
+                    shopifyShop = new ShopifyShop(shop);
+                }
+                else
+                {
+                    throw new ShopifyException("Shopify returned an invalid response to ShipWorks.");
+                }
+            }
+            catch (JsonException ex)
+            {
+                log.Error("An error occurred during JObect.Parse", ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving store information.", ex);
+            }
+
+            return shopifyShop;
         }
 
         /// <summary>
