@@ -2967,6 +2967,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)ShopifyOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "ShopifyOrderItemID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderItemFieldIndex.ShopifyOrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "ShopifyProductID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderItemFieldIndex.ShopifyProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ShopifyOrderItemEntity", "InventoryItemID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShopifyOrderItemFieldIndex.InventoryItemID, 0, 0, 19);
 		}
 		/// <summary>Inits ShopifyOrderSearchEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderSearchEntityInfos()

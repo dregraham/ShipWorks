@@ -2618,6 +2618,7 @@
       </EntityDefinition>
       <EntityDefinition Name="ShopifyOrderItem" ObjectID="489184b5-24ae-4989-8224-2ad7f8b17b02" InheritanceType="2">
         <Fields>
+          <Field Name="InventoryItemID" Type="long" IsOptional="true" Precision="19" FieldIndex="2" />
           <Field Name="ShopifyOrderItemID" Type="long" FieldIndex="0" />
           <Field Name="ShopifyProductID" Type="long" FieldIndex="1" />
         </Fields>
@@ -4257,7 +4258,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-06-20T12:09:16.4775442Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-12T17:54:56.4552334Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4626,10 +4627,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -7185,9 +7186,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7298,8 +7299,8 @@
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -8121,6 +8122,7 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShopifyOrderItemID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="ShopifyProductID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="InventoryItemID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopifyOrderSearch">
@@ -12775,6 +12777,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShopifyOrderItem" TargetName="ShipWorksLocal:dbo:ShopifyOrderItem">
           <FieldMappings>
+            <FieldMapping FieldName="InventoryItemID" TargetFieldName="InventoryItemID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="ShopifyOrderItemID" TargetFieldName="ShopifyOrderItemID" />
             <FieldMapping FieldName="ShopifyProductID" TargetFieldName="ShopifyProductID" />

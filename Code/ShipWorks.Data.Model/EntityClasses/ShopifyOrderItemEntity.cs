@@ -337,6 +337,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShopifyOrderItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShopifyProductID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InventoryItemID", fieldHashtable);
 		}
 		#endregion
 
@@ -408,6 +410,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShopifyOrderItemFieldIndex.ShopifyProductID, true); }
 			set	{ SetValue((int)ShopifyOrderItemFieldIndex.ShopifyProductID, value); }
+		}
+
+		/// <summary> The InventoryItemID property of the Entity ShopifyOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."InventoryItemID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> InventoryItemID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShopifyOrderItemFieldIndex.InventoryItemID, false); }
+			set	{ SetValue((int)ShopifyOrderItemFieldIndex.InventoryItemID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

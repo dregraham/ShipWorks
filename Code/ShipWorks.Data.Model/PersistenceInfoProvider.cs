@@ -3130,10 +3130,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyOrderItemEntity's mappings</summary>
 		private void InitShopifyOrderItemEntityMappings()
 		{
-			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 3, 0);
+			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 4, 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyOrderItemID", "ShopifyOrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyProductID", "ShopifyProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("ShopifyOrderItemEntity", "InventoryItemID", "InventoryItemID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits ShopifyOrderSearchEntity's mappings</summary>
