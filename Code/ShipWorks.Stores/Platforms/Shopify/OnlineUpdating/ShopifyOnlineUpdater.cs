@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 
             var orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
             var webClient = createWebClient(store, null);
-            var primaryLocationID = locationService.GetPrimaryLocationID(webClient);
+            var primaryLocationID = locationService.GetPrimaryLocationID(store, webClient);
 
             var items = new Lazy<IEnumerable<IShopifyOrderItemEntity>>(() => orderManager.GetItems(order).OfType<IShopifyOrderItemEntity>());
 

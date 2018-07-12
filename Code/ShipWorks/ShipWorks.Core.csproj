@@ -2074,7 +2074,6 @@
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyUploadDetails.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />

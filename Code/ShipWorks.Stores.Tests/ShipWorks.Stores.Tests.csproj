@@ -35,6 +35,7 @@
     <None Remove="Platforms\Overstock\OverstockOrderIdentifierTest.cs" />
     <None Remove="Platforms\Overstock\OverstockShipmentFactoryTest.cs" />
     <None Remove="Platforms\Overstock\OverstockStoreTypeTest.cs" />
+    <None Remove="Platforms\Shopify\ShopifyLocationServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

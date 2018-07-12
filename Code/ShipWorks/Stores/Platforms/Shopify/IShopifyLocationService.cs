@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get the primary location id for a store
         /// </summary>
-        long GetPrimaryLocationID(IShopifyWebClient webClient);
+        long GetPrimaryLocationID(IShopifyStoreEntity store, IShopifyWebClient webClient);
 
         /// <summary>
         /// Get items grouped by the location id that should be used for them
