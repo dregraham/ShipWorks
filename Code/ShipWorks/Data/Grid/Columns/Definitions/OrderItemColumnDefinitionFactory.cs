@@ -19,6 +19,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Model;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -470,8 +471,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         {
             if (item is OrderItemEntity orderItem)
             {
-                return $"{orderItem.Length:0.##}x{orderItem.Width:0.##}x{orderItem.Height:0.##}";
+                string dimensions = $"{orderItem.Length:0.##}x{orderItem.Width:0.##}x{orderItem.Height:0.##}";
+
+                return dimensions == "0x0x0" ? string.Empty : dimensions;
             }
+
             return string.Empty;
         }
 
