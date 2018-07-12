@@ -29,6 +29,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         // Shop Url Format
         private const string ShopUrlFormat = "{0}shop.json";
 
+        private const string InventoryLevelUrlFormat = "{0}inventory_levels.json";
+
         // Scopes we need
         private const string Scopes = "write_customers,write_orders,write_products,write_shipping";
 
@@ -75,6 +77,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return string.Format(ShopUrlFormat, ApiBaseUrl);
             }
         }
+
+        public string InventoryLevelUrl => string.Format(InventoryLevelUrlFormat, ApiBaseUrl);
 
         /// <summary>
         /// The url to which the user is sent for granting ShipWorks access
