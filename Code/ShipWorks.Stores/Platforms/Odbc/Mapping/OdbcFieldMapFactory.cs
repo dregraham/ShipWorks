@@ -89,6 +89,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalPrice, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderItemFields.Length, OdbcOrderFieldDescription.ItemLength, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderItemFields.Width, OdbcOrderFieldDescription.ItemWidth, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderItemFields.Height, OdbcOrderFieldDescription.ItemHeight, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Description, OdbcOrderFieldDescription.ItemDescription, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Location, OdbcOrderFieldDescription.ItemLocation, OdbcFieldValueResolutionStrategy.Default),
@@ -97,10 +100,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Image, OdbcOrderFieldDescription.ItemImage, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.Length, OdbcOrderFieldDescription.ItemLength, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.Width, OdbcOrderFieldDescription.ItemWidth, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.Height, OdbcOrderFieldDescription.ItemHeight, OdbcFieldValueResolutionStrategy.Default)
+                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default)
             };
 
 	        return fields;
