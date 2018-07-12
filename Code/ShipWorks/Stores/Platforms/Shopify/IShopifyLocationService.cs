@@ -11,11 +11,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get the primary location id for a store
         /// </summary>
-        long GetPrimaryLocationID(IShopifyStoreEntity store);
+        long GetPrimaryLocationID(IShopifyWebClient webClient);
 
         /// <summary>
         /// Get items grouped by the location id that should be used for them
         /// </summary>
-        IEnumerable<(long locationId, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyStoreEntity store, IEnumerable<IShopifyOrderItemEntity> items);
+        IEnumerable<(long locationId, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, IEnumerable<IShopifyOrderItemEntity> items);
     }
 }
