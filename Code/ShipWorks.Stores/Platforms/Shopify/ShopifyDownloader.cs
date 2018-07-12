@@ -484,6 +484,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             ShopifyOrderItemEntity item = (ShopifyOrderItemEntity) InstantiateOrderItem(order);
 
             // Set item properties
+            item.ShopifyOrderItemID = lineItem.GetValue<long>("id", 0);
             item.Name = lineItem.GetValue<string>("title", string.Empty);
             item.Code = lineItem.GetValue<string>("sku", string.Empty);
             item.SKU = item.Code;
