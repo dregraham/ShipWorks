@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -28,6 +29,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         private readonly ILog log;
         private readonly IShopifyOrderSearchProvider orderSearchProvider;
         private readonly IShopifyLocationService locationService;
+        private readonly IOrderManager orderManager;
         private readonly Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> createWebClient;
 
         /// <summary>
@@ -36,11 +38,13 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         public ShopifyOnlineUpdater(IShopifyOrderSearchProvider orderSearchProvider,
             Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> createWebClient,
             IShopifyLocationService locationService,
+            IOrderManager orderManager,
             Func<Type, ILog> createLogger)
         {
             this.createWebClient = createWebClient;
             this.orderSearchProvider = orderSearchProvider;
             this.locationService = locationService;
+            this.orderManager = orderManager;
             log = createLogger(GetType());
         }
 
@@ -152,9 +156,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 
             var orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
             var webClient = createWebClient(store, null);
+            var primaryLocationID = locationService.GetPrimaryLocationID(webClient);
+
+            var items = new Lazy<IEnumerable<IShopifyOrderItemEntity>>(() => orderManager.GetItems(order).OfType<IShopifyOrderItemEntity>());
 
             orderSearchEntities
-                .Select(x => PerformUpload(webClient, x, carrier, trackingNumber, carrierTrackingUrl))
+                .Select(x => PerformUpload(webClient, new ShopifyUploadDetails(x, trackingNumber, carrier, carrierTrackingUrl, primaryLocationID), items, true))
                 .ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
         }
 
@@ -166,13 +173,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         /// <param name="carrierTrackingUrl"></param>
         /// <param name="webClient"></param>
         /// <param name="orderSearchEntity"></param>
-        private IResult PerformUpload(IShopifyWebClient webClient, long shopifyOrderID, string carrier, string trackingNumber, string carrierTrackingUrl)
+        private IResult PerformUpload(IShopifyWebClient webClient, ShopifyUploadDetails uploadDetails, Lazy<IEnumerable<IShopifyOrderItemEntity>> items, bool shouldRetry)
         {
             try
             {
-                var primaryLocationID = locationService.GetPrimaryLocationID(webClient);
 
-                webClient.UploadOrderShipmentDetails(new ShopifyUploadDetails(shopifyOrderID, trackingNumber, carrier, carrierTrackingUrl, primaryLocationID));
+                webClient.UploadOrderShipmentDetails(uploadDetails);
             }
             catch (ShopifyAlreadyUploadedException ex)
             {
@@ -180,6 +186,14 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             }
             catch (ShopifyException ex)
             {
+                if (shouldRetry)
+                {
+                    locationService.GetItemLocations(webClient, items.Value)
+                        .Select(x => uploadDetails.WithLocation(x.locationId, x.items))
+                        .Select(x => PerformUpload(webClient, x, items, false))
+                        .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2));
+                }
+
                 return Result.FromError(ex);
             }
 

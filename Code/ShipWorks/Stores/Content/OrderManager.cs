@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -202,6 +203,25 @@ namespace ShipWorks.Stores.Content
                 }
 
                 return shipment;
+            }
+        }
+
+        /// <summary>
+        /// Get items from an order
+        /// </summary>
+        public IEnumerable<IOrderItemEntity> GetItems(IOrderEntity order)
+        {
+            if (order.OrderItems.Any())
+            {
+                return order.OrderItems;
+            }
+
+            var queryFactory = new QueryFactory();
+            var query = queryFactory.OrderItem.Where(OrderFields.OrderID == order.OrderID);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return sqlAdapter.FetchQuery(query).OfType<IOrderItemEntity>();
             }
         }
     }

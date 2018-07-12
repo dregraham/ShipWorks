@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -8,6 +9,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// </summary>
     public class ShopifyUploadDetails
     {
+        /// <summary>
+        /// Create upload details based on another instance
+        /// </summary>
+        /// <param name="copyFrom"></param>
+        /// <param name="items"></param>
+        private ShopifyUploadDetails(ShopifyUploadDetails copyFrom, long locationID, IEnumerable<IShopifyOrderItemEntity> items)
+        {
+            ShopifyOrderID = copyFrom.ShopifyOrderID;
+            TrackingNumber = copyFrom.TrackingNumber;
+            Carrier = copyFrom.Carrier;
+            CarrierTrackingUrl = copyFrom.CarrierTrackingUrl;
+            LocationID = locationID;
+            ItemIDs = items.Select(x => x.ShopifyOrderItemID).ToList();
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,5 +66,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Item ids associated with this fulfillment
         /// </summary>
         public IEnumerable<long> ItemIDs { get; }
+
+        /// <summary>
+        /// Create a copy of these details with the given location and items
+        /// </summary>
+        public ShopifyUploadDetails WithLocation(long locationId, IEnumerable<IShopifyOrderItemEntity> items) =>
+            new ShopifyUploadDetails(this, locationId, items);
     }
 }
