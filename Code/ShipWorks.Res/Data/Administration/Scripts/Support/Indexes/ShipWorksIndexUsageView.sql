@@ -55,7 +55,7 @@ IndexUsageFull as
 	select *, 
 		CASE IsPrimaryKey
 			WHEN 0 THEN 
-				'IF EXISTS(SELECT * FROM ' + QUOTENAME(TableName) + ') BEGIN RAISERROR (''Disabling index ' + QUOTENAME(TableName) + ''', 0, 1) WITH NOWAIT;  ALTER INDEX ' + QUOTENAME(IndexName) + ' ON ' + QUOTENAME(TableName) + ' DISABLE END'
+				'IF EXISTS(SELECT * FROM ' + QUOTENAME(TableName) + ') ALTER INDEX ' + QUOTENAME(IndexName) + ' ON ' + QUOTENAME(TableName) + ' DISABLE'
 			ELSE '' 
 		END as 'DisableIndex',
 		'IF EXISTS(SELECT * FROM ' + QUOTENAME(TableName) + ')  ALTER INDEX ' + QUOTENAME(IndexName) + ' ON ' + QUOTENAME(TableName) + ' REBUILD' AS 'EnableIndex'

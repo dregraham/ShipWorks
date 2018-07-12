@@ -33,8 +33,29 @@ public partial class StoredProcedures
         get
         {
             return @"
+                DECLARE @maxDbDate DATETIME 
+                DECLARE @daysBackDate DATETIME
                 DECLARE @disableIndexSql NVARCHAR(MAX)
                 SET @disableIndexSql = ''
+
+                IF (@daysBack <= 0)
+                BEGIN
+	                SET @daysBackDate = GETDATE();
+                END
+                ELSE
+                BEGIN
+	                SET @daysBackDate = DATEADD(day, -@daysBack, GETDATE());
+                END
+
+                ;WITH DatabaseDates AS
+                (
+	                SELECT max(restore_date) AS DbDate FROM msdb.dbo.restorehistory WHERE destination_database_name = DB_NAME()
+	                UNION
+	                SELECT create_date FROM sys.databases WHERE [name] = DB_NAME()
+	                UNION
+	                SELECT sqlserver_start_time FROM sys.dm_os_sys_info
+                )
+                SELECT @maxDbDate = MAX(DbDate) FROM DatabaseDates
 
                 SELECT @disableIndexSql =
 	                (
@@ -55,8 +76,8 @@ public partial class StoredProcedures
 		                  and indexUsage.TableName not like 'ObjectReference%'
 		                  and indexUsage.TableName not like 'PrintResult%'
 		                  and indexUsage.TableName not like 'Scheduling%'
-		                  and (indexUsage.MaxLastQueryDate is null or indexUsage.MaxLastQueryDate <= DATEADD(day, -@daysBack, getdate()))
-		                  and (SELECT sqlserver_start_time FROM sys.dm_os_sys_info) <= DATEADD(day, -@daysBack, getdate())
+		                  and (indexUsage.MaxLastQueryDate is null or indexUsage.MaxLastQueryDate <= @daysBackDate)
+		                  and (@maxDbDate <= @daysBackDate)
 		                FOR XML PATH('')
 	                )
 

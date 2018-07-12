@@ -125,16 +125,6 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 using (DbConnection sqlConnection = sqlSession.OpenConnection(timeoutSeconds))
                 {
-                    if (sqlConnection is SqlConnection connection)
-                    {
-                        void infoHandler(object sender, SqlInfoMessageEventArgs e) => log.Info(e.Message);
-
-                        connection.FireInfoMessageEventOnUserErrors = true;
-                        connection.InfoMessage += infoHandler;
-
-                        Disposable.Create(() => connection.InfoMessage -= infoHandler);
-                    }
-
                     using (DbCommand sqlCommand = sqlConnection.CreateCommand())
                     {
                         sqlCommand.CommandTimeout = timeoutSeconds;
