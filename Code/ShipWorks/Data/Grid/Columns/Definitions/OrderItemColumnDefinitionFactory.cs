@@ -470,7 +470,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         {
             if (item is OrderItemEntity orderItem)
             {
-                return $"{orderItem.Length:0.#}x{orderItem.Width:0.#}x{orderItem.Height:0.#}";
+                return $"{orderItem.Length:0.##}x{orderItem.Width:0.##}x{orderItem.Height:0.##}";
             }
             return string.Empty;
         }
