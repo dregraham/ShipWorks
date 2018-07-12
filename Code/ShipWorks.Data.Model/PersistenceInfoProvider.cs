@@ -2419,9 +2419,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
 			this.AddElementFieldMapping("OrderItemEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 19);
-			this.AddElementFieldMapping("OrderItemEntity", "Length", "Length", false, "Decimal", 0, 29, 9, false, "", null, typeof(System.Decimal), 20);
-			this.AddElementFieldMapping("OrderItemEntity", "Width", "Width", false, "Decimal", 0, 29, 9, false, "", null, typeof(System.Decimal), 21);
-			this.AddElementFieldMapping("OrderItemEntity", "Height", "Height", false, "Decimal", 0, 29, 9, false, "", null, typeof(System.Decimal), 22);
+			this.AddElementFieldMapping("OrderItemEntity", "Length", "Length", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 20);
+			this.AddElementFieldMapping("OrderItemEntity", "Width", "Width", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 21);
+			this.AddElementFieldMapping("OrderItemEntity", "Height", "Height", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 22);
 		}
 
 		/// <summary>Inits OrderItemAttributeEntity's mappings</summary>

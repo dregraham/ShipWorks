@@ -72,9 +72,9 @@ namespace ShipWorks.Stores.Content
             description.Text = item.Description;
             thumbnailUrl.Text = item.Thumbnail;
             imageUrl.Text = item.Image;
-            length.Text = item.Length.ToString();
-            width.Text = item.Width.ToString();
-            height.Text = item.Height.ToString();
+            length.Text = item.Length.ToString("0.##");
+            width.Text = item.Width.ToString("0.##");
+            height.Text = item.Height.ToString("0.##");
 
             LoadAttributes();
 

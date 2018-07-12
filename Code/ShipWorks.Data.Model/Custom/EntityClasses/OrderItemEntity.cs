@@ -50,7 +50,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             base.PreProcessValueToSet(fieldToSet, ref valueToSet);
         }
+        
+        /// <summary>
+        /// Trying to set a value of a field
+        /// </summary>
+        protected override void OnSetValue(int fieldIndex, object valueToSet, out bool cancel)
+        {
+            // If we're setting a decimal value ensure that the value is within the precision defined in the database
+            // otherwise LLBLGen will throw an exceptiopn
+            IEntityField2 field = Fields[fieldIndex];
 
+            if (field.DataType == typeof(decimal))
+            {
+                decimal fieldMaxValue = Convert.ToDecimal(Math.Pow(10, field.Precision - field.Scale) - 1);
+                decimal fieldMinValue = fieldMaxValue * -1;
+
+                decimal value = ((decimal) valueToSet);
+
+                if (value > fieldMaxValue || value < fieldMinValue)
+                {
+                    cancel = true;
+                    this.SetNewFieldValue(fieldIndex, value.Clamp(fieldMinValue, fieldMaxValue));
+                    return;
+                }
+            }
+
+            base.OnSetValue(fieldIndex, valueToSet, out cancel);
+        }
+        
         /// <summary>
         /// Special processing before saving to ensure base table gets hit when derived tables change
         /// </summary>
