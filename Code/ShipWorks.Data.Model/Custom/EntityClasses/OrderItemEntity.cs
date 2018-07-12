@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -59,10 +58,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             // If we're setting a decimal value ensure that the value is within the precision defined in the database
             // otherwise LLBLGen will throw an exceptiopn
-            IFieldInfo info = FieldInfoProviderSingleton.GetInstance().GetFieldInfo((OrderItemFieldIndex) fieldIndex);
-            if (info.DataType == typeof(decimal))
+            IEntityField2 field = Fields[fieldIndex];
+
+            if (field.DataType == typeof(decimal))
             {
-                decimal fieldMaxValue = Convert.ToDecimal(Math.Pow(10, info.Precision - info.Scale) - 1);
+                decimal fieldMaxValue = Convert.ToDecimal(Math.Pow(10, field.Precision - field.Scale) - 1);
                 decimal fieldMinValue = fieldMaxValue * -1;
 
                 decimal value = ((decimal) valueToSet);
