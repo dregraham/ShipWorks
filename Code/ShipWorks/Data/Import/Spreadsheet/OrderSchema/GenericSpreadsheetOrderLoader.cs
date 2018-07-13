@@ -285,7 +285,10 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 item.UnitPrice = unitPrice.Value;
                 item.UnitCost = unitCost.Value;
                 item.Weight = unitWeight.Value;
-
+                item.Length = csv.ReadField("Item.Length", item.Length);
+                item.Width = csv.ReadField("Item.Width", item.Width);
+                item.Height = csv.ReadField("Item.Height", item.Height);
+                
                 item.UPC = csv.ReadField("Item.UPC", "");
                 item.ISBN = csv.ReadField("Item.ISBN", "");
 

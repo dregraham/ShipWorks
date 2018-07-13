@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Content
+﻿using ShipWorks.UI.Controls;
+
+namespace ShipWorks.Stores.Content
 {
     partial class EditItemDlg
     {
@@ -71,17 +73,22 @@
             this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.harmonizedCode = new System.Windows.Forms.TextBox();
+            this.length = new ShipWorks.UI.Controls.PromptTextBox();
+            this.width = new ShipWorks.UI.Controls.PromptTextBox();
+            this.height = new ShipWorks.UI.Controls.PromptTextBox();
             this.labelHarmonizedCode = new System.Windows.Forms.Label();
+            this.dimsLabel = new System.Windows.Forms.Label();
+            this.dimUnitLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(248, 606);
+            this.ok.Location = new System.Drawing.Point(248, 639);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
-            this.ok.TabIndex = 17;
+            this.ok.TabIndex = 20;
             this.ok.Text = "OK";
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.OnOK);
@@ -90,10 +97,10 @@
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(329, 606);
+            this.cancel.Location = new System.Drawing.Point(329, 639);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
-            this.cancel.TabIndex = 18;
+            this.cancel.TabIndex = 21;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
@@ -154,7 +161,7 @@
             // labelCost
             // 
             this.labelCost.AutoSize = true;
-            this.labelCost.Location = new System.Drawing.Point(47, 313);
+            this.labelCost.Location = new System.Drawing.Point(47, 340);
             this.labelCost.Name = "labelCost";
             this.labelCost.Size = new System.Drawing.Size(55, 13);
             this.labelCost.TabIndex = 8;
@@ -163,7 +170,7 @@
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(39, 394);
+            this.labelDescription.Location = new System.Drawing.Point(39, 421);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 9;
@@ -193,7 +200,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.edge2.AutoSize = false;
             this.edge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.edge2.Location = new System.Drawing.Point(41, 463);
+            this.edge2.Location = new System.Drawing.Point(41, 490);
             this.edge2.Name = "edge2";
             this.edge2.Size = new System.Drawing.Size(380, 1);
             this.edge2.Text = "kryptonBorderEdge1";
@@ -212,7 +219,7 @@
             // labelAttributes
             // 
             this.labelAttributes.AutoSize = true;
-            this.labelAttributes.Location = new System.Drawing.Point(43, 473);
+            this.labelAttributes.Location = new System.Drawing.Point(43, 500);
             this.labelAttributes.Name = "labelAttributes";
             this.labelAttributes.Size = new System.Drawing.Size(59, 13);
             this.labelAttributes.TabIndex = 23;
@@ -228,11 +235,11 @@
             this.gridLinkEdit,
             this.gridLinkDelete});
             this.attributeGrid.EnableSearching = false;
-            this.attributeGrid.Location = new System.Drawing.Point(109, 470);
+            this.attributeGrid.Location = new System.Drawing.Point(109, 497);
             this.attributeGrid.Name = "attributeGrid";
             this.attributeGrid.Renderer = windowsXPRenderer1;
             this.attributeGrid.Size = new System.Drawing.Size(300, 111);
-            this.attributeGrid.TabIndex = 15;
+            this.attributeGrid.TabIndex = 18;
             this.attributeGrid.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnRowActivated);
             // 
             // gridColumnDescription
@@ -293,7 +300,7 @@
             // imageUrlLabel
             // 
             this.imageUrlLabel.AutoSize = true;
-            this.imageUrlLabel.Location = new System.Drawing.Point(45, 367);
+            this.imageUrlLabel.Location = new System.Drawing.Point(45, 394);
             this.imageUrlLabel.Name = "imageUrlLabel";
             this.imageUrlLabel.Size = new System.Drawing.Size(57, 13);
             this.imageUrlLabel.TabIndex = 31;
@@ -302,7 +309,7 @@
             // thumbnailUrlLabel
             // 
             this.thumbnailUrlLabel.AutoSize = true;
-            this.thumbnailUrlLabel.Location = new System.Drawing.Point(27, 340);
+            this.thumbnailUrlLabel.Location = new System.Drawing.Point(27, 367);
             this.thumbnailUrlLabel.Name = "thumbnailUrlLabel";
             this.thumbnailUrlLabel.Size = new System.Drawing.Size(75, 13);
             this.thumbnailUrlLabel.TabIndex = 29;
@@ -310,17 +317,17 @@
             // 
             // imageUrl
             // 
-            this.imageUrl.Location = new System.Drawing.Point(109, 364);
+            this.imageUrl.Location = new System.Drawing.Point(109, 391);
             this.imageUrl.Name = "imageUrl";
             this.imageUrl.Size = new System.Drawing.Size(301, 21);
-            this.imageUrl.TabIndex = 13;
+            this.imageUrl.TabIndex = 16;
             // 
             // thumbnailUrl
             // 
-            this.thumbnailUrl.Location = new System.Drawing.Point(109, 337);
+            this.thumbnailUrl.Location = new System.Drawing.Point(109, 364);
             this.thumbnailUrl.Name = "thumbnailUrl";
             this.thumbnailUrl.Size = new System.Drawing.Size(301, 21);
-            this.thumbnailUrl.TabIndex = 12;
+            this.thumbnailUrl.TabIndex = 15;
             // 
             // isbn
             // 
@@ -344,22 +351,22 @@
             this.addAttribute.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addAttribute.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.addAttribute.ForeColor = System.Drawing.Color.Blue;
-            this.addAttribute.Location = new System.Drawing.Point(340, 584);
+            this.addAttribute.Location = new System.Drawing.Point(340, 611);
             this.addAttribute.Name = "addAttribute";
             this.addAttribute.Size = new System.Drawing.Size(72, 13);
-            this.addAttribute.TabIndex = 16;
+            this.addAttribute.TabIndex = 19;
             this.addAttribute.Text = "Add Attribute";
             this.addAttribute.Click += new System.EventHandler(this.OnAddAttribute);
             // 
             // description
             // 
             this.description.AcceptsReturn = true;
-            this.description.Location = new System.Drawing.Point(109, 391);
+            this.description.Location = new System.Drawing.Point(109, 418);
             this.description.Multiline = true;
             this.description.Name = "description";
             this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.description.Size = new System.Drawing.Size(301, 66);
-            this.description.TabIndex = 14;
+            this.description.TabIndex = 17;
             // 
             // weight
             // 
@@ -385,10 +392,10 @@
             0,
             131072});
             this.cost.IgnoreSet = false;
-            this.cost.Location = new System.Drawing.Point(109, 310);
+            this.cost.Location = new System.Drawing.Point(109, 337);
             this.cost.Name = "cost";
             this.cost.Size = new System.Drawing.Size(100, 21);
-            this.cost.TabIndex = 11;
+            this.cost.TabIndex = 14;
             this.cost.Text = "$0.00";
             // 
             // location
@@ -465,6 +472,36 @@
             this.harmonizedCode.Size = new System.Drawing.Size(159, 21);
             this.harmonizedCode.TabIndex = 9;
             // 
+            // length
+            // 
+            this.length.Location = new System.Drawing.Point(109, 310);
+            this.fieldLengthProvider.SetMaxLengthSource(this.length, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
+            this.length.Name = "length";
+            this.length.PromptColor = System.Drawing.SystemColors.GrayText;
+            this.length.PromptText = "L";
+            this.length.Size = new System.Drawing.Size(49, 21);
+            this.length.TabIndex = 11;
+            // 
+            // width
+            // 
+            this.width.Location = new System.Drawing.Point(164, 310);
+            this.fieldLengthProvider.SetMaxLengthSource(this.width, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
+            this.width.Name = "width";
+            this.width.PromptColor = System.Drawing.SystemColors.GrayText;
+            this.width.PromptText = "W";
+            this.width.Size = new System.Drawing.Size(49, 21);
+            this.width.TabIndex = 12;
+            // 
+            // height
+            // 
+            this.height.Location = new System.Drawing.Point(219, 310);
+            this.fieldLengthProvider.SetMaxLengthSource(this.height, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
+            this.height.Name = "height";
+            this.height.PromptColor = System.Drawing.SystemColors.GrayText;
+            this.height.PromptText = "H";
+            this.height.Size = new System.Drawing.Size(49, 21);
+            this.height.TabIndex = 13;
+            // 
             // labelHarmonizedCode
             // 
             this.labelHarmonizedCode.AutoSize = true;
@@ -474,13 +511,36 @@
             this.labelHarmonizedCode.TabIndex = 34;
             this.labelHarmonizedCode.Text = "Harmonized Code:";
             // 
+            // dimsLabel
+            // 
+            this.dimsLabel.AutoSize = true;
+            this.dimsLabel.Location = new System.Drawing.Point(38, 313);
+            this.dimsLabel.Name = "dimsLabel";
+            this.dimsLabel.Size = new System.Drawing.Size(64, 13);
+            this.dimsLabel.TabIndex = 38;
+            this.dimsLabel.Text = "Dimensions:";
+            // 
+            // dimUnitLabel
+            // 
+            this.dimUnitLabel.AutoSize = true;
+            this.dimUnitLabel.Location = new System.Drawing.Point(274, 313);
+            this.dimUnitLabel.Name = "dimUnitLabel";
+            this.dimUnitLabel.Size = new System.Drawing.Size(79, 13);
+            this.dimUnitLabel.TabIndex = 43;
+            this.dimUnitLabel.Text = "in.  (L x W x H)";
+            // 
             // EditItemDlg
             // 
             this.AcceptButton = this.ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(416, 641);
+            this.ClientSize = new System.Drawing.Size(416, 674);
+            this.Controls.Add(this.dimUnitLabel);
+            this.Controls.Add(this.height);
+            this.Controls.Add(this.width);
+            this.Controls.Add(this.length);
+            this.Controls.Add(this.dimsLabel);
             this.Controls.Add(this.harmonizedCode);
             this.Controls.Add(this.labelHarmonizedCode);
             this.Controls.Add(this.imageUrl);
@@ -578,5 +638,10 @@
         private System.Windows.Forms.Label thumbnailUrlLabel;
         private System.Windows.Forms.TextBox harmonizedCode;
         private System.Windows.Forms.Label labelHarmonizedCode;
+        private PromptTextBox length;
+        private System.Windows.Forms.Label dimsLabel;
+        private PromptTextBox width;
+        private PromptTextBox height;
+        private System.Windows.Forms.Label dimUnitLabel;
     }
 }

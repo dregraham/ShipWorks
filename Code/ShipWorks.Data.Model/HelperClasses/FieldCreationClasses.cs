@@ -912,6 +912,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new AmazonOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new AmazonOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new AmazonOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new AmazonOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2047,6 +2062,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new BigCommerceOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2401,6 +2431,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new BuyDotComOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -3151,6 +3196,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -5607,6 +5667,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new EbayOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new EbayOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new EbayOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new EbayOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -7016,6 +7091,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -9892,6 +9982,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new GenericModuleOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -10777,6 +10882,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new GrouponOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -11121,6 +11241,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new InfopiaOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -12132,6 +12267,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new JetOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new JetOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -12911,6 +13061,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -15967,6 +16132,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new NeweggOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new NeweggOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new NeweggOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new NeweggOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -17297,6 +17477,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new OrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new OrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new OrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.Height);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderItemAttributeEntity</summary>
@@ -18561,6 +18756,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new OverstockOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new OverstockOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -21077,6 +21287,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new SearsOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new SearsOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new SearsOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new SearsOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -23032,6 +23257,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new ShopifyOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -24701,6 +24941,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new ThreeDCartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -27237,6 +27492,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Height);}
+		}
 		/// <summary>Creates a new WalmartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -28671,6 +28941,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new YahooOrderItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new YahooOrderItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new YahooOrderItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Height);}
 		}
 		/// <summary>Creates a new YahooOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID

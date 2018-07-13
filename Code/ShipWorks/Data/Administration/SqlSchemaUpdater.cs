@@ -374,7 +374,7 @@ namespace ShipWorks.Data.Administration
             int scriptsCompleted = updateScripts.IndexOf(script);
 
             // Execute the script
-            SqlScript executor = sqlLoader[script.ScriptName];
+            ISqlScript executor = sqlLoader[script.ScriptName];
 
             // Update the progress as we complete each batch in the script
             executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
