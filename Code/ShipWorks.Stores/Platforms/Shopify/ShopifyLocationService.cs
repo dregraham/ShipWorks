@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             var groupedLocations = webClient
                 .GetInventoryLevels(inventoryItems.Select(x => x.inventoryItemID))
                 .GroupBy(inventoryLevel => inventoryLevel.LocationID)
-                .Select(level => (locationID: level.Key, items: level.Select(x => inventoryItems.First(y => y.inventoryItemID == x.InventoryItemID).item)))
+                .Select(level => AssociateItemsWithLocation(level, inventoryItems))
                 .OrderByDescending(x => x.items.Count())
                 .ToList();
 
@@ -49,6 +49,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 .Select((x, i) => (locationID: x.locationID, items: x.items.Except(groupedLocations.Take(i).SelectMany(y => y.items))))
                 .Where(x => x.items.Any());
         }
+
+        /// <summary>
+        /// Associate items with the inventory level
+        /// </summary>
+        private static (long locationID, IEnumerable<IShopifyOrderItemEntity> items) AssociateItemsWithLocation(IGrouping<long, ShopifyInventoryLevel> level, List<(IShopifyOrderItemEntity item, long inventoryItemID)> inventoryItems) =>
+            (
+                locationID: level.Key,
+                items: level.Select(x => inventoryItems.First(y => y.inventoryItemID == x.InventoryItemID).item)
+            );
 
         /// <summary>
         /// Get the inventory item ID for the given item
