@@ -469,9 +469,6 @@
     <Compile Include="Net\IHttpResponseReader.cs" />
     <Compile Include="Net\INetworkUtility.cs" />
     <Compile Include="Net\InvalidSoapException.cs" />
-    <Compile Include="Net\JsonException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Net\JsonExtensions.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Get the primary location id for a store
         /// </summary>
         public long GetPrimaryLocationID(IShopifyStoreEntity store, IShopifyWebClient webClient) =>
-            primaryLocations.GetOrAdd(store.StoreID, x => webClient.GetShop().PrimaryLocationID.GetValueOrDefault(0));
+            primaryLocations.GetOrAdd(store.StoreID, x => webClient.GetShop().PrimaryLocationID);
 
         /// <summary>
         /// Get items grouped by the location id that should be used for them

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -84,7 +83,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// The URL to get item inventory level info
         /// </summary>
-        public string InventoryLevelUrl(IEnumerable<long> itemInventoryIDs) => string.Format(InventoryLevelUrlFormat, ApiBaseUrl, String.Join(",", itemInventoryIDs));
+        public string InventoryLevelUrl(IEnumerable<long> itemInventoryIDs) =>
+            string.Format(InventoryLevelUrlFormat, ApiBaseUrl, String.Join(",", itemInventoryIDs));
 
         /// <summary>
         /// The URL to which the user is sent for granting ShipWorks access

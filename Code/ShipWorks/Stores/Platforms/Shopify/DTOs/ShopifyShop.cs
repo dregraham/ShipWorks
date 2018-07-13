@@ -1,67 +1,75 @@
-﻿using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Net;
-using Newtonsoft.Json.Linq;
+﻿using System.ComponentModel;
+using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Shopify.DTOs
 {
     /// <summary>
     /// Shop details for a Shopify store
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class ShopifyShop
     {
-        private readonly JToken shopJson;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ShopifyShop(JToken shopJson)
-        {
-            this.shopJson = shopJson;
-        }
-
         /// <summary>
         /// The Store Name
         /// </summary>
-        public string StoreName => shopJson.GetValue("name", "Shopify Store");
+        [DefaultValue("Shopify Store")]
+        [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string StoreName { get; set; }
 
         /// <summary>
         /// The Street 1
         /// </summary>
-        public string Street1 => shopJson.GetValue("address1", string.Empty);
+        [DefaultValue("")]
+        [JsonProperty("address1", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string Street1 { get; set; }
 
         /// <summary>
         /// The City
         /// </summary>
-        public string City => shopJson.GetValue("city", string.Empty);
+        [DefaultValue("")]
+        [JsonProperty("city", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string City { get; set; }
 
         /// <summary>
         /// The State/Province Code
         /// </summary>
-        public string StateProvCode => Geography.GetStateProvCode(shopJson.GetValue("province", string.Empty));
+        [DefaultValue("")]
+        [JsonProperty("province", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string StateProvince { get; set; }
 
         /// <summary>
         /// The Postal Code
         /// </summary>
-        public string PostalCode => shopJson.GetValue("zip", string.Empty);
+        [DefaultValue("")]
+        [JsonProperty("zip", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string PostalCode { get; set; }
 
         /// <summary>
         /// The Country Code
         /// </summary>
-        public string CountryCode => Geography.GetCountryCode(shopJson.GetValue("country", string.Empty));
+        [DefaultValue("")]
+        [JsonProperty("country", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string Country { get; set; }
 
         /// <summary>
         /// The Email
         /// </summary>
-        public string Email => shopJson.GetValue("email", string.Empty);
+        [DefaultValue("")]
+        [JsonProperty("email", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string Email { get; set; }
 
         /// <summary>
         /// The Phone
         /// </summary>
-        public string Phone => shopJson.GetValue("phone", string.Empty);
+        [DefaultValue("")]
+        [JsonProperty("phone", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public string Phone { get; set; }
 
         /// <summary>
         /// The Primary Location ID
         /// </summary>
-        public long? PrimaryLocationID => shopJson.GetValue<long?>("primary_location_id");
+        [JsonProperty("primary_location_id", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public long PrimaryLocationID { get; set; }
     }
 }

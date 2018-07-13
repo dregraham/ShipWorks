@@ -12,6 +12,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -179,9 +180,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     store.ShopifyShopDisplayName = store.StoreName;
                     store.Street1 = shopifyShop.Street1;
                     store.City = shopifyShop.City;
-                    store.StateProvCode = shopifyShop.StateProvCode;
+                    store.StateProvCode = Geography.GetStateProvCode(shopifyShop.StateProvince);
                     store.PostalCode = shopifyShop.PostalCode;
-                    store.CountryCode = shopifyShop.CountryCode;
+                    store.CountryCode = shopifyShop.Country;
                     store.Email = shopifyShop.Email;
                     store.Phone = shopifyShop.Phone;
                 }
@@ -613,8 +614,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public ShopifyShop GetShop()
         {
-            ShopifyShop shopifyShop = null;
-
             try
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
@@ -627,9 +626,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 if (shop?["shop"] != null)
                 {
-                    shop = shop["shop"];
-
-                    shopifyShop = new ShopifyShop(shop);
+                    return shop["shop"].ToObject<ShopifyShop>();
                 }
                 else
                 {
@@ -642,8 +639,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving store information.", ex);
             }
-
-            return shopifyShop;
         }
 
         /// <summary>
@@ -663,13 +658,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 if (inventoryLevels != null)
                 {
-                    List<ShopifyInventoryLevel> shopifyInventoryLevels = new List<ShopifyInventoryLevel>();
-                    foreach (JToken inventoryLevel in inventoryLevels.SelectToken("inventory_levels"))
-                        {
-                        shopifyInventoryLevels.Add(new ShopifyInventoryLevel(inventoryLevel));
-                    }
-
-                    return shopifyInventoryLevels;
+                    return inventoryLevels.SelectToken("inventory_levels")
+                        .Select(x => x.ToObject<ShopifyInventoryLevel>())
+                        .ToList();
                 }
                 else
                 {

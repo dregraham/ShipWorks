@@ -617,6 +617,8 @@
     <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyEndpointsTest.cs" />
     <Compile Include="Stores\Sears\SearsUtilityTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
@@ -811,6 +813,8 @@
     <None Include="Shipping\AdjustedCountryCodeData_Usps.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.FullObject.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />

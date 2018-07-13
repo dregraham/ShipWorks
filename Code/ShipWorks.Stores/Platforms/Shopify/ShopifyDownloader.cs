@@ -11,6 +11,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
