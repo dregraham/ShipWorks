@@ -1,11 +1,7 @@
-﻿extern alias rebex2015;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using rebex2015::Rebex;
-using rebex2015::Rebex.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
@@ -15,11 +11,12 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Saving;
 using log4net;
+using Rebex.Net;
+using Rebex;
+using Rebex.IO;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
-    extern alias rebex2015;
-
     /// <summary>
     /// Task for ftping a chosen template
     /// </summary>
@@ -125,7 +122,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 IFtp ftp = FtpUtility.LogonToFtp(ftpAccountEntity);
 
                 ftp.LogWriter = GetFtpLogWriter();
-                ftp.PutFiles(string.Format("{0}\\*", rootTempFileName), "/", FtpBatchTransferOptions.Recursive, FtpActionOnExistingFiles.OverwriteAll);
+                ftp.PutFiles(string.Format("{0}\\*", rootTempFileName), "/", TraversalMode.Recursive, ActionOnExistingFiles.OverwriteAll);
             }
             catch (NetworkSessionException ex)
             {

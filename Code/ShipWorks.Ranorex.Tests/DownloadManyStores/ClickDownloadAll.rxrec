@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="cc14af8c-d8ff-4c0f-a17b-8ca3064eedd6"
+mode="Global"
+rxversion="8.1">
+	<name>
+		ClickDownloadAll
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ClickDownloadAll"
+	namespace="DownloadManyStores">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="6510aef1-a755-4188-b2db-bd8bae2032a7"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d4fc9afa-db0c-419c-a97b-5fd56605fc0d"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@title~'ShipWorks']/?/?/tabpagelist[@accessiblename='Ribbon Tabs']/tabpage[@accessiblename='Home' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="f86feb8c-dd00-4244-81af-24a8449dd156"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d4fc9afa-db0c-419c-a97b-5fd56605fc0d"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@title~'ShipWorks']/?/?/tabpagelist[@accessiblename='Ribbon Tabs']/tabpage[@accessiblename='Home' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<keysequenceitem
+		KeySequence="{LMenu down}{D1}{LMenu up}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="bb905622-d8b0-4dba-88e4-51cb355aa9c8">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+	</recorditems>
+	<repository
+	id="21006fdf-b3eb-4175-9002-323b1ef8a36b"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="DownloadManyStores">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ClickDownloadAll.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

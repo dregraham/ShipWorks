@@ -7,7 +7,6 @@ using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -62,24 +61,14 @@ namespace ShipWorks.Stores.Content
                 {
                     IConfigurationEntity config = ConfigurationData.FetchReadOnly();
 
-                    // Have to update
-                    if (config.CustomerUpdateShipping || config.CustomerUpdateBilling)
+                    var updated =
+                        UpdateCustomerAddress(config.CustomerUpdateBilling, order.BillPerson, customer.BillPerson) |
+                        UpdateCustomerAddress(config.CustomerUpdateShipping, order.ShipPerson, customer.ShipPerson);
+
+                    if (updated || customer.IsDirty)
                     {
-                        if (config.CustomerUpdateBilling)
-                        {
-                            PersonAdapter.Copy(order, customer, "Bill");
-                        }
-
-                        if (config.CustomerUpdateShipping)
-                        {
-                            PersonAdapter.Copy(order, customer, "Ship");
-                        }
-
-                        if (config.CustomerUpdateBilling || config.CustomerUpdateShipping || customer.IsDirty)
-                        {
-                            // Save it back
-                            await adapter.SaveEntityAsync(customer).ConfigureAwait(false);
-                        }
+                        // Save it back
+                        await adapter.SaveEntityAsync(customer).ConfigureAwait(false);
                     }
                 }
 
@@ -90,6 +79,20 @@ namespace ShipWorks.Stores.Content
             }
 
             return customer;
+        }
+
+        /// <summary>
+        /// Update a customer address, if necessary
+        /// </summary>
+        private static bool UpdateCustomerAddress(bool shouldUpdate, PersonAdapter orderAddress, PersonAdapter customerAddress)
+        {
+            if (shouldUpdate && !PersonAdapter.IsAddressEmpty(orderAddress))
+            {
+                orderAddress.CopyTo(customerAddress);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

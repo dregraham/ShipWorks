@@ -1,0 +1,12 @@
+﻿<Properties>
+  <Array name="active">
+    <Element value="DownloadManyStores.rxtst" />
+  </Array>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="DownloadManyStores.rxtst" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Array name="recentusercodeselections" />
+  </Properties>
+</Properties>

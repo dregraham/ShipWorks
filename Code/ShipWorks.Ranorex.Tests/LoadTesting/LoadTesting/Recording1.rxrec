@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="e4a10d96-8fd8-4ce2-bfff-8077e8887587"
+mode="Global"
+rxversion="8.0">
+	<name>
+		Recording1
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="Recording1"
+	namespace="LoadTesting">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mousewheelitem
+		delta="-600"
+		duration="1000ms"
+		enabled="True"
+		optional="False"
+		orientation="Vertical">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</mousewheelitem>
+	</recorditems>
+	<repository
+	id="dc68e475-1036-4fd8-9469-a12d0991a9cf"
+	name="LoadTestingRepository"
+	relativepath="LoadTestingRepository.rxrep"
+	rxversion="7.0">
+		<codegen
+		classname="LoadTestingRepository"
+		namespace="LoadTesting">
+		</codegen>
+		<rootfolder
+		id="74067a9f-0b8f-488d-8d73-0b6338021e77"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		Recording1.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

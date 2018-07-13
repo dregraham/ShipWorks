@@ -1,0 +1,252 @@
+﻿<repository
+name="ShippingCarrierRegressionRepository"
+id="c68b9397-84ac-4ea0-be0f-3eb8aa9b5526"
+rxversion="5.4.5.19886">
+	<codegen
+	classname="ShippingCarrierRegressionRepository"
+	namespace="SoakPerformanceTest"/>
+	<rootfolder
+	name="Root"
+	id="8b3666b0-4472-487b-baaa-0a31e8982b7d"
+	searchtimeout="0ms"
+	capname="unknown"
+	isrooted="True"
+	usecache="True">
+		<appfolder
+		name="ShipOrders1"
+		id="b316b72b-5681-4152-85b9-e567c20842b5"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@title='Ship Orders']"
+		isrooted="True"
+		usecache="True">
+			<folder
+			name="SplitContainer"
+			id="704dbf8f-fbfb-447f-abc2-7ca908933d26"
+			searchtimeout="30000ms"
+			capname="container"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']"
+			isrooted="True"
+			usecache="False">
+				<item
+				name="ResidentialDetermination"
+				id="f9871dd3-361b-4526-b0db-cf5364a35849"
+				searchtimeout="30000ms"
+				capname="combobox"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/tabpagelist[@controlname='tabControl']/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='FedExServiceControl']/container[@controlname='sectionRecipient']/element[@controlname='collapseControl']/container[@controlname='collapseControl.Panel']/combobox[@controlname='residentialDetermination']"
+				addcaps="combobox,control,nativewindow"
+				refimgid="1ba7af71-c147-419b-9cd9-2e74115cb87b">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='FedExServiceControl']/container[@controlname='sectionRecipient']//combobox[@controlname='residentialDetermination']
+				</item>
+				<item
+				name="Confirmation"
+				id="4c667a23-c151-4f98-aa8f-89c44c466708"
+				searchtimeout="30000ms"
+				capname="combobox"
+				addcaps="combobox,control,nativewindow"
+				refimgid="50cd4f2b-a4fe-4d02-bf0e-4430b864f6ce">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/container[@controlname='sectionShipment']//combobox[@controlname='confirmation']
+				</item>
+				<item
+				name="WeightUSPS"
+				id="4649ef25-c0f8-4799-ae8c-5e38f939d50d"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='UspsServiceControl']/container[@controlname='sectionShipment']/element/container/container[@controlname='weight']/text[@controlname='textBox']/text[@accessiblerole='Text']"
+				addcaps="text,accessible">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='weight']/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				name="LengthUSPS"
+				id="248478d8-9a2c-45c3-89e4-8775f7286bbe"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/container[@controlname='sectionShipment']//container[@controlname='dimensionsControl']/text[@controlname='length']
+				</item>
+				<item
+				name="WidthUSPS"
+				id="a132451d-0871-44ff-a2b0-bc310d7c4f0b"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/container[@controlname='sectionShipment']//container[@controlname='dimensionsControl']/text[@controlname='width']
+				</item>
+				<item
+				name="HeightUSPS"
+				id="a8b6dabb-c070-4cc9-97af-b4ed21521b06"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/container[@controlname='sectionShipment']//container[@controlname='dimensionsControl']/text[@controlname='height']
+				</item>
+				<basepath>
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']
+				</basepath>
+			</folder>
+			<basepath>
+				/form[@title='Ship Orders']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJRSURBVDhPpZPrS5NhGIf3l/QhoqQiMgii6OBx
+5cwPElaEfSqIJJCgzAikQgsELSlI7SCUnayoIKkPghWZhxxpc861Oedh6jZ1mzu8x1092wS10KBu
++H177+t3Pc/LY/jvaWgxc+eVg5rmAaqafnC50cyZ6k5OVHZTXPGFonOtFJa+pKDkybIcPP0Y45Fy
+DHXPbTS1azS2adxqlal+HaHyWZCKR7OUN/k5e9dHye1JTtaOc7zazdEqF4euOMkvM7MmbQeG2mYz
+dW8C3Hwb5uKDKU7dcFN83cmxaw4OX7VTWGGj4NIgpnIrBy4MYCyzkHveQkZpN+vSjRhqGl7gD8QI
+RzXmRUIRlWBYISAyG0rFG1DwzMi4vTIOj4R1TKLL6mHj1u0CUN/CahOPg6JCRIozF9GZCmqM+lUs
+Li8bNm/DcP/p+4VP/xxNB0mJMx/TmZnXmJzTcPsUfk4q9Az9BaCLZlksJ5vDOtOieUw0O6cUrOMy
+ndbVAAltTSzLcYJRHV9IY2JWw+VVsE0o9I/IfLYIwKYVAIvqcWbEckpdxS7ULaMyvcMS7X0rAJLq
+akJdT6kHUuqOpLrCd5dMl0OizZwApC8HJG9cg6g4d2Cp+nRKvc8t0eOU6LDF+ND7G0Dsoi6oh4S6
+P3nrKiMJdc+i+ld7jE/WKO96vKxPAO4tMRDlSOKfh2IIAEzMgcsXZ8ij0T+q8W1YpcOu8HFQTgLW
+pm0Rb6H+Ibn788kxmsgWyRLJFMnINbEvx8Te7Dz2iOzOymNXZio7M1LJyS9i4U3+6xgMvwD+1+a2
+GORSxAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ShippingDlg"
+		id="6f962f36-f89d-46b2-900c-1ad2de88d682"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='ShippingDlg']"
+		isrooted="True"
+		usecache="True">
+			<folder
+			name="DimensionsControl"
+			id="91c3dada-1243-4b10-ad20-450acaafb698"
+			searchtimeout="30000ms"
+			capname="container"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/tabpagelist[@controlname='tabControl']/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='UpsServiceControl']/container[@controlname='sectionShipment']/element[@controlname='collapseControl']/container[@controlname='collapseControl.Panel']/container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='dimensionsControl']"
+			isrooted="True"
+			usecache="False">
+				<item
+				name="Lengthiparcel"
+				id="d39ceb27-21ff-4ad4-986e-f994f3d4a9a6"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow"
+				refimgid="0651630e-be71-40ba-9c9b-497ebc0e8ec6">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='dimensionsControl']/text[@controlname='length']
+				</item>
+				<item
+				name="Widthiparcel"
+				id="54d5dbf7-f198-4022-8b53-0d467d775ca9"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow"
+				refimgid="98db2751-052c-48ec-aa7b-c9ab2228cdf4">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='dimensionsControl']/text[@controlname='width']
+				</item>
+				<item
+				name="Heightiparcel"
+				id="d88c1b4b-9e30-43b7-b164-80f792f82d0f"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow"
+				refimgid="ebd88731-0aa2-4166-8562-79c9b5d3b39d">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='dimensionsControl']/text[@controlname='height']
+				</item>
+				<basepath>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='dimensionsControl']
+				</basepath>
+			</folder>
+			<folder
+			name="SplitContainer"
+			id="1c0286e4-c6be-4bb9-8420-62ab72c3ae40"
+			searchtimeout="30000ms"
+			capname="container"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']"
+			isrooted="True"
+			usecache="False">
+				<item
+				name="Service"
+				id="3f814f41-2004-4277-90f6-31b572d0f36e"
+				searchtimeout="30000ms"
+				capname="combobox"
+				addcaps="combobox,control,nativewindow"
+				refimgid="5863048d-5955-4c48-8778-9a233a236806">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container/container[@controlname='sectionShipment']//combobox[@controlname='service']
+				</item>
+				<item
+				name="Weight"
+				id="78c1cb69-4a6e-468a-9bd7-b0201e7d37ab"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow"
+				refimgid="430148a7-319e-43a1-ba1c-3fad6dea0256">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='packageControl']/container[@controlname='panelPackage']/container[@controlname='weight']/text[@controlname='textBox']
+				</item>
+				<item
+				name="Customs"
+				id="5809f2b0-f3c2-4819-9779-7197fb71a1e9"
+				searchtimeout="30000ms"
+				capname="rawtext"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/rawtext[1]"
+				addcaps="unknown,rawtext"
+				refimgid="4aee2c7f-535a-4b52-a35a-f3251b50bb81">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/tabpagelist/rawtext[1]
+				</item>
+				<item
+				name="ButtonAdd"
+				id="5c370e95-f650-459f-8235-2df901e0267d"
+				searchtimeout="30000ms"
+				capname="button"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageCustoms']/container/container/container[@controlname='sectionContents']/element/container/button[@controlname='add']"
+				addcaps="button,control,nativewindow"
+				refimgid="b2656343-d8a3-4214-8753-aabbab871e38">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageCustoms']//container[@controlname='sectionContents']//button[@controlname='add']
+				</item>
+				<item
+				name="CustomsWeightUSPS"
+				id="0371ac3c-347f-4ce2-b81f-26e846a305b6"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageCustoms']/container/container/container[@controlname='sectionContents']/element/container/container/container/text[@controlname='textBox']/text[@accessiblerole='Text']"
+				addcaps="text,accessible"
+				refimgid="b242eb07-8816-44a6-832f-aa609e3e58e3">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageCustoms']//container[@controlname='sectionContents']//container[@controlname='groupSelectedContent']/container[@controlname='weight']/text[@controlname='textBox']/text[@accessiblerole='Text']
+				</item>
+				<item
+				name="CustomsValueUSPS"
+				id="0aa31e4b-29ea-4033-8b4f-79fa46b86ed2"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageCustoms']/container/container/container[@controlname='sectionGeneral']/element/container/text[@controlname='customsValue']/text[@accessiblename='Value:']"
+				addcaps="text,accessible"
+				refimgid="95c01767-e0e1-4d49-8dc9-aa0ea117bead">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel1']/tabpagelist[@controlname='tabControl']/tabpage[@controlname='tabPageCustoms']//container[@controlname='sectionGeneral']//text[@accessiblename='Value:']
+				</item>
+				<item
+				name="CustomsSelectedItemValueUSPSEndicia"
+				id="5e23138d-2057-452b-814f-f088b6253960"
+				searchtimeout="30000ms"
+				capname="text"
+				addcaps="text,control,nativewindow"
+				refimgid="8b381c64-4c66-4313-9822-ef055ffa3b85">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageCustoms']//container[@controlname='sectionContents']//container[@controlname='groupSelectedContent']/text[@controlname='value']
+				</item>
+				<basepath>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']
+				</basepath>
+			</folder>
+			<basepath>
+				/form[@controlname='ShippingDlg']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<basepath/>
+	</rootfolder>
+	<variables/>
+</repository>

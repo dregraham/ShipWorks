@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="7cc5ee49-5bc7-4d08-8d1b-594402027a8c"
+mode="Global"
+rxversion="8.1">
+	<name>
+		ProcessAShipment
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ProcessAShipment"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="2fa28f00-acdf-4da7-9244-a56f36ae30d3"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Move to the Create Label Button
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="5da456c8-c51a-4b6d-a29e-1250fcc21712"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="69e1b527-5614-433b-8a50-65dae8ceaedd"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+				Click the Create Label button
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="5da456c8-c51a-4b6d-a29e-1250fcc21712"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']
+				</path>
+			</info>
+		</mouseitem>
+		<WaitForRecordItem
+		enabled="True"
+		optional="False"
+		searchpropertyid="5b4357d9-b39e-4b0b-9097-39e8ce77d982"
+		waitaction="NotExists"
+		waittimeout="30000ms">
+			<comment>
+				Wait until the processing Shipments dialog does not exist
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="0b9a476b-4d79-47bb-a452-ec34726a39ef"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']
+				</path>
+			</info>
+		</WaitForRecordItem>
+		<explicitdelayitem
+		duration="10000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+				Wait 5s
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ProcessAShipment.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

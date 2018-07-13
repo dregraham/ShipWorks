@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="ebcb08da-285c-4cdf-b249-863799d6f8e0"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		AllOrdersFilter_SelectFirstRow_ShipOrders
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="AllOrdersFilter_SelectFirstRow_ShipOrders"
+	namespace="SmokeTest"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="2b36c2fe-e32d-442a-a0bf-97028b06d632"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click the Orders tab in filter pnael in case user is on Customer tab of filters
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="fd615d0a-2c23-43d1-be86-efc843cce936">
+				<path>
+					/form[@title='ShipWorks - sa']/container[@controlname='panelDockingArea']/?/?/rawtext[@rawtext='Orders']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="08a09906-c3b4-4231-9097-4d3a12a32885"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click the All filter to view all orders
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="e1819c8c-6919-4a24-8e69-02f09a08df0a">
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='All']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="80d0f17d-5cbb-401d-a44a-3ca96f2dc59d"
+		action="Click"
+		button="Right"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Right click the 2nd row in the grid
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="052a5561-23a7-463e-8fe5-dbb472252fec">
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='gridPanel']/?/?/rawtext[@row='2']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="5f6ea27a-bf18-461e-b815-bafe3ef8b482"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click Ship Orders from the Context menu
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="43832e0e-45d6-4be1-859a-e6517d9b8a05">
+				<path>
+					/contextmenu[@controlname='contextMenuOrderGrid']/menuitem[@accessiblename='Ship Orders']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	name="SmokeTestRepository"
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	rxversion="5.4.5.19886"
+	relativepath="SmokeTestRepository.rxrep">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		AllOrdersFilter_SelectFirstRow_ShipOrders.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

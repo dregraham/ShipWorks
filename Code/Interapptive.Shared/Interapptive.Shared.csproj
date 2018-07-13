@@ -110,8 +110,11 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Rebex.Mail">
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Common.2.5.6755\lib\net40\Rebex.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
@@ -193,6 +196,8 @@
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IConnectionSensitiveScope.cs" />
+    <Compile Include="Data\ISqlScript.cs" />
+    <Compile Include="Data\SqlScriptWithMetadata.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />
     <Compile Include="Enums\AsendiaServiceType.cs" />

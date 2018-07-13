@@ -1,0 +1,31 @@
+﻿<Properties>
+  <Array name="active">
+    <Element value="DurationResults.cs" />
+  </Array>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="DurationResults.cs" />
+    <Element value="UnzipGenericFileStuff.cs" />
+    <Element value="PerformanceTesting.rxtst" />
+    <Element value="SetupDatabase.UserCode.cs" />
+    <Element value="Load1000Shipments.UserCode.cs" />
+    <Element value="SetupDatabase.rxrec" />
+    <Element value="Download1000Orders.rxrec" />
+    <Element value="InstallShipWorks.UserCode.cs" />
+    <Element value="Load1000Shipments.rxrec" />
+    <Element value="SelectandUnselect1000Shipments.rxrec" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections">
+      <Element value="PerformanceTesting.InstallShipWorks.Key_sequence_DirEdit(RepoItemInfo textInfo)" />
+      <Element value="PerformanceTesting.InstallShipWorks.Key_sequence_Install_Directory_Random_Number(RepoItemInfo textInfo)" />
+      <Element value="PerformanceTesting.SelectandUnselect1000Shipments.getEndTime2()" />
+      <Element value="PerformanceTesting.Void1000Shipments.getEndTime2()" />
+      <Element value="PerformanceTesting.Void1000Shipments.getStartTime2()" />
+      <Element value="PerformanceTesting.Void1000Shipments.getEndTime()" />
+    </Array>
+  </Properties>
+</Properties>

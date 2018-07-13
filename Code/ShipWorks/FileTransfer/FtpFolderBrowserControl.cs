@@ -1,16 +1,14 @@
-﻿extern alias rebex2015;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using rebex2015::Rebex.IO;
-using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading.Tasks;
 using Divelements.SandGrid;
 using ShipWorks.Properties;
 using Interapptive.Shared.UI;
+using Rebex.Net;
+using Rebex.IO;
 
 namespace ShipWorks.FileTransfer
 {

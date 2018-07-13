@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="ad4fb3c3-0852-4661-b9de-d32dd2fc36bb"
+mode="Global"
+rxversion="8.0">
+	<name>
+		SelectCorrectFilter
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="SelectCorrectFilter"
+	namespace="LoadTesting">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="6ac5e504-1f5a-4577-b13e-22eb78047272"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="7389d8a7-7a4a-4b53-a415-bf46bba2a846"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="9"
+				prefcap="rawtext"
+				rect="446,315,17,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						3
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						ItalicStruckout
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Jon
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						4
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='Jon']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="cfd7b144-b6f6-4c12-9f7d-d2960dd2ba63"
+		sx="451"
+		sy="321"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="7389d8a7-7a4a-4b53-a415-bf46bba2a846"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="9"
+				prefcap="rawtext"
+				rect="446,315,17,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						3
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						ItalicStruckout
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Jon
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						4
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='Jon']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="c56adabf-87a9-49f1-b586-fb6b475ad211">
+				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
+VY05HUlupJPJoooqHuaJaH//2Q==
+			</helperscreenshot>
+		</mouseitem>
+	</recorditems>
+	<repository
+	id="dc68e475-1036-4fd8-9469-a12d0991a9cf"
+	name="LoadTestingRepository"
+	relativepath="LoadTestingRepository.rxrep"
+	rxversion="7.0">
+		<codegen
+		classname="LoadTestingRepository"
+		namespace="LoadTesting">
+		</codegen>
+		<rootfolder
+		id="74067a9f-0b8f-488d-8d73-0b6338021e77"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		SelectCorrectFilter.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>
