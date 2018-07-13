@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# Ranorex Studio 6.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Create1000Orders", "Create1000Orders\Create1000Orders.csproj", "{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}.Debug|x86.Build.0 = Debug|x86
+		{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}.Debug|x86.ActiveCfg = Debug|x86
+		{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}.Release|x86.Build.0 = Release|x86
+		{B1AC9FC2-F58C-4C58-9E23-6600EC4132A9}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+EndGlobal

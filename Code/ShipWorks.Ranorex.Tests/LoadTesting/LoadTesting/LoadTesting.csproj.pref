@@ -1,0 +1,20 @@
+﻿<Properties>
+  <Array name="active">
+    <Element value="LoadTesting.rxtst" />
+  </Array>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="LoadTesting.rxtst" />
+    <Element value="Recording1.rxrec" />
+    <Element value="SetupLoadDB.UserCode.cs" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections">
+      <Element value="LoadTesting.Load500Shipments.SelectNamedFilter()" />
+      <Element value="LoadTesting.Load500Shipments.SelectNamedOnFilter()" />
+    </Array>
+  </Properties>
+</Properties>

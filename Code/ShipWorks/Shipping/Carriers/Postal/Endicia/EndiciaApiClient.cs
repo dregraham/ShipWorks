@@ -937,6 +937,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public void RequestRefund(ShipmentEntity shipment)
         {
+            if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+            {
+                log.InfoFormat("DHL shipments do not support refunds. {0}", shipment.ShipmentID);
+                return;
+            }
+
             EndiciaAccountEntity account = GetAccount(shipment.Postal);
 
             try

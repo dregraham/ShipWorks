@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>{9FDE1F43-4536-4246-9F79-B19D50AF55C2}</string>
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution ShippingCarrierRegression[ShippingCarrierRegression[]]]&#xD;&#xA;Solution ShippingCarrierRegression\ShippingCarrierRegression\ShippingCarrierRegression.rxtst&#xD;&#xA;Solution ShippingCarrierRegression" />
+  <StartupProject value="{9FDE1F43-4536-4246-9F79-B19D50AF55C2}" />
+</Properties>

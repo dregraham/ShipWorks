@@ -1,0 +1,1 @@
+wmic printer where name='\\\\OZ\\Epson WF-4640' call setdefaultprinter

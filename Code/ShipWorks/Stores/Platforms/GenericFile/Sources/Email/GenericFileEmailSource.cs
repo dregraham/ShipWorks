@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Email
                 imap.SelectFolder(store.EmailIncomingFolder);
 
                 // We don't want to set the Seen (Read) flag just by getting messages
-                imap.Options |= ImapOptions.UsePeekForGetMessage;
+                imap.Settings.UsePeekForGetMessage = true;
 
                 // Havn't done a download for this folder yet
                 if (store.EmailFolderValidityID == 0)

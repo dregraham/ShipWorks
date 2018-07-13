@@ -209,6 +209,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.XCart, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Yahoo, typeof(YahooOrderIdentifier) },
             { StoreTypeCode.ZenCart, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.Zentail, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Zenventory, typeof(AlphaNumericOrderIdentifier) }
         };
 

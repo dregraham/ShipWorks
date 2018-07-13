@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="cde62441-e141-4211-bde4-f1b12a005284"
+mode="Global"
+rxversion="8.1">
+	<name>
+		ErrorOK
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ErrorOK"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="ErrorOK"
+		enabled="False"
+		isexternaltestmethod="False"
+		methodname="Validate_ButtonOK"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="82c4a24c-adf4-448f-8b82-06321b55db27">
+				<argument
+				argname="buttonInfo"
+				id="19aea50a-679e-4eb3-80b8-24c75d5d804a">
+					<argvaluetype>
+						Ranorex.Core.Repository.RepoItemInfo, Ranorex.Core, Culture=neutral
+					</argvaluetype>
+					<argvalue>
+					</argvalue>
+					<info
+					id="c2ca85f4-28b5-4c0d-a6cd-fde9287ff10d"
+					sourcename="ItemRecorderEditor">
+						<path>
+							/form[@processname='ShipWorks' and @class='#32770']/button[@text='OK' and @visible='True']
+						</path>
+					</info>
+				</argument>
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.0">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ErrorOK.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="d82eee9b-1f6c-4aff-8a2e-940465457285"
+mode="Global"
+rxversion="7.0">
+	<name>
+		ProcessUPSCustomsExtreme
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ProcessUPSCustomsExtreme"
+	namespace="ShippingCarrierRegression">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+	</recorditems>
+	<repository
+	id="1746c819-e390-458c-9b66-d168eb35b96c"
+	name="ShippingCarrierRegressionRepository"
+	relativepath="ShippingCarrierRegressionRepository.rxrep"
+	rxversion="7.0">
+		<codegen
+		classname="ShippingCarrierRegressionRepository"
+		namespace="ShippingCarrierRegression">
+		</codegen>
+		<rootfolder
+		id="8b3666b0-4472-487b-baaa-0a31e8982b7d"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ProcessUPSCustomsExtreme.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

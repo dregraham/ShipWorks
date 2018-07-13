@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>{953B7E7C-91CC-440C-98A0-2F164A8E2CF0}</string>
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[Reports[]CheckShipWorksVersion.rxrec[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\SmokeTest.rxtst&#xD;&#xA;Solution SmokeTest" />
+  <StartupProject value="{953B7E7C-91CC-440C-98A0-2F164A8E2CF0}" />
+</Properties>

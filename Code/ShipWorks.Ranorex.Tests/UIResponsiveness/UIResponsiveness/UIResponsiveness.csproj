@@ -1,0 +1,637 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{D77DF402-CA51-40FD-A94F-B59D1384AEA5}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>UIResponsiveness</RootNamespace>
+    <AssemblyName>UIResponsiveness</AssemblyName>
+    <RanorexVersion>5</RanorexVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <projectdefaultrepository>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</projectdefaultrepository>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="Ranorex.Core, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.ChromeWeb, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Flex, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Java, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Mobile, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.MozillaWeb, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Msaa, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Office, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Qt, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.RawText, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Sap, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Uia, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Web, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Win32, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.WinForms, Version=$(RanorexVersion)" />
+    <Reference Include="Ranorex.Plugin.Wpf, Version=$(RanorexVersion)" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CreateNewShipment_ProviderFedEx.cs">
+      <DependentUpon>CreateNewShipment_ProviderFedEx.rxrec</DependentUpon>
+      <id>e27f0649-dc53-4ee4-bb1d-c688b60a576e</id>
+      <BoundTo>ee028563-79fc-40d2-8e78-491d00e7127b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="CreateNewShipment_ProviderFedEx.UserCode.cs">
+      <DependentUpon>CreateNewShipment_ProviderFedEx.rxrec</DependentUpon>
+      <id>b1d93f07-7f00-4928-ba28-22f9ce0f955f</id>
+      <BoundTo>ee028563-79fc-40d2-8e78-491d00e7127b</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessFedExDomesticGround.cs">
+      <DependentUpon>ProcessFedExDomesticGround.rxrec</DependentUpon>
+      <id>31987d90-369b-4947-a3b8-4b091ff88fac</id>
+      <BoundTo>5d67b3e5-78f4-4831-99fb-f9bf884bc734</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessFedExDomesticGround.UserCode.cs">
+      <DependentUpon>ProcessFedExDomesticGround.rxrec</DependentUpon>
+      <id>6c88d3ed-20b5-456b-afcc-203e970f870c</id>
+      <BoundTo>5d67b3e5-78f4-4831-99fb-f9bf884bc734</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessFedExInternationalPriority.cs">
+      <DependentUpon>ProcessFedExInternationalPriority.rxrec</DependentUpon>
+      <id>2a262aff-0cc7-4ff4-8612-ea99fc62d9cf</id>
+      <BoundTo>02b71928-987a-4ee7-b1ad-34030740f35b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessFedExInternationalPriority.UserCode.cs">
+      <DependentUpon>ProcessFedExInternationalPriority.rxrec</DependentUpon>
+      <id>b410a56f-ed5a-4b7b-a9ba-9f62602906dc</id>
+      <BoundTo>02b71928-987a-4ee7-b1ad-34030740f35b</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessFedExMultiPackageShipment.cs">
+      <DependentUpon>ProcessFedExMultiPackageShipment.rxrec</DependentUpon>
+      <id>909f4291-65e4-488b-a1c8-244685791627</id>
+      <BoundTo>ee055815-ed85-49dd-b56e-2a328077e595</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessFedExMultiPackageShipment.UserCode.cs">
+      <DependentUpon>ProcessFedExMultiPackageShipment.rxrec</DependentUpon>
+      <id>f1b6f982-967e-4a11-bdea-affb5b1858f0</id>
+      <BoundTo>ee055815-ed85-49dd-b56e-2a328077e595</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ResetRibbonsAndPanels.cs">
+      <BoundTo>b5cc3629-b088-45b9-a9cb-d0668eca409e</BoundTo>
+      <DependentUpon>ResetRibbonsAndPanels.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>622f7002-6736-4251-8301-106b8e8406a2</id>
+    </Compile>
+    <Compile Include="ResetRibbonsAndPanels.UserCode.cs">
+      <BoundTo>b5cc3629-b088-45b9-a9cb-d0668eca409e</BoundTo>
+      <DependentUpon>ResetRibbonsAndPanels.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>ec03bd3d-3d7a-4716-b182-9c9d307a5a5a</id>
+    </Compile>
+    <Compile Include="SelectAllOrders_AccessShipOrdersDialog.cs">
+      <BoundTo>af39b533-30c6-4c3c-acf1-7d749e505fc5</BoundTo>
+      <DependentUpon>SelectAllOrders_AccessShipOrdersDialog.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>fe892396-ec17-4d69-967b-946f341fa850</id>
+    </Compile>
+    <Compile Include="SelectAllOrders_AccessShipOrdersDialog.UserCode.cs">
+      <BoundTo>af39b533-30c6-4c3c-acf1-7d749e505fc5</BoundTo>
+      <DependentUpon>SelectAllOrders_AccessShipOrdersDialog.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>545d2fe0-5aec-4572-bfb9-d75f1531c1b0</id>
+    </Compile>
+    <Compile Include="AllOrdersFilter_SelectFirstRow.cs">
+      <BoundTo>d3b06c85-3ac4-4ae3-909c-115591de9939</BoundTo>
+      <DependentUpon>AllOrdersFilter_SelectFirstRow.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>f2accb41-691d-4d86-b498-cc2f73d9e54e</id>
+    </Compile>
+    <Compile Include="AllOrdersFilter_SelectFirstRow.UserCode.cs">
+      <BoundTo>d3b06c85-3ac4-4ae3-909c-115591de9939</BoundTo>
+      <DependentUpon>AllOrdersFilter_SelectFirstRow.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>c1c2191c-b2dd-45f6-b6e8-57e09c5617f1</id>
+    </Compile>
+    <Compile Include="AllOrdersFilter_SelectFirstRow_ShipOrders2.cs">
+      <DependentUpon>AllOrdersFilter_SelectFirstRow_ShipOrders2.rxrec</DependentUpon>
+      <id>69f36bcb-8e03-4ce6-889f-c41bc0ff976f</id>
+      <BoundTo>a7eaaf38-9a30-4713-b4a1-23d2aa1c8e6d</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="AllOrdersFilter_SelectFirstRow_ShipOrders2.UserCode.cs">
+      <DependentUpon>AllOrdersFilter_SelectFirstRow_ShipOrders2.rxrec</DependentUpon>
+      <id>6727740c-56b4-4085-91a5-3293200e2797</id>
+      <BoundTo>a7eaaf38-9a30-4713-b4a1-23d2aa1c8e6d</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <id>6bf4227d-0266-49d3-825d-b13d55704ebd</id>
+    </Compile>
+    <Compile Include="CreateAnOrder.cs">
+      <DependentUpon>CreateAnOrder.rxrec</DependentUpon>
+      <id>7bc83a8d-7392-48a4-968e-c80ea0db31c6</id>
+      <BoundTo>29ffb26c-e72e-4f35-8c88-1cb23f5ff252</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="CreateAnOrder.UserCode.cs">
+      <DependentUpon>CreateAnOrder.rxrec</DependentUpon>
+      <id>afeec9e0-5c47-4bb8-b552-d4fb1fa8361f</id>
+      <BoundTo>29ffb26c-e72e-4f35-8c88-1cb23f5ff252</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="CreateNewShipment_ProviderOther.cs">
+      <DependentUpon>CreateNewShipment_ProviderOther.rxrec</DependentUpon>
+      <id>912e7027-5b46-4a4a-82b9-e4269755d9b3</id>
+      <BoundTo>39bcceae-5847-4cd7-bc20-4f962af63a3d</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="CreateNewShipment_ProviderOther.UserCode.cs">
+      <DependentUpon>CreateNewShipment_ProviderOther.rxrec</DependentUpon>
+      <id>bfcf311c-eb89-4962-a105-995dd24f6e68</id>
+      <BoundTo>39bcceae-5847-4cd7-bc20-4f962af63a3d</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ApplyProfile_Other.cs">
+      <BoundTo>29cc411f-a679-4372-979a-828df8eccbbe</BoundTo>
+      <DependentUpon>ApplyProfile_Other.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>149735c7-72c5-41da-be00-58e1ed711c9f</id>
+    </Compile>
+    <Compile Include="ApplyProfile_Other.UserCode.cs">
+      <BoundTo>29cc411f-a679-4372-979a-828df8eccbbe</BoundTo>
+      <DependentUpon>ApplyProfile_Other.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>1f1e5ec4-d9fc-4441-8719-31b9cb33854c</id>
+    </Compile>
+    <Compile Include="CreateNewShipment_ProviderUPS.cs">
+      <DependentUpon>CreateNewShipment_ProviderUPS.rxrec</DependentUpon>
+      <id>5f7ee0f2-5d01-4ca0-ba4e-0b957623400a</id>
+      <BoundTo>bacd4ff6-9165-4f7b-8f6e-eb4d6326a0ea</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="CreateNewShipment_ProviderUPS.UserCode.cs">
+      <DependentUpon>CreateNewShipment_ProviderUPS.rxrec</DependentUpon>
+      <id>ae3a886e-1f10-4c38-aca2-b6cc965446ac</id>
+      <BoundTo>bacd4ff6-9165-4f7b-8f6e-eb4d6326a0ea</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="DisableCarrierTestServers.cs">
+      <DependentUpon>DisableCarrierTestServers.rxrec</DependentUpon>
+      <id>96ab1523-156e-47e8-9489-a28839f97061</id>
+      <BoundTo>0eefcb3c-e6a2-413f-be60-dc83bbfb4799</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="DisableCarrierTestServers.UserCode.cs">
+      <DependentUpon>DisableCarrierTestServers.rxrec</DependentUpon>
+      <id>ecc106d6-7a32-4515-ad4f-f42d678233a9</id>
+      <BoundTo>0eefcb3c-e6a2-413f-be60-dc83bbfb4799</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="EnableCarrierTestServers.cs">
+      <DependentUpon>EnableCarrierTestServers.rxrec</DependentUpon>
+      <id>a3a56482-6aa6-49ea-a72d-2006e35e1a28</id>
+      <BoundTo>35fc9117-3d31-4327-94c9-418691bafc9c</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="EnableCarrierTestServers.UserCode.cs">
+      <DependentUpon>EnableCarrierTestServers.rxrec</DependentUpon>
+      <id>50232467-6787-4067-8e4d-749d70709b7f</id>
+      <BoundTo>35fc9117-3d31-4327-94c9-418691bafc9c</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="GiveFocusShipWorks.cs">
+      <DependentUpon>GiveFocusShipWorks.rxrec</DependentUpon>
+      <id>f821892f-f1b4-4f7b-8339-7a3254f7c74d</id>
+      <BoundTo>2dc2f6a4-b52e-47f3-b6e2-4ab30d0a298b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="GiveFocusShipWorks.UserCode.cs">
+      <DependentUpon>GiveFocusShipWorks.rxrec</DependentUpon>
+      <id>3367b96f-22c9-43eb-93ee-26e7c8be7be3</id>
+      <BoundTo>2dc2f6a4-b52e-47f3-b6e2-4ab30d0a298b</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="PressEscape5Times.cs">
+      <DependentUpon>PressEscape5Times.rxrec</DependentUpon>
+      <id>45bc43b1-dd96-49bf-870a-6f8d2888889f</id>
+      <BoundTo>d351d3ee-7c90-4277-8cbe-e4e82c5d1907</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="PressEscape5Times.UserCode.cs">
+      <DependentUpon>PressEscape5Times.rxrec</DependentUpon>
+      <id>362aaf32-e663-4575-9d0f-a7157f16c012</id>
+      <BoundTo>d351d3ee-7c90-4277-8cbe-e4e82c5d1907</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessFedExInternational_ShippingPanel.cs">
+      <BoundTo>0619cf16-8686-4670-828c-800e424fca4f</BoundTo>
+      <DependentUpon>ProcessFedExInternational_ShippingPanel.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>a138b3bf-5190-44ea-a5b9-ee77defc7783</id>
+    </Compile>
+    <Compile Include="ProcessFedExInternational_ShippingPanel.UserCode.cs">
+      <BoundTo>0619cf16-8686-4670-828c-800e424fca4f</BoundTo>
+      <DependentUpon>ProcessFedExInternational_ShippingPanel.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>0f1479ab-64e4-4535-87a1-c87e26b661cf</id>
+    </Compile>
+    <Compile Include="ProcessOtherShipmentApplyProfileChangeOriginAddress.cs">
+      <DependentUpon>ProcessOtherShipmentApplyProfileChangeOriginAddress.rxrec</DependentUpon>
+      <id>dfe679e6-2f1e-4bd4-bf4b-72c1a6b325cb</id>
+      <BoundTo>80660115-f3d7-406b-877d-fbf72dbc6f04</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessOtherShipmentApplyProfileChangeOriginAddress.UserCode.cs">
+      <DependentUpon>ProcessOtherShipmentApplyProfileChangeOriginAddress.rxrec</DependentUpon>
+      <id>6e4e3e3f-7c77-491e-bbf3-6b0fafa3e6f1</id>
+      <BoundTo>80660115-f3d7-406b-877d-fbf72dbc6f04</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessUPSDomesticMultiPackageShipment.cs">
+      <DependentUpon>ProcessUPSDomesticMultiPackageShipment.rxrec</DependentUpon>
+      <id>fc26205b-c590-4f4f-92a4-a6becfec845b</id>
+      <BoundTo>8d4ef4a8-5844-4f47-9128-6bbab8eb0253</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessUPSDomesticMultiPackageShipment.UserCode.cs">
+      <DependentUpon>ProcessUPSDomesticMultiPackageShipment.rxrec</DependentUpon>
+      <id>04365533-a85b-437c-8654-c86d0a75f481</id>
+      <BoundTo>8d4ef4a8-5844-4f47-9128-6bbab8eb0253</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ProcessVoidShipment_ShippingPanel.cs">
+      <BoundTo>551110a5-fa00-4133-8118-6967276f00c7</BoundTo>
+      <DependentUpon>ProcessVoidShipment_ShippingPanel.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>4f7619ef-d7cb-4385-a1f0-1c4121d77334</id>
+    </Compile>
+    <Compile Include="ProcessVoidShipment_ShippingPanel.UserCode.cs">
+      <BoundTo>551110a5-fa00-4133-8118-6967276f00c7</BoundTo>
+      <DependentUpon>ProcessVoidShipment_ShippingPanel.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>fc323f5c-9e4b-4f34-84fc-9be653cf2607</id>
+    </Compile>
+    <Compile Include="ProcessVoidShipment_Validate_CloseShipOrders2.cs">
+      <DependentUpon>ProcessVoidShipment_Validate_CloseShipOrders2.rxrec</DependentUpon>
+      <id>641b103b-3c1e-453c-9021-15385695105c</id>
+      <BoundTo>16759f5f-e87b-4593-8942-5f13a943b452</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ProcessVoidShipment_Validate_CloseShipOrders2.UserCode.cs">
+      <DependentUpon>ProcessVoidShipment_Validate_CloseShipOrders2.rxrec</DependentUpon>
+      <id>5a717b9a-8d8f-4110-8b5f-2e1119303f7f</id>
+      <BoundTo>16759f5f-e87b-4593-8942-5f13a943b452</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="Program.cs">
+      <id>5be2ba91-dc44-4a3c-bb48-739db6a5d105</id>
+    </Compile>
+    <Compile Include="ProcessFedExMultiPackageShipment_ShippingPanel.cs">
+      <BoundTo>3e776e25-8cc1-4efb-a365-d44981b3e641</BoundTo>
+      <DependentUpon>ProcessFedExMultiPackageShipment_ShippingPanel.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>bbbac99c-50d4-4e5b-b3dc-946298602df1</id>
+    </Compile>
+    <Compile Include="ProcessFedExMultiPackageShipment_ShippingPanel.UserCode.cs">
+      <BoundTo>3e776e25-8cc1-4efb-a365-d44981b3e641</BoundTo>
+      <DependentUpon>ProcessFedExMultiPackageShipment_ShippingPanel.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>77c88e27-7732-4759-9d90-ce7ec98ceadd</id>
+    </Compile>
+    <Compile Include="Recording1.cs">
+      <BoundTo>64d1880a-05f9-48d4-a078-3682cda62109</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>e2a9bc23-5709-46e5-ab2a-57bec2124d03</id>
+    </Compile>
+    <Compile Include="Recording1.UserCode.cs">
+      <BoundTo>64d1880a-05f9-48d4-a078-3682cda62109</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>a63cc639-66a1-49b2-ae72-44c74ebecb8e</id>
+    </Compile>
+    <Compile Include="Recording2.cs">
+      <BoundTo>2426a9e1-84c6-4620-bd81-c5dbbb0ed2ec</BoundTo>
+      <DependentUpon>Recording2.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>f44be685-511b-48a4-b4db-2a071913a330</id>
+    </Compile>
+    <Compile Include="Recording2.UserCode.cs">
+      <BoundTo>2426a9e1-84c6-4620-bd81-c5dbbb0ed2ec</BoundTo>
+      <DependentUpon>Recording2.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>4177d61f-2faa-47ae-8be8-fbe807b0fb15</id>
+    </Compile>
+    <Compile Include="RestoreDatabase.cs">
+      <BoundTo>ae1c5f51-cd28-4468-a575-e4ab93cee8ca</BoundTo>
+      <DependentUpon>RestoreDatabase.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2dfc2961-f924-4900-89e6-b5dab6141518</id>
+    </Compile>
+    <Compile Include="RestoreDatabase.UserCode.cs">
+      <BoundTo>ae1c5f51-cd28-4468-a575-e4ab93cee8ca</BoundTo>
+      <DependentUpon>RestoreDatabase.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>6009c10b-5a84-4f6c-853f-96356b1d7d06</id>
+    </Compile>
+    <Compile Include="SetupFedex.cs">
+      <DependentUpon>SetupFedex.rxrec</DependentUpon>
+      <id>924802b1-942a-475d-9c43-3b8dfb7dcff1</id>
+      <BoundTo>c518cd77-873d-44d1-9638-9f579a163d23</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetupFedex.UserCode.cs">
+      <DependentUpon>SetupFedex.rxrec</DependentUpon>
+      <id>74994017-9ba7-4c6f-95a8-be17d29d0be2</id>
+      <BoundTo>c518cd77-873d-44d1-9638-9f579a163d23</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SetupOther.cs">
+      <DependentUpon>SetupOther.rxrec</DependentUpon>
+      <id>f2573d30-7a86-46b8-97e7-3baf09ebfa12</id>
+      <BoundTo>e00e5881-b691-4089-bf2d-6bda5cca7f9b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetupOther.UserCode.cs">
+      <DependentUpon>SetupOther.rxrec</DependentUpon>
+      <id>65659d52-b8b9-4a2b-acc0-aab457c46890</id>
+      <BoundTo>e00e5881-b691-4089-bf2d-6bda5cca7f9b</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SetupUPS.cs">
+      <DependentUpon>SetupUPS.rxrec</DependentUpon>
+      <id>bbb43633-aabc-4db3-8d67-2f3a979723c5</id>
+      <BoundTo>a88adcfb-98b8-4bfc-99c8-edde4569f78f</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetupUPS.UserCode.cs">
+      <DependentUpon>SetupUPS.rxrec</DependentUpon>
+      <id>2847d369-4551-49c1-a173-18ebd645449e</id>
+      <BoundTo>a88adcfb-98b8-4bfc-99c8-edde4569f78f</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ShipOrders_ToAddress_Domestic2.cs">
+      <DependentUpon>ShipOrders_ToAddress_Domestic2.rxrec</DependentUpon>
+      <id>46232fe7-cd43-482a-b7f7-a8ae73379491</id>
+      <BoundTo>3388ae2d-2da0-4572-bbcc-162213c2ccaa</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ShipOrders_ToAddress_Domestic2.UserCode.cs">
+      <DependentUpon>ShipOrders_ToAddress_Domestic2.rxrec</DependentUpon>
+      <id>9f766ea3-9d58-4cbf-b279-1337044b7ee3</id>
+      <BoundTo>3388ae2d-2da0-4572-bbcc-162213c2ccaa</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="ShipOrders_ToAddress_International.cs">
+      <DependentUpon>ShipOrders_ToAddress_International.rxrec</DependentUpon>
+      <id>4a1ed26c-3085-46d1-9da0-ed87acda44bd</id>
+      <BoundTo>4a939b7f-44ed-4621-8b97-2ca8c7311d68</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ShipOrders_ToAddress_International.UserCode.cs">
+      <DependentUpon>ShipOrders_ToAddress_International.rxrec</DependentUpon>
+      <id>f3c69651-d2f2-4ea1-9d4e-69059a8ddc6a</id>
+      <BoundTo>4a939b7f-44ed-4621-8b97-2ca8c7311d68</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SmokeTestRepository.cs">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>feb0e583-7fe5-4a75-8303-404a1e07661f</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <RepositoryCode>true</RepositoryCode>
+    </Compile>
+    <Compile Include="SoakPerformanceTestRepository.cs">
+      <DependentUpon>SoakPerformanceTestRepository.rxrep</DependentUpon>
+      <id>a02f64d8-14cb-4f25-b6c6-fd5106ef749a</id>
+      <BoundTo>34d89ce6-364b-4317-9417-f75ae5988729</BoundTo>
+      <RepositoryCode>true</RepositoryCode>
+    </Compile>
+    <Compile Include="UIResponsivenessRepository.cs">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <DependentUpon>UIResponsivenessRepository.rxrep</DependentUpon>
+      <RepositoryCode>true</RepositoryCode>
+      <id>7f356889-0d40-4e8b-8067-10ee864adfd5</id>
+    </Compile>
+    <None Include="CreateNewShipment_ProviderFedEx.rxrec">
+      <id>ee028563-79fc-40d2-8e78-491d00e7127b</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>f8f5110b-b3c8-4f16-b9bc-5ef28e3b03f2</recordtableid>
+    </None>
+    <None Include="ProcessFedExDomesticGround.rxrec">
+      <id>5d67b3e5-78f4-4831-99fb-f9bf884bc734</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>b3076885-d162-4151-b9a7-af2b9f6bbaa5</recordtableid>
+    </None>
+    <None Include="ProcessFedExInternationalPriority.rxrec">
+      <id>02b71928-987a-4ee7-b1ad-34030740f35b</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>aea32a3f-2ad2-4877-955e-b9c81195995c</recordtableid>
+    </None>
+    <None Include="ProcessFedExMultiPackageShipment.rxrec">
+      <id>ee055815-ed85-49dd-b56e-2a328077e595</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>914020ba-8a4b-41e6-bb9f-52503052428e</recordtableid>
+    </None>
+    <None Include="ResetRibbonsAndPanels.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>b5cc3629-b088-45b9-a9cb-d0668eca409e</id>
+      <recordtableid>33bb36fd-4193-4bb7-a11c-00c109a537ce</recordtableid>
+    </None>
+    <None Include="SelectAllOrders_AccessShipOrdersDialog.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>af39b533-30c6-4c3c-acf1-7d749e505fc5</id>
+      <recordtableid>4a582960-001b-4749-8c50-a184241b269d</recordtableid>
+    </None>
+    <None Include="AllOrdersFilter_SelectFirstRow.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>d3b06c85-3ac4-4ae3-909c-115591de9939</id>
+      <recordtableid>b93408e8-b201-4abc-8fd7-8f6f746d20f0</recordtableid>
+    </None>
+    <None Include="AllOrdersFilter_SelectFirstRow_ShipOrders2.rxrec">
+      <id>a7eaaf38-9a30-4713-b4a1-23d2aa1c8e6d</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>85512752-b26f-4ef2-8738-886b2b64fbdb</recordtableid>
+    </None>
+    <None Include="app.config">
+      <id>7b7cfd68-f1a8-4668-80bd-9a77bef5459d</id>
+    </None>
+    <None Include="CreateAnOrder.rxrec">
+      <id>29ffb26c-e72e-4f35-8c88-1cb23f5ff252</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>36c1efa7-8922-49e3-a994-46e5f6483e04</recordtableid>
+    </None>
+    <None Include="CreateNewShipment_ProviderOther.rxrec">
+      <id>39bcceae-5847-4cd7-bc20-4f962af63a3d</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>97a65d58-b7e6-4944-bc61-4cf6bab6297a</recordtableid>
+    </None>
+    <None Include="ApplyProfile_Other.rxrec">
+      <id>29cc411f-a679-4372-979a-828df8eccbbe</id>
+      <recordtableid>5126db2e-a597-4f4f-99bb-5441e1855bd3</recordtableid>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+    </None>
+    <None Include="CreateNewShipment_ProviderUPS.rxrec">
+      <id>bacd4ff6-9165-4f7b-8f6e-eb4d6326a0ea</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>2f0d1ae9-3860-4b38-9bc5-8e5b189a7f7a</recordtableid>
+    </None>
+    <None Include="DisableCarrierTestServers.rxrec">
+      <id>0eefcb3c-e6a2-413f-be60-dc83bbfb4799</id>
+      <BoundTo>34d89ce6-364b-4317-9417-f75ae5988729</BoundTo>
+      <recordtableid>dc09f827-f783-4c4e-b5af-8497b7915e82</recordtableid>
+    </None>
+    <None Include="EnableCarrierTestServers.rxrec">
+      <id>35fc9117-3d31-4327-94c9-418691bafc9c</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>1d58c691-c926-4bba-847b-7be7c5af4e9c</recordtableid>
+    </None>
+    <None Include="GiveFocusShipWorks.rxrec">
+      <id>2dc2f6a4-b52e-47f3-b6e2-4ab30d0a298b</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>e8b2c8d3-f696-4d3e-b278-4eaa0dc4c2a7</recordtableid>
+    </None>
+    <None Include="PressEscape5Times.rxrec">
+      <id>d351d3ee-7c90-4277-8cbe-e4e82c5d1907</id>
+      <BoundTo>34d89ce6-364b-4317-9417-f75ae5988729</BoundTo>
+      <recordtableid>9026e307-9580-4142-b594-58e04d2be78d</recordtableid>
+    </None>
+    <None Include="ProcessFedExInternational_ShippingPanel.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>0619cf16-8686-4670-828c-800e424fca4f</id>
+      <recordtableid>90ab8097-d70e-4f7c-9458-788d542b3ff6</recordtableid>
+    </None>
+    <None Include="ProcessOtherShipmentApplyProfileChangeOriginAddress.rxrec">
+      <id>80660115-f3d7-406b-877d-fbf72dbc6f04</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>362d4a97-fd7c-4a35-89f8-6624c9525a4a</recordtableid>
+    </None>
+    <None Include="ProcessUPSDomesticMultiPackageShipment.rxrec">
+      <id>8d4ef4a8-5844-4f47-9128-6bbab8eb0253</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>e05f8891-b6c7-4cd3-8e4e-06995520cd72</recordtableid>
+    </None>
+    <None Include="ProcessVoidShipment_ShippingPanel.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>551110a5-fa00-4133-8118-6967276f00c7</id>
+      <recordtableid>99367737-2f69-428f-95f7-b640c021ce2c</recordtableid>
+    </None>
+    <None Include="ProcessVoidShipment_Validate_CloseShipOrders2.rxrec">
+      <id>16759f5f-e87b-4593-8942-5f13a943b452</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>c418a500-3142-41ff-8efe-04db6ee2d0f5</recordtableid>
+    </None>
+    <None Include="ProcessFedExMultiPackageShipment_ShippingPanel.rxrec">
+      <id>3e776e25-8cc1-4efb-a365-d44981b3e641</id>
+      <recordtableid>5eef3f62-8c56-4783-83b2-6d0834cdaaa6</recordtableid>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+    </None>
+    <None Include="Recording1.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>64d1880a-05f9-48d4-a078-3682cda62109</id>
+      <recordtableid>1ca5658d-1276-4d77-8bca-a9450777e2f2</recordtableid>
+    </None>
+    <None Include="Recording2.rxrec">
+      <id>2426a9e1-84c6-4620-bd81-c5dbbb0ed2ec</id>
+      <recordtableid>4751cacf-af8d-4b1e-b055-cac1c74722dd</recordtableid>
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+    </None>
+    <None Include="RestoreDatabase.rxrec">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <id>ae1c5f51-cd28-4468-a575-e4ab93cee8ca</id>
+      <recordtableid>ee939fdb-4ba5-4850-906f-63a9fd65ecf4</recordtableid>
+    </None>
+    <None Include="SetupFedex.rxrec">
+      <id>c518cd77-873d-44d1-9638-9f579a163d23</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>f0000fec-bce0-48bb-b1a0-86889ce49093</recordtableid>
+    </None>
+    <None Include="SetupOther.rxrec">
+      <id>e00e5881-b691-4089-bf2d-6bda5cca7f9b</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>69c17a5e-5044-4092-b1b5-d739396a8643</recordtableid>
+    </None>
+    <None Include="SetupUPS.rxrec">
+      <id>a88adcfb-98b8-4bfc-99c8-edde4569f78f</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>559cab08-94c4-4a06-b319-8a978f08d8cf</recordtableid>
+    </None>
+    <None Include="ShipOrders_ToAddress_Domestic2.rxrec">
+      <id>3388ae2d-2da0-4572-bbcc-162213c2ccaa</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>58f56842-885e-4eeb-99a7-300a987467e0</recordtableid>
+    </None>
+    <None Include="ShipOrders_ToAddress_International.rxrec">
+      <id>4a939b7f-44ed-4621-8b97-2ca8c7311d68</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <recordtableid>a6fd6bad-9037-460d-bb74-9f9b0a349380</recordtableid>
+    </None>
+    <None Include="SmokeTestRepository.rximg">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>42ae8423-b1d0-4e28-9366-426529616ed2</id>
+      <BoundTo>73276e81-7f69-4877-8f17-620e5144292f</BoundTo>
+      <imageblob>true</imageblob>
+    </None>
+    <None Include="SmokeTestRepository.rxrep">
+      <id>73276e81-7f69-4877-8f17-620e5144292f</id>
+      <repoid>e60d7cd6-302c-4e11-a480-edbca6931390</repoid>
+      <reporootid>4aacfef1-6402-4ba7-b3c9-270ac9a4db4a</reporootid>
+    </None>
+    <None Include="SoakPerformanceTestRepository.rximg">
+      <DependentUpon>SoakPerformanceTestRepository.rxrep</DependentUpon>
+      <id>55c0bc8e-0487-417c-aad3-0a1e20dd9247</id>
+      <BoundTo>34d89ce6-364b-4317-9417-f75ae5988729</BoundTo>
+      <imageblob>true</imageblob>
+    </None>
+    <None Include="SoakPerformanceTestRepository.rxrep">
+      <id>34d89ce6-364b-4317-9417-f75ae5988729</id>
+      <repoid>bd7b687b-0efc-4b09-ae67-240649718516</repoid>
+      <reporootid>ae0c01ae-9da3-4f2c-95c5-6e24580e0462</reporootid>
+    </None>
+    <None Include="UIResponsivenessRepository.rximg">
+      <BoundTo>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</BoundTo>
+      <DependentUpon>UIResponsivenessRepository.rxrep</DependentUpon>
+      <imageblob>true</imageblob>
+      <id>509a8f4a-b2d3-4845-981b-9e6ae2b8a6b5</id>
+    </None>
+    <None Include="UIResponsivenessRepository.rxrep">
+      <id>1dd5be19-a15c-4fac-bf2b-8a937e43df4e</id>
+      <repoid>08e99ed5-89e8-4b37-a7a6-7c8e074c87af</repoid>
+      <reporootid>3857c5ce-8d08-4731-9380-bc0f1dbbd7c0</reporootid>
+    </None>
+    <Content Include="UIResponsiveness.rxtmg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>dbb0bc47-ba15-40a4-9859-5d989376ec21</id>
+    </Content>
+    <Content Include="UIResponsiveness.rxtst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>2f79cfaa-439b-4b60-a1bd-7c4cd8142434</id>
+    </Content>
+  </ItemGroup>
+  <Import Condition="Exists('$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets')" Project="$(MSBuildExtensionsPath)\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets" />
+</Project>
