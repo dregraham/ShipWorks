@@ -14,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         // Order URL formats
         private const string ApiGetOrdersUrlFormat = "{0}orders.json";
+        private const string ApiGetOrderUrlFormat = "{0}orders/{1}.json";
         private const string ApiGetOrderCountUrlFormat = "{0}orders/count.json";
         private const string ViewOrderUrlFormat = "{0}orders/{1}";
 
@@ -110,6 +111,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             get { return string.Format(ApiBaseUrl + "auth/logout", shopUrlName); }
         }
+
+        /// <summary>
+        /// The base URL used to request orders
+        /// </summary>
+        public string ApiGetOrderUrl(long shopifyOrderID) =>
+            string.Format(ApiGetOrderUrlFormat, ApiBaseUrl, shopifyOrderID);
 
         /// <summary>
         /// The base URL used to request orders

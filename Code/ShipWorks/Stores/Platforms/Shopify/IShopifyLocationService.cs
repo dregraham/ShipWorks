@@ -16,6 +16,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get items grouped by the location id that should be used for them
         /// </summary>
-        IEnumerable<(long locationId, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, IEnumerable<IShopifyOrderItemEntity> items);
+        IEnumerable<(long locationID, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, long shopifyOrderID, IEnumerable<IShopifyOrderItemEntity> items);
     }
 }

@@ -39,6 +39,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         int GetOrderCount(DateTime startDate, DateTime endDate);
 
         /// <summary>
+        /// Get an order by id
+        /// </summary>
+        /// <param name="shopifyOrderID"></param>
+        /// <returns></returns>
+        ShopifyOrder GetOrder(long shopifyOrderID);
+
+        /// <summary>
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
@@ -51,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="shopifyProductId">Shopify Product Id</param>
         /// <returns></returns>
-        JToken GetProduct(long shopifyProductId);
+        ShopifyProduct GetProduct(long shopifyProductId);
 
         /// <summary>
         /// Get fraud risks for an order

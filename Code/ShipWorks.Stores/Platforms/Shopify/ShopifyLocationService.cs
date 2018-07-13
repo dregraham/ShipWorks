@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -31,9 +33,35 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get items grouped by the location id that should be used for them
         /// </summary>
-        public IEnumerable<(long locationId, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, IEnumerable<IShopifyOrderItemEntity> items)
+        public IEnumerable<(long locationID, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, long shopifyOrderID, IEnumerable<IShopifyOrderItemEntity> items)
         {
-            throw new NotImplementedException();
+            var order = new Lazy<ShopifyOrder>(() => webClient.GetOrder(shopifyOrderID));
+            var inventoryItems = items.Select(x => (item: x, inventoryItemID: GetInventoryItemID(webClient, order, x))).ToList();
+
+            var groupedLocations = webClient
+                .GetInventoryLevels(inventoryItems.Select(x => x.inventoryItemID))
+                .GroupBy(inventoryLevel => inventoryLevel.LocationID)
+                .Select(level => (locationID: level.Key, items: level.Select(x => inventoryItems.First(y => y.inventoryItemID == x.InventoryItemID).item)))
+                .OrderByDescending(x => x.items.Count())
+                .ToList();
+
+            return groupedLocations
+                .Select((x, i) => (locationID: x.locationID, items: x.items.Except(groupedLocations.Take(i).SelectMany(y => y.items))))
+                .Where(x => x.items.Any());
+        }
+
+        /// <summary>
+        /// Get the inventory item ID for the given item
+        /// </summary>
+        private long GetInventoryItemID(IShopifyWebClient webClient, Lazy<ShopifyOrder> order, IShopifyOrderItemEntity item)
+        {
+            if (item.InventoryItemID != null)
+            {
+                return item.InventoryItemID.Value;
+            }
+
+            var variantID = order.Value?.LineItems.FirstOrDefault(x => x.ID == item.ShopifyOrderItemID)?.VariantID;
+            return webClient.GetProduct(item.ShopifyProductID)?.Variants.FirstOrDefault(x => x.ID == variantID)?.InventoryItemID ?? 0;
         }
     }
 }

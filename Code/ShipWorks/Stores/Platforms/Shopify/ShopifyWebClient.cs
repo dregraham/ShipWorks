@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
-        private static readonly LruCache<string, JToken> productCache = new LruCache<string, JToken>(1000);
+        private static readonly LruCache<string, ShopifyProduct> productCache = new LruCache<string, ShopifyProduct>(1000);
         private static readonly ShopifyWebClientRequestThrottle throttler = new ShopifyWebClientRequestThrottle();
 
         // Progress reporting
@@ -271,6 +271,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
+        /// Get an order by id
+        /// </summary>
+        /// <param name="shopifyOrderID"></param>
+        /// <returns></returns>
+        public ShopifyOrder GetOrder(long shopifyOrderID)
+        {
+            string url = Endpoints.ApiGetOrderUrl(shopifyOrderID);
+
+            // Not cached, so go get it
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
+            request.Uri = new Uri(url);
+
+            try
+            {
+                string orderAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrder, progress);
+                return JObject.Parse(orderAsString)["order"].ToObject<ShopifyOrder>();
+            }
+            catch (JsonException ex)
+            {
+                string message = $"An error occurred in GetOrder for Url: '{url}'){Environment.NewLine}     ";
+                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", message, ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting the order.", ex);
+            }
+        }
+
+        /// <summary>
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
@@ -323,14 +350,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="shopifyProductId">Shopify Product Id</param>
         /// <returns></returns>
-        public JToken GetProduct(long shopifyProductId)
+        public ShopifyProduct GetProduct(long shopifyProductId)
         {
             string url = Endpoints.ApiProductUrl(shopifyProductId);
 
             try
             {
                 // See if we have a cached version of the product
-                JToken product;
+                ShopifyProduct product;
                 if (productCache.Contains(url.ToLower()))
                 {
                     product = productCache[url.ToLower()];
@@ -344,7 +371,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     try
                     {
                         string productAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetProduct, progress);
-                        product = JObject.Parse(productAsString);
+                        product = JObject.Parse(productAsString)["product"].ToObject<ShopifyProduct>();
                     }
                     catch (ShopifyException ex)
                     {

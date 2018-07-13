@@ -618,6 +618,10 @@
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImageTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariantTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrderTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyEndpointsTest.cs" />
     <Compile Include="Stores\Sears\SearsUtilityTest.cs" />
@@ -815,6 +819,10 @@
     </None>
     <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.FullObject.json" />
     <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyOrderTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariantTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImageTest.FullObject.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />

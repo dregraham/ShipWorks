@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -21,6 +23,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ShopifyLocationService>();
             webClient = mock.CreateMock<IShopifyWebClient>();
+
+            webClient.Setup(x => x.GetOrder(6))
+                .Returns(new ShopifyOrder
+                {
+                    LineItems = new[]
+                    {
+                        new ShopifyLineItem { ID = 11, VariantID = 111 },
+                        new ShopifyLineItem { ID = 22, VariantID = 222 },
+                        new ShopifyLineItem { ID = 33, VariantID = 333 },
+                        new ShopifyLineItem { ID = 44, VariantID = 444 },
+                    }
+                });
         }
 
         [Fact]
@@ -103,6 +117,132 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
 
             Assert.Equal(123, location1);
             Assert.Equal(456, location2);
+        }
+
+        [Fact]
+        public void GetItemLocations_GetsOrderOnce_WhenMultipleItemsNeedToBeLookedUp()
+        {
+            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
+            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
+
+            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item3 });
+
+            webClient.Verify(x => x.GetOrder(6), Times.Once);
+        }
+
+        [Fact]
+        public void GetItemLocations_RequestsInventoryItemIDs_WhenItemsDoNotHaveInventoryItemIDs()
+        {
+            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
+
+            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2, item3 });
+
+            webClient.Verify(x => x.GetProduct(10));
+            webClient.Verify(x => x.GetProduct(30));
+        }
+
+        [Fact]
+        public void GetItemLocations_DoesNotRequestsInventoryItemIDs_ForItemsThatHaveIDs()
+        {
+            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
+            var item2 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 22, ShopifyProductID = 20, InventoryItemID = 2 };
+            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
+
+            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2, item3 });
+
+            webClient.Verify(x => x.GetProduct(20), Times.Never);
+        }
+
+        [Fact]
+        public void GetItemLocations_RequestsInventoryLevelsForAllItems_WhenItemsAreNotCached()
+        {
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+
+            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
+
+            webClient.Verify(x => x.GetInventoryLevels(new[] { 1L, 2L }));
+        }
+
+        [Fact]
+        public void GetItemLocations_ReturnsEntryPerItem_WhenEachItemHasDifferentLocation()
+        {
+            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
+                .Returns(new[] {
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 22 },
+                    new ShopifyInventoryLevel { InventoryItemID = 3, LocationID = 33 }
+                });
+
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+            var item3 = new ShopifyOrderItemEntity { InventoryItemID = 3 };
+
+            var result = testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2, item3 });
+
+            Assert.Equal(item1, result.Single(x => x.locationID == 11).items.Single());
+            Assert.Equal(item2, result.Single(x => x.locationID == 22).items.Single());
+            Assert.Equal(item3, result.Single(x => x.locationID == 33).items.Single());
+        }
+
+        [Fact]
+        public void GetItemLocations_ReturnsFirstLocation_WhenItemIsInTwoLocations()
+        {
+            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
+                .Returns(new[] {
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+                });
+
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+
+            var result = testObject.GetItemLocations(webClient.Object, 6, new[] { item1 });
+
+            Assert.Equal(item1, result.Single(x => x.locationID == 11).items.Single());
+        }
+
+        [Fact]
+        public void GetItemLocations_ReturnsLocationWithBothItems_WhenLocationsOverlap()
+        {
+            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
+                .Returns(new[] {
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 33 },
+                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 11 }
+                });
+
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+
+            var result = testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
+
+            Assert.Equal(1, result.Count());
+            Assert.Contains(item1, result.Single(x => x.locationID == 11).items);
+            Assert.Contains(item2, result.Single(x => x.locationID == 11).items);
+        }
+
+        [Fact]
+        public void GetItemLocations_ReturnsFewestLocationsPossible_WhenLocationsOverlap()
+        {
+            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
+                .Returns(new[] {
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 33 },
+                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 22 }
+                });
+
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+
+            var result = testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
+
+            Assert.Equal(1, result.Count());
+            Assert.Contains(item1, result.Single(x => x.locationID == 22).items);
+            Assert.Contains(item2, result.Single(x => x.locationID == 22).items);
         }
 
         public void Dispose()

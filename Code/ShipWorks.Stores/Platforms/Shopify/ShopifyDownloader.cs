@@ -20,6 +20,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -563,7 +564,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             long productId = lineItem.GetValue<long>("product_id");
             item.ShopifyProductID = productId;
 
-            JToken shopifyProduct = webClient.GetProduct(productId);
+            ShopifyProduct shopifyProduct = webClient.GetProduct(productId);
 
             // Product may not exist
             if (shopifyProduct == null)
@@ -581,38 +582,32 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Gets the image from the shopifyProduct and copies them into the ShopifyOrderItemEntity
         /// </summary>
-        private static void GetImage(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
+        private static void GetImage(ShopifyOrderItemEntity item, ShopifyProduct shopifyProduct, long variantID)
         {
-            // Select all product images
-            JToken images = shopifyProduct.SelectToken("product.images");
-
             // Get the image with the corresponding variantID
-            JToken image = images.FirstOrDefault(i => i.SelectToken("variant_ids").Values<long>().Contains(variantID));
+            ShopifyProductImage image = shopifyProduct.Images.FirstOrDefault(i => i.VariantIDs.Contains(variantID));
 
             // We want to use the variant image when we can, otherwise use the main image
             if (image == null)
             {
-                image = shopifyProduct.SelectToken("product.image");
+                image = shopifyProduct.Image;
             }
 
-            item.Image = image?.GetValue<string>("src");
+            item.Image = image?.Src;
             item.Thumbnail = item.Image;
         }
 
         /// <summary>
         /// Retrieves the corresponding variant info from the Shopify product
         /// </summary>
-        private void SetVariantInfo(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
+        private void SetVariantInfo(ShopifyOrderItemEntity item, ShopifyProduct shopifyProduct, long variantID)
         {
-            // Grab all the variants of the product
-            JToken variants = shopifyProduct.SelectToken("product.variants");
-
             // Get the variant with a corresponding variantID
-            JToken variant = variants.FirstOrDefault(v => v.GetValue<long>("id") == variantID);
+            ShopifyProductVariant variant = shopifyProduct.Variants.FirstOrDefault(v => v.ID == variantID);
             if (variant != null)
             {
-                item.UPC = variant.GetValue<string>("barcode");
-                item.InventoryItemID = variant.GetValue<long?>("inventory_item_id");
+                item.UPC = variant.Barcode;
+                item.InventoryItemID = variant.InventoryItemID;
             }
         }
 

@@ -188,8 +188,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             {
                 if (shouldRetry)
                 {
-                    locationService.GetItemLocations(webClient, items.Value)
-                        .Select(x => uploadDetails.WithLocation(x.locationId, x.items))
+                    locationService.GetItemLocations(webClient, uploadDetails.ShopifyOrderID, items.Value)
+                        .Select(x => uploadDetails.WithLocation(x.locationID, x.items))
                         .Select(x => PerformUpload(webClient, x, items, false))
                         .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2));
                 }

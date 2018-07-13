@@ -2067,6 +2067,11 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevel.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLineItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrder.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProduct.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImage.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariant.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShop.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
