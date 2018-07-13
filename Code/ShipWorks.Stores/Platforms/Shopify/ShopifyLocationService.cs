@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     [Component]
     public class ShopifyLocationService : IShopifyLocationService, IInitializeForCurrentDatabase
     {
-        private ConcurrentDictionary<long, long> primaryLocations = new ConcurrentDictionary<long, long>();
+        private readonly ConcurrentDictionary<long, long> primaryLocations = new ConcurrentDictionary<long, long>();
 
         /// <summary>
         /// Initialize the service
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Get the primary location id for a store
         /// </summary>
         public long GetPrimaryLocationID(IShopifyStoreEntity store, IShopifyWebClient webClient) =>
-            primaryLocations.GetOrAdd(store.StoreID, x => webClient.GetShop().PrimaryLocationID);
+            primaryLocations.GetOrAdd(store.StoreID, x => webClient.GetShop().PrimaryLocationID.GetValueOrDefault(0));
 
         /// <summary>
         /// Get items grouped by the location id that should be used for them
