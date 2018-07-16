@@ -34,7 +34,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 PackageDimensions = new PackageDimensions(),
                 ShippingServiceOptions = new ShippingServiceOptions
                 {
-                    DeclaredValue = new DeclaredValue()
+                    DeclaredValue = new DeclaredValue(),
+                    LabelFormat = "PNG" //RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
                 }
             };
 

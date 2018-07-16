@@ -162,6 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             amazonShipment.DimsWeight = shipment.ContentWeight;
             amazonShipment.Insurance = false;
+            amazonShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
