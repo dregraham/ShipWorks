@@ -111,9 +111,10 @@
             //
             // sectionLabelOptions
             //
+            this.sectionLabelOptions.Collapsed = false;
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 334);
             this.sectionLabelOptions.Size = new System.Drawing.Size(437, 24);
-            this.sectionLabelOptions.Visible = false;
+            this.sectionLabelOptions.Visible = true;
             //
             // weight
             //

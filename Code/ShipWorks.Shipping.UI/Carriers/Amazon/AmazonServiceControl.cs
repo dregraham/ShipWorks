@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -326,5 +327,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// One of the values that affects rates has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return format != ThermalLanguage.EPL;
+        }
     }
 }

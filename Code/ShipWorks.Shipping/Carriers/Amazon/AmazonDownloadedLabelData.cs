@@ -65,6 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
             shipment.Amazon.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
             shipment.Amazon.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
+            shipment.ActualLabelFormat = shipment.Amazon.RequestedLabelFormat;
         }
 
         /// <summary>
