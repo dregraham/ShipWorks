@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
@@ -293,6 +292,37 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             IEnumerable<int> allServices = serviceTypeRepository.Get().Select(x => x.AmazonServiceTypeID);
             return allServices.Except(GetExcludedServiceTypes(repository));
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Amazon != null)
+            {
+                shipment.Amazon.RequestedLabelFormat = (int) requestedLabelFormat;
+            }
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new AmazonShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Update the dynamic shipment data that could have changed "outside" the known editor
+        /// </summary>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+
+            shipment.RequestedLabelFormat = shipment.Amazon.RequestedLabelFormat;
         }
     }
 }
