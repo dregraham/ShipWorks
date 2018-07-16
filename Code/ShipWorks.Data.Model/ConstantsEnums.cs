@@ -492,6 +492,8 @@ namespace ShipWorks.Data.Model
 		AmazonUniqueShipmentID,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
