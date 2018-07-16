@@ -92,6 +92,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 
         [XmlElement("DeliveryExperience")]
         public string DeliveryExperience { get; set; }
+
+        [XmlElement("LabelFormat")]
+        public string LabelFormat { get; set; }
     }
 
     [Serializable]
