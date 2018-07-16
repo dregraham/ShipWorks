@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,7 +6,7 @@ using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Pdf;
-using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -65,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
             shipment.Amazon.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
             shipment.Amazon.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
-            shipment.ActualLabelFormat = shipment.Amazon.RequestedLabelFormat;
+            shipment.ActualLabelFormat = shipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.None ? (int?) null : shipment.Amazon.RequestedLabelFormat;
         }
 
         /// <summary>
