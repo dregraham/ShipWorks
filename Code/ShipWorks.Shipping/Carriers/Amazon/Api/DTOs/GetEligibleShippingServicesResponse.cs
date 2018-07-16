@@ -98,6 +98,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     }
 
     [Serializable]
+    [XmlRoot("LabelCustomization")]
+    public class LabelCustomization
+    {
+        [XmlElement("CustomTextForLabel")]
+        public string CustomTextForLabel { get; set; }
+    }
+
+    [Serializable]
     [XmlRoot("DeclaredValue")]
     public class DeclaredValue
     {
