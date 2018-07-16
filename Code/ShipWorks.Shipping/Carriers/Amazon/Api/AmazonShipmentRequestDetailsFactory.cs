@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
@@ -51,7 +52,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     {
                         Amount = 0,
                         CurrencyCode = "USD"
-                    }
+                    },
+                    LabelFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
                 },
                 Weight = shipment.TotalWeight
             };
