@@ -1092,6 +1092,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Insurance);}
 		}
+		/// <summary>Creates a new AmazonShipmentEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Reference1);}
+		}
 		/// <summary>Creates a new AmazonShipmentEntity.RequestedLabelFormat field instance</summary>
 		public static EntityField2 RequestedLabelFormat
 		{

@@ -307,7 +307,8 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="7" />
           <Field Name="Insurance" Type="bool" FieldIndex="14" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
-          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="15" />
+          <Field Name="Reference1" Type="string" MaxLength="28" FieldIndex="15" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="16" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="ShippingServiceName" Type="string" MaxLength="50" FieldIndex="2" />
@@ -4463,7 +4464,8 @@
                     </Field>
                     <Field Name="AmazonUniqueShipmentID" Ordinal="14" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="Insurance" Ordinal="15" DbType="2" />
-                    <Field Name="RequestedLabelFormat" Ordinal="16" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
+                    <Field Name="Reference1" Ordinal="16" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="28" />
+                    <Field Name="RequestedLabelFormat" Ordinal="17" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonStore">
@@ -10425,6 +10427,7 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="Reference1" TargetFieldName="Reference1" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />

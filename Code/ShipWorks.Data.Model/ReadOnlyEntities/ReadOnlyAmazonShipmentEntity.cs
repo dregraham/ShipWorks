@@ -51,6 +51,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeclaredValue = source.DeclaredValue;
             AmazonUniqueShipmentID = source.AmazonUniqueShipmentID;
             Insurance = source.Insurance;
+            Reference1 = source.Reference1;
             RequestedLabelFormat = source.RequestedLabelFormat;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
@@ -151,6 +152,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean Insurance { get; }
+        /// <summary> The Reference1 property of the Entity AmazonShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonShipment"."Reference1"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 28<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Reference1 { get; }
         /// <summary> The RequestedLabelFormat property of the Entity AmazonShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonShipment"."RequestedLabelFormat"<br/>

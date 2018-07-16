@@ -440,7 +440,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
 		private void InitAmazonShipmentEntityMappings()
 		{
-			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 16, 0);
+			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 17, 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "CarrierName", "CarrierName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -456,7 +456,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 15);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 28, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>

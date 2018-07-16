@@ -380,6 +380,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
@@ -627,6 +629,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The Reference1 property of the Entity AmazonShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."Reference1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 28<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Reference1
+		{
+			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.Reference1, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.Reference1, value); }
 		}
 
 		/// <summary> The RequestedLabelFormat property of the Entity AmazonShipment<br/><br/></summary>
