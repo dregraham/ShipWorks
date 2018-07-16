@@ -51,6 +51,7 @@
             this.labelReference1 = new System.Windows.Forms.Label();
             this.labelService = new System.Windows.Forms.Label();
             this.referenceTemplateToken = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.referenceInfoTip = new ShipWorks.UI.Controls.InfoTip();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -111,12 +112,17 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.referenceTemplateToken);
+            this.sectionShipment.ContentPanel.Controls.Add(this.referenceInfoTip);
             this.sectionShipment.Location = new System.Drawing.Point(3, 5);
             this.sectionShipment.Size = new System.Drawing.Size(420, 294);
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Collapsed = false;
+            // 
+            // sectionLabelOptions.ContentPanel
+            // 
+            this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 333);
             this.sectionLabelOptions.Size = new System.Drawing.Size(420, 70);
             this.sectionLabelOptions.Visible = true;
@@ -299,7 +305,6 @@
             this.labelService.Size = new System.Drawing.Size(46, 13);
             this.labelService.TabIndex = 7;
             this.labelService.Text = "Service:";
-            //
             // 
             // referenceTemplateToken
             // 
@@ -309,6 +314,15 @@
             this.referenceTemplateToken.Size = new System.Drawing.Size(210, 21);
             this.referenceTemplateToken.TabIndex = 6;
             this.referenceTemplateToken.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
+            // referenceInfoTip
+            // 
+            this.referenceInfoTip.Caption = "Reference number is only available when using thermal (ZPL) labels.";
+            this.referenceInfoTip.Location = new System.Drawing.Point(310, 239);
+            this.referenceInfoTip.Name = "referenceInfoTip";
+            this.referenceInfoTip.Size = new System.Drawing.Size(12, 12);
+            this.referenceInfoTip.TabIndex = 13;
+            this.referenceInfoTip.Title = "Reference";
             // 
             // AmazonServiceControl
             // 
@@ -362,5 +376,6 @@
         private System.Windows.Forms.Label labelShipDate;
         private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
         private Templates.Tokens.TemplateTokenTextBox referenceTemplateToken;
+        private ShipWorks.UI.Controls.InfoTip referenceInfoTip;
     }
 }

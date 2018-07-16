@@ -51,10 +51,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         UpdateServiceTypes(new List<ShipmentEntity> { x.ShipmentAdapter.Shipment });
                     }
                 });
+
+            labelFormat.SelectedIndexChanged += OnLabelFormatSelectedIndexChanged;
         }
 
         /// <summary>
-        /// Initialize the comboboxes
+        /// Initialize the combo boxes
         /// </summary>
         protected override void Initialize()
         {
@@ -337,6 +339,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
             return format != ThermalLanguage.EPL;
+        }
+
+        /// <summary>
+        /// Label format selection changed
+        /// </summary>
+        private void OnLabelFormatSelectedIndexChanged(object sender, EventArgs e)
+        {
+            referenceTemplateToken.Enabled = !labelFormat.MultiValued && labelFormat.SelectedValue != null && (ThermalLanguage) labelFormat.SelectedValue == ThermalLanguage.ZPL;
         }
     }
 }
