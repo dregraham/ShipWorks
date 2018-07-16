@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
     /// <summary>
     /// Inventory level for a Shopify product
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation]
     public class ShopifyInventoryLevel
     {
         /// <summary>

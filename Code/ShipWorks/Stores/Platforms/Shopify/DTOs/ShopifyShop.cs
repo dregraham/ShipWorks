@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
     /// <summary>
     /// Shop details for a Shopify store
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation]
     public class ShopifyShop
     {
         /// <summary>

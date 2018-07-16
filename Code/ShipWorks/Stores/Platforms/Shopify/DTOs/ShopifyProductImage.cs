@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
     /// <summary>
     /// Image for a Shopify product
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation]
     public class ShopifyProductImage
     {
         /// <summary>
