@@ -212,6 +212,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode",
                 requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
+
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.LabelFormat", requestDetails.ShippingServiceOptions.LabelFormat);
         }
 
         /// <summary>
