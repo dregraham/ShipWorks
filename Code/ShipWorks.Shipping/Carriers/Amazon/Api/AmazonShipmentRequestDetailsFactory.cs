@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                         Amount = 0,
                         CurrencyCode = "USD"
                     },
-                    LabelFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
+                    LabelFormat = shipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
                 },
                 LabelCustomization = new LabelCustomization
                 {

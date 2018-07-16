@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShippingServiceOptions = new ShippingServiceOptions
                 {
                     DeclaredValue = new DeclaredValue(),
-                    LabelFormat = "PNG" //RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
+                    LabelFormat = "PNG"
                 }
             };
 

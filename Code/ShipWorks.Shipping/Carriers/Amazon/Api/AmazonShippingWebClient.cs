@@ -223,8 +223,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private static void AddLabelCustomizations(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // LabelCustomization
-            request.Variables.Add("ShipmentRequestDetails.LabelCustomization.CustomTextForLabel",
-                requestDetails.LabelCustomization.CustomTextForLabel.ToLowerInvariant());
+            if (requestDetails.LabelCustomization?.CustomTextForLabel?.IsNullOrWhiteSpace() == false)
+            {
+                request.Variables.Add("ShipmentRequestDetails.LabelCustomization.CustomTextForLabel",
+                    requestDetails.LabelCustomization.CustomTextForLabel.ToLowerInvariant());
+            }
         }
 
         /// <summary>
