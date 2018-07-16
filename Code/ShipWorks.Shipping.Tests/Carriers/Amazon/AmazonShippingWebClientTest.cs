@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShippingServiceOptions = new ShippingServiceOptions
                 {
                     DeclaredValue = new DeclaredValue(),
-                    LabelFormat = "PNG"
+                    LabelFormat = null
                 }
             };
 
