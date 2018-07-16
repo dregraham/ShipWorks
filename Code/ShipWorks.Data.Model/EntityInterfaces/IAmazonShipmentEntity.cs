@@ -114,8 +114,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Reference1 property of the Entity AmazonShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonShipment"."Reference1"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 28<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String Reference1 { get; }
         /// <summary> The RequestedLabelFormat property of the Entity AmazonShipment<br/><br/>
         /// </summary>

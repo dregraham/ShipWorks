@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -14,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// </summary>
     public class AmazonShipmentRequestDetailsFactory : IAmazonShipmentRequestDetailsFactory
     {
+        private const int MaxReferenceLength = 14;
+
         /// <summary>
         /// Creates the ShipmentRequestDetails.
         /// </summary>
@@ -57,10 +60,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 },
                 LabelCustomization = new LabelCustomization
                 {
-                    CustomTextForLabel = shipment.Amazon.Reference1.Truncate(14)
+                    CustomTextForLabel = ProcessReferenceNumber(shipment.Amazon.Reference1, shipment.ShipmentID),
                 },
                 Weight = shipment.TotalWeight
             };
+        }
+
+        /// <summary>
+        /// Process for tokens and trim to allowable length
+        /// </summary>
+        public static string ProcessReferenceNumber(string reference, long shipmentID)
+        {
+            return TemplateTokenProcessor.ProcessTokens(reference, shipmentID).Truncate(MaxReferenceLength);
         }
 
         /// <summary>

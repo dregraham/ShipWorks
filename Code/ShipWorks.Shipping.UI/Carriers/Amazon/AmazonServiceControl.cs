@@ -136,6 +136,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.Amazon));
 
+                    referenceTemplateToken.ApplyMultiText(shipment.Amazon.Reference1);
+
                     deliveryConfirmation.ApplyMultiValue((AmazonDeliveryExperienceType) shipment.Amazon.DeliveryExperience);
                 }
             }
@@ -232,7 +234,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = v.ToString());
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
-
+                referenceTemplateToken.ReadMultiText(v => shipment.Amazon.Reference1 = v);
+                
                 AmazonShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment) as AmazonShipmentAdapter;
                 shipmentAdapter?.SelectServiceFromRate(RateControl.SelectedRate);
 

@@ -456,7 +456,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 28, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 

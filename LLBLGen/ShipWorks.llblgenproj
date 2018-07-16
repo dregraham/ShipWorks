@@ -307,7 +307,7 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="7" />
           <Field Name="Insurance" Type="bool" FieldIndex="14" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
-          <Field Name="Reference1" Type="string" MaxLength="28" FieldIndex="15" />
+          <Field Name="Reference1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="15" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="16" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" MaxLength="50" FieldIndex="3" />
@@ -4262,7 +4262,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-11T21:03:50.0079799Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-16T16:44:20.70698Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4464,8 +4464,8 @@
                     </Field>
                     <Field Name="AmazonUniqueShipmentID" Ordinal="14" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="Insurance" Ordinal="15" DbType="2" />
-                    <Field Name="Reference1" Ordinal="16" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="28" />
-                    <Field Name="RequestedLabelFormat" Ordinal="17" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
+                    <Field Name="RequestedLabelFormat" Ordinal="16" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
+                    <Field Name="Reference1" Ordinal="17" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonStore">
