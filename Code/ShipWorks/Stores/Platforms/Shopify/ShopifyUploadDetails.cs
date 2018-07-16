@@ -72,5 +72,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public ShopifyUploadDetails WithLocation(long locationId, IEnumerable<IShopifyOrderItemEntity> items) =>
             new ShopifyUploadDetails(this, locationId, items);
+
+        /// <summary>
+        /// Get details about this object
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() =>
+            $"ShopifyOrderID: {ShopifyOrderID}; TrackingNumber: {TrackingNumber}; Carrier: {Carrier}, CarrierTrackingUrl: {CarrierTrackingUrl}, LocationID: {LocationID}";
     }
 }
