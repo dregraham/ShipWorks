@@ -88,6 +88,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         SaveCroppedLabel);
                 }
             }
+            else if (fileContents.FileType == "application/zpl")
+            {
+                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+            }
             else
             {
                 // Save the label to the database
