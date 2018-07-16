@@ -195,6 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddFromAddressInfo(request, requestDetails);
             AddPackageInfo(request, requestDetails);
             AddShippingServiceOptions(request, requestDetails);
+            AddLabelCustomizations(request, requestDetails);
         }
 
         /// <summary>
@@ -214,6 +215,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
 
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.LabelFormat", requestDetails.ShippingServiceOptions.LabelFormat);
+        }
+
+        /// <summary>
+        /// Add the label customizations to the request
+        /// </summary>
+        private static void AddLabelCustomizations(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // LabelCustomization
+            request.Variables.Add("ShipmentRequestDetails.LabelCustomization.CustomTextForLabel",
+                requestDetails.LabelCustomization.CustomTextForLabel.ToLowerInvariant());
         }
 
         /// <summary>
