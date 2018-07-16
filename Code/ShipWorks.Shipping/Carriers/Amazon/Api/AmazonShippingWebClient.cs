@@ -213,7 +213,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode",
                 requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
 
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.LabelFormat", requestDetails.ShippingServiceOptions.LabelFormat);
+            // Only request thermal if that is what was selected.  Otherwise, let Amazon figure it out (like we used to do)
+            if (requestDetails.ShippingServiceOptions.LabelFormat == "ZPL203")
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.LabelFormat", requestDetails.ShippingServiceOptions.LabelFormat);
+            }
         }
 
         /// <summary>
