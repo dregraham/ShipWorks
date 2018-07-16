@@ -55,6 +55,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     },
                     LabelFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : "PNG"
                 },
+                LabelCustomization = new LabelCustomization
+                {
+                    CustomTextForLabel = shipment.Amazon.Reference1.Truncate(14)
+                },
                 Weight = shipment.TotalWeight
             };
         }
