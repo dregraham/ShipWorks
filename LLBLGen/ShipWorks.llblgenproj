@@ -1988,9 +1988,11 @@
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
+          <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
+          <Field Name="Length" Type="decimal" Precision="10" Scale="2" FieldIndex="19" />
           <Field Name="LocalStatus" Type="string" MaxLength="255" FieldIndex="16" />
           <Field Name="Location" Type="string" MaxLength="255" FieldIndex="9" />
           <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
@@ -2005,6 +2007,7 @@
           <Field Name="UnitPrice" Type="decimal" Precision="19" Scale="4" FieldIndex="12" />
           <Field Name="UPC" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="Weight" Type="double" Precision="29" Scale="9" FieldIndex="14" />
+          <Field Name="Width" Type="decimal" Precision="10" Scale="2" FieldIndex="20" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderItemAttribute" ObjectID="0c056446-175a-4d4b-8b9d-73db5866acaa" InheritanceType="2">
@@ -4257,7 +4260,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-06-20T12:09:16.4775442Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-11T21:03:50.0079799Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7188,6 +7191,9 @@
                     <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                     <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
                     <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -12138,9 +12144,11 @@
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
+            <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
+            <FieldMapping FieldName="Length" TargetFieldName="Length" />
             <FieldMapping FieldName="LocalStatus" TargetFieldName="LocalStatus" />
             <FieldMapping FieldName="Location" TargetFieldName="Location" />
             <FieldMapping FieldName="Name" TargetFieldName="Name" />
@@ -12155,6 +12163,7 @@
             <FieldMapping FieldName="UnitPrice" TargetFieldName="UnitPrice" />
             <FieldMapping FieldName="UPC" TargetFieldName="UPC" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
+            <FieldMapping FieldName="Width" TargetFieldName="Width" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OrderItemAttribute" TargetName="ShipWorksLocal:dbo:OrderItemAttribute">
