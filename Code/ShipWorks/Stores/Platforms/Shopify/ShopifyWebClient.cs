@@ -429,22 +429,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Upload the shipment details for an order
         /// </summary>
-        public void UploadOrderShipmentDetails(ShopifyUploadDetails details)
+        public void UploadOrderShipmentDetails(long orderID, ShopifyFulfillment details)
         {
             try
             {
-                string url = Endpoints.ApiFulfillmentsUrl(details.ShopifyOrderID);
-                var trackingNumber = string.IsNullOrEmpty(details.TrackingNumber) ? "null" : details.TrackingNumber;
-
-                JObject fulfillmentReq = new JObject(
-                    new JProperty("fulfillment",
-                    new JObject(
-                        new JProperty("tracking_company", details.Carrier),
-                        new JProperty("tracking_number", trackingNumber),
-                        new JProperty("custom_tracking_url", details.CarrierTrackingUrl),
-                        new JProperty("notify_customer", store.ShopifyNotifyCustomer))));
-
-                string jsonRequest = fulfillmentReq.ToString();
+                string url = Endpoints.ApiFulfillmentsUrl(orderID);
+                string jsonRequest = JsonConvert.SerializeObject(new ShopifyFulfillmentRequest(details));
 
                 // Create the JSON post request submitter, with default params
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") { Verb = HttpVerb.Post };

@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Update the online status of the given orders
         /// </summary>
-        void UploadOrderShipmentDetails(ShopifyUploadDetails details);
+        void UploadOrderShipmentDetails(long orderID, ShopifyFulfillment details);
 
         /// <summary>
         /// Get inventory levels for a list of inventory ids

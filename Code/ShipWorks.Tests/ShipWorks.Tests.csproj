@@ -617,11 +617,13 @@
     <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequestTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImageTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariantTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyEndpointsTest.cs" />
     <Compile Include="Stores\Sears\SearsUtilityTest.cs" />

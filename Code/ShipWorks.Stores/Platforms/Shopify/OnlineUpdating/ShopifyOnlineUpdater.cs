@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
@@ -139,12 +140,11 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
                 return;
             }
 
-            string carrier = GetTrackingCompany(shipment);
-            string trackingNumber = shipment.TrackingNumber;
-
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
             shipmentType.LoadShipmentData(shipment, true);
 
+            string trackingNumber = string.IsNullOrEmpty(shipment.TrackingNumber) ? "null" : shipment.TrackingNumber;
+            string carrier = GetTrackingCompany(shipment);
             string carrierTrackingUrl = shipmentType.GetCarrierTrackingUrl(shipment);
 
             // Check the order's online status to see if it's Fulfilled.  If it is, don't try to re-ship it...it will throw an error.
@@ -161,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             var items = new Lazy<IEnumerable<IShopifyOrderItemEntity>>(() => orderManager.GetItems(order).OfType<IShopifyOrderItemEntity>());
 
             orderSearchEntities
-                .Select(x => PerformUpload(webClient, new ShopifyUploadDetails(x, trackingNumber, carrier, carrierTrackingUrl, primaryLocationID), items, true))
+                .Select(x => PerformUpload(webClient, x, new ShopifyFulfillment(trackingNumber, carrier, carrierTrackingUrl, primaryLocationID, store), items, true))
                 .ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
         }
 
@@ -173,12 +173,11 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
         /// <param name="carrierTrackingUrl"></param>
         /// <param name="webClient"></param>
         /// <param name="orderSearchEntity"></param>
-        private IResult PerformUpload(IShopifyWebClient webClient, ShopifyUploadDetails uploadDetails, Lazy<IEnumerable<IShopifyOrderItemEntity>> items, bool shouldRetry)
+        private IResult PerformUpload(IShopifyWebClient webClient, long orderID, ShopifyFulfillment uploadDetails, Lazy<IEnumerable<IShopifyOrderItemEntity>> items, bool shouldRetry)
         {
             try
             {
-
-                webClient.UploadOrderShipmentDetails(uploadDetails);
+                webClient.UploadOrderShipmentDetails(orderID, uploadDetails);
             }
             catch (ShopifyAlreadyUploadedException ex)
             {
@@ -188,9 +187,9 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             {
                 if (shouldRetry)
                 {
-                    locationService.GetItemLocations(webClient, uploadDetails.ShopifyOrderID, items.Value)
+                    locationService.GetItemLocations(webClient, orderID, items.Value)
                         .Select(x => uploadDetails.WithLocation(x.locationID, x.items))
-                        .Select(x => PerformUpload(webClient, x, items, false))
+                        .Select(x => PerformUpload(webClient, orderID, x, items, false))
                         .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2));
                 }
 
