@@ -317,7 +317,7 @@
             // 
             // referenceInfoTip
             // 
-            this.referenceInfoTip.Caption = "Reference number is only available when using thermal (ZPL) labels.";
+            this.referenceInfoTip.Caption = "Reference number is only available when using thermal (ZPL) label format.";
             this.referenceInfoTip.Location = new System.Drawing.Point(310, 239);
             this.referenceInfoTip.Name = "referenceInfoTip";
             this.referenceInfoTip.Size = new System.Drawing.Size(12, 12);
