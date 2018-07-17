@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Theory]
-        [InlineData(ThermalLanguage.None, "PNG")]
+        [InlineData(ThermalLanguage.None, null)]
         [InlineData(ThermalLanguage.ZPL, "ZPL203")]
         public void CreateReturns_ShipmentRequestDetailsWith_RequestedLabelFormat(ThermalLanguage thermalLanguage, string expectedValue)
         {
