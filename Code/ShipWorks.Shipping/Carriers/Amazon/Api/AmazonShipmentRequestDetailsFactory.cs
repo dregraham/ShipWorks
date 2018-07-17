@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// </summary>
     public class AmazonShipmentRequestDetailsFactory : IAmazonShipmentRequestDetailsFactory
     {
-        private const int MaxReferenceLength = 14;
+        private const int MaxReferenceLength = 25;
 
         /// <summary>
         /// Creates the ShipmentRequestDetails.
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public static string ProcessReferenceNumber(string reference, long shipmentID)
         {
-            return TemplateTokenProcessor.ProcessTokens(reference, shipmentID).Truncate(MaxReferenceLength);
+            return Regex.Replace(TemplateTokenProcessor.ProcessTokens(reference, shipmentID).Truncate(MaxReferenceLength), @"[^0-9a-zA-Z]{0,25}", string.Empty);
         }
 
         /// <summary>
