@@ -209,8 +209,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonProfileEntity amazon = profile.Amazon;
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
-
             amazon.ShippingServiceID = string.Empty;
+            amazon.Reference1 = "Order {//Order/Number}";
+            amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
        
         /// <summary>
