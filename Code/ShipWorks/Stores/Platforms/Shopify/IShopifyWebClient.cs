@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Gets shop information for a Shopify store
         /// </summary>
-        ShopifyShop GetShop();
+        ShopifyShopResponse GetShop();
 
         /// <summary>
         /// Update store information from Shopify
@@ -75,6 +75,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get inventory levels for a list of inventory ids
         /// </summary>
-        IEnumerable<ShopifyInventoryLevel> GetInventoryLevels(IEnumerable<long> itemInventoryIdList);
+        ShopifyInventoryLevelsResponse GetInventoryLevelsForItems(IEnumerable<long> itemInventoryIDList);
+
+        /// <summary>
+        /// Get inventory levels for a list of inventory ids
+        /// </summary>
+        ShopifyInventoryLevelsResponse GetInventoryLevelsForLocations(IEnumerable<long> locationIDList);
+
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        ShopifyLocationsResponse GetLocations();
     }
 }

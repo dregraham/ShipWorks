@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             try
             {
-                ShopifyShop shopifyShop = GetShop();
+                ShopifyShop shopifyShop = GetShop().Shop;
 
                 if (shopifyShop != null)
                 {
@@ -459,6 +459,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Process a request that requires authentication headers to be sent to Shopify
         /// </summary>
+        private T ProcessAuthenticatedRequest<T>(HttpVerb verb, Uri endpoint, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
+        {
+            try
+            {
+                var request = new HttpVariableRequestSubmitter
+                {
+                    Verb = verb,
+                    Uri = endpoint
+                };
+
+                using (var reader = ProcessAuthenticatedRequestReader(request, action, progressReporter))
+                {
+                    var json = reader.ReadResult();
+                    return JsonConvert.DeserializeObject<T>(json);
+                }
+            }
+            catch (JsonException ex)
+            {
+                log.Error("An error occurred during JObect.Parse", ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving data from Shopify.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Process a request that requires authentication headers to be sent to Shopify
+        /// </summary>
         private string ProcessAuthenticatedRequest(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
             using (var reader = ProcessAuthenticatedRequestReader(request, action, progressReporter))
@@ -568,6 +595,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     throw new ShopifyAlreadyUploadedException(ex.Message);
                 }
 
+                if (webResponse?.StatusCode == HttpStatusCode.Forbidden || webResponse?.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new ShopifyAuthorizationException("You do not have the correct permissions to perform this operation. Try updating your Shopify token in the store manager", ex);
+                }
+
                 throw;
             }
         }
@@ -627,69 +659,43 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Gets shop information for a Shopify store
+        /// Get all available locations
         /// </summary>
-        public ShopifyShop GetShop()
-        {
-            try
-            {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
-                request.Uri = new Uri(Endpoints.ShopUrl);
-
-                // Make the call and get the response
-                string shopAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetShop, progress);
-
-                JToken shop = JObject.Parse(shopAsString);
-
-                if (shop?["shop"] != null)
-                {
-                    return shop["shop"].ToObject<ShopifyShop>();
-                }
-                else
-                {
-                    throw new ShopifyException("Shopify returned an invalid response to ShipWorks.");
-                }
-            }
-            catch (JsonException ex)
-            {
-                log.Error("An error occurred during JObect.Parse", ex);
-
-                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving store information.", ex);
-            }
-        }
+        public ShopifyShopResponse GetShop() =>
+            ProcessAuthenticatedRequest<ShopifyShopResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.ShopUrl),
+                ShopifyWebClientApiCall.GetShop,
+                progress);
 
         /// <summary>
-        /// Get inventory levels for a list of inventory ids
+        /// Get all available locations
         /// </summary>
-        public IEnumerable<ShopifyInventoryLevel> GetInventoryLevels(IEnumerable<long> itemInventoryIdList)
-        {
-            try
-            {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
-                request.Uri = new Uri(Endpoints.InventoryLevelUrl(itemInventoryIdList));
+        public ShopifyInventoryLevelsResponse GetInventoryLevelsForItems(IEnumerable<long> itemInventoryIDList) =>
+            ProcessAuthenticatedRequest<ShopifyInventoryLevelsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.InventoryLevelForItemsUrl(itemInventoryIDList)),
+                ShopifyWebClientApiCall.GetInventoryLevels,
+                progress);
 
-                // Make the call and get the response
-                string inventoryLevelsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetInventoryLevels, progress);
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyInventoryLevelsResponse GetInventoryLevelsForLocations(IEnumerable<long> locationIDList) =>
+            ProcessAuthenticatedRequest<ShopifyInventoryLevelsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.InventoryLevelForLocationsUrl(locationIDList) + "&limit=1"),
+                ShopifyWebClientApiCall.GetInventoryLevels,
+                progress);
 
-                JToken inventoryLevels = JObject.Parse(inventoryLevelsString);
-
-                if (inventoryLevels != null)
-                {
-                    return inventoryLevels.SelectToken("inventory_levels")
-                        .Select(x => x.ToObject<ShopifyInventoryLevel>())
-                        .ToList();
-                }
-                else
-                {
-                    throw new ShopifyException("Shopify returned an invalid response to ShipWorks.");
-                }
-            }
-            catch (JsonException ex)
-            {
-                log.Error("An error occurred during JObect.Parse", ex);
-
-                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving inventory levels information.", ex);
-            }
-        }
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyLocationsResponse GetLocations() =>
+            ProcessAuthenticatedRequest<ShopifyLocationsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.LocationsUrl),
+                ShopifyWebClientApiCall.GetLocations,
+                progress);
     }
 }

@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Shopify) as ShopifyOnlineUpdateCommandCreator;
 
             webClient.Setup(x => x.GetShop())
-                .Returns(new ShopifyShop { PrimaryLocationID = 6 });
+                .Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 6 } });
 
             store = Create.Store<ShopifyStoreEntity>(StoreTypeCode.Shopify).Save();
 

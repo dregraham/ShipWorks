@@ -32,7 +32,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private const string ShopUrlFormat = "{0}shop.json";
 
         // InventoryLevel URL Format
-        private const string InventoryLevelUrlFormat = "{0}inventory_levels.json?inventory_item_ids={1}";
+        private const string InventoryLevelForItemsUrlFormat = "{0}inventory_levels.json?inventory_item_ids={1}";
+        private const string InventoryLevelForLocationsUrlFormat = "{0}inventory_levels.json?location_ids={1}";
+        private const string LocationsUrlFormat = "{0}locations.json";
 
         // Scopes we need
         private const string Scopes = "write_customers,write_orders,write_products,write_shipping,read_inventory";
@@ -84,8 +86,20 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// The URL to get item inventory level info
         /// </summary>
-        public string InventoryLevelUrl(IEnumerable<long> itemInventoryIDs) =>
-            string.Format(InventoryLevelUrlFormat, ApiBaseUrl, String.Join(",", itemInventoryIDs));
+        public string InventoryLevelForItemsUrl(IEnumerable<long> itemInventoryIDs) =>
+            string.Format(InventoryLevelForItemsUrlFormat, ApiBaseUrl, String.Join(",", itemInventoryIDs));
+
+        /// <summary>
+        /// The URL to get location inventory level info
+        /// </summary>
+        public string InventoryLevelForLocationsUrl(IEnumerable<long> locationIDs) =>
+            string.Format(InventoryLevelForLocationsUrlFormat, ApiBaseUrl, String.Join(",", locationIDs));
+
+        /// <summary>
+        /// Url of the Locations api
+        /// </summary>
+        public string LocationsUrl =>
+            string.Format(LocationsUrlFormat, ApiBaseUrl);
 
         /// <summary>
         /// The URL to which the user is sent for granting ShipWorks access

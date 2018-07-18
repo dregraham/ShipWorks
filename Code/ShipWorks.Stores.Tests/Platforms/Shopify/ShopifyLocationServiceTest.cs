@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         [Fact]
         public void GetPrimaryLocationID_ReturnsValueFromWebClient_WhenLocationIsNotCached()
         {
-            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShop { PrimaryLocationID = 123 });
+            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 123 } });
 
             var location = testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         [Fact]
         public void GetPrimaryLocationID_ReturnsCachedValue_WhenLocationIsCached()
         {
-            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShop { PrimaryLocationID = 123 });
+            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 123 } });
 
             testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
             var location = testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
@@ -106,8 +106,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         {
             var webClient2 = mock.CreateMock<IShopifyWebClient>();
 
-            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShop { PrimaryLocationID = 123 });
-            webClient2.Setup(x => x.GetShop()).Returns(new ShopifyShop { PrimaryLocationID = 456 });
+            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 123 } });
+            webClient2.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 456 } });
 
             testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
             var location1 = testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
@@ -163,17 +163,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
 
             testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
 
-            webClient.Verify(x => x.GetInventoryLevels(new[] { 1L, 2L }));
+            webClient.Verify(x => x.GetInventoryLevelsForItems(new[] { 1L, 2L }));
         }
 
         [Fact]
         public void GetItemLocations_ReturnsEntryPerItem_WhenEachItemHasDifferentLocation()
         {
-            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
-                .Returns(new[] {
+            webClient.Setup(x => x.GetInventoryLevelsForItems(It.IsAny<IEnumerable<long>>()))
+                .Returns(new ShopifyInventoryLevelsResponse
+                {
+                    InventoryLevels = new[] {
                     new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
                     new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 22 },
                     new ShopifyInventoryLevel { InventoryItemID = 3, LocationID = 33 }
+                }
                 });
 
             var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
@@ -190,10 +193,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         [Fact]
         public void GetItemLocations_ReturnsFirstLocation_WhenItemIsInTwoLocations()
         {
-            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
-                .Returns(new[] {
-                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
-                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+            webClient.Setup(x => x.GetInventoryLevelsForItems(It.IsAny<IEnumerable<long>>()))
+                .Returns(new ShopifyInventoryLevelsResponse
+                {
+                    InventoryLevels = new[] {
+                        new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                        new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+                    }
                 });
 
             var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
@@ -206,12 +212,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         [Fact]
         public void GetItemLocations_ReturnsLocationWithBothItems_WhenLocationsOverlap()
         {
-            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
-                .Returns(new[] {
-                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
-                    new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
-                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 33 },
-                    new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 11 }
+            webClient.Setup(x => x.GetInventoryLevelsForItems(It.IsAny<IEnumerable<long>>()))
+                .Returns(new ShopifyInventoryLevelsResponse
+                {
+                    InventoryLevels =
+                    new[] {
+                        new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
+                        new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
+                        new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 33 },
+                        new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 11 }
+                    }
                 });
 
             var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
@@ -227,12 +237,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         [Fact]
         public void GetItemLocations_ReturnsFewestLocationsPossible_WhenLocationsOverlap()
         {
-            webClient.Setup(x => x.GetInventoryLevels(It.IsAny<IEnumerable<long>>()))
-                .Returns(new[] {
+            webClient.Setup(x => x.GetInventoryLevelsForItems(It.IsAny<IEnumerable<long>>()))
+                .Returns(new ShopifyInventoryLevelsResponse
+                {
+                    InventoryLevels = new[] {
                     new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 11 },
                     new ShopifyInventoryLevel { InventoryItemID = 1, LocationID = 22 },
                     new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 33 },
                     new ShopifyInventoryLevel { InventoryItemID = 2, LocationID = 22 }
+                }
                 });
 
             var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };

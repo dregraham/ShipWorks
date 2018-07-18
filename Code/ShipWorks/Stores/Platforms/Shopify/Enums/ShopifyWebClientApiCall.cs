@@ -30,6 +30,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.Enums
         [Description("GetFraud")]
         GetFraud = 9,
         [Description("GetInventoryLevels")]
-        GetInventoryLevels = 10
+        GetInventoryLevels = 10,
+        [Description("GetLocations")]
+        GetLocations = 11
     }
 }
