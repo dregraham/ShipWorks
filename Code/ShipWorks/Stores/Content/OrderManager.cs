@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Content
             }
 
             var queryFactory = new QueryFactory();
-            var query = queryFactory.OrderItem.Where(OrderFields.OrderID == order.OrderID);
+            var query = queryFactory.OrderItem.Where(OrderItemFields.OrderID == order.OrderID);
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
