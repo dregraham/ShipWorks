@@ -61,6 +61,7 @@ pipeline {
 					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
 				}
 				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest/SmokeTest/bin/Debug') {
+					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
 					bat """
 							SmokeTest.exe ^
 								/runconfig:Complete ^
