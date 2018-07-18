@@ -1,7 +1,7 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
 def WORKSPACE = 'c:/jenkins-builds/SR_' + BUILD_FOLDER
 //def REVISION = new File('//INTFS01/Development/CruiseControl/Configuration/Versioning/ShipWorks/NextRevision.txt').text.trim()
-def TIMESTAMP = new Date().format("YYYY-MM-DD-HHmmss")
+def TIMESTAMP = new Date().format("YYYY-MM-dd-HHmmss")
 
 pipeline {
 	agent {
@@ -76,7 +76,8 @@ pipeline {
 			}
 			post {
 				always {
-					junit "/2018-06-170-132916.rxlog.junit.xml"
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\results.junit.xml"
+					junit "results.junit.xml"
 				}
 			}
 		}
