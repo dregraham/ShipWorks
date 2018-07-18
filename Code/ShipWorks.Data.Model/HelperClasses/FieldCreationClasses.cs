@@ -992,6 +992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingServiceID);}
 		}
+		/// <summary>Creates a new AmazonProfileEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Reference1);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>

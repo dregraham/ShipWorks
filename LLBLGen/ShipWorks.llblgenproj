@@ -282,6 +282,7 @@
       <EntityDefinition Name="AmazonProfile" ObjectID="2b74a416-5d2b-4e35-9bdc-09330904a10f">
         <Fields>
           <Field Name="DeliveryExperience" Type="int" IsOptional="true" FieldIndex="1" />
+          <Field Name="Reference1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
         </Fields>
@@ -307,7 +308,7 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="7" />
           <Field Name="Insurance" Type="bool" FieldIndex="14" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
-          <Field Name="Reference1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="15" />
+          <Field Name="Reference1" Type="string" MaxLength="300" FieldIndex="15" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="16" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" MaxLength="50" FieldIndex="3" />
@@ -4262,7 +4263,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-16T16:44:20.70698Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-18T13:47:38.3601111Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4404,6 +4405,7 @@
                     <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="DeliveryExperience" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ShippingServiceID" Ordinal="3" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="Reference1" Ordinal="4" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonServiceType">
@@ -4465,7 +4467,7 @@
                     <Field Name="AmazonUniqueShipmentID" Ordinal="14" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="Insurance" Ordinal="15" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="16" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
-                    <Field Name="Reference1" Ordinal="17" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="Reference1" Ordinal="17" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonStore">
@@ -10402,6 +10404,7 @@
         <EntityMapping EntityName=":AmazonProfile" TargetName="ShipWorksLocal:dbo:AmazonProfile">
           <FieldMappings>
             <FieldMapping FieldName="DeliveryExperience" TargetFieldName="DeliveryExperience" />
+            <FieldMapping FieldName="Reference1" TargetFieldName="Reference1" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
           </FieldMappings>

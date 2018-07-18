@@ -444,6 +444,8 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
+		///<summary>Reference1. </summary>
+		Reference1,
 		/// <summary></summary>
 		AmountOfFields
 	}

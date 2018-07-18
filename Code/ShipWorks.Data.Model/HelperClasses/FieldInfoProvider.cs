@@ -421,6 +421,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.Reference1, 300, 0, 0);
 		}
 		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
 		private void InitAmazonServiceTypeEntityInfos()
@@ -449,7 +450,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.Insurance, 0, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.Reference1, 300, 0, 0);
+			this.AddElementFieldInfo("AmazonShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.Reference1, 300, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>

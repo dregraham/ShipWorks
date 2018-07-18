@@ -1924,7 +1924,8 @@ CREATE TABLE [dbo].[AmazonProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
 [DeliveryExperience] [int] NULL,
-[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
