@@ -226,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     var levels = webClient.GetInventoryLevelsForLocations(locations.Locations.Select(x => x.ID));
                 }
             }
-            catch (ShopifyAuthorizationException ex)
+            catch (ShopifyAuthorizationException)
             {
                 return new DashboardStoreItem[]
                 {
