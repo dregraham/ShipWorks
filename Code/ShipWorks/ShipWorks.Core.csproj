@@ -2069,6 +2069,8 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyError.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyErrorResponse.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentLineItem.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevel.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelsResponse.cs" />
@@ -2085,7 +2087,7 @@
     <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyUnprocessableEntityException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillment.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequst.cs" />

@@ -179,21 +179,22 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             {
                 webClient.UploadOrderShipmentDetails(orderID, uploadDetails);
             }
-            catch (ShopifyAlreadyUploadedException ex)
-            {
-                log.Warn(ex.Message);
-            }
-            catch (ShopifyException ex)
+            catch (ShopifyUnprocessableEntityException ex) when (ex.IsInvalidLocation)
             {
                 if (shouldRetry)
                 {
-                    locationService.GetItemLocations(webClient, orderID, items.Value)
+                    return locationService.GetItemLocations(webClient, orderID, items.Value)
                         .Select(x => uploadDetails.WithLocation(x.locationID, x.items))
                         .Select(x => PerformUpload(webClient, orderID, x, items, false))
-                        .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2));
+                        .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2))
+                        .FirstOrDefault();
                 }
 
                 return Result.FromError(ex);
+            }
+            catch (ShopifyUnprocessableEntityException ex)
+            {
+                log.Warn(ex.Message);
             }
 
             return Result.FromSuccess();

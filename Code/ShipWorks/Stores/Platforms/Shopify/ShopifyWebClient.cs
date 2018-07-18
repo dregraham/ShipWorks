@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -592,7 +593,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
                 {
-                    throw new ShopifyAlreadyUploadedException(ex.Message);
+                    ShopifyError error = GetErrorFromResponse(webResponse);
+                    throw new ShopifyUnprocessableEntityException(ex, error);
                 }
 
                 if (webResponse?.StatusCode == HttpStatusCode.Forbidden || webResponse?.StatusCode == HttpStatusCode.Unauthorized)
@@ -602,6 +604,31 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get the Error object from a response stream
+        /// </summary>
+        private static ShopifyError GetErrorFromResponse(HttpWebResponse webResponse)
+        {
+            try
+            {
+                using (var stream = webResponse?.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var json = reader.ReadToEnd();
+                        return JsonConvert.DeserializeObject<ShopifyErrorResponse>(json).Errors;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // If we can't deserialize the error response, just assume it's an already uploaded error since that
+                // was the assumption before this code was added.
+            }
+
+            return null;
         }
 
         /// <summary>
