@@ -54,13 +54,13 @@ pipeline {
 				bat '(Taskkill -im Shipworks* -f 2>NUL) || type NUL>NUL'
 				bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
 				bat 'powershell "mkdir -f ranorex"'
-				dir('ranorex') {
-					svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
-				}
-				dir('ranorex/Test Solutions/SmokeTest') {
+				//dir('ranorex') {
+				//	svn 'file://intfs01/Development/Testing/Ranorex Subversion Repository'
+				//}
+				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest') {
 					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
 				}
-				dir('ranorex/Test Solutions/SmokeTest/SmokeTest/bin/Debug') {
+				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest/SmokeTest/bin/Debug') {
 					bat """
 							SmokeTest.exe ^
 								/runconfig:Complete ^
