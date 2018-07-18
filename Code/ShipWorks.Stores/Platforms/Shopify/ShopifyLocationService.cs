@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -36,7 +37,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public IEnumerable<(long locationID, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, long shopifyOrderID, IEnumerable<IShopifyOrderItemEntity> items)
         {
             var order = new Lazy<ShopifyOrder>(() => webClient.GetOrder(shopifyOrderID));
-            var inventoryItems = items.Select(x => (item: x, inventoryItemID: GetInventoryItemID(webClient, order, x))).ToList();
+            var inventoryItems = items.Where(x => x.InventoryItemID.HasValue)
+                .Select(x => (item: x, inventoryItemID: x.InventoryItemID.Value))
+                .ToList();
+
+            if (inventoryItems.None())
+            {
+                return Enumerable.Empty<(long, IEnumerable<IShopifyOrderItemEntity>)>();
+            }
 
             var groupedLocations = webClient
                 .GetInventoryLevelsForItems(inventoryItems.Select(x => x.inventoryItemID))
@@ -59,19 +67,5 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 locationID: level.Key,
                 items: level.Select(x => inventoryItems.First(y => y.inventoryItemID == x.InventoryItemID).item)
             );
-
-        /// <summary>
-        /// Get the inventory item ID for the given item
-        /// </summary>
-        private long GetInventoryItemID(IShopifyWebClient webClient, Lazy<ShopifyOrder> order, IShopifyOrderItemEntity item)
-        {
-            if (item.InventoryItemID != null)
-            {
-                return item.InventoryItemID.Value;
-            }
-
-            var variantID = order.Value?.LineItems.FirstOrDefault(x => x.ID == item.ShopifyOrderItemID)?.VariantID;
-            return webClient.GetProduct(item.ShopifyProductID)?.Variants.FirstOrDefault(x => x.ID == variantID)?.InventoryItemID ?? 0;
-        }
     }
 }

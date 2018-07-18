@@ -181,16 +181,19 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             }
             catch (ShopifyUnprocessableEntityException ex) when (ex.IsInvalidLocation)
             {
+                var wrappedException = new ShopifyException("Items must be stocked at the same location", ex);
+
                 if (shouldRetry)
                 {
                     return locationService.GetItemLocations(webClient, orderID, items.Value)
                         .Select(x => uploadDetails.WithLocation(x.locationID, x.items))
                         .Select(x => PerformUpload(webClient, orderID, x, items, false))
-                        .ThrowFailures((msg, ex2) => new ShopifyException(msg, ex2))
+                        .DefaultIfEmpty(Result.FromError(wrappedException))
+                        .OrderBy(x => x.Success)
                         .FirstOrDefault();
                 }
 
-                return Result.FromError(ex);
+                return Result.FromError(wrappedException);
             }
             catch (ShopifyUnprocessableEntityException ex)
             {
