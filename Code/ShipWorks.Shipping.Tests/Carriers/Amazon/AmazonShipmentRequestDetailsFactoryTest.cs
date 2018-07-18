@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(shipmentEntity.Amazon.Reference1.Truncate(14), testObject.LabelCustomization.CustomTextForLabel);
+            Assert.Equal(shipmentEntity.Amazon.Reference1.Truncate(25), testObject.LabelCustomization.CustomTextForLabel);
         }
 
         [Theory]
