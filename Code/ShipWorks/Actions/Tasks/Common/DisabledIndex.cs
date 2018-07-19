@@ -13,6 +13,14 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Constructor
         /// </summary>
+        protected DisabledIndex()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DisabledIndex(IEnumerable<ShipWorksDisabledDefaultIndexRow> indexRows) :
             this(
                 indexRows.FirstOrDefault().IndexName,
@@ -26,10 +34,10 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Constructor
         /// </summary>
-        public DisabledIndex(string name, string table, string enableIndexSql, IEnumerable<IndexColumn> columns)
+        public DisabledIndex(string indexName, string tableName, string enableIndexSql, IEnumerable<IndexColumn> columns)
         {
-            Name = name;
-            Table = table;
+            IndexName = indexName;
+            TableName = tableName;
             EnableIndexSql = enableIndexSql;
             Columns = columns.ToImmutableList();
         }
@@ -37,12 +45,12 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Name of the index
         /// </summary>
-        public string Name { get; }
+        public string IndexName { get; }
 
         /// <summary>
         /// Table to which this index applies
         /// </summary>
-        public string Table { get; }
+        public string TableName { get; }
 
         /// <summary>
         /// Sql statement that will enable this index

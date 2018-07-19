@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             var index = MissingIndex.FromView(view).Single();
 
             Assert.Equal(1, index.GroupHandle);
-            Assert.Equal("OtherTable", index.Table);
+            Assert.Equal("OtherTable", index.TableName);
 
             Assert.Equal("OrderID", index.Columns.ElementAt(0).Name);
             Assert.Equal(false, index.Columns.ElementAt(0).IsInclude);
@@ -45,6 +45,86 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             Assert.Equal("Details", index.Columns.ElementAt(2).Name);
             Assert.Equal(true, index.Columns.ElementAt(2).IsInclude);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsNull_WhenNoDisabledIndexesExist()
+        {
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false) });
+
+            var result = testObject.FindBestMatchingIndex(Enumerable.Empty<DisabledIndex>());
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsNull_WhenDisabledIndexesDoNotApplyToTable()
+        {
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { new DisabledIndex("IX_A", "Other", string.Empty, new[] { new IndexColumn("Bar", false) }) });
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsNull_IndexHasNoMatchingColumns()
+        {
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Other", false) }) });
+
+            Assert.Null(result);
+        }
+
+        [Theory]
+        [InlineData("Foo", "Bar", "Foo", "Bar")]
+        [InlineData("Foo", "Bar", "FOO", "BAR")]
+        public void FindBestMatchingIndex_ReturnsIndex_WhenColumnsMatch(string disabledTable, string disabledColumn, string missingTable, string missingColumn)
+        {
+            var expectedIndex = new DisabledIndex("IX_A", disabledTable, string.Empty, new[] { new IndexColumn(disabledColumn, false) });
+            var testObject = new MissingIndex(1, missingTable, new[] { new IndexColumn(missingColumn, false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { expectedIndex });
+
+            Assert.Equal(expectedIndex, result);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsIndexWithMostColumnMatches_WhenMultipleIndexesQualify()
+        {
+            var otherIndex1 = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false) });
+            var expectedIndex = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false), new IndexColumn("Baz", false) });
+            var otherIndex2 = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false) });
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false), new IndexColumn("Baz", false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { otherIndex1, expectedIndex, otherIndex2 });
+
+            Assert.Equal(expectedIndex, result);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsIndexWithFewestColumns_WhenMultipleIndexesHaveSameMatchCounts()
+        {
+            var otherIndex = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false), new IndexColumn("Baz", true) });
+            var expectedIndex = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false) });
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { expectedIndex, otherIndex });
+
+            Assert.Equal(expectedIndex, result);
+        }
+
+        [Fact]
+        public void FindBestMatchingIndex_ReturnsFirstIndex_WhenMultipleIndexesHaveSameMatchCounts()
+        {
+            var expectedIndex = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false) });
+            var otherIndex = new DisabledIndex("IX_A", "Foo", string.Empty, new[] { new IndexColumn("Bar", false) });
+            var testObject = new MissingIndex(1, "Foo", new[] { new IndexColumn("Bar", false), new IndexColumn("Baz", false) });
+
+            var result = testObject.FindBestMatchingIndex(new[] { expectedIndex, otherIndex });
+
+            Assert.Equal(expectedIndex, result);
         }
 
         private IEnumerable<DataRow> AddIndex(ShipWorksMissingIndexRequestsTypedView view, int groupHandle, string tableName, string[] columns, string[] included) =>

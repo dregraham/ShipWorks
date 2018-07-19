@@ -22,9 +22,9 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             var results = DisabledIndex.FromView(view);
 
             Assert.Equal(3, results.Count());
-            Assert.Contains("IX_SomeTable_1", results.Select(x => x.Name));
-            Assert.Contains("IX_SomeTable_2", results.Select(x => x.Name));
-            Assert.Contains("IX_OtherTable_1", results.Select(x => x.Name));
+            Assert.Contains("IX_SomeTable_1", results.Select(x => x.IndexName));
+            Assert.Contains("IX_SomeTable_2", results.Select(x => x.IndexName));
+            Assert.Contains("IX_OtherTable_1", results.Select(x => x.IndexName));
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             var index = DisabledIndex.FromView(view).Single();
 
-            Assert.Equal("IX_OtherTable_1", index.Name);
-            Assert.Equal("OtherTable", index.Table);
+            Assert.Equal("IX_OtherTable_1", index.IndexName);
+            Assert.Equal("OtherTable", index.TableName);
             Assert.Equal("ENABLE SQL", index.EnableIndexSql);
 
             Assert.Equal("OrderID", index.Columns.ElementAt(0).Name);

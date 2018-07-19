@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -10,26 +10,13 @@ namespace ShipWorks.Actions.Tasks.Common
     [Component]
     public class MissingIndexResolver : IMissingIndexResolver
     {
-        public IEnumerable<DisabledIndex> GetIndexesToEnable(IEnumerable<MissingIndex> missingIndexes, IEnumerable<DisabledIndex> disabledIndexes)
-        {
-            //missingIndexes
-            //    .Select(x => FindBestExistingIndex(x, disabledIndexes))
-
-            throw new NotImplementedException();
-        }
-
-        //private object FindBestExistingIndex(MissingIndex missing, IEnumerable<DisabledIndex> disabledIndexes) =>
-        //    disabledIndexes
-        //        .Select(x => (x, MatchingColumns(x, missing), x.Count()))
-        //        .OrderByDescending(x => x.Item2)
-        //        .ThenBy(x => x.Item3);
-
-        //public int MatchingColumns(IEnumerable<DisabledIndex> index, IEnumerable<MissingIndex> suggested)
-        //{
-        //    return suggested
-        //        .Zip(index, (s, i) => s.Column == i.Column)
-        //        .TakeWhile(x => x)
-        //        .Count();
-        //}
+        /// <summary>
+        /// Get a list of disabled indexes that should be enabled
+        /// </summary>
+        public IEnumerable<DisabledIndex> GetIndexesToEnable(IEnumerable<MissingIndex> missingIndexes, IEnumerable<DisabledIndex> disabledIndexes) =>
+            missingIndexes
+                .Select(x => x.FindBestMatchingIndex(disabledIndexes))
+                .Where(x => x != null)
+                .Distinct();
     }
 }
