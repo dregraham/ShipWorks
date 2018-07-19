@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Connection;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.TypedViewClasses;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -11,11 +12,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Get any ShipWorks indexes that are disabled.
         /// </summary>
-        ShipWorksDisabledDefaultIndexTypedView GetShipWorksDisabledDefaultIndexesView(ISqlAdapter adapter);
+        IEnumerable<DisabledIndex> GetShipWorksDisabledDefaultIndexesView(ISqlAdapter adapter);
 
         /// <summary>
         /// Get any missing index requests.
         /// </summary>
-        ShipWorksMissingIndexRequestsTypedView GetMissingIndexRequestsView(ISqlAdapter adapter, decimal minIndexUsage);
+        IEnumerable<MissingIndex> GetMissingIndexRequestsView(ISqlAdapter adapter, decimal minIndexUsage);
     }
 }

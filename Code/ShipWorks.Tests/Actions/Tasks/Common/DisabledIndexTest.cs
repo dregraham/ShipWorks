@@ -34,6 +34,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                     row[(int) ShipWorksDisabledDefaultIndexesFieldIndex.ColumnName] = column.Name;
                     row[(int) ShipWorksDisabledDefaultIndexesFieldIndex.IndexColumnId] = index;
                     row[(int) ShipWorksDisabledDefaultIndexesFieldIndex.IsIncluded] = column.Included;
+                    view.Rows.Add(row);
                 });
     }
 }

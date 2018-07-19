@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -15,23 +16,23 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Get any ShipWorks indexes that are disabled.
         /// </summary>
-        public ShipWorksDisabledDefaultIndexTypedView GetShipWorksDisabledDefaultIndexesView(ISqlAdapter adapter)
+        public IEnumerable<DisabledIndex> GetShipWorksDisabledDefaultIndexesView(ISqlAdapter adapter)
         {
             ShipWorksDisabledDefaultIndexTypedView disabledDefaultIndexes = new ShipWorksDisabledDefaultIndexTypedView();
             adapter.FetchTypedView(disabledDefaultIndexes);
-            return disabledDefaultIndexes;
+            return DisabledIndex.FromView(disabledDefaultIndexes);
         }
 
         /// <summary>
         /// Get any missing index requests that have a usage greater than specified value.
         /// </summary>
-        public ShipWorksMissingIndexRequestsTypedView GetMissingIndexRequestsView(ISqlAdapter adapter, decimal minIndexUsage)
+        public IEnumerable<MissingIndex> GetMissingIndexRequestsView(ISqlAdapter adapter, decimal minIndexUsage)
         {
             ShipWorksMissingIndexRequestsTypedView missingIndexRequests = new ShipWorksMissingIndexRequestsTypedView();
             RelationPredicateBucket missingIndexRequestsBucket = new RelationPredicateBucket(ShipWorksMissingIndexRequestsFields.IndexAdvantage > minIndexUsage);
             adapter.FetchTypedView(missingIndexRequests, missingIndexRequestsBucket, true);
 
-            return missingIndexRequests;
+            return MissingIndex.FromView(missingIndexRequests);
         }
     }
 }
