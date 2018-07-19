@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 
@@ -21,20 +20,26 @@ namespace ShipWorks.Actions.Tasks.Common
     public class ManageIndexStateTask : ActionTask
     {
         private const int DefaultDaysBack = 14;
+        private const int DefaultMinIndexAdvantage = 100;
         private readonly ILog log;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlSession sqlSession;
         private const int timeoutHours = 3;
         private readonly int timeoutSeconds = (int) TimeSpan.FromHours(timeoutHours).TotalSeconds;
+        private readonly IManageDisabledIndexesRepo mangeDisabledIndexesRepo;
+        private readonly IMissingIndexResolver missingIndexResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageIndexStateTask" /> class.
         /// </summary>
-        public ManageIndexStateTask(IDateTimeProvider dateTimeProvider, Func<Type, ILog> logFactory, ISqlSession sqlSession)
+        public ManageIndexStateTask(IDateTimeProvider dateTimeProvider, Func<Type, ILog> logFactory, ISqlSession sqlSession,
+            IManageDisabledIndexesRepo mangeDisabledIndexesRepo, IMissingIndexResolver missingIndexResolver)
         {
             this.dateTimeProvider = dateTimeProvider;
             log = logFactory(typeof(ManageIndexStateTask));
             this.sqlSession = sqlSession;
+            this.mangeDisabledIndexesRepo = mangeDisabledIndexesRepo;
+            this.missingIndexResolver = missingIndexResolver;
 
             TimeoutInMinutes = 180;
         }
@@ -70,7 +75,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns><c>true</c> when the task can be run with the given trigger; otherwise <c>false</c>.</returns>
         public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
-            return triggerType == ActionTriggerType.Scheduled;
+            return triggerType == ActionTriggerType.Scheduled ||
+                   (InterapptiveOnly.MagicKeysDown && triggerType == ActionTriggerType.UserInitiated);
         }
 
         /// <summary>
@@ -79,8 +85,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <exception cref="System.InvalidOperationException">There is not an editor associated with the task.</exception>
         public override ActionTaskEditor CreateEditor()
         {
-            // This task should not appear in the UI
-            throw new InvalidOperationException("There is not an editor associated with the task for managing database index state.");
+            return new ActionTaskEditor();
         }
 
         /// <summary>
@@ -97,13 +102,16 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 XDocument doc = XDocument.Parse(context.Step.TaskSettings);
                 XElement daysBackElement = doc.Descendants("DaysBack").FirstOrDefault();
-                var daysBack = Functional.ParseInt(daysBackElement?.Value).Match(x => x, _ => 14);
+                XElement minIndexUsageElement = doc.Descendants("MinIndexUsage").FirstOrDefault();
+                int daysBack = Functional.ParseInt(daysBackElement?.Value).Match(x => x, _ => DefaultDaysBack);
+                decimal minIndexUsage = Functional.ParseDecimal(minIndexUsageElement?.Value).Match(x => x, _ => DefaultMinIndexAdvantage);
 
                 if (dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
                 {
                     using (new LoggedStopwatch(log, $"Manage Index State Total Time. Days back: {daysBack}"))
                     {
                         DisableUnusedIndexes(daysBack);
+                        EnableUnusedIndexes(minIndexUsage);
                     }
                 }
             }
@@ -131,6 +139,50 @@ namespace ShipWorks.Actions.Tasks.Common
                         sqlCommand.CommandText = $"EXECUTE DisableUnusedIndexes @daysBack = {daysBack}";
                         sqlCommand.CommandType = CommandType.Text;
                         sqlCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable missing ShipWorks indexes.
+        /// </summary>
+        private void EnableUnusedIndexes(decimal minIndexAdvantage)
+        {
+            IEnumerable<DisabledIndex> diabledIndexView;
+            IEnumerable<MissingIndex> missingIndexView;
+            using (ISqlAdapter adapter = new SqlAdapter(sqlSession.OpenConnection(timeoutHours)))
+            {
+                missingIndexView = mangeDisabledIndexesRepo.GetMissingIndexRequestsView(adapter, minIndexAdvantage);
+                diabledIndexView = mangeDisabledIndexesRepo.GetShipWorksDisabledDefaultIndexesView(adapter);
+            }
+
+            var indexesToEnable = missingIndexResolver.GetIndexesToEnable(missingIndexView, diabledIndexView);
+
+            foreach (DisabledIndex indexToEnable in indexesToEnable)
+            {
+                string enableIndexSql = indexToEnable.EnableIndexSql;
+                string indexDescriptor = $"[{indexToEnable.TableName}].[{indexToEnable.IndexName}]";
+
+                using (new LoggedStopwatch(log, $"Enabling index {indexDescriptor}."))
+                {
+                    try
+                    {
+                        using (DbConnection sqlConnection = sqlSession.OpenConnection(timeoutSeconds))
+                        {
+                            using (DbCommand sqlCommand = sqlConnection.CreateCommand())
+                            {
+                                sqlCommand.CommandTimeout = timeoutSeconds;
+                                sqlCommand.CommandText = enableIndexSql;
+                                sqlCommand.CommandType = CommandType.Text;
+                                sqlCommand.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"An error occurred while attempting to re-enable index {indexDescriptor}", ex);
+                        throw;
                     }
                 }
             }

@@ -13,6 +13,7 @@ using ShipWorks.Common;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using System.Reactive.Disposables;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -72,17 +73,16 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns><c>true</c> when the task can be run with the given trigger; otherwise <c>false</c>.</returns>
         public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
-            return triggerType == ActionTriggerType.Scheduled;
+            return triggerType == ActionTriggerType.Scheduled ||
+                   (InterapptiveOnly.MagicKeysDown && triggerType == ActionTriggerType.UserInitiated);
         }
 
         /// <summary>
         /// Creates the editor that is used to edit the task.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException">There is not an editor associated with the task for rebuilding database indexes.</exception>
         public override ActionTaskEditor CreateEditor()
         {
-            // This task should not appear in the UI
-            throw new InvalidOperationException("There is not an editor associated with the task for rebuilding database indexes.");
+            return new ActionTaskEditor();
         }
 
         /// <summary>

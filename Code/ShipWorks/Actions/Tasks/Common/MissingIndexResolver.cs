@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
     /// Resolve indexes that could be enabled based on a list of missing indexes
     /// </summary>
+    [Component]
     public class MissingIndexResolver : IMissingIndexResolver
     {
         public IEnumerable<DisabledIndex> GetIndexesToEnable(IEnumerable<MissingIndex> missingIndexes, IEnumerable<DisabledIndex> disabledIndexes)
