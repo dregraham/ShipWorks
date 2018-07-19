@@ -12592,6 +12592,46 @@ namespace ShipWorks.Data.Model
 		AmountOfFields
 	}
 
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksDisabledDefaultIndexes.</summary>
+	public enum ShipWorksDisabledDefaultIndexesFieldIndex
+	{
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexName</summary>
+		IndexName,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>EnableIndex</summary>
+		EnableIndex,
+		///<summary>IndexID</summary>
+		IndexID,
+		///<summary>IndexColumnId</summary>
+		IndexColumnId,
+		///<summary>IsIncluded</summary>
+		IsIncluded,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksMissingIndexRequests.</summary>
+	public enum ShipWorksMissingIndexRequestsFieldIndex
+	{
+		///<summary>IndexHandle</summary>
+		IndexHandle,
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexAdvantage</summary>
+		IndexAdvantage,
+		///<summary>GroupHandle</summary>
+		GroupHandle,
+		///<summary>ColumnID</summary>
+		ColumnID,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>ColumnUsage</summary>
+		ColumnUsage,
+		/// <summary></summary>
+		AmountOfFields
+	}
 
 
 	/// <summary>Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.</summary>
@@ -13051,6 +13091,14 @@ namespace ShipWorks.Data.Model
 		YahooStoreEntity
 	}
 
+	/// <summary>Enum definition for all the typed view types defined in this namespace. Used by the entityfields factory.</summary>
+	public enum TypedViewType
+	{
+		///<summary>ShipWorksDisabledDefaultIndexes</summary>
+		ShipWorksDisabledDefaultIndexesTypedView,
+		///<summary>ShipWorksMissingIndexRequests</summary>
+		ShipWorksMissingIndexRequestsTypedView
+	}
 
 	#region Custom ConstantsEnums Code
 	

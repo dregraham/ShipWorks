@@ -500,6 +500,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzFirst.sql.xml" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzIndex.sql.xml" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzWho.sql.xml" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\Indexes\ShipWorksMissingIndexRequests.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\Indexes\ShipWorksDisabledDefaultIndexes.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
