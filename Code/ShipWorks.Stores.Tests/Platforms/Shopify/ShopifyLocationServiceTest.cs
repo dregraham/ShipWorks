@@ -35,6 +35,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
                         new ShopifyLineItem { ID = 44, VariantID = 444 },
                     }
                 });
+
+            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 0 } });
         }
 
         [Fact]
@@ -72,6 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         public void GetPrimaryLocationID_CallsWebClientTwice_WhenDifferentStoresAreRequested()
         {
             var webClient2 = mock.Mock<IShopifyWebClient>();
+            webClient2.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 123 } });
 
             testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object);
             webClient.Verify(x => x.GetShop());
@@ -102,6 +105,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         }
 
         [Fact]
+        public void GetPrimaryLocationID_Foo_OnFirstCall()
+        {
+            webClient.Setup(x => x.GetShop()).Returns(new ShopifyShopResponse());
+
+            Assert.Throws<ShopifyException>(() => testObject.GetPrimaryLocationID(new ShopifyStoreEntity { StoreID = 1 }, webClient.Object));
+        }
+
+        [Fact]
         public void GetPrimaryLocationID_ReturnsCorrectValue_WhenMultipleStoresAreCached()
         {
             var webClient2 = mock.CreateMock<IShopifyWebClient>();
@@ -120,42 +131,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
         }
 
         [Fact]
-        public void GetItemLocations_GetsOrderOnce_WhenMultipleItemsNeedToBeLookedUp()
-        {
-            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
-            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
-
-            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item3 });
-
-            webClient.Verify(x => x.GetOrder(6), Times.Once);
-        }
-
-        [Fact]
-        public void GetItemLocations_RequestsInventoryItemIDs_WhenItemsDoNotHaveInventoryItemIDs()
-        {
-            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
-            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
-            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
-
-            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2, item3 });
-
-            webClient.Verify(x => x.GetProduct(10));
-            webClient.Verify(x => x.GetProduct(30));
-        }
-
-        [Fact]
-        public void GetItemLocations_DoesNotRequestsInventoryItemIDs_ForItemsThatHaveIDs()
-        {
-            var item1 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 11, ShopifyProductID = 10 };
-            var item2 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 22, ShopifyProductID = 20, InventoryItemID = 2 };
-            var item3 = new ShopifyOrderItemEntity { ShopifyOrderItemID = 33, ShopifyProductID = 30 };
-
-            testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2, item3 });
-
-            webClient.Verify(x => x.GetProduct(20), Times.Never);
-        }
-
-        [Fact]
         public void GetItemLocations_RequestsInventoryLevelsForAllItems_WhenItemsAreNotCached()
         {
             var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
@@ -164,6 +139,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
             testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
 
             webClient.Verify(x => x.GetInventoryLevelsForItems(new[] { 1L, 2L }));
+        }
+
+        [Fact]
+        public void GetItemLocations_ReturnsEmpty_WhenNoInventoryLevelsAreFound()
+        {
+            var item1 = new ShopifyOrderItemEntity { InventoryItemID = 1 };
+            var item2 = new ShopifyOrderItemEntity { InventoryItemID = 2 };
+
+            var results = testObject.GetItemLocations(webClient.Object, 6, new[] { item1, item2 });
+
+            Assert.Empty(results);
         }
 
         [Fact]

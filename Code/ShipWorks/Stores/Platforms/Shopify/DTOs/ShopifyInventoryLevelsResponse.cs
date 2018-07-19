@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -14,6 +15,6 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
         /// Available locations
         /// </summary>
         [JsonProperty("inventory_levels")]
-        public IEnumerable<ShopifyInventoryLevel> InventoryLevels { get; set; }
+        public IEnumerable<ShopifyInventoryLevel> InventoryLevels { get; set; } = Enumerable.Empty<ShopifyInventoryLevel>();
     }
 }

@@ -28,7 +28,18 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Get the primary location id for a store
         /// </summary>
         public long GetPrimaryLocationID(IShopifyStoreEntity store, IShopifyWebClient webClient) =>
-            primaryLocations.GetOrAdd(store.StoreID, x => webClient.GetShop().Shop.PrimaryLocationID);
+            primaryLocations.GetOrAdd(store.StoreID, _ => GetPrimaryLocationForStore(webClient));
+
+        private static long GetPrimaryLocationForStore(IShopifyWebClient webClient)
+        {
+            var shopResult = webClient.GetShop();
+            if (shopResult.Shop == null)
+            {
+                throw new ShopifyException("Could not get primary location for the Shopify store");
+            }
+
+            return shopResult.Shop.PrimaryLocationID;
+        }
 
         /// <summary>
         /// Get items grouped by the location id that should be used for them
@@ -44,9 +55,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return Enumerable.Empty<(long, IEnumerable<IShopifyOrderItemEntity>)>();
             }
 
-            var groupedLocations = webClient
-                .GetInventoryLevelsForItems(inventoryItems.Select(x => x.inventoryItemID))
-                .InventoryLevels
+            var inventoryLevels = webClient.GetInventoryLevelsForItems(inventoryItems.Select(x => x.inventoryItemID)).InventoryLevels;
+            if (inventoryLevels.None())
+            {
+                return Enumerable.Empty<(long, IEnumerable<IShopifyOrderItemEntity>)>();
+            }
+
+            var groupedLocations = inventoryLevels
                 .GroupBy(inventoryLevel => inventoryLevel.LocationID)
                 .Select(level => AssociateItemsWithLocation(level, inventoryItems))
                 .OrderByDescending(x => x.items.Count())
