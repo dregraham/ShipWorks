@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
@@ -36,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public IEnumerable<(long locationID, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, long shopifyOrderID, IEnumerable<IShopifyOrderItemEntity> items)
         {
-            var order = new Lazy<ShopifyOrder>(() => webClient.GetOrder(shopifyOrderID));
             var inventoryItems = items.Where(x => x.InventoryItemID.HasValue)
                 .Select(x => (item: x, inventoryItemID: x.InventoryItemID.Value))
                 .ToList();
