@@ -566,7 +566,10 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\EnableableIndex.cs" />
     <Compile Include="Actions\Tasks\Common\IManageDisabledIndexesRepo.cs" />
+    <Compile Include="Actions\Tasks\Common\IMissingIndexResolver.cs" />
+    <Compile Include="Actions\Tasks\Common\IndexColumn.cs" />
     <Compile Include="Actions\Tasks\Common\ManageDisabledIndexesRepo.cs" />
     <Compile Include="Actions\Tasks\Common\ManageIndexStateTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">
@@ -577,6 +580,8 @@
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
     <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
     <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTask.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndexResolver.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
