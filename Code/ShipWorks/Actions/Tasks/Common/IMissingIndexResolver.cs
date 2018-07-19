@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.TypedViewClasses;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -11,6 +10,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Get a list of indexes to enable
         /// </summary>
-        IEnumerable<DisabledIndex> GetIndexesToEnable(ShipWorksMissingIndexRequestsTypedView missingIndexes, ShipWorksDisabledDefaultIndexTypedView availableIndexes);
+        IEnumerable<DisabledIndex> GetIndexesToEnable(IEnumerable<MissingIndex> missingIndexes, IEnumerable<DisabledIndex> disabledIndexes);
     }
 }
