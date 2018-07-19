@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ShipWorks.Data.Model.TypedViewClasses;
 
@@ -12,44 +13,53 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Constructor
         /// </summary>
-        public DisabledIndex(IGrouping<int, ShipWorksDisabledDefaultIndexRow> indexRows)
+        public DisabledIndex(IEnumerable<ShipWorksDisabledDefaultIndexRow> indexRows) :
+            this(
+                indexRows.FirstOrDefault().IndexName,
+                indexRows.FirstOrDefault().TableName,
+                indexRows.FirstOrDefault().EnableIndex,
+                indexRows.Select(x => new IndexColumn(x.ColumnName, x.IsIncluded)))
         {
-            TableName = indexRows.First().TableName;
-            IndexName = indexRows.First().IndexName;
-            EnableIndexSql = indexRows.First().EnableIndex;
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DisabledIndex(string tableName, string indexName, string enableIndexSql)
+        public DisabledIndex(string name, string table, string enableIndexSql, IEnumerable<IndexColumn> columns)
         {
+            Name = name;
+            Table = table;
             EnableIndexSql = enableIndexSql;
-            TableName = tableName;
-            IndexName = indexName;
+            Columns = columns.ToImmutableList();
         }
 
         /// <summary>
-        /// Table name
+        /// Name of the index
         /// </summary>
-        public string TableName { get; }
+        public string Name { get; }
 
         /// <summary>
-        /// Index name
+        /// Table to which this index applies
         /// </summary>
-        public string IndexName { get; }
+        public string Table { get; }
 
         /// <summary>
-        /// SQL to enable the index
+        /// Sql statement that will enable this index
         /// </summary>
         public string EnableIndexSql { get; }
 
         /// <summary>
-        /// Populate a list of DisabledIndex from a view
+        /// List of columns in this index, in the correct order
+        /// </summary>
+        public IEnumerable<IndexColumn> Columns { get; }
+
+        /// <summary>
+        /// Get a list of disabled indexes from a typed view of index columns
         /// </summary>
         public static IEnumerable<DisabledIndex> FromView(ShipWorksDisabledDefaultIndexTypedView availableIndexes) =>
             availableIndexes
-                .GroupBy(x => x.IndexID)
+                .GroupBy(x => x.IndexName)
                 .Select(x => new DisabledIndex(x))
                 .ToList();
     }
