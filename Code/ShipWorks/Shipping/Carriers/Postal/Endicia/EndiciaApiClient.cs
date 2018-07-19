@@ -1163,9 +1163,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Check for errors
                     if (response.Status != 0)
                     {
-                        if (response.Status == 12503 || response.Status == 12104 ||
-                            response.Status == 100002 && response.ErrorMessage.Contains("not enough money in the account to produce the indicium") ||
-                            response.Status == -1 && response.ErrorMessage.Contains("insufficient funds"))
+                        if ((response.Status == 12503 || response.Status == 12104) ||
+                            (response.Status == 100002 && response.ErrorMessage.Contains("not enough money in the account to produce the indicium")) ||
+                            (response.Status == -1 && response.ErrorMessage.Contains("insufficient funds")))
 
                         {
                             throw new EndiciaInsufficientFundsException(account, response.Status, response.ErrorMessage);
