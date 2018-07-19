@@ -31,6 +31,11 @@ rxversion="8.1">
 		id="502b53db-69d0-47d4-be79-b64f07a47f2f"
 		name="SQLModuleVariable">
 		</var>
+		<var
+		id="1683a4b9-e643-4597-af88-1b1ea0cc88cb"
+		name="Environ">
+			Production
+		</var>
 	</variables>
 	<recorditems>
 		<mouseitem
@@ -29594,19 +29599,23 @@ q4QAAAAASUVORK5CYII=
 				</path>
 			</info>
 		</mouseitem>
-		<keysequenceitem
-		KeySequence="bbenterprise3@fake.com"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupDatabase"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="EnterUserEmail"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="bdabda07-c302-4131-aebf-48f62c827a74">
+		varname="">
 			<comment>
 				Entering credentials
 			</comment>
 			<bindings>
 			</bindings>
-		</keysequenceitem>
+			<arguments
+			id="9809ccc5-c02e-43a0-ac8f-3880c38307b2">
+			</arguments>
+		</userrecorditem>
 		<keysequenceitem
 		KeySequence="{Tab}"
 		duration="100ms"
@@ -29619,19 +29628,23 @@ q4QAAAAASUVORK5CYII=
 			<bindings>
 			</bindings>
 		</keysequenceitem>
-		<keysequenceitem
-		KeySequence="password1"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupDatabase"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="EnterUserPassword"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="8a143c63-1092-4393-95f5-427303adc32a">
+		varname="">
 			<comment>
 				Enterin credentials
 			</comment>
 			<bindings>
 			</bindings>
-		</keysequenceitem>
+			<arguments
+			id="4a60071d-3043-4273-ab47-99ad76575637">
+			</arguments>
+		</userrecorditem>
 		<keysequenceitem
 		KeySequence="{Tab}{Space}"
 		duration="100ms"

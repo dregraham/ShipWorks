@@ -86,5 +86,35 @@ namespace SmokeTest
         		                           Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
         	}
         }
+
+        public void EnterUserEmail()
+        {
+        	if(Environ == "Production")
+        	{       	    	
+            Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'demoshipworks@gmail.com'.");
+            Keyboard.Press("demoshipworks@gmail.com");
+        	}
+        	else
+        	{
+        	Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'bbenterprise3@fake.com'.");
+            Keyboard.Press("bbenterprise3@fake.com");
+        	}
+        }
+        
+        public void EnterUserPassword()
+        {
+        	
+        	if(Environ == "Production")
+        	{       	    	
+            Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'shipworks7458'.");
+            Keyboard.Press("shipworks7458");
+        	}
+        	else
+        	{
+            Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'password1'.");
+            Keyboard.Press("password1");
+        	}
+
+        }
     }
 }       
