@@ -117,5 +117,20 @@ namespace SmokeTest
         	}
 
         }
+
+        public void ChooseDatabaseBackup()
+        {   
+        	if(Environ == "Production")
+        	{       	    	
+            Report.Log(ReportLevel.Info, "Keyboard", "Key in text\r\nKey sequence 'Empty.swb'.");
+            Keyboard.Press("Empty2.swb");
+        	}
+        	else
+        	{
+            Report.Log(ReportLevel.Info, "Keyboard", "Key in text\r\nKey sequence 'Empty.swb'.");
+            Keyboard.Press("Empty.swb");
+        	}
+
+        }
     }
 }       
