@@ -66,7 +66,7 @@ namespace SmokeTest
         public void InstallChromium(string dir)
         {
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			using(Ionic.Zip.ZipFile EmptyDatabase = Ionic.Zip.ZipFile.Read("renderer_63_x64.zip"))
+			using(Ionic.Zip.ZipFile EmptyDatabase = Ionic.Zip.ZipFile.Read("\\\\intfs01\\Development\\Testing\\Chromium\\renderer_63_x64.zip"))
         	{
         		EmptyDatabase.ExtractAll(dir + "\\x64\\");
         	}

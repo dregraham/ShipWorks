@@ -1,15 +1,6 @@
 ﻿<Properties>
-  <Array name="active">
-    <Element value="SmokeTest.rxtst" />
-  </Array>
   <Array name="bookmarks" />
-  <Array name="files">
-    <Element value="SetupCarrierTestServers.UserCode.cs" />
-    <Element value="SetupDatabase.UserCode.cs" />
-    <Element value="SmokeTest.rxtst" />
-    <Element value="SetupDatabase.rxrec" />
-    <Element value="SetupCarrierTestServers.cs" />
-  </Array>
+  <Array name="files" />
   <Properties name="projectSavedData">
     <Properties name="customTool">
       <runOnBuild value="False" />

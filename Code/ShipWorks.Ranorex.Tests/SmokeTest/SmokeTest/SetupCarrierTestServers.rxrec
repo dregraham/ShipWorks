@@ -29,20 +29,22 @@ rxversion="8.1">
 	<variables>
 	</variables>
 	<recorditems>
-		<runapprecorditem
+		<userrecorditem
+		classname="SetupCarrierTestServers"
 		enabled="True"
-		maximized="False"
-		optional="False">
+		isexternaltestmethod="False"
+		methodname="RunTestServerCMD"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
 			<comment>
 			</comment>
 			<bindings>
 			</bindings>
-			<filename>
-				TestServers.cmd
-			</filename>
-			<args>
-			</args>
-		</runapprecorditem>
+			<arguments
+			id="eeb73e74-6af9-4af7-bfc7-0e6e2a889bd0">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"

@@ -79,8 +79,9 @@ namespace SmokeTest
 
         public void UnzipDatabase()
         {
+        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			using(Ionic.Zip.ZipFile EmptyDatabase = Ionic.Zip.ZipFile.Read("Empty.zip"))
+        	using(Ionic.Zip.ZipFile EmptyDatabase = Ionic.Zip.ZipFile.Read(smokeTestPath + @"\ZipFiles\Empty.zip"))
         	{
         		EmptyDatabase.ExtractAll(userPath + "\\Desktop\\",
         		                           Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
