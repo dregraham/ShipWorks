@@ -236,6 +236,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 Convert.ToDouble(product.Weight) :
                 Convert.ToDouble(product.Weight.ConvertFromKilogramsToPounds());
 
+            itemToSave.Length = product.Length;
+            itemToSave.Width = product.Width;
+            itemToSave.Height = product.Height;
             itemToSave.Location = product.WarehouseLocation;
             itemToSave.Classification = product.Classification;
             itemToSave.UnitCost = product.Cost;
