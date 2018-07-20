@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -205,6 +208,38 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
             return new ShopifyStoreSettingsControl();
+        }
+
+        /// <summary>
+        /// Create dashboard message for updating token if necessary
+        /// </summary>
+        public override IEnumerable<DashboardStoreItem> CreateDashboardMessages()
+        {
+            ShopifyStoreEntity store = (ShopifyStoreEntity) Store;
+
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store), TypedParameter.From<IProgressReporter>(null));
+                    var locations = webClient.GetLocations();
+                    var levels = webClient.GetInventoryLevelsForLocations(locations.Locations.Select(x => x.ID));
+                }
+            }
+            catch (ShopifyAuthorizationException)
+            {
+                return new DashboardStoreItem[]
+                {
+                    new ShopifyAuthorizationDashboardItem(store)
+                };
+
+            }
+            catch (Exception)
+            {
+                // Since we're just checking token validity, we don't want any other errors causing problems
+            }
+
+            return null;
         }
     }
 }

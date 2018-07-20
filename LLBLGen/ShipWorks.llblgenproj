@@ -2624,6 +2624,7 @@
       </EntityDefinition>
       <EntityDefinition Name="ShopifyOrderItem" ObjectID="489184b5-24ae-4989-8224-2ad7f8b17b02" InheritanceType="2">
         <Fields>
+          <Field Name="InventoryItemID" Type="long" IsOptional="true" Precision="19" FieldIndex="2" />
           <Field Name="ShopifyOrderItemID" Type="long" FieldIndex="0" />
           <Field Name="ShopifyProductID" Type="long" FieldIndex="1" />
         </Fields>
@@ -4287,7 +4288,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-11T21:03:50.0079799Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-12T17:54:56.4552334Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8157,6 +8158,7 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShopifyOrderItemID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="ShopifyProductID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="InventoryItemID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopifyOrderSearch">
@@ -12841,6 +12843,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShopifyOrderItem" TargetName="ShipWorksLocal:dbo:ShopifyOrderItem">
           <FieldMappings>
+            <FieldMapping FieldName="InventoryItemID" TargetFieldName="InventoryItemID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="ShopifyOrderItemID" TargetFieldName="ShopifyOrderItemID" />
             <FieldMapping FieldName="ShopifyProductID" TargetFieldName="ShopifyProductID" />

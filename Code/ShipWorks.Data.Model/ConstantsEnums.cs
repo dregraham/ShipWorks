@@ -10016,6 +10016,8 @@ namespace ShipWorks.Data.Model
 		ShopifyOrderItemID,
 		///<summary>ShopifyProductID. </summary>
 		ShopifyProductID,
+		///<summary>InventoryItemID. </summary>
+		InventoryItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}

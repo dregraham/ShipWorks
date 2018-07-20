@@ -484,6 +484,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.2.sql" />

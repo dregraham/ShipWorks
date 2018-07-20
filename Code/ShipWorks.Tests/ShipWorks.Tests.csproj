@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props')" />
-  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" />
+  <Import Project="..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.props')" />
+  <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -183,17 +183,16 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\xunit.abstractions.2.0.2\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.3.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.assert.2.4.0\lib\netstandard1.1\xunit.assert.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.3.1\lib\netstandard1.1\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.core.2.4.0\lib\net452\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.3.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    <Reference Include="xunit.execution.desktop, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.execution.2.4.0\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -572,6 +571,7 @@
     <Compile Include="SqlUtilityFunctionsTest.cs" />
     <Compile Include="Stores\Content\Combine\OrderCombineValidatorTest.cs" />
     <Compile Include="Stores\Content\SplitOrder\SplitOrderValidatorTest.cs" />
+    <Compile Include="Stores\Content\OrderManagerTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsWebClientSettingsTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderItemEntityTest.cs" />
@@ -619,6 +619,16 @@
     <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelsResponseTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImageTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariantTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrderTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyEndpointsTest.cs" />
     <Compile Include="Stores\Sears\SearsUtilityTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionWebClientTest.cs" />
@@ -812,6 +822,12 @@
     <None Include="Shipping\AdjustedCountryCodeData_Usps.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyShopTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyOrderTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariantTest.FullObject.json" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImageTest.FullObject.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
@@ -827,21 +843,21 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.targets'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
-  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" />
-  <Import Project="..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets')" />
+  <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" />
+  <Import Project="..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.targets" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.4.0\build\net452\xunit.runner.msbuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

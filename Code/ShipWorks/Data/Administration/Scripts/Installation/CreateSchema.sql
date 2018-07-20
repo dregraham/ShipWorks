@@ -3678,7 +3678,8 @@ CREATE TABLE [dbo].[ShopifyOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [ShopifyOrderItemID] [bigint] NOT NULL,
-[ShopifyProductID] [bigint] NOT NULL
+[ShopifyProductID] [bigint] NOT NULL,
+[InventoryItemID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyOrderItem] on [dbo].[ShopifyOrderItem]'

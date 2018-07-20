@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Reflection;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
@@ -9,17 +9,17 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class GrouponCustomer
     {
-  
-    //    "customer": {
-    //        "city": "CHICAGO",
-    //        "state": "IL",
-    //        "name": "Joshua Ulanski",
-    //        "zip": "60655",
-    //        "country": "USA",
-    //        "address1": "10326 S SPAULDING AVE",
-    //        "address2": "",
-    //        "phone": ""
-    //    }
+
+        //    "customer": {
+        //        "city": "CHICAGO",
+        //        "state": "IL",
+        //        "name": "Joshua Ulanski",
+        //        "zip": "60655",
+        //        "country": "USA",
+        //        "address1": "10326 S SPAULDING AVE",
+        //        "address2": "",
+        //        "phone": ""
+        //    }
 
         [JsonProperty("city")]
         public string City { get; set; }

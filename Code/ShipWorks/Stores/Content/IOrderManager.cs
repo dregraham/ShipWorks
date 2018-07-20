@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Content
 {
@@ -79,5 +80,10 @@ namespace ShipWorks.Stores.Content
         /// Load the specified orders using the given prefetch path
         /// </summary>
         IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath);
+
+        /// <summary>
+        /// Get items from an order
+        /// </summary>
+        IEnumerable<IOrderItemEntity> GetItems(IOrderEntity order);
     }
 }

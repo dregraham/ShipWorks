@@ -759,6 +759,7 @@
     <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDownloader.cs" />
     <Compile Include="Platforms\Shopify\ShopifyFraudDownloader.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyLocationService.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressIsFBACondition.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressIsPrimeCondition.cs" />
