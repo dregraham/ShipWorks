@@ -4228,6 +4228,30 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":YahooStore" />
     </InheritanceHierarchies>
   </EntityModel>
+  <TypedViewDefinitions>
+    <TypedViewDefinition Name="ShipWorksDisabledDefaultIndexes" ObjectID="41d28651-fc59-4406-9101-e33c0e6147cd">
+      <Fields>
+        <Field Name="ColumnName" Type="string" IsOptional="true" MaxLength="128" FieldIndex="2" />
+        <Field Name="EnableIndex" Type="string" IsOptional="true" MaxLength="825" FieldIndex="3" />
+        <Field Name="IndexColumnId" Type="int" Precision="10" FieldIndex="5" />
+        <Field Name="IndexID" Type="int" Precision="10" FieldIndex="4" />
+        <Field Name="IndexName" Type="string" IsOptional="true" MaxLength="128" FieldIndex="1" />
+        <Field Name="IsIncluded" Type="bool" IsOptional="true" FieldIndex="6" />
+        <Field Name="TableName" Type="string" MaxLength="128" FieldIndex="0" />
+      </Fields>
+    </TypedViewDefinition>
+    <TypedViewDefinition Name="ShipWorksMissingIndexRequests" ObjectID="79426fc8-f066-4033-8614-a82e48162340">
+      <Fields>
+        <Field Name="ColumnID" Type="int" Precision="10" FieldIndex="4" />
+        <Field Name="ColumnName" Type="string" IsOptional="true" MaxLength="4000" FieldIndex="5" />
+        <Field Name="ColumnUsage" Type="string" IsOptional="true" MaxLength="4000" FieldIndex="6" />
+        <Field Name="GroupHandle" Type="int" Precision="10" FieldIndex="3" />
+        <Field Name="IndexAdvantage" Type="double" IsOptional="true" Precision="38" FieldIndex="2" />
+        <Field Name="IndexHandle" Type="int" Precision="10" FieldIndex="0" />
+        <Field Name="TableName" Type="string" IsOptional="true" MaxLength="128" FieldIndex="1" />
+      </Fields>
+    </TypedViewDefinition>
+  </TypedViewDefinitions>
   <SPCallDefinitions>
     <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9">
       <Parameters>
@@ -4263,7 +4287,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-18T13:47:38.3601111Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-11T21:03:50.0079799Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9156,6 +9180,30 @@
                   </Fields>
                 </Table>
               </Tables>
+              <Views>
+                <View Name="ShipWorksDisabledDefaultIndexes">
+                  <Fields>
+                    <Field Name="TableName" Ordinal="1" DbType="12" Length="128" />
+                    <Field Name="IndexName" Ordinal="2" IsOptional="true" DbType="12" Length="128" />
+                    <Field Name="ColumnName" Ordinal="3" IsOptional="true" DbType="12" Length="128" />
+                    <Field Name="EnableIndex" Ordinal="4" IsOptional="true" DbType="12" Length="825" />
+                    <Field Name="IndexID" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="IndexColumnId" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="IsIncluded" Ordinal="7" IsOptional="true" DbType="2" />
+                  </Fields>
+                </View>
+                <View Name="ShipWorksMissingIndexRequests">
+                  <Fields>
+                    <Field Name="IndexHandle" Ordinal="1" DbType="8" Precision="10" />
+                    <Field Name="TableName" Ordinal="2" IsOptional="true" DbType="12" Length="128" />
+                    <Field Name="IndexAdvantage" Ordinal="3" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="GroupHandle" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ColumnID" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="ColumnName" Ordinal="6" IsOptional="true" DbType="12" Length="4000" />
+                    <Field Name="ColumnUsage" Ordinal="7" IsOptional="true" DbType="12" Length="4000" />
+                  </Fields>
+                </View>
+              </Views>
               <StoredProcedures>
                 <StoredProcedure Name="CalculateInitialFilterCounts">
                   <Parameters>
@@ -13621,7 +13669,30 @@
           </FieldMappings>
         </EntityMapping>
       </EntityMappings>
-      <TypedViewMappings />
+      <TypedViewMappings>
+        <TypedViewMapping TypedViewName=":ShipWorksDisabledDefaultIndexes" TargetName="ShipWorksLocal:dbo:ShipWorksDisabledDefaultIndexes">
+          <FieldMappings>
+            <FieldMapping FieldName="ColumnName" TargetFieldName="ColumnName" />
+            <FieldMapping FieldName="EnableIndex" TargetFieldName="EnableIndex" />
+            <FieldMapping FieldName="IndexColumnId" TargetFieldName="IndexColumnId" />
+            <FieldMapping FieldName="IndexID" TargetFieldName="IndexID" />
+            <FieldMapping FieldName="IndexName" TargetFieldName="IndexName" />
+            <FieldMapping FieldName="IsIncluded" TargetFieldName="IsIncluded" />
+            <FieldMapping FieldName="TableName" TargetFieldName="TableName" />
+          </FieldMappings>
+        </TypedViewMapping>
+        <TypedViewMapping TypedViewName=":ShipWorksMissingIndexRequests" TargetName="ShipWorksLocal:dbo:ShipWorksMissingIndexRequests">
+          <FieldMappings>
+            <FieldMapping FieldName="ColumnID" TargetFieldName="ColumnID" />
+            <FieldMapping FieldName="ColumnName" TargetFieldName="ColumnName" />
+            <FieldMapping FieldName="ColumnUsage" TargetFieldName="ColumnUsage" />
+            <FieldMapping FieldName="GroupHandle" TargetFieldName="GroupHandle" />
+            <FieldMapping FieldName="IndexAdvantage" TargetFieldName="IndexAdvantage" />
+            <FieldMapping FieldName="IndexHandle" TargetFieldName="IndexHandle" />
+            <FieldMapping FieldName="TableName" TargetFieldName="TableName" />
+          </FieldMappings>
+        </TypedViewMapping>
+      </TypedViewMappings>
       <SPCallMappings>
         <SPCallMapping SPCallName=":CalculateInitialFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateInitialFilterCounts">
           <FieldMappings>

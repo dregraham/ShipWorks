@@ -407,7 +407,7 @@ namespace ShipWorks.Stores
 
             if (ex is ORMQueryExecutionException)
             {
-                if (ex.Message.Contains("IX_Store_StoreName"))
+                if (ex.Message.Contains("IX_SWDefault_Store_StoreName"))
                 {
                     throw new DuplicateNameException("The store name already exists.", ex);
                 }

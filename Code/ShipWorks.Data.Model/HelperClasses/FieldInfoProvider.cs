@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (226 + 0));
+			this.InitClass( (226 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -276,7 +276,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitYahooOrderSearchEntityInfos();
 			InitYahooProductEntityInfos();
 			InitYahooStoreEntityInfos();
-
+			InitShipWorksDisabledDefaultIndexesTypedViewInfos();
+			InitShipWorksMissingIndexRequestsTypedViewInfos();
 			this.ConstructElementFieldStructures(InheritanceInfoProviderSingleton.GetInstance());
 		}
 
@@ -3849,7 +3850,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("YahooStoreEntity", "AccessToken", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.AccessToken, 200, 0, 0);
 			this.AddElementFieldInfo("YahooStoreEntity", "BackupOrderNumber", typeof(Nullable<System.Int64>), false, false, false, true,  (int)YahooStoreFieldIndex.BackupOrderNumber, 0, 0, 19);
 		}
-		
+
+		/// <summary>Inits View's FieldInfo objects</summary>
+		private void InitShipWorksDisabledDefaultIndexesTypedViewInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipWorksDisabledDefaultIndexesFieldIndex), "ShipWorksDisabledDefaultIndexesTypedView");
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "TableName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.TableName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "ColumnName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.ColumnName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "EnableIndex", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.EnableIndex, 825, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexID", typeof(System.Int32), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexID, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexColumnId", typeof(System.Int32), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexColumnId, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IsIncluded", typeof(Nullable<System.Boolean>), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IsIncluded, 0, 0, 0);
+		}
+		/// <summary>Inits View's FieldInfo objects</summary>
+		private void InitShipWorksMissingIndexRequestsTypedViewInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipWorksMissingIndexRequestsFieldIndex), "ShipWorksMissingIndexRequestsTypedView");
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "IndexHandle", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.IndexHandle, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "TableName", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.TableName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "IndexAdvantage", typeof(Nullable<System.Double>), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.IndexAdvantage, 0, 0, 38);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "GroupHandle", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.GroupHandle, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnID", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnID, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnName", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnName, 4000, 0, 0);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnUsage", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnUsage, 4000, 0, 0);
+		}		
 	}
 }
 

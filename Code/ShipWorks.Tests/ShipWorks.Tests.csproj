@@ -224,10 +224,13 @@
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\DisabledIndexTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\AutoArchiveTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndexResolverTest.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndexTest.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTaskTests.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\TaskTestUtility.cs" />

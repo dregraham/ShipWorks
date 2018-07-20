@@ -184,7 +184,7 @@ namespace ShipWorks.Templates.Media
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.Message.Contains("IX_LabelSheet_Name"))
+                if (ex.Message.Contains("IX_SWDefault_LabelSheet_Name"))
                 {
                     MessageHelper.ShowMessage(this, "A custom label sheet with the selected name already exists.");
                 }
