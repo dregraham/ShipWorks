@@ -1,6 +1,5 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
 def WORKSPACE = 'c:/jenkins-builds/SR_' + BUILD_FOLDER
-//def REVISION = new File('//INTFS01/Development/CruiseControl/Configuration/Versioning/ShipWorks/NextRevision.txt').text.trim()
 def TIMESTAMP = new Date().format("YYYY-MM-dd-HHmmss")
 
 pipeline {
@@ -10,6 +9,12 @@ pipeline {
 			customWorkspace "${WORKSPACE}"
 		}
 	}
+	parameters {
+        choice(
+            name: 'Environment',
+            choices:"Staging\nProduction",
+            description: "Run against which Stamps environment?")
+    }
 	options {
     	disableConcurrentBuilds()
   	}
@@ -63,6 +68,7 @@ pipeline {
 							SmokeTest.exe ^
 								/runconfig:Complete ^
 								/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+								/param:Environment=${params.Environment} ^
 								/param:SQLServ=localhost\\ranorex ^
 								/reportlevel:Debug ^
 								/zr ^
