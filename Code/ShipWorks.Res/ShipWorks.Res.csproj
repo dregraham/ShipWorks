@@ -483,8 +483,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.26\5.26.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Support\OlaHallengren\MaintenanceSolution.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Support\OlaHallengren\MaintenanceSolution.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_Blitz.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzCache.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzFirst.sql" />
@@ -492,8 +494,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzQueryStore.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzWho.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\Indexes\ShipWorksIndexUsageView.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzQueryStore.sql.xml" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_Blitz.sql.xml" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\BrentOzar\sp_BlitzCache.sql.xml" />
