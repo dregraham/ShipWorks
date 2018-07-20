@@ -42,6 +42,7 @@ namespace SmokeTest
         public SetupDatabase()
         {
             SQLModuleVariable = "";
+            Environ = "Production";
         }
 
         /// <summary>
@@ -64,6 +65,18 @@ namespace SmokeTest
         {
             get { return _SQLModuleVariable; }
             set { _SQLModuleVariable = value; }
+        }
+
+        string _Environ;
+
+        /// <summary>
+        /// Gets or sets the value of variable Environ.
+        /// </summary>
+        [TestVariable("1683a4b9-e643-4597-af88-1b1ea0cc88cb")]
+        public string Environ
+        {
+            get { return _Environ; }
+            set { _Environ = value; }
         }
 
 #endregion
@@ -260,8 +273,7 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             // Key in text
-            Report.Log(ReportLevel.Info, "Keyboard", "Key in text\r\nKey sequence 'Empty.swb'.", new RecordItemIndex(41));
-            Keyboard.Press("Empty.swb");
+            ChooseDatabaseBackup();
             Delay.Milliseconds(0);
             
             // Press Enter on the keyboard > Window closes
@@ -320,8 +332,7 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             // Entering credentials
-            Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'bbenterprise3@fake.com'.", new RecordItemIndex(55));
-            Keyboard.Press("bbenterprise3@fake.com");
+            EnterUserEmail();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(56));
@@ -329,8 +340,7 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             // Enterin credentials
-            Report.Log(ReportLevel.Info, "Keyboard", "Enterin credentials\r\nKey sequence 'password1'.", new RecordItemIndex(57));
-            Keyboard.Press("password1");
+            EnterUserPassword();
             Delay.Milliseconds(0);
             
             // Next

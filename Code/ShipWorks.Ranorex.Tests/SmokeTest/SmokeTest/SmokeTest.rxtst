@@ -1057,6 +1057,12 @@ rxversion="8.1">
 					variableid="502b53db-69d0-47d4-be79-b64f07a47f2f"
 					variablename="SQLModuleVariable">
 					</var>
+					<var
+					dataname="Environment"
+					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
+					variableid="1683a4b9-e643-4597-af88-1b1ea0cc88cb"
+					variablename="Environ">
+					</var>
 				</databinding>
 			</testmodule>
 			<testmodule
@@ -1358,6 +1364,10 @@ rxversion="8.1">
 					<param
 					name="ShipWorksVersion"
 					value="">
+					</param>
+					<param
+					name="Environment"
+					value="Production">
 					</param>
 				</parameters>
 			</testcase>
