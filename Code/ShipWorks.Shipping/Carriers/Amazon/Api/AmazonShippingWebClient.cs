@@ -195,6 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddFromAddressInfo(request, requestDetails);
             AddPackageInfo(request, requestDetails);
             AddShippingServiceOptions(request, requestDetails);
+            AddLabelCustomizations(request, requestDetails);
         }
 
         /// <summary>
@@ -212,6 +213,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode",
                 requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
+
+            // Only request thermal if that is what was selected.  Otherwise, let Amazon figure it out (like we used to do)
+            if (requestDetails.ShippingServiceOptions.LabelFormat == "ZPL203")
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.LabelFormat", requestDetails.ShippingServiceOptions.LabelFormat);
+            }
+        }
+
+        /// <summary>
+        /// Add the label customizations to the request
+        /// </summary>
+        private static void AddLabelCustomizations(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // LabelCustomization
+            if (requestDetails.LabelCustomization?.CustomTextForLabel?.IsNullOrWhiteSpace() == false)
+            {
+                request.Variables.Add("ShipmentRequestDetails.LabelCustomization.CustomTextForLabel",
+                    requestDetails.LabelCustomization.CustomTextForLabel.ToLowerInvariant());
+            }
         }
 
         /// <summary>

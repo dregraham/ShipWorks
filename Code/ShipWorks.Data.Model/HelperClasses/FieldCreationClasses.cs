@@ -992,6 +992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingServiceID);}
 		}
+		/// <summary>Creates a new AmazonProfileEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Reference1);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>
@@ -1091,6 +1096,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new AmazonShipmentEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Reference1);}
+		}
+		/// <summary>Creates a new AmazonShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.RequestedLabelFormat);}
 		}
 	}
 
