@@ -13,4 +13,5 @@ CREATE VIEW ShipWorksDisabledDefaultIndexes WITH ENCRYPTION AS
 		AND ic.object_id = c.object_id
 	    AND siu.IsPrimaryKey = 0 
 	    AND siu.IsEnabled = 0
+		AND siu.IndexName LIKE 'IX_SWDefault%'
 GO
