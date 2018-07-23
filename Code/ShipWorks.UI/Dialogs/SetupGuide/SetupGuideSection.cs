@@ -24,7 +24,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         /// <summary>
         /// Get Printing section
         /// </summary>
-        [Description("Get {romtomg")]
+        [Description("Get Printing")]
         GetPrinting,
 
         /// <summary>
