@@ -135,7 +135,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         }
 
         /// <summary>
-        /// Start using ShipWorks
+        /// Get Printing
         /// </summary>
         private void GetPrintingAction()
         {
