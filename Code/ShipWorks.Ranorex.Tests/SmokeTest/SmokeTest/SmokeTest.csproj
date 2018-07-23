@@ -1715,6 +1715,9 @@
     <Folder Include="BatchFile">
       <id>4f8412e7-d3c3-4d21-9b6b-287625c43966</id>
     </Folder>
+    <Folder Include="ZipFiles">
+      <id>a74b6b2e-1791-470e-bd2f-6b76ed961f84</id>
+    </Folder>
   </ItemGroup>
   <Import Project="$(RanorexTargetsPath)" Condition="Exists('$(RanorexTargetsPath)')" />
 </Project>

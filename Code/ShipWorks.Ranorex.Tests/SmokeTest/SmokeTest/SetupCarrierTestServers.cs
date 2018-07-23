@@ -79,8 +79,7 @@ namespace SmokeTest
 
             Init();
 
-            Report.Log(ReportLevel.Info, "Application", "Run application 'TestServers.cmd' with arguments '' in normal mode.", new RecordItemIndex(0));
-            Host.Local.RunApplication("TestServers.cmd", "", "", false);
+            RunTestServerCMD();
             Delay.Milliseconds(0);
             
             // Mouse Move to avoid click inconsistency
