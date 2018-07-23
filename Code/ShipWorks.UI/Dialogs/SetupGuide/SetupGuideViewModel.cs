@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -47,6 +48,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
             DeselectShippingSetup = new RelayCommand(DeselectShippingSetupAction);
             ShowShippingSetupWizard = new RelayCommand<ShipmentTypeCode>(OpenShippingSetupWizardAction);
             UseShipWorks = new RelayCommand(UseShipWorksAction);
+            GetPrinting = new RelayCommand(GetPrintingAction);
 
             SelectedSection = SetupGuideSection.AddStore;
         }
@@ -74,6 +76,12 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         /// </summary>
         [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand DeselectShippingSetup { get; }
+
+        /// <summary>
+        /// Get Printing
+        /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public ICommand GetPrinting { get; }
 
         /// <summary>
         /// Start using ShipWorks
@@ -124,6 +132,15 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         private void DeselectShippingSetupAction()
         {
             SelectedSection = SetupGuideSection.AddStore;
+        }
+
+        /// <summary>
+        /// Start using ShipWorks
+        /// </summary>
+        private void GetPrintingAction()
+        {
+            SelectedSection = SetupGuideSection.GetPrinting;
+            Process.Start("http://support.shipworks.com/helpdesk/attachments/4050484348");
         }
 
         /// <summary>

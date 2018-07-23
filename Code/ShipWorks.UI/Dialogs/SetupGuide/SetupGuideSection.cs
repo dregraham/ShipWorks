@@ -22,6 +22,12 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         AddShippingAccount,
 
         /// <summary>
+        /// Get Printing section
+        /// </summary>
+        [Description("Get {romtomg")]
+        GetPrinting,
+
+        /// <summary>
         /// Use ShipWorks section
         /// </summary>
         [Description("Use ShipWorks")]
