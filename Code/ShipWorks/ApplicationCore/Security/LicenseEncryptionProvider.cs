@@ -34,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Security
                 string decryptedResult = base.Decrypt(encryptedText);
                 return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
             }
-            catch (EncryptionException ex) when (ex.InnerException.InnerException is DatabaseIdentifierException)
+            catch (EncryptionException ex) when (ex.InnerException?.InnerException is DatabaseIdentifierException)
             {
                 // refresh isCustomerLicenseSupported as we may have restored the database to a version
                 // that does not support customer licenses yet, the database is in a state where it needs
