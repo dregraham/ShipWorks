@@ -361,7 +361,7 @@ namespace ShipWorks.Email.Accounts
         private SmtpProbeResult ProbeSmtpSecureImplicit(string host, string username, string password)
         {
             log.InfoFormat("Probing SMTP implicit secure ({0}:{1})", host, username);
-            return ProbeSmtp(host, username, password, 465, SmtpSecurity.Implicit);
+            return ProbeSmtp(host, username, password, 465, SslMode.Implicit);
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace ShipWorks.Email.Accounts
         private SmtpProbeResult ProbeSmtpSecureExplicit(string host, string username, string password)
         {
             log.InfoFormat("Probing SMTP explicit secure ({0}:{1})", host, username);
-            return ProbeSmtp(host, username, password, 587, SmtpSecurity.Explicit);
+            return ProbeSmtp(host, username, password, 587, SslMode.Explicit);
         }
 
         /// <summary>
@@ -379,26 +379,18 @@ namespace ShipWorks.Email.Accounts
         private SmtpProbeResult ProbeSmtpUnsecure(string host, string username, string password)
         {
             log.InfoFormat("Probing SMTP unsecure ({0}:{1})", host, username);
-            return ProbeSmtp(host, username, password, 25, SmtpSecurity.Unsecure);
+            return ProbeSmtp(host, username, password, 25, SslMode.None);
         }
 
         /// <summary>
         /// SMTP settings probe generic function
         /// </summary>
-        private SmtpProbeResult ProbeSmtp(string host, string username, string password, int port, SmtpSecurity smtpSecurity)
+        private SmtpProbeResult ProbeSmtp(string host, string username, string password, int port, SslMode sslMode)
         {
-            TlsParameters tlsParameters = null;
-
-            if (smtpSecurity != SmtpSecurity.Unsecure)
-            {
-                tlsParameters = new TlsParameters();
-                tlsParameters.CertificateVerifier = CertificateVerifier.AcceptAll;
-            }
-
             using (Smtp smtp = new Smtp())
             {
-                smtp.Connect(host, port, tlsParameters, smtpSecurity);
-                Debug.Assert(smtp.IsSecured == (smtpSecurity != SmtpSecurity.Unsecure));
+                smtp.Connect(host, port, sslMode);
+                Debug.Assert(smtp.IsSecured == (sslMode != SslMode.None));
 
                 // Now try to login
                 smtp.Login(username, password);
@@ -414,7 +406,7 @@ namespace ShipWorks.Email.Accounts
                 Username = username,
                 Password = password,
                 Port = port,
-                SmtpSecurity = smtpSecurity
+                SslMode = sslMode
             };
         }
 
@@ -450,18 +442,10 @@ namespace ShipWorks.Email.Accounts
         /// </summary>
         private static IncomingProbeResult ProbeImap(string host, string username, string password, int port, EmailIncomingSecurityType incomingSecurity)
         {
-            TlsParameters tlsParameters = null;
-
-            if (incomingSecurity != EmailIncomingSecurityType.Unsecure)
-            {
-                tlsParameters = new TlsParameters();
-                tlsParameters.CertificateVerifier = CertificateVerifier.AcceptAll;
-            }
-
             using (Imap imap = new Imap())
             {
                 // Casting to ImapSecurity is OK - we use the same raw values
-                imap.Connect(host, port, tlsParameters, (ImapSecurity) incomingSecurity);
+                imap.Connect(host, port, (SslMode) incomingSecurity);
                 Debug.Assert(imap.IsSecured == (incomingSecurity != EmailIncomingSecurityType.Unsecure));
 
                 // Now try to login
@@ -515,18 +499,10 @@ namespace ShipWorks.Email.Accounts
         /// </summary>
         private static IncomingProbeResult ProbePop(string host, string username, string password, int port, EmailIncomingSecurityType incomingSecurity)
         {
-            TlsParameters tlsParameters = null;
-
-            if (incomingSecurity != EmailIncomingSecurityType.Unsecure)
-            {
-                tlsParameters = new TlsParameters();
-                tlsParameters.CertificateVerifier = CertificateVerifier.AcceptAll;
-            }
-
             using (Pop3 pop3 = new Pop3())
             {
                 // Casting to Pop3Security is OK - we use the same raw values
-                pop3.Connect(host, port, tlsParameters, (Pop3Security) incomingSecurity);
+                pop3.Connect(host, port, (SslMode) incomingSecurity);
                 Debug.Assert(pop3.IsSecured == (incomingSecurity != EmailIncomingSecurityType.Unsecure));
 
                 // Now try to login

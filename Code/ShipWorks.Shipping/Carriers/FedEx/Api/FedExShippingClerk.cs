@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity)
+        public TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -116,10 +116,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 int packageCount = FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service) ? 1 : shipmentEntity.FedEx.Packages.Count;
 
-                return Enumerable.Range(0, packageCount)
+                TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricResult = new TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>>("");
+                IEnumerable<IFedExShipResponse> responses = Enumerable.Empty<IFedExShipResponse>();
+
+                GenericResult<IEnumerable<IFedExShipResponse>> shipResponses = Enumerable.Range(0, packageCount)
                     .Aggregate(
-                        Enumerable.Empty<IFedExShipResponse>(),
-                        (list, i) => request.Submit(shipmentEntity, i).Map(list.Append));
+                        responses,
+                        (list, i) =>
+                        {
+                            var telemetricResponse = request.Submit(shipmentEntity, i);
+                            telemetricResponse.CopyTo(telemetricResult);
+                            return telemetricResponse.Value.Map(list.Append);
+                        });
+
+                telemetricResult.SetValue(shipResponses);
+            
+                return telemetricResult;
             }
             catch (Exception ex)
             {

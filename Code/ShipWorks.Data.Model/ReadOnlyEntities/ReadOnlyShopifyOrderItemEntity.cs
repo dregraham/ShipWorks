@@ -38,6 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ShopifyOrderItemID = source.ShopifyOrderItemID;
             ShopifyProductID = source.ShopifyProductID;
+            InventoryItemID = source.InventoryItemID;
             
             
             
@@ -58,6 +59,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ShopifyProductID { get; }
+        /// <summary> The InventoryItemID property of the Entity ShopifyOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopifyOrderItem"."InventoryItemID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> InventoryItemID { get; }
         
         
         

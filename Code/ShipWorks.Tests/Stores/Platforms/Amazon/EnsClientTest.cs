@@ -1,9 +1,8 @@
-﻿using Interapptive.Shared.Net;
-using ShipWorks.Tests.Shared;
-using System;
-using System.DirectoryServices.ActiveDirectory;
+﻿using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Net;
+using Interapptive.Shared.Net;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.Amazon
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             Domain domain = Domain.GetCurrentDomain();
 
-            Console.WriteLine(domain.Name);
+            Assert.NotNull(domain);
         }
 
         /// <summary>

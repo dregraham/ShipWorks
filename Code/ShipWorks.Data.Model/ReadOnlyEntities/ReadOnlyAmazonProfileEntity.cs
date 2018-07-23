@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShippingProfileID = source.ShippingProfileID;
             DeliveryExperience = source.DeliveryExperience;
             ShippingServiceID = source.ShippingServiceID;
+            Reference1 = source.Reference1;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ShippingServiceID { get; }
+        /// <summary> The Reference1 property of the Entity AmazonProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonProfile"."Reference1"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String Reference1 { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

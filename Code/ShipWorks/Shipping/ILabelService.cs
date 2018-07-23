@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create a label
         /// </summary>
-        Task<IDownloadedLabelData> Create(ShipmentEntity shipment);
+        Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment);
 
         /// <summary>
         /// Voids the shipment

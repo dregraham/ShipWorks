@@ -23,11 +23,11 @@ namespace ShipWorks.Email.Accounts
 
             this.emailAccount = emailAccount;
 
-            SmtpSecurity security = (SmtpSecurity) emailAccount.OutgoingSecurityType;
+            SslMode security = (SslMode) emailAccount.OutgoingSecurityType;
 
             port.Text = emailAccount.OutgoingPort.ToString();
-            secureRequired.Checked = (security != SmtpSecurity.Unsecure);
-            securityMethod.SelectedIndex = (security != SmtpSecurity.Implicit) ? 0 : 1;
+            secureRequired.Checked = (security != SslMode.None);
+            securityMethod.SelectedIndex = (security != SslMode.Implicit) ? 0 : 1;
 
             EmailSmtpCredentialSource credentialSource = (EmailSmtpCredentialSource) emailAccount.OutgoingCredentialSource;
 
@@ -154,11 +154,11 @@ namespace ShipWorks.Email.Accounts
 
             if (secureRequired.Checked)
             {
-                emailAccount.OutgoingSecurityType = (int) ((securityMethod.SelectedIndex == 0) ? SmtpSecurity.Explicit : SmtpSecurity.Implicit);
+                emailAccount.OutgoingSecurityType = (int) ((securityMethod.SelectedIndex == 0) ? SslMode.Explicit : SslMode.Implicit);
             }
             else
             {
-                emailAccount.OutgoingSecurityType = (int) SmtpSecurity.Unsecure;
+                emailAccount.OutgoingSecurityType = (int) SslMode.None;
             }
 
             // Save the credential source

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -59,5 +60,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Was the get label phase successful
         /// </summary>
         bool Success { get; }
+        
+        /// <summary>
+        /// Telemetry properties related to this result
+        /// </summary>
+        TelemetricResult<IDownloadedLabelData> Telemetry { get; }
     }
 }

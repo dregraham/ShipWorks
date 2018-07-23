@@ -1,6 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -28,7 +29,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 DimsHeight = 7,
                 DimsLength = 8,
                 DimsWidth = 9,
-                DeliveryExperience = 1
+                DeliveryExperience = 1,
+                Reference1 = "01234567890123456789",
+                RequestedLabelFormat = (int) ThermalLanguage.None
             }
         };
 
@@ -47,6 +50,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
             Assert.Null(testObject.Insurance);
+        }
+
+        [Fact]
+        public void CreateReturns_ShipmentRequestDetailsWith_Reference()
+        {
+            ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
+
+            Assert.Equal(shipmentEntity.Amazon.Reference1.Truncate(25), testObject.LabelCustomization.CustomTextForLabel);
+        }
+
+        [Theory]
+        [InlineData(ThermalLanguage.None, null)]
+        [InlineData(ThermalLanguage.ZPL, "ZPL203")]
+        public void CreateReturns_ShipmentRequestDetailsWith_RequestedLabelFormat(ThermalLanguage thermalLanguage, string expectedValue)
+        {
+            shipmentEntity.Amazon.RequestedLabelFormat = (int) thermalLanguage;
+            ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
+
+            Assert.Equal(expectedValue, testObject.ShippingServiceOptions.LabelFormat);
         }
 
         [Fact]

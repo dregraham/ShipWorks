@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Shopify;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -216,10 +217,8 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
             orders.AddRange(ParseOrderResponse("ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify.Resources.GetOrdersPage4.txt"));
         }
 
-        private JToken GetProduct()
-        {
-            return JToken.Parse(ResourceUtility.ReadString("ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify.Resources.GetProduct.txt"));
-        }
+        private ShopifyProduct GetProduct() =>
+            JToken.Parse(ResourceUtility.ReadString("ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify.Resources.GetProduct.txt")).ToObject<ShopifyProduct>();
 
         private List<JToken> GetOrdersPageThatCrashes()
         {

@@ -6,6 +6,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
@@ -26,7 +27,7 @@ namespace ShipWorks.Actions
         string identifier;
         ActionStepPostponementActivity postponementActivity = ActionStepPostponementActivity.None;
 
-        UnitOfWork2 commitWork = new UnitOfWork2();
+        UnitOfWork2 commitWork = new ManagedConnectionUnitOfWork2();
 
         /// <summary>
         /// Constructor

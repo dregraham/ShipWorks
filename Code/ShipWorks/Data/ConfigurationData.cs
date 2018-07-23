@@ -180,7 +180,8 @@ namespace ShipWorks.Data
             new[]
             {
                 Functional.Using(SqlSession.Current.OpenConnection(),
-                connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString()))
+                    connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString())),
+                new KeyValuePair<string, string>("Auditing.Enabled", FetchReadOnly().AuditEnabled ? "True" : "False")
             };
     }
 }

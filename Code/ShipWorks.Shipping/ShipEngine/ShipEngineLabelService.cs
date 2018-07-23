@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the label
         /// </summary>
-        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -53,8 +53,16 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                Label label = await shipEngineWebClient.PurchaseLabel(request, ApiLogSource).ConfigureAwait(false);
-                return createDownloadedLabelData(shipment, label);
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                Label label = null;
+                await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel, 
+                                                       async () => label = await shipEngineWebClient
+                                                                         .PurchaseLabel(request, ApiLogSource)
+                                                                         .ConfigureAwait(false));
+                
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
+
+                return telemetricResult;
             }
             catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
             {

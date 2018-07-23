@@ -78,7 +78,11 @@ namespace ShipWorks.Stores.Orders.Archive
                     }
 
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(result => AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value))
+                        .Do(async result =>
+                        {
+                            AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value);
+                            await orderArchiveDataAccess.Audit(isManualArchive).ConfigureAwait(false);
+                        })
                         .Map(result => (IResult) result);
                 });
         }
@@ -128,7 +132,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Recover(ex =>
                             {
                                 exception = ex;
-                                return TerminateNonStartedTasks(ex, new[] {prepareProgress, archiveProgress, syncProgress, filterProgress});
+                                return TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress });
                             })
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);

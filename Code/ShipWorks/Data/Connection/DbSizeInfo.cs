@@ -82,7 +82,7 @@ namespace ShipWorks.Data.Connection
         WHERE   TableName LIKE '%Order%'
 	        and TableName not like '%Filter%' and TableName not like '%OrderSearch%'
 
-        SELECT @AvgOrderSizeInMb = @OrderTableSizeInMb * 1.0 / @TotalOrderCount
+        SELECT @AvgOrderSizeInMb = ISNULL(@OrderTableSizeInMb * 1.0 / NULLIF(@TotalOrderCount, 0), 0)
 
         SELECT  @TotalDbSizeInMb = sum(CONVERT(float,left(reserved,len([reserved])-3))) / 1024.0
         FROM    #DbSizeInfo 
@@ -108,6 +108,7 @@ namespace ShipWorks.Data.Connection
 
 		SELECT @TotalFiltersCount = COUNT(f.FilterID)
 		FROM [Filter] f
+		WHERE f.FilterID > 0		
 
         SELECT @OrderTableSizeInMb = @TotalOrderCount * 1.0 * @AvgOrderSizeInMb
 

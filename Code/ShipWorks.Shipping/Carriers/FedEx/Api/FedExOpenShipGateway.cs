@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Communicates with the FedEx API to process a shipment.
         /// </summary>
-        public override GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest)
+        public override TelemetricResult<GenericResult<ProcessShipmentReply>> Ship(ProcessShipmentRequest nativeShipmentRequest)
         {
             using (ShipService service = new FedExShipServiceWrapper(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
             {

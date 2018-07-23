@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -13,6 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// </summary>
     public class AmazonShipmentRequestDetailsFactory : IAmazonShipmentRequestDetailsFactory
     {
+        private const int MaxReferenceLength = 25;
+
         /// <summary>
         /// Creates the ShipmentRequestDetails.
         /// </summary>
@@ -51,10 +56,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     {
                         Amount = 0,
                         CurrencyCode = "USD"
-                    }
+                    },
+                    LabelFormat = shipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : null
+                },
+                LabelCustomization = new LabelCustomization
+                {
+                    CustomTextForLabel = ProcessReferenceNumber(shipment.Amazon.Reference1, shipment.ShipmentID),
                 },
                 Weight = shipment.TotalWeight
             };
+        }
+
+        /// <summary>
+        /// Process for tokens and trim to allowable length
+        /// </summary>
+        public static string ProcessReferenceNumber(string reference, long shipmentID)
+        {
+            return Regex.Replace(TemplateTokenProcessor.ProcessTokens(reference, shipmentID).Truncate(MaxReferenceLength), @"[^0-9a-zA-Z]{0,25}", string.Empty);
         }
 
         /// <summary>

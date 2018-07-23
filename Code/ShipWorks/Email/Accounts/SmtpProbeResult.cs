@@ -15,6 +15,6 @@ namespace ShipWorks.Email.Accounts
         public string Username { get; set; }
         public string Password { get; set; }
         public int Port { get; set; }
-        public SmtpSecurity SmtpSecurity { get; set; }
+        public SslMode SslMode { get; set; }
     }
 }

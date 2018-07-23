@@ -11,6 +11,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
         /// <summary>
         /// Submit the request
         /// </summary>
-        GenericResult<IFedExShipResponse> Submit(ShipmentEntity shipment, int sequenceNumber);
+        TelemetricResult<GenericResult<IFedExShipResponse>> Submit(ShipmentEntity shipment, int sequenceNumber);
     }
 }

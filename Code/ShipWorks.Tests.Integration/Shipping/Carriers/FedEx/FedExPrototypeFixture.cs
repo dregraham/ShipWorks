@@ -271,7 +271,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                             LogManager.GetLogger
                         );
 
-                        var result = shippingClerk.Ship(shipment)
+                        var result = shippingClerk.Ship(shipment).Value
                             .Map(r => r.ForEach(x => x.Process()));
 
                         if (result.Failure)

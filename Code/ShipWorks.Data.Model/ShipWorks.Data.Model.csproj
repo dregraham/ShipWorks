@@ -240,6 +240,7 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include="Custom\ICarrierAccount.cs" />
+    <Compile Include="Custom\ManagedConnectionUnitOfWork2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
@@ -3010,6 +3011,18 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\OverstockStoreRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexesTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestsTypedView.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

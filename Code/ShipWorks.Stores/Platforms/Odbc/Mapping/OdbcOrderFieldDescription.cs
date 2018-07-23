@@ -127,6 +127,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         ItemISBN,
 
         [Description("Attribute Name")]
-        ItemAttributeName
+        ItemAttributeName,
+        
+        [Description("Length")]
+        ItemLength,
+
+        [Description("Width")]
+        ItemWidth,
+
+        [Description("Height")]
+        ItemHeight
     }
 }

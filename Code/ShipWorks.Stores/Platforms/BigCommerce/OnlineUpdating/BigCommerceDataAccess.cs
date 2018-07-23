@@ -7,6 +7,7 @@ using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -134,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Commit a unit of work
         /// </summary>
-        public IUnitOfWorkCore GetUnitOfWork() => new UnitOfWork2();
+        public IUnitOfWorkCore GetUnitOfWork() => new ManagedConnectionUnitOfWork2();
 
         /// <summary>
         /// Get combined order details

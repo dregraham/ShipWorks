@@ -181,10 +181,13 @@ namespace ShipWorks.Data.Import.Xml
             item.ISBN = XPathUtility.Evaluate(xpath, "ISBN", "");
             item.Description = XPathUtility.Evaluate(xpath, "Description", "");
             item.LocalStatus = XPathUtility.Evaluate(xpath, "Status", "");
-            item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", (double) 0.0);
+            item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", 0.0);
             item.UnitPrice = XPathUtility.Evaluate(xpath, "UnitPrice", 0.0M);
             item.UnitCost = XPathUtility.Evaluate(xpath, "UnitCost", 0.0M);
-            item.Weight = XPathUtility.Evaluate(xpath, "Weight", (double) 0.0);
+            item.Weight = XPathUtility.Evaluate(xpath, "Weight", 0.0);
+            item.Length = XPathUtility.Evaluate(xpath, "Length", 0.0M); 
+            item.Width = XPathUtility.Evaluate(xpath, "Width", 0.0M); 
+            item.Height = XPathUtility.Evaluate(xpath, "Height", 0.0M); 
             item.Image = XPathUtility.Evaluate(xpath, "Image", "");
             item.Thumbnail = XPathUtility.Evaluate(xpath, "ThumbnailImage", item.Image);
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");

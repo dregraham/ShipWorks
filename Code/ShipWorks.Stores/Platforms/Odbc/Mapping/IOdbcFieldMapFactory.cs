@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the field map from the list of entries
         /// </summary>
-        OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries);
+        IOdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries);
 
         /// <summary>
         /// Create a FieldMap from a serialized json string

@@ -66,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((OnTracServiceType) ServiceType);
+
+        /// <summary>
         /// Are customs allowed?
         /// </summary>
         public override bool CustomsAllowed => false;

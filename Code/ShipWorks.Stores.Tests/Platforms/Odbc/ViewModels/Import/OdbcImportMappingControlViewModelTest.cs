@@ -15,7 +15,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 {
@@ -596,6 +598,90 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
 
                 Assert.False(testObject.ValidateRequiredMappingFields());
+            }
+        }
+
+        [Fact]
+        public void Save_SavesSerializedMap()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var fieldMap = mock.FromFactory<IOdbcFieldMapFactory>()
+                    .Mock(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()));
+                fieldMap.Setup(m => m.Serialize()).Returns("Serialized Map");
+                
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>();
+
+                var odbcStoreEntity = new OdbcStoreEntity();
+                testObject.Load(odbcStoreEntity);
+                testObject.Save(odbcStoreEntity);
+
+                mock.Mock<IMessageHelper>().Verify(h=>h.ShowError(AnyString), Times.Never);
+                Assert.Equal("Serialized Map", odbcStoreEntity.ImportMap);
+            }
+        }
+        
+        [Fact]
+        public void Save_SavesMapName()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var fieldMapFactory = mock.FromFactory<IOdbcFieldMapFactory>();
+                var savedFieldMap = fieldMapFactory.Mock(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()));
+                var loadedFieldMap = fieldMapFactory.Mock(f => f.CreateFieldMapFrom(AnyString));
+                loadedFieldMap.SetupGet(f => f.Name).Returns("MapName");
+                
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>();
+
+                var odbcStoreEntity = new OdbcStoreEntity();
+                testObject.Load(odbcStoreEntity);
+                testObject.Save(odbcStoreEntity);
+
+                savedFieldMap.VerifySet(m => m.Name = "MapName");
+            }
+        }
+
+        [Theory]
+        [InlineData(true, OdbcImportOrderItemStrategy.SingleLine)]
+        [InlineData(false, OdbcImportOrderItemStrategy.MultiLine)]
+        public void Save_SavesImportOrderItemStrategy(bool isSingleLineOrder, OdbcImportOrderItemStrategy expectedStragety)
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var fieldMapFactory = mock.FromFactory<IOdbcFieldMapFactory>();
+                
+                var loadedFieldMap = fieldMapFactory.Mock(f => f.CreateFieldMapFrom(AnyString));
+                loadedFieldMap.SetupGet(f => f.Name).Returns("MapName");
+                
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>();
+
+                var odbcStoreEntity = new OdbcStoreEntity();
+                testObject.Load(odbcStoreEntity);
+                testObject.IsSingleLineOrder = isSingleLineOrder;
+                testObject.Save(odbcStoreEntity);
+
+                Assert.Equal((int) expectedStragety, odbcStoreEntity.ImportOrderItemStrategy);
+            }
+        }
+
+        [Fact]
+        public void Save_ShowsError_WhenFieldMapThrowsShipWorksOdbcException()
+        {
+            
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var fieldMapFactory = mock.FromFactory<IOdbcFieldMapFactory>();
+                var savedFieldMap = fieldMapFactory.Mock(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()));
+                
+                savedFieldMap.Setup(m => m.Serialize()).Throws(new ShipWorksOdbcException("error message"));
+                
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>();
+
+                var odbcStoreEntity = new OdbcStoreEntity();
+                testObject.Load(odbcStoreEntity);
+                testObject.Save(odbcStoreEntity);
+
+                mock.Mock<IMessageHelper>().Verify(m=>m.ShowError("error message"));
             }
         }
 

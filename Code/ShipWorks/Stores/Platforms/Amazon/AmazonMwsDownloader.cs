@@ -425,25 +425,30 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // There is only one image URL provided, so populate the both image properties with it
                     item.Thumbnail = XPathUtility.Evaluate(product, "amz:AttributeSets/details:ItemAttributes/details:SmallImage/details:URL", string.Empty);
                     item.Image = item.Thumbnail;
-
-                    // There are two ways to obtain the weight of the order item: from the package dimensions and from the
-                    // item dimensions. Our preferences is to use the weight of the package dimension, and if that is not
-                    // available, we'll fall back to the item's weight
-                    double weight = 0.0;
-                    string weightPath = "amz:AttributeSets/details:ItemAttributes/details:PackageDimensions/details:Weight";
-
-                    if (!double.TryParse(XPathUtility.Evaluate(product, weightPath, null), out weight))
-                    {
-                        // We didn't find the weight of the package of the item, so we'll try to extract the weight
-                        // of the item instead. If a value is not found for this, the weight will just be 0.0 - the
-                        // default value of weight
-                        weightPath = "amz:AttributeSets/details:ItemAttributes/details:ItemDimensions/details:Weight";
-                        double.TryParse(XPathUtility.Evaluate(product, weightPath, null), out weight);
-                    }
-
-                    item.Weight = weight;
+                   
+                    item.Weight = (double) GetDimensionValue(product, "Weight");
+                    item.Length = GetDimensionValue(product, "Length");
+                    item.Width = GetDimensionValue(product, "Width");
+                    item.Height = GetDimensionValue(product, "Height");
                 }
             }
+        }
+
+        /// <summary>
+        /// Attempts to get the package dimension with passed in name. If package dimension doesn't exist,
+        /// we try to get the item dimension. If no dimension exists, we return 0.
+        /// </summary>
+        private decimal GetDimensionValue(XPathNavigator product, string dimensionName)
+        {
+            string dimensionPath = $"amz:AttributeSets/details:ItemAttributes/details:PackageDimensions/details:{dimensionName}";
+
+            if (!decimal.TryParse(XPathUtility.Evaluate(product, dimensionPath, null), out decimal dimensionValue))
+            {
+                dimensionPath = $"amz:AttributeSets/details:ItemAttributes/details:ItemDimensions/details:{dimensionName}";
+                decimal.TryParse(XPathUtility.Evaluate(product, dimensionPath, null), out dimensionValue);
+            }
+
+            return dimensionValue;
         }
 
         /// <summary>

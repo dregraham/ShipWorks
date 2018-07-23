@@ -62,6 +62,12 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((AsendiaServiceType) ServiceType);
+        
+
+        /// <summary>
         /// Are customs allowed?
         /// </summary>
         public override bool CustomsAllowed => true;

@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the given UPS shipment
         /// </summary>
-        public static UpsLabelResponse ProcessShipment(ShipmentEntity shipment)
+        public static TelemetricResult<UpsLabelResponse> ProcessShipment(ShipmentEntity shipment)
         {
             XmlDocument confirmResponse = ProcessShipConfirm(shipment);
 
@@ -954,7 +954,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the accept phase of the ship request
         /// </summary>
-        private static UpsLabelResponse CallShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
+        private static TelemetricResult<UpsLabelResponse> CallShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
@@ -963,17 +963,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             string shipmentDigest = XPathUtility.Evaluate(shipConfirmNavigator, "//ShipmentDigest", "");
             xmlWriter.WriteElementString("ShipmentDigest", shipmentDigest);
 
-            XmlDocument acceptResponse = UpsWebClient.ProcessRequest(xmlWriter);
+            TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>("API.ResponseTimeInMilliseconds");
+            
+            XmlDocument acceptResponse = null;
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => acceptResponse = UpsWebClient.ProcessRequest(xmlWriter));
 
-            UpsLabelResponse upsLabelResponse = new UpsLabelResponse()
+            UpsLabelResponse upsLabelResponse = new UpsLabelResponse
             {
                 Shipment = shipment,
                 ShipConfirmNavigator = shipConfirmNavigator,
                 AcceptResponse = acceptResponse,
                 Account = account
             };
+            
+            telemetricResult.SetValue(upsLabelResponse);
 
-            return upsLabelResponse;
+            return telemetricResult;
         }
 
         /// <summary>

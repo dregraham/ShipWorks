@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
@@ -64,6 +65,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Service type selected
         /// </summary>
         public override int ServiceType { get; set; } = 0;
+
+        /// <summary>
+        /// Service LEVEL selected
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((ServiceLevelType) Shipment.BestRate.ServiceLevel);
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

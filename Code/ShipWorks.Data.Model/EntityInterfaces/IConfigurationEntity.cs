@@ -117,6 +117,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ArchivalSettingsXml { get; }
+        /// <summary> The AuditEnabled property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AuditEnabled"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean AuditEnabled { get; }
         
         
         

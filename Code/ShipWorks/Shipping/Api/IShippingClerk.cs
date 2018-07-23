@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// entity accordingly.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity);
+        TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> Ship(ShipmentEntity shipmentEntity);
 
         /// <summary>
         /// Void/Cancel/Delete a shipment

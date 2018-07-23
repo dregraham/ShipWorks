@@ -281,6 +281,21 @@
           <xs:documentation>The weight of a single one of these items.  This value is multiplied by Quantity when the total order weight is calculated.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="Length" type="xs:decimal" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The length of a single one of these items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Width" type="xs:decimal" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The width of a single one of these items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Height" type="xs:decimal" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The height of a single one of these items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="Amazon" type="AmazonItem" minOccurs="0">
         <xs:annotation>
           <xs:documentation>The Amazon information for this item.</xs:documentation>

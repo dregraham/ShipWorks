@@ -56,6 +56,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         [Fact]
         public void Submit_DelegatesToManipulators()
         {
+            var service = mock.FromFactory<IFedExServiceGatewayFactory>()
+                              .Mock(x => x.Create(It.IsAny<IShipmentEntity>(), It.IsAny<IFedExSettingsRepository>()));
+            
+            service.Setup(s => s.Ship(It.IsAny<ProcessShipmentRequest>()))
+                   .Returns(new TelemetricResult<GenericResult<ProcessShipmentReply>>("Foo"));
+            
             var testObject = mock.Create<FedExShipRequest>();
             testObject.Submit(shipmentEntity, 2);
 
@@ -70,6 +76,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             var service = mock.FromFactory<IFedExServiceGatewayFactory>()
                 .Mock(x => x.Create(It.IsAny<IShipmentEntity>(), It.IsAny<IFedExSettingsRepository>()));
 
+            service.Setup(s => s.Ship(It.IsAny<ProcessShipmentRequest>()))
+                   .Returns(new TelemetricResult<GenericResult<ProcessShipmentReply>>("Foo"));
+            
             var testObject = mock.Create<FedExShipRequest>();
             testObject.Submit(shipmentEntity, 0);
 
@@ -79,7 +88,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         [Fact]
         public void Submit_ReturnsResponseFromShipResult()
         {
-            var shipmentReply = new ProcessShipmentReply();
+            ProcessShipmentReply shipmentReply = new ProcessShipmentReply();
+            TelemetricResult<GenericResult<ProcessShipmentReply>> telemetricShipmentReply = new TelemetricResult<GenericResult<ProcessShipmentReply>>("API.ResponseTimeInMilliseconds");
+            telemetricShipmentReply.SetValue(shipmentReply);
+
             var response = mock.CreateMock<IFedExShipResponse>();
             response.Setup(x => x.ApplyManipulators(It.IsAny<ProcessShipmentRequest>()))
                 .Returns(GenericResult.FromSuccess(response.Object));
@@ -87,7 +99,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             mock.FromFactory<IFedExServiceGatewayFactory>()
                 .Mock(x => x.Create(It.IsAny<IShipmentEntity>(), It.IsAny<IFedExSettingsRepository>()))
                 .Setup(x => x.Ship(It.IsAny<ProcessShipmentRequest>()))
-                .Returns(shipmentReply);
+                .Returns(telemetricShipmentReply);
 
             var function = mock.MockRepository
                 .Create<Func<ShipmentEntity, ProcessShipmentReply, IFedExShipResponse>>();
@@ -98,7 +110,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             var testObject = mock.Create<FedExShipRequest>();
             var result = testObject.Submit(shipmentEntity, 0);
 
-            Assert.Equal(response.Object, result.Value);
+            Assert.Equal(response.Object, result.Value.Value);
         }
     }
 }

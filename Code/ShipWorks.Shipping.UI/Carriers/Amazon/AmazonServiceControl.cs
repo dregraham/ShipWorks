@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -50,10 +51,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         UpdateServiceTypes(new List<ShipmentEntity> { x.ShipmentAdapter.Shipment });
                     }
                 });
+
+            labelFormat.SelectedIndexChanged += OnLabelFormatSelectedIndexChanged;
         }
 
         /// <summary>
-        /// Initialize the comboboxes
+        /// Initialize the combo boxes
         /// </summary>
         protected override void Initialize()
         {
@@ -134,6 +137,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.Amazon));
+
+                    referenceTemplateToken.ApplyMultiText(shipment.Amazon.Reference1);
 
                     deliveryConfirmation.ApplyMultiValue((AmazonDeliveryExperienceType) shipment.Amazon.DeliveryExperience);
                 }
@@ -231,7 +236,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = v.ToString());
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
-
+                referenceTemplateToken.ReadMultiText(v => shipment.Amazon.Reference1 = v);
+                
                 AmazonShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment) as AmazonShipmentAdapter;
                 shipmentAdapter?.SelectServiceFromRate(RateControl.SelectedRate);
 
@@ -326,5 +332,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// One of the values that affects rates has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return format != ThermalLanguage.EPL;
+        }
+
+        /// <summary>
+        /// Label format selection changed
+        /// </summary>
+        private void OnLabelFormatSelectedIndexChanged(object sender, EventArgs e)
+        {
+            referenceTemplateToken.Enabled = !labelFormat.MultiValued && labelFormat.SelectedValue != null && (ThermalLanguage) labelFormat.SelectedValue == ThermalLanguage.ZPL;
+        }
     }
 }
