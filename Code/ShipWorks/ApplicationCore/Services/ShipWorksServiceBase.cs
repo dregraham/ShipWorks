@@ -9,6 +9,7 @@ using System.ServiceProcess;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -362,6 +363,13 @@ namespace ShipWorks.ApplicationCore.Services
                 catch (TypeInitializationException ex) when (ex.Message.Contains("SqlPerformanceCounters", StringComparison.InvariantCultureIgnoreCase))
                 {
                     log.Error("Connection to ShipWorks Database was lost.", ex);
+
+                    return hasChanged;
+                }
+                catch (EncryptionException ex)
+                {
+                    log.Error("Encryption exceptions can occur when the Database ID is out of sync with the customer key.  " +
+                              "The user should be re-activating, but we need to wait for that, so keep checking.", ex);
 
                     return hasChanged;
                 }
