@@ -992,6 +992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingServiceID);}
 		}
+		/// <summary>Creates a new AmazonProfileEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Reference1);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>
@@ -1091,6 +1096,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new AmazonShipmentEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Reference1);}
+		}
+		/// <summary>Creates a new AmazonShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.RequestedLabelFormat);}
 		}
 	}
 
@@ -23287,6 +23302,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.ShopifyProductID);}
 		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.InventoryItemID field instance</summary>
+		public static EntityField2 InventoryItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.InventoryItemID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopifyOrderSearchEntity</summary>
@@ -29205,4 +29225,95 @@ namespace ShipWorks.Data.Model.HelperClasses
 	}
 	
 
+	/// <summary>Field Creation Class for typedview ShipWorksDisabledDefaultIndexesTypedView</summary>
+	public partial class ShipWorksDisabledDefaultIndexesFields
+	{
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.TableName field instance</summary>
+		public static EntityField2 TableName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.TableName);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.IndexName field instance</summary>
+		public static EntityField2 IndexName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.IndexName);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.ColumnName field instance</summary>
+		public static EntityField2 ColumnName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.ColumnName);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.EnableIndex field instance</summary>
+		public static EntityField2 EnableIndex
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.EnableIndex);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.IndexID field instance</summary>
+		public static EntityField2 IndexID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.IndexID);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.IndexColumnId field instance</summary>
+		public static EntityField2 IndexColumnId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.IndexColumnId);}
+		}
+
+		/// <summary>Creates a new ShipWorksDisabledDefaultIndexesTypedView.IsIncluded field instance</summary>
+		public static EntityField2 IsIncluded
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksDisabledDefaultIndexesFieldIndex.IsIncluded);}
+		}
+	}
+
+	/// <summary>Field Creation Class for typedview ShipWorksMissingIndexRequestsTypedView</summary>
+	public partial class ShipWorksMissingIndexRequestsFields
+	{
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.IndexHandle field instance</summary>
+		public static EntityField2 IndexHandle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.IndexHandle);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.TableName field instance</summary>
+		public static EntityField2 TableName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.TableName);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.IndexAdvantage field instance</summary>
+		public static EntityField2 IndexAdvantage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.IndexAdvantage);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.GroupHandle field instance</summary>
+		public static EntityField2 GroupHandle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.GroupHandle);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.ColumnID field instance</summary>
+		public static EntityField2 ColumnID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.ColumnID);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.ColumnName field instance</summary>
+		public static EntityField2 ColumnName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.ColumnName);}
+		}
+
+		/// <summary>Creates a new ShipWorksMissingIndexRequestsTypedView.ColumnUsage field instance</summary>
+		public static EntityField2 ColumnUsage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipWorksMissingIndexRequestsFieldIndex.ColumnUsage);}
+		}
+	}
 }

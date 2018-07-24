@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
     /// <summary>
-    /// Class with api url definitions and helper methods/properties for populating urls
+    /// Class with API URL definitions and helper methods/properties for populating URLs
     /// </summary>
     public class ShopifyEndpoints
     {
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         // Order URL formats
         private const string ApiGetOrdersUrlFormat = "{0}orders.json";
+        private const string ApiGetOrderUrlFormat = "{0}orders/{1}.json";
         private const string ApiGetOrderCountUrlFormat = "{0}orders/count.json";
         private const string ViewOrderUrlFormat = "{0}orders/{1}";
 
@@ -26,11 +28,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
         // Shipment URL formats
         private const string ApiFulfillmentsUrlFormat = "{0}orders/{1}/fulfillments.json";
 
-        // Shop Url Format
+        // Shop URL Format
         private const string ShopUrlFormat = "{0}shop.json";
 
+        // InventoryLevel URL Format
+        private const string InventoryLevelForItemsUrlFormat = "{0}inventory_levels.json?inventory_item_ids={1}";
+        private const string InventoryLevelForLocationsUrlFormat = "{0}inventory_levels.json?location_ids={1}";
+        private const string LocationsUrlFormat = "{0}locations.json";
+
         // Scopes we need
-        private const string Scopes = "write_customers,write_orders,write_products,write_shipping";
+        private const string Scopes = "write_customers,write_orders,write_products,write_shipping,read_inventory";
 
         // The shop name for which to generate endpoints for
         string shopUrlName;
@@ -50,12 +57,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             this.shopUrlName = shopUrlName;
 
-            // See if we can make a valid uri out of it.  This will throw if it's not valid
+            // See if we can make a valid URI out of it.  This will throw if it's not valid
             Uri uri = new Uri(ApiBaseUrl);
         }
 
         /// <summary>
-        /// The base url for calling the Shopify API for a specific shop name
+        /// The base URL for calling the Shopify API for a specific shop name
         /// </summary>
         private string ApiBaseUrl
         {
@@ -66,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The url to get shop information
+        /// The URL to get shop information
         /// </summary>
         public string ShopUrl
         {
@@ -77,7 +84,25 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The url to which the user is sent for granting ShipWorks access
+        /// The URL to get item inventory level info
+        /// </summary>
+        public string InventoryLevelForItemsUrl(IEnumerable<long> itemInventoryIDs) =>
+            string.Format(InventoryLevelForItemsUrlFormat, ApiBaseUrl, String.Join(",", itemInventoryIDs));
+
+        /// <summary>
+        /// The URL to get location inventory level info
+        /// </summary>
+        public string InventoryLevelForLocationsUrl(IEnumerable<long> locationIDs) =>
+            string.Format(InventoryLevelForLocationsUrlFormat, ApiBaseUrl, String.Join(",", locationIDs));
+
+        /// <summary>
+        /// Url of the Locations api
+        /// </summary>
+        public string LocationsUrl =>
+            string.Format(LocationsUrlFormat, ApiBaseUrl);
+
+        /// <summary>
+        /// The URL to which the user is sent for granting ShipWorks access
         /// </summary>
         public Uri GetApiAuthorizeUrl()
         {
@@ -86,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The url used to ask Shopify for an AccessToken
+        /// The URL used to ask Shopify for an AccessToken
         /// </summary>
         public string GetApiAccessTokenUrl(string requestToken)
         {
@@ -102,7 +127,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The base url used to request orders
+        /// The base URL used to request orders
+        /// </summary>
+        public string ApiGetOrderUrl(long shopifyOrderID) =>
+            string.Format(ApiGetOrderUrlFormat, ApiBaseUrl, shopifyOrderID);
+
+        /// <summary>
+        /// The base URL used to request orders
         /// </summary>
         public string ApiGetOrdersUrl
         {
@@ -113,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The base url used to request an order count
+        /// The base URL used to request an order count
         /// </summary>
         public string ApiGetOrderCountUrl
         {
@@ -124,17 +155,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The url used for displaying an order in a browser.  Used for linking from the grid/etc...
+        /// The URL used for displaying an order in a browser.  Used for linking from the grid/etc...
         /// </summary>
         /// <param name="shopifyOrderId"></param>
-        /// <returns>Url to shopify order</returns>
+        /// <returns>URL to shopify order</returns>
         public string ViewOrderUrl(long shopifyOrderId)
         {
             return string.Format(ViewOrderUrlFormat, ApiBaseUrl, shopifyOrderId);
         }
 
         /// <summary>
-        /// The url used for displaying a product in a browser.  Used for linking from the grid/etc...
+        /// The URL used for displaying a product in a browser.  Used for linking from the grid/etc...
         /// </summary>
         /// <param name="shopifyProductId"></param>
         /// <returns></returns>
@@ -144,28 +175,28 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// The url to retrieve all shopify fraud risks for a shopify order
+        /// The URL to retrieve all shopify fraud risks for a shopify order
         /// </summary>
         /// <param name="shopifyOrderId">The shopify order id</param>
-        /// <returns>The url to retrieve all shopify fraud risks for a shopify order</returns>
+        /// <returns>The URL to retrieve all shopify fraud risks for a shopify order</returns>
         public string ApiFraudUrl(long shopifyOrderId) =>
             string.Format(ApiFraudUrlFormat, ApiBaseUrl, shopifyOrderId);
 
         /// <summary>
-        /// The url to retrieve all shopify fulfillments for a shopify order
+        /// The URL to retrieve all shopify fulfillments for a shopify order
         /// </summary>
         /// <param name="shopifyOrderId">The shopify order id</param>
-        /// <returns>The url to retrieve all shopify fulfillments for a shopify order</returns>
+        /// <returns>The URL to retrieve all shopify fulfillments for a shopify order</returns>
         public string ApiFulfillmentsUrl(long shopifyOrderId)
         {
             return string.Format(ApiFulfillmentsUrlFormat, ApiBaseUrl, shopifyOrderId);
         }
 
         /// <summary>
-        /// The url to a shopify Product Id.  Used to get product information such as image urls.
+        /// The URL to a shopify Product Id.  Used to get product information such as image urls.
         /// </summary>
         /// <param name="shopifyProductId">The shopify product Id</param>
-        /// <returns>The url to a shopify Product</returns>
+        /// <returns>The URL to a shopify Product</returns>
         public string ApiProductUrl(long shopifyProductId)
         {
             return string.Format(ApiGetProductFormat, ApiBaseUrl, shopifyProductId);

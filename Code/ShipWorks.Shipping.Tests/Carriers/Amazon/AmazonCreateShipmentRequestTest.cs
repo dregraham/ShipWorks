@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
@@ -27,7 +28,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             mock.Mock<IAmazonShipmentRequestDetailsFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentEntity>(), It.IsAny<IAmazonOrder>()))
-                .Returns(new ShipmentRequestDetails { ShippingServiceOptions = new ShippingServiceOptions { DeclaredValue = new DeclaredValue() } });
+                .Returns(new ShipmentRequestDetails { ShippingServiceOptions = new ShippingServiceOptions
+                {
+                    DeclaredValue = new DeclaredValue(),
+                    LabelFormat = defaultShipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : null
+                } });
         }
 
         [Theory]
@@ -84,6 +89,33 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 100),
+                    defaultShipment.Amazon));
+        }
+
+        [Theory]
+        [InlineData(ThermalLanguage.None, null)]
+        [InlineData(ThermalLanguage.ZPL, "ZPL203")]
+        public void Create_SetsLabelFormatCorrectly(ThermalLanguage thermalLanguage, string expectedLabelFormat)
+        {
+            defaultShipment.Amazon.RequestedLabelFormat = (int) thermalLanguage;
+
+            mock.Mock<IAmazonShipmentRequestDetailsFactory>()
+                .Setup(x => x.Create(It.IsAny<ShipmentEntity>(), It.IsAny<IAmazonOrder>()))
+                .Returns(new ShipmentRequestDetails
+                {
+                    ShippingServiceOptions = new ShippingServiceOptions
+                    {
+                        DeclaredValue = new DeclaredValue(),
+                        LabelFormat = defaultShipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : null
+                    }
+                });
+
+            var testObject = mock.Create<AmazonCreateShipmentRequest>();
+            testObject.Submit(defaultShipment);
+
+            mock.Mock<IAmazonShippingWebClient>()
+                .Verify(x => x.CreateShipment(
+                    It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.LabelFormat == expectedLabelFormat),
                     defaultShipment.Amazon));
         }
 

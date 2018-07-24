@@ -14,6 +14,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -408,7 +409,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
             catch (JsonException)
             {
-                // the shipping details dont exist
+                // the shipping details don't exist
                 return string.Empty;
             }
         }

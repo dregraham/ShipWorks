@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(226);
+			this.InitClass(228);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -273,6 +273,8 @@ namespace ShipWorks.Data.Model
 			InitYahooOrderSearchEntityMappings();
 			InitYahooProductEntityMappings();
 			InitYahooStoreEntityMappings();
+			InitShipWorksDisabledDefaultIndexesTypedViewMappings();
+			InitShipWorksMissingIndexRequestsTypedViewMappings();
 		}
 
 		/// <summary>Inits ActionEntity's mappings</summary>
@@ -422,10 +424,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonProfileEntity's mappings</summary>
 		private void InitAmazonProfileEntityMappings()
 		{
-			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 3, 0);
+			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 4, 0);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>
@@ -440,7 +443,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
 		private void InitAmazonShipmentEntityMappings()
 		{
-			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 15, 0);
+			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 17, 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "CarrierName", "CarrierName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -456,6 +459,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
@@ -3133,10 +3138,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyOrderItemEntity's mappings</summary>
 		private void InitShopifyOrderItemEntityMappings()
 		{
-			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 3, 0);
+			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 4, 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyOrderItemID", "ShopifyOrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyProductID", "ShopifyProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("ShopifyOrderItemEntity", "InventoryItemID", "InventoryItemID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits ShopifyOrderSearchEntity's mappings</summary>
@@ -4065,6 +4071,34 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("YahooStoreEntity", "AccessToken", "AccessToken", false, "VarChar", 200, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
+		}
+
+
+		/// <summary>Inits ShipWorksDisabledDefaultIndexesView's mappings</summary>
+		private void InitShipWorksDisabledDefaultIndexesTypedViewMappings()
+		{
+			this.AddElementMapping("ShipWorksDisabledDefaultIndexesTypedView", @"ShipWorksLocal", @"dbo", "ShipWorksDisabledDefaultIndexes", 7);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "TableName", "TableName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 0);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexName", "IndexName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 1);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "ColumnName", "ColumnName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "EnableIndex", "EnableIndex", false, "NVarChar", 825, 0, 0, false, string.Empty, null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexID", "IndexID", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexColumnId", "IndexColumnId", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 5);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IsIncluded", "IsIncluded", false, "Bit", 0, 0, 0, false, string.Empty, null, typeof(System.Boolean), 6);
+		}
+
+
+		/// <summary>Inits ShipWorksMissingIndexRequestsView's mappings</summary>
+		private void InitShipWorksMissingIndexRequestsTypedViewMappings()
+		{
+			this.AddElementMapping("ShipWorksMissingIndexRequestsTypedView", @"ShipWorksLocal", @"dbo", "ShipWorksMissingIndexRequests", 7);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "IndexHandle", "IndexHandle", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "TableName", "TableName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 1);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "IndexAdvantage", "IndexAdvantage", false, "Float", 0, 38, 0, false, string.Empty, null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "GroupHandle", "GroupHandle", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnID", "ColumnID", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnName", "ColumnName", false, "NVarChar", 4000, 0, 0, false, string.Empty, null, typeof(System.String), 5);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnUsage", "ColumnUsage", false, "NVarChar", 4000, 0, 0, false, string.Empty, null, typeof(System.String), 6);
 		}
 
 	}

@@ -39,7 +39,7 @@ namespace ShipWorks.Stores
 
         static readonly ILog log = LogManager.GetLogger(typeof(StoreManager));
 
-        static TableSynchronizer<StoreEntity> storeSynchronizer;
+        static TableSynchronizer<StoreEntity> storeSynchronizer = new TableSynchronizer<StoreEntity>();
 
         // These could easily be obtained each time from the store list, but since they can be called so often (due to being used by
         // grid column header drawing), i am caching it.
@@ -407,7 +407,7 @@ namespace ShipWorks.Stores
 
             if (ex is ORMQueryExecutionException)
             {
-                if (ex.Message.Contains("IX_Store_StoreName"))
+                if (ex.Message.Contains("IX_SWDefault_Store_StoreName"))
                 {
                     throw new DuplicateNameException("The store name already exists.", ex);
                 }

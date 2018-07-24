@@ -329,6 +329,24 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
+        /// Performs the specified action for each item in source
+        /// </summary>
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            MethodConditions.EnsureArgumentIsNotNull(action, nameof(action));
+            int index = 0;
+
+            foreach (T item in source)
+            {
+                action(item, index);
+                index += 1;
+            }
+
+            return source;
+        }
+
+        /// <summary>
         /// Convert an int to a comparison result
         /// </summary>
         private static ComparisonResult ConvertIntToComparisonResult(int result)

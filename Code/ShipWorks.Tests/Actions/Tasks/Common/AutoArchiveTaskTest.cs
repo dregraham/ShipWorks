@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -219,9 +220,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void CreateEditor_ThrowsInvalidOperationException()
+        public void CreateEditor_ReturnsActionTaskEditor()
         {
-            Assert.Throws<InvalidOperationException>(() => testObject.CreateEditor());
+            var editor = testObject.CreateEditor();
+            Assert.Equal(typeof(ActionTaskEditor), editor.GetType());
         }
     }
 }

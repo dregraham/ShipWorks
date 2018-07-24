@@ -3013,6 +3013,18 @@
     <Compile Include=".\RelationClasses\OverstockStoreRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexesTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestsTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

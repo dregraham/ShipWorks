@@ -273,8 +273,7 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             // Key in text
-            Report.Log(ReportLevel.Info, "Keyboard", "Key in text\r\nKey sequence 'Empty.swb'.", new RecordItemIndex(41));
-            Keyboard.Press("Empty.swb");
+            ChooseDatabaseBackup();
             Delay.Milliseconds(0);
             
             // Press Enter on the keyboard > Window closes

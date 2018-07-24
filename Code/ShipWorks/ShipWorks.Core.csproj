@@ -566,6 +566,12 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\DisabledIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\IManageDisabledIndexesRepo.cs" />
+    <Compile Include="Actions\Tasks\Common\IMissingIndexResolver.cs" />
+    <Compile Include="Actions\Tasks\Common\IndexColumn.cs" />
+    <Compile Include="Actions\Tasks\Common\ManageDisabledIndexesRepo.cs" />
+    <Compile Include="Actions\Tasks\Common\ManageIndexStateTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -574,6 +580,8 @@
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
     <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
     <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTask.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndexResolver.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
@@ -2069,11 +2077,30 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyError.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyErrorResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentLineItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevel.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelsResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLineItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLocation.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLocationsResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrder.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProduct.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImage.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariant.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShop.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopResponse.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyUnprocessableEntityException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillment.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequst.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationDashboardItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />

@@ -35,9 +35,9 @@ PRINT N'Creating primary key [PK_AmazonServiceTypeID] on [dbo].[AmazonServiceTyp
 GO
 ALTER TABLE [dbo].[AmazonServiceType] ADD CONSTRAINT [PK_AmazonServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonServiceTypeID])
 GO
-PRINT N'Creating index [IX_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
+PRINT N'Creating index [IX_SWDefault_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
 GO
 
 PRINT N'Creating [dbo].[FedExPackage]'
@@ -97,9 +97,9 @@ PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
 GO
 ALTER TABLE [dbo].[FedExPackage] ADD CONSTRAINT [PK_FedExPackage] PRIMARY KEY CLUSTERED  ([FedExPackageID])
 GO
-PRINT N'Creating index [IX_FedExPackage_ShipmentID] on [dbo].[FedExPackage]'
+PRINT N'Creating index [IX_SWDefault_FedExPackage_ShipmentID] on [dbo].[FedExPackage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FedExPackage_ShipmentID] ON [dbo].[FedExPackage] ([ShipmentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FedExPackage_ShipmentID] ON [dbo].[FedExPackage] ([ShipmentID])
 GO
 PRINT N'Creating [dbo].[GenericFileStore]'
 GO
@@ -146,13 +146,13 @@ PRINT N'Creating primary key [PK_ObjectReference] on [dbo].[ObjectReference]'
 GO
 ALTER TABLE [dbo].[ObjectReference] ADD CONSTRAINT [PK_ObjectReference] PRIMARY KEY CLUSTERED  ([ObjectReferenceID])
 GO
-PRINT N'Creating index [IX_ObjectReference_ConsumerIDReferenceKey] on [dbo].[ObjectReference]'
+PRINT N'Creating index [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] on [dbo].[ObjectReference]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
 GO
-PRINT N'Creating index [IX_ObjectReference_ObjectID] on [dbo].[ObjectReference]'
+PRINT N'Creating index [IX_SWDefault_ObjectReference_ObjectID] on [dbo].[ObjectReference]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ObjectReference_ObjectID] ON [dbo].[ObjectReference] ([ObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ObjectID] ON [dbo].[ObjectReference] ([ObjectID])
 GO
 PRINT N'Creating [dbo].[EbayOrder]'
 GO
@@ -189,17 +189,17 @@ PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
 GO
 ALTER TABLE [dbo].[EbayOrder] ADD CONSTRAINT [PK_EbayOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
+PRINT N'Creating index [IX_SWDefault_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
 GO
-PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
+PRINT N'Creating index [IX_SWDefault_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
 GO
-PRINT N'Creating index [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] on [dbo].[EbayOrder]'
+PRINT N'Creating index [IX_SWDefault_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] on [dbo].[EbayOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC) 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC) 
 	INCLUDE ([RollupEffectiveCheckoutStatus], [GspEligible]) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
@@ -257,9 +257,9 @@ PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
 GO
 ALTER TABLE [dbo].[WorldShipPackage] ADD CONSTRAINT [PK_WorldShipPackage] PRIMARY KEY CLUSTERED  ([UpsPackageID])
 GO
-PRINT N'Creating index [IX_WorldShipPackage_ShipmentID] on [dbo].[WorldShipPackage]'
+PRINT N'Creating index [IX_SWDefault_WorldShipPackage_ShipmentID] on [dbo].[WorldShipPackage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_WorldShipPackage_ShipmentID] ON [dbo].[WorldShipPackage] ([ShipmentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_WorldShipPackage_ShipmentID] ON [dbo].[WorldShipPackage] ([ShipmentID])
 GO
 PRINT N'Creating [dbo].[Action]'
 GO
@@ -333,9 +333,9 @@ PRINT N'Creating primary key [PK_ActionQueueSelection] on [dbo].[ActionQueueSele
 GO
 ALTER TABLE [dbo].[ActionQueueSelection] ADD CONSTRAINT [PK_ActionQueueSelection] PRIMARY KEY CLUSTERED  ([ActionQueueSelectionID])
 GO
-PRINT N'Creating index [IX_ActionQueueSelection_ActionQueueID] on [dbo].[ActionQueueSelection]'
+PRINT N'Creating index [IX_SWDefault_ActionQueueSelection_ActionQueueID] on [dbo].[ActionQueueSelection]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID], [ObjectID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID], [ObjectID])
 
 GO
 PRINT N'Creating [dbo].[ActionQueueStep]'
@@ -366,9 +366,9 @@ PRINT N'Creating primary key [PK_QueueStep] on [dbo].[ActionQueueStep]'
 GO
 ALTER TABLE [dbo].[ActionQueueStep] ADD CONSTRAINT [PK_QueueStep] PRIMARY KEY CLUSTERED  ([ActionQueueStepID])
 GO
-PRINT N'Creating index [IX_ActionQueueStep_ActionQueue] on [dbo].[ActionQueueStep]'
+PRINT N'Creating index [IX_SWDefault_ActionQueueStep_ActionQueue] on [dbo].[ActionQueueStep]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueStep_ActionQueue] ON [dbo].[ActionQueueStep] ([ActionQueueID], [StepIndex])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ActionQueueStep_ActionQueue] ON [dbo].[ActionQueueStep] ([ActionQueueID], [StepIndex])
 GO
 
 PRINT N'Creating [dbo].[ActionTask]'
@@ -524,193 +524,193 @@ PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_OnlineLastModified_StoreID_IsManual] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_OnlineLastModified_StoreID_IsManual] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual] ON [dbo].[Order] ([OnlineLastModified] DESC, [StoreID], [IsManual])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_OnlineLastModified_StoreID_IsManual] ON [dbo].[Order] ([OnlineLastModified] DESC, [StoreID], [IsManual])
 GO
-PRINT N'Creating index [IX_Auto_CustomerID] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_CustomerID] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_CustomerID] ON [dbo].[Order] ([CustomerID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_CustomerID] ON [dbo].[Order] ([CustomerID])
 GO
-PRINT N'Creating index [IX_Auto_OrderNumber] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OrderNumber] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderNumber] ON [dbo].[Order] ([OrderNumber])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderNumber] ON [dbo].[Order] ([OrderNumber])
 GO
-PRINT N'Creating index [IX_Auto_OrderNumberComplete] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OrderNumberComplete] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderNumberComplete] ON [dbo].[Order] ([OrderNumberComplete])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderNumberComplete] ON [dbo].[Order] ([OrderNumberComplete])
 GO
-PRINT N'Creating index [IX_Auto_OrderDate] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OrderDate] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderDate] ON [dbo].[Order] ([OrderDate]) INCLUDE ([IsManual])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderDate] ON [dbo].[Order] ([OrderDate]) INCLUDE ([IsManual])
 GO
-PRINT N'Creating index [IX_Auto_OrderTotal] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OrderTotal] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderTotal] ON [dbo].[Order] ([OrderTotal])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderTotal] ON [dbo].[Order] ([OrderTotal])
 GO
-PRINT N'Creating index [IX_Auto_LocalStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_LocalStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_LocalStatus] ON [dbo].[Order] ([LocalStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_LocalStatus] ON [dbo].[Order] ([LocalStatus])
 GO
-PRINT N'Creating index [IX_OnlineCustomerID] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_OnlineCustomerID] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OnlineCustomerID] ON [dbo].[Order] ([OnlineCustomerID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_OnlineCustomerID] ON [dbo].[Order] ([OnlineCustomerID])
 GO
-PRINT N'Creating index [IX_Auto_OnlineStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OnlineStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
 GO
-PRINT N'Creating index [IX_Order_StoreIdOnlineStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_StoreIdOnlineStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
 GO
-PRINT N'Creating index [IX_Auto_RequestedShipping] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RequestedShipping] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
 GO
-PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillFirstName] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Order] ([BillFirstName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillFirstName] ON [dbo].[Order] ([BillFirstName])
 GO
-PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillLastName] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName] ON [dbo].[Order] ([BillLastName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillLastName] ON [dbo].[Order] ([BillLastName])
 GO
-PRINT N'Creating index [IX_Auto_BillCompany] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillCompany] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany] ON [dbo].[Order] ([BillCompany])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillCompany] ON [dbo].[Order] ([BillCompany])
 GO
-PRINT N'Creating index [IX_Auto_BillStateProvCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillStateProvCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode] ON [dbo].[Order] ([BillStateProvCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillStateProvCode] ON [dbo].[Order] ([BillStateProvCode])
 GO
-PRINT N'Creating index [IX_Auto_BillPostalCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillPostalCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode] ON [dbo].[Order] ([BillPostalCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillPostalCode] ON [dbo].[Order] ([BillPostalCode])
 GO
-PRINT N'Creating index [IX_Auto_BillCountryCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillCountryCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode] ON [dbo].[Order] ([BillCountryCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillCountryCode] ON [dbo].[Order] ([BillCountryCode])
 GO
-PRINT N'Creating index [IX_Auto_BillEmail] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_BillEmail] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail] ON [dbo].[Order] ([BillEmail])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillEmail] ON [dbo].[Order] ([BillEmail])
 GO
-PRINT N'Creating index [IX_Auto_ShipLastName] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipLastName] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName] ON [dbo].[Order] ([ShipLastName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipLastName] ON [dbo].[Order] ([ShipLastName])
 GO
-PRINT N'Creating index [IX_Auto_ShipCompany] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipCompany] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany] ON [dbo].[Order] ([ShipCompany])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipCompany] ON [dbo].[Order] ([ShipCompany])
 GO
-PRINT N'Creating index [IX_Auto_ShipStateProvCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipStateProvCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode] ON [dbo].[Order] ([ShipStateProvCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipStateProvCode] ON [dbo].[Order] ([ShipStateProvCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipPostalCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipPostalCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode] ON [dbo].[Order] ([ShipPostalCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipPostalCode] ON [dbo].[Order] ([ShipPostalCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipCountryCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipCountryCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipCountryCode] ON [dbo].[Order] ([ShipCountryCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipCountryCode] ON [dbo].[Order] ([ShipCountryCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipEmail] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipEmail] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipEmail] ON [dbo].[Order] ([ShipEmail])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipEmail] ON [dbo].[Order] ([ShipEmail])
 GO
-PRINT N'Creating index [IX_Auto_RollupItemCount] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RollupItemCount] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCount] ON [dbo].[Order] ([RollupItemCount])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupItemCount] ON [dbo].[Order] ([RollupItemCount])
 GO
-PRINT N'Creating index [IX_Auto_RollupItemName] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RollupItemName] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemName] ON [dbo].[Order] ([RollupItemName], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupItemName] ON [dbo].[Order] ([RollupItemName], [OrderID])
 GO
-PRINT N'Creating index [IX_Auto_RollupItemCode] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RollupItemCode] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCode] ON [dbo].[Order] ([RollupItemCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupItemCode] ON [dbo].[Order] ([RollupItemCode])
 GO
-PRINT N'Creating index [IX_Auto_RollupItemSKU] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RollupItemSKU] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemSKU] ON [dbo].[Order] ([RollupItemSKU])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupItemSKU] ON [dbo].[Order] ([RollupItemSKU])
 GO
-PRINT N'Creating index [IX_Auto_RollupNoteCount] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_RollupNoteCount] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount] ON [dbo].[Order] ([RollupNoteCount])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupNoteCount] ON [dbo].[Order] ([RollupNoteCount])
 GO
-PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
+PRINT N'Adding [Order].[IX_SWDefault_ShipSenseRecognitionStatus] Index'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
 GO
-PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
+PRINT N'Adding [Order].[IX_SWDefault_ShipSenseHashKey] Index'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
 GO
-PRINT N'Creating index [IX_Order_BillAddressValidationStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_BillAddressValidationStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_BillAddressValidationStatus] ON [dbo].[Order] ([BillAddressValidationStatus] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_BillAddressValidationStatus] ON [dbo].[Order] ([BillAddressValidationStatus] DESC)
 GO
-PRINT N'Creating index [IX_Order_BillMilitaryAddress] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_BillMilitaryAddress] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_BillMilitaryAddress] ON [dbo].[Order] ([BillMilitaryAddress] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_BillMilitaryAddress] ON [dbo].[Order] ([BillMilitaryAddress] DESC)
 GO
-PRINT N'Creating index [IX_Order_BillPOBox] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_BillPOBox] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_BillPOBox] ON [dbo].[Order] ([BillPOBox] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_BillPOBox] ON [dbo].[Order] ([BillPOBox] DESC)
 GO
-PRINT N'Creating index [IX_Order_BillResidentialStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_BillResidentialStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_BillResidentialStatus] ON [dbo].[Order] ([BillResidentialStatus] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_BillResidentialStatus] ON [dbo].[Order] ([BillResidentialStatus] DESC)
 GO
-PRINT N'Creating index [IX_Order_BillUSTerritory] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_BillUSTerritory] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_BillUSTerritory] ON [dbo].[Order] ([BillUSTerritory] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_BillUSTerritory] ON [dbo].[Order] ([BillUSTerritory] DESC)
 GO
-PRINT N'Creating index [IX_Order_ShipAddressValidationStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_ShipAddressValidationStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipAddressValidationStatus] ON [dbo].[Order] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderDate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_ShipAddressValidationStatus] ON [dbo].[Order] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderDate])
 GO
-PRINT N'Creating index [IX_Order_StoreIDIsManual] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_StoreIDIsManual] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_StoreIDIsManual] ON [dbo].[Order] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderDate], [OrderNumber])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_StoreIDIsManual] ON [dbo].[Order] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderDate], [OrderNumber])
 GO
-PRINT N'Creating index [IX_Auto_ShipFirstName] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_ShipFirstName] on [dbo].[Order]'
 GO
 -- *********************
 -- Purposely using If Not Exists here because this index may already exist in some db's and we dont' want
 -- to fail on upgrade.
 -- *********************
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Auto_ShipFirstName')
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipFirstName] ON [dbo].[Order]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_SWDefault_ShipFirstName')
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipFirstName] ON [dbo].[Order]
 (
     [ShipFirstName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-PRINT N'Creating index [IX_Order_ShipMilitaryAddress] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_ShipMilitaryAddress] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipMilitaryAddress] ON [dbo].[Order] ([ShipMilitaryAddress] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_ShipMilitaryAddress] ON [dbo].[Order] ([ShipMilitaryAddress] DESC)
 GO
-PRINT N'Creating index [IX_Order_ShipPOBox] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_ShipPOBox] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipPOBox] ON [dbo].[Order] ([ShipPOBox] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_ShipPOBox] ON [dbo].[Order] ([ShipPOBox] DESC)
 GO
-PRINT N'Creating index [IX_Order_ShipResidentialStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_ShipResidentialStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipResidentialStatus] ON [dbo].[Order] ([ShipResidentialStatus] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_ShipResidentialStatus] ON [dbo].[Order] ([ShipResidentialStatus] DESC)
 GO
-PRINT N'Creating index [IX_Order_ShipUSTerritory] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_ShipUSTerritory] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipUSTerritory] ON [dbo].[Order] ([ShipUSTerritory] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_ShipUSTerritory] ON [dbo].[Order] ([ShipUSTerritory] DESC)
 GO
-PRINT N'Creating index [IX_Order_StoreIDOrderDateLocalStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_StoreIDOrderDateLocalStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_StoreIDOrderDateLocalStatus] ON [dbo].[Order] ([StoreID], [OrderDate], [LocalStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_StoreIDOrderDateLocalStatus] ON [dbo].[Order] ([StoreID], [OrderDate], [LocalStatus])
 GO
-PRINT N'Creating index [IX_Order_CombineSplitStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_Order_CombineSplitStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_CombineSplitStatus] ON [dbo].[Order] ([CombineSplitStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_CombineSplitStatus] ON [dbo].[Order] ([CombineSplitStatus])
 GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
@@ -734,25 +734,25 @@ PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
 GO
 ALTER TABLE [dbo].[AmazonOrder] ADD CONSTRAINT [PK_AmazonOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_Auto_AmazonOrderID] on [dbo].[AmazonOrder]'
+PRINT N'Creating index [IX_SWDefault_AmazonOrderID] on [dbo].[AmazonOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_AmazonOrderID] ON [dbo].[AmazonOrder] ([AmazonOrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AmazonOrderID] ON [dbo].[AmazonOrder] ([AmazonOrderID])
 GO
-PRINT N'Creating index [IX_Auto_FulfillmentChannel] on [dbo].[AmazonOrder]'
+PRINT N'Creating index [IX_SWDefault_FulfillmentChannel] on [dbo].[AmazonOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_FulfillmentChannel] ON [dbo].[AmazonOrder] ([FulFillmentChannel])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FulfillmentChannel] ON [dbo].[AmazonOrder] ([FulFillmentChannel])
 GO
-PRINT N'Creating index [IX_Auto_IsPrime] on [dbo].[AmazonOrder]'
+PRINT N'Creating index [IX_SWDefault_IsPrime] on [dbo].[AmazonOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
 GO
-PRINT N'Creating index [IX_Auto_EarliestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+PRINT N'Creating index [IX_SWDefault_EarliestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_EarliestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([EarliestExpectedDeliveryDate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EarliestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([EarliestExpectedDeliveryDate])
 GO
-PRINT N'Creating index [IX_Auto_LatestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+PRINT N'Creating index [IX_SWDefault_LatestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_LatestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([LatestExpectedDeliveryDate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_LatestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([LatestExpectedDeliveryDate])
 GO
 PRINT N'Creating [dbo].[OrderItem]'
 GO
@@ -788,15 +788,15 @@ PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
 GO
 ALTER TABLE [dbo].[OrderItem] ADD CONSTRAINT [PK_OrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
-PRINT N'Creating index [IX_OrderItem_OrderID] on [dbo].[OrderItem]'
+PRINT N'Creating index [IX_SWDefault_OrderItem_OrderID] on [dbo].[OrderItem]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID] ASC, [OrderItemID] ASC)
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID] ASC, [OrderItemID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Code_OrderId] ON [dbo].[OrderItem] ([Code], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderItem_Code_OrderId] ON [dbo].[OrderItem] ([Code], [OrderID])
 GO
 PRINT N'Creating [dbo].[AmazonOrderItem]'
 GO
@@ -963,9 +963,9 @@ PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
 GO
 ALTER TABLE [dbo].[Store] ADD CONSTRAINT [PK_Store] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
-PRINT N'Creating index [IX_Store_StoreName] on [dbo].[Store]'
+PRINT N'Creating index [IX_SWDefault_Store_StoreName] on [dbo].[Store]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_StoreName] ON [dbo].[Store] ([StoreName])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Store_StoreName] ON [dbo].[Store] ([StoreName])
 GO
 ALTER TABLE [dbo].[Store] ENABLE CHANGE_TRACKING
 GO
@@ -1008,21 +1008,21 @@ PRINT N'Creating primary key [PK_Audit] on [dbo].[Audit]'
 GO
 ALTER TABLE [dbo].[Audit] ADD CONSTRAINT [PK_Audit] PRIMARY KEY CLUSTERED  ([AuditID])
 GO
-PRINT N'Creating index [IX_Audit_TransactionID] on [dbo].[Audit]'
+PRINT N'Creating index [IX_SWDefault_Audit_TransactionID] on [dbo].[Audit]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Audit_TransactionID] ON [dbo].[Audit] ([TransactionID]) INCLUDE ([Action])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Audit_TransactionID] ON [dbo].[Audit] ([TransactionID]) INCLUDE ([Action])
 GO
-PRINT N'Creating index [IX_Audit_Date] on [dbo].[Audit]'
+PRINT N'Creating index [IX_SWDefault_Audit_Date] on [dbo].[Audit]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Audit_Date] ON [dbo].[Audit] ([Date])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Audit_Date] ON [dbo].[Audit] ([Date])
 GO
-PRINT N'Creating index [IX_Audit_ObjectIDDate] on [dbo].[Audit]'
+PRINT N'Creating index [IX_SWDefault_Audit_ObjectIDDate] on [dbo].[Audit]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Audit_ObjectIDDate] ON [dbo].[Audit] ([ObjectID]) INCLUDE ([Date])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Audit_ObjectIDDate] ON [dbo].[Audit] ([ObjectID]) INCLUDE ([Date])
 GO
-PRINT N'Creating index [IX_Audit_Action] on [dbo].[Audit]'
+PRINT N'Creating index [IX_SWDefault_Audit_Action] on [dbo].[Audit]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Audit_Action] ON [dbo].[Audit] ([Action])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Audit_Action] ON [dbo].[Audit] ([Action])
 GO
 ALTER TABLE [dbo].[Audit] ENABLE CHANGE_TRACKING
 GO
@@ -1045,9 +1045,9 @@ PRINT N'Creating primary key [PK_User] on [dbo].[User]'
 GO
 ALTER TABLE [dbo].[User] ADD CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED  ([UserID])
 GO
-PRINT N'Creating index [IX_User_Username] on [dbo].[User]'
+PRINT N'Creating index [IX_SWDefault_User_Username] on [dbo].[User]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_User_Username] ON [dbo].[User] ([Username])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_User_Username] ON [dbo].[User] ([Username])
 GO
 ALTER TABLE [dbo].[User] ENABLE CHANGE_TRACKING
 GO
@@ -1067,9 +1067,9 @@ PRINT N'Creating primary key [PK_AuditChange] on [dbo].[AuditChange]'
 GO
 ALTER TABLE [dbo].[AuditChange] ADD CONSTRAINT [PK_AuditChange] PRIMARY KEY CLUSTERED  ([AuditChangeID])
 GO
-PRINT N'Creating index [IX_AuditChange_AuditID] on [dbo].[AuditChange]'
+PRINT N'Creating index [IX_SWDefault_AuditChange_AuditID] on [dbo].[AuditChange]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AuditChange_AuditID] ON [dbo].[AuditChange] ([AuditID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChange_AuditID] ON [dbo].[AuditChange] ([AuditID])
 GO
 PRINT N'Creating [dbo].[AuditChangeDetail]'
 GO
@@ -1091,17 +1091,17 @@ PRINT N'Creating primary key [PK_AuditChangeDetail] on [dbo].[AuditChangeDetail]
 GO
 ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [PK_AuditChangeDetail] PRIMARY KEY CLUSTERED  ([AuditChangeDetailID])
 GO
-PRINT N'Creating index [IX_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
+PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID])
 GO
-PRINT N'Creating index [IX_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
+PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_AuditID] ON [dbo].[AuditChangeDetail] ([AuditID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChangeDetail_AuditID] ON [dbo].[AuditChangeDetail] ([AuditID])
 GO
-PRINT N'Creating index [IX_AuditChangeDetail_VariantNew] on [dbo].[AuditChangeDetail]'
+PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_VariantNew] on [dbo].[AuditChangeDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_VariantNew] ON [dbo].[AuditChangeDetail] ([VariantNew]) INCLUDE ([AuditID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChangeDetail_VariantNew] ON [dbo].[AuditChangeDetail] ([VariantNew]) INCLUDE ([AuditID])
 GO
 PRINT N'Creating [dbo].[ShippingProfile]'
 GO
@@ -1247,62 +1247,62 @@ PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
 GO
 ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_OrderID] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
 GO
-PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC, [ProcessedDate]) INCLUDE ([OrderID], [Voided])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC, [ProcessedDate]) INCLUDE ([OrderID], [Voided])
 GO
-PRINT N'Creating index [IX_Shipment_ReturnShipment] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ReturnShipment] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ReturnShipment] ON [dbo].[Shipment] ([ReturnShipment]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ReturnShipment] ON [dbo].[Shipment] ([ReturnShipment]) INCLUDE ([OrderID])
 GO
-PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
 (
     [OrderID] ASC,
     [Processed] ASC,
     [ShipSenseStatus] ASC
 )
 GO
-PRINT N'Creating index [IX_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_RequestedLabelFormat] ON [dbo].[Shipment] ([RequestedLabelFormat])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_RequestedLabelFormat] ON [dbo].[Shipment] ([RequestedLabelFormat])
 GO
-PRINT N'Creating index [IX_Shipment_ActualLabelFormat] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ActualLabelFormat] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ActualLabelFormat] ON [dbo].[Shipment] ([ActualLabelFormat])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ActualLabelFormat] ON [dbo].[Shipment] ([ActualLabelFormat])
 GO
-PRINT N'Creating index [IX_Shipment_ShipAddressValidationStatus] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipAddressValidationStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipAddressValidationStatus] ON [dbo].[Shipment] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderID], [Processed], [Voided])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipAddressValidationStatus] ON [dbo].[Shipment] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderID], [Processed], [Voided])
 GO
-PRINT N'Creating index [IX_Shipment_ShipMilitaryAddress] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipMilitaryAddress] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipMilitaryAddress] ON [dbo].[Shipment] ([ShipMilitaryAddress] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipMilitaryAddress] ON [dbo].[Shipment] ([ShipMilitaryAddress] DESC)
 GO
-PRINT N'Creating index [IX_Shipment_ShipPOBox] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipPOBox] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipPOBox] ON [dbo].[Shipment] ([ShipPOBox] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipPOBox] ON [dbo].[Shipment] ([ShipPOBox] DESC)
 GO
-PRINT N'Creating index [IX_Shipment_ShipResidentialStatus] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipResidentialStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipResidentialStatus] ON [dbo].[Shipment] ([ShipResidentialStatus] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipResidentialStatus] ON [dbo].[Shipment] ([ShipResidentialStatus] DESC)
 GO
-PRINT N'Creating index [IX_Shipment_ShipUSTerritory] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipUSTerritory] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipUSTerritory] ON [dbo].[Shipment] ([ShipUSTerritory] DESC)
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipUSTerritory] ON [dbo].[Shipment] ([ShipUSTerritory] DESC)
 GO
-PRINT N'Creating index [IX_Shipment_ShipDate] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipDate] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipDate] ON [dbo].[Shipment] ([ShipDate]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipDate] ON [dbo].[Shipment] ([ShipDate]) INCLUDE ([OrderID])
 GO
-PRINT N'Creating index [IX_Shipment_ShipmentType] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_SWDefault_Shipment_ShipmentType] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipmentType] ON [dbo].[Shipment] ([ShipmentType]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipmentType] ON [dbo].[Shipment] ([ShipmentType]) INCLUDE ([OrderID])
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
@@ -1407,17 +1407,17 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrder] on [dbo].[ChannelAdvisorOr
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrder] ADD CONSTRAINT [PK_ChannelAdvisorOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAdvisorOrder]'
+PRINT N'Creating index [IX_SWDefault_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAdvisorOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisorOrder]'
+PRINT N'Creating index [IX_SWDefault_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisorOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrder]'
+PRINT N'Creating index [IX_SWDefault_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID]
 	ON [dbo].[ChannelAdvisorOrder] ([CustomOrderIdentifier], [OrderID])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
@@ -1441,19 +1441,19 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvis
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] ADD CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketPlaceName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_MarketPlaceName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceName])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_Classification] ON [dbo].[ChannelAdvisorOrderItem] ([Classification])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_Classification] ON [dbo].[ChannelAdvisorOrderItem] ([Classification])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_DistributionCenterID] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenterID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_DistributionCenterID] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenterID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_DistributionCenter] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenter])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderItem_DistributionCenter] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenter])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
@@ -1522,9 +1522,9 @@ PRINT N'Creating primary key [PK_Download] on [dbo].[Download]'
 GO
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [PK_Download] PRIMARY KEY CLUSTERED  ([DownloadID])
 GO
-PRINT N'Creating index [IX_DownloadLog_StoreID_Ended] on [dbo].[Download]'
+PRINT N'Creating index [IX_SWDefault_DownloadLog_StoreID_Ended] on [dbo].[Download]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadLog_StoreID_Ended] ON [dbo].[Download] ([StoreID], [Ended])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadLog_StoreID_Ended] ON [dbo].[Download] ([StoreID], [Ended])
 GO
 ALTER TABLE [dbo].[Download] ENABLE CHANGE_TRACKING
 GO
@@ -1549,25 +1549,25 @@ PRINT N'Creating primary key [PK_DownloadDetail] on [dbo].[DownloadDetail]'
 GO
 ALTER TABLE [dbo].[DownloadDetail] ADD CONSTRAINT [PK_DownloadDetail] PRIMARY KEY CLUSTERED  ([DownloadedDetailID])
 GO
-PRINT N'Creating index [IX_DownloadDetail_DownloadID] on [dbo].[DownloadDetail]'
+PRINT N'Creating index [IX_SWDefault_DownloadDetail_DownloadID] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_DownloadID] ON [dbo].[DownloadDetail] ([DownloadID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadDetail_DownloadID] ON [dbo].[DownloadDetail] ([DownloadID])
 GO
-PRINT N'Creating index [IX_DownloadDetail_OrderNumber] on [dbo].[DownloadDetail]'
+PRINT N'Creating index [IX_SWDefault_DownloadDetail_OrderNumber] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber], [ExtraStringData1]) INCLUDE ([DownloadID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber], [ExtraStringData1]) INCLUDE ([DownloadID])
 GO
-PRINT N'Creating index [IX_DownloadDetail_BigIntIndex] on [dbo].[DownloadDetail]'
+PRINT N'Creating index [IX_SWDefault_DownloadDetail_BigIntIndex] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3]) INCLUDE ([DownloadID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3]) INCLUDE ([DownloadID])
 GO
-PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
+PRINT N'Creating index [IX_SWDefault_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1]) INCLUDE ([DownloadID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1]) INCLUDE ([DownloadID])
 GO
-PRINT N'Creating index [IX_DownloadDetail_OrderID] on [dbo].[DownloadDetail]'
+PRINT N'Creating index [IX_SWDefault_DownloadDetail_OrderID] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderID] ON [dbo].[DownloadDetail] ([OrderID]) INCLUDE ([DownloadID], [InitialDownload])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DownloadDetail_OrderID] ON [dbo].[DownloadDetail] ([OrderID]) INCLUDE ([DownloadID], [InitialDownload])
 GO
 PRINT N'Creating [dbo].[EbayCombinedOrderRelation]'
 GO
@@ -1583,9 +1583,9 @@ PRINT N'Creating primary key [PK_EbayCombinedOrderRelation] on [dbo].[EbayCombin
 GO
 ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [PK_EbayCombinedOrderRelation] PRIMARY KEY CLUSTERED  ([EbayCombinedOrderRelationID])
 GO
-PRINT N'Creating index [IX_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
+PRINT N'Creating index [IX_SWDefault_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_EbayCombinedOrderRelation] ON [dbo].[EbayCombinedOrderRelation] ([EbayOrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_EbayCombinedOrderRelation] ON [dbo].[EbayCombinedOrderRelation] ([EbayOrderID])
 GO
 PRINT N'Creating [dbo].[EbayOrderItem]'
 GO
@@ -1615,15 +1615,15 @@ PRINT N'Creating primary key [PK_EbayOrderItem] on [dbo].[EbayOrderItem]'
 GO
 ALTER TABLE [dbo].[EbayOrderItem] ADD CONSTRAINT [PK_EbayOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
-PRINT N'Creating index [IX_EbayOrderItem_OrderID] on [dbo].[EbayOrderItem]'
+PRINT N'Creating index [IX_SWDefault_EbayOrderItem_OrderID] on [dbo].[EbayOrderItem]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_OrderID] ON [dbo].[EbayOrderItem] ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrderItem_OrderID] ON [dbo].[EbayOrderItem] ([OrderID])
 GO
-CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EbayItemID_EbayTransactionID] ON [dbo].[EbayOrderItem] ([EbayItemID],[EbayTransactionID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrderItem_EbayItemID_EbayTransactionID] ON [dbo].[EbayOrderItem] ([EbayItemID],[EbayTransactionID])
 GO
-CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EffectiveCheckoutStatus_EbayOrderItemID] ON [dbo].[EbayOrderItem] ([EffectiveCheckoutStatus], [OrderItemID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrderItem_EffectiveCheckoutStatus_EbayOrderItemID] ON [dbo].[EbayOrderItem] ([EffectiveCheckoutStatus], [OrderItemID])
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_SellingManagerRecord_OrderID] ON [dbo].[EbayOrderItem]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrderItem_SellingManagerRecord_OrderID] ON [dbo].[EbayOrderItem]
 	([SellingManagerRecord] ASC, [OrderID] ASC)
 GO
 PRINT N'Creating [dbo].[EbayStore]'
@@ -1683,9 +1683,9 @@ PRINT N'Creating primary key [PK_EmailOutbound] on [dbo].[EmailOutbound]'
 GO
 ALTER TABLE [dbo].[EmailOutbound] ADD CONSTRAINT [PK_EmailOutbound] PRIMARY KEY CLUSTERED  ([EmailOutboundID])
 GO
-PRINT N'Creating index [IX_EmailOutbound] on [dbo].[EmailOutbound]'
+PRINT N'Creating index [IX_SWDefault_EmailOutbound] on [dbo].[EmailOutbound]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EmailOutbound] ON [dbo].[EmailOutbound] ([SendStatus], [AccountID], [DontSendBefore], [SentDate], [ComposedDate]) INCLUDE ([Visibility])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EmailOutbound] ON [dbo].[EmailOutbound] ([SendStatus], [AccountID], [DontSendBefore], [SentDate], [ComposedDate]) INCLUDE ([Visibility])
 GO
 ALTER TABLE [dbo].[EmailOutbound] ENABLE CHANGE_TRACKING
 GO
@@ -1705,17 +1705,17 @@ PRINT N'Creating primary key [PK_EmailOutboundObject] on [dbo].[EmailOutboundRel
 GO
 ALTER TABLE [dbo].[EmailOutboundRelation] ADD CONSTRAINT [PK_EmailOutboundObject] PRIMARY KEY CLUSTERED  ([EmailOutboundRelationID])
 GO
-PRINT N'Creating index [IX_EmailOutbound_EmailOutboundIDRelationTypeObjectID] on [dbo].[EmailOutboundRelation]'
+PRINT N'Creating index [IX_SWDefault_EmailOutboundRelation_EmailOutboundIDRelationTypeObjectID] on [dbo].[EmailOutboundRelation]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EmailOutbound_EmailOutboundIDRelationTypeObjectID] ON [dbo].[EmailOutboundRelation] ([EmailOutboundID], [RelationType]) INCLUDE ([ObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EmailOutboundRelation_EmailOutboundIDRelationTypeObjectID] ON [dbo].[EmailOutboundRelation] ([EmailOutboundID], [RelationType]) INCLUDE ([ObjectID])
 GO
-PRINT N'Creating index [IX_EmailOutbound_ObjectIDRelationTypeEmailOutboundID] on [dbo].[EmailOutboundRelation]'
+PRINT N'Creating index [IX_SWDefault_EmailOutboundRelation_ObjectIDRelationTypeEmailOutboundID] on [dbo].[EmailOutboundRelation]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EmailOutbound_ObjectIDRelationTypeEmailOutboundID] ON [dbo].[EmailOutboundRelation] ([ObjectID], [RelationType]) INCLUDE ([EmailOutboundID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EmailOutboundRelation_ObjectIDRelationTypeEmailOutboundID] ON [dbo].[EmailOutboundRelation] ([ObjectID], [RelationType]) INCLUDE ([EmailOutboundID])
 GO
-PRINT N'Creating index [IX_EmailOutbound_RelationTypeObject] on [dbo].[EmailOutboundRelation]'
+PRINT N'Creating index [IX_SWDefault_EmailOutboundRelation_RelationTypeObject] on [dbo].[EmailOutboundRelation]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EmailOutbound_RelationTypeObject] ON [dbo].[EmailOutboundRelation] ([RelationType], [ObjectID]) INCLUDE ([EmailOutboundID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EmailOutboundRelation_RelationTypeObject] ON [dbo].[EmailOutboundRelation] ([RelationType], [ObjectID]) INCLUDE ([EmailOutboundID])
 GO
 PRINT N'Creating [dbo].[PostalProfile]'
 GO
@@ -1821,17 +1821,17 @@ PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
 GO
 ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [PK_PostalShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_PostalShipment_Service] on [dbo].[PostalShipment]'
+PRINT N'Creating index [IX_SWDefault_PostalShipment_Service] on [dbo].[PostalShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PostalShipment_Service] ON [dbo].[PostalShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PostalShipment_Service] ON [dbo].[PostalShipment] ([Service])
 GO
-PRINT N'Creating index [IX_PostalShipment_PackagingType] on [dbo].[PostalShipment]'
+PRINT N'Creating index [IX_SWDefault_PostalShipment_PackagingType] on [dbo].[PostalShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PostalShipment_PackagingType] ON [dbo].[PostalShipment] ([PackagingType])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PostalShipment_PackagingType] ON [dbo].[PostalShipment] ([PackagingType])
 GO
-PRINT N'Creating index [IX_PostalShipment_Confirmation] on [dbo].[PostalShipment]'
+PRINT N'Creating index [IX_SWDefault_PostalShipment_Confirmation] on [dbo].[PostalShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PostalShipment_Confirmation] ON [dbo].[PostalShipment] ([Confirmation])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PostalShipment_Confirmation] ON [dbo].[PostalShipment] ([Confirmation])
 GO
 PRINT N'Creating [dbo].[EndiciaShipment]'
 GO
@@ -1905,7 +1905,9 @@ CREATE TABLE [dbo].[AmazonShipment]
 [DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((2)),
 [DeclaredValue] [money] NULL,
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Insurance] [bit] NOT NULL
+[Insurance] [bit] NOT NULL,
+[RequestedLabelFormat] [INT] NOT NULL CONSTRAINT [DF_AmazonShipment_RequestedLabelFormat] DEFAULT (-1),
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ReferenceNumber] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
@@ -1922,7 +1924,8 @@ CREATE TABLE [dbo].[AmazonProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
 [DeliveryExperience] [int] NULL,
-[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
@@ -2102,13 +2105,13 @@ PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [PK_FedExShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_FedExShipment_Service] on [dbo].[FedExShipment]'
+PRINT N'Creating index [IX_SWDefault_FedExShipment_Service] on [dbo].[FedExShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FedExShipment_Service] ON [dbo].[FedExShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FedExShipment_Service] ON [dbo].[FedExShipment] ([Service])
 GO
-PRINT N'Creating index [IX_FedExShipment_PackagingType] on [dbo].[FedExShipment]'
+PRINT N'Creating index [IX_SWDefault_FedExShipment_PackagingType] on [dbo].[FedExShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FedExShipment_PackagingType] ON [dbo].[FedExShipment] ([PackagingType])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FedExShipment_PackagingType] ON [dbo].[FedExShipment] ([PackagingType])
 GO
 PRINT N'Creating [dbo].[FedExProfile]'
 GO
@@ -2218,13 +2221,13 @@ PRINT N'Creating primary key [PK_FilterNode] on [dbo].[FilterNode]'
 GO
 ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [PK_FilterNode] PRIMARY KEY CLUSTERED  ([FilterNodeID])
 GO
-PRINT N'Creating index [IX_FilterNode_ParentFilterNodeID] on [dbo].[FilterNode]'
+PRINT N'Creating index [IX_SWDefault_FilterNode_ParentFilterNodeID] on [dbo].[FilterNode]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterNode_ParentFilterNodeID] ON [dbo].[FilterNode] ([ParentFilterNodeID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterNode_ParentFilterNodeID] ON [dbo].[FilterNode] ([ParentFilterNodeID])
 GO
-PRINT N'Creating index [IX_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] on [dbo].[FilterNode]'
+PRINT N'Creating index [IX_SWDefault_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] on [dbo].[FilterNode]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] ON [dbo].[FilterNode] ([FilterSequenceID], [FilterNodeContentID], [Purpose]) INCLUDE ([FilterNodeID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] ON [dbo].[FilterNode] ([FilterSequenceID], [FilterNodeContentID], [Purpose]) INCLUDE ([FilterNodeID])
 GO
 
 PRINT N'Creating [dbo].[FilterLayout]'
@@ -2242,9 +2245,9 @@ PRINT N'Creating primary key [PK_FilterLayout] on [dbo].[FilterLayout]'
 GO
 ALTER TABLE [dbo].[FilterLayout] ADD CONSTRAINT [PK_FilterLayout] PRIMARY KEY CLUSTERED  ([FilterLayoutID])
 GO
-PRINT N'Creating index [IX_FilterLayout] on [dbo].[FilterLayout]'
+PRINT N'Creating index [IX_SWDefault_FilterLayout] on [dbo].[FilterLayout]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterLayout] ON [dbo].[FilterLayout] ([UserID], [FilterTarget])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_FilterLayout] ON [dbo].[FilterLayout] ([UserID], [FilterTarget])
 GO
 PRINT N'Creating [dbo].[FilterNodeContent]'
 GO
@@ -2266,9 +2269,9 @@ PRINT N'Creating primary key [PK_FilterNodeContent] on [dbo].[FilterNodeContent]
 GO
 ALTER TABLE [dbo].[FilterNodeContent] ADD CONSTRAINT [PK_FilterNodeContent] PRIMARY KEY CLUSTERED  ([FilterNodeContentID])
 GO
-PRINT N'Creating index [IX_FilterNodeContent_Status] on [dbo].[FilterNodeContent]'
+PRINT N'Creating index [IX_SWDefault_FilterNodeContent_Status] on [dbo].[FilterNodeContent]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContent_Status] ON [dbo].[FilterNodeContent] ([Status]) INCLUDE ([ColumnMask], [Cost], [FilterNodeContentID], [JoinMask], [UpdateCalculation])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterNodeContent_Status] ON [dbo].[FilterNodeContent] ([Status]) INCLUDE ([ColumnMask], [Cost], [FilterNodeContentID], [JoinMask], [UpdateCalculation])
 GO
 PRINT N'Creating [dbo].[FilterSequence]'
 GO
@@ -2285,13 +2288,13 @@ PRINT N'Creating primary key [PK_FilterFolderContent] on [dbo].[FilterSequence]'
 GO
 ALTER TABLE [dbo].[FilterSequence] ADD CONSTRAINT [PK_FilterFolderContent] PRIMARY KEY CLUSTERED  ([FilterSequenceID])
 GO
-PRINT N'Creating index [IX_FilterChild_ParentFilterID] on [dbo].[FilterSequence]'
+PRINT N'Creating index [IX_SWDefault_FilterSequence_FilterChild_ParentFilterID] on [dbo].[FilterSequence]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterChild_ParentFilterID] ON [dbo].[FilterSequence] ([ParentFilterID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterSequence_FilterChild_ParentFilterID] ON [dbo].[FilterSequence] ([ParentFilterID])
 GO
-PRINT N'Creating index [IX_FilterSequence_FilterID] on [dbo].[FilterSequence]'
+PRINT N'Creating index [IX_SWDefault_FilterSequence_FilterID] on [dbo].[FilterSequence]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterSequence_FilterID] ON [dbo].[FilterSequence] ([FilterID]) INCLUDE ([FilterSequenceID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterSequence_FilterID] ON [dbo].[FilterSequence] ([FilterID]) INCLUDE ([FilterSequenceID])
 GO
 
 
@@ -2310,9 +2313,9 @@ PRINT N'Creating primary key [PK_FilterNodeColumnSettings] on [dbo].[FilterNodeC
 GO
 ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [PK_FilterNodeColumnSettings] PRIMARY KEY CLUSTERED  ([FilterNodeColumnSettingsID])
 GO
-PRINT N'Creating index [IX_FilterNodeColumnSettings] on [dbo].[FilterNodeColumnSettings]'
+PRINT N'Creating index [IX_SWDefault_FilterNodeColumnSettings] on [dbo].[FilterNodeColumnSettings]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeColumnSettings] ON [dbo].[FilterNodeColumnSettings] ([UserID], [FilterNodeID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_FilterNodeColumnSettings] ON [dbo].[FilterNodeColumnSettings] ([UserID], [FilterNodeID])
 GO
 PRINT N'Creating [dbo].[GridColumnLayout]'
 GO
@@ -2360,13 +2363,13 @@ PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
 GO
-PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+PRINT N'Creating index [IX_SWDefault_Filter_State] on [dbo].[Filter]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Filter_State] ON [dbo].[Filter] ([State])
 GO
-PRINT N'Creating index [IX_Filter_IsFolder] on [dbo].[Filter]'
+PRINT N'Creating index [IX_SWDefault_Filter_IsFolder] on [dbo].[Filter]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Filter_IsFolder] ON [dbo].[Filter] ([IsFolder]) INCLUDE ([FilterID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Filter_IsFolder] ON [dbo].[Filter] ([IsFolder]) INCLUDE ([FilterID])
 GO
 
 PRINT N'Creating [dbo].[GenericModuleStore]'
@@ -2416,9 +2419,9 @@ PRINT N'Creating primary key [PK_GridColumnFormat] on [dbo].[GridColumnFormat]'
 GO
 ALTER TABLE [dbo].[GridColumnFormat] ADD CONSTRAINT [PK_GridColumnFormat] PRIMARY KEY CLUSTERED  ([GridColumnFormatID])
 GO
-PRINT N'Creating index [IX_GridColumnDisplay] on [dbo].[GridColumnFormat]'
+PRINT N'Creating index [IX_SWDefault_GridColumnDisplay] on [dbo].[GridColumnFormat]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_GridColumnDisplay] ON [dbo].[GridColumnFormat] ([UserID], [ColumnGuid])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_GridColumnDisplay] ON [dbo].[GridColumnFormat] ([UserID], [ColumnGuid])
 GO
 PRINT N'Creating [dbo].[GridColumnPosition]'
 GO
@@ -2436,9 +2439,9 @@ PRINT N'Creating primary key PK_GridColumnPosition on [dbo].[GridColumnPosition]
 GO
 ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT PK_GridColumnPosition PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
 GO
-PRINT N'Creating index [IX_GridLayoutColumn] on [dbo].[GridColumnPosition]'
+PRINT N'Creating index [IX_SWDefault_GridLayoutColumn] on [dbo].[GridColumnPosition]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_GridColumnPosition_GridColumnLayoutIdColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_GridColumnPosition_GridColumnLayoutIdColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
 GO
 PRINT N'Creating [dbo].[InfopiaOrderItem]'
 GO
@@ -2504,9 +2507,9 @@ PRINT N'Creating primary key [PK_iParcelShipment] on [dbo].[iParcelShipment]'
 GO
 ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [PK_iParcelShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_IParcelShipment_Service] on [dbo].[IParcelShipment]'
+PRINT N'Creating index [IX_SWDefault_IParcelShipment_Service] on [dbo].[IParcelShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_IParcelShipment_Service] ON [dbo].[IParcelShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_IParcelShipment_Service] ON [dbo].[IParcelShipment] ([Service])
 GO
 PRINT N'Creating [dbo].[iParcelPackage]'
 GO
@@ -2552,9 +2555,9 @@ PRINT N'Creating primary key [PK_iParcelProfile] on [dbo].[iParcelProfile]'
 GO
 ALTER TABLE [dbo].[iParcelProfile] ADD CONSTRAINT [PK_iParcelProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
-PRINT N'Creating index [IX_iParcelPackage_ShipmentID] on [dbo].[iParcelPackage]'
+PRINT N'Creating index [IX_SWDefault_iParcelPackage_ShipmentID] on [dbo].[iParcelPackage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_iParcelPackage_ShipmentID] ON [dbo].[iParcelPackage] ([ShipmentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_iParcelPackage_ShipmentID] ON [dbo].[iParcelPackage] ([ShipmentID])
 GO
 PRINT N'Creating [dbo].[MagentoOrder]'
 GO
@@ -2629,9 +2632,9 @@ PRINT N'Creating primary key [PK_OrderItemAttribute] on [dbo].[OrderItemAttribut
 GO
 ALTER TABLE [dbo].[OrderItemAttribute] ADD CONSTRAINT [PK_OrderItemAttribute] PRIMARY KEY CLUSTERED  ([OrderItemAttributeID])
 GO
-PRINT N'Creating index [IX_OrderItemAttribute_OrderItemID] on [dbo].[OrderItemAttribute]'
+PRINT N'Creating index [IX_SWDefault_OrderItemAttribute_OrderItemID] on [dbo].[OrderItemAttribute]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID] ASC,[OrderItemAttributeID] ASC)
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID] ASC,[OrderItemAttributeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItemAttribute] ENABLE CHANGE_TRACKING
 GO
@@ -2759,9 +2762,9 @@ PRINT N'Creating primary key [PK_Note] on [dbo].[Note]'
 GO
 ALTER TABLE [dbo].[Note] ADD CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED  ([NoteID])
 GO
-PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
+PRINT N'Creating index [IX_SWDefault_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited])
 GO
 ALTER TABLE [dbo].[Note] ENABLE CHANGE_TRACKING
 GO
@@ -2820,13 +2823,13 @@ PRINT N'Creating primary key [PK_OnTracShipment] on [dbo].[OnTracShipment]'
 GO
 ALTER TABLE [dbo].[OnTracShipment] ADD CONSTRAINT [PK_OnTracShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_OnTracShipment_Service] on [dbo].[OnTracShipment]'
+PRINT N'Creating index [IX_SWDefault_OnTracShipment_Service] on [dbo].[OnTracShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OnTracShipment_Service] ON [dbo].[OnTracShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OnTracShipment_Service] ON [dbo].[OnTracShipment] ([Service])
 GO
-PRINT N'Creating index [IX_OnTracShipment_PackagingType] on [dbo].[OnTracShipment]'
+PRINT N'Creating index [IX_SWDefault_OnTracShipment_PackagingType] on [dbo].[OnTracShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OnTracShipment_PackagingType] ON [dbo].[OnTracShipment] ([PackagingType])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OnTracShipment_PackagingType] ON [dbo].[OnTracShipment] ([PackagingType])
 GO
 PRINT N'Creating [dbo].[DhlExpressShipment]'
 GO
@@ -2851,9 +2854,9 @@ PRINT N'Adding foreign keys to [dbo].[DhlExpressShipment]'
 GO
 ALTER TABLE [dbo].[DhlExpressShipment] ADD CONSTRAINT [FK_DhlExpressShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Creating index [IX_OnTracShipment_Service] on [dbo].[OnTracShipment]'
+PRINT N'Creating index [IX_SWDefault_OnTracShipment_Service] on [dbo].[OnTracShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DhlExpressShipment_Service] ON [dbo].[DhlExpressShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_DhlExpressShipment_Service] ON [dbo].[DhlExpressShipment] ([Service])
 GO
 
 PRINT N'Creating [dbo].[DhlExpressPackage]'
@@ -2950,9 +2953,9 @@ PRINT N'Adding foreign keys to [dbo].[AsendiaShipment]'
 GO
 ALTER TABLE [dbo].[AsendiaShipment] ADD CONSTRAINT [FK_AsendiaShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Creating index [IX_AsendiaShipment_Service] on [dbo].[AsendiaShipment]'
+PRINT N'Creating index [IX_SWDefault_AsendiaShipment_Service] on [dbo].[AsendiaShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
 GO
 PRINT N'Creating [dbo].[Customer]'
 GO
@@ -2999,69 +3002,69 @@ PRINT N'Creating primary key [PK_Customer] on [dbo].[Customer]'
 GO
 ALTER TABLE [dbo].[Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED  ([CustomerID])
 GO
-PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillFirstName] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Customer] ([BillFirstName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillFirstName] ON [dbo].[Customer] ([BillFirstName])
 GO
-PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillLastName] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName] ON [dbo].[Customer] ([BillLastName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillLastName] ON [dbo].[Customer] ([BillLastName])
 GO
-PRINT N'Creating index [IX_Auto_BillCompany] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillCompany] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany] ON [dbo].[Customer] ([BillCompany])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillCompany] ON [dbo].[Customer] ([BillCompany])
 GO
-PRINT N'Creating index [IX_Auto_BillStateProvCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillStateProvCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode] ON [dbo].[Customer] ([BillStateProvCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillStateProvCode] ON [dbo].[Customer] ([BillStateProvCode])
 GO
-PRINT N'Creating index [IX_Auto_BillPostalCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillPostalCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode] ON [dbo].[Customer] ([BillPostalCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillPostalCode] ON [dbo].[Customer] ([BillPostalCode])
 GO
-PRINT N'Creating index [IX_Auto_BillCountryCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillCountryCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode] ON [dbo].[Customer] ([BillCountryCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillCountryCode] ON [dbo].[Customer] ([BillCountryCode])
 GO
-PRINT N'Creating index [IX_Auto_BillEmail] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_BillEmail] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail] ON [dbo].[Customer] ([BillEmail])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_BillEmail] ON [dbo].[Customer] ([BillEmail])
 GO
-PRINT N'Creating index [IX_Auto_ShipLastName] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipLastName] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName] ON [dbo].[Customer] ([ShipLastName])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipLastName] ON [dbo].[Customer] ([ShipLastName])
 GO
-PRINT N'Creating index [IX_Auto_ShipCompany] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipCompany] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany] ON [dbo].[Customer] ([ShipCompany])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipCompany] ON [dbo].[Customer] ([ShipCompany])
 GO
-PRINT N'Creating index [IX_Auto_ShipStateProvCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipStateProvCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode] ON [dbo].[Customer] ([ShipStateProvCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipStateProvCode] ON [dbo].[Customer] ([ShipStateProvCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipPostalCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipPostalCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode] ON [dbo].[Customer] ([ShipPostalCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipPostalCode] ON [dbo].[Customer] ([ShipPostalCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipCountryCode] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipCountryCode] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipCountryCode] ON [dbo].[Customer] ([ShipCountryCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipCountryCode] ON [dbo].[Customer] ([ShipCountryCode])
 GO
-PRINT N'Creating index [IX_Auto_ShipEmail] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_ShipEmail] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipEmail] ON [dbo].[Customer] ([ShipEmail])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipEmail] ON [dbo].[Customer] ([ShipEmail])
 GO
-PRINT N'Creating index [IX_Auto_RollupOrderCount] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_RollupOrderCount] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderCount] ON [dbo].[Customer] ([RollupOrderCount])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupOrderCount] ON [dbo].[Customer] ([RollupOrderCount])
 GO
-PRINT N'Creating index [IX_Auto_RollupOrderTotal] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_RollupOrderTotal] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderTotal] ON [dbo].[Customer] ([RollupOrderTotal])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupOrderTotal] ON [dbo].[Customer] ([RollupOrderTotal])
 GO
-PRINT N'Creating index [IX_Auto_RollupNoteCount] on [dbo].[Customer]'
+PRINT N'Creating index [IX_SWDefault_RollupNoteCount] on [dbo].[Customer]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount] ON [dbo].[Customer] ([RollupNoteCount])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RollupNoteCount] ON [dbo].[Customer] ([RollupNoteCount])
 GO
 ALTER TABLE [dbo].[Customer] ENABLE CHANGE_TRACKING
 GO
@@ -3083,9 +3086,9 @@ PRINT N'Creating primary key [PK_OrderCharge] on [dbo].[OrderCharge]'
 GO
 ALTER TABLE [dbo].[OrderCharge] ADD CONSTRAINT [PK_OrderCharge] PRIMARY KEY CLUSTERED  ([OrderChargeID])
 GO
-PRINT N'Creating index [IX_OrderCharge_OrderID] on [dbo].[OrderCharge]'
+PRINT N'Creating index [IX_SWDefault_OrderCharge_OrderID] on [dbo].[OrderCharge]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID] ASC, [OrderChargeID] ASC)
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID] ASC, [OrderChargeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderCharge] ENABLE CHANGE_TRACKING
 GO
@@ -3133,9 +3136,9 @@ PRINT N'Creating primary key [PK_OrderPaymentDetail] on [dbo].[OrderPaymentDetai
 GO
 ALTER TABLE [dbo].[OrderPaymentDetail] ADD CONSTRAINT [PK_OrderPaymentDetail] PRIMARY KEY CLUSTERED  ([OrderPaymentDetailID])
 GO
-PRINT N'Creating index [IX_OrderPaymentDetail_OrderID] on [dbo].[OrderPaymentDetail]'
+PRINT N'Creating index [IX_SWDefault_OrderPaymentDetail_OrderID] on [dbo].[OrderPaymentDetail]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID] ASC, [OrderPaymentDetailID] ASC)
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID] ASC, [OrderPaymentDetailID] ASC)
 GO
 ALTER TABLE [dbo].[OrderPaymentDetail] ENABLE CHANGE_TRACKING
 GO
@@ -3184,9 +3187,9 @@ PRINT N'Creating primary key [PK_PayPalOrder] on [dbo].[PayPalOrder]'
 GO
 ALTER TABLE [dbo].[PayPalOrder] ADD CONSTRAINT [PK_PayPalOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_PayPalOrder_PaymentStatus] on [dbo].[PayPalOrder]'
+PRINT N'Creating index [IX_SWDefault_PayPalOrder_PaymentStatus] on [dbo].[PayPalOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PayPalOrder_PaymentStatus] ON [dbo].[PayPalOrder] ([PaymentStatus])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PayPalOrder_PaymentStatus] ON [dbo].[PayPalOrder] ([PaymentStatus])
 GO
 PRINT N'Creating [dbo].[PayPalStore]'
 GO
@@ -3220,9 +3223,9 @@ PRINT N'Creating primary key [PK_Permission] on [dbo].[Permission]'
 GO
 ALTER TABLE [dbo].[Permission] ADD CONSTRAINT [PK_Permission] PRIMARY KEY CLUSTERED  ([PermissionID])
 GO
-PRINT N'Creating index [IX_Permission] on [dbo].[Permission]'
+PRINT N'Creating index [IX_SWDefault_Permission] on [dbo].[Permission]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Permission] ON [dbo].[Permission] ([UserID], [PermissionType], [ObjectID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Permission] ON [dbo].[Permission] ([UserID], [PermissionType], [ObjectID])
 GO
 PRINT N'Creating [dbo].[PrintResult]'
 GO
@@ -3257,13 +3260,13 @@ PRINT N'Creating primary key [PK_PrintResult] on [dbo].[PrintResult]'
 GO
 ALTER TABLE [dbo].[PrintResult] ADD CONSTRAINT [PK_PrintResult] PRIMARY KEY CLUSTERED  ([PrintResultID])
 GO
-PRINT N'Creating index [IX_PrintResult_RelatedObjectID] on [dbo].[PrintResult]'
+PRINT N'Creating index [IX_SWDefault_PrintResult_RelatedObjectID] on [dbo].[PrintResult]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PrintResult_RelatedObjectID] ON [dbo].[PrintResult] ([RelatedObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_RelatedObjectID] ON [dbo].[PrintResult] ([RelatedObjectID])
 GO
-PRINT N'Creating index [IX_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
+PRINT N'Creating index [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
 GO
-CREATE NONCLUSTERED INDEX [IX_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID])
 GO
 ALTER TABLE [dbo].[PrintResult] ENABLE CHANGE_TRACKING
 GO
@@ -3283,7 +3286,7 @@ PRINT N'Creating primary key [PK_ProStoresOrder] on [dbo].[ProStoresOrder]'
 GO
 ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [PK_ProStoresOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ProStoresOrder_ConfirmationNumber] 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrder_ConfirmationNumber] 
 	ON [dbo].[ProStoresOrder] ( [ConfirmationNumber] ASC )
 GO
 PRINT N'Creating [dbo].[ProStoresStore]'
@@ -3478,9 +3481,9 @@ PRINT N'Creating primary key [PK_SearsOrder] on [dbo].[SearsOrder]'
 GO
 ALTER TABLE [dbo].[SearsOrder] ADD CONSTRAINT [PK_SearsOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_SearsOrder_PoNumber_OrderID] on [dbo].[SearsOrder]'
+PRINT N'Creating index [IX_SWDefault_SearsOrder_PoNumber_OrderID] on [dbo].[SearsOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SearsOrder_PoNumber_OrderID] ON [dbo].[SearsOrder] ([PoNumber], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_SearsOrder_PoNumber_OrderID] ON [dbo].[SearsOrder] ([PoNumber], [OrderID])
 GO
 PRINT N'Creating [dbo].[SearsOrderItem]'
 GO
@@ -3529,9 +3532,9 @@ PRINT N'Creating primary key [PK_ServerMessageSignoff] on [dbo].[ServerMessageSi
 GO
 ALTER TABLE [dbo].[ServerMessageSignoff] ADD CONSTRAINT [PK_ServerMessageSignoff] PRIMARY KEY CLUSTERED  ([ServerMessageSignoffID])
 GO
-PRINT N'Creating index [IX_ServerMessageSignoff] on [dbo].[ServerMessageSignoff]'
+PRINT N'Creating index [IX_SWDefault_ServerMessageSignoff] on [dbo].[ServerMessageSignoff]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessageSignoff] ON [dbo].[ServerMessageSignoff] ([UserID], [ComputerID], [ServerMessageID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ServerMessageSignoff] ON [dbo].[ServerMessageSignoff] ([UserID], [ComputerID], [ServerMessageID])
 GO
 PRINT N'Creating [dbo].[ServerMessage]'
 GO
@@ -3559,17 +3562,17 @@ PRINT N'Creating primary key [PK_ServerMessage] on [dbo].[ServerMessage]'
 GO
 ALTER TABLE [dbo].[ServerMessage] ADD CONSTRAINT [PK_ServerMessage] PRIMARY KEY CLUSTERED  ([ServerMessageID])
 GO
-PRINT N'Creating index [IX_ServerMessage_RowVersion] on [dbo].[ServerMessage]'
+PRINT N'Creating index [IX_SWDefault_ServerMessage_RowVersion] on [dbo].[ServerMessage]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessage_RowVersion] ON [dbo].[ServerMessage] ([RowVersion])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ServerMessage_RowVersion] ON [dbo].[ServerMessage] ([RowVersion])
 GO
-PRINT N'Creating index [IX_ServerMessage_Number] on [dbo].[ServerMessage]'
+PRINT N'Creating index [IX_SWDefault_ServerMessage_Number] on [dbo].[ServerMessage]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessage_Number] ON [dbo].[ServerMessage] ([Number])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ServerMessage_Number] ON [dbo].[ServerMessage] ([Number])
 GO
-PRINT N'Creating index [IX_ServerMessage_Expires] on [dbo].[ServerMessage]'
+PRINT N'Creating index [IX_SWDefault_ServerMessage_Expires] on [dbo].[ServerMessage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ServerMessage_Expires] ON [dbo].[ServerMessage] ([Expires])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ServerMessage_Expires] ON [dbo].[ServerMessage] ([Expires])
 GO
 PRINT N'Creating [dbo].[ServiceStatus]'
 GO
@@ -3615,9 +3618,9 @@ PRINT N'Creating primary key [PK_ShipmentCustomsItem] on [dbo].[ShipmentCustomsI
 GO
 ALTER TABLE [dbo].[ShipmentCustomsItem] ADD CONSTRAINT [PK_ShipmentCustomsItem] PRIMARY KEY CLUSTERED  ([ShipmentCustomsItemID])
 GO
-PRINT N'Creating index [IX_ShipmentCustomsItem_ShipmentID] on [dbo].[ShipmentCustomsItem]'
+PRINT N'Creating index [IX_SWDefault_ShipmentCustomsItem_ShipmentID] on [dbo].[ShipmentCustomsItem]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ShipmentCustomsItem_ShipmentID] ON [dbo].[ShipmentCustomsItem] ([ShipmentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipmentCustomsItem_ShipmentID] ON [dbo].[ShipmentCustomsItem] ([ShipmentID])
 GO
 ALTER TABLE [dbo].[ShipmentCustomsItem] ENABLE CHANGE_TRACKING
 GO
@@ -3675,7 +3678,8 @@ CREATE TABLE [dbo].[ShopifyOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [ShopifyOrderItemID] [bigint] NOT NULL,
-[ShopifyProductID] [bigint] NOT NULL
+[ShopifyProductID] [bigint] NOT NULL,
+[InventoryItemID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyOrderItem] on [dbo].[ShopifyOrderItem]'
@@ -3884,9 +3888,9 @@ PRINT N'Creating primary key [PK_TemplateStoreSettings] on [dbo].[TemplateStoreS
 GO
 ALTER TABLE [dbo].[TemplateStoreSettings] ADD CONSTRAINT [PK_TemplateStoreSettings] PRIMARY KEY CLUSTERED  ([TemplateStoreSettingsID])
 GO
-PRINT N'Creating index [IX_TemplateStoreSettings] on [dbo].[TemplateStoreSettings]'
+PRINT N'Creating index [IX_SWDefault_TemplateStoreSettings] on [dbo].[TemplateStoreSettings]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_TemplateStoreSettings] ON [dbo].[TemplateStoreSettings] ([TemplateID], [StoreID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_TemplateStoreSettings] ON [dbo].[TemplateStoreSettings] ([TemplateID], [StoreID])
 GO
 PRINT N'Creating [dbo].[TemplateUserSettings]'
 GO
@@ -4016,13 +4020,13 @@ PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
 GO
 ALTER TABLE [dbo].[UpsShipment] ADD CONSTRAINT [PK_UpsShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating index [IX_UpsShipment_Service] on [dbo].[UpsShipment]'
+PRINT N'Creating index [IX_SWDefault_UpsShipment_Service] on [dbo].[UpsShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsShipment_Service] ON [dbo].[UpsShipment] ([Service])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsShipment_Service] ON [dbo].[UpsShipment] ([Service])
 GO
-PRINT N'Creating index [IX_UpsShipment_DeliveryConfirmation] on [dbo].[UpsShipment]'
+PRINT N'Creating index [IX_SWDefault_UpsShipment_DeliveryConfirmation] on [dbo].[UpsShipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsShipment_DeliveryConfirmation] ON [dbo].[UpsShipment] ([DeliveryConfirmation])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsShipment_DeliveryConfirmation] ON [dbo].[UpsShipment] ([DeliveryConfirmation])
 GO
 PRINT N'Creating [dbo].[UpsPackage]'
 GO
@@ -4059,13 +4063,13 @@ PRINT N'Creating primary key [PK_UpsPackage] on [dbo].[UpsPackage]'
 GO
 ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [PK_UpsPackage] PRIMARY KEY CLUSTERED  ([UpsPackageID])
 GO
-PRINT N'Creating index [IX_UpsPackage_ShipmentID] on [dbo].[UpsPackage]'
+PRINT N'Creating index [IX_SWDefault_UpsPackage_ShipmentID] on [dbo].[UpsPackage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsPackage_ShipmentID] ON [dbo].[UpsPackage] ([ShipmentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsPackage_ShipmentID] ON [dbo].[UpsPackage] ([ShipmentID])
 GO
-PRINT N'Creating index [IX_UpsPackage_PackagingType] on [dbo].[UpsPackage]'
+PRINT N'Creating index [IX_SWDefault_UpsPackage_PackagingType] on [dbo].[UpsPackage]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsPackage_PackagingType] ON [dbo].[UpsPackage] ([PackagingType])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsPackage_PackagingType] ON [dbo].[UpsPackage] ([PackagingType])
 GO
 PRINT N'Creating [dbo].[UpsProfile]'
 GO
@@ -4155,9 +4159,9 @@ PRINT N'Creating primary key [PK_UserColumnSettings] on [dbo].[UserColumnSetting
 GO
 ALTER TABLE [dbo].[UserColumnSettings] ADD CONSTRAINT [PK_UserColumnSettings] PRIMARY KEY CLUSTERED  ([UserColumnSettingsID])
 GO
-PRINT N'Creating index [IX_UserColumnSettings] on [dbo].[UserColumnSettings]'
+PRINT N'Creating index [IX_SWDefault_UserColumnSettings] on [dbo].[UserColumnSettings]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_UserColumnSettings] ON [dbo].[UserColumnSettings] ([UserID], [SettingsKey])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_UserColumnSettings] ON [dbo].[UserColumnSettings] ([UserID], [SettingsKey])
 GO
 PRINT N'Creating [dbo].[UserSettings]'
 GO
@@ -4201,9 +4205,9 @@ PRINT N'Creating primary key [PK_VersionVerification] on [dbo].[VersionSignoff]'
 GO
 ALTER TABLE [dbo].[VersionSignoff] ADD CONSTRAINT [PK_VersionVerification] PRIMARY KEY CLUSTERED  ([VersionSignoffID])
 GO
-PRINT N'Creating index [IX_VersionSignoff] on [dbo].[VersionSignoff]'
+PRINT N'Creating index [IX_SWDefault_VersionSignoff] on [dbo].[VersionSignoff]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_VersionSignoff] ON [dbo].[VersionSignoff] ([ComputerID], [UserID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_VersionSignoff] ON [dbo].[VersionSignoff] ([ComputerID], [UserID])
 GO
 PRINT N'Creating [dbo].[VolusionStore]'
 GO
@@ -4401,17 +4405,17 @@ PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
 GO
 ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
 GO
-PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
+PRINT N'Creating index [IX_SWDefault_ActionQueue_Search] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([Status], [ActionQueueType], [ActionQueueID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ActionQueue_Search] ON [dbo].[ActionQueue] ([Status], [ActionQueueType], [ActionQueueID])
 GO
-PRINT N'Creating index [IX_ActionQueue_ActionQueueType] on [dbo].[ActionQueue]'
+PRINT N'Creating index [IX_SWDefault_ActionQueue_ActionQueueType] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ActionQueueType] ON [dbo].[ActionQueue] ([ActionQueueType] DESC) INCLUDE ([ComputerLimitedList], [Status])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ActionQueue_ActionQueueType] ON [dbo].[ActionQueue] ([ActionQueueType] DESC) INCLUDE ([ComputerLimitedList], [Status])
 GO
-PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
+PRINT N'Creating index [IX_SWDefault_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock]) INCLUDE ([Status])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock]) INCLUDE ([Status])
 GO
 ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
 GO
@@ -4460,9 +4464,9 @@ PRINT N'Creating primary key [PK_PackagingProfile] on [dbo].[DimensionsProfile]'
 GO
 ALTER TABLE [dbo].[DimensionsProfile] ADD CONSTRAINT [PK_PackagingProfile] PRIMARY KEY CLUSTERED  ([DimensionsProfileID])
 GO
-PRINT N'Creating index [IX_DimensionsProfile_Name] on [dbo].[DimensionsProfile]'
+PRINT N'Creating index [IX_SWDefault_DimensionsProfile_Name] on [dbo].[DimensionsProfile]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_DimensionsProfile_Name] ON [dbo].[DimensionsProfile] ([Name])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_DimensionsProfile_Name] ON [dbo].[DimensionsProfile] ([Name])
 GO
 ALTER TABLE [dbo].[DimensionsProfile] ENABLE CHANGE_TRACKING
 GO
@@ -4599,9 +4603,9 @@ PRINT N'Creating primary key [PK_FedExEndOfDayClose] on [dbo].[FedExEndOfDayClos
 GO
 ALTER TABLE [dbo].[FedExEndOfDayClose] ADD CONSTRAINT [PK_FedExEndOfDayClose] PRIMARY KEY CLUSTERED  ([FedExEndOfDayCloseID])
 GO
-PRINT N'Creating index [IX_FedExEndOfDayClose_CloseDate] on [dbo].[FedExEndOfDayClose]'
+PRINT N'Creating index [IX_SWDefault_FedExEndOfDayClose_CloseDate] on [dbo].[FedExEndOfDayClose]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FedExEndOfDayClose_CloseDate] ON [dbo].[FedExEndOfDayClose] ([CloseDate]) INCLUDE ([FedExAccountID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FedExEndOfDayClose_CloseDate] ON [dbo].[FedExEndOfDayClose] ([CloseDate]) INCLUDE ([FedExAccountID])
 GO
 PRINT N'Creating [dbo].[FilterNodeContentDirty]'
 GO
@@ -4620,7 +4624,7 @@ PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeCon
 GO
 ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_FilterNodeContentDirtyID] ON [dbo].[FilterNodeContentDirty] ([ObjectID], [ComputerID], [ColumnsUpdated]) INCLUDE ([ObjectType], [ParentID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_FilterNodeContentDirty_FilterNodeContentDirtyID] ON [dbo].[FilterNodeContentDirty] ([ObjectID], [ComputerID], [ColumnsUpdated]) INCLUDE ([ObjectType], [ParentID])
 GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
@@ -4782,9 +4786,9 @@ PRINT N'Creating primary key [PK_LabelSheet] on [dbo].[LabelSheet]'
 GO
 ALTER TABLE [dbo].[LabelSheet] ADD CONSTRAINT [PK_LabelSheet] PRIMARY KEY CLUSTERED  ([LabelSheetID])
 GO
-PRINT N'Creating index [IX_LabelSheet_Name] on [dbo].[LabelSheet]'
+PRINT N'Creating index [IX_SWDefault_LabelSheet_Name] on [dbo].[LabelSheet]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_LabelSheet_Name] ON [dbo].[LabelSheet] ([Name])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_LabelSheet_Name] ON [dbo].[LabelSheet] ([Name])
 GO
 ALTER TABLE [dbo].[LabelSheet] ENABLE CHANGE_TRACKING
 GO
@@ -4804,9 +4808,9 @@ PRINT N'Creating primary key [PK_ObjectLabel] on [dbo].[ObjectLabel]'
 GO
 ALTER TABLE [dbo].[ObjectLabel] ADD CONSTRAINT [PK_ObjectLabel] PRIMARY KEY CLUSTERED  ([ObjectID])
 GO
-PRINT N'Creating index [IX_ObjectLabel_ObjectTypeIsDeleted] on [dbo].[ObjectLabel]'
+PRINT N'Creating index [IX_SWDefault_ObjectLabel_ObjectTypeIsDeleted] on [dbo].[ObjectLabel]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ObjectLabel_ObjectTypeIsDeleted] ON [dbo].[ObjectLabel] ([ObjectType], [IsDeleted])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ObjectLabel_ObjectTypeIsDeleted] ON [dbo].[ObjectLabel] ([ObjectType], [IsDeleted])
 GO
 PRINT N'Creating [dbo].[OnTracAccount]'
 GO
@@ -4851,13 +4855,13 @@ PRINT N'Creating primary key [PK_Resource] on [dbo].[Resource]'
 GO
 ALTER TABLE [dbo].[Resource] ADD CONSTRAINT [PK_Resource] PRIMARY KEY CLUSTERED  ([ResourceID])
 GO
-PRINT N'Creating index [IX_Resource_Checksum] on [dbo].[Resource]'
+PRINT N'Creating index [IX_SWDefault_Resource_Checksum] on [dbo].[Resource]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Resource_Checksum] ON [dbo].[Resource] ([Checksum])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Resource_Checksum] ON [dbo].[Resource] ([Checksum])
 GO
-PRINT N'Creating index [IX_Resource_Filename] on [dbo].[Resource]'
+PRINT N'Creating index [IX_SWDefault_Resource_Filename] on [dbo].[Resource]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Resource_Filename] ON [dbo].[Resource] ([Filename])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Resource_Filename] ON [dbo].[Resource] ([Filename])
 GO
 PRINT N'Creating [dbo].[Scheduling_BLOB_TRIGGERS]'
 GO
@@ -5033,9 +5037,9 @@ PRINT N'Creating primary key [PK_ShippingOrigin] on [dbo].[ShippingOrigin]'
 GO
 ALTER TABLE [dbo].[ShippingOrigin] ADD CONSTRAINT [PK_ShippingOrigin] PRIMARY KEY CLUSTERED  ([ShippingOriginID])
 GO
-PRINT N'Creating index [IX_ShippingOrigin_Description] on [dbo].[ShippingOrigin]'
+PRINT N'Creating index [IX_SWDefault_ShippingOrigin_Description] on [dbo].[ShippingOrigin]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ShippingOrigin_Description] ON [dbo].[ShippingOrigin] ([Description])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ShippingOrigin_Description] ON [dbo].[ShippingOrigin] ([Description])
 GO
 ALTER TABLE [dbo].[ShippingOrigin] ENABLE CHANGE_TRACKING
 GO
@@ -5359,9 +5363,9 @@ CREATE TABLE [dbo].[ValidatedAddress](
 ) ON [PRIMARY]
 GO
 
-Print N'Creating [IX_ValidatedAddress_ConsumerIDAddressPrefix]'
+Print N'Creating [IX_SWDefault_ValidatedAddress_ConsumerIDAddressPrefix]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ValidatedAddress_ConsumerIDAddressPrefix]
     ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
 GO
 
@@ -5417,11 +5421,11 @@ PRINT N'Altering [dbo].[UpsAccount]'
 GO
 PRINT N'Adding constraints to [dbo].[Computer]'
 GO
-ALTER TABLE [dbo].[Computer] ADD CONSTRAINT [UK_Computer_Identifier] UNIQUE NONCLUSTERED  ([Identifier])
+ALTER TABLE [dbo].[Computer] ADD CONSTRAINT [IX_SWDefault_Computer_Identifier] UNIQUE NONCLUSTERED  ([Identifier])
 GO
 PRINT N'Adding constraints to [dbo].[ServiceStatus]'
 GO
-ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [IX_ServiceStatus] UNIQUE NONCLUSTERED  ([ComputerID], [ServiceType])
+ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [IX_SWDefault_ServiceStatus] UNIQUE NONCLUSTERED  ([ComputerID], [ServiceType])
 GO
 PRINT N'Adding foreign keys to [dbo].[ActionFilterTrigger]'
 GO
@@ -5968,13 +5972,13 @@ PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
 GO
 ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [PK_GrouponOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_Auto_GrouponOrderID] on [dbo].[GrouponOrder]'
+PRINT N'Creating index [IX_SWDefault_GrouponOrderID] on [dbo].[GrouponOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_GrouponOrderID] ON [dbo].[GrouponOrder] ([GrouponOrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GrouponOrderID] ON [dbo].[GrouponOrder] ([GrouponOrderID])
 GO
-PRINT N'Creating index [IX_GrouponOrder_ParentOrderID] on [dbo].[GrouponOrder]'
+PRINT N'Creating index [IX_SWDefault_GrouponOrder_ParentOrderID] on [dbo].[GrouponOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_GrouponOrder_ParentOrderID] ON [dbo].[GrouponOrder] ([ParentOrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GrouponOrder_ParentOrderID] ON [dbo].[GrouponOrder] ([ParentOrderID])
 GO
 PRINT N'Creating [dbo].[GrouponOrderItem]'
 GO
@@ -6100,7 +6104,7 @@ GO
 ALTER TABLE [dbo].[LemonStandOrderItem] CHECK CONSTRAINT [FK_LemonStandOrderItem_OrderItem]
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 (
     [LemonStandOrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -6219,25 +6223,25 @@ GO
 ALTER TABLE [dbo].[GenericModuleOrderItem] CHECK CONSTRAINT [FK_GenericModuleOrderItem_OrderItem]
 GO
 
-PRINT N'Creating index [IX_Auto_PurchaseOrderId] on [dbo].[WalmartOrder]'
+PRINT N'Creating index [IX_SWDefault_PurchaseOrderId] on [dbo].[WalmartOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_PurchaseOrderId] ON [dbo].[WalmartOrder] ([PurchaseOrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PurchaseOrderId] ON [dbo].[WalmartOrder] ([PurchaseOrderID])
 GO
-PRINT N'Creating index [IX_Auto_CustomerOrderId] on [dbo].[WalmartOrder]'
+PRINT N'Creating index [IX_SWDefault_CustomerOrderId] on [dbo].[WalmartOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_CustomerOrderId] ON [dbo].[WalmartOrder] ([CustomerOrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_CustomerOrderId] ON [dbo].[WalmartOrder] ([CustomerOrderID])
 GO
-PRINT N'Creating index [IX_Auto_EstimatedDeliveryDate] on [dbo].[WalmartOrder]'
+PRINT N'Creating index [IX_SWDefault_EstimatedDeliveryDate] on [dbo].[WalmartOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_EstimatedDeliveryDate] ON [dbo].[WalmartOrder] ([EstimatedDeliveryDate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EstimatedDeliveryDate] ON [dbo].[WalmartOrder] ([EstimatedDeliveryDate])
 GO
-PRINT N'Creating index [IX_Auto_EstimatedShipDate] on [dbo].[WalmartOrder]'
+PRINT N'Creating index [IX_SWDefault_EstimatedShipDate] on [dbo].[WalmartOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_EstimatedShipDate] ON [dbo].[WalmartOrder] ([EstimatedShipDate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EstimatedShipDate] ON [dbo].[WalmartOrder] ([EstimatedShipDate])
 GO
-PRINT N'Creating index [IX_Auto_RequestedShippingMethodCode] on [dbo].[WalmartOrder]'
+PRINT N'Creating index [IX_SWDefault_RequestedShippingMethodCode] on [dbo].[WalmartOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShippingMethodCode] ON [dbo].[WalmartOrder] ([RequestedShippingMethodCode])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_RequestedShippingMethodCode] ON [dbo].[WalmartOrder] ([RequestedShippingMethodCode])
 GO
 PRINT N'Creating [dbo].[WalmartOrderItem]'
 GO
@@ -6356,9 +6360,9 @@ ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [FK_UpsPackageRate_UpsPackageR
 ON DELETE CASCADE
 GO
 
-PRINT N'Creating index [IX_UpsPackageRate_WeightInPounds_Zone] on [dbo].[UpsPackageRate]'
+PRINT N'Creating index [IX_SWDefault_UpsPackageRate_WeightInPounds_Zone] on [dbo].[UpsPackageRate]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsPackageRate_WeightInPounds_Zone] ON [dbo].[UpsPackageRate] ([WeightInPounds],[Zone]) INCLUDE ([UpsPackageRateID], [UpsRateTableID], [Service], [Rate])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsPackageRate_WeightInPounds_Zone] ON [dbo].[UpsPackageRate] ([WeightInPounds],[Zone]) INCLUDE ([UpsPackageRateID], [UpsRateTableID], [Service], [Rate])
 GO
 
 PRINT N'Creating [dbo].[UpsLetterRate]'
@@ -6489,24 +6493,24 @@ PRINT N'Creating primary key [PK_Shortcut] on [dbo].[Shortcut]'
 GO
 ALTER TABLE [dbo].[Shortcut] ADD CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED  ([ShortcutID])
 GO
-PRINT N'Creating index [IX_Shortcut_Keys] on [dbo].[Shortcut]'
+PRINT N'Creating index [IX_SWDefault_Shortcut_Keys] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey]) 
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey]) 
 WHERE [ModifierKeys] IS NOT NULL 
 AND [VirtualKey] IS NOT NULL
 GO
-PRINT N'Creating index [IX_Shortcut_Barcode] on [dbo].[Shortcut]'
+PRINT N'Creating index [IX_SWDefault_Shortcut_Barcode] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE ([Barcode]<>'')
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Shortcut_Barcode] ON [dbo].[Shortcut] ([Barcode]) WHERE ([Barcode]<>'')
 GO
 PRINT N'Altering [dbo].[Shortcut]'
 GO
 ALTER TABLE [dbo].[Shortcut] ENABLE CHANGE_TRACKING
 GO
 
-PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
+PRINT N'Creating index [IX_SWDefault_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
-CREATE NONCLUSTERED INDEX [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])
 GO
 PRINT N'Creating [dbo].[OrderSearch]'
 GO
@@ -6525,17 +6529,17 @@ PRINT N'Creating primary key [PK_OrderSearch] on [dbo].[OrderSearch]'
 GO
 ALTER TABLE [dbo].[OrderSearch] ADD CONSTRAINT [PK_OrderSearch] PRIMARY KEY CLUSTERED  ([OrderSearchID])
 GO
-PRINT N'Creating index [IX_OrderSearch_OrderNumber] on [dbo].[OrderSearch]'
+PRINT N'Creating index [IX_SWDefault_OrderSearch_OrderNumber] on [dbo].[OrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderSearch_OrderNumber] ON [dbo].[OrderSearch] ([OrderNumber]) INCLUDE ([OrderID], [StoreID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderSearch_OrderNumber] ON [dbo].[OrderSearch] ([OrderNumber]) INCLUDE ([OrderID], [StoreID])
 GO
-PRINT N'Creating index [IX_OrderSearch_OrderNumberComplete] on [dbo].[OrderSearch]'
+PRINT N'Creating index [IX_SWDefault_OrderSearch_OrderNumberComplete] on [dbo].[OrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderSearch_OrderNumberComplete] ON [dbo].[OrderSearch] ([OrderNumberComplete]) INCLUDE ([OrderID], [StoreID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderSearch_OrderNumberComplete] ON [dbo].[OrderSearch] ([OrderNumberComplete]) INCLUDE ([OrderID], [StoreID])
 GO
-PRINT N'Creating index [IX_OrderSearch_StoreIDIsManual] on [dbo].[Order]'
+PRINT N'Creating index [IX_SWDefault_OrderSearch_StoreIDIsManual] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderSearch_StoreIDIsManual] ON [dbo].[OrderSearch] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderNumber])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OrderSearch_StoreIDIsManual] ON [dbo].[OrderSearch] ([StoreID] ASC, [IsManual] ASC) INCLUDE ([OrderNumber])
 GO
 PRINT N'Adding foreign keys to [dbo].[OrderSearch]'
 GO
@@ -6557,9 +6561,9 @@ PRINT N'Creating primary key [PK_AmazonOrderSearch] on [dbo].[AmazonOrderSearch]
 GO
 ALTER TABLE [dbo].[AmazonOrderSearch] ADD CONSTRAINT [PK_AmazonOrderSearch] PRIMARY KEY CLUSTERED  ([AmazonOrderSearchID])
 GO
-PRINT N'Creating index [IX_AmazonOrderSearch_AmazonOrderID_OrderID] on [dbo].[AmazonOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_AmazonOrderSearch_AmazonOrderID_OrderID] on [dbo].[AmazonOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AmazonOrderSearch_AmazonOrderID_OrderID] ON [dbo].[AmazonOrderSearch] ([AmazonOrderID], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AmazonOrderSearch_AmazonOrderID_OrderID] ON [dbo].[AmazonOrderSearch] ([AmazonOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderSearch]'
 GO
@@ -6575,9 +6579,9 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderSearch] on [dbo].[ChannelAdv
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderSearch] ADD CONSTRAINT [PK_ChannelAdvisorOrderSearch] PRIMARY KEY CLUSTERED  ([ChannelAdvisorOrderSearchID])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID]
 	ON [dbo].[ChannelAdvisorOrderSearch] ([CustomOrderIdentifier], [OrderID])
 GO
 PRINT N'Creating [dbo].[ClickCartProOrderSearch]'
@@ -6594,9 +6598,9 @@ PRINT N'Creating primary key [PK_ClickCartProOrderSearch] on [dbo].[ClickCartPro
 GO
 ALTER TABLE [dbo].[ClickCartProOrderSearch] ADD CONSTRAINT [PK_ClickCartProOrderSearch] PRIMARY KEY CLUSTERED  ([ClickCartProOrderSearchID])
 GO
-PRINT N'Creating index [IX_ClickCartProOrderSearch_ClickCartProOrderID] on [dbo].[ClickCartProOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_ClickCartProOrderSearch_ClickCartProOrderID] on [dbo].[ClickCartProOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ClickCartProOrderSearch_ClickCartProOrderID] ON [dbo].[ClickCartProOrderSearch] ([ClickCartProOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ClickCartProOrderSearch_ClickCartProOrderID] ON [dbo].[ClickCartProOrderSearch] ([ClickCartProOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[CommerceInterfaceOrderSearch]'
 GO
@@ -6612,9 +6616,9 @@ PRINT N'Creating primary key [PK_CommerceInterfaceOrderSearch] on [dbo].[Commerc
 GO
 ALTER TABLE [dbo].[CommerceInterfaceOrderSearch] ADD CONSTRAINT [PK_CommerceInterfaceOrderSearch] PRIMARY KEY CLUSTERED  ([CommerceInterfaceOrderSearchID])
 GO
-PRINT N'Creating index [IX_CommerceInterfaceOrderSearch_CommerceInterfaceOrderNumber] on [dbo].[CommerceInterfaceOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_CommerceInterfaceOrderSearch_CommerceInterfaceOrderNumber] on [dbo].[CommerceInterfaceOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_CommerceInterfaceOrderSearch_CommerceInterfaceOrderNumber] ON [dbo].[CommerceInterfaceOrderSearch] ([CommerceInterfaceOrderNumber]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_CommerceInterfaceOrderSearch_CommerceInterfaceOrderNumber] ON [dbo].[CommerceInterfaceOrderSearch] ([CommerceInterfaceOrderNumber]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[EbayOrderSearch]'
 GO
@@ -6632,9 +6636,9 @@ PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
 GO
 ALTER TABLE [dbo].[EbayOrderSearch] ADD CONSTRAINT [PK_EbayOrderSearch] PRIMARY KEY CLUSTERED  ([EbayOrderSearchID])
 GO
-PRINT N'Creating index [IX_EbayOrderSearch_EbayBuyerID_OrderID] on [dbo].[EbayOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_EbayOrderSearch_EbayBuyerID_OrderID] on [dbo].[EbayOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrderSearch_EbayBuyerID_OrderID] ON [dbo].[EbayOrderSearch] ([EbayBuyerID], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrderSearch_EbayBuyerID_OrderID] ON [dbo].[EbayOrderSearch] ([EbayBuyerID], [OrderID])
 GO
 PRINT N'Creating [dbo].[GrouponOrderSearch]'
 GO
@@ -6651,13 +6655,13 @@ PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearc
 GO
 ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [PK_GrouponOrderSearch] PRIMARY KEY CLUSTERED  ([GrouponOrderSearchID])
 GO
-PRINT N'Creating index [IX_GrouponOrderSearch_GrouponOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_GrouponOrderSearch_GrouponOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_GrouponOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([GrouponOrderID], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GrouponOrderSearch_GrouponOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([GrouponOrderID], [OrderID])
 GO
-PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_GrouponOrderSearch_ParentOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GrouponOrderSearch_ParentOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[JetOrderSearch]'
 GO
@@ -6673,9 +6677,9 @@ PRINT N'Creating primary key [PK_JetOrderSearch] on [dbo].[JetOrderSearch]'
 GO
 ALTER TABLE [dbo].[JetOrderSearch] ADD CONSTRAINT [PK_JetOrderSearch] PRIMARY KEY CLUSTERED  ([JetOrderSearchID])
 GO
-PRINT N'Creating index [IX_JetOrderSearch_JetOrderID] on [dbo].[JetOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_JetOrderSearch_JetOrderID] on [dbo].[JetOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_JetOrderSearch_JetOrderID] ON [dbo].[JetOrderSearch] ([MerchantOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_JetOrderSearch_JetOrderID] ON [dbo].[JetOrderSearch] ([MerchantOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[LemonStandOrderSearch]'
 GO
@@ -6691,9 +6695,9 @@ PRINT N'Creating primary key [PK_LemonStandOrderSearch] on [dbo].[LemonStandOrde
 GO
 ALTER TABLE [dbo].[LemonStandOrderSearch] ADD CONSTRAINT [PK_LemonStandOrderSearch] PRIMARY KEY CLUSTERED  ([LemonStandOrderSearchID])
 GO
-PRINT N'Creating index [IX_LemonStandOrderSearch_LemonStandOrderID_OrderID] on [dbo].[LemonStandOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_LemonStandOrderSearch_LemonStandOrderID_OrderID] on [dbo].[LemonStandOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_LemonStandOrderSearch_LemonStandOrderID_OrderID] ON [dbo].[LemonStandOrderSearch] ([LemonStandOrderID], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_LemonStandOrderSearch_LemonStandOrderID_OrderID] ON [dbo].[LemonStandOrderSearch] ([LemonStandOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[MagentoOrderSearch]'
 GO
@@ -6709,9 +6713,9 @@ PRINT N'Creating primary key [PK_MagentoOrderSearch] on [dbo].[MagentoOrderSearc
 GO
 ALTER TABLE [dbo].[MagentoOrderSearch] ADD CONSTRAINT [PK_MagentoOrderSearch] PRIMARY KEY CLUSTERED  ([MagentoOrderSearchID])
 GO
-PRINT N'Creating index [IX_MagentoOrderSearch_MagentoOrderID] on [dbo].[MagentoOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_MagentoOrderSearch_MagentoOrderID] on [dbo].[MagentoOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_MagentoOrderSearch_MagentoOrderID] ON [dbo].[MagentoOrderSearch] ([MagentoOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_MagentoOrderSearch_MagentoOrderID] ON [dbo].[MagentoOrderSearch] ([MagentoOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[MarketplaceAdvisorOrderSearch]'
 GO
@@ -6784,7 +6788,7 @@ PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderS
 GO
 ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [PK_ProStoresOrderSearch] PRIMARY KEY CLUSTERED  ([ProStoresOrderSearchID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ProStoresOrderSearch_ConfirmationNumber] 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrderSearch_ConfirmationNumber] 
 	ON [dbo].[ProStoresOrderSearch] ( [ConfirmationNumber] ASC )
 GO
 PRINT N'Creating [dbo].[SearsOrderSearch]'
@@ -6801,9 +6805,9 @@ PRINT N'Creating primary key [PK_SearsOrderSearch] on [dbo].[SearsOrderSearch]'
 GO
 ALTER TABLE [dbo].[SearsOrderSearch] ADD CONSTRAINT [PK_SearsOrderSearch] PRIMARY KEY CLUSTERED  ([SearsOrderSearchID])
 GO
-PRINT N'Creating index [IX_SearsOrderSearch_PoNumber_OrderID] on [dbo].[SearsOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_SearsOrderSearch_PoNumber_OrderID] on [dbo].[SearsOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SearsOrderSearch_PoNumber_OrderID] ON [dbo].[SearsOrderSearch] ([PoNumber], [OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_SearsOrderSearch_PoNumber_OrderID] ON [dbo].[SearsOrderSearch] ([PoNumber], [OrderID])
 GO
 PRINT N'Creating [dbo].[ShopifyOrderSearch]'
 GO
@@ -6848,13 +6852,13 @@ PRINT N'Creating primary key [PK_WalmartOrderSearch] on [dbo].[WalmartOrderSearc
 GO
 ALTER TABLE [dbo].[WalmartOrderSearch] ADD CONSTRAINT [PK_WalmartOrderSearch] PRIMARY KEY CLUSTERED  ([WalmartOrderSearchID])
 GO
-PRINT N'Creating index [IX_WalmartOrderSearch_PurchaseOrderID] on [dbo].[WalmartOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_WalmartOrderSearch_PurchaseOrderID] on [dbo].[WalmartOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_PurchaseOrderID] ON [dbo].[WalmartOrderSearch] ([PurchaseOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_WalmartOrderSearch_PurchaseOrderID] ON [dbo].[WalmartOrderSearch] ([PurchaseOrderID]) INCLUDE ([OrderID])
 GO
-PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
+PRINT N'Creating index [IX_SWDefault_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[YahooOrderSearch]'
 GO
@@ -6964,17 +6968,17 @@ PRINT N'Creating primary key [PK_OverstockOrder] on [dbo].[OverstockOrder]'
 GO
 ALTER TABLE [dbo].[OverstockOrder] ADD CONSTRAINT [PK_OverstockOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SalesChannelName] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OverstockOrder_SalesChannelName] ON [dbo].[OverstockOrder]
 (
 	[SalesChannelName] ASC
 ) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_WarehouseCode] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OverstockOrder_WarehouseCode] ON [dbo].[OverstockOrder]
 (
 	[WarehouseCode] ASC
 ) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_OverstockOrder_SofsCreatedDate] ON [dbo].[OverstockOrder]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_OverstockOrder_SofsCreatedDate] ON [dbo].[OverstockOrder]
 (
 	[SofsCreatedDate] ASC
 ) ON [PRIMARY]

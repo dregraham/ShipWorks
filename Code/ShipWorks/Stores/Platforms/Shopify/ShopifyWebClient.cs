@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,10 +13,12 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -28,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
-        private static readonly LruCache<string, JToken> productCache = new LruCache<string, JToken>(1000);
+        private static readonly LruCache<string, ShopifyProduct> productCache = new LruCache<string, ShopifyProduct>(1000);
         private static readonly ShopifyWebClientRequestThrottle throttler = new ShopifyWebClientRequestThrottle();
 
         // Progress reporting
@@ -170,29 +173,19 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             try
             {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
-                request.Uri = new Uri(Endpoints.ShopUrl);
+                ShopifyShop shopifyShop = GetShop().Shop;
 
-                // Make the call and get the response
-                string shopAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetShop, progress);
-
-                JToken shop = JObject.Parse(shopAsString);
-
-                if (shop?["shop"] != null)
+                if (shopifyShop != null)
                 {
-                    shop = shop["shop"];
-
-                    store.StoreName = shop.GetValue("name", "Shopify Store");
+                    store.StoreName = shopifyShop.StoreName;
                     store.ShopifyShopDisplayName = store.StoreName;
-
-                    store.Street1 = shop.GetValue("address1", string.Empty);
-                    store.City = shop.GetValue("city", string.Empty);
-                    store.StateProvCode = Geography.GetStateProvCode(shop.GetValue("province", string.Empty));
-                    store.PostalCode = shop.GetValue("zip", string.Empty);
-                    store.CountryCode = Geography.GetCountryCode(shop.GetValue("country", string.Empty));
-
-                    store.Email = shop.GetValue("email", string.Empty);
-                    store.Phone = shop.GetValue("phone", string.Empty);
+                    store.Street1 = shopifyShop.Street1;
+                    store.City = shopifyShop.City;
+                    store.StateProvCode = Geography.GetStateProvCode(shopifyShop.StateProvince);
+                    store.PostalCode = shopifyShop.PostalCode;
+                    store.CountryCode = shopifyShop.Country;
+                    store.Email = shopifyShop.Email;
+                    store.Phone = shopifyShop.Phone;
                 }
                 else
                 {
@@ -279,6 +272,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
+        /// Get an order by id
+        /// </summary>
+        /// <param name="shopifyOrderID"></param>
+        /// <returns></returns>
+        public ShopifyOrder GetOrder(long shopifyOrderID)
+        {
+            string url = Endpoints.ApiGetOrderUrl(shopifyOrderID);
+
+            // Not cached, so go get it
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
+            request.Uri = new Uri(url);
+
+            try
+            {
+                string orderAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrder, progress);
+                return JObject.Parse(orderAsString)["order"].ToObject<ShopifyOrder>();
+            }
+            catch (JsonException ex)
+            {
+                string message = $"An error occurred in GetOrder for Url: '{url}'){Environment.NewLine}     ";
+                log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", message, ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while getting the order.", ex);
+            }
+        }
+
+        /// <summary>
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
@@ -331,14 +351,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="shopifyProductId">Shopify Product Id</param>
         /// <returns></returns>
-        public JToken GetProduct(long shopifyProductId)
+        public ShopifyProduct GetProduct(long shopifyProductId)
         {
             string url = Endpoints.ApiProductUrl(shopifyProductId);
 
             try
             {
                 // See if we have a cached version of the product
-                JToken product;
+                ShopifyProduct product;
                 if (productCache.Contains(url.ToLower()))
                 {
                     product = productCache[url.ToLower()];
@@ -352,7 +372,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     try
                     {
                         string productAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetProduct, progress);
-                        product = JObject.Parse(productAsString);
+                        product = JObject.Parse(productAsString)["product"].ToObject<ShopifyProduct>();
                     }
                     catch (ShopifyException ex)
                     {
@@ -410,26 +430,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Upload the shipment details for an order
         /// </summary>
-        public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl)
+        public void UploadOrderShipmentDetails(long orderID, ShopifyFulfillment details)
         {
             try
             {
-                string url = Endpoints.ApiFulfillmentsUrl(shopifyOrderID);
-
-                if (string.IsNullOrEmpty(trackingNumber))
-                {
-                    trackingNumber = "null";
-                }
-
-                JObject fulfillmentReq = new JObject(
-                    new JProperty("fulfillment",
-                    new JObject(
-                        new JProperty("tracking_company", carrier),
-                        new JProperty("tracking_number", trackingNumber),
-                        new JProperty("custom_tracking_url", carrierTrackingUrl),
-                        new JProperty("notify_customer", store.ShopifyNotifyCustomer))));
-
-                string jsonRequest = fulfillmentReq.ToString();
+                string url = Endpoints.ApiFulfillmentsUrl(orderID);
+                string jsonRequest = JsonConvert.SerializeObject(new ShopifyFulfillmentRequest(details));
 
                 // Create the JSON post request submitter, with default params
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") { Verb = HttpVerb.Post };
@@ -448,6 +454,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
+            }
+        }
+
+        /// <summary>
+        /// Process a request that requires authentication headers to be sent to Shopify
+        /// </summary>
+        private T ProcessAuthenticatedRequest<T>(HttpVerb verb, Uri endpoint, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
+        {
+            try
+            {
+                var request = new HttpVariableRequestSubmitter
+                {
+                    Verb = verb,
+                    Uri = endpoint
+                };
+
+                using (var reader = ProcessAuthenticatedRequestReader(request, action, progressReporter))
+                {
+                    var json = reader.ReadResult();
+                    return JsonConvert.DeserializeObject<T>(json);
+                }
+            }
+            catch (JsonException ex)
+            {
+                log.Error("An error occurred during JObect.Parse", ex);
+
+                throw new ShopifyException("Shopify returned an invalid response to ShipWorks while retrieving data from Shopify.", ex);
             }
         }
 
@@ -560,11 +593,42 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
                 {
-                    throw new ShopifyAlreadyUploadedException(ex.Message);
+                    ShopifyError error = GetErrorFromResponse(webResponse);
+                    throw new ShopifyUnprocessableEntityException(ex, error);
+                }
+
+                if (webResponse?.StatusCode == HttpStatusCode.Forbidden || webResponse?.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new ShopifyAuthorizationException("You do not have the correct permissions to perform this operation. Try updating your Shopify token in the store manager", ex);
                 }
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get the Error object from a response stream
+        /// </summary>
+        private static ShopifyError GetErrorFromResponse(HttpWebResponse webResponse)
+        {
+            try
+            {
+                using (var stream = webResponse?.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var json = reader.ReadToEnd();
+                        return JsonConvert.DeserializeObject<ShopifyErrorResponse>(json).Errors;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // If we can't deserialize the error response, just assume it's an already uploaded error since that
+                // was the assumption before this code was added.
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -620,5 +684,45 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 .SelectToken("risks")
                 .Where(x => x != null);
         }
+
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyShopResponse GetShop() =>
+            ProcessAuthenticatedRequest<ShopifyShopResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.ShopUrl),
+                ShopifyWebClientApiCall.GetShop,
+                progress);
+
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyInventoryLevelsResponse GetInventoryLevelsForItems(IEnumerable<long> itemInventoryIDList) =>
+            ProcessAuthenticatedRequest<ShopifyInventoryLevelsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.InventoryLevelForItemsUrl(itemInventoryIDList)),
+                ShopifyWebClientApiCall.GetInventoryLevels,
+                progress);
+
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyInventoryLevelsResponse GetInventoryLevelsForLocations(IEnumerable<long> locationIDList) =>
+            ProcessAuthenticatedRequest<ShopifyInventoryLevelsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.InventoryLevelForLocationsUrl(locationIDList) + "&limit=1"),
+                ShopifyWebClientApiCall.GetInventoryLevels,
+                progress);
+
+        /// <summary>
+        /// Get all available locations
+        /// </summary>
+        public ShopifyLocationsResponse GetLocations() =>
+            ProcessAuthenticatedRequest<ShopifyLocationsResponse>(
+                HttpVerb.Get,
+                new Uri(Endpoints.LocationsUrl),
+                ShopifyWebClientApiCall.GetLocations,
+                progress);
     }
 }

@@ -21829,19 +21829,23 @@ zI16AcVkf2rP/cj/ACP+NH9qz/3I/wAj/jRysOZGxk0Vj/2rP/cj/I/40UcrDmR//9k=
 				</path>
 			</info>
 		</mouseitem>
-		<keysequenceitem
-		KeySequence="Empty.swb"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupDatabase"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="ChooseDatabaseBackup"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="b5626bb0-32c6-4958-aa71-bf2185d22974">
+		varname="">
 			<comment>
 				Key in text
 			</comment>
 			<bindings>
 			</bindings>
-		</keysequenceitem>
+			<arguments
+			id="078cda05-23de-4e45-93a3-9d75ee43c1b6">
+			</arguments>
+		</userrecorditem>
 		<keysequenceitem
 		KeySequence="{Return}"
 		duration="100ms"

@@ -35,12 +35,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             profile.Amazon.ShippingServiceID = "id";
             profile.Amazon.DeliveryExperience = 44;
+            profile.Amazon.Reference1 = "A ref 1";
+            profile.Amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+
             profile.Insurance = true;
 
             Apply();
             
             Assert.Equal("id", shipment.Amazon.ShippingServiceID);
             Assert.Equal(44, shipment.Amazon.DeliveryExperience);
+            Assert.Equal("A ref 1", shipment.Amazon.Reference1);
+            Assert.Equal((int) ThermalLanguage.ZPL, shipment.Amazon.RequestedLabelFormat);
             Assert.True(shipment.Amazon.Insurance);
         }
         
