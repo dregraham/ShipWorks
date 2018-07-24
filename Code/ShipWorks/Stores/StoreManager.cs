@@ -39,7 +39,7 @@ namespace ShipWorks.Stores
 
         static readonly ILog log = LogManager.GetLogger(typeof(StoreManager));
 
-        static TableSynchronizer<StoreEntity> storeSynchronizer;
+        static TableSynchronizer<StoreEntity> storeSynchronizer = new TableSynchronizer<StoreEntity>();
 
         // These could easily be obtained each time from the store list, but since they can be called so often (due to being used by
         // grid column header drawing), i am caching it.

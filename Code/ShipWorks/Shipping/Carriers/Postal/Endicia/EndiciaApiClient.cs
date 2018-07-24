@@ -563,7 +563,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                                 rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect))
                                 {
-                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia),
+                                    Tag = new PostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.None)
                                 });
                                 rates.Add(withDelivery);
                                 rates.Add(withSignature);
