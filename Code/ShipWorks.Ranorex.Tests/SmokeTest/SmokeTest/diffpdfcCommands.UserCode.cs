@@ -42,8 +42,9 @@ namespace SmokeTest
         {
         	if(File.Exists(@"C:\Program Files (x86)\diffpdfc\diffpdfc.exe"))
         	{
-        	
-        	using(Ionic.Zip.ZipFile sourcelabelszip = Ionic.Zip.ZipFile.Read("SourceLabels.zip"))
+        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
+        	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        	using(Ionic.Zip.ZipFile sourcelabelszip = Ionic.Zip.ZipFile.Read(smokeTestPath + @"\ZipFiles\SourceLabels.zip"))
         	{
         		sourcelabelszip.ExtractAll("C:\\printpdflabels\\sourceLabels",
         		                           Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);

@@ -5,8 +5,12 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="DownloadManyStores.rxtst" />
+    <Element value="SetupBigcommerceStore.rxrec" />
   </Array>
   <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
     <Array name="recentusercodeselections" />
   </Properties>
 </Properties>
