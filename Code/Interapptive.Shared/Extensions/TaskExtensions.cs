@@ -24,6 +24,15 @@ namespace Interapptive.Shared.Extensions
         }
 
         /// <summary>
+        /// Convert the task into a Task(Of T)
+        /// </summary>
+        public static async Task<T> ToTyped<T>(this Task task)
+        {
+            await task.ConfigureAwait(false);
+            return default(T);
+        }
+
+        /// <summary>
         /// Execute a new task based on the current task
         /// </summary>
         /// <param name="task">Task on which to bind the function</param>

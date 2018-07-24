@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
-using System.Xml;
-using System.Xml.Xsl;
 using System.IO;
-using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
+using System.Windows.Forms;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -21,11 +12,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     /// </summary>
     public partial class GenericFileXmlSetupControl : UserControl
     {
-        bool _isVerified = false;
+        private bool isVerified;
 
         // If the user has changed\cleared the XSLT file to use, this will reflect that as the filename or empty string.
-        string pendingXslFile = null;
-        string originalXslContent = null;
+        private string pendingXslFile;
+        private string originalXslContent;
 
         /// <summary>
         /// Constructor
@@ -91,13 +82,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         {
             get
             {
-                return _isVerified;
+                return isVerified;
             }
             set
             {
-                _isVerified = value;
+                isVerified = value;
 
-                panelVerifySuccess.Visible = _isVerified;
+                panelVerifySuccess.Visible = isVerified;
             }
         }
 
@@ -125,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
                 dlg.Filter = "XSLT Files (*.xsl, *.xslt)|*.xsl;*.xslt";
 
                 // Don't let the window close unless the pick something valid or cancel
-                dlg.FileOk += (object unused, CancelEventArgs cancelArgs) =>
+                dlg.FileOk += (unused, cancelArgs) =>
                     {
                         cancelArgs.Cancel = !LoadXslTransform(dlg.FileName);
                     };
@@ -204,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
                 dlg.Filter = "XML Files (*.xml)|*.xml";
 
                 // Don't let the window close unless the pick something valid or cancel
-                dlg.FileOk += (object unused, CancelEventArgs cancelArgs) =>
+                dlg.FileOk += (unused, cancelArgs) =>
                     {
                         try
                         {
@@ -254,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         private void OnLinkSchemaDocumentation(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000033910-xslt-stylesheet-generic-file-setup-", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000101693-shipworks-xsd-file", this);
         }
     }
 }

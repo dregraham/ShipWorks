@@ -240,6 +240,7 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include="Custom\ICarrierAccount.cs" />
+    <Compile Include="Custom\ManagedConnectionUnitOfWork2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
@@ -2962,6 +2963,66 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ShortcutRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\OverstockOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\OverstockOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\OverstockOrderSearchEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\OverstockStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOverstockOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOverstockOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOverstockOrderSearchEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOverstockStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOverstockOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOverstockOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOverstockOrderSearchEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOverstockStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\OverstockOrderItemRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\OverstockOrderRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\OverstockOrderSearchRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\OverstockStoreRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksDisabledDefaultIndexesTypedView.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\TypedViewClasses\ShipWorksMissingIndexRequestsTypedView.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

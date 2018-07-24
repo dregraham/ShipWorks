@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using CefSharp;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -15,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyCreateTokenWizard));
 
         string browserDisplayedShopName;
-        string accessToken;
 
         /// <summary>
         /// Constructor
@@ -28,23 +28,23 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// The ShopName the user entered and validated - only valid if the DialogResult is OK.
         /// </summary>
-        public string ShopUrlName
-        {
-            get
-            {
-                return shopUrlName.Text.Trim();
-            }
-        }
+        public string ShopUrlName => shopUrlName.Text.Trim();
 
         /// <summary>
         /// The access token that has been generated.  Only valid if DialogResult is OK
         /// </summary>
-        public string ShopAccessToken
+        public string ShopAccessToken { get; private set; }
+
+        /// <summary>
+        /// Store that should be used to start wizard
+        /// </summary>
+        public IShopifyStoreEntity Store { get; set; }
+
+        protected override void OnShown(EventArgs e)
         {
-            get
-            {
-                return accessToken;
-            }
+            base.OnShown(e);
+
+            shopUrlName.Text = Store?.ShopifyShopUrlName ?? string.Empty;
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             try
             {
                 // We've got the request token now, so go ask for the actual Access Token that will be persisted.
-                accessToken = ShopifyWebClient.GetAccessToken(ShopUrlName, requestedUrl);
+                ShopAccessToken = ShopifyWebClient.GetAccessToken(ShopUrlName, requestedUrl);
 
                 MoveNext();
             }

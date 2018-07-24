@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ChannelSale)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Choxi)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CloudConversion)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CommerceV3)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CreLoaded)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CsCart)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Fortune3)]
@@ -68,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WPeCommerce)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.XCart)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ZenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zentail)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zenventory)]
     public class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {

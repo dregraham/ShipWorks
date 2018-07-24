@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
@@ -68,18 +71,27 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         /// <param name="progressReporter">The progress reporter.</param>
         /// <param name="resetOrderHashKeys">if set to <c>true</c> this reset all the order hash keys and reload them.</param>
-        public static void LoadDataAsync(IProgressReporter progressReporter, bool resetOrderHashKeys)
+        private static void LoadDataAsync(IProgressReporter progressReporter, bool resetOrderHashKeys)
         {
             try
             {
-                ShipSenseLoader shipSenseLoader = new ShipSenseLoader(progressReporter);
-                shipSenseLoader.ResetOrderHashKeys = resetOrderHashKeys;
 
                 // We used to have this StartNew in a new ShipSenseLoaderGateway using block, but that doesn't make sense
                 // because we were in a using, starting a new thread that could take a long time, but immediately leaving the
                 // using block.  This was causing sql app locking issues, so removed the using block and added a Dispose
                 // method to ShipSenseLoader that now disposes the gateway.  The ContinueWith now calls this loader dispose method.
-                Task.Factory.StartNew(shipSenseLoader.LoadData).ContinueWith(t => shipSenseLoader.Dispose());
+                Task.Factory.StartNew(() =>
+                {
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IShipSenseLoaderGateway gateway = lifetimeScope.Resolve<IShipSenseLoaderGateway>();
+                        using (ShipSenseLoader shipSenseLoader = new ShipSenseLoader(progressReporter, gateway))
+                        {
+                            shipSenseLoader.ResetOrderHashKeys = resetOrderHashKeys;
+                            shipSenseLoader.LoadData();
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {

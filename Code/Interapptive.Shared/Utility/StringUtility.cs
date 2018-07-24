@@ -291,11 +291,11 @@ namespace Interapptive.Shared.Utility
         {
             SecureString secureString = new SecureString();
 
-            if (string.IsNullOrWhiteSpace(value))
+            if (value == null)
             {
                 return secureString;
             }
-            
+
             foreach (char charInValue in value)
             {
                 secureString.AppendChar(charInValue);
@@ -318,7 +318,7 @@ namespace Interapptive.Shared.Utility
             {
                 return string.Empty;
             }
-            
+
             MethodConditions.EnsureArgumentIsNotNull(value, nameof(value));
 
             IntPtr unmanagedString = IntPtr.Zero;

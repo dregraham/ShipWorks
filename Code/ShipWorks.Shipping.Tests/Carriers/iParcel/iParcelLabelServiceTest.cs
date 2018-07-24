@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             var downloadedLabel = await labelService.Create(shipment);
 
-            Assert.Equal(response, downloadedLabel);
+            Assert.Equal(response, downloadedLabel.Value);
         }
 
         public void Dispose()

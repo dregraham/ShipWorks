@@ -141,8 +141,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Mail">
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Common.2.5.6755\lib\net40\Rebex.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

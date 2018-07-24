@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="e8b2c8d3-f696-4d3e-b278-4eaa0dc4c2a7"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		GiveFocusShipWorks
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="GiveFocusShipWorks"
+	namespace="UIResponsiveness"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="03b72f73-1bf8-4197-ae01-f02bdde16137"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Give Focus: ShipWorks Application
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="31f69c8e-3e93-404a-9a99-21dce5a23fc9">
+				<path>
+					/form[@title~'ShipWorks']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	name="SmokeTestRepository"
+	id="e60d7cd6-302c-4e11-a480-edbca6931390"
+	rxversion="5.4.5.19886"
+	relativepath="SmokeTestRepository.rxrep">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="UIResponsiveness"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		GiveFocusShipWorks.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

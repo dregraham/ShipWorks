@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -21,17 +18,19 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "WalmartShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class WalmartShipmentUploadTask : StoreInstanceTaskBase
     {
-        private const long MaxBatchSize = 1000;
         private readonly IShipmentDetailsUpdater onlineUpdater;
         private readonly IShippingManager shippingManager;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WalmartShipmentUploadTask(IShipmentDetailsUpdater onlineUpdater, IShippingManager shippingManager)
+        public WalmartShipmentUploadTask(IShipmentDetailsUpdater onlineUpdater, IShippingManager shippingManager,
+            IStoreManager storeManager)
         {
             this.shippingManager = shippingManager;
             this.onlineUpdater = onlineUpdater;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -68,41 +67,25 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            if (StoreID <= 0)
             {
-                if (StoreID <= 0)
-                {
-                    throw new ActionTaskRunException("A store has not been configured for the task.");
-                }
-
-                WalmartStoreEntity store = scope.Resolve<IStoreManager>().GetStore(StoreID) as WalmartStoreEntity;
-                if (store == null)
-                {
-                    throw new ActionTaskRunException("The store configured for the task has been deleted.");
-                }
-
-                // Get any postponed data we've previously stored away
-                List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
-
-                // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-                if (context.CanPostpone && postponedKeys.Count < MaxBatchSize)
-                {
-                    context.Postpone(inputKeys);
-                }
-                else
-                {
-                    context.ConsumingPostponed();
-
-                    // Upload the details, first starting with all the postponed input, plus the current input
-                    await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys), scope).ConfigureAwait(false);
-                }
+                throw new ActionTaskRunException("A store has not been configured for the task.");
             }
+
+            WalmartStoreEntity store = storeManager.GetStore(StoreID) as WalmartStoreEntity;
+            if (store == null)
+            {
+                throw new ActionTaskRunException("The store configured for the task has been deleted.");
+            }
+
+            // Upload the details, first starting with all the postponed input, plus the current input
+            await UpdloadShipmentDetails(store, inputKeys).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private async Task UpdloadShipmentDetails(WalmartStoreEntity store, IEnumerable<long> shipmentKeys, ILifetimeScope scope)
+        private async Task UpdloadShipmentDetails(WalmartStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {

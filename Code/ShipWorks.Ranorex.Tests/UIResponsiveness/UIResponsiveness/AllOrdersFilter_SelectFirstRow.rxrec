@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="b93408e8-b201-4abc-8fd7-8f6f746d20f0"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		AllOrdersFilter_SelectFirstRow
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="AllOrdersFilter_SelectFirstRow"
+	namespace="UIResponsiveness"/>
+	<variables/>
+	<recorditems>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="2b36c2fe-e32d-442a-a0bf-97028b06d632"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click the Orders tab in filter pnael in case user is on Customer tab of filters
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="55f8c287-e058-4aa4-8163-8fe433f93b57">
+				<path>
+					/form[@title='ShipWorks - sa']/container[@controlname='panelDockingArea']/?/?/rawtext[@rawtext='Orders']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="08a09906-c3b4-4231-9097-4d3a12a32885"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click the All filter to view all orders
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="5a30cccb-6d5d-4a51-a1b0-83d84d0b2465">
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='All']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		enabled="True"
+		optional="False"
+		duration="500ms"
+		searchpropertyid="31bcb4c3-e8a6-44f4-894d-bf3d9bc0abd7"
+		action="Click"
+		button="Left"
+		movetime="300ms"
+		sx="0"
+		sy="0"
+		loc="Center">
+			<comment>
+				Click the 2nd row in the grid (in case multiples are highlighted already)
+			</comment>
+			<bindings/>
+			<info
+			sourcename="RepositoryEditor"
+			id="59eaeb72-201f-4bb3-9e4e-3e7a22376acc">
+				<path>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='gridPanel']/?/?/rawtext[@row='2']
+				</path>
+			</info>
+		</mouseitem>
+	</recorditems>
+	<repository
+	name="UIResponsivenessRepository"
+	id="08e99ed5-89e8-4b37-a7a6-7c8e074c87af"
+	rxversion="5.4.5.19886"
+	relativepath="UIResponsivenessRepository.rxrep">
+		<codegen
+		classname="UIResponsivenessRepository"
+		namespace="UIResponsiveness"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="3857c5ce-8d08-4731-9380-bc0f1dbbd7c0"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		AllOrdersFilter_SelectFirstRow.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

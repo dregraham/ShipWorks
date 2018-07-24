@@ -2,7 +2,6 @@
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using Xunit;
 
@@ -98,27 +97,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Process_SetsShipmentRequestedLabelFormatToNone()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var labelRepository = mock.Mock<IFimsLabelRepository>();
-                var fimsResponse = mock.Mock<IFimsShipResponse>();
-                var shipmentEntity = new ShipmentEntity();
-                shipmentEntity.FedEx = new FedExShipmentEntity();
-                shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
-                fimsResponse.SetupGet(x => x.TrackingNumber).Returns("12345");
-                fimsResponse.SetupGet(x => x.ParcelID).Returns("1");
-
-                var testObject = new FimsCarrierResponse(shipmentEntity, fimsResponse.Object, labelRepository.Object);
-
-                testObject.Process();
-
-                Assert.Equal((int)ThermalLanguage.None, shipmentEntity.RequestedLabelFormat);
-            }
-        }
-
-        [Fact]
         public void Process_SetsActualLabelFormat()
         {
             using (var mock = AutoMock.GetLoose())
@@ -136,28 +114,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
 
                 testObject.Process();
 
-                Assert.Equal((int)ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
-            }
-        }
-
-        [Fact]
-        public void Process_SetsFedExShipmentRequestedLabelFormatToNone()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var labelRepository = mock.Mock<IFimsLabelRepository>();
-                var fimsResponse = mock.Mock<IFimsShipResponse>();
-                var shipmentEntity = new ShipmentEntity();
-                shipmentEntity.FedEx = new FedExShipmentEntity();
-                shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
-                fimsResponse.SetupGet(x => x.TrackingNumber).Returns("12345");
-                fimsResponse.SetupGet(x => x.ParcelID).Returns("1");
-
-                var testObject = new FimsCarrierResponse(shipmentEntity, fimsResponse.Object, labelRepository.Object);
-
-                testObject.Process();
-
-                Assert.Equal((int)ThermalLanguage.None, shipmentEntity.FedEx.RequestedLabelFormat);
+                Assert.Equal((int) ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
             }
         }
 

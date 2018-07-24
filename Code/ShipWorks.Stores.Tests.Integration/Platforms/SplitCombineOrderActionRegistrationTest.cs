@@ -16,7 +16,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
     {
         private readonly IContainer container;
         private readonly ITestOutputHelper testOutputHelper;
-        private readonly static StoreTypeCode[] splitOrderExceptions = { StoreTypeCode.Groupon, StoreTypeCode.MarketplaceAdvisor, StoreTypeCode.Walmart };
+        private readonly static StoreTypeCode[] splitOrderExceptions = 
+            { StoreTypeCode.Groupon, StoreTypeCode.MarketplaceAdvisor, StoreTypeCode.Walmart, StoreTypeCode.Overstock };
 
         public SplitCombineOrderActionRegistrationTest(ITestOutputHelper testOutputHelper)
         {

@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
 
 namespace ShipWorks.SqlServer.Filters.DirtyCounts
 {
@@ -23,7 +22,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
             tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 75;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 21;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 24;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 73;
@@ -77,6 +76,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OverstockOrder] = 4;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

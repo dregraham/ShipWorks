@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.ComponentModel;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Net;
-using log4net;
-using Interapptive.Shared.UI;
-using System.Web.Services.Protocols;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Security;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using log4net;
 
 namespace Interapptive.Shared.Net
 {
@@ -31,7 +30,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         static WebHelper()
         {
-            exceptionInternalPreserverStackTrace = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic );
+            exceptionInternalPreserverStackTrace = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
             if (exceptionInternalPreserverStackTrace == null)
             {
                 throw new InvalidOperationException("Could not reflect Exception.InternalPreserveStackTrace");
@@ -67,7 +66,7 @@ namespace Interapptive.Shared.Net
                 MessageHelper.ShowError(errorOwner, string.Format("ShipWorks could not open the URL '{0}'.\n\n({1})", uri, ex.Message));
             }
         }
-        
+
         /// <summary>
         /// Open the computer's default mail composer with the given email address
         /// </summary>
@@ -130,7 +129,8 @@ namespace Interapptive.Shared.Net
                 ex is TimeoutException ||
                 ex is ProtocolViolationException ||
                 ex is IOException ||
-                ex is InvalidSoapException;
+                ex is InvalidSoapException ||
+                ex is SocketException;
         }
 
         /// <summary>

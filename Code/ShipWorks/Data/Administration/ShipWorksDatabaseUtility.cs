@@ -28,6 +28,9 @@ namespace ShipWorks.Data.Administration
         // Used for loading \ executing sql
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation");
 
+        // Used for loading \ executing support sql
+        private static readonly SqlScriptLoader supportSqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Support");
+
         // We put the underscore so we can try to not conflict with databases users may end up creating on their own
         static string localDbBaseName = "_ShipWorks";
 
@@ -113,9 +116,30 @@ namespace ShipWorks.Data.Administration
                 }
 
                 AddInitialDataAndVersion(con);
+
+                AddSupportSql(con);
             }
 
             AddRequiredData();
+        }
+
+        /// <summary>
+        /// Add any support SQL scripts
+        /// </summary>
+        private static void AddSupportSql(DbConnection con)
+        {
+            try
+            {
+                foreach (string scriptName in supportSqlLoader.ScriptResources)
+                {
+                    supportSqlLoader[scriptName].Execute(con);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"An error occurred while adding support sql scripts.", ex);
+                throw;
+            }
         }
 
         /// <summary>

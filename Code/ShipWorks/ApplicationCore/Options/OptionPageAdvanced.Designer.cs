@@ -53,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.enableShipSense = new System.Windows.Forms.CheckBox();
             this.labelShipSenseInfo = new System.Windows.Forms.Label();
             this.editShipSenseSettings = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.relearnShipSense = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.autoCreateShipments = new System.Windows.Forms.CheckBox();
@@ -69,6 +69,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
             this.useParallelActionProcessing = new System.Windows.Forms.CheckBox();
             this.printingPriorityInfoTip = new ShipWorks.UI.Controls.InfoTip();
+            this.auditEnabled = new System.Windows.Forms.CheckBox();
+            this.linkAuditInfo = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -240,7 +242,7 @@ namespace ShipWorks.ApplicationCore.Options
             // auditNewOrders
             // 
             this.auditNewOrders.AutoSize = true;
-            this.auditNewOrders.Location = new System.Drawing.Point(35, 574);
+            this.auditNewOrders.Location = new System.Drawing.Point(54, 594);
             this.auditNewOrders.Name = "auditNewOrders";
             this.auditNewOrders.Size = new System.Drawing.Size(249, 17);
             this.auditNewOrders.TabIndex = 17;
@@ -251,7 +253,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infotipAudit.Caption = "Auditing all new order data uses a significant amount of space in the database.\r\n" +
     "\r\nAny edits are still audited, including both the original and updated values.";
-            this.infotipAudit.Location = new System.Drawing.Point(282, 575);
+            this.infotipAudit.Location = new System.Drawing.Point(297, 595);
             this.infotipAudit.Name = "infotipAudit";
             this.infotipAudit.Size = new System.Drawing.Size(12, 12);
             this.infotipAudit.TabIndex = 33;
@@ -260,7 +262,7 @@ namespace ShipWorks.ApplicationCore.Options
             // auditDeletedOrders
             // 
             this.auditDeletedOrders.AutoSize = true;
-            this.auditDeletedOrders.Location = new System.Drawing.Point(35, 597);
+            this.auditDeletedOrders.Location = new System.Drawing.Point(54, 617);
             this.auditDeletedOrders.Name = "auditDeletedOrders";
             this.auditDeletedOrders.Size = new System.Drawing.Size(265, 17);
             this.auditDeletedOrders.TabIndex = 34;
@@ -271,7 +273,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionShipSense.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionShipSense.Location = new System.Drawing.Point(10, 625);
+            this.sectionShipSense.Location = new System.Drawing.Point(10, 642);
             this.sectionShipSense.Name = "sectionShipSense";
             this.sectionShipSense.Size = new System.Drawing.Size(481, 22);
             this.sectionShipSense.TabIndex = 17;
@@ -281,7 +283,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.clearKnowledgebase.Image = global::ShipWorks.Properties.Resources.delete16;
             this.clearKnowledgebase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clearKnowledgebase.Location = new System.Drawing.Point(32, 819);
+            this.clearKnowledgebase.Location = new System.Drawing.Point(66, 836);
             this.clearKnowledgebase.Name = "clearKnowledgebase";
             this.clearKnowledgebase.Size = new System.Drawing.Size(168, 23);
             this.clearKnowledgebase.TabIndex = 37;
@@ -292,27 +294,28 @@ namespace ShipWorks.ApplicationCore.Options
             // enableShipSense
             // 
             this.enableShipSense.AutoSize = true;
-            this.enableShipSense.Location = new System.Drawing.Point(35, 692);
+            this.enableShipSense.Location = new System.Drawing.Point(35, 709);
             this.enableShipSense.Name = "enableShipSense";
             this.enableShipSense.Size = new System.Drawing.Size(348, 17);
             this.enableShipSense.TabIndex = 35;
             this.enableShipSense.Text = "Automatically configure my shipments based on my shipping history";
             this.enableShipSense.UseVisualStyleBackColor = true;
+            this.enableShipSense.CheckedChanged += new System.EventHandler(this.OnEnableShipSenseCheckedChanged);
             // 
             // labelShipSenseInfo
             // 
-            this.labelShipSenseInfo.Location = new System.Drawing.Point(17, 657);
+            this.labelShipSenseInfo.Location = new System.Drawing.Point(17, 674);
             this.labelShipSenseInfo.Name = "labelShipSenseInfo";
             this.labelShipSenseInfo.Size = new System.Drawing.Size(423, 40);
             this.labelShipSenseInfo.TabIndex = 36;
-            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remembers what you do, and then automatically se" +
-    "ts the weights, dimensions, and customs information of future shipments.";
+            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remembers what you do, and then automatically s" +
+    "ets the weights, dimensions, and customs information of future shipments.";
             // 
             // editShipSenseSettings
             // 
             this.editShipSenseSettings.Image = global::ShipWorks.Properties.Resources.edit16;
             this.editShipSenseSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.editShipSenseSettings.Location = new System.Drawing.Point(33, 759);
+            this.editShipSenseSettings.Location = new System.Drawing.Point(67, 776);
             this.editShipSenseSettings.Name = "editShipSenseSettings";
             this.editShipSenseSettings.Size = new System.Drawing.Size(167, 23);
             this.editShipSenseSettings.TabIndex = 38;
@@ -320,21 +323,21 @@ namespace ShipWorks.ApplicationCore.Options
             this.editShipSenseSettings.UseVisualStyleBackColor = true;
             this.editShipSenseSettings.Click += new System.EventHandler(this.OnEditShipSenseClick);
             // 
-            // button1
+            // relearnShipSense
             // 
-            this.button1.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(32, 849);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 23);
-            this.button1.TabIndex = 39;
-            this.button1.Text = "Relearn from history";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.OnReloadKnowledgebase);
+            this.relearnShipSense.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
+            this.relearnShipSense.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.relearnShipSense.Location = new System.Drawing.Point(66, 866);
+            this.relearnShipSense.Name = "relearnShipSense";
+            this.relearnShipSense.Size = new System.Drawing.Size(168, 23);
+            this.relearnShipSense.TabIndex = 39;
+            this.relearnShipSense.Text = "Relearn from history";
+            this.relearnShipSense.UseVisualStyleBackColor = true;
+            this.relearnShipSense.Click += new System.EventHandler(this.OnReloadKnowledgebase);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(17, 723);
+            this.label2.Location = new System.Drawing.Point(51, 740);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(352, 32);
             this.label2.TabIndex = 40;
@@ -343,7 +346,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(17, 797);
+            this.label3.Location = new System.Drawing.Point(51, 814);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(423, 20);
             this.label3.TabIndex = 41;
@@ -352,7 +355,7 @@ namespace ShipWorks.ApplicationCore.Options
             // autoCreateShipments
             // 
             this.autoCreateShipments.AutoSize = true;
-            this.autoCreateShipments.Location = new System.Drawing.Point(35, 919);
+            this.autoCreateShipments.Location = new System.Drawing.Point(35, 936);
             this.autoCreateShipments.Name = "autoCreateShipments";
             this.autoCreateShipments.Size = new System.Drawing.Size(281, 17);
             this.autoCreateShipments.TabIndex = 43;
@@ -363,7 +366,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionShipmentCreation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionShipmentCreation.Location = new System.Drawing.Point(10, 888);
+            this.sectionShipmentCreation.Location = new System.Drawing.Point(10, 905);
             this.sectionShipmentCreation.Name = "sectionShipmentCreation";
             this.sectionShipmentCreation.Size = new System.Drawing.Size(481, 22);
             this.sectionShipmentCreation.TabIndex = 44;
@@ -423,7 +426,7 @@ namespace ShipWorks.ApplicationCore.Options
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(32, 945);
+            this.label7.Location = new System.Drawing.Point(32, 962);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(299, 13);
             this.label7.TabIndex = 53;
@@ -436,7 +439,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.shipmentEditLimit.Items.AddRange(new object[] {
             "Type username",
             "Select username from dropdown"});
-            this.shipmentEditLimit.Location = new System.Drawing.Point(337, 942);
+            this.shipmentEditLimit.Location = new System.Drawing.Point(337, 959);
             this.shipmentEditLimit.Name = "shipmentEditLimit";
             this.shipmentEditLimit.Size = new System.Drawing.Size(87, 21);
             this.shipmentEditLimit.TabIndex = 52;
@@ -445,7 +448,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infoTip1.Caption = "Larger batch sizes mean more shipments can be processed at once, but require more" +
     " system resources.";
-            this.infoTip1.Location = new System.Drawing.Point(430, 946);
+            this.infoTip1.Location = new System.Drawing.Point(430, 963);
             this.infoTip1.Name = "infoTip1";
             this.infoTip1.Size = new System.Drawing.Size(12, 12);
             this.infoTip1.TabIndex = 54;
@@ -455,7 +458,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitle1.Location = new System.Drawing.Point(10, 979);
+            this.sectionTitle1.Location = new System.Drawing.Point(10, 996);
             this.sectionTitle1.Name = "sectionTitle1";
             this.sectionTitle1.Size = new System.Drawing.Size(481, 22);
             this.sectionTitle1.TabIndex = 55;
@@ -464,7 +467,7 @@ namespace ShipWorks.ApplicationCore.Options
             // useParallelActionProcessing
             // 
             this.useParallelActionProcessing.AutoSize = true;
-            this.useParallelActionProcessing.Location = new System.Drawing.Point(35, 1009);
+            this.useParallelActionProcessing.Location = new System.Drawing.Point(35, 1026);
             this.useParallelActionProcessing.Name = "useParallelActionProcessing";
             this.useParallelActionProcessing.Size = new System.Drawing.Size(201, 17);
             this.useParallelActionProcessing.TabIndex = 56;
@@ -475,11 +478,33 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.printingPriorityInfoTip.Caption = "This option will give priority to default printing tasks over other tasks like up" +
     "loading shipment details.";
-            this.printingPriorityInfoTip.Location = new System.Drawing.Point(237, 1011);
+            this.printingPriorityInfoTip.Location = new System.Drawing.Point(237, 1028);
             this.printingPriorityInfoTip.Name = "printingPriorityInfoTip";
             this.printingPriorityInfoTip.Size = new System.Drawing.Size(12, 12);
             this.printingPriorityInfoTip.TabIndex = 58;
             this.printingPriorityInfoTip.Title = "Default Label Printing Priority";
+            // 
+            // auditEnabled
+            // 
+            this.auditEnabled.AutoSize = true;
+            this.auditEnabled.Location = new System.Drawing.Point(34, 571);
+            this.auditEnabled.Name = "auditEnabled";
+            this.auditEnabled.Size = new System.Drawing.Size(94, 17);
+            this.auditEnabled.TabIndex = 59;
+            this.auditEnabled.Text = "Audit changes";
+            this.auditEnabled.UseVisualStyleBackColor = true;
+            this.auditEnabled.CheckedChanged += new System.EventHandler(this.OnAuditEnableChanged);
+            // 
+            // linkAuditInfo
+            // 
+            this.linkAuditInfo.AutoSize = true;
+            this.linkAuditInfo.Location = new System.Drawing.Point(125, 572);
+            this.linkAuditInfo.Name = "linkAuditInfo";
+            this.linkAuditInfo.Size = new System.Drawing.Size(64, 13);
+            this.linkAuditInfo.TabIndex = 60;
+            this.linkAuditInfo.TabStop = true;
+            this.linkAuditInfo.Text = "more info...";
+            this.linkAuditInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnAuditInfoClicked);
             // 
             // OptionPageAdvanced
             // 
@@ -487,6 +512,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.linkAuditInfo);
+            this.Controls.Add(this.auditEnabled);
             this.Controls.Add(this.printingPriorityInfoTip);
             this.Controls.Add(this.useParallelActionProcessing);
             this.Controls.Add(this.sectionTitle1);
@@ -502,7 +529,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.autoCreateShipments);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.relearnShipSense);
             this.Controls.Add(this.editShipSenseSettings);
             this.Controls.Add(this.clearKnowledgebase);
             this.Controls.Add(this.enableShipSense);
@@ -530,7 +557,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.logOnMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(505, 1035);
+            this.Size = new System.Drawing.Size(505, 1060);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -564,7 +591,7 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.CheckBox enableShipSense;
         private System.Windows.Forms.Label labelShipSenseInfo;
         private System.Windows.Forms.Button editShipSenseSettings;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button relearnShipSense;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox autoCreateShipments;
@@ -580,5 +607,7 @@ namespace ShipWorks.ApplicationCore.Options
         private UI.Controls.SectionTitle sectionTitle1;
         private System.Windows.Forms.CheckBox useParallelActionProcessing;
         private UI.Controls.InfoTip printingPriorityInfoTip;
+        private System.Windows.Forms.CheckBox auditEnabled;
+        private System.Windows.Forms.LinkLabel linkAuditInfo;
     }
 }

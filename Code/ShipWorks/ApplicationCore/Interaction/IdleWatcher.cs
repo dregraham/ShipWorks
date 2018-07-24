@@ -15,6 +15,9 @@ using ShipWorks.Common.Threading;
 using Interapptive.Shared.Win32;
 using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
+using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Magento.WebServices;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -72,6 +75,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         class IdleWork
         {
+            static readonly ILog log = LogManager.GetLogger(typeof(IdleWork));
             Guid workID = Guid.NewGuid();
 
             string name;
@@ -141,7 +145,12 @@ namespace ShipWorks.ApplicationCore.Interaction
             {
                 get
                 {
-                    if (databaseDependent)
+                    if (SqlSession.Current?.Configuration == null)
+                    {
+                        return false;
+                    }
+
+                    if (databaseDependent || SqlUtility.IsSingleUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName))
                     {
                         // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
                         // or we know something is wrong with the connection - bail.
@@ -270,6 +279,13 @@ namespace ShipWorks.ApplicationCore.Interaction
                 {
                     // Do the work
                     workInvoker();
+                }
+                // If the work can't be done due to a db issue, just log it and carry on.  Any clean up
+                // tasks will be tried again later.
+                catch (Exception ex) when (ex.HasExceptionType<SqlException>() || 
+                                           ex.HasExceptionType<ORMQueryExecutionException>())
+                {
+                    log.Error($"Exception occurred while IdleWatcher was running.", ex);
                 }
                 finally
                 {

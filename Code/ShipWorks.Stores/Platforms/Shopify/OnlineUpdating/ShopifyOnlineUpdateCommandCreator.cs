@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             catch (ShopifyException ex)
             {
                 log.ErrorFormat("Error uploading shipment information for orders.  Error message: {0}", ex.Message);
-                return Result.FromError(ex);
+                return Result.FromError($"Error uploading shipment information for orders. {ex.Message}");
             }
         }
     }

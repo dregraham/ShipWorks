@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="loopuninstallRepository"
+id="80f8852d-aefc-4faa-a162-387cebf4d4a4"
+rxversion="6.0">
+  <codegen
+  classname="loopuninstallRepository"
+  namespace="loopuninstall"/>
+  <rootfolder
+  name="Root"
+  id="077dcf1d-2888-4666-ae2f-6e850d88ffc1"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>

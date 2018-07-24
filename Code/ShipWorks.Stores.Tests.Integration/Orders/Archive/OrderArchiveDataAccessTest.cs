@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
     [Collection("Database collection")]
     [Trait("Category", "SmokeTest")]
+    [Trait("Category", "ContinuousIntegration")]
     public class OrderArchiveDataAccessTest
     {
         private readonly DataContext context;
@@ -45,6 +46,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         [Fact]
         public void EnableArchiveTriggersSql_EnablesTriggers()
         {
+            SqlSession.Current.Configuration.ForceWorkstationID = true;
+
             using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
             {
                 testObject.DisableArchiveTriggers(conn);
@@ -133,7 +136,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "DhlExpressAccount",
                 "DhlExpressPackage",
                 "DhlExpressProfile",
-                "DhlExpressProfilePackage",
                 "DhlExpressShipment",
                 "DimensionsProfile",
                 "Download",
@@ -176,7 +178,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "iParcelAccount",
                 "iParcelPackage",
                 "iParcelProfile",
-                "iParcelProfilePackage",
                 "iParcelShipment",
                 "JetOrder",
                 "JetOrderItem",
@@ -217,6 +218,10 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "OrderSearch",
                 "OtherProfile",
                 "OtherShipment",
+                "OverstockOrder",
+                "OverstockOrderSearch",
+                "OverstockOrderItem",
+                "OverstockStore",
                 "PayPalOrder",
                 "PayPalOrderSearch",
                 "PayPalStore",

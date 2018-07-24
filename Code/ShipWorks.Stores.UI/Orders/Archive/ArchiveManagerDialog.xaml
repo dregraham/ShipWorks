@@ -116,6 +116,9 @@
                         Command="{Binding ArchiveNow}">Archive Now</Button>
                 <Button MinHeight="23"
                         Margin="{StaticResource StandardPaddingTop}"
+                        Command="{Binding AutoArchive}">Schedule Archiving</Button>
+                <Button MinHeight="23"
+                        Margin="{StaticResource StandardPaddingTop}"
                         Command="{Binding ConnectToArchive}">Connect to Archive</Button>
             </StackPanel>
 

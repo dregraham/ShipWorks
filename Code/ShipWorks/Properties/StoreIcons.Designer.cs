@@ -203,6 +203,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cv3 {
+            get {
+                object obj = ResourceManager.GetObject("cv3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ebay {
             get {
                 object obj = ResourceManager.GetObject("ebay", resourceCulture);
@@ -523,6 +533,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap overstock {
+            get {
+                object obj = ResourceManager.GetObject("overstock", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap paypal {
             get {
                 object obj = ResourceManager.GetObject("paypal", resourceCulture);
@@ -826,6 +846,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap zencart {
             get {
                 object obj = ResourceManager.GetObject("zencart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap zentail {
+            get {
+                object obj = ResourceManager.GetObject("zentail", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -37,9 +37,10 @@
             // 
             this.attributes.AddButtonText = "Add Attribute";
             this.attributes.AutoSize = true;
+            this.attributes.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.attributes.Location = new System.Drawing.Point(3, 58);
             this.attributes.Name = "attributes";
-            this.attributes.Size = new System.Drawing.Size(530, 38);
+            this.attributes.Size = new System.Drawing.Size(475, 38);
             this.attributes.TabIndex = 15;
             // 
             // attributesTitle
@@ -59,19 +60,20 @@
             this.labelAttributeInstructions.Size = new System.Drawing.Size(474, 30);
             this.labelAttributeInstructions.TabIndex = 17;
             this.labelAttributeInstructions.Text = "An item attribute is something specific about the items you’re shipping. For exam" +
-    "ple, a color. If you want ShipWorks to download the color of the product ordere" +
-    "d, add an attribute.";
+    "ple, a color. If you want ShipWorks to download the color of the product ordered" +
+    ", add an attribute.";
             // 
-            // ChannelAdvisorStoreSettingsControl
+            // ChannelAdvisorAttributesSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.labelAttributeInstructions);
             this.Controls.Add(this.attributesTitle);
             this.Controls.Add(this.attributes);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.Name = "ChannelAdvisorStoreSettingsControl";
+            this.Name = "ChannelAdvisorAttributesSettingsControl";
             this.Size = new System.Drawing.Size(558, 99);
             this.ResumeLayout(false);
             this.PerformLayout();

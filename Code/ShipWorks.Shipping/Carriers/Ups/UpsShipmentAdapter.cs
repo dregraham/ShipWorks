@@ -67,6 +67,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((UpsServiceType) ServiceType);
+
+        /// <summary>
         /// Add a new package to the shipment
         /// </summary>
         public override IPackageAdapter AddPackage()

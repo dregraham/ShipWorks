@@ -1,0 +1,410 @@
+﻿<repository
+name="SoakPerformanceTestRepository"
+id="bd7b687b-0efc-4b09-ae67-240649718516"
+rxversion="5.4.5.19886">
+	<codegen
+	classname="SoakPerformanceTestRepository"
+	namespace="UIResponsiveness"/>
+	<rootfolder
+	name="Root"
+	id="ae0c01ae-9da3-4f2c-95c5-6e24580e0462"
+	searchtimeout="0ms"
+	capname="unknown"
+	isrooted="True"
+	usecache="True">
+		<appfolder
+		name="MainForm"
+		id="71f1d0dd-546a-432a-ac42-88cfd0006fb8"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='MainForm']"
+		addcaps="form,control,nativewindow"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="Home"
+			id="d424a31b-6c02-46dd-9a6b-889d444bc468"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/rawtext[@rawtext='Home']"
+			addcaps="unknown,rawtext"
+			refimgid="58438a5d-e005-494e-ab00-66f65d1b2ac3">
+				/form[@controlname='MainForm']/?/?/rawtext
+			</item>
+			<item
+			name="Manage"
+			id="e3bd119c-0b4a-4512-898d-f804eb8dc2a0"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/rawtext[@rawtext='Manage']"
+			addcaps="unknown,rawtext"
+			refimgid="08d675ed-58dc-4dc5-82f6-968d4d2dcb5a">
+				/form[@controlname='MainForm']/?/?/rawtext[@rawtext='Manage']
+			</item>
+			<basepath>
+				/form[@controlname='MainForm']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJMSURBVDhPtZBdSNNRGMYPBLZpF9FN6I3ZzJxJ
+NUERTLooUySjT6WCtCQrsIi8mNYqCiWIWZF60UWlQbgZgVPbMqaYtNrK0H38MyepW/tmYpsySmpP
+Z+vM/Odue+DHOYf3eZ4DL/kvMjlCR5qG3KNXnllxUzEOWbsJB+W6EXJWdS75ek8is61UF7BKPz0P
+T3AR30I/8dEZwg21DQqdA5efcyCnu0Fqus3MHl/3dD4MTy1EidwNru+REMgZVYxBZo2v+j4bWl67
+oTLOQto7g6dckF9Q061k1vg638EhwoV2S/S8Nez9p6CnhVnjq6JZj4rmd0tUdlr/himCauVVZuUr
+PFlW7hoq9GRIB5Al1TJeoeDu+2W/q9Da0Ai7vA7mvUUPRlO3rSVhbxdd+RsgYAB8SixOXMRIzzHs
+lslpoA9Jdf3R7T++1gR37VFw6WKMpm6GTVYPTpIL8mtswzjM2cDXO4BxHcLT5fAbSuFQr4ZTkwDf
+w0YE3r7ArFYBT8dthP12jKVmYCwtE8aNYpCgvkw9rz+MH19aEdQfR0B3iIYTaFhIEWBaVg1/7yP4
+FPcx01CF0If+aDAG8QzsbPNqC+HV7qAUUPLZ738KrCdLMVlVgolKyolizD2R8wscmpRLTk0KNScz
+1vMKPhXngyvJA7eHUpQLl/QUv8CuXnPAoU6ioeUIlgrMkq2w5GTDJKHQc2r/Ln5BTE5NYptTEwkn
+sgLBHBsRc/oWkVEkXjBuysLnnO3RoCkts5aN+XJohPvcL4V57LlCFpG4k12pCPkNtP3MDxHi5EQA
+AAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ShipWorksSa"
+		id="aeb53ba1-63cb-471b-9d4a-56f30723084d"
+		searchtimeout="30000ms"
+		capname="form"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="Options"
+			id="33ee4d4a-bd8d-45c7-ae4c-96728d7f6cd7"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Options']"
+			addcaps="unknown,rawtext"
+			refimgid="15c3da88-83d1-42be-924b-2420bad35224">
+				/form[@title~'ShipWorks']/?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Options']
+			</item>
+			<item
+			name="Interapptive"
+			id="149125f8-0c2b-4b88-baee-aead158d19bb"
+			searchtimeout="30000ms"
+			capname="listitem"
+			addcaps="listitem,accessible"
+			refimgid="495dd68f-e2a1-466e-ac90-a60778d4cfb5">
+				/form[@title~'ShipWorks']/list[@controlname='menuList']/?/?/listitem[4]
+			</item>
+			<item
+			name="UpsOnLineTools"
+			id="acae23e1-e515-4c13-8eae-431387f0d31d"
+			searchtimeout="30000ms"
+			capname="checkbox"
+			refpath="/form[@controlname='ShipWorksOptions']/container[@controlname='sectionContainer']/container[@controlname='OptionPageInterapptive']/checkbox[@controlname='upsOnLineTools']"
+			addcaps="checkbox,control,nativewindow"
+			refimgid="d796d31c-b80f-43fc-84d5-d5a2ee2724d7">
+				/form[@title~'ShipWorks']/container[@controlname='sectionContainer']/?/?/checkbox[@controlname='upsOnLineTools']
+			</item>
+			<item
+			name="ButtonOk"
+			id="3234fa52-fa07-4acf-beb1-95d8dd1ff50c"
+			searchtimeout="30000ms"
+			capname="button"
+			refpath="/form[@controlname='ShipWorksOptions']/button[@controlname='ok']"
+			addcaps="button,control,nativewindow"
+			refimgid="022a0ae0-ffea-4d62-9dda-4108a519d5df">
+				/form[@title~'ShipWorks']/button[@controlname='ok']
+			</item>
+			<item
+			name="SomeErrorsOccurredDuringProcessing"
+			id="85f2efe5-3a5b-4802-a83f-83b211019b65"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@title='ShipWorks']/text[@controlid='65535']/rawtext[@rawtext~'^Some\ errors\ occurred\ during\ processing\.Order\ 4-M:\ The\ message\ with\ Action\ ''http://tempuri\.org/IRateService/GetInternationalRateZoneWithPostCode''\ cannot\ be\ processed\ at\ the\ receiver,\ due\ to\ a\ ContractFilter\ mismatch\ at\ the\ EndpointDispatcher\.\ This\ may\ be\ beca']"
+			addcaps="unknown,rawtext"
+			refimgid="8f68d9f8-043d-4140-bf9d-be0e666ad261">
+				/form[@title~'ShipWorks']/?/?/rawtext[@rawtext='Some errors occurred during processing.Order 4-M: The message with Action ''http://tempuri.org/IRateService/GetInternationalRateZoneWithPostCode'' cannot be processed at the receiver, due to a ContractFilter mismatch at the EndpointDispatcher. This may be because of either a contract mismatch (mismatched Actions between sender and receiver) or a binding/security mismatch between the sender and the receiver.  Check that sender and receiver have the same contract and the same binding (including security requirements, e.g. Message, Transport, None).']
+			</item>
+			<item
+			name="ButtonOK1"
+			id="2a5bd0f8-658e-455f-afc5-62338ee86eea"
+			searchtimeout="30000ms"
+			capname="button"
+			refpath="/form[@title='ShipWorks']/button[@text='OK']"
+			addcaps="button,nativewindow"
+			refimgid="9939a782-a82f-43af-ac50-dbbef6c9d77d">
+				/form[@title~'ShipWorks']/button[@text='OK']
+			</item>
+			<item
+			name="Agree"
+			id="0abc6c33-e0e7-45a6-ad5a-7773294ac9a1"
+			searchtimeout="30000ms"
+			capname="checkbox"
+			refpath="/form[@controlname='InsuranceAgreementDlg']/checkbox[@controlname='agree']"
+			comment="insurance termans and conditionas"
+			addcaps="checkbox,control,nativewindow"
+			refimgid="6448b6af-5928-4746-8b46-79dae59029ae">
+				/form[@title~'ShipWorks']/checkbox[@controlname='agree']
+			</item>
+			<basepath>
+				/form[@title~'ShipWorks']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAALYSURBVDhPfZF9LNRxHMe//5SnWhNZpglLOUeL
+G2mr1mVqJY1i62ZSCjWTodjKQ62QpgersUZxqpnKQ7o8n4ehUsk5bpwT5dyT54iw3Lufn9+S3ea9
+vfZ9+rxfvz9+ZLW4R/GdLAIz3Nx87xowV6vnQ0c/q3dkPr5VPlOZ+2X0V6ZQjjtFMvAetMD2qrDH
++lpNgVlY0R5mXDdVPZMJtbIp9I3MonvoN+r6psD/qEJAVitYiUKQkBKQs/khzLhuEgSy8OSGIQh7
+JpHXNoakeg3CC6Ug54uXyqFvQAJz/Jlx3YRmNp6+UtyHlIoBmhhqf/KpeLm8CC/bmxnXjW9cwfGL
+2WJcyGqnWdzvT/+8UuDzwIMZ101kairXK+U9jt9uYmiG/c3G/wSlOOd9+eLjEM4apkKIpCWXrR3O
+u6yVHqmV1PHm9iUJsDGqEiYUptHUGlsNEkwJKDyjsyFOjIA04MTs1527atpd3WKI9kfcHDQvgIlm
+aEcFmJeGorU+HmnPbuBQQhpsY0pxPUeI76/5GIoOQ+9RL3wLCoLU8xhEtuwF8qfNRKmV8aCV38eC
+yBwLiiSoqjdDWb4WqgJXDD9JwmRjCTTP70KVdQuah/cg2rodImu7RWbIeJOP5OenYMx0pWK8yQ/T
+kngMlq2Folwfcr4t+mPPQJmZCHnyJXyL4kEeGQaR1Q6027AWmSCqKpdmdTUH6mpnqKucMP7JjxLo
+0YKBHHNIeR7o5rmj+9RBmn5/X/rrtMCaNUwUZWYCRfkmqmBKM9LoTAn0lwR8Y0i4LujkcpY4wIHs
+MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
+9OTvDIOVFQadqioTKMr01AMCfR79SOXtFhuHzm2sLLE1a7bTjo0OG7uXhZaW5szzypQ9Wrc3L5oY
+MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ShippingDlg"
+		id="3a1c1565-c514-4ede-8bc5-43f2092a0b0f"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='ShippingDlg']"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="CreateLabel"
+			id="28994b08-f9e2-4fb6-b17d-0d2dcac53f13"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			addcaps="unknown,rawtext"
+			refimgid="8c7db73b-b510-48ae-be55-216fa4476834">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']/rawtext[@rawtext='Create Label']
+			</item>
+			<item
+			name="VoidSelected"
+			id="c7deec03-acbc-41df-ab75-ee66434d60b1"
+			searchtimeout="30000ms"
+			capname="button"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='panelEditButtons']/button[@controlname='voidSelected']"
+			addcaps="button,control,nativewindow"
+			refimgid="d933eea3-b5e6-438b-8451-182a11a459ab">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='voidSelected']
+			</item>
+			<item
+			name="Close"
+			id="4df7c55c-256c-4aa4-bfbd-290cf80709aa"
+			searchtimeout="30000ms"
+			capname="button"
+			refpath="/form[@controlname='ShippingDlg']/button[@controlname='close']"
+			addcaps="button,control,nativewindow"
+			refimgid="0b4f78b9-6039-4530-8d56-2d68016c4fb3">
+				/form[@controlname='ShippingDlg']/button[@controlname='close']
+			</item>
+			<basepath>
+				/form[@controlname='ShippingDlg']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ProcessingShipments"
+		id="e3fe3159-df93-4283-8ab8-9ac88cc694c8"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@title=' ']"
+		refimgid="c79bdc17-fb17-4fcb-ad1a-40f3ec675bfe"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="ProcessingShipments"
+			id="1eeab451-063b-4d2e-bd8c-94563bb3ea8f"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/text[@controlname='title']/rawtext[@rawtext='Processing Shipments']"
+			addcaps="unknown,rawtext"
+			refimgid="9d32a0dc-53ef-4b7b-a6c7-f55d5dbb6ca2">
+				/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']
+			</item>
+			<item
+			name="VoidingShipments"
+			id="17128e3b-af49-4aac-993a-5e8dc65f3afd"
+			searchtimeout="30000ms"
+			capname="rawtext"
+			refpath="/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/text[@controlname='title']/rawtext[@rawtext='Voiding Shipments']"
+			addcaps="unknown,rawtext"
+			refimgid="9f335731-a56d-49ed-9bfd-cde5f38fb652">
+				/form[@title=' ']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Voiding Shipments']
+			</item>
+			<basepath>
+				/form[@title=' ']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJRSURBVDhPpZPrS5NhGIf3l/QhoqQiMgii6OBx
+5cwPElaEfSqIJJCgzAikQgsELSlI7SCUnayoIKkPghWZhxxpc861Oedh6jZ1mzu8x1092wS10KBu
++H177+t3Pc/LY/jvaWgxc+eVg5rmAaqafnC50cyZ6k5OVHZTXPGFonOtFJa+pKDkybIcPP0Y45Fy
+DHXPbTS1azS2adxqlal+HaHyWZCKR7OUN/k5e9dHye1JTtaOc7zazdEqF4euOMkvM7MmbQeG2mYz
+dW8C3Hwb5uKDKU7dcFN83cmxaw4OX7VTWGGj4NIgpnIrBy4MYCyzkHveQkZpN+vSjRhqGl7gD8QI
+RzXmRUIRlWBYISAyG0rFG1DwzMi4vTIOj4R1TKLL6mHj1u0CUN/CahOPg6JCRIozF9GZCmqM+lUs
+Li8bNm/DcP/p+4VP/xxNB0mJMx/TmZnXmJzTcPsUfk4q9Az9BaCLZlksJ5vDOtOieUw0O6cUrOMy
+ndbVAAltTSzLcYJRHV9IY2JWw+VVsE0o9I/IfLYIwKYVAIvqcWbEckpdxS7ULaMyvcMS7X0rAJLq
+akJdT6kHUuqOpLrCd5dMl0OizZwApC8HJG9cg6g4d2Cp+nRKvc8t0eOU6LDF+ND7G0Dsoi6oh4S6
+P3nrKiMJdc+i+ld7jE/WKO96vKxPAO4tMRDlSOKfh2IIAEzMgcsXZ8ij0T+q8W1YpcOu8HFQTgLW
+pm0Rb6H+Ibn788kxmsgWyRLJFMnINbEvx8Te7Dz2iOzOymNXZio7M1LJyS9i4U3+6xgMvwD+1+a2
+GORSxAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ShipmentVoidConfirmDlg"
+		id="317a58e1-9f54-44ee-81d3-cf8a28f54a0c"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@controlname='ShipmentVoidConfirmDlg']"
+		isrooted="True"
+		usecache="True">
+			<item
+			name="ButtonOk"
+			id="7045aaaf-3f69-4ffe-b27f-8c2c05d9190f"
+			searchtimeout="30000ms"
+			capname="button"
+			refpath="/form[@controlname='ShipmentVoidConfirmDlg']/button[@controlname='ok']"
+			addcaps="button,control,nativewindow"
+			refimgid="28ada2de-37a2-46ac-af24-b6ae510b362c">
+				/form[@controlname='ShipmentVoidConfirmDlg']/button[@controlname='ok']
+			</item>
+			<basepath>
+				/form[@controlname='ShipmentVoidConfirmDlg']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		name="ShipOrders1"
+		id="475f83f3-fda2-444a-af63-31ff8426836c"
+		searchtimeout="30000ms"
+		capname="form"
+		refpath="/form[@title='Ship Orders']"
+		isrooted="True"
+		usecache="True">
+			<folder
+			name="SplitContainer"
+			id="b9ae4bfa-cc8a-4316-8ae4-efea8c187b05"
+			searchtimeout="30000ms"
+			capname="container"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']"
+			isrooted="True"
+			usecache="False">
+				<item
+				name="Carrier"
+				id="b92f79a9-0339-45ff-8fc1-fbb908f1a6aa"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='carrier']"
+				addcaps="text,control,nativewindow"
+				refimgid="c61bb171-746f-49c8-9faf-03cb3bcc62fa">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//text[@controlname='carrier']
+				</item>
+				<item
+				name="Service1"
+				id="aebd4219-3f0d-449f-a528-215787c2b72a"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='service']"
+				addcaps="text,control,nativewindow"
+				refimgid="b94f69f5-2205-48df-8b69-d0f9567b5422">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//text[@controlname='service']
+				</item>
+				<item
+				name="WeightOther"
+				id="b511ec5c-c40b-4a1a-a15b-59817391caf0"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/container[@controlname='weight']/text[@controlname='textBox']"
+				addcaps="text,control,nativewindow"
+				refimgid="232c6b11-155b-4849-93d0-2074db596dec">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//container[@controlname='weight']/text[@controlname='textBox']
+				</item>
+				<item
+				name="Cost"
+				id="8cdb8673-4082-474b-949a-d54a4b913abb"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='cost']"
+				addcaps="text,control,nativewindow"
+				refimgid="733bf71d-57d9-4629-827c-2f03ce3e1c31">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//text[@controlname='cost']
+				</item>
+				<item
+				name="TrackingHash"
+				id="8e83cd91-1699-43c7-83dd-271f30857ab2"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='tracking']/text[@accessiblename='Tracking #:']"
+				addcaps="text,accessible"
+				refimgid="38098668-8e69-487d-a1fb-be5931c63419">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='tracking']/text[@accessiblename='Tracking #:']
+				</item>
+				<item
+				name="UseInsurance"
+				id="c8a53428-cb4c-4d98-957a-5c4a69601c13"
+				searchtimeout="30000ms"
+				capname="checkbox"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/tabpagelist[@controlname='tabControl']/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element[@controlname='collapseControl']/container[@controlname='collapseControl.Panel']/container[@controlname='insuranceControl']/checkbox[@controlname='useInsurance']"
+				addcaps="checkbox,control,nativewindow"
+				refimgid="4b5bfeef-204f-478f-8b19-813bab8a5044">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//container[@controlname='insuranceControl']/checkbox[@controlname='useInsurance']
+				</item>
+				<item
+				name="InsuredValue"
+				id="9032f7f4-d19e-4fed-ae81-9055d43143f9"
+				searchtimeout="30000ms"
+				capname="text"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/tabpagelist[@controlname='tabControl']/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element[@controlname='collapseControl']/container[@controlname='collapseControl.Panel']/container[@controlname='insuranceControl']/text[@controlname='insuredValue']/text[@accessiblename='Insured value:']"
+				addcaps="text,accessible"
+				refimgid="56ebf543-2f03-43ce-b399-c68a1bcffc2f">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//container[@controlname='insuranceControl']/text[@controlname='insuredValue']/text[@accessiblename='Insured value:']
+				</item>
+				<basepath>
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']
+				</basepath>
+			</folder>
+			<basepath>
+				/form[@title='Ship Orders']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJRSURBVDhPpZPrS5NhGIf3l/QhoqQiMgii6OBx
+5cwPElaEfSqIJJCgzAikQgsELSlI7SCUnayoIKkPghWZhxxpc861Oedh6jZ1mzu8x1092wS10KBu
++H177+t3Pc/LY/jvaWgxc+eVg5rmAaqafnC50cyZ6k5OVHZTXPGFonOtFJa+pKDkybIcPP0Y45Fy
+DHXPbTS1azS2adxqlal+HaHyWZCKR7OUN/k5e9dHye1JTtaOc7zazdEqF4euOMkvM7MmbQeG2mYz
+dW8C3Hwb5uKDKU7dcFN83cmxaw4OX7VTWGGj4NIgpnIrBy4MYCyzkHveQkZpN+vSjRhqGl7gD8QI
+RzXmRUIRlWBYISAyG0rFG1DwzMi4vTIOj4R1TKLL6mHj1u0CUN/CahOPg6JCRIozF9GZCmqM+lUs
+Li8bNm/DcP/p+4VP/xxNB0mJMx/TmZnXmJzTcPsUfk4q9Az9BaCLZlksJ5vDOtOieUw0O6cUrOMy
+ndbVAAltTSzLcYJRHV9IY2JWw+VVsE0o9I/IfLYIwKYVAIvqcWbEckpdxS7ULaMyvcMS7X0rAJLq
+akJdT6kHUuqOpLrCd5dMl0OizZwApC8HJG9cg6g4d2Cp+nRKvc8t0eOU6LDF+ND7G0Dsoi6oh4S6
+P3nrKiMJdc+i+ld7jE/WKO96vKxPAO4tMRDlSOKfh2IIAEzMgcsXZ8ij0T+q8W1YpcOu8HFQTgLW
+pm0Rb6H+Ibn788kxmsgWyRLJFMnINbEvx8Te7Dz2iOzOymNXZio7M1LJyS9i4U3+6xgMvwD+1+a2
+GORSxAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<basepath/>
+	</rootfolder>
+	<variables/>
+</repository>

@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Orders.Archive.Errors;
 using ShipWorks.Users.Audit;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Stores.Orders.Archive
 {
@@ -29,9 +30,10 @@ namespace ShipWorks.Stores.Orders.Archive
         private static readonly ILog log = LogManager.GetLogger(typeof(OrderArchiveDataAccess));
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderArchiveSqlGenerator orderArchiveSqlGenerator;
+        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly IAuditUtility auditUtility;
         private readonly int commandTimeout = int.MaxValue;
         private bool isRestore = false;
-        readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
@@ -39,11 +41,13 @@ namespace ShipWorks.Stores.Orders.Archive
         public OrderArchiveDataAccess(
             ISqlAdapterFactory sqlAdapterFactory,
             IOrderArchiveSqlGenerator orderArchiveSqlGenerator,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            IAuditUtility auditUtility)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderArchiveSqlGenerator = orderArchiveSqlGenerator;
+            this.auditUtility = auditUtility;
         }
 
         /// <summary>
@@ -255,7 +259,7 @@ namespace ShipWorks.Stores.Orders.Archive
         {
             using (ISqlAdapter adapter = new SqlAdapter(conn))
             {
-                adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql());
+                adapter.ExecuteSQL(orderArchiveSqlGenerator.DisableAutoProcessingSettingsSql(conn.Database));
             }
         }
 
@@ -265,5 +269,19 @@ namespace ShipWorks.Stores.Orders.Archive
         public Task<(long totalOrders, long purgedOrders)> GetOrderCountsForTelemetry(DateTime cutoffDate) =>
             GetCountOfOrdersToArchive(dateTimeProvider.Now.AddDays(1))
                 .Bind(totalOrders => GetCountOfOrdersToArchive(cutoffDate).Map(purgedOrders => (totalOrders, purgedOrders)));
+
+        /// <summary>
+        /// Audit that an archive was run
+        /// </summary>
+        public Task Audit(bool isManualArchive) =>
+            UsingAsync(
+                sqlAdapterFactory.Create(),
+                adapter => auditUtility.AuditAsync(null, AuditActionType.Archive, CreateAuditReason(isManualArchive), adapter));
+
+        /// <summary>
+        /// Create the reason for auditing
+        /// </summary>
+        private AuditReason CreateAuditReason(bool isManualArchive) =>
+            new AuditReason(AuditReasonType.Archive, $"{(isManualArchive ? "Manual" : "Automatic")} archive performed");
     }
 }

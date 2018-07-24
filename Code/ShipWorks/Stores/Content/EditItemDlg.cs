@@ -24,13 +24,13 @@ namespace ShipWorks.Stores.Content
     /// </summary>
     public partial class EditItemDlg : Form
     {
-        OrderItemEntity item;
-        long storeID;
-        PanelDataMode dataMode;
+        readonly OrderItemEntity item;
+        readonly long storeID;
+        readonly PanelDataMode dataMode;
 
-        List<OrderItemAttributeEntity> allAttributes = new List<OrderItemAttributeEntity>();
-        List<OrderItemAttributeEntity> addedAttributes = new List<OrderItemAttributeEntity>();
-        List<OrderItemAttributeEntity> deletedAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> allAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> addedAttributes = new List<OrderItemAttributeEntity>();
+        readonly List<OrderItemAttributeEntity> deletedAttributes = new List<OrderItemAttributeEntity>();
 
         /// <summary>
         /// Constructor.  StoreID is necessary b\c there is no way to know the store when dataMode is local.
@@ -72,6 +72,9 @@ namespace ShipWorks.Stores.Content
             description.Text = item.Description;
             thumbnailUrl.Text = item.Thumbnail;
             imageUrl.Text = item.Image;
+            length.Text = item.Length.ToString("0.##");
+            width.Text = item.Width.ToString("0.##");
+            height.Text = item.Height.ToString("0.##");
 
             LoadAttributes();
 
@@ -272,16 +275,13 @@ namespace ShipWorks.Stores.Content
         [NDependIgnoreLongMethod]
         private void OnOK(object sender, EventArgs e)
         {
-            double quantityValue;
-            if (!double.TryParse(quantity.Text, NumberStyles.Any, null, out quantityValue))
+            if (!ValidateNumericFields())
             {
-                MessageHelper.ShowMessage(this, "Enter a valid quantity for the item.");
                 return;
             }
-
+            
             item.Name = name.Text;
             item.Code = code.Text;
-            item.Quantity = quantityValue;
             item.UnitPrice = price.Amount;
             item.LocalStatus = status.Tag.ToString();
 
@@ -377,6 +377,59 @@ namespace ShipWorks.Stores.Content
 
                 DialogResult = DialogResult.Abort;
             }
+        }
+
+        /// <summary>
+        /// Ensure numeric fields have a numeric value before attempting to save
+        /// </summary>
+        private bool ValidateNumericFields()
+        {
+            List<string> validationErrorFields = new List<string>();
+
+            if (double.TryParse(quantity.Text, NumberStyles.Any, null, out double quantityValue))
+            {
+                item.Quantity = quantityValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Quantity\n");
+            }
+
+            if(decimal.TryParse(length.Text, out decimal lengthValue))
+            {
+                item.Length = lengthValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Length\n");
+            }
+
+            if(decimal.TryParse(width.Text, out decimal widthValue))
+            {
+                item.Width = widthValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Width\n");
+            }
+
+            if(decimal.TryParse(height.Text, out decimal heightValue))
+            {
+                item.Height = heightValue;
+            }
+            else
+            {
+                validationErrorFields.Add("\t- Height\n");
+            }
+
+            if (validationErrorFields.Any())
+            {
+                MessageHelper.ShowError(this, "Please enter a valid number for the following fields:\n" +
+                    $"{string.Join(string.Empty, validationErrorFields)}");
+                return false;
+            }
+
+            return true;
         }
     }
 }

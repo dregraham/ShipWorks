@@ -32,6 +32,9 @@ namespace ShipWorks.Data.Administration
         // Used for executing scripts
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
 
+        // Used for loading \ executing support sql
+        private static readonly SqlScriptLoader supportSqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Support");
+
         /// <summary>
         /// Get the database schema version that is required by this version of ShipWorks
         /// </summary>
@@ -167,12 +170,17 @@ namespace ShipWorks.Data.Administration
                     // Put the SuperUser in scope, and don't audit
                     using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                     {
+                        SqlSession.Current.Configuration.ForceWorkstationID = true;
+
                         using (new ExistingConnectionScope())
                         {
                             using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                             {
                                 // Update the tables
                                 UpdateScripts(installedSchema, progressScripts);
+
+                                // Execute any support scripts
+                                ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
 
                                 // Functionality starting
                                 progressFunctionality.Starting();
@@ -182,9 +190,6 @@ namespace ShipWorks.Data.Administration
 
                                 // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
                                 UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                                // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
-                                SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
                                 // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
                                 // database upgrade can take time and cause a timeout.
@@ -202,6 +207,10 @@ namespace ShipWorks.Data.Administration
                 {
                     log.Error("UpdateDatabase failed", ex);
                     throw;
+                }
+                finally
+                {
+                    SqlSession.Current.Configuration.ForceWorkstationID = false;
                 }
             }
         }
@@ -365,7 +374,7 @@ namespace ShipWorks.Data.Administration
             int scriptsCompleted = updateScripts.IndexOf(script);
 
             // Execute the script
-            SqlScript executor = sqlLoader[script.ScriptName];
+            ISqlScript executor = sqlLoader[script.ScriptName];
 
             // Update the progress as we complete each batch in the script
             executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
@@ -558,6 +567,25 @@ namespace ShipWorks.Data.Administration
                 (version.Minor << 16) +
                 (version.Build << 8) +
                 (version.Revision);
+        }
+
+        /// <summary>
+        /// Execute any support SQL scripts
+        /// </summary>
+        private static void ExecuteSupportSql(DbConnection con)
+        {
+            try
+            {
+                foreach (string scriptName in supportSqlLoader.ScriptResources)
+                {
+                    supportSqlLoader[scriptName].Execute(con);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"An error occurred while adding support sql scripts.", ex);
+                throw;
+            }
         }
     }
 }

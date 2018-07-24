@@ -64,7 +64,10 @@ namespace ShipWorks.Data.Administration
                 "ShipmentCustomsItem",
                 "ShippingOrigin",
                 "ShippingPrintOutput",
-                "ShippingProviderRule"
+                "ShippingProviderRule",
+                "Shortcut",
+                "DhlExpressAccount",
+                "AsendiaAccount"
             };
         }
 

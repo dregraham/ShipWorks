@@ -982,9 +982,9 @@ namespace ShipWorks.Stores.Management
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
                 FilterLayoutContext.PushScope();
 
-                if (!string.IsNullOrEmpty(licenseKey.Text))
+                if (!string.IsNullOrWhiteSpace(licenseKey.Text))
                 {
-                    store.License = licenseKey.Text;
+                    store.License = licenseKey.Text.Trim();
                 }
 
                 if (!ValidateLicense(e))

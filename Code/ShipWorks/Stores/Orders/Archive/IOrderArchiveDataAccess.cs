@@ -61,5 +61,10 @@ namespace ShipWorks.Stores.Orders.Archive
         /// Get order counts for telemetry
         /// </summary>
         Task<(long totalOrders, long purgedOrders)> GetOrderCountsForTelemetry(DateTime cutoffDate);
+
+        /// <summary>
+        /// Audit that an archive was run
+        /// </summary>
+        Task Audit(bool isManualArchive);
     }
 }

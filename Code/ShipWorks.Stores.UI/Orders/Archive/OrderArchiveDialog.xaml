@@ -79,13 +79,13 @@
                 <LineBreak />
                 <LineBreak />
                 <Run Foreground="Transparent">MM</Run>
-                <Run>Archiving orders cannot be undone.</Run>
+                <Run>- Archiving orders cannot be undone.</Run>
                 <LineBreak />
                 <Run Foreground="Transparent">MM</Run>
-                <Run>Archived orders are removed from the current ShipWorks database.</Run>
+                <Run>- Archived orders are removed from the current ShipWorks database.</Run>
                 <LineBreak />
                 <Run Foreground="Transparent">MM</Run>
-                <Run>ShipWorks cannot be used during the archiving process.</Run>
+                <Run>- ShipWorks cannot be used during the archiving process.</Run>
                 <LineBreak />
                 <LineBreak />
                 <Run>Want to learn more about archiving?</Run>

@@ -1,7 +1,7 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -19,6 +19,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
                 var settings = new ShippingSettingsEntity() {FedExFimsUsername = "U", FedExFimsPassword = "P"};
                 var settingsRepository = mock.Mock<IFedExSettingsRepository>();
                 settingsRepository.Setup(s => s.GetShippingSettings()).Returns(settings);
+
+                var webClient = mock.Mock<IFimsWebClient>();
+                var result = new TelemetricResult<IFimsShipResponse>("Foo");
+                result.SetValue(mock.Mock<IFimsShipResponse>().Object);
+                webClient.Setup(c => c.Ship(It.IsAny<IFimsShipRequest>())).Returns(result);
 
                 var shipment = new ShipmentEntity();
                 shipment.FedEx = new FedExShipmentEntity();
@@ -52,8 +57,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
                 shipment.FedEx.Service = (int)FedExServiceType.FedExFimsStandard;
                 shipment.ShipCountryCode = "CA";
                 shipment.CustomsItems.Add(new ShipmentCustomsItemEntity());
-
+                
                 var webClient = mock.Mock<IFimsWebClient>();
+                var result = new TelemetricResult<IFimsShipResponse>("Foo");
+                result.SetValue(mock.Mock<IFimsShipResponse>().Object);
+                webClient.Setup(c => c.Ship(It.IsAny<IFimsShipRequest>())).Returns(result);
 
                 var testObject = mock.Create<FimsShippingClerk>();
 

@@ -5,6 +5,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Audit;
@@ -20,15 +21,18 @@ namespace ShipWorks.Stores.Orders.Combine
         private readonly IAuditUtility auditUtility;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IStoreTypeManager storeTypeManager;
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrderAudit(IAuditUtility auditUtility, ISqlAdapterFactory sqlAdapterFactory, IStoreTypeManager storeTypeManager)
+        public CombineOrderAudit(IAuditUtility auditUtility, ISqlAdapterFactory sqlAdapterFactory, 
+            IStoreTypeManager storeTypeManager, IConfigurationData configurationData)
         {
             this.storeTypeManager = storeTypeManager;
             this.auditUtility = auditUtility;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -36,6 +40,11 @@ namespace ShipWorks.Stores.Orders.Combine
         /// </summary>
         public async Task Audit(long survivingOrderID, IEnumerable<IOrderEntity> orders)
         {
+            if (!configurationData.FetchReadOnly().AuditEnabled)
+            {
+                return;
+            }
+
             var identifiers = orders.Select(GetOrderIdentifier).Combine(", ");
             string reason = $"Combined from orders : {identifiers}";
             reason = reason.Truncate(100);

@@ -66,21 +66,26 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
+                        log.Info("LabelPersistenceStep.SaveLabel: LabelData.Save");
                         result.LabelData.Save();
 
                         log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
 
                         ResetTemporaryAddressChanges(result, shipment);
 
-                        MarkShipmentAsProcessed(shipment, adapter);
+                        MarkShipmentAsProcessed(shipment);
+
+                        SaveShipment(shipment, adapter);
 
                         DispatchShipmentProcessedActions(shipment, adapter);
 
+                        log.Info("LabelPersistenceStep.SaveLabel: adapter.Commit()");
                         adapter.Commit();
                     }
                 }
                 catch (Exception ex)
                 {
+                    log.Error($"Exception during LabelPersistenceStep.SaveLabel", ex);
                     return new LabelPersistenceResult(result, ex);
                 }
             }
@@ -89,16 +94,31 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         }
 
         /// <summary>
+        /// Save the shipment before dispatching.
+        /// </summary>
+        private void SaveShipment(ShipmentEntity shipment, ISqlAdapter sqlAdapter)
+        {
+            sqlAdapter.SaveAndRefetch(shipment);
+
+            // SafeAndRefetch doesn't delete the entities, so force the delete here.
+            if (shipment.CustomsItems.RemovedEntitiesTracker?.Count > 0)
+            {
+                sqlAdapter.DeleteEntityCollection(shipment.CustomsItems.RemovedEntitiesTracker);
+                shipment.CustomsItems.RemovedEntitiesTracker.Clear();
+            }
+        }
+
+        /// <summary>
         /// Mark the shipment as processed
         /// </summary>
-        private void MarkShipmentAsProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
+        private void MarkShipmentAsProcessed(ShipmentEntity shipment)
         {
+            log.Info("LabelPersistenceStep.MarkShipmentAsProcessed");
+
             shipment.Processed = true;
             shipment.ProcessedDate = dateTimeProvider.UtcNow;
             shipment.ProcessedUserID = userSession.User.UserID;
             shipment.ProcessedComputerID = userSession.Computer.ComputerID;
-
-            adapter.SaveAndRefetch(shipment);
         }
 
         /// <summary>
@@ -106,6 +126,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private void DispatchShipmentProcessedActions(IShipmentEntity shipment, ISqlAdapter adapter)
         {
+            log.Info("LabelPersistenceStep.DispatchShipmentProcessedActions");
+
             // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
             if (!shipment.ProcessingCompletesExternally())
             {
@@ -118,8 +140,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Reset the address changes that were made temporarily for services like GSP
         /// </summary>
-        private static void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
+        private void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
         {
+            log.Info("LabelPersistenceStep.ResetTemporaryAddressChanges");
+
             // Now that the label is generated, we can reset the shipping fields the store changed back to their
             // original values before saving to the database
             foreach (ShipmentFieldIndex fieldIndex in result.FieldsToRestore)

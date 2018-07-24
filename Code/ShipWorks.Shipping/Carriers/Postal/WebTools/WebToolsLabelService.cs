@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Creates a WebTools label for the given Shipment
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
             {
@@ -43,9 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
-
+            
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            PostalWebToolsLabelResponse response = null;
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = PostalWebClientShipping.ProcessShipment(shipment.Postal));
+            telemetricResult.SetValue(createDownloadedLabelData(response));
+            
             // Process the shipment
-            return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(PostalWebClientShipping.ProcessShipment(shipment.Postal)));
+            return Task.FromResult(telemetricResult);
         }
 
         /// <summary>

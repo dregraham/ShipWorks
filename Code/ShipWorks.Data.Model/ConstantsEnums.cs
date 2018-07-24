@@ -404,6 +404,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -438,6 +444,8 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
+		///<summary>Reference1. </summary>
+		Reference1,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -486,6 +494,10 @@ namespace ShipWorks.Data.Model
 		AmazonUniqueShipmentID,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>Reference1. </summary>
+		Reference1,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -918,6 +930,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1068,6 +1086,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1380,6 +1404,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1904,6 +1934,8 @@ namespace ShipWorks.Data.Model
 		AllowEbayCombineLocally,
 		///<summary>ArchivalSettingsXml. </summary>
 		ArchivalSettingsXml,
+		///<summary>AuditEnabled. </summary>
+		AuditEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2436,6 +2468,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3044,6 +3082,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4274,6 +4318,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -4652,6 +4702,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4664,6 +4720,8 @@ namespace ShipWorks.Data.Model
 		BomSKU,
 		///<summary>GrouponLineItemID. </summary>
 		GrouponLineItemID,
+		///<summary>PONumber. </summary>
+		PONumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4800,6 +4858,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -5236,6 +5300,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -5568,6 +5638,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -6850,6 +6926,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -7426,6 +7508,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>Length. </summary>
+		Length,
+		///<summary>Width. </summary>
+		Width,
+		///<summary>Height. </summary>
+		Height,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7762,6 +7850,316 @@ namespace ShipWorks.Data.Model
 		InsuranceValue,
 		///<summary>Insurance. </summary>
 		Insurance,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OverstockOrder.</summary>
+	public enum OverstockOrderFieldIndex
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. Inherited from Order</summary>
+		RowVersion,
+		///<summary>StoreID. Inherited from Order</summary>
+		StoreID,
+		///<summary>CustomerID. Inherited from Order</summary>
+		CustomerID,
+		///<summary>OrderNumber. Inherited from Order</summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. Inherited from Order</summary>
+		OrderDate,
+		///<summary>OrderTotal. Inherited from Order</summary>
+		OrderTotal,
+		///<summary>LocalStatus. Inherited from Order</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from Order</summary>
+		IsManual,
+		///<summary>OnlineLastModified. Inherited from Order</summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. Inherited from Order</summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. Inherited from Order</summary>
+		RequestedShipping,
+		///<summary>BillFirstName. Inherited from Order</summary>
+		BillFirstName,
+		///<summary>BillMiddleName. Inherited from Order</summary>
+		BillMiddleName,
+		///<summary>BillLastName. Inherited from Order</summary>
+		BillLastName,
+		///<summary>BillCompany. Inherited from Order</summary>
+		BillCompany,
+		///<summary>BillStreet1. Inherited from Order</summary>
+		BillStreet1,
+		///<summary>BillStreet2. Inherited from Order</summary>
+		BillStreet2,
+		///<summary>BillStreet3. Inherited from Order</summary>
+		BillStreet3,
+		///<summary>BillCity. Inherited from Order</summary>
+		BillCity,
+		///<summary>BillStateProvCode. Inherited from Order</summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. Inherited from Order</summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. Inherited from Order</summary>
+		BillCountryCode,
+		///<summary>BillPhone. Inherited from Order</summary>
+		BillPhone,
+		///<summary>BillFax. Inherited from Order</summary>
+		BillFax,
+		///<summary>BillEmail. Inherited from Order</summary>
+		BillEmail,
+		///<summary>BillWebsite. Inherited from Order</summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. Inherited from Order</summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. Inherited from Order</summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. Inherited from Order</summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. Inherited from Order</summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. Inherited from Order</summary>
+		ShipLastName,
+		///<summary>ShipCompany. Inherited from Order</summary>
+		ShipCompany,
+		///<summary>ShipStreet1. Inherited from Order</summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. Inherited from Order</summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. Inherited from Order</summary>
+		ShipStreet3,
+		///<summary>ShipCity. Inherited from Order</summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. Inherited from Order</summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. Inherited from Order</summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. Inherited from Order</summary>
+		ShipPhone,
+		///<summary>ShipFax. Inherited from Order</summary>
+		ShipFax,
+		///<summary>ShipEmail. Inherited from Order</summary>
+		ShipEmail,
+		///<summary>ShipWebsite. Inherited from Order</summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. Inherited from Order</summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. Inherited from Order</summary>
+		RollupItemCount,
+		///<summary>RollupItemName. Inherited from Order</summary>
+		RollupItemName,
+		///<summary>RollupItemCode. Inherited from Order</summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. Inherited from Order</summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. Inherited from Order</summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. Inherited from Order</summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. Inherited from Order</summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
+		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. Inherited from Order</summary>
+		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>WarehouseCode. </summary>
+		WarehouseCode,
+		///<summary>SalesChannelName. </summary>
+		SalesChannelName,
+		///<summary>SofsCreatedDate. </summary>
+		SofsCreatedDate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OverstockOrderItem.</summary>
+	public enum OverstockOrderItemFieldIndex
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. Inherited from OrderItem</summary>
+		RowVersion,
+		///<summary>OrderID. Inherited from OrderItem</summary>
+		OrderID,
+		///<summary>Name. Inherited from OrderItem</summary>
+		Name,
+		///<summary>Code. Inherited from OrderItem</summary>
+		Code,
+		///<summary>SKU. Inherited from OrderItem</summary>
+		SKU,
+		///<summary>ISBN. Inherited from OrderItem</summary>
+		ISBN,
+		///<summary>UPC. Inherited from OrderItem</summary>
+		UPC,
+		///<summary>Description. Inherited from OrderItem</summary>
+		Description,
+		///<summary>Location. Inherited from OrderItem</summary>
+		Location,
+		///<summary>Image. Inherited from OrderItem</summary>
+		Image,
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
+		Thumbnail,
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
+		UnitPrice,
+		///<summary>UnitCost. Inherited from OrderItem</summary>
+		UnitCost,
+		///<summary>Weight. Inherited from OrderItem</summary>
+		Weight,
+		///<summary>Quantity. Inherited from OrderItem</summary>
+		Quantity,
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from OrderItem</summary>
+		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>SalesChannelLineNumber. </summary>
+		SalesChannelLineNumber,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OverstockOrderSearch.</summary>
+	public enum OverstockOrderSearchFieldIndex
+	{
+		///<summary>OverstockOrderSearchID. </summary>
+		OverstockOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
+		///<summary>SalesChannelName. </summary>
+		SalesChannelName,
+		///<summary>WarehouseCode. </summary>
+		WarehouseCode,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OverstockStore.</summary>
+	public enum OverstockStoreFieldIndex
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. Inherited from Store</summary>
+		RowVersion,
+		///<summary>License. Inherited from Store</summary>
+		License,
+		///<summary>Edition. Inherited from Store</summary>
+		Edition,
+		///<summary>TypeCode. Inherited from Store</summary>
+		TypeCode,
+		///<summary>Enabled. Inherited from Store</summary>
+		Enabled,
+		///<summary>SetupComplete. Inherited from Store</summary>
+		SetupComplete,
+		///<summary>StoreName. Inherited from Store</summary>
+		StoreName,
+		///<summary>Company. Inherited from Store</summary>
+		Company,
+		///<summary>Street1. Inherited from Store</summary>
+		Street1,
+		///<summary>Street2. Inherited from Store</summary>
+		Street2,
+		///<summary>Street3. Inherited from Store</summary>
+		Street3,
+		///<summary>City. Inherited from Store</summary>
+		City,
+		///<summary>StateProvCode. Inherited from Store</summary>
+		StateProvCode,
+		///<summary>PostalCode. Inherited from Store</summary>
+		PostalCode,
+		///<summary>CountryCode. Inherited from Store</summary>
+		CountryCode,
+		///<summary>Phone. Inherited from Store</summary>
+		Phone,
+		///<summary>Fax. Inherited from Store</summary>
+		Fax,
+		///<summary>Email. Inherited from Store</summary>
+		Email,
+		///<summary>Website. Inherited from Store</summary>
+		Website,
+		///<summary>AutoDownload. Inherited from Store</summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
+		AutoDownloadOnlyAway,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>Username. </summary>
+		Username,
+		///<summary>Password. </summary>
+		Password,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8746,6 +9144,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -9600,12 +10004,20 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
 		ShopifyOrderItemID,
 		///<summary>ShopifyProductID. </summary>
 		ShopifyProductID,
+		///<summary>InventoryItemID. </summary>
+		InventoryItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10326,6 +10738,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -11448,6 +11866,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -12054,6 +12478,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
@@ -12170,6 +12600,46 @@ namespace ShipWorks.Data.Model
 		AmountOfFields
 	}
 
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksDisabledDefaultIndexes.</summary>
+	public enum ShipWorksDisabledDefaultIndexesFieldIndex
+	{
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexName</summary>
+		IndexName,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>EnableIndex</summary>
+		EnableIndex,
+		///<summary>IndexID</summary>
+		IndexID,
+		///<summary>IndexColumnId</summary>
+		IndexColumnId,
+		///<summary>IsIncluded</summary>
+		IsIncluded,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksMissingIndexRequests.</summary>
+	public enum ShipWorksMissingIndexRequestsFieldIndex
+	{
+		///<summary>IndexHandle</summary>
+		IndexHandle,
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexAdvantage</summary>
+		IndexAdvantage,
+		///<summary>GroupHandle</summary>
+		GroupHandle,
+		///<summary>ColumnID</summary>
+		ColumnID,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>ColumnUsage</summary>
+		ColumnUsage,
+		/// <summary></summary>
+		AmountOfFields
+	}
 
 
 	/// <summary>Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.</summary>
@@ -12445,6 +12915,14 @@ namespace ShipWorks.Data.Model
 		OtherProfileEntity,
 		///<summary>OtherShipment</summary>
 		OtherShipmentEntity,
+		///<summary>OverstockOrder</summary>
+		OverstockOrderEntity,
+		///<summary>OverstockOrderItem</summary>
+		OverstockOrderItemEntity,
+		///<summary>OverstockOrderSearch</summary>
+		OverstockOrderSearchEntity,
+		///<summary>OverstockStore</summary>
+		OverstockStoreEntity,
 		///<summary>PackageProfile</summary>
 		PackageProfileEntity,
 		///<summary>PayPalOrder</summary>
@@ -12621,6 +13099,14 @@ namespace ShipWorks.Data.Model
 		YahooStoreEntity
 	}
 
+	/// <summary>Enum definition for all the typed view types defined in this namespace. Used by the entityfields factory.</summary>
+	public enum TypedViewType
+	{
+		///<summary>ShipWorksDisabledDefaultIndexes</summary>
+		ShipWorksDisabledDefaultIndexesTypedView,
+		///<summary>ShipWorksMissingIndexRequests</summary>
+		ShipWorksMissingIndexRequestsTypedView
+	}
 
 	#region Custom ConstantsEnums Code
 	

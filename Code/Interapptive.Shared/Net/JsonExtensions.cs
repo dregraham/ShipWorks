@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using log4net;
 
 namespace Interapptive.Shared.Net
 {
@@ -24,7 +20,9 @@ namespace Interapptive.Shared.Net
         public static T GetValue<T>(this JToken input, string key, T defaultValue = default(T))
         {
             if (input == null)
-                throw new JsonException("input JObject provided was null.") { Input = input, Key = key };
+            {
+                throw new JsonException($"JObject for {key} was null.");
+            }
 
             JToken selection = input.SelectToken(key);
             if (selection != null && selection.Type != JTokenType.Null)
@@ -33,7 +31,7 @@ namespace Interapptive.Shared.Net
                 if (converter != null)
                 {
                     string tmp = selection.ToString();
-                    return (T)converter.ConvertFromString(tmp);
+                    return (T) converter.ConvertFromString(tmp);
                 }
             }
 

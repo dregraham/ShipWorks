@@ -563,7 +563,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                                 rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect))
                                 {
-                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia),
+                                    Tag = new PostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.None)
                                 });
                                 rates.Add(withDelivery);
                                 rates.Add(withSignature);
@@ -937,6 +938,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public void RequestRefund(ShipmentEntity shipment)
         {
+            if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+            {
+                log.InfoFormat("DHL shipments do not support refunds. {0}", shipment.ShipmentID);
+                return;
+            }
+
             EndiciaAccountEntity account = GetAccount(shipment.Postal);
 
             try

@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(222);
+			this.InitClass(228);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -182,6 +182,10 @@ namespace ShipWorks.Data.Model
 			InitOrderSearchEntityMappings();
 			InitOtherProfileEntityMappings();
 			InitOtherShipmentEntityMappings();
+			InitOverstockOrderEntityMappings();
+			InitOverstockOrderItemEntityMappings();
+			InitOverstockOrderSearchEntityMappings();
+			InitOverstockStoreEntityMappings();
 			InitPackageProfileEntityMappings();
 			InitPayPalOrderEntityMappings();
 			InitPayPalOrderSearchEntityMappings();
@@ -269,6 +273,8 @@ namespace ShipWorks.Data.Model
 			InitYahooOrderSearchEntityMappings();
 			InitYahooProductEntityMappings();
 			InitYahooStoreEntityMappings();
+			InitShipWorksDisabledDefaultIndexesTypedViewMappings();
+			InitShipWorksMissingIndexRequestsTypedViewMappings();
 		}
 
 		/// <summary>Inits ActionEntity's mappings</summary>
@@ -418,10 +424,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonProfileEntity's mappings</summary>
 		private void InitAmazonProfileEntityMappings()
 		{
-			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 3, 0);
+			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 4, 0);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>
@@ -436,7 +443,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
 		private void InitAmazonShipmentEntityMappings()
 		{
-			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 15, 0);
+			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 17, 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "CarrierName", "CarrierName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -452,6 +459,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AmazonShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
@@ -776,7 +785,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 16, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 17, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -793,6 +802,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 			this.AddElementFieldMapping("ConfigurationEntity", "AllowEbayCombineLocally", "AllowEbayCombineLocally", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
 			this.AddElementFieldMapping("ConfigurationEntity", "ArchivalSettingsXml", "ArchivalSettingsXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("ConfigurationEntity", "AuditEnabled", "AuditEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -1797,13 +1807,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderItemEntity's mappings</summary>
 		private void InitGrouponOrderItemEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderItemEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderItem", 6, 0);
+			this.AddElementMapping("GrouponOrderItemEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderItem", 7, 0);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "Permalink", "Permalink", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "ChannelSKUProvided", "ChannelSKUProvided", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "FulfillmentLineItemID", "FulfillmentLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "BomSKU", "BomSKU", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("GrouponOrderItemEntity", "GrouponLineItemID", "GrouponLineItemID", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("GrouponOrderItemEntity", "PONumber", "PONumber", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits GrouponOrderSearchEntity's mappings</summary>
@@ -2392,7 +2403,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderItemEntity's mappings</summary>
 		private void InitOrderItemEntityMappings()
 		{
-			this.AddElementMapping("OrderItemEntity", @"ShipWorksLocal", @"dbo", "OrderItem", 20, 0);
+			this.AddElementMapping("OrderItemEntity", @"ShipWorksLocal", @"dbo", "OrderItem", 23, 0);
 			this.AddElementFieldMapping("OrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderItemEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderItemEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2413,6 +2424,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
 			this.AddElementFieldMapping("OrderItemEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 19);
+			this.AddElementFieldMapping("OrderItemEntity", "Length", "Length", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 20);
+			this.AddElementFieldMapping("OrderItemEntity", "Width", "Width", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 21);
+			this.AddElementFieldMapping("OrderItemEntity", "Height", "Height", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 22);
 		}
 
 		/// <summary>Inits OrderItemAttributeEntity's mappings</summary>
@@ -2499,6 +2513,44 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OtherShipmentEntity", "Service", "Service", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("OtherShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("OtherShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+		}
+
+		/// <summary>Inits OverstockOrderEntity's mappings</summary>
+		private void InitOverstockOrderEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderEntity", @"ShipWorksLocal", @"dbo", "OverstockOrder", 4, 0);
+			this.AddElementFieldMapping("OverstockOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderEntity", "WarehouseCode", "WarehouseCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SalesChannelName", "SalesChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("OverstockOrderEntity", "SofsCreatedDate", "SofsCreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
+		}
+
+		/// <summary>Inits OverstockOrderItemEntity's mappings</summary>
+		private void InitOverstockOrderItemEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderItemEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderItem", 2, 0);
+			this.AddElementFieldMapping("OverstockOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderItemEntity", "SalesChannelLineNumber", "SalesChannelLineNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+		}
+
+		/// <summary>Inits OverstockOrderSearchEntity's mappings</summary>
+		private void InitOverstockOrderSearchEntityMappings()
+		{
+			this.AddElementMapping("OverstockOrderSearchEntity", @"ShipWorksLocal", @"dbo", "OverstockOrderSearch", 5, 0);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OverstockOrderSearchID", "OverstockOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "SalesChannelName", "SalesChannelName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("OverstockOrderSearchEntity", "WarehouseCode", "WarehouseCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
+		}
+
+		/// <summary>Inits OverstockStoreEntity's mappings</summary>
+		private void InitOverstockStoreEntityMappings()
+		{
+			this.AddElementMapping("OverstockStoreEntity", @"ShipWorksLocal", @"dbo", "OverstockStore", 3, 0);
+			this.AddElementFieldMapping("OverstockStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OverstockStoreEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OverstockStoreEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits PackageProfileEntity's mappings</summary>
@@ -3050,7 +3102,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingSettingsEntity", "Express1UspsSingleSource", "Express1UspsSingleSource", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 39);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 40);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 41);
-			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 42);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 42);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseEnabled", "ShipSenseEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 43);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseUniquenessXml", "ShipSenseUniquenessXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 44);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 45);
@@ -3086,10 +3138,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyOrderItemEntity's mappings</summary>
 		private void InitShopifyOrderItemEntityMappings()
 		{
-			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 3, 0);
+			this.AddElementMapping("ShopifyOrderItemEntity", @"ShipWorksLocal", @"dbo", "ShopifyOrderItem", 4, 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyOrderItemID", "ShopifyOrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ShopifyOrderItemEntity", "ShopifyProductID", "ShopifyProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("ShopifyOrderItemEntity", "InventoryItemID", "InventoryItemID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits ShopifyOrderSearchEntity's mappings</summary>
@@ -4018,6 +4071,34 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("YahooStoreEntity", "AccessToken", "AccessToken", false, "VarChar", 200, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
+		}
+
+
+		/// <summary>Inits ShipWorksDisabledDefaultIndexesView's mappings</summary>
+		private void InitShipWorksDisabledDefaultIndexesTypedViewMappings()
+		{
+			this.AddElementMapping("ShipWorksDisabledDefaultIndexesTypedView", @"ShipWorksLocal", @"dbo", "ShipWorksDisabledDefaultIndexes", 7);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "TableName", "TableName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 0);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexName", "IndexName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 1);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "ColumnName", "ColumnName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "EnableIndex", "EnableIndex", false, "NVarChar", 825, 0, 0, false, string.Empty, null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexID", "IndexID", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IndexColumnId", "IndexColumnId", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 5);
+			this.AddElementFieldMapping("ShipWorksDisabledDefaultIndexesTypedView", "IsIncluded", "IsIncluded", false, "Bit", 0, 0, 0, false, string.Empty, null, typeof(System.Boolean), 6);
+		}
+
+
+		/// <summary>Inits ShipWorksMissingIndexRequestsView's mappings</summary>
+		private void InitShipWorksMissingIndexRequestsTypedViewMappings()
+		{
+			this.AddElementMapping("ShipWorksMissingIndexRequestsTypedView", @"ShipWorksLocal", @"dbo", "ShipWorksMissingIndexRequests", 7);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "IndexHandle", "IndexHandle", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "TableName", "TableName", false, "NVarChar", 128, 0, 0, false, string.Empty, null, typeof(System.String), 1);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "IndexAdvantage", "IndexAdvantage", false, "Float", 0, 38, 0, false, string.Empty, null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "GroupHandle", "GroupHandle", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnID", "ColumnID", false, "Int", 0, 10, 0, false, string.Empty, null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnName", "ColumnName", false, "NVarChar", 4000, 0, 0, false, string.Empty, null, typeof(System.String), 5);
+			this.AddElementFieldMapping("ShipWorksMissingIndexRequestsTypedView", "ColumnUsage", "ColumnUsage", false, "NVarChar", 4000, 0, 0, false, string.Empty, null, typeof(System.String), 6);
 		}
 
 	}

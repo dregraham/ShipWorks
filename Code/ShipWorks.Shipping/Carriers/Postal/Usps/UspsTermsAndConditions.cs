@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -123,14 +124,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Open the url in a browser in kiosk mode
+        /// Open the URL in a browser in kiosk mode
         /// </summary>
         private static void OpenKioskBrowser(string url)
         {
-            using (WebBrowser webBrowser = new WebBrowser())
+            try
             {
-                webBrowser.Url = new Uri("about:blank");
-                webBrowser.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
+                using (WebBrowser webBrowser = new WebBrowser())
+                {
+                    webBrowser.Url = new Uri("about:blank");
+                    webBrowser.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
+                }
+            }
+            catch (COMException)
+            {
+                Process.Start(url);
             }
         }
 

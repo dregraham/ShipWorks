@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="838f02b6-fa01-4c54-9bf3-58aaa8a2c4b4"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		ProcessUSPSNoPostageFirstClass
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ProcessUSPSNoPostageFirstClass"
+	namespace="SoakPerformanceTest"/>
+	<variables/>
+	<recorditems/>
+	<repository
+	name="ShippingCarrierRegressionRepository"
+	id="c68b9397-84ac-4ea0-be0f-3eb8aa9b5526"
+	rxversion="5.4.5.19886"
+	relativepath="ShippingCarrierRegressionRepository.rxrep">
+		<codegen
+		classname="ShippingCarrierRegressionRepository"
+		namespace="SoakPerformanceTest"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="8b3666b0-4472-487b-baaa-0a31e8982b7d"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ProcessUSPSNoPostageFirstClass.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

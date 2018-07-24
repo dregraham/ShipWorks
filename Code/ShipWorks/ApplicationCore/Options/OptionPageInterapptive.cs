@@ -70,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Options
             payPal.Checked = !PayPalWebClient.UseLiveServer;
             newegg.Checked = !Credentials.UseLiveServerKey;
             sears.Checked = !SearsWebClient.UseLiveServer;
-
+            overstockServer.Checked = !InterapptiveOnly.Registry.GetValue("OverstockLiveServer", true);
             marketplaceAdvisorMarkProcessed.Checked = MarketplaceAdvisorUtility.MarkProcessedAfterDownload;
             yahooDeleteMessages.Checked = YahooEmailUtility.DeleteMessagesAfterDownload;
             buyDotComArchiveOrderFile.Checked = BuyDotComUtility.ArchiveFileAfterDownload;
@@ -111,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Options
             PayPalWebClient.UseLiveServer = !payPal.Checked;
             Credentials.UseLiveServerKey = !newegg.Checked;
             SearsWebClient.UseLiveServer = !sears.Checked;
-
+            InterapptiveOnly.Registry.SetValue("OverstockLiveServer", !overstockServer.Checked);
             MarketplaceAdvisorUtility.MarkProcessedAfterDownload = marketplaceAdvisorMarkProcessed.Checked;
             YahooEmailUtility.DeleteMessagesAfterDownload = yahooDeleteMessages.Checked;
             BuyDotComUtility.ArchiveFileAfterDownload = buyDotComArchiveOrderFile.Checked;

@@ -39,6 +39,8 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
@@ -239,6 +241,11 @@ namespace ShipWorks.ApplicationCore
             KeyedComponentAttribute.Register(builder, registrationCache, allAssemblies);
             NamedComponentAttribute.Register(builder, registrationCache, allAssemblies);
 
+            builder.Register((c, _) => Program.ExecutionMode.IsUISupported ?
+                    (IUserLoginWorkflow) c.Resolve<UserLoginWorkflow>() :
+                    c.Resolve<BackgroundUserLoginWorkflow>())
+                .As<IUserLoginWorkflow>();
+
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
@@ -250,6 +257,24 @@ namespace ShipWorks.ApplicationCore
             {
                 builder.RegisterType(taskDescriptor.SystemType).AsSelf();
             }
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IKnowledgebase) c.Resolve<Knowledgebase>() :
+                        c.Resolve<NullKnowledgebase>())
+                .As<IKnowledgebase>();
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IShipSenseLoaderGateway) c.Resolve<ShipSenseLoaderGateway>() :
+                        c.Resolve<NullShipSenseLoaderGateway>())
+                .As<IShipSenseLoaderGateway>();
+
+            builder.Register((c, _) =>
+                    c.Resolve<IShippingSettings>().FetchReadOnly().ShipSenseEnabled ?
+                        (IShipSenseSynchronizer) c.Resolve<ShipSenseSynchronizer>() :
+                        c.Resolve<NullShipSenseSynchronizer>())
+                .As<IShipSenseSynchronizer>();
         }
 
         /// <summary>

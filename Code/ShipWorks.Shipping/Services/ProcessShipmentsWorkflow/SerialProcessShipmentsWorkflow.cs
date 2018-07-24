@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
         private readonly ShipmentPreparationStep prepareShipmentTask;
-        private readonly LabelRetrievalStep getLabelTask;
+        private readonly ILabelRetrievalStep getLabelTask;
         private readonly LabelPersistenceStep saveLabelTask;
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         public SerialProcessShipmentsWorkflow(
             ShipmentPreparationStep prepareShipmentTask,
-            LabelRetrievalStep getLabelTask,
+            ILabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
             LabelResultLogStep completeLabelTask,
             IShippingManager shippingManager)

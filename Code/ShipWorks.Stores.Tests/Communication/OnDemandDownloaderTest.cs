@@ -10,6 +10,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using log4net;
 
 namespace ShipWorks.Stores.Tests.Communication
 {
@@ -67,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Communication
         }
 
         [Fact]
-        public async Task Download_ShowsWarning_WhenSqlAppResourceLockExceptionThrown()
+        public async Task Download_LogsInfo_WhenSqlAppResourceLockExceptionThrown()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
             downloadManager.Setup(m => m.Download(AnyString))
@@ -75,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Communication
 
             await testObject.Download("blah");
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowWarning("Someone else just searched for this order. Please search again."), Times.Once);
+            mock.Mock<ILog>().Verify(l => l.Info("skipping download because another downloader is downloading that order number currently."), Times.Once);
         }
 
         [Fact]

@@ -164,7 +164,7 @@ INSERT INTO [dbo].[Scheduling_SIMPROP_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [
 VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 1, 0, 0, 0, 0.0000, 0.0000, 0, 0)
 GO
 
--- Create RebuildTableIndex Action
+-- Create DatabaseMaintenance Action
 
 DECLARE @ActionID NVARCHAR(20)
 DECLARE @StartReindexTime DATETIME
@@ -183,7 +183,7 @@ SET @StartReindexTimeString = CONVERT(NVARCHAR(50), @StartReindexTime, 127) + 'Z
 SET @ReindexFireTimeTicks = dbo.GetTicksFromDateTime(@StartReindexTimeString)
 
 INSERT INTO [dbo].[Action] ([Name], [Enabled], [ComputerLimitedType], [ComputerLimitedList], [StoreLimited], [StoreLimitedList], [TriggerType], [TriggerSettings], [TaskSummary], [InternalOwner])
-VALUES (N'Reindex Data', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartReindexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule></Settings>',1), N'RebuildTableIndex', 'ReIndex')
+VALUES (N'Database Maintenance', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartReindexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule></Settings>',1), N'DatabaseMaintenance', 'DatabaseMaintenance')
 SELECT @ActionID = CONVERT(NVARCHAR(20), SCOPE_IDENTITY())
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_JOB_DETAILS]')
@@ -193,7 +193,7 @@ VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Sch
 
 PRINT (N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])
-VALUES (CONVERT(BIGINT, @ActionID), N'RebuildTableIndex', CONVERT(xml, N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>2014-07-06T07:00:00Z</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule><TimeoutInMinutes value="120" /></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
+VALUES (CONVERT(BIGINT, @ActionID), N'DatabaseMaintenance', CONVERT(xml, N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>2014-07-06T07:00:00Z</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule><TimeoutInMinutes value="120" /></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA])
@@ -202,6 +202,43 @@ VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', @ActionID, N'DEFAULT', NULL, 
 PRINT(N'Add 1 row to [dbo].[Scheduling_SIMPROP_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_SIMPROP_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [STR_PROP_1], [STR_PROP_2], [STR_PROP_3], [INT_PROP_1], [INT_PROP_2], [LONG_PROP_1], [LONG_PROP_2], [DEC_PROP_1], [DEC_PROP_2], [BOOL_PROP_1], [BOOL_PROP_2])
 VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 7, 0, 0, 0, 0.0000, 0.0000, 0, 0)
+GO
+
+DECLARE @ActionID NVARCHAR(20)
+DECLARE @StartManageIndexTime DATETIME
+DECLARE @StartManageIndexTimeString NVARCHAR(50)
+DECLARE @ManageIndexFireTimeTicks BIGINT
+
+-- Next Sunday at 12am
+SET @StartManageIndexTime = dateadd(hour, 0, dateadd(week, datediff(week, 0, GETDATE()), 6))
+
+-- Convert to UTC
+SET @StartManageIndexTime = DATEADD(hh, DATEDIFF(hh, GETDATE(), GETUTCDATE()), @StartManageIndexTime)
+SET @StartManageIndexTimeString = CONVERT(NVARCHAR(50), @StartManageIndexTime, 127) + 'Z'
+
+-- Convert to UTC, and get ticks
+SET @ManageIndexFireTimeTicks = dbo.GetTicksFromDateTime(@StartManageIndexTimeString)
+
+INSERT INTO [dbo].[Action] ([Name], [Enabled], [ComputerLimitedType], [ComputerLimitedList], [StoreLimited], [StoreLimitedList], [TriggerType], [TriggerSettings], [TaskSummary], [InternalOwner])
+VALUES (N'Manage Index State', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartManageIndexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>1</FrequencyInDays></DailyActionSchedule></Settings>',1), N'ManageIndexState', 'ManageIndexState')
+SELECT @ActionID = CONVERT(NVARCHAR(20), SCOPE_IDENTITY())
+
+PRINT(N'Add 1 row to [dbo].[Scheduling_JOB_DETAILS]')
+INSERT INTO [dbo].[Scheduling_JOB_DETAILS]
+([SCHED_NAME], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [JOB_CLASS_NAME], [IS_DURABLE], [IS_NONCONCURRENT], [IS_UPDATE_DATA], [REQUESTS_RECOVERY], [JOB_DATA])
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Scheduling.QuartzNet.ActionJob, ShipWorks.Core', 0, 0, 0, 0, null)
+
+PRINT (N'Add 1 row to [dbo].[ActionTask]')
+INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])
+VALUES (CONVERT(BIGINT, @ActionID), N'ManageIndexState', CONVERT(xml, N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>2014-07-06T07:00:00Z</StartDateTimeInUtc><FrequencyInDays>1</FrequencyInDays></DailyActionSchedule><TimeoutInMinutes value="120" /><DaysBack>14</DaysBack><MinIndexUsage>100</MinIndexUsage></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
+
+PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
+INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA])
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', @ActionID, N'DEFAULT', NULL, @ManageIndexFireTimeTicks, NULL, 5, N'WAITING', N'CAL_INT', @ManageIndexFireTimeTicks, NULL, NULL, 0, NULL)
+
+PRINT(N'Add 1 row to [dbo].[Scheduling_SIMPROP_TRIGGERS]')
+INSERT INTO [dbo].[Scheduling_SIMPROP_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [STR_PROP_1], [STR_PROP_2], [STR_PROP_3], [INT_PROP_1], [INT_PROP_2], [LONG_PROP_1], [LONG_PROP_2], [DEC_PROP_1], [DEC_PROP_2], [BOOL_PROP_1], [BOOL_PROP_2])
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 1, 0, 0, 0, 0.0000, 0.0000, 0, 0)
 GO
 
 -- Create default best rate profile

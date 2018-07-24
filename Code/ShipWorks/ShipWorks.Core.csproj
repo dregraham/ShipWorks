@@ -251,52 +251,29 @@
       <HintPath>..\..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Common.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Common.2.5.6755\lib\net40\Rebex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Ftp.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Ftp, Version=4.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Ftp.4.0.6755\lib\net40\Rebex.Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    <Reference Include="Rebex.Imap, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Imap.2.0.6755\lib\net40\Rebex.Imap.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Imap">
-      <HintPath>..\..\Components\Rebex.Net.Imap.dll</HintPath>
+    <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Pop3, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.Pop3.dll</HintPath>
+    <Reference Include="Rebex.Networking, Version=3.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Networking.3.5.6755\lib\net40\Rebex.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.ProxySocket, Version=2.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.ProxySocket.dll</HintPath>
+    <Reference Include="Rebex.Pop3, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Pop3.2.0.6755\lib\net40\Rebex.Pop3.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.SecureSocket, Version=3.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.SecureSocket.dll</HintPath>
+    <Reference Include="Rebex.Sftp, Version=3.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Sftp.3.0.6755\lib\net40\Rebex.Sftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Net.Smtp, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.Smtp.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
-    </Reference>
-    <Reference Include="Rebex.Security, Version=1.5.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Sftp.dll</HintPath>
-      <Aliases>rebex2015</Aliases>
+    <Reference Include="Rebex.Smtp, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Smtp.2.0.6755\lib\net40\Rebex.Smtp.dll</HintPath>
     </Reference>
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -589,13 +566,22 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\DisabledIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\IManageDisabledIndexesRepo.cs" />
+    <Compile Include="Actions\Tasks\Common\IMissingIndexResolver.cs" />
+    <Compile Include="Actions\Tasks\Common\IndexColumn.cs" />
+    <Compile Include="Actions\Tasks\Common\ManageDisabledIndexesRepo.cs" />
+    <Compile Include="Actions\Tasks\Common\ManageIndexStateTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
-    <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
+    <Compile Include="Actions\Tasks\Common\AutoArchiveTask.cs" />
+    <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTask.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\MissingIndexResolver.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
@@ -983,9 +969,28 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\Threading\BackgroundProgressDlg.cs" />
+    <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
+    <Compile Include="Data\FilterTelemetryService.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
+    <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
+    <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\Population\NullShipSenseLoaderGateway.cs" />
+    <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
+    <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Data\Administration\Retry\SqlAdapterRetryOptions.cs" />
+    <Compile Include="Data\Utility\DataFunctions.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentials.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\IEndiciaApiClient.cs" />
+    <Compile Include="Properties\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDataAccess.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialogViewModel.cs" />
     <Compile Include="Stores\Orders\Archive\IArchiveManagerDialog.cs" />
@@ -1096,10 +1101,7 @@
     <Compile Include="Email\EmailCommunicatorWrapper.cs" />
     <Compile Include="Email\IEmailCommunicatorWrapper.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
-    <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
-    <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
-    <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
-    <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Data\Administration\Retry\SqlAdapterRetryT.cs" />
     <Compile Include="Filters\Content\Conditions\EnumEqualityOperator.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
@@ -2062,6 +2064,7 @@
     <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Overstock\IOverstockStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\ProStores\IProStoresWebClient.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
@@ -2074,11 +2077,30 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyError.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyErrorResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentLineItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevel.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelsResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLineItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLocation.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyLocationsResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyOrder.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProduct.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductImage.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariant.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShop.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopResponse.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyUnprocessableEntityException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillment.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequst.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationDashboardItem.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
@@ -2573,11 +2595,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShippingIcons.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\StoreIcons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
@@ -8741,6 +8758,7 @@
       <DependentUpon>LogonDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
+    <Compile Include="Users\BackgroundUserLoginWorkflow.cs" />
     <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
@@ -10862,6 +10880,7 @@
     <Resource Include="Resources\printer_redo_16_16.png" />
     <None Include="Resources\sellercloud.png" />
     <None Include="Resources\selleractive.png" />
+    <None Include="Resources\overstock.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -10980,10 +10999,12 @@
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <None Include="Resources\Stores\Icons\geekseller.png" />
+    <Content Include="Resources\Stores\Icons\cv3.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />
     <Content Include="Resources\Stores\Icons\opencart.png" />
+    <Content Include="Resources\Stores\Icons\overstock.png" />
     <Content Include="Resources\Stores\Icons\sellerexpress.png" />
     <Content Include="Resources\Stores\Icons\powersportssupport.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
@@ -11000,6 +11021,7 @@
     <Resource Include="Resources\warning3.png" />
     <Resource Include="Resources\warning2.png" />
     <None Include="Resources\walmart.png" />
+    <Content Include="Resources\Stores\Icons\zentail.png" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />

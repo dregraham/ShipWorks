@@ -67,6 +67,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((PostalServiceType) ServiceType);
+
+        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)

@@ -97,38 +97,47 @@ namespace ShipWorks.Data.Connection
         private static void RestoreMultiUserMode(DbConnection con, bool clearConnectionPool)
         {
             bool shouldDisposeConnection = false;
+            bool succeeded = false;
+            int maxTries = 100;
 
-            try
+            while (!succeeded && maxTries >= 0)
             {
-                // Clear out the pool so any connection holding onto SINGLE_USER gets released
-                if (clearConnectionPool)
+                maxTries--;
+
+                try
                 {
-                    SqlConnection.ClearAllPools();
+                    // Clear out the pool so any connection holding onto SINGLE_USER gets released
+                    if (clearConnectionPool)
+                    {
+                        SqlConnection.ClearAllPools();
+                    }
+
+                    // Allow multiple connections again
+                    if (con == null)
+                    {
+                        shouldDisposeConnection = true;
+                        con = SqlSession.Current.OpenConnection();
+                    }
+
+                    SqlUtility.SetMultiUser(con);
+
+                    succeeded = true;
                 }
-
-                // Allow multiple connections again
-                if (con == null)
+                catch (SingleUserModeException ex)
                 {
-                    shouldDisposeConnection = true;
-                    con = SqlSession.Current.OpenConnection();
+                    log.Error("Failed to set database back to multi-user mode.", ex);
                 }
-
-                SqlUtility.SetMultiUser(con);
-            }
-            catch (SingleUserModeException ex)
-            {
-                log.Error("Failed to set database back to multi-user mode.", ex);
-            }
-            catch (SqlException ex)
-            {
-                log.Error("Failed to set database back to multi-user mode.", ex);
-            }
-            finally
-            {
-                // Dispose the connection if this function created it
-                if (shouldDisposeConnection && con != null)
+                catch (SqlException ex)
                 {
-                    con.Dispose();
+                    log.Error("Failed to set database back to multi-user mode.", ex);
+                }
+                finally
+                {
+                    // Dispose the connection if this function created it
+                    if (shouldDisposeConnection && con != null)
+                    {
+                        con.Dispose();
+                    }
                 }
             }
 

@@ -1,7 +1,5 @@
-﻿extern alias rebex2015;
-
-using System.IO;
-using rebex2015::Rebex.Net;
+﻿using System.IO;
+using Rebex.Net;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 {

@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+      <string>{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution LoadTesting[LoadTesting[Reports[]]]]&#xD;&#xA;Solution LoadTesting\LoadTesting\LoadTesting.rxtst&#xD;&#xA;Solution LoadTesting" />
+  <StartupProject value="{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}" />
+</Properties>

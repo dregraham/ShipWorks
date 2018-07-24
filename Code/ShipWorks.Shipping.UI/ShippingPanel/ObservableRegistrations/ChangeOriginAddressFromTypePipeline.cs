@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = viewModel.PropertyChangeStream
-                .Where(x => x == nameof(viewModel.OriginAddressType))
+                .Where(x => x == nameof(viewModel.OriginAddressType) || x == nameof(viewModel.AccountId))
                 .Subscribe(_ => UpdateOriginAddress(viewModel));
         }
 

@@ -46,5 +46,11 @@
         /// </summary>
         /// <returns></returns>
         IEncryptionProvider CreateChannelAdvisorEncryptionProvider();
+
+        /// <summary>
+        /// Creates the Overstock encryption provider.
+        /// </summary>
+        /// <returns></returns>
+        IEncryptionProvider CreateOverstockEncryptionProvider();
     }
 }

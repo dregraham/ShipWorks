@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# Ranorex Studio 8.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B61982E6-9678-47E7-8AA4-75BC45FB6099}"
+	ProjectSection(SolutionItems) = postProject
+		Ranorex = .\Ranorex.rxsettings
+		..\PerformanceTesting\PerformanceTesting\PerformanceTestingRepository.rxrep = ..\PerformanceTesting\PerformanceTesting\PerformanceTestingRepository.rxrep
+		..\PerformanceTesting\PerformanceTesting\SetupGenericFile.cs = ..\PerformanceTesting\PerformanceTesting\SetupGenericFile.cs
+		..\PerformanceTesting\PerformanceTesting\SetupGenericFile.rxrec = ..\PerformanceTesting\PerformanceTesting\SetupGenericFile.rxrec
+		..\PerformanceTesting\PerformanceTesting\SetupGenericFile.UserCode.cs = ..\PerformanceTesting\PerformanceTesting\SetupGenericFile.UserCode.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadTesting", "LoadTesting\LoadTesting.csproj", "{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}.Debug|x86.Build.0 = Debug|x86
+		{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}.Debug|x86.ActiveCfg = Debug|x86
+		{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}.Release|x86.Build.0 = Release|x86
+		{FA61D755-990B-48DA-BAF4-FE3C1DFBA68F}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+EndGlobal

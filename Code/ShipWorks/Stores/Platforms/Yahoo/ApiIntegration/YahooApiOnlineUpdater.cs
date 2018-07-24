@@ -9,6 +9,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -131,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         private void SaveOrderStatus(long orderID, string status)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             // Update the local database with the new status
             OrderEntity basePrototype = new OrderEntity(orderID)

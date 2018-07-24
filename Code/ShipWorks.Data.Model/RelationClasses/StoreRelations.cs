@@ -301,6 +301,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OverstockStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeOverstockStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(StoreFields.StoreID, OverstockStoreFields.StoreID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PayPalStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypePayPalStoreEntity
 		{
@@ -455,6 +466,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeOdbcStoreEntity;
 				case "OrderMotionStoreEntity":
 					return this.RelationToSubTypeOrderMotionStoreEntity;
+				case "OverstockStoreEntity":
+					return this.RelationToSubTypeOverstockStoreEntity;
 				case "PayPalStoreEntity":
 					return this.RelationToSubTypePayPalStoreEntity;
 				case "ProStoresStoreEntity":

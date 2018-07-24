@@ -79,31 +79,31 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Generate SQL for disabling auto processing settings.  (Auto download, auto create shipments, etc...)
         /// </summary>
-        public string DisableAutoProcessingSettingsSql()
+        public string DisableAutoProcessingSettingsSql(string databaseName)
         {
-            return @"
-                UPDATE [Store] SET AutoDownload = 0
-                UPDATE [Store] SET DomesticAddressValidationSetting = 3
-                UPDATE [Store] SET InternationalAddressValidationSetting = 3
-                UPDATE [Store] SET ComputerDownloadPolicy = '<ComputerDownloadPolicy><DefaultToYes>false</DefaultToYes><Computers /></ComputerDownloadPolicy>'
+            return $@"
+                UPDATE [{databaseName}]..[Store] SET AutoDownload = 0
+                UPDATE [{databaseName}]..[Store] SET DomesticAddressValidationSetting = 3
+                UPDATE [{databaseName}]..[Store] SET InternationalAddressValidationSetting = 3
+                UPDATE [{databaseName}]..[Store] SET ComputerDownloadPolicy = '<ComputerDownloadPolicy><DefaultToYes>false</DefaultToYes><Computers /></ComputerDownloadPolicy>'
 
-                UPDATE [Action] SET Enabled = 0
+                UPDATE [{databaseName}]..[Action] SET Enabled = 0
 
-                UPDATE [ShippingSettings] SET AutoCreateShipments = 0
-                UPDATE [ShippingSettings] SET ShipSenseEnabled = 0
+                UPDATE [{databaseName}]..[ShippingSettings] SET AutoCreateShipments = 0
+                UPDATE [{databaseName}]..[ShippingSettings] SET ShipSenseEnabled = 0
 
-                UPDATE [UserSettings] SET SingleScanSettings = 0
-                UPDATE [UserSettings] SET AutoWeigh = 0
+                UPDATE [{databaseName}]..[UserSettings] SET SingleScanSettings = 0
+                UPDATE [{databaseName}]..[UserSettings] SET AutoWeigh = 0
 
-                UPDATE [Configuration] SET CustomerUpdateBilling = 0
-                UPDATE [Configuration] SET CustomerUpdateShipping = 0
-                UPDATE [Configuration] SET CustomerUpdateModifiedBilling = 0
-                UPDATE [Configuration] SET CustomerUpdateModifiedShipping = 0
-                UPDATE [Configuration] SET AllowEbayCombineLocally = 0
+                UPDATE [{databaseName}]..[Configuration] SET CustomerUpdateBilling = 0
+                UPDATE [{databaseName}]..[Configuration] SET CustomerUpdateShipping = 0
+                UPDATE [{databaseName}]..[Configuration] SET CustomerUpdateModifiedBilling = 0
+                UPDATE [{databaseName}]..[Configuration] SET CustomerUpdateModifiedShipping = 0
+                UPDATE [{databaseName}]..[Configuration] SET AllowEbayCombineLocally = 0
 
-                UPDATE [EmailAccount] SET AutoSend = 0
+                UPDATE [{databaseName}]..[EmailAccount] SET AutoSend = 0
 
-                DELETE FROM [ActionQueue]
+                DELETE FROM [{databaseName}]..[ActionQueue]
             ";
         }
 

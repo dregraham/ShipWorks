@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+rxversion="5.4.5.19886"
+id="1ca5658d-1276-4d77-8bca-a9450777e2f2"
+embeddedrepository="false"
+mode="Global">
+	<name>
+		Recording1
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="Recording1"
+	namespace="UIResponsiveness"/>
+	<variables/>
+	<recorditems/>
+	<repository
+	name="UIResponsivenessRepository"
+	id="08e99ed5-89e8-4b37-a7a6-7c8e074c87af"
+	rxversion="5.4.5.19886"
+	relativepath="UIResponsivenessRepository.rxrep">
+		<codegen
+		classname="UIResponsivenessRepository"
+		namespace="UIResponsiveness"/>
+		<rootfolder
+		name="_rootdummy_"
+		id="3857c5ce-8d08-4731-9380-bc0f1dbbd7c0"/>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		Recording1.UserCode.cs
+	</usercodefile>
+	<references/>
+</recordtable>

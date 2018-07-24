@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -14,6 +13,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
@@ -34,6 +34,7 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -349,10 +350,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 affectedOrders.Add(affectedOrder);
             }
 
-            SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
+            int retryNumber = 0;
 
-            return sqlDeadlockRetry.ExecuteWithRetryAsync(
-                retryNumber => PerformSave(order, abandonedItems, retryNumber, affectedOrders),
+            return ExecuteWithRetryAsync(
+                $"EbayDownloader.ProcessOrder for entity {order.OrderID}",
+                new SqlAdapterRetryOptions(log: log),
+                async () =>
+                {
+                    await PerformSave(order, abandonedItems, retryNumber, affectedOrders);
+                    return retryNumber += 1;
+                },
                 ex => ex is ORMEntityOutOfSyncException);
         }
 
@@ -1645,35 +1652,49 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given feedback
         /// </summary>
-        private void ProcessFeedback(FeedbackDetailType feedback)
+        private void ProcessFeedback(FeedbackDetailType feedback) =>
+            ExecuteWithRetry(
+                $"EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {feedback.OrderLineItemID}",
+                new SqlAdapterRetryOptions(log: log),
+                adapter => ProcessFeedbackInternal(feedback, adapter),
+                sqlAdapterFactory.Create,
+                CanHandleFeedbackException);
+
+        /// <summary>
+        /// Actually process the given feedback
+        /// </summary>
+        private void ProcessFeedbackInternal(FeedbackDetailType feedback, ISqlAdapter adapter)
         {
-            SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {0}", feedback.OrderLineItemID));
-            sqlDeadlockRetry.ExecuteWithRetry(adapter =>
+            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+
+            if (item == null)
             {
-                EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+                return;
+            }
 
-                if (item == null)
-                {
-                    return;
-                }
+            log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
 
-                log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
+            // Feedback we've received
+            if (feedback.Role == TradingRoleCodeType.Seller)
+            {
+                item.FeedbackReceivedType = (int) feedback.CommentType;
+                item.FeedbackReceivedComments = feedback.CommentText;
+            }
+            else
+            {
+                item.FeedbackLeftType = (int) feedback.CommentType;
+                item.FeedbackLeftComments = feedback.CommentText;
+            }
 
-                // Feedback we've received
-                if (feedback.Role == TradingRoleCodeType.Seller)
-                {
-                    item.FeedbackReceivedType = (int) feedback.CommentType;
-                    item.FeedbackReceivedComments = feedback.CommentText;
-                }
-                else
-                {
-                    item.FeedbackLeftType = (int) feedback.CommentType;
-                    item.FeedbackLeftComments = feedback.CommentText;
-                }
-
-                adapter.SaveEntity(item);
-            }, ex => ex is SqlDeadlockException);
+            adapter.SaveEntity(item);
         }
+
+        /// <summary>
+        /// Can we handle the exception raised while processing feedback
+        /// </summary>
+        private static bool CanHandleFeedbackException(Exception ex) =>
+            ex.GetAllExceptions().OfType<SqlException>().Any() ||
+            ex.GetAllExceptions().OfType<SqlDeadlockException>().Any();
 
         /// <summary>
         /// Gets the smallest order date, combined or not, for this store in the database

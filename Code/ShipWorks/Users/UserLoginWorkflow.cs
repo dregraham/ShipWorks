@@ -6,7 +6,7 @@ namespace ShipWorks.Users
     /// <summary>
     /// User login workflow
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class UserLoginWorkflow : IUserLoginWorkflow
     {
         readonly IUserSession userSession;

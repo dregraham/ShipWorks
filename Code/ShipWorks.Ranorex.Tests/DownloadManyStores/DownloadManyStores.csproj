@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{243BAA5D-375D-4164-A4E7-28155B441700}</ProjectGuid>
+    <TargetFrameworkProfile />
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DownloadManyStores</RootNamespace>
+    <AssemblyName>DownloadManyStores</AssemblyName>
+    <RanorexVersion>8.1</RanorexVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RanorexTargetsPath>$(MSBuildProgramFiles32)\MSBuild\Ranorex$(RanorexVersion)\Ranorex.MSBuild.Targets</RanorexTargetsPath>
+    <projectdefaultrepository>4f77ced0-3225-42f6-bbff-2820cc379384</projectdefaultrepository>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>True</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ranorex.Bootstrapper">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Core.Resolver">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Cef">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.ChromeWeb">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.FirefoxWeb">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Flex">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Java">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Mobile">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Msaa">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Office">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Qt">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.RawText">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Sap">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Uia">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Web">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.WebDriver">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Win32">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.WinForms">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ranorex.Plugin.Wpf">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <id>65e8f23d-868a-4619-93be-5eab2023c3cb</id>
+    </Compile>
+    <Compile Include="ClickDownloadAll.cs">
+      <BoundTo>8acd4e67-62e6-4250-8fa5-d876cd366e5d</BoundTo>
+      <DependentUpon>ClickDownloadAll.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>40a39ad9-1868-4557-a78a-2ebd1a5218c0</id>
+    </Compile>
+    <Compile Include="ClickDownloadAll.UserCode.cs">
+      <BoundTo>8acd4e67-62e6-4250-8fa5-d876cd366e5d</BoundTo>
+      <DependentUpon>ClickDownloadAll.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>919556fe-bf9f-4f5e-a1e3-4561072c912c</id>
+    </Compile>
+    <Compile Include="DatabaseUpdate.cs">
+      <BoundTo>3e796ebb-2dfb-4440-836e-c864356f8f64</BoundTo>
+      <DependentUpon>DatabaseUpdate.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>c4b8cd4c-237c-4e9a-819a-fadee3dc94c5</id>
+    </Compile>
+    <Compile Include="DatabaseUpdate.UserCode.cs">
+      <BoundTo>3e796ebb-2dfb-4440-836e-c864356f8f64</BoundTo>
+      <DependentUpon>DatabaseUpdate.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>1088bf80-3595-4e09-8b93-2b498a4d0a16</id>
+    </Compile>
+    <Compile Include="DownloadManyStoresRepository.cs">
+      <BoundTo>4f77ced0-3225-42f6-bbff-2820cc379384</BoundTo>
+      <DependentUpon>DownloadManyStoresRepository.rxrep</DependentUpon>
+      <RepositoryCode>true</RepositoryCode>
+      <id>c12a2fc3-5b60-4eb1-bee3-35d959ed85e2</id>
+    </Compile>
+    <Compile Include="Program.cs">
+      <id>9bacfd48-a46a-49eb-a451-a6a0e63cf0ca</id>
+    </Compile>
+    <Compile Include="Setup3dcartStore.cs">
+      <BoundTo>8642c3c6-9b33-41e2-a1bd-aa7d959ceb29</BoundTo>
+      <DependentUpon>Setup3dcartStore.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>5c715cd0-9731-475e-a989-cc68c8275202</id>
+    </Compile>
+    <Compile Include="Setup3dcartStore.UserCode.cs">
+      <BoundTo>8642c3c6-9b33-41e2-a1bd-aa7d959ceb29</BoundTo>
+      <DependentUpon>Setup3dcartStore.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>e0bd1799-62fd-4df9-a81d-b01d4611c97e</id>
+    </Compile>
+    <Compile Include="SetupAmazon.cs">
+      <DependentUpon>SetupAmazon.rxrec</DependentUpon>
+      <id>615b5b69-b64e-4843-bf81-d93e38b257ba</id>
+      <BoundTo>81da8fad-fe9f-4585-b91a-e0406c3d9525</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetupAmazon.UserCode.cs">
+      <DependentUpon>SetupAmazon.rxrec</DependentUpon>
+      <id>70931ec2-e460-4329-86d5-5cdcc22b8c97</id>
+      <BoundTo>81da8fad-fe9f-4585-b91a-e0406c3d9525</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SetupBigcommerceStore.cs">
+      <BoundTo>24c8009e-5e6b-4a39-933c-92e4690bf301</BoundTo>
+      <DependentUpon>SetupBigcommerceStore.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>e1d57cb1-df8d-459e-a3fc-0da7f238d064</id>
+    </Compile>
+    <Compile Include="SetupBigcommerceStore.UserCode.cs">
+      <BoundTo>24c8009e-5e6b-4a39-933c-92e4690bf301</BoundTo>
+      <DependentUpon>SetupBigcommerceStore.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>bdb16cf3-d7c3-4188-ae8f-4a973636d4c7</id>
+    </Compile>
+    <Compile Include="SetupCarrierTestServers.cs">
+      <DependentUpon>SetupCarrierTestServers.rxrec</DependentUpon>
+      <id>cf244b55-5271-4a29-b683-faf3aa413682</id>
+      <BoundTo>825f34ab-486d-4e50-becc-9af219cdfed3</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetupCarrierTestServers.UserCode.cs">
+      <DependentUpon>SetupCarrierTestServers.rxrec</DependentUpon>
+      <id>2bb14a64-1bcd-4632-ae7a-b399d0323ef6</id>
+      <BoundTo>825f34ab-486d-4e50-becc-9af219cdfed3</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SmokeTestRepository.cs">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>a5e2f48b-5237-4028-8ca2-ea8a5aed7c99</id>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+      <RepositoryCode>true</RepositoryCode>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <id>c09846cb-a975-4098-85ba-da2bd3fa316e</id>
+    </None>
+    <None Include="ClickDownloadAll.rxrec">
+      <id>8acd4e67-62e6-4250-8fa5-d876cd366e5d</id>
+      <recordtableid>cc14af8c-d8ff-4c0f-a17b-8ca3064eedd6</recordtableid>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+    </None>
+    <None Include="DatabaseUpdate.rxrec">
+      <id>3e796ebb-2dfb-4440-836e-c864356f8f64</id>
+      <recordtableid>3db952f5-7465-4b7f-bb94-26aee77f55e0</recordtableid>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+    </None>
+    <None Include="DownloadManyStoresRepository.rximg">
+      <BoundTo>4f77ced0-3225-42f6-bbff-2820cc379384</BoundTo>
+      <DependentUpon>DownloadManyStoresRepository.rxrep</DependentUpon>
+      <imageblob>true</imageblob>
+      <id>5245594b-77e7-4e6d-b508-b8a7c3193357</id>
+    </None>
+    <None Include="DownloadManyStoresRepository.rxrep">
+      <id>4f77ced0-3225-42f6-bbff-2820cc379384</id>
+      <repoid>e6e0c247-8e9d-4ae9-b344-9fc80d5a0e59</repoid>
+      <reporootid>acac629f-069f-451b-8f20-c07118d148f6</reporootid>
+    </None>
+    <None Include="Setup3dcartStore.rxrec">
+      <id>8642c3c6-9b33-41e2-a1bd-aa7d959ceb29</id>
+      <recordtableid>e2cb11db-f28a-4f5a-952c-bb36eae146d7</recordtableid>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+    </None>
+    <None Include="SetupAmazon.rxrec">
+      <id>81da8fad-fe9f-4585-b91a-e0406c3d9525</id>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+      <recordtableid>a337efeb-1a34-4ce5-b1c4-12ba3e03cf4e</recordtableid>
+    </None>
+    <None Include="SetupBigcommerceStore.rxrec">
+      <id>24c8009e-5e6b-4a39-933c-92e4690bf301</id>
+      <recordtableid>1a53de60-3fce-469d-83cb-049285c3e7f9</recordtableid>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+    </None>
+    <None Include="SetupCarrierTestServers.rxrec">
+      <id>825f34ab-486d-4e50-becc-9af219cdfed3</id>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+      <recordtableid>5099df02-3625-482e-b38d-f1ff20194745</recordtableid>
+    </None>
+    <None Include="SmokeTestRepository.rximg">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>008ba7cd-a58b-4740-8200-7afaebdd2588</id>
+      <BoundTo>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</BoundTo>
+      <imageblob>true</imageblob>
+    </None>
+    <None Include="SmokeTestRepository.rxrep">
+      <id>61dcfb1a-cfe3-445b-8bd1-1d7c14863d84</id>
+      <repoid>21006fdf-b3eb-4175-9002-323b1ef8a36b</repoid>
+      <reporootid>4aacfef1-6402-4ba7-b3c9-270ac9a4db4a</reporootid>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DownloadManyStores.rxtmg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>92cb1c55-1935-419a-89b7-155b0372bac7</id>
+    </Content>
+    <Content Include="DownloadManyStores.rxtst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <id>fee8a7e4-42e7-411d-b3e4-51c3d5d10663</id>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(RanorexTargetsPath)" Condition="Exists('$(RanorexTargetsPath)')" />
+</Project>

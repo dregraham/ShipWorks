@@ -439,6 +439,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         private static void LogShipmentToTango(long shipmentId)
         {
+            // Somehow the shipmentId is zero, so don't try to log it.
+            if (shipmentId <= 0)
+            {
+                return;
+            }
+
             // Load the shipment for sending to Tango
             ShipmentEntity shipmentForTango = ShippingManager.GetShipment(shipmentId);
             ShippingManager.EnsureShipmentLoaded(shipmentForTango);

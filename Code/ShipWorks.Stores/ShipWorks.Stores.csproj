@@ -95,12 +95,17 @@
       <HintPath>..\..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Rebex.Mail">
-      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Common.2.5.6755\lib\net40\Rebex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
+    <Reference Include="Rebex.Ftp, Version=4.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Ftp.4.0.6755\lib\net40\Rebex.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Networking, Version=3.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rebex.Networking.3.5.6755\lib\net40\Rebex.Networking.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
@@ -173,8 +178,9 @@
     <Compile Include="Orders\Archive\Errors\CanceledException.cs" />
     <Compile Include="Orders\Archive\Errors\Errors.cs" />
     <Compile Include="Orders\Archive\Errors\OrderArchiveException.cs" />
-    <Compile Include="Orders\Archive\IOrderArchiver.cs" />
+    <Compile Include="Orders\Archive\IScheduleOrderArchiveDialog.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveDialog.cs" />
+    <Compile Include="Orders\Archive\IScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\IOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveDataAccess.cs" />
     <Compile Include="Orders\Archive\OrderArchiveFilterRegenerator.cs" />
@@ -183,8 +189,10 @@
     <Compile Include="Orders\Archive\OrderArchiveResult.cs" />
     <Compile Include="Orders\Archive\OrderArchiveSqlGenerator.cs" />
     <Compile Include="Orders\Archive\OrderArchiveTableWritability.cs" />
+    <Compile Include="Orders\Archive\ScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\OrderArchiveViewModel.cs" />
     <Compile Include="Orders\Archive\SingleDatabaseSelectorViewModel.cs" />
+    <Compile Include="Orders\Archive\TelemetricScheduleOrderArchiveViewModel.cs" />
     <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
     <Compile Include="Orders\Combine\Actions\IStoreSpecificCombineOrderAction.cs" />
     <Compile Include="Orders\Split\Actions\IStoreSpecificSplitOrderAction.cs" />
@@ -358,6 +366,7 @@
     <Compile Include="Platforms\CommerceInterface\CoreExtensions\Filters\Orders\CommerceInterfaceIsFBACondition.cs" />
     <Compile Include="Platforms\CommerceInterface\CoreExtensions\Filters\Orders\CommerceInterfaceIsPrimeCondition.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\CommerceV3\CommerceV3StoreType.cs" />
     <Compile Include="Platforms\Ebay\Content\EbaySplitOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
@@ -543,6 +552,9 @@
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\ActionComments.cs" />
+    <Compile Include="Platforms\Overstock\CoreExtensions\Actions\OverstockShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockDataAccess.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdaterFactory.cs" />
@@ -679,6 +691,30 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Overstock\Content\OverstockCombineOrderAction.cs" />
+    <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockSofsCreatedDateCondition.cs" />
+    <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockWarehouseNameCondition.cs" />
+    <Compile Include="Platforms\Overstock\CoreExtensions\Filters\OverstockChannelNameCondition.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\IOverstockOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockRestClientFactory.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockShipmentFactory.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockWebClient.cs" />
+    <Compile Include="Platforms\Overstock\IOverstockWebClientEndpoints.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockCarrierServiceTranslator.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockDataAccess.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOrderDetail.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockSupplierShipment.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Overstock\OverstockCipherKey.cs" />
+    <Compile Include="Platforms\Overstock\OverstockDownloader.cs" />
+    <Compile Include="Platforms\Overstock\OverstockException.cs" />
+    <Compile Include="Platforms\Overstock\OnlineUpdating\OverstockOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Overstock\OverstockRestClientFactory.cs" />
+    <Compile Include="Platforms\Overstock\OverstockShipmentFactory.cs" />
+    <Compile Include="Platforms\Overstock\OverstockStoreType.cs" />
+    <Compile Include="Platforms\Overstock\OverstockWebClient.cs" />
+    <Compile Include="Platforms\Overstock\OverstockWebClientEndpoints.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalSplitOrderAction.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
     <Compile Include="Platforms\PowersportsSupport\CoreExtensions\Filters\Orders\PowersportsSupportAmazonOrderIDCondition.cs" />
@@ -723,6 +759,7 @@
     <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDownloader.cs" />
     <Compile Include="Platforms\Shopify\ShopifyFraudDownloader.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyLocationService.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressIsFBACondition.cs" />
     <Compile Include="Platforms\Shopperpress\CoreExtensions\Filters\Orders\ShopperpressIsPrimeCondition.cs" />
@@ -849,6 +886,7 @@
     <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
     <Compile Include="Platforms\Yahoo\Content\YahooCombineOrderAction.cs" />
+    <Compile Include="Platforms\Zentail\ZentailStoreType.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryIsFBACondition.cs" />
     <Compile Include="Platforms\Zenventory\CoreExtensions\Filters\Orders\ZenventoryIsPrimeCondition.cs" />
@@ -913,6 +951,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

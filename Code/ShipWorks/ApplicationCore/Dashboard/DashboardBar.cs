@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Dashboard
@@ -201,6 +198,12 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
+        /// Dismiss the dashboard bar
+        /// </summary>
+        public void Dismiss() =>
+            OnDismiss(this, EventArgs.Empty);
+
+        /// <summary>
         /// Update the positions of all the controls
         /// </summary>
         private void UpdatePositions()
@@ -212,12 +215,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// User has clicked to dismiss this dashboard item
         /// </summary>
-        private void OnDismiss(object sender, EventArgs e)
-        {
-            if (Dismissed != null)
-            {
-                Dismissed(this, EventArgs.Empty);
-            }
-        }
+        private void OnDismiss(object sender, EventArgs e) =>
+            Dismissed?.Invoke(this, EventArgs.Empty);
     }
 }

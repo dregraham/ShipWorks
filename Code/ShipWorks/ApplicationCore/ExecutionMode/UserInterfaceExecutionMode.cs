@@ -167,7 +167,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SemanticParserService.Start();
 
             // Register nudge refreshing
-            IdleWatcher.RegisterDatabaseIndependentWork("Refresh Nudges", RefreshNudgeThread, TimeSpan.FromHours(8));
+            IdleWatcher.RegisterDatabaseDependentWork("Refresh Nudges", RefreshNudgeThread, "Refreshing Nudges", TimeSpan.FromHours(8));
 
             // Register some idle cleanup work.
             DataResourceManager.RegisterResourceCacheCleanup();

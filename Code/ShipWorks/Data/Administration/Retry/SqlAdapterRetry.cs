@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
-using System.Threading;
 using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using static Interapptive.Shared.Utility.Functional;
+using static ShipWorks.Data.Utility.DataFunctions;
 
 namespace ShipWorks.Data.Administration.Retry
 {
@@ -16,50 +16,25 @@ namespace ShipWorks.Data.Administration.Retry
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
-    [Component]
-    public class SqlAdapterRetry<TException> : ISqlAdapterRetry where TException : Exception
+    public static class SqlAdapterRetry
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
-        [SuppressMessage("SonarQube", "S2743:Static fields should not be used in generic types",
-            Justification = "It is not a problem if each closed class gets its own logger")]
         private static readonly ILog log = LogManager.GetLogger("SqlAdapterRetry<TException>");
 
-        private readonly object lockObject = new object();
-        private readonly int retries = 5;
-        private readonly int deadlockPriority = -5;
-        private readonly string commandDescription = string.Empty;
-        private readonly TimeSpan retryDelay;
-
         /// <summary>
-        /// Constructor
+        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
+        /// if TException is detected.
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
+        /// and an exception is thrown, everything would be rolled back.
         /// </summary>
-        /// <param name="retries">Number of times to attempt execution before allowing the exception to throw.</param>
-        /// <param name="deadlockPriority">Deadlock priority for the call.  Used with method that accepts a SqlAdapter parameter.</param>
-        /// <param name="commandDescription">Description of the command to be run.</param>
-        public SqlAdapterRetry(int retries, int deadlockPriority, string commandDescription) :
-            this(retries, deadlockPriority, commandDescription, TimeSpan.FromSeconds(1))
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="retries">Number of times to attempt execution before allowing the exception to throw.</param>
-        /// <param name="deadlockPriority">Deadlock priority for the call.  Used with method that accepts a SqlAdapter parameter.</param>
-        /// <param name="commandDescription">Description of the command to be run.</param>
-        public SqlAdapterRetry(int retries, int deadlockPriority, string commandDescription, TimeSpan retryDelay)
-        {
-            if (retries < 1)
-            {
-                throw new ArgumentException("retries must be greater than 0.");
-            }
-
-            this.retries = retries;
-            this.deadlockPriority = deadlockPriority;
-            this.commandDescription = commandDescription;
-            this.retryDelay = retryDelay;
-        }
+        /// <param name="method">Method to execute.  </param>
+        public static GenericResult<Unit> ExecuteWithRetry(
+                string commandDescription,
+                Action<ISqlAdapter> method,
+                Func<ISqlAdapter> createSqlAdapter,
+                Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetry(commandDescription, SqlAdapterRetryOptions.Default, method, createSqlAdapter, isHandleableException);
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -69,8 +44,44 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method) =>
-            ExecuteWithRetry(method, () => SqlAdapter.Create(true));
+        public static GenericResult<Unit> ExecuteWithRetry(
+                string commandDescription,
+                SqlAdapterRetryOptions options,
+                Action<ISqlAdapter> method,
+                Func<ISqlAdapter> createSqlAdapter,
+                Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetry(
+                commandDescription,
+                options,
+                () => WithDeadlockPriority(
+                    options.DeadlockPriority,
+                    () => WithSqlAdapter(createSqlAdapter, method.ToFunc())),
+                isHandleableException);
+
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public static GenericResult<Unit> ExecuteWithRetry(
+                string commandDescription,
+                Action method,
+                Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetry(commandDescription, SqlAdapterRetryOptions.Default, method, isHandleableException);
+
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public static GenericResult<Unit> ExecuteWithRetry(
+                string commandDescription,
+                SqlAdapterRetryOptions options,
+                Action method,
+                Func<Exception, bool> isHandleableException) =>
+            Using(
+                new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {options.DeadlockPriority}."),
+                _ => method.ToFunc().Retry(options.Retries, options.RetryDelay, isHandleableException, options.Log));
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -80,8 +91,11 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetry(method, () => SqlAdapter.Create(true), exceptionCheck);
+        public static Task<T> ExecuteWithRetryAsync<T>(
+                string commandDescription,
+                Func<ISqlAdapter, Task<T>> method,
+                Func<ISqlAdapter> createSqlAdapter, Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetryAsync(commandDescription, SqlAdapterRetryOptions.Default, method, createSqlAdapter, isHandleableException);
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -91,237 +105,43 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter) =>
-            ExecuteWithRetry(method, createSqlAdapter, ex => false);
-
-        /// <summary>
-        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
-        /// if TException is detected.
-        ///
-        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
-        /// and an exception is thrown, everything would be rolled back.
-        /// </summary>
-        /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetry(() =>
-            {
-                using (new SqlDeadlockPriorityScope(deadlockPriority))
-                {
-                    using (ISqlAdapter adapter = createSqlAdapter())
-                    {
-                        adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
-
-                        method(adapter);
-
-                        adapter.Commit();
-
-                        return;
-                    }
-                }
-            }, exceptionCheck);
+        public static Task<T> ExecuteWithRetryAsync<T>(
+                string commandDescription,
+                SqlAdapterRetryOptions options,
+                Func<ISqlAdapter, Task<T>> method,
+                Func<ISqlAdapter> createSqlAdapter,
+                Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetryAsync(
+                commandDescription,
+                options,
+                () => WithDeadlockPriorityAsync(
+                    options.DeadlockPriority,
+                    () => WithSqlAdapterAsync(createSqlAdapter, method)),
+                isHandleableException);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public void ExecuteWithRetry(Action method) =>
-            ExecuteWithRetry(method, ex => false);
+        public static Task<T> ExecuteWithRetryAsync<T>(
+                string commandDescription,
+                Func<Task<T>> method,
+                Func<Exception, bool> isHandleableException) =>
+            ExecuteWithRetryAsync(commandDescription, SqlAdapterRetryOptions.Default, method, isHandleableException);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public void ExecuteWithRetry(Action method, Func<Exception, bool> exceptionCheck)
-        {
-            int retryCounter = retries;
-
-            lock (lockObject)
-            {
-                using (new LoggedStopwatch(log, string.Format("ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
-                {
-                    while (retryCounter >= 0)
-                    {
-                        try
-                        {
-                            method();
-
-                            return;
-                        }
-                        catch (Exception ex)
-                        {
-                            var result = HandleException(ex, retryCounter, exceptionCheck);
-
-                            if (result.Success)
-                            {
-                                retryCounter = result.Value;
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method) =>
-            ExecuteWithRetryAsync<T>(x => method(), ex => false);
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public async Task<T> ExecuteWithRetryAsync<T>(Func<int, Task<T>> method, Func<Exception, bool> exceptionCheck)
-        {
-            int retryCounter = retries;
-
-            using (new LoggedStopwatch(log, string.Format("ExecuteWithRetryAsync for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
-            {
-                while (retryCounter >= 0)
-                {
-                    try
-                    {
-                        return await method(retries - retryCounter).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        var result = await HandleExceptionAsync(ex, retryCounter, exceptionCheck).ConfigureAwait(false);
-
-                        if (result.Success)
-                        {
-                            retryCounter = result.Value;
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                return default(T);
-            }
-        }
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public Task ExecuteWithRetryAsync(Func<Task> method) =>
-            ExecuteWithRetryAsync(method, ex => false);
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public Task ExecuteWithRetryAsync(Func<Task> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetryAsync(x => method(), exceptionCheck);
-
-        /// <summary>
-        /// Executes the given method and automatically retries the command if TException is detected.
-        ///
-        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
-        /// </summary>
-        public Task ExecuteWithRetryAsync(Func<int, Task> method, Func<Exception, bool> exceptionCheck) =>
-            ExecuteWithRetryAsync(async (x) =>
-            {
-                await method(x).ConfigureAwait(false);
-                return Unit.Default;
-            }, exceptionCheck);
-
-        /// <summary>
-        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
-        /// if TException is detected.
-        ///
-        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
-        /// and an exception is thrown, everything would be rolled back.
-        /// </summary>
-        /// <param name="method">Method to execute.  </param>
-        public Task ExecuteWithRetryAsync(Func<ISqlAdapter, Task> method) =>
-            ExecuteWithRetryAsync(method, () => SqlAdapter.Create(true));
-
-        /// <summary>
-        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
-        /// if TException is detected.
-        ///
-        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
-        /// and an exception is thrown, everything would be rolled back.
-        /// </summary>
-        /// <param name="method">Method to execute.  </param>
-        public Task ExecuteWithRetryAsync(Func<ISqlAdapter, Task> method, Func<ISqlAdapter> createSqlAdapter) =>
-            ExecuteWithRetryAsync(async () =>
-            {
-                using (new SqlDeadlockPriorityScope(deadlockPriority))
-                {
-                    using (ISqlAdapter adapter = createSqlAdapter())
-                    {
-                        adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
-
-                        await method(adapter).ConfigureAwait(false);
-
-                        adapter.Commit();
-
-                        return;
-                    }
-                }
-            });
-
-        /// <summary>
-        /// Handle the exception, if possible
-        /// </summary>
-        private GenericResult<int> HandleException(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
-        {
-            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
-            {
-                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                if (retryCounter == 0)
-                {
-                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                    return GenericResult.FromError<int>(ex);
-                }
-
-                // Wait before trying again, give the other guy some time to resolve itself
-                Thread.Sleep(retryDelay);
-
-                return GenericResult.FromSuccess(retryCounter - 1);
-            }
-
-            return GenericResult.FromError<int>(ex);
-        }
-
-        /// <summary>
-        /// Handle the exception, if possible
-        /// </summary>
-        private async Task<GenericResult<int>> HandleExceptionAsync(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
-        {
-            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
-            {
-                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                if (retryCounter == 0)
-                {
-                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                    return GenericResult.FromError<int>(ex);
-                }
-
-                // Wait before trying again, give the other guy some time to resolve itself
-                await Task.Delay(retryDelay).ConfigureAwait(false);
-
-                return GenericResult.FromSuccess(retryCounter - 1);
-            }
-
-            return GenericResult.FromError<int>(ex);
-        }
+        public static Task<T> ExecuteWithRetryAsync<T>(
+                string commandDescription,
+                SqlAdapterRetryOptions options,
+                Func<Task<T>> method,
+                Func<Exception, bool> isHandleableException) =>
+            UsingAsync(
+                new LoggedStopwatch(log, $"ExecuteWithRetryAsync for {commandDescription}, deadlock priority {options.DeadlockPriority}."),
+                _ => method.RetryAsync(options.Retries, options.RetryDelay, isHandleableException, options.Log));
     }
 }

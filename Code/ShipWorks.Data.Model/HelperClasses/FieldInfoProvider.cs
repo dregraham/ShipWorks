@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (222 + 0));
+			this.InitClass( (226 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -185,6 +185,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitOrderSearchEntityInfos();
 			InitOtherProfileEntityInfos();
 			InitOtherShipmentEntityInfos();
+			InitOverstockOrderEntityInfos();
+			InitOverstockOrderItemEntityInfos();
+			InitOverstockOrderSearchEntityInfos();
+			InitOverstockStoreEntityInfos();
 			InitPackageProfileEntityInfos();
 			InitPayPalOrderEntityInfos();
 			InitPayPalOrderSearchEntityInfos();
@@ -272,7 +276,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitYahooOrderSearchEntityInfos();
 			InitYahooProductEntityInfos();
 			InitYahooStoreEntityInfos();
-
+			InitShipWorksDisabledDefaultIndexesTypedViewInfos();
+			InitShipWorksMissingIndexRequestsTypedViewInfos();
 			this.ConstructElementFieldStructures(InheritanceInfoProviderSingleton.GetInstance());
 		}
 
@@ -417,6 +422,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.Reference1, 300, 0, 0);
 		}
 		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
 		private void InitAmazonServiceTypeEntityInfos()
@@ -445,6 +451,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("AmazonShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.Reference1, 300, 0, 0);
+			this.AddElementFieldInfo("AmazonShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -762,6 +770,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AllowEbayCombineLocally", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AllowEbayCombineLocally, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "AuditEnabled", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditEnabled, 0, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -1725,6 +1734,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderItemEntity", "PONumber", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.PONumber, 255, 0, 0);
 		}
 		/// <summary>Inits GrouponOrderSearchEntity's FieldInfo objects</summary>
 		private void InitGrouponOrderSearchEntityInfos()
@@ -2292,6 +2302,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OrderItemEntity", "Length", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Length, 0, 2, 10);
+			this.AddElementFieldInfo("OrderItemEntity", "Width", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Width, 0, 2, 10);
+			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()
@@ -2370,6 +2383,40 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OtherShipmentEntity", "Service", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Service, 50, 0, 0);
 			this.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("OtherShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)OtherShipmentFieldIndex.Insurance, 0, 0, 0);
+		}
+		/// <summary>Inits OverstockOrderEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderFieldIndex), "OverstockOrderEntity");
+			this.AddElementFieldInfo("OverstockOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderFieldIndex.WarehouseCode, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderFieldIndex.SalesChannelName, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderEntity", "SofsCreatedDate", typeof(System.DateTime), false, false, false, false,  (int)OverstockOrderFieldIndex.SofsCreatedDate, 0, 0, 0);
+		}
+		/// <summary>Inits OverstockOrderItemEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderItemFieldIndex), "OverstockOrderItemEntity");
+			this.AddElementFieldInfo("OverstockOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderItemEntity", "SalesChannelLineNumber", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, 0, 0, 19);
+		}
+		/// <summary>Inits OverstockOrderSearchEntity's FieldInfo objects</summary>
+		private void InitOverstockOrderSearchEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockOrderSearchFieldIndex), "OverstockOrderSearchEntity");
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OverstockOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)OverstockOrderSearchFieldIndex.OverstockOrderSearchID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OverstockOrderSearchFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "SalesChannelName", typeof(System.String), false, false, false, false,  (int)OverstockOrderSearchFieldIndex.SalesChannelName, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockOrderSearchEntity", "WarehouseCode", typeof(System.String), false, false, false, true,  (int)OverstockOrderSearchFieldIndex.WarehouseCode, 50, 0, 0);
+		}
+		/// <summary>Inits OverstockStoreEntity's FieldInfo objects</summary>
+		private void InitOverstockStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OverstockStoreFieldIndex), "OverstockStoreEntity");
+			this.AddElementFieldInfo("OverstockStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OverstockStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("OverstockStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)OverstockStoreFieldIndex.Username, 50, 0, 0);
+			this.AddElementFieldInfo("OverstockStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)OverstockStoreFieldIndex.Password, 50, 0, 0);
 		}
 		/// <summary>Inits PackageProfileEntity's FieldInfo objects</summary>
 		private void InitPackageProfileEntityInfos()
@@ -2890,7 +2937,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "Express1UspsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1UspsSingleSource, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, 0, 0, 0);
-			this.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 30, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 100, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseUniquenessXml", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, 0, 0, 19);
@@ -2927,6 +2974,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)ShopifyOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "ShopifyOrderItemID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderItemFieldIndex.ShopifyOrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderItemEntity", "ShopifyProductID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderItemFieldIndex.ShopifyProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ShopifyOrderItemEntity", "InventoryItemID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShopifyOrderItemFieldIndex.InventoryItemID, 0, 0, 19);
 		}
 		/// <summary>Inits ShopifyOrderSearchEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderSearchEntityInfos()
@@ -3803,7 +3851,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("YahooStoreEntity", "AccessToken", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.AccessToken, 200, 0, 0);
 			this.AddElementFieldInfo("YahooStoreEntity", "BackupOrderNumber", typeof(Nullable<System.Int64>), false, false, false, true,  (int)YahooStoreFieldIndex.BackupOrderNumber, 0, 0, 19);
 		}
-		
+
+		/// <summary>Inits View's FieldInfo objects</summary>
+		private void InitShipWorksDisabledDefaultIndexesTypedViewInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipWorksDisabledDefaultIndexesFieldIndex), "ShipWorksDisabledDefaultIndexesTypedView");
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "TableName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.TableName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "ColumnName", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.ColumnName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "EnableIndex", typeof(System.String), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.EnableIndex, 825, 0, 0);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexID", typeof(System.Int32), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexID, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IndexColumnId", typeof(System.Int32), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IndexColumnId, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksDisabledDefaultIndexesTypedView", "IsIncluded", typeof(Nullable<System.Boolean>), false, false, true, false, (int)ShipWorksDisabledDefaultIndexesFieldIndex.IsIncluded, 0, 0, 0);
+		}
+		/// <summary>Inits View's FieldInfo objects</summary>
+		private void InitShipWorksMissingIndexRequestsTypedViewInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipWorksMissingIndexRequestsFieldIndex), "ShipWorksMissingIndexRequestsTypedView");
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "IndexHandle", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.IndexHandle, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "TableName", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.TableName, 128, 0, 0);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "IndexAdvantage", typeof(Nullable<System.Double>), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.IndexAdvantage, 0, 0, 38);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "GroupHandle", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.GroupHandle, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnID", typeof(System.Int32), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnID, 0, 0, 10);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnName", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnName, 4000, 0, 0);
+			this.AddElementFieldInfo("ShipWorksMissingIndexRequestsTypedView", "ColumnUsage", typeof(System.String), false, false, true, false, (int)ShipWorksMissingIndexRequestsFieldIndex.ColumnUsage, 4000, 0, 0);
+		}		
 	}
 }
 

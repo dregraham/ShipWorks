@@ -87,7 +87,7 @@ namespace ShipWorks.Actions.Tasks
 
             return new ActionTaskDescriptorBinding(GetDescriptor(task.GetType()));
         }
-
+        
         /// <summary>
         /// Create a menu that can be used to select task types
         /// </summary>
@@ -96,10 +96,17 @@ namespace ShipWorks.Actions.Tasks
             List<ActionTaskDescriptorBinding> commonBindings = new List<ActionTaskDescriptorBinding>();
             Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap = new Dictionary<StoreTypeCode, DescriptorStoreInfo>();
 
+            IOrderedEnumerable<ActionTaskDescriptor> actionTaskDescriptors = 
+                taskDescriptors
+                    .Value
+                    .Values
+                    .Where(atd => !atd.Hidden || (InterapptiveOnly.MagicKeysDown && atd.Identifier != "FinishProcessingBatch"))
+                    .OrderBy(d => d.BaseName);
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 // A menu item for each descriptor that has no store-specific issues
-                foreach (ActionTaskDescriptor descriptor in taskDescriptors.Value.Values.Where(atd => !atd.Hidden).OrderBy(d => d.BaseName))
+                foreach (ActionTaskDescriptor descriptor in actionTaskDescriptors)
                 {
                     // We need to create a dummy instance of the task to figure out how to bind it
                     ActionTask taskDummy = descriptor.CreateInstance(lifetimeScope);

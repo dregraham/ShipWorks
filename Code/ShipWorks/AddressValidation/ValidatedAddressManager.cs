@@ -297,7 +297,9 @@ namespace ShipWorks.AddressValidation
             }
 
             bool shouldRetry = false;
-            bool canApplyChanges = store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply;
+            bool canApplyChanges = shipmentAdapter.IsDomesticCountry() ?
+                store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply :
+                store.InternationalAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply;
 
             try
             {

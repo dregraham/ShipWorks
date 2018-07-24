@@ -286,7 +286,9 @@ namespace ShipWorks.ApplicationCore.Logging
                     }
                 }
             }
-            catch (Exception ex) when (ex is SecurityException || ex is DirectoryNotFoundException)
+            catch (Exception ex) when (ex is SecurityException ||
+                                       ex is DirectoryNotFoundException ||
+                                       ex is IOException)
             {
                 log.Error("Failed during log cleanup.", ex);
             }

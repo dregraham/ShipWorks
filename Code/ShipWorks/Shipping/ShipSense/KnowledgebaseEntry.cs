@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using Interapptive.Shared.IO.Zip;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -408,5 +410,13 @@ namespace ShipWorks.Shipping.ShipSense
             return true;
         }
 
+        /// <summary>
+        /// Compresses the data in the knowledge base entry into a byte array.
+        /// </summary>
+        /// <returns>A byte[] containing the compressed data of the knowledge base entry.</returns>
+        public byte[] Compress()
+        {
+            return GZipUtility.Compress(Encoding.UTF8.GetBytes(ToJson()));
+        }
     }
 }

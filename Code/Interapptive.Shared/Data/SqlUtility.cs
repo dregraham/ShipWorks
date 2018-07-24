@@ -109,21 +109,33 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Determines if the specified database is in SINGLE_USER mode using the given connection
         /// </summary>
-        public static bool IsSingleUser(DbConnection con, string databaseName)
+        public static bool IsSingleUser(string connectionString, string databaseName)
         {
-            if (con == null)
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentNullException("con");
+                throw new ArgumentNullException("connectionString");
             }
 
-            DbCommand cmd = DbCommandProvider.Create(con);
-            cmd.CommandText = "SELECT user_access FROM sys.databases WHERE name = @name";
-            cmd.AddParameterWithValue("@name", databaseName);
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(connectionString);
+            csb.InitialCatalog = "master";
+            csb.Pooling = false;
+            csb.WorkstationID += Guid.NewGuid().ToString("N").Substring(5);
 
-            object result = cmd.ExecuteScalar();
-            if (result == null || result is DBNull)
+            object result = null;
+            using (SqlConnection connection = new SqlConnection(csb.ToString()))
             {
-                return false;
+                connection.Open();
+                using (DbCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT user_access FROM sys.databases WHERE name = @name";
+                    cmd.AddParameterWithValue("@name", databaseName);
+
+                    result = cmd.ExecuteScalar();
+                    if (result == null || result is DBNull)
+                    {
+                        return false;
+                    }
+                }
             }
 
             return Convert.ToInt32(result) == 1;

@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
 
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
-        // it reentrantly.
+        // it again.
         private bool loadingSelectedShipments = false;
 
         // Indicates which tab in the dialog will be initially displayed
@@ -70,7 +70,6 @@ namespace ShipWorks.Shipping
         // and we used the "live" value, then we'd think a shipment was currently loaded when really it wasn't.
         private List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
 
-
         private List<ShipmentEntity> loadedShipmentEntities;
 
         private readonly Timer getRatesTimer = new Timer();
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping
 
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
-        private readonly ShipSenseSynchronizer shipSenseSynchronizer;
+        private readonly IShipSenseSynchronizer shipSenseSynchronizer;
 
         private readonly Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
         private CustomsControlCache customsControlCache;
@@ -104,8 +103,9 @@ namespace ShipWorks.Shipping
         private readonly IShippingProfileService shippingProfileService;
         private bool closing;
         private bool applyingProfile;
-        private bool isArchiveMode = false;
+        private readonly bool isArchiveMode = false;
         IDisposable keyboardShortcutSubscription;
+        private IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
@@ -183,8 +183,9 @@ namespace ShipWorks.Shipping
                 shippingManager.EnsureShipmentLoaded(shipment);
             });
 
-            shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
-
+            shippingSettings = lifetimeScope.Resolve<IShippingSettings>();
+            shipSenseSynchronizer = lifetimeScope.Resolve<IShipSenseSynchronizer>(TypedParameter.From(shipments));
+            
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>()
                 .Subscribe(OnStampsUspsAutomaticExpeditedChanged);
             customsControlCache = new CustomsControlCache(lifetimeScope);
@@ -551,7 +552,7 @@ namespace ShipWorks.Shipping
 
             // Get the list of setup shipment types up front - so in case it changes from another ShipWorks in the middle of loading,
             // all shipments of the same type are loaded in the same way.
-            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode)v).ToList();
+            uiActivatedShipmentTypes = shippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode)v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
@@ -1373,7 +1374,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void SynchronizeWithShipSense()
         {
-            if (!uiDisplayedShipments.Any() || !shipSenseNeedsUpdated)
+            if (!uiDisplayedShipments.Any() || 
+                !shipSenseNeedsUpdated || 
+                !shippingSettings.FetchReadOnly().ShipSenseEnabled)
             {
                 return;
             }

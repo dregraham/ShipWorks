@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Audit;
@@ -18,15 +19,18 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private const string SplitToOrderReasonFormat = "Split to order : {0}";
         private const string SplitFromOrderReasonFormat = "Split from order : {0}";
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitAudit(IAuditUtility auditUtility, IStoreTypeManager storeTypeManager, ISqlAdapterFactory sqlAdapterFactory)
+        public OrderSplitAudit(IAuditUtility auditUtility, IStoreTypeManager storeTypeManager, 
+            ISqlAdapterFactory sqlAdapterFactory, IConfigurationData configurationData)
         {
             this.storeTypeManager = storeTypeManager;
             this.auditUtility = auditUtility;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -34,6 +38,11 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public async Task Audit(IOrderEntity originalOrder, IOrderEntity splitOrder)
         {
+            if (!configurationData.FetchReadOnly().AuditEnabled)
+            {
+                return;
+            }
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 await AuditOrder(originalOrder, splitOrder, SplitToOrderReasonFormat, sqlAdapter).ConfigureAwait(false);

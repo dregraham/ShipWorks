@@ -95,6 +95,8 @@ namespace ShipWorks
             // errors when trying to use Windows credentials when installing the service.
             MessageHelper.Initialize("ShipWorks");
 
+            ApplyThirdPartyLicenses();
+
             SetupUnhandledExceptionHandling();
 
             AuditDisplayFormatAttribute.Register();
@@ -397,6 +399,14 @@ namespace ShipWorks
             {
                 log.Fatal("Application crashed, and no ExecutionMode to handle exception.", ex);
             }
+        }
+
+        /// <summary>
+        /// Apply third party licenses 
+        /// </summary>
+        private static void ApplyThirdPartyLicenses()
+        {
+            Rebex.Licensing.Key = "==FkhSvCGeTWZceYPGxAXhIFg8MsCGacCTnp+8iElvsPrtAft0NvMidZJIU4F0YbKZoH3sq==";
         }
     }
 }

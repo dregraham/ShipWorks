@@ -155,6 +155,10 @@ namespace ShipWorks.Data.Model.Custom
 				case "OrderSearchEntity": return EntityType.OrderSearchEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "OtherShipmentEntity": return EntityType.OtherShipmentEntity;
+				case "OverstockOrderEntity": return EntityType.OverstockOrderEntity;
+				case "OverstockOrderItemEntity": return EntityType.OverstockOrderItemEntity;
+				case "OverstockOrderSearchEntity": return EntityType.OverstockOrderSearchEntity;
+				case "OverstockStoreEntity": return EntityType.OverstockStoreEntity;
 				case "PackageProfileEntity": return EntityType.PackageProfileEntity;
 				case "PayPalOrderEntity": return EntityType.PayPalOrderEntity;
 				case "PayPalOrderSearchEntity": return EntityType.PayPalOrderSearchEntity;
@@ -340,6 +344,9 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.OrderItemAttributeEntity: return new OrderItemAttributeRelations();
 				case EntityType.OrderMotionOrderEntity: return new OrderMotionOrderRelations();
 				case EntityType.OrderMotionStoreEntity: return new OrderMotionStoreRelations();
+				case EntityType.OverstockOrderEntity: return new OverstockOrderRelations();
+				case EntityType.OverstockOrderItemEntity: return new OverstockOrderItemRelations();
+				case EntityType.OverstockStoreEntity: return new OverstockStoreRelations();
 				case EntityType.PackageProfileEntity: return new PackageProfileRelations();
 				case EntityType.PayPalOrderEntity: return new PayPalOrderRelations();
 				case EntityType.PayPalStoreEntity: return new PayPalStoreRelations();

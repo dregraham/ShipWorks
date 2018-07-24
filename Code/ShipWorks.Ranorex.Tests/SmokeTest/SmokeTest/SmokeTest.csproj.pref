@@ -1,0 +1,17 @@
+﻿<Properties>
+  <Array name="bookmarks" />
+  <Array name="files" />
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections">
+      <Element value="SmokeTest.SetupCarrierTestServers.RunTestServerCMD()" />
+      <Element value="SmokeTest.InstallShipWorks.InstallChromium()" />
+      <Element value="SmokeTest.SendResultsEmail.SendEmail()" />
+      <Element value="SmokeTest.GetComparisonReportDirectory.GetDirectory()" />
+      <Element value="SmokeTest.CheckShipWorksVersion.GrabVersion()" />
+      <Element value="SmokeTest.CheckShipWorksVersion.Get_Value_Version()" />
+    </Array>
+  </Properties>
+</Properties>

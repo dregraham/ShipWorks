@@ -1,24 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Transactions;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
-using System.Runtime.InteropServices;
-using System.Transactions;
-using System.Text;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Interapptive.Shared.Utility;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Connection
 {
@@ -63,6 +64,7 @@ namespace ShipWorks.Data.Connection
                 596,   // SQL: Cannot continue the execution because the session is in the kill state
                 59,    // SQL: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - An unexpected network error occurred.)
                 1130,  // Win32: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - Not enough server storage is available to process this command.)
+                2,     // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Shared Memory Provider, error: 40 - Could not open a connection to SQL Server)
             });
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace ShipWorks.Data.Connection
                 return Interlocked.Read(ref connections);
             }
         }
-        
+
         /// <summary>
         /// The current status of the connection monitor
         /// </summary>
@@ -283,12 +285,13 @@ namespace ShipWorks.Data.Connection
                             {
                                 SqlSession master = new SqlSession(SqlSession.Current);
                                 master.Configuration.DatabaseName = "master";
+                                var connectionString = master.Configuration.GetConnectionString();
 
-                                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
+                                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(connectionString))
                                 {
                                     testConnection.Open();
 
-                                    isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                                    isSingleUser = SqlUtility.IsSingleUser(connectionString, SqlSession.Current.Configuration.DatabaseName);
                                 }
                             }
                             catch (Exception textEx)
@@ -424,9 +427,20 @@ namespace ShipWorks.Data.Connection
                 throw new ArgumentNullException("con");
             }
 
+            // In the case of actions where WorkstationID could be longer than 128 due to the task name,
+            // go ahead and truncate to 127 just to be sure we don't go over the context allowed size.
+            string workstationID = UserSession.WorkstationID.Truncate(127);
+
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandTimeout = 5;
-            cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ COMMITTED";
+            cmd.CommandText = $@"
+                SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+                DECLARE @Ctx varbinary(128)
+                SELECT @Ctx = CONVERT(varbinary(128), '{ workstationID }')
+                SET CONTEXT_INFO @Ctx
+                ";
+
             DbCommandProvider.ExecuteNonQuery(cmd);
         }
 
@@ -513,8 +527,8 @@ namespace ShipWorks.Data.Connection
         {
             IEnumerable<Exception> exceptions = ex.GetAllExceptions();
             IEnumerable<SqlException> sqlExceptions = exceptions.OfType<SqlException>();
-            
-            if (sqlExceptions.Any())
+
+            if (sqlExceptions.Any() || exceptions.Any())
             {
                 List<int> errors = sqlExceptions.Select(e => e.Number).ToList();
 

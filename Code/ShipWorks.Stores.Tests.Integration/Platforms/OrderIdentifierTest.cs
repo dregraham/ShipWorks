@@ -153,6 +153,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.ClickCartPro, typeof(ClickCartProOrderIdentifier) },
             { StoreTypeCode.CloudConversion, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CommerceInterface, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.CommerceV3, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CreLoaded, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.CsCart, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Ebay, typeof(EbayOrderIdentifier) },
@@ -182,6 +183,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.OrderDynamics, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.OrderMotion, typeof(OrderMotionOrderIdentifier) },
             { StoreTypeCode.osCommerce, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.Overstock, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PayPal, typeof(PayPalOrderIdentifier) },
             { StoreTypeCode.PowersportsSupport, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PrestaShop, typeof(AlphaNumericOrderIdentifier) },
@@ -207,6 +209,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.XCart, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Yahoo, typeof(YahooOrderIdentifier) },
             { StoreTypeCode.ZenCart, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.Zentail, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Zenventory, typeof(AlphaNumericOrderIdentifier) }
         };
 

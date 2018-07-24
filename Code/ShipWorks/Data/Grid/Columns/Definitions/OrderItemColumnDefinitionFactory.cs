@@ -19,6 +19,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Model;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -90,6 +91,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnDefinition("{47FACE52-9D1C-45ad-B0E6-4217517935EB}", true,
                             new GridTextDisplayType(), "Status", "In Stock",
                             OrderItemFields.LocalStatus),    
+                         
+                         new GridColumnDefinition("{11e7920e-ba78-44bb-b661-82b8e075745f}", false,
+                             new GridTextDisplayType(), "Dimensions", "5x5x29",
+                             new GridColumnFunctionValueProvider(FormatDimensions),
+                             new GridColumnSortProvider(OrderItemFields.Length)),
 
                         #region Infopia
 
@@ -379,6 +385,27 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             StoreTypeCode = StoreTypeCode.Groupon
                         },
+                        
+                        new GridColumnDefinition("{8863B7B6-0011-491A-8E9C-719456306F2F}", false,
+                            new GridTextDisplayType(), "Permalink", "A123456",
+                            GrouponOrderItemFields.Permalink)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
+                        new GridColumnDefinition("{997C0126-9D3F-41A8-93E3-07119B41BFCD}", false,
+                            new GridTextDisplayType(), "Channel SKU", "A123456",
+                            GrouponOrderItemFields.ChannelSKUProvided)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+                        
+                        new GridColumnDefinition("{6DA4253C-04F1-4970-B7FD-A239090D36FC}", false,
+                            new GridTextDisplayType(), "PO Number", "A123456",
+                            GrouponOrderItemFields.PONumber)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
 
                 #endregion
 
@@ -435,6 +462,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                      };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Return formatted dimensions like "LxWxH"
+        /// </summary>
+        private static string FormatDimensions(EntityBase2 item)
+        {
+            if (item is OrderItemEntity orderItem)
+            {
+                string dimensions = $"{orderItem.Length:0.##}x{orderItem.Width:0.##}x{orderItem.Height:0.##}";
+
+                return dimensions == "0x0x0" ? string.Empty : dimensions;
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

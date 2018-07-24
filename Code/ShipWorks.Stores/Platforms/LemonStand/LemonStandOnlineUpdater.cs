@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -10,10 +12,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using System;
-using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -27,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly ILog log;
         private readonly LemonStandStoreEntity store;
         private LemonStandStatusCodeProvider statusCodeProvider;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -59,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

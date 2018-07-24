@@ -62,6 +62,11 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Force the connection string to set the WorkstationID for legacy support.
+        /// </summary>
+        public bool ForceWorkstationID { get; set; }
+
+        /// <summary>
         /// Copy constructor
         /// </summary>
         public SqlSessionConfiguration(SqlSessionConfiguration copy)
@@ -267,7 +272,7 @@ namespace ShipWorks.Data.Connection
         {
             if (string.IsNullOrEmpty(ServerInstance))
             {
-                return "";
+                return string.Empty;
             }
 
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
@@ -285,8 +290,11 @@ namespace ShipWorks.Data.Connection
                 csb.Password = Password;
             }
 
-            // The WorkstationID is how we pass the UserID and ComputerID to use for auditing on this connection
-            csb.WorkstationID = UserSession.WorkstationID;
+            if (ForceWorkstationID)
+            {
+                // The WorkstationID is how we pass the UserID and ComputerID to use for auditing on this connection
+                csb.WorkstationID = UserSession.WorkstationID;
+            }
 
             // Timeout for connect
             csb.ConnectTimeout = (int) defaultTimeout.TotalSeconds;

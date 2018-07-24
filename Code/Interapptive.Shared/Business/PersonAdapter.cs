@@ -70,6 +70,12 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Is the entity's address considered empty?
+        /// </summary>
+        public static bool IsAddressEmpty(IAddressAdapter address) =>
+            string.IsNullOrEmpty(address.City) && string.IsNullOrEmpty(address.PostalCode);
+
+        /// <summary>
         /// Copy the person/address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
         public static void Copy(IEntity2 fromEntity, IEntity2 toEntity, string fieldPrefix)
