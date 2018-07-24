@@ -32,7 +32,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -902,5 +901,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         bool ICustomsRequired.IsCustomsRequired(IShipmentEntity shipment) =>
             IsCustomsRequired(shipment);
+
+        /// <summary>
+        /// Returns a URL to the FedEx's website for the specific shipment
+        /// </summary>
+        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException(nameof(shipment));
+            }
+
+            FedExSettings fedExSettings = new FedExSettings(SettingsRepository);
+
+            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber) 
+                && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
+            {
+                return fedExSettings.FimsTrackEndpointUrlFormat;
+            }
+
+            return string.Empty;
+        }
+
+        
     }
 }
