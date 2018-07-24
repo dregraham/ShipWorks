@@ -922,7 +922,5 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return string.Empty;
         }
-
-        
     }
 }
