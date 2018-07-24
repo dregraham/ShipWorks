@@ -1,18 +1,18 @@
-﻿using System.ComponentModel;
-using System.Reflection;
-
-namespace ShipWorks.Shipping
+﻿namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Result of a shipment update operation
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     internal enum ShipmentUpdateOperationResult
     {
-        [Description("Loaded")]
+        /// <summary>
+        /// The shipment was loaded
+        /// </summary>
         Loaded,
 
-        [Description("Deleted")]
+        /// <summary>
+        /// The shipment was deleted
+        /// </summary>
         Deleted
     }
 }

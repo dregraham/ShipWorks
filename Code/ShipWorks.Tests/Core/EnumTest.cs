@@ -223,6 +223,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.Content.FilterDefinitionSourceType".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
+                //"ShipWorks.Shipping.ShipmentUpdateOperationResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExMaskedDataType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment.codType".ToUpperInvariant(),
