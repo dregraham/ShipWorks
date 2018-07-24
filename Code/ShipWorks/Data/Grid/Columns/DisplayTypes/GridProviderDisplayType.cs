@@ -162,17 +162,22 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         private static void ChangeShipmentProvider(ShipmentEntity shipment, ShipmentType type)
         {
-            shipment.ShipmentType = (int) type.ShipmentTypeCode;
-            shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
-
-            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                sqlAdapter.SaveAndRefetch(shipment);
+                var shippingManager = lifetimeScope.Resolve<IShippingManager>();
+                var sqlAdapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
+                var dataProvider = lifetimeScope.Resolve<IDataProvider>();
 
-                // Perform this after the save otherwise customs items will be duplicated on
-                // international shipments
-                ShippingManager.EnsureShipmentLoaded(shipment);
-                CustomsManager.LoadCustomsItems(shipment, false, sqlAdapter);
+                shipment.Order = (OrderEntity) dataProvider.GetEntity(shipment.OrderID);
+
+                using (var sqlAdapter = sqlAdapterFactory.Create())
+                {
+                    sqlAdapter.SaveAndRefetch(shipment);
+
+                    // Perform this after the save otherwise customs items will be duplicated on
+                    // international shipments
+                    shippingManager.ChangeShipmentType(type.ShipmentTypeCode, shipment);
+                }
             }
         }
     }

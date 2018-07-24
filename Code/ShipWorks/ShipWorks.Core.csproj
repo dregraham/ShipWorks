@@ -986,6 +986,7 @@
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\Threading\BackgroundProgressDlg.cs" />
     <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
+    <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />

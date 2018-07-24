@@ -84,7 +84,6 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             {
                 if (WebHelper.IsWebException(ex))
                 {
-                    Debug.Fail(ex.Message, ex.ToString());
                     log.Error("Failed to connect to server message feed.", ex);
                 }
                 else
