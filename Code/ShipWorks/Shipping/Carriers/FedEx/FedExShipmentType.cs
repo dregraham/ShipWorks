@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -905,6 +906,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Returns a URL to the FedEx's website for the specific shipment
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+        Justification = "Identifier is not being used for data binding")]
         public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
         {
             if (shipment == null)
