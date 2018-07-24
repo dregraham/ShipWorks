@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
 
             string url = testObject.GetCarrierTrackingUrl(shipment);
 
-            Assert.Equal("http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={0}", url);
+            Assert.Equal("http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=" + shipment.TrackingNumber, url);
         }
 
         public void Dispose() => context.Dispose();

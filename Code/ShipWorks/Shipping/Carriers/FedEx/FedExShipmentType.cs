@@ -920,7 +920,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber) 
                 && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
             {
-                return fedExSettings.FimsTrackEndpointUrlFormat;
+                return string.Format(fedExSettings.FimsTrackEndpointUrlFormat, shipment.TrackingNumber);
             }
 
             return string.Empty;
