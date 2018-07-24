@@ -11,6 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -148,7 +149,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Apply existing dimensions to a shipment, if necessary
         /// </summary>
-        private static void ApplyDimensionsIfNecessary(ShipmentEntity shipment, List<(double height, double length, double width)> originalDimensions)
+        private static void ApplyDimensionsIfNecessary(ShipmentEntity shipment, List<DimensionsAdapter> originalDimensions)
         {
             var newDimensions = ShipmentTypeManager.GetType(shipment)
                 .GetPackageAdapters(shipment)
@@ -158,9 +159,10 @@ namespace ShipWorks.Shipping.Services
             {
                 foreach (var (package, dimensions) in newDimensions.Zip(originalDimensions, (x, y) => (package: x, dimensions: y)))
                 {
-                    package.DimsLength = dimensions.length;
-                    package.DimsWidth = dimensions.width;
-                    package.DimsHeight = dimensions.height;
+                    package.DimsProfileID = dimensions.ProfileID;
+                    package.DimsLength = dimensions.Length;
+                    package.DimsWidth = dimensions.Width;
+                    package.DimsHeight = dimensions.Height;
                 }
             }
         }
@@ -174,10 +176,10 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get a list of dimensions from a shipment
         /// </summary>
-        private static List<(double height, double length, double width)> GetOriginalDimensions(ShipmentEntity shipment) =>
+        private static List<DimensionsAdapter> GetOriginalDimensions(ShipmentEntity shipment) =>
             ShipmentTypeManager.GetType(shipment)
                 .GetPackageAdapters(shipment)
-                .Select(x => (height: x.DimsHeight, length: x.DimsLength, width: x.DimsWidth))
+                .Select(DimensionsAdapter.CreateFrom)
                 .ToList();
 
         /// <summary>

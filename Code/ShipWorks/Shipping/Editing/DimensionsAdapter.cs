@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Data;
+﻿using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -16,7 +13,6 @@ namespace ShipWorks.Shipping.Editing
         /// Creates a new instance of the adapter that maintains its own values, and has no backing entity.
         /// </summary>
         public DimensionsAdapter()
-            : base()
         {
 
         }
@@ -29,6 +25,19 @@ namespace ShipWorks.Shipping.Editing
         {
 
         }
+
+        /// <summary>
+        /// Create a dimensions adapter from a package adapter
+        /// </summary>
+        public static DimensionsAdapter CreateFrom(IPackageAdapter packageAdapter) =>
+            new DimensionsAdapter
+            {
+                ProfileID = packageAdapter.DimsProfileID,
+                Length = packageAdapter.DimsLength,
+                Width = packageAdapter.DimsWidth,
+                Height = packageAdapter.DimsHeight,
+                Weight = packageAdapter.DimsWidth
+            };
 
         /// <summary>
         /// The database id of the DimensionsProfile
