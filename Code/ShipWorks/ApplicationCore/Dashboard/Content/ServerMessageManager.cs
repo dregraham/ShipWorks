@@ -276,7 +276,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
                     // If the message already exists then just let it be - it could be that either Tango is screwing up
                     // and not respecting our start number, or that another copy of sw was running and we had a race condition
                     // and were both downloading at once.
-                    if (ex.Message.Contains("IX_ServerMessage_Number"))
+                    if (ex.Message.Contains("IX_SWDefault_ServerMessage_Number"))
                     {
                         log.WarnFormat("Message {0} already found in database.", message.Number);
                     }

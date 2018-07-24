@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 catch (ORMQueryExecutionException ex)
                 {
                     // if the exception is because the shipper already exists don't do anything
-                    if (!ex.Message.Contains("IX_ShippingOrigin_Description"))
+                    if (!ex.Message.Contains("IX_SWDefault_ShippingOrigin_Description"))
                     {
                         throw;
                     }

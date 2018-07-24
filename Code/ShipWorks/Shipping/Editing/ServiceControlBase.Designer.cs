@@ -277,7 +277,7 @@ namespace ShipWorks.Shipping.Editing
         protected UI.Controls.CollapsibleGroupControl sectionShipment;
         protected UI.Controls.CollapsibleGroupControl sectionLabelOptions;
         private System.Windows.Forms.Label labelFormatLabel;
-        private MultiValueComboBox labelFormat;
+        protected MultiValueComboBox labelFormat;
         private System.Windows.Forms.PictureBox help;
     }
 }

@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Enums
     /// <summary>
     /// Shopify API calls we use
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum ShopifyWebClientApiCall
     {
         [Description("GetOrderCount")]
@@ -28,6 +28,10 @@ namespace ShipWorks.Stores.Platforms.Shopify.Enums
         [Description("AddFulfillment")]
         AddFulfillment = 8,
         [Description("GetFraud")]
-        GetFraud = 9
+        GetFraud = 9,
+        [Description("GetInventoryLevels")]
+        GetInventoryLevels = 10,
+        [Description("GetLocations")]
+        GetLocations = 11
     }
 }

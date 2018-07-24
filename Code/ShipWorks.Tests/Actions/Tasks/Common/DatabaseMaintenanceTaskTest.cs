@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using ShipWorks.Actions.Tasks;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
@@ -138,9 +139,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void CreateEditor_ThrowsInvalidOperationException()
+        public void CreateEditor_ReturnsActionTaskEditor()
         {
-            Assert.Throws<InvalidOperationException>(() => testObject.CreateEditor());
+            var editor = testObject.CreateEditor();
+            Assert.Equal(typeof(ActionTaskEditor), editor.GetType());
         }
     }
 }

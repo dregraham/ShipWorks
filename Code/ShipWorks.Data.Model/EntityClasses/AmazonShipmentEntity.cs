@@ -379,6 +379,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonUniqueShipmentID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -625,6 +629,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The Reference1 property of the Entity AmazonShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."Reference1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Reference1
+		{
+			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.Reference1, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.Reference1, value); }
+		}
+
+		/// <summary> The RequestedLabelFormat property of the Entity AmazonShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)AmazonShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.RequestedLabelFormat, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

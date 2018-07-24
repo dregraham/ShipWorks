@@ -128,7 +128,7 @@ namespace ShipWorks.Users
             }
             catch (ORMQueryExecutionException ex)
             {
-                if (ex.Message.Contains("IX_User_Username"))
+                if (ex.Message.Contains("IX_SWDefault_User_Username"))
                 {
                     log.ErrorFormat("User '{0}' already exists.", username);
 

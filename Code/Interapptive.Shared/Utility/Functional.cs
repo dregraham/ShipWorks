@@ -116,6 +116,14 @@ namespace Interapptive.Shared.Utility
                 GenericResult.FromError<int>($"Could not parse {value} as int");
 
         /// <summary>
+        /// Parse an decimal value
+        /// </summary>
+        public static GenericResult<decimal> ParseDecimal(string value) =>
+            decimal.TryParse(value, out decimal result) ?
+                result :
+                GenericResult.FromError<decimal>($"Could not parse {value} as decimal");
+
+        /// <summary>
         /// Try executing a function
         /// </summary>
         /// <typeparam name="T">Return type of the function</typeparam>

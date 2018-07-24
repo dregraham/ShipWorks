@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -24,6 +25,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             InitializeComponent();
 
             ResizeGroupBoxes(tabPageSettings);
+
+            // Amazon does not support ZPL
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
         /// <summary>
@@ -51,6 +55,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
             AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+
+            AddValueMapping(amazonProfile, AmazonProfileFields.Reference1, reference1State, reference1Token, labelReference1);
+            AddValueMapping(amazonProfile.ShippingProfile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

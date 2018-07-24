@@ -467,7 +467,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 return;
             }
-
+            
             PopulateItemInventoryDetails(orderItem, matchingItem);
             PopulateItemAttributes(soapClient, orderItem);
             PopulateImages(soapClient, orderItem);
@@ -517,6 +517,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 orderItem.MPN = matchingItem.MPN;
             }
+            
+            orderItem.Length = matchingItem.Length ?? 0;
+            orderItem.Width = matchingItem.Width ?? 0;
+            orderItem.Height = matchingItem.Height ?? 0;
         }
 
         /// <summary>
