@@ -237,55 +237,60 @@ namespace ShipWorks.Actions.Tasks.Common
 
             int pageSize = 100;
 
-            while (true)
+            using (ISqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
-                // <orderID, customerID>
-                List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
+                adapter.KeepConnectionOpen = true;
 
-                RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);
-                using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sort, true))
+                while (true)
                 {
-                    while (reader.Read())
+                    // <orderID, customerID>
+                    List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
+
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);
+                    using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sort, true))
                     {
-                        toDelete.Add(Tuple.Create(reader.GetInt64(0), reader.GetInt64(1)));
-                    }
-                }
-
-                // Now go through each one and delete it
-                foreach (var tuple in toDelete)
-                {
-                    long orderID = tuple.Item1;
-                    long customerID = tuple.Item2;
-
-                    // First delete the order
-                    DeletionService.DeleteOrder(orderID);
-
-                    // See if the customer has any orders left
-                    object result = SqlAdapter.Default.GetScalar(CustomerFields.RollupOrderCount, null, AggregateFunction.None, CustomerFields.CustomerID == customerID);
-
-                    if (!(result is DBNull))
-                    {
-                        int ordersLeft = Convert.ToInt32(result);
-
-                        if (ordersLeft == 0)
+                        while (reader.Read())
                         {
-                            DeletionService.DeleteCustomer(customerID);
+                            toDelete.Add(Tuple.Create(reader.GetInt64(0), reader.GetInt64(1)));
                         }
                     }
 
-                    // Stop executing if we've been running longer than the time the user has allowed.
-                    if (CanTimeout && stopAfter < dateProvider.UtcNow)
+                    // Now go through each one and delete it
+                    foreach (var tuple in toDelete)
                     {
-                        log.Info("Stopping purge because it has exceeded the maximum allowed time.");
+                        long orderID = tuple.Item1;
+                        long customerID = tuple.Item2;
+
+                        // First delete the order
+                        DeletionService.DeleteOrder(orderID, adapter);
+
+                        // See if the customer has any orders left
+                        object result = SqlAdapter.Default.GetScalar(CustomerFields.RollupOrderCount, null, AggregateFunction.None, CustomerFields.CustomerID == customerID);
+
+                        if (!(result is DBNull))
+                        {
+                            int ordersLeft = Convert.ToInt32(result);
+
+                            if (ordersLeft == 0)
+                            {
+                                DeletionService.DeleteCustomer(customerID, adapter);
+                            }
+                        }
+
+                        // Stop executing if we've been running longer than the time the user has allowed.
+                        if (CanTimeout && stopAfter < dateProvider.UtcNow)
+                        {
+                            log.Info("Stopping purge because it has exceeded the maximum allowed time.");
+                            return;
+                        }
+                    }
+
+                    // If there aren't any more, or if it was less than our page size, then we must be done
+                    if (toDelete.Count < pageSize)
+                    {
+                        log.InfoFormat("There are no more orders left to purge older than the retention period.");
                         return;
                     }
-                }
-
-                // If there aren't any more, or if it was less than our page size, then we must be done
-                if (toDelete.Count < pageSize)
-                {
-                    log.InfoFormat("There are no more orders left to purge older than the retention period.");
-                    return;
                 }
             }
         }

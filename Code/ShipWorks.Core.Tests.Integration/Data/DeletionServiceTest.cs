@@ -56,7 +56,10 @@ namespace ShipWorks.Core.Tests.Integration.Data
                 .OfType<OrderDeletedMessage>()
                 .Subscribe(x => deletedOrderId = x.DeletedEntityID);
 
-            DeletionService.DeleteOrder(orderId);
+            using (var sqlAdapter = SqlAdapter.Create(false))
+            {
+                DeletionService.DeleteOrder(orderId, sqlAdapter);
+            }
 
             Assert.True(deletedOrderId.HasValue);
             Assert.Equal(orderId, deletedOrderId.Value);
@@ -67,10 +70,10 @@ namespace ShipWorks.Core.Tests.Integration.Data
         {
             long orderId = context.Order.OrderID;
 
-            DeletionService.DeleteCustomer(context.Customer.CustomerID);
-
             using (var sqlAdapter = SqlAdapter.Create(false))
             {
+                DeletionService.DeleteCustomer(context.Customer.CustomerID, sqlAdapter);
+
                 var orders = new EntityCollection<OrderEntity>();
                 sqlAdapter.FetchEntityCollection(orders, new RelationPredicateBucket(OrderFields.OrderID == orderId));
                 Assert.Empty(orders);
@@ -87,7 +90,10 @@ namespace ShipWorks.Core.Tests.Integration.Data
                 .OfType<CustomerDeletedMessage>()
                 .Subscribe(x => deletedCustomerId = x.DeletedEntityID);
 
-            DeletionService.DeleteCustomer(CustomerId);
+            using (var sqlAdapter = SqlAdapter.Create(false))
+            {
+                DeletionService.DeleteCustomer(CustomerId, sqlAdapter);
+            }
 
             Assert.True(deletedCustomerId.HasValue);
             Assert.Equal(CustomerId, deletedCustomerId.Value);

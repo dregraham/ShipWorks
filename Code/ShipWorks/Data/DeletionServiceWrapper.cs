@@ -49,11 +49,6 @@ namespace ShipWorks.Data
         /// <summary>
         /// Deletes the given order
         /// </summary>
-        public void DeleteOrder(long orderID) => DeletionService.DeleteOrder(orderID);
-
-        /// <summary>
-        /// Deletes the given order
-        /// </summary>
         public void DeleteOrder(long orderID, ISqlAdapter adapter) => DeletionService.DeleteOrder(orderID, adapter as SqlAdapter);
     }
 }
