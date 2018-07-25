@@ -172,11 +172,8 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
                 using (var sqlAdapter = sqlAdapterFactory.Create())
                 {
-                    sqlAdapter.SaveAndRefetch(shipment);
-
-                    // Perform this after the save otherwise customs items will be duplicated on
-                    // international shipments
                     shippingManager.ChangeShipmentType(type.ShipmentTypeCode, shipment);
+                    sqlAdapter.SaveAndRefetch(shipment);
                 }
             }
         }

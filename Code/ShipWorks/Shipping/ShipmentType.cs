@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using Autofac;
-using Autofac.Core.Lifetime;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -326,7 +325,7 @@ namespace ShipWorks.Shipping
         {
             return new ReturnsControlBase();
         }
-        
+
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
@@ -515,14 +514,8 @@ namespace ShipWorks.Shipping
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
-                // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
-                // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
-                // LoadCustomsItems is called, saving will be skipped.
-                if (shipment.CustomsGenerated && IsCustomsRequired(shipment))
-                {
-                    shipment.CustomsGenerated = false;
-                }
-                customsManager.GenerateCustomsItems(shipment);
+                // LoadCustomsItems no longer automatically saves the shipment, so we can call it here
+                customsManager.LoadCustomsItems(shipment, false, x => true);
 
                 // First apply the base profile
                 ShippingProfileEntity primaryProfile = shippingProfileManager.GetOrCreatePrimaryProfile(this);
@@ -1100,6 +1093,6 @@ namespace ShipWorks.Shipping
         public virtual void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
             // Default will have nothing to update
-        }        
+        }
     }
 }

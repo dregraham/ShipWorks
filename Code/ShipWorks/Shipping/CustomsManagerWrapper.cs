@@ -32,10 +32,16 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Ensure custom's contents for the given shipment have been created
+        /// Ensure customs contents for the given shipment have been created
         /// </summary>
-        public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter) =>
+        public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, ISqlAdapter adapter) =>
             CustomsManager.LoadCustomsItems(shipment, reloadIfPresent, adapter);
+
+        /// <summary>
+        /// Ensure customs contents for the given shipment have been created
+        /// </summary>
+        public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, Func<ShipmentEntity, bool> saveShipment) =>
+            CustomsManager.LoadCustomsItems(shipment, reloadIfPresent, saveShipment);
 
         /// <summary>
         /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
