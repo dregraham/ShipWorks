@@ -148,6 +148,7 @@
     <Compile Include="Purge\PurgeAuditProcedure.cs" />
     <Compile Include="Purge\PurgeEmailOutboundProcedure.cs" />
     <Compile Include="Purge\PurgeLabelsProcedure.cs" />
+    <Compile Include="Purge\PurgeDownloadsProcedure.cs" />
     <Compile Include="Purge\PurgePrintResultProcedure.cs" />
     <Compile Include="Purge\PurgeScriptRunner.cs" />
     <Compile Include="Shipping\FedExPackageDeleteTrigger.cs" />
