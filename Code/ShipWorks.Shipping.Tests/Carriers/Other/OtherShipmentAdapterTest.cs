@@ -171,15 +171,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         }
 
         [Fact]
-        public void AddCustomsItem_AddsNewCustomsItemToList()
-        {
-            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
-            testObject.AddCustomsItem();
-
-            Assert.Equal(1, shipment.CustomsItems.Count);
-        }
-
-        [Fact]
         public void AddCustomsItem_ReturnsCustomsItemAdapter_ForNewCustomsItem()
         {
             var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
