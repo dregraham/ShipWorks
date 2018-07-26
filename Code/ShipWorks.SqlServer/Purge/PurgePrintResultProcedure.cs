@@ -16,16 +16,17 @@ public partial class StoredProcedures
     /// Purges PrintResult resource data from the database and replaces it with a pointer to the
     /// appropriate dummy record depending on whether an standard image was printed or a thermal image.
     /// </summary>
-    /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
+    /// <param name="olderThan">Indicates the date/time to use for determining
     /// which PrintResult records will be purged. Any records with an PrintResult.PrintDate value earlier than
     /// this date will be purged.</param>
     /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
+    /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
     [SqlProcedure]
-    public static void PurgePrintResult(SqlDateTime olderThan, SqlDateTime runUntil)
+    public static void PurgePrintResult(SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgePrintResultCommandText, PurgePrintResultAppLockName, olderThan, runUntil);
+        PurgeScriptRunner.RunPurgeScript(PurgePrintResultCommandText, PurgePrintResultAppLockName, olderThan, runUntil, softDelete);
     }
 
     /// <summary>

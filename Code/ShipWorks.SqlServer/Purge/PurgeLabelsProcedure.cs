@@ -16,16 +16,17 @@ public partial class StoredProcedures
     /// This is done by adding png and gif resources to ShipWorks that say 'This resource has been deleted'
     /// and then pointing all of the expired labels to this resource while deleting the old ones.
     /// </summary>
-    /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
+    /// <param name="olderThan">Indicates the date/time to use for determining
     /// which Label records will be purged. Any records with an Shipment.ProcessedDate value earlier than
     /// this date will be purged.</param>
     /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
+    /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
     [SqlProcedure]
-    public static void PurgeLabels(SqlDateTime olderThan, SqlDateTime runUntil)
+    public static void PurgeLabels(SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, olderThan, runUntil);
+        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, olderThan, runUntil, softDelete);
     }
 
     private static string PurgeLabelCommandText

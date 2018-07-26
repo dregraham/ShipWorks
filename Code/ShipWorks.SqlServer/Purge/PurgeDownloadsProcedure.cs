@@ -15,10 +15,11 @@ public partial class StoredProcedures
     /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
+    /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
     [SqlProcedure]
-    public static void PurgeDownloads(SqlDateTime olderThan, SqlDateTime runUntil)
+    public static void PurgeDownloads(SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeDownloadsCommandText, PurgeDownloadsAppLockName, olderThan, runUntil);
+        PurgeScriptRunner.RunPurgeScript(PurgeDownloadsCommandText, PurgeDownloadsAppLockName, olderThan, runUntil, softDelete);
     }
 
     /// <summary>

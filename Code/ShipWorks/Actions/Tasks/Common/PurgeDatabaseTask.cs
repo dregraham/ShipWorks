@@ -102,6 +102,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Purge print job history, if print job content should be deleted
         /// </summary>
         public bool PurgePrintJobHistory { get; set; }
+
         /// <summary>
         /// Gets or sets whether the database should be shrunk after the purge is complete.
         /// </summary>
@@ -192,7 +193,11 @@ namespace ShipWorks.Actions.Tasks.Common
                     log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, olderThan);
                     try
                     {
-                        scriptRunner.RunScript(scriptName, olderThan, CanTimeout ? runUntil : (DateTime?) null, 5);
+                        bool softDelete = purge != PurgeDatabaseType.Email && purge != PurgeDatabaseType.PrintJobs ||
+                                          purge == PurgeDatabaseType.Email && !PurgeEmailHistory ||
+                                          purge == PurgeDatabaseType.PrintJobs && !PurgePrintJobHistory;
+
+                        scriptRunner.RunScript(scriptName, olderThan, CanTimeout ? runUntil : (DateTime?) null, 5, softDelete);
                         log.InfoFormat("Finished {0} successfully.", scriptName);
                     }
                     catch (DbException ex)

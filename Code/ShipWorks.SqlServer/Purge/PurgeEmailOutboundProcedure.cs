@@ -1,28 +1,25 @@
 using Microsoft.SqlServer.Server;
-using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.Purge;
-using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using ShipWorks.SqlServer;
-
 
 public partial class StoredProcedures
 {
     private const string PurgeEmailOutboundAppLockName = "PurgeEmailOutbound";
 
     /// <summary>
-    /// Purges EmailOutbound resource data from the database and replaces it with a pointer to the dummy record.
+    /// Purges EmailOutbound resource data from the database.
     /// </summary>
-    /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
+    /// <param name="olderThan">Indicates the date/time to use for determining
     /// which EmailOutbound records will be purged. Any records with an EmailOutbound.SentDate value earlier than
     /// this date will be purged.</param>
     /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
+    /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
     [SqlProcedure]
-    public static void PurgeEmailOutbound(SqlDateTime olderThan, SqlDateTime runUntil)
+    public static void PurgeEmailOutbound(SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeEmailOutboundCommandText, PurgeEmailOutboundAppLockName, olderThan, runUntil);             
+        PurgeScriptRunner.RunPurgeScript(PurgeEmailOutboundCommandText, PurgeEmailOutboundAppLockName, olderThan, runUntil, softDelete);             
     }
 
     /// <summary>
@@ -54,11 +51,16 @@ public partial class StoredProcedures
 
                     SET @deletedHtmlResourceID = SCOPE_IDENTITY();
                 END;
-
+                        
+                IF OBJECT_ID('tempdb.dbo.#EmailPurgeBatch', 'U') IS NOT NULL
+                    DROP TABLE #EmailPurgeBatch; 
+                
                 -- create batch purge ID table
                 CREATE TABLE #EmailPurgeBatch 
                 (
-                    EmailOutboundID BIGINT PRIMARY KEY
+                    EmailOutboundID BIGINT,
+                    PlainPartResourceID BIGINT,
+                    HtmlPartResourceID BIGINT
                 );
 
                 DECLARE
@@ -70,7 +72,7 @@ public partial class StoredProcedures
                 WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
                 BEGIN
                     INSERT #EmailPurgeBatch
-                    SELECT DISTINCT TOP (@batchSize) e.EmailOutboundID
+                    SELECT DISTINCT TOP (@batchSize) e.EmailOutboundID, e.PlainPartResourceID, e.HtmlPartResourceID
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
@@ -78,8 +80,7 @@ public partial class StoredProcedures
                     WHERE
                         e.SentDate < @olderThan AND
                         e.SendStatus = 1 AND  -- only purge emails that have been sent
-                        o.ObjectID <> @deletedPlainResourceID AND
-                        o.ObjectID <> @deletedHtmlResourceID;
+                        o.ObjectID not in ( @deletedPlainResourceID, @deletedHtmlResourceID);
 
                     SET @batchSize = @@ROWCOUNT;
                     IF @batchSize = 0
@@ -97,39 +98,47 @@ public partial class StoredProcedures
 
                     BEGIN TRANSACTION;
 
-                    -- update EmailOutbound.PlainPartResourceID to point to the @deletedPlainResourceID
-                    UPDATE ObjectReference
-                    SET
-                        ObjectID = @deletedPlainResourceID,
-                        ReferenceKey = '#' + convert(VARCHAR, @deletedPlainResourceID)
-                    FROM ObjectReference o
-                    INNER JOIN EmailOutbound e ON
-                        e.PlainPartResourceID = o.ObjectReferenceID
-                    INNER JOIN #EmailPurgeBatch p ON
-                        p.EmailOutboundID = e.EmailOutboundID;
+                        IF (@softDelete IS NULL OR @softDelete = 0)
+                        BEGIN   
+	                        -- update EmailOutbound.PlainPartResourceID to point to the @deletedPlainResourceID
+	                        UPDATE ObjectReference
+	                        SET
+		                        ObjectID = @deletedPlainResourceID,
+		                        ReferenceKey = '#' + convert(VARCHAR, @deletedPlainResourceID)
+	                        FROM ObjectReference o
+		                        INNER JOIN #EmailPurgeBatch p ON p.PlainPartResourceID = o.ObjectReferenceID
 
-                    UPDATE ObjectReference
-                    SET
-                        ObjectID = @deletedHtmlResourceID,
-                        ReferenceKey = '#' + convert(VARCHAR, @deletedHtmlResourceID)
-                    FROM ObjectReference o
-                    INNER JOIN EmailOutbound e ON
-                        e.HtmlPartResourceID = o.ObjectReferenceID
-                    INNER JOIN #EmailPurgeBatch p ON
-                        p.EmailOutboundID = e.EmailOutboundID;
-                   
-                    -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
-                    DELETE ObjectReference
-                    FROM ObjectReference o
-                    INNER JOIN EmailOutbound e ON
-                        e.EmailOutboundID = o.ConsumerID
-                    INNER JOIN #EmailPurgeBatch p ON
-                        p.EmailOutboundID = e.EmailOutboundID
-                    WHERE o.ObjectID <> @deletedPlainResourceID
-                        AND o.ObjectID <> @deletedHtmlResourceID;
+	                        UPDATE ObjectReference
+	                        SET
+		                        ObjectID = @deletedHtmlResourceID,
+		                        ReferenceKey = '#' + convert(VARCHAR, @deletedHtmlResourceID)
+	                        FROM ObjectReference o
+		                        INNER JOIN #EmailPurgeBatch p ON p.HtmlPartResourceID = o.ObjectReferenceID
+                                   
+	                        -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
+	                        DELETE ObjectReference
+	                        select o.ObjectReferenceID
+	                        FROM ObjectReference o
+		                        INNER JOIN #EmailPurgeBatch p ON o.ConsumerID = p.EmailOutboundID
+	                        WHERE o.ObjectID not in ( @deletedPlainResourceID, @deletedHtmlResourceID)
+                        END
+                        ELSE
+                        BEGIN
+                            DELETE ObjectReference
+                            FROM ObjectReference
+                                INNER JOIN #EmailPurgeBatch batch on batch.PlainPartResourceID = ObjectReference.ObjectReferenceID
+
+                            DELETE ObjectReference
+                            FROM ObjectReference
+                                INNER JOIN #EmailPurgeBatch batch on batch.HtmlPartResourceID = ObjectReference.ObjectReferenceID
+                            
+                            DELETE ObjectReference
+                            FROM ObjectReference
+                                INNER JOIN #EmailPurgeBatch batch on batch.EmailOutboundID = ObjectReference.ConsumerID
+                        END
 
                     COMMIT TRANSACTION;
-
+                    
                     TRUNCATE TABLE #EmailPurgeBatch;
 
                     -- update batch total and adjust batch size to an amount expected to complete in 10 seconds

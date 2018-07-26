@@ -46,6 +46,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             emailHistory.CheckedChanged += (s, evt) => task.PurgeEmailHistory = emailHistory.Checked;
             printJobHistory.CheckedChanged += (s, evt) => task.PurgePrintJobHistory = printJobHistory.Checked;
 
+            emailHistory.Checked = task.PurgeEmailHistory;
+            printJobHistory.Checked = task.PurgePrintJobHistory;
+
+            emailHistory.CheckedChanged += (s, evt) => task.PurgeEmailHistory = emailHistory.Checked;
+            printJobHistory.CheckedChanged += (s, evt) => task.PurgePrintJobHistory = printJobHistory.Checked;
+
             LoadPurgeTasks();
             audit.CheckedChanged += OnPurgeCheckChanged;
             email.CheckedChanged += OnPurgeCheckChanged;
