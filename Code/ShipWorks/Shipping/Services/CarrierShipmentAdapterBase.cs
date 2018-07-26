@@ -319,7 +319,6 @@ namespace ShipWorks.Shipping.Services
         public IShipmentCustomsItemAdapter AddCustomsItem()
         {
             ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(Shipment);
-            Shipment.CustomsItems.Add(shipmentCustomsItemEntity);
             UpdateDynamicData();
 
             return new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
