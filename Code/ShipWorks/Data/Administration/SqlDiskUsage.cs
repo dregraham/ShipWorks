@@ -50,14 +50,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Indicates how much space resources take
-        /// </summary>
-        public static long ResourceUsage
-        {
-            get { return GetTableSpaceUsed(resourceList); }
-        }
-
-        /// <summary>
         /// Indicates how much space ShipSense takes
         /// </summary>
         public static long ShipSenseUsage
@@ -78,7 +70,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static long OtherUsage
         {
-            get { return TotalUsage - OrdersUsage - AuditUsage - ResourceUsage - ShipSenseUsage; }
+            get { return TotalUsage - OrdersUsage - AuditUsage - GetResourceEmailData() - GetResourcePrintResultData() - ShipSenseUsage; }
         }
 
         /// <summary>
@@ -214,6 +206,53 @@ namespace ShipWorks.Data.Administration
                 }
 
                 return total;
+            }
+        }
+
+        /// <summary>
+        /// Get the amount of email resource data in bytes
+        /// </summary>
+        /// <returns></returns>
+        public static long GetResourceEmailData()
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                DbCommand cmd = DbCommandProvider.Create(con);
+                cmd.CommandText = @"SELECT SUM(DATALENGTH(r.data)) as EmailDataInBytes
+                                        FROM Resource r
+                                        INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID
+                                        INNER JOIN EmailOutbound e on e.PlainPartResourceID = o.ObjectReferenceID
+                                            OR e.HtmlPartResourceID = o.ObjectReferenceID
+                                        WHERE
+                                            e.SendStatus = 1";
+
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                {
+                    reader.Read();
+                    return Convert.ToInt64(reader["EmailDataInBytes"].ToString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the amount of print result resource data in bytes
+        /// </summary>
+        /// <returns></returns>
+        public static long GetResourcePrintResultData()
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                DbCommand cmd = DbCommandProvider.Create(con);
+                cmd.CommandText = @"SELECT SUM(DATALENGTH(r.data)) as PrintResultDataInBytes
+	                                    FROM Resource r
+	                                    INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID
+	                                    INNER JOIN PrintResult p on p.ContentResourceID = o.ObjectReferenceID";
+
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                {
+                    reader.Read();
+                    return Convert.ToInt64(reader["PrintResultDataInBytes"].ToString());
+                }
             }
         }
     }

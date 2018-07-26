@@ -104,7 +104,7 @@ namespace ShipWorks.Data.Administration
         private void LoadUsage()
         {
             usageOrders.Text = "";
-            usageResources.Text = "";
+            usageEmail.Text = "";
             usageAudit.Text = "";
             usageTotal.Text = "";
             usageRemaining.Text = "";
@@ -116,7 +116,9 @@ namespace ShipWorks.Data.Administration
                 try
                 {
                     usageOrders.Text = StringUtility.FormatByteCount(SqlDiskUsage.OrdersUsage);
-                    usageResources.Text = StringUtility.FormatByteCount(SqlDiskUsage.ResourceUsage);
+                    usageEmail.Text = StringUtility.FormatByteCount(SqlDiskUsage.GetResourceEmailData());
+                    usagePrintJob.Text = StringUtility.FormatByteCount(SqlDiskUsage.GetResourcePrintResultData());
+                    usageLabels.Text = StringUtility.FormatByteCount(SqlDiskUsage.GetResourceEmailData());
                     usageAudit.Text = StringUtility.FormatByteCount(SqlDiskUsage.AuditUsage);
                     usageTotal.Text = StringUtility.FormatByteCount(SqlDiskUsage.TotalUsage);
                     usageOther.Text = StringUtility.FormatByteCount(SqlDiskUsage.OtherUsage);
