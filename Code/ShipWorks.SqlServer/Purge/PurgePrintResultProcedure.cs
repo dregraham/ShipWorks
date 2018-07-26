@@ -120,7 +120,7 @@ public partial class StoredProcedures
                             -- Wrap edits in transaction 
                             BEGIN TRANSACTION 
 							
-								IF (@softDelete IS NULL OR @softDelete = 0)
+								IF (@softDelete IS NULL OR @softDelete = 1)
 								BEGIN  
 									-- Update ObjectReference refrerenced by PrintResult.ContentResourceID so they point to the generic, purged resource ID 
 									UPDATE objRef 

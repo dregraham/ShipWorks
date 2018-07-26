@@ -98,7 +98,7 @@ public partial class StoredProcedures
 
                     BEGIN TRANSACTION;
 
-                        IF (@softDelete IS NULL OR @softDelete = 0)
+                        IF (@softDelete IS NULL OR @softDelete = 1)
                         BEGIN   
 	                        -- update EmailOutbound.PlainPartResourceID to point to the @deletedPlainResourceID
 	                        UPDATE ObjectReference
