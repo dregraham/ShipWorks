@@ -94,6 +94,15 @@ namespace ShipWorks.Actions.Tasks.Common
         public List<PurgeDatabaseType> Purges { get; set; }
 
         /// <summary>
+        /// Purge email history, if email content should be deleted
+        /// </summary>
+        public bool PurgeEmailHistory { get; set; }
+
+        /// <summary>
+        /// Purge print job history, if print job content should be deleted
+        /// </summary>
+        public bool PurgePrintJobHistory { get; set; }
+        /// <summary>
         /// Gets or sets whether the database should be shrunk after the purge is complete.
         /// </summary>
         public bool ReclaimDiskSpace { get; set; }

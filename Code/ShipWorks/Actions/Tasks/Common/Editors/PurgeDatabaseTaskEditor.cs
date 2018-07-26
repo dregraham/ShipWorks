@@ -39,13 +39,24 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             retentionPeriodInDays.Value = task.RetentionPeriodInDays;
             retentionPeriodInDays.ValueChanged += OnRetentionPeriodInDaysValueChanged;
+            
+            emailHistory.Checked = task.PurgeEmailHistory;
+            printJobHistory.Checked = task.PurgePrintJobHistory;
+
+            emailHistory.CheckedChanged += (s, evt) => task.PurgeEmailHistory = emailHistory.Checked;
+            printJobHistory.CheckedChanged += (s, evt) => task.PurgePrintJobHistory = printJobHistory.Checked;
 
             LoadPurgeTasks();
             audit.CheckedChanged += OnPurgeCheckChanged;
             email.CheckedChanged += OnPurgeCheckChanged;
+            email.CheckedChanged += (s, evt) => emailHistory.Enabled = email.Checked;
             labels.CheckedChanged += OnPurgeCheckChanged;
             printJobs.CheckedChanged += OnPurgeCheckChanged;
+            printJobs.CheckedChanged += (s, evt) => printJobHistory.Enabled = printJobs.Checked;
             orders.CheckedChanged += OnPurgeCheckChanged;
+
+            emailHistory.Enabled = email.Checked;
+            printJobHistory.Enabled = printJobs.Checked;
         }
 
         /// <summary>
