@@ -25,9 +25,10 @@ namespace ShipWorks.Actions.Tasks.Common
     public class PurgeDatabaseTask : ActionTask
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
-        readonly ISqlPurgeScriptRunner scriptRunner;
-        readonly IDateTimeProvider dateProvider;
+        private static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
+        private readonly ISqlPurgeScriptRunner scriptRunner;
+        private readonly IDateTimeProvider dateProvider;
+        private const int pageSize = 100;
 
         readonly List<PurgeDatabaseType> purgeOrder = new List<PurgeDatabaseType>
             {
@@ -249,7 +250,6 @@ namespace ShipWorks.Actions.Tasks.Common
             // Delete the oldest orders first
             SortExpression sort = new SortExpression(OrderFields.OrderDate | SortOperator.Ascending);
 
-            int pageSize = 100;
 
             using (ISqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
