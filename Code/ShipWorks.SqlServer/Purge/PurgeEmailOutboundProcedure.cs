@@ -135,6 +135,10 @@ public partial class StoredProcedures
                             DELETE ObjectReference
                             FROM ObjectReference
                                 INNER JOIN #EmailPurgeBatch batch on batch.EmailOutboundID = ObjectReference.ConsumerID
+
+                            DELETE EmailOutbound
+                            FROM EmailOutbound
+                                INNER JOIN #EmailPurgeBatch batch on batch.EmailOutboundID = EmailOutbound.EmailOutboundID
                         END
 
                     COMMIT TRANSACTION;

@@ -142,6 +142,10 @@ public partial class StoredProcedures
 									DELETE ObjectReference
 									FROM ObjectReference
 										INNER JOIN @CurrentBatch batch ON batch.ContentResourceID = ObjectReference.ObjectReferenceID
+
+									DELETE PrintResult
+									FROM PrintResult
+										INNER JOIN @CurrentBatch AS batch ON batch.PrintResultID = PrintResult.PrintResultID 
 								END
 
 								-- Delete ObjectReference not explicitly pointed at by PrintResult (and therefore updated to point to @htmlResourceID
