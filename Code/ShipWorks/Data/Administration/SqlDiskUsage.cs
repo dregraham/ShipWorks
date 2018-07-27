@@ -227,9 +227,7 @@ namespace ShipWorks.Data.Administration
                                         FROM Resource r
                                         INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID
                                         INNER JOIN EmailOutbound e on e.PlainPartResourceID = o.ObjectReferenceID
-                                            OR e.HtmlPartResourceID = o.ObjectReferenceID
-                                        WHERE
-                                            e.SendStatus = 1";
+                                            OR e.HtmlPartResourceID = o.ObjectReferenceID";
 
                 using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
                 {
