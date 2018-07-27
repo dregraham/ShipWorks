@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Data
 {
@@ -150,6 +151,14 @@ namespace Interapptive.Shared.Data
         public static DbDataReader ExecuteReader(DbCommand cmd)
         {
             return cmd.ExecuteReader();
+        }
+
+        /// <summary>
+        /// Builds a new DbDataReader based on the given DbCommand
+        /// </summary>
+        public static Task<DbDataReader> ExecuteReaderAsync(DbCommand cmd)
+        {
+            return cmd.ExecuteReaderAsync();
         }
     }
 }

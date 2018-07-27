@@ -877,7 +877,7 @@ namespace ShipWorks
                 DashboardManager.ShowLocalMessage("DatabaseSize",
                     DashboardMessageImageType.Warning,
                     "Database Size",
-                    string.Format("You are using {0} of your {1} GB database size limit.", StringUtility.FormatByteCount(SqlDiskUsage.TotalUsage), gbLimit),
+                    string.Format("You are using {0} of your {1} GB database size limit.", StringUtility.FormatByteCount(SqlDiskUsage.GetDatabaseSpaceUsed()), gbLimit),
                     new DashboardActionMethod("[link]Help[/link]", () =>
                     {
                         MessageHelper.ShowInformation(this,

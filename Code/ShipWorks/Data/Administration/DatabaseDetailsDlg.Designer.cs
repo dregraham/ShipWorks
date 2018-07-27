@@ -33,7 +33,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.usageRemaining = new System.Windows.Forms.Label();
             this.labelUsageRemaining = new System.Windows.Forms.Label();
-            this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.usageTotal = new System.Windows.Forms.Label();
             this.labelUsageTotal = new System.Windows.Forms.Label();
             this.usageAudit = new System.Windows.Forms.Label();
@@ -56,21 +55,24 @@
             this.labelUsageOther = new System.Windows.Forms.Label();
             this.usageShipSense = new System.Windows.Forms.Label();
             this.labelShipSenseUsage = new System.Windows.Forms.Label();
+            this.usagePrintJob = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.usageLabel = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.usageDownloadDetails = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.sectionConfiguration = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionDiskUsage = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionActiveConnection = new ShipWorks.UI.Controls.SectionTitle();
             this.infotipSizeRemaining = new ShipWorks.UI.Controls.InfoTip();
-            this.usagePrintJob = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.usageLabels = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.SuspendLayout();
             // 
             // close
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.close.Location = new System.Drawing.Point(272, 418);
+            this.close.Location = new System.Drawing.Point(272, 389);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
             this.close.TabIndex = 0;
@@ -100,7 +102,7 @@
             // 
             this.usageRemaining.AutoSize = true;
             this.usageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageRemaining.Location = new System.Drawing.Point(124, 419);
+            this.usageRemaining.Location = new System.Drawing.Point(279, 362);
             this.usageRemaining.Name = "usageRemaining";
             this.usageRemaining.Size = new System.Drawing.Size(41, 13);
             this.usageRemaining.TabIndex = 82;
@@ -110,26 +112,17 @@
             // 
             this.labelUsageRemaining.AutoSize = true;
             this.labelUsageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageRemaining.Location = new System.Drawing.Point(48, 419);
+            this.labelUsageRemaining.Location = new System.Drawing.Point(203, 363);
             this.labelUsageRemaining.Name = "labelUsageRemaining";
             this.labelUsageRemaining.Size = new System.Drawing.Size(70, 13);
             this.labelUsageRemaining.TabIndex = 81;
             this.labelUsageRemaining.Text = "Remaining:";
             // 
-            // kryptonBorderEdge
-            // 
-            this.kryptonBorderEdge.AutoSize = false;
-            this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(35, 428);
-            this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(140, 1);
-            this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            // 
             // usageTotal
             // 
             this.usageTotal.AutoSize = true;
             this.usageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageTotal.Location = new System.Drawing.Point(124, 399);
+            this.usageTotal.Location = new System.Drawing.Point(279, 339);
             this.usageTotal.Name = "usageTotal";
             this.usageTotal.Size = new System.Drawing.Size(41, 13);
             this.usageTotal.TabIndex = 79;
@@ -139,7 +132,7 @@
             // 
             this.labelUsageTotal.AutoSize = true;
             this.labelUsageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageTotal.Location = new System.Drawing.Point(79, 399);
+            this.labelUsageTotal.Location = new System.Drawing.Point(234, 339);
             this.labelUsageTotal.Name = "labelUsageTotal";
             this.labelUsageTotal.Size = new System.Drawing.Size(39, 13);
             this.labelUsageTotal.TabIndex = 78;
@@ -148,7 +141,7 @@
             // usageAudit
             // 
             this.usageAudit.AutoSize = true;
-            this.usageAudit.Location = new System.Drawing.Point(124, 267);
+            this.usageAudit.Location = new System.Drawing.Point(123, 246);
             this.usageAudit.Name = "usageAudit";
             this.usageAudit.Size = new System.Drawing.Size(36, 13);
             this.usageAudit.TabIndex = 77;
@@ -157,7 +150,7 @@
             // labelUsageAudit
             // 
             this.labelUsageAudit.AutoSize = true;
-            this.labelUsageAudit.Location = new System.Drawing.Point(57, 267);
+            this.labelUsageAudit.Location = new System.Drawing.Point(57, 246);
             this.labelUsageAudit.Name = "labelUsageAudit";
             this.labelUsageAudit.Size = new System.Drawing.Size(61, 13);
             this.labelUsageAudit.TabIndex = 76;
@@ -167,7 +160,7 @@
             // usageEmail
             // 
             this.usageEmail.AutoSize = true;
-            this.usageEmail.Location = new System.Drawing.Point(124, 289);
+            this.usageEmail.Location = new System.Drawing.Point(123, 289);
             this.usageEmail.Name = "usageEmail";
             this.usageEmail.Size = new System.Drawing.Size(36, 13);
             this.usageEmail.TabIndex = 75;
@@ -176,7 +169,7 @@
             // labelUsageResources
             // 
             this.labelUsageResources.AutoSize = true;
-            this.labelUsageResources.Location = new System.Drawing.Point(42, 289);
+            this.labelUsageResources.Location = new System.Drawing.Point(41, 289);
             this.labelUsageResources.Name = "labelUsageResources";
             this.labelUsageResources.Size = new System.Drawing.Size(77, 13);
             this.labelUsageResources.TabIndex = 74;
@@ -186,7 +179,7 @@
             // usageOrders
             // 
             this.usageOrders.AutoSize = true;
-            this.usageOrders.Location = new System.Drawing.Point(124, 246);
+            this.usageOrders.Location = new System.Drawing.Point(123, 311);
             this.usageOrders.Name = "usageOrders";
             this.usageOrders.Size = new System.Drawing.Size(36, 13);
             this.usageOrders.TabIndex = 73;
@@ -195,11 +188,11 @@
             // labelUsageOrders
             // 
             this.labelUsageOrders.AutoSize = true;
-            this.labelUsageOrders.Location = new System.Drawing.Point(53, 246);
+            this.labelUsageOrders.Location = new System.Drawing.Point(74, 311);
             this.labelUsageOrders.Name = "labelUsageOrders";
-            this.labelUsageOrders.Size = new System.Drawing.Size(65, 13);
+            this.labelUsageOrders.Size = new System.Drawing.Size(44, 13);
             this.labelUsageOrders.TabIndex = 72;
-            this.labelUsageOrders.Text = "Order Data:";
+            this.labelUsageOrders.Text = "Orders:";
             // 
             // labelDatabase
             // 
@@ -301,7 +294,7 @@
             // usageOther
             // 
             this.usageOther.AutoSize = true;
-            this.usageOther.Location = new System.Drawing.Point(124, 379);
+            this.usageOther.Location = new System.Drawing.Point(279, 311);
             this.usageOther.Name = "usageOther";
             this.usageOther.Size = new System.Drawing.Size(36, 13);
             this.usageOther.TabIndex = 98;
@@ -310,7 +303,7 @@
             // labelUsageOther
             // 
             this.labelUsageOther.AutoSize = true;
-            this.labelUsageOther.Location = new System.Drawing.Point(79, 379);
+            this.labelUsageOther.Location = new System.Drawing.Point(235, 311);
             this.labelUsageOther.Name = "labelUsageOther";
             this.labelUsageOther.Size = new System.Drawing.Size(39, 13);
             this.labelUsageOther.TabIndex = 97;
@@ -320,7 +313,7 @@
             // usageShipSense
             // 
             this.usageShipSense.AutoSize = true;
-            this.usageShipSense.Location = new System.Drawing.Point(124, 359);
+            this.usageShipSense.Location = new System.Drawing.Point(279, 289);
             this.usageShipSense.Name = "usageShipSense";
             this.usageShipSense.Size = new System.Drawing.Size(36, 13);
             this.usageShipSense.TabIndex = 101;
@@ -329,12 +322,69 @@
             // labelShipSenseUsage
             // 
             this.labelShipSenseUsage.AutoSize = true;
-            this.labelShipSenseUsage.Location = new System.Drawing.Point(57, 359);
+            this.labelShipSenseUsage.Location = new System.Drawing.Point(214, 289);
             this.labelShipSenseUsage.Name = "labelShipSenseUsage";
             this.labelShipSenseUsage.Size = new System.Drawing.Size(60, 13);
             this.labelShipSenseUsage.TabIndex = 100;
             this.labelShipSenseUsage.Text = "ShipSense:";
             this.labelShipSenseUsage.UseMnemonic = false;
+            // 
+            // usagePrintJob
+            // 
+            this.usagePrintJob.AutoSize = true;
+            this.usagePrintJob.Location = new System.Drawing.Point(279, 246);
+            this.usagePrintJob.Name = "usagePrintJob";
+            this.usagePrintJob.Size = new System.Drawing.Size(36, 13);
+            this.usagePrintJob.TabIndex = 104;
+            this.usagePrintJob.Text = "14 MB";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(177, 246);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(97, 13);
+            this.label7.TabIndex = 103;
+            this.label7.Text = "Pring Job Content:";
+            this.label7.UseMnemonic = false;
+            // 
+            // usageLabel
+            // 
+            this.usageLabel.AutoSize = true;
+            this.usageLabel.Location = new System.Drawing.Point(279, 267);
+            this.usageLabel.Name = "usageLabel";
+            this.usageLabel.Size = new System.Drawing.Size(36, 13);
+            this.usageLabel.TabIndex = 106;
+            this.usageLabel.Text = "14 MB";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(190, 267);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 13);
+            this.label10.TabIndex = 105;
+            this.label10.Text = "Shipping Labels:";
+            this.label10.UseMnemonic = false;
+            // 
+            // usageDownloadDetails
+            // 
+            this.usageDownloadDetails.AutoSize = true;
+            this.usageDownloadDetails.Location = new System.Drawing.Point(123, 267);
+            this.usageDownloadDetails.Name = "usageDownloadDetails";
+            this.usageDownloadDetails.Size = new System.Drawing.Size(36, 13);
+            this.usageDownloadDetails.TabIndex = 109;
+            this.usageDownloadDetails.Text = "14 MB";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(25, 267);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(93, 13);
+            this.label9.TabIndex = 108;
+            this.label9.Text = "Download Details:";
+            this.label9.UseMnemonic = false;
             // 
             // sectionConfiguration
             // 
@@ -370,49 +420,20 @@
             // 
             this.infotipSizeRemaining.Caption = "SQL Server Express has a {0} GB size limit.  \r\n\r\nThere is no limit for paid editi" +
     "ons of SQL Server.";
-            this.infotipSizeRemaining.Location = new System.Drawing.Point(169, 420);
+            this.infotipSizeRemaining.Location = new System.Drawing.Point(326, 364);
             this.infotipSizeRemaining.Name = "infotipSizeRemaining";
             this.infotipSizeRemaining.Size = new System.Drawing.Size(12, 12);
             this.infotipSizeRemaining.TabIndex = 83;
             this.infotipSizeRemaining.Title = "Remaining Size";
             // 
-            // usagePrintJob
+            // kryptonBorderEdge
             // 
-            this.usagePrintJob.AutoSize = true;
-            this.usagePrintJob.Location = new System.Drawing.Point(124, 311);
-            this.usagePrintJob.Name = "usagePrintJob";
-            this.usagePrintJob.Size = new System.Drawing.Size(36, 13);
-            this.usagePrintJob.TabIndex = 104;
-            this.usagePrintJob.Text = "14 MB";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(21, 311);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(97, 13);
-            this.label7.TabIndex = 103;
-            this.label7.Text = "Pring Job Content:";
-            this.label7.UseMnemonic = false;
-            // 
-            // usageLabels
-            // 
-            this.usageLabels.AutoSize = true;
-            this.usageLabels.Location = new System.Drawing.Point(124, 334);
-            this.usageLabels.Name = "usageLabels";
-            this.usageLabels.Size = new System.Drawing.Size(36, 13);
-            this.usageLabels.TabIndex = 106;
-            this.usageLabels.Text = "14 MB";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(1, 334);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(117, 13);
-            this.label10.TabIndex = 105;
-            this.label10.Text = "Shipping Label Images:";
-            this.label10.UseMnemonic = false;
+            this.kryptonBorderEdge.AutoSize = false;
+            this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(15, 330);
+            this.kryptonBorderEdge.Name = "kryptonBorderEdge";
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(320, 1);
+            this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // DatabaseDetailsDlg
             // 
@@ -420,8 +441,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.close;
-            this.ClientSize = new System.Drawing.Size(359, 453);
-            this.Controls.Add(this.usageLabels);
+            this.ClientSize = new System.Drawing.Size(359, 424);
+            this.Controls.Add(this.usageDownloadDetails);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.usageLabel);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.usagePrintJob);
             this.Controls.Add(this.label7);
@@ -480,7 +503,6 @@
         private UI.Controls.InfoTip infotipSizeRemaining;
         private System.Windows.Forms.Label usageRemaining;
         private System.Windows.Forms.Label labelUsageRemaining;
-        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.Label usageTotal;
         private System.Windows.Forms.Label labelUsageTotal;
         private System.Windows.Forms.Label usageAudit;
@@ -508,7 +530,10 @@
         private System.Windows.Forms.Label labelShipSenseUsage;
         private System.Windows.Forms.Label usagePrintJob;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label usageLabels;
+        private System.Windows.Forms.Label usageLabel;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label usageDownloadDetails;
+        private System.Windows.Forms.Label label9;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
     }
 }
