@@ -148,7 +148,7 @@ ALTER TABLE [dbo].[ObjectReference] ADD CONSTRAINT [PK_ObjectReference] PRIMARY 
 GO
 PRINT N'Creating index [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] on [dbo].[ObjectReference]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey]) INCLUDE ([ObjectID])
 GO
 PRINT N'Creating index [IX_SWDefault_ObjectReference_ObjectID] on [dbo].[ObjectReference]'
 GO
@@ -3266,7 +3266,7 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_RelatedObjectID] ON [dbo].[P
 GO
 PRINT N'Creating index [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID]) INCLUDE ([TemplateType], [ContentResourceID])  
 GO
 ALTER TABLE [dbo].[PrintResult] ENABLE CHANGE_TRACKING
 GO
