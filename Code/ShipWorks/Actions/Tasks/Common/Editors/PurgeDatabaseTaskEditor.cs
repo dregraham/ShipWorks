@@ -39,7 +39,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             retentionPeriodInDays.Value = task.RetentionPeriodInDays;
             retentionPeriodInDays.ValueChanged += OnRetentionPeriodInDaysValueChanged;
-            
+
             emailHistory.Checked = task.PurgeEmailHistory;
             printJobHistory.Checked = task.PurgePrintJobHistory;
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             {
                 task.Purges.Add(PurgeDatabaseType.Audit);
             }
- 
+
             if (email.Checked)
             {
                 task.Purges.Add(PurgeDatabaseType.Email);
@@ -113,7 +113,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary> 
         private void OnTimeoutInHoursValueChanged(object sender, EventArgs eventArgs)
         {
-            task.TimeoutInHours = (int)timeoutInHours.Value;
+            task.TimeoutInHours = (int) timeoutInHours.Value;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnRetentionPeriodInDaysValueChanged(object sender, EventArgs eventArgs)
         {
-            task.RetentionPeriodInDays = (int)retentionPeriodInDays.Value;
+            task.RetentionPeriodInDays = (int) retentionPeriodInDays.Value;
         }
 
         /// <summary>
@@ -134,11 +134,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Recleaim disk space has changed
+        /// Reclaim disk space has changed
         /// </summary>
         private void OnReclaimDiskSpaceCheckedChanged(object sender, EventArgs e)
         {
             task.ReclaimDiskSpace = reclaimDiskSpaceCheckbox.Checked;
-        }       
+        }
     }
 }

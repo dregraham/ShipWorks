@@ -43,6 +43,8 @@
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.orders = new System.Windows.Forms.CheckBox();
+            this.emailHistory = new System.Windows.Forms.CheckBox();
+            this.printJobHistory = new System.Windows.Forms.CheckBox();
             this.retentionHeading = new System.Windows.Forms.Label();
             this.timeoutHelp = new ShipWorks.UI.Controls.InfoTip();
             this.emailContentHelp = new ShipWorks.UI.Controls.InfoTip();
@@ -50,8 +52,6 @@
             this.printJobHelp = new ShipWorks.UI.Controls.InfoTip();
             this.reclaimDiskSpaceHelp = new ShipWorks.UI.Controls.InfoTip();
             this.infoTip1 = new ShipWorks.UI.Controls.InfoTip();
-            this.emailHistory = new System.Windows.Forms.CheckBox();
-            this.printJobHistory = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -128,9 +128,9 @@
             this.email.AutoSize = true;
             this.email.Location = new System.Drawing.Point(21, 92);
             this.email.Name = "email";
-            this.email.Size = new System.Drawing.Size(92, 17);
+            this.email.Size = new System.Drawing.Size(122, 17);
             this.email.TabIndex = 3;
-            this.email.Text = "Email Content";
+            this.email.Text = "Email Message Body";
             this.purgeToolTip.SetToolTip(this.email, "The message body is the only thing that will be deleted. You will still be able t" +
         "o see if an email was sent, when, to whom, and the subject line.");
             this.email.UseVisualStyleBackColor = true;
@@ -215,6 +215,30 @@
         "be able to see your print history and filter against it.");
             this.orders.UseVisualStyleBackColor = true;
             // 
+            // emailHistory
+            // 
+            this.emailHistory.AutoSize = true;
+            this.emailHistory.Location = new System.Drawing.Point(39, 115);
+            this.emailHistory.Name = "emailHistory";
+            this.emailHistory.Size = new System.Drawing.Size(87, 17);
+            this.emailHistory.TabIndex = 29;
+            this.emailHistory.Text = "Email History";
+            this.purgeToolTip.SetToolTip(this.emailHistory, "The message body is the only thing that will be deleted. You will still be able t" +
+        "o see if an email was sent, when, to whom, and the subject line.");
+            this.emailHistory.UseVisualStyleBackColor = true;
+            // 
+            // printJobHistory
+            // 
+            this.printJobHistory.AutoSize = true;
+            this.printJobHistory.Location = new System.Drawing.Point(39, 184);
+            this.printJobHistory.Name = "printJobHistory";
+            this.printJobHistory.Size = new System.Drawing.Size(85, 17);
+            this.printJobHistory.TabIndex = 30;
+            this.printJobHistory.Text = "Print History";
+            this.purgeToolTip.SetToolTip(this.printJobHistory, "The message body is the only thing that will be deleted. You will still be able t" +
+        "o see if an email was sent, when, to whom, and the subject line.");
+            this.printJobHistory.UseVisualStyleBackColor = true;
+            // 
             // retentionHeading
             // 
             this.retentionHeading.AutoSize = true;
@@ -238,7 +262,7 @@
             // 
             this.emailContentHelp.Caption = "The message body is the only thing that will be deleted. You will still be able t" +
     "o see if an email was sent, when, to whom, and the subject line.";
-            this.emailContentHelp.Location = new System.Drawing.Point(109, 94);
+            this.emailContentHelp.Location = new System.Drawing.Point(139, 94);
             this.emailContentHelp.Name = "emailContentHelp";
             this.emailContentHelp.Size = new System.Drawing.Size(12, 12);
             this.emailContentHelp.TabIndex = 23;
@@ -281,30 +305,6 @@
             this.infoTip1.Size = new System.Drawing.Size(12, 12);
             this.infoTip1.TabIndex = 28;
             this.infoTip1.Title = "Orders";
-            // 
-            // emailHistory
-            // 
-            this.emailHistory.AutoSize = true;
-            this.emailHistory.Location = new System.Drawing.Point(39, 115);
-            this.emailHistory.Name = "emailHistory";
-            this.emailHistory.Size = new System.Drawing.Size(98, 17);
-            this.emailHistory.TabIndex = 29;
-            this.emailHistory.Text = "Include History";
-            this.purgeToolTip.SetToolTip(this.emailHistory, "The message body is the only thing that will be deleted. You will still be able t" +
-        "o see if an email was sent, when, to whom, and the subject line.");
-            this.emailHistory.UseVisualStyleBackColor = true;
-            // 
-            // printJobHistory
-            // 
-            this.printJobHistory.AutoSize = true;
-            this.printJobHistory.Location = new System.Drawing.Point(39, 184);
-            this.printJobHistory.Name = "printJobHistory";
-            this.printJobHistory.Size = new System.Drawing.Size(98, 17);
-            this.printJobHistory.TabIndex = 30;
-            this.printJobHistory.Text = "Include History";
-            this.purgeToolTip.SetToolTip(this.printJobHistory, "The message body is the only thing that will be deleted. You will still be able t" +
-        "o see if an email was sent, when, to whom, and the subject line.");
-            this.printJobHistory.UseVisualStyleBackColor = true;
             // 
             // PurgeDatabaseTaskEditor
             // 
