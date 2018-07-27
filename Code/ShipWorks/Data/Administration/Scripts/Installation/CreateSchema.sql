@@ -5481,6 +5481,8 @@ PRINT N'Adding foreign keys to [dbo].[AuditChangeDetail]'
 GO
 ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [FK_AuditChangeDetail_AuditChange] FOREIGN KEY ([AuditChangeID]) REFERENCES [dbo].[AuditChange] ([AuditChangeID]) ON DELETE CASCADE
 GO
+ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [FK_AuditChangeDetail_Audit] FOREIGN KEY ([AuditID]) REFERENCES [dbo].[Audit] ([AuditID])
+GO
 PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
 GO
 ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [FK_BestRateProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
