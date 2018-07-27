@@ -10,8 +10,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -136,10 +136,51 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ICarrierShipmentAdapter ChangeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentEntity shipment)
         {
+            var originalDimensions = GetOriginalDimensions(shipment);
+
             shipment.ShipmentTypeCode = shipmentTypeCode;
             EnsureShipmentLoaded(shipment);
+
+            ApplyDimensionsIfNecessary(shipment, originalDimensions);
+
             return shipmentAdapterFactory.Get(shipment);
         }
+
+        /// <summary>
+        /// Apply existing dimensions to a shipment, if necessary
+        /// </summary>
+        private static void ApplyDimensionsIfNecessary(ShipmentEntity shipment, List<DimensionsAdapter> originalDimensions)
+        {
+            var newDimensions = ShipmentTypeManager.GetType(shipment)
+                .GetPackageAdapters(shipment)
+                .ToList();
+
+            if (DimensionsAreEmpty(newDimensions) && newDimensions.Count() == originalDimensions.Count())
+            {
+                foreach (var (package, dimensions) in newDimensions.Zip(originalDimensions, (x, y) => (package: x, dimensions: y)))
+                {
+                    package.DimsProfileID = dimensions.ProfileID;
+                    package.DimsLength = dimensions.Length;
+                    package.DimsWidth = dimensions.Width;
+                    package.DimsHeight = dimensions.Height;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Are all the dimensions in the list empty
+        /// </summary>
+        private static bool DimensionsAreEmpty(List<IPackageAdapter> dimensions) =>
+            dimensions.All(x => x.DimsLength.IsEquivalentTo(0) && x.DimsWidth.IsEquivalentTo(0) && x.DimsHeight.IsEquivalentTo(0));
+
+        /// <summary>
+        /// Get a list of dimensions from a shipment
+        /// </summary>
+        private static List<DimensionsAdapter> GetOriginalDimensions(ShipmentEntity shipment) =>
+            ShipmentTypeManager.GetType(shipment)
+                .GetPackageAdapters(shipment)
+                .Select(DimensionsAdapter.CreateFrom)
+                .ToList();
 
         /// <summary>
         /// Save the shipment to the database

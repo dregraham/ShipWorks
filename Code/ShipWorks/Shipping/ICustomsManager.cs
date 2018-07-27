@@ -1,7 +1,7 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
 {
@@ -13,7 +13,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter);
+        void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, ISqlAdapter adapter);
+
+        /// <summary>
+        /// Ensure customs contents for the given shipment have been created
+        /// </summary>
+        void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, Func<ShipmentEntity, bool> saveShipment);
 
         /// <summary>
         /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,

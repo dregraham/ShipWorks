@@ -11,6 +11,7 @@
 .vs
 *.jfm
 *.idea
+*.playlist
 
 # Build results
 
