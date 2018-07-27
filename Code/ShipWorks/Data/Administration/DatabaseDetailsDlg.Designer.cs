@@ -341,11 +341,11 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(177, 246);
+            this.label7.Location = new System.Drawing.Point(179, 246);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(97, 13);
+            this.label7.Size = new System.Drawing.Size(95, 13);
             this.label7.TabIndex = 103;
-            this.label7.Text = "Pring Job Content:";
+            this.label7.Text = "Print Job Content:";
             this.label7.UseMnemonic = false;
             // 
             // usageLabel
