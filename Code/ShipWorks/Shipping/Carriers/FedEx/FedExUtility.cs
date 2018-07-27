@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public static bool CanDeliverOnSaturday(FedExServiceType serviceType, DateTime shipDate)
         {
             if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight || serviceType == FedExServiceType.FirstFreight ||
-                 serviceType == FedExServiceType.OneRateFirstOvernight || serviceType == FedExServiceType.OneRatePriorityOvernight)
+                 serviceType == FedExServiceType.OneRatePriorityOvernight)
                 && shipDate.DayOfWeek == DayOfWeek.Friday)
             {
                 return true;
