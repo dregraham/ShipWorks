@@ -151,6 +151,7 @@
     <Compile Include="Purge\PurgeDownloadsProcedure.cs" />
     <Compile Include="Purge\PurgePrintResultProcedure.cs" />
     <Compile Include="Purge\PurgeScriptRunner.cs" />
+    <Compile Include="Shipping\iParcelPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\FedExPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\OrderShipmentShipSenseStatusTrigger.cs" />
     <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
     <Compile Include="Shipping\ShippingSettingsShipSenseTrigger.cs" />
     <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
+    <Compile Include="Shipping\DhlPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\UpsPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\WorldShipProcessedInvalidShipmentIdTrigger.cs" />
     <Compile Include="Templates\GetTemplateDescendantsOfFolder.cs" />
