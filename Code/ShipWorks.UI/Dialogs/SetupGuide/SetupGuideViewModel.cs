@@ -48,7 +48,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
             DeselectShippingSetup = new RelayCommand(DeselectShippingSetupAction);
             ShowShippingSetupWizard = new RelayCommand<ShipmentTypeCode>(OpenShippingSetupWizardAction);
             UseShipWorks = new RelayCommand(UseShipWorksAction);
-            GetPrinting = new RelayCommand(GetPrintingAction);
+            HowToPrintLabels = new RelayCommand(HowToPrintLabelsAction);
 
             SelectedSection = SetupGuideSection.AddStore;
         }
@@ -78,10 +78,10 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         public ICommand DeselectShippingSetup { get; }
 
         /// <summary>
-        /// Get Printing
+        /// How to print labels
         /// </summary>
         [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
-        public ICommand GetPrinting { get; }
+        public ICommand HowToPrintLabels { get; }
 
         /// <summary>
         /// Start using ShipWorks
@@ -135,11 +135,11 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         }
 
         /// <summary>
-        /// Get Printing
+        /// How to print labels
         /// </summary>
-        private void GetPrintingAction()
+        private void HowToPrintLabelsAction()
         {
-            SelectedSection = SetupGuideSection.GetPrinting;
+            SelectedSection = SetupGuideSection.HowToPrintLabels;
             Process.Start("http://support.shipworks.com/helpdesk/attachments/4050484348");
         }
 

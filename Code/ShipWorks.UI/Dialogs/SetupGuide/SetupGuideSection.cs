@@ -22,10 +22,10 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         AddShippingAccount,
 
         /// <summary>
-        /// Get Printing section
+        /// How to print labels section
         /// </summary>
-        [Description("Get Printing")]
-        GetPrinting,
+        [Description("How to print labels")]
+        HowToPrintLabels,
 
         /// <summary>
         /// Use ShipWorks section
