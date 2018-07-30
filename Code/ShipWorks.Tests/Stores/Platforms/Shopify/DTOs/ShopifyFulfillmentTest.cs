@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Stores.Platforms.Shopify.DTOs
 
             Assert.Equal("T-Test", jobject.Value<string>("tracking_number"));
             Assert.Equal("C-Test", jobject.Value<string>("tracking_company"));
-            Assert.Equal("CTU-Test", jobject.Value<string>("custom_tracking_url"));
+            Assert.Equal("CTU-Test", jobject.Value<string>("tracking_url"));
             Assert.Equal(true, jobject.Value<bool>("notify_customer"));
             Assert.Equal(987, jobject.Value<long>("location_id"));
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Stores.Platforms.Shopify.DTOs
 
             Assert.Equal("T-Test", jobject.Value<string>("tracking_number"));
             Assert.Equal("C-Test", jobject.Value<string>("tracking_company"));
-            Assert.Equal("CTU-Test", jobject.Value<string>("custom_tracking_url"));
+            Assert.Equal("CTU-Test", jobject.Value<string>("tracking_url"));
             Assert.Equal(true, jobject.Value<bool>("notify_customer"));
             Assert.Equal(678, jobject.Value<long>("location_id"));
 

@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
         /// <summary>
         /// Url for carrier tracking information
         /// </summary>
-        [JsonProperty("custom_tracking_url")]
+        [JsonProperty("tracking_url")]
         public string CarrierTrackingUrl { get; }
 
         /// <summary>

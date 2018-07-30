@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -32,7 +33,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -902,5 +902,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         bool ICustomsRequired.IsCustomsRequired(IShipmentEntity shipment) =>
             IsCustomsRequired(shipment);
+
+        /// <summary>
+        /// Returns a URL to the FedEx's website for the specific shipment
+        /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+        Justification = "Identifier is not being used for data binding")]
+        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException(nameof(shipment));
+            }
+
+            FedExSettings fedExSettings = new FedExSettings(SettingsRepository);
+
+            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber) 
+                && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
+            {
+                return string.Format(fedExSettings.FimsTrackEndpointUrlFormat, shipment.TrackingNumber);
+            }
+
+            return string.Empty;
+        }
     }
 }
