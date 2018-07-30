@@ -180,6 +180,7 @@
     <Compile Include="Stores\Content\OrderUtilityTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyDownloaderTest.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartRestDownloaderTest.cs" />
+    <Compile Include="Tasks\Common\PurgeDatabaseTaskTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

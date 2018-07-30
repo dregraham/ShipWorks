@@ -117,7 +117,6 @@ public partial class StoredProcedures
                                    
 	                        -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
 	                        DELETE ObjectReference
-	                        select o.ObjectReferenceID
 	                        FROM ObjectReference o
 		                        INNER JOIN #EmailPurgeBatch p ON o.ConsumerID = p.EmailOutboundID
 	                        WHERE o.ObjectID not in ( @deletedPlainResourceID, @deletedHtmlResourceID)
