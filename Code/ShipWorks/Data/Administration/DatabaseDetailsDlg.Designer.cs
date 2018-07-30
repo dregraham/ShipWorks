@@ -150,11 +150,11 @@
             // labelUsageAudit
             // 
             this.labelUsageAudit.AutoSize = true;
-            this.labelUsageAudit.Location = new System.Drawing.Point(57, 246);
+            this.labelUsageAudit.Location = new System.Drawing.Point(45, 246);
             this.labelUsageAudit.Name = "labelUsageAudit";
-            this.labelUsageAudit.Size = new System.Drawing.Size(61, 13);
+            this.labelUsageAudit.Size = new System.Drawing.Size(73, 13);
             this.labelUsageAudit.TabIndex = 76;
-            this.labelUsageAudit.Text = "Audit Logs:";
+            this.labelUsageAudit.Text = "Audit History:";
             this.labelUsageAudit.UseMnemonic = false;
             // 
             // usageEmail
@@ -169,11 +169,11 @@
             // labelUsageResources
             // 
             this.labelUsageResources.AutoSize = true;
-            this.labelUsageResources.Location = new System.Drawing.Point(41, 289);
+            this.labelUsageResources.Location = new System.Drawing.Point(78, 289);
             this.labelUsageResources.Name = "labelUsageResources";
-            this.labelUsageResources.Size = new System.Drawing.Size(77, 13);
+            this.labelUsageResources.Size = new System.Drawing.Size(40, 13);
             this.labelUsageResources.TabIndex = 74;
-            this.labelUsageResources.Text = "Email Content:";
+            this.labelUsageResources.Text = "Emails:";
             this.labelUsageResources.UseMnemonic = false;
             // 
             // usageOrders
@@ -341,11 +341,11 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(179, 246);
+            this.label7.Location = new System.Drawing.Point(216, 246);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(95, 13);
+            this.label7.Size = new System.Drawing.Size(58, 13);
             this.label7.TabIndex = 103;
-            this.label7.Text = "Print Job Content:";
+            this.label7.Text = "Print Jobs:";
             this.label7.UseMnemonic = false;
             // 
             // usageLabel
@@ -379,11 +379,11 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(25, 267);
+            this.label9.Location = new System.Drawing.Point(23, 267);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(93, 13);
+            this.label9.Size = new System.Drawing.Size(95, 13);
             this.label9.TabIndex = 108;
-            this.label9.Text = "Download Details:";
+            this.label9.Text = "Download History:";
             this.label9.UseMnemonic = false;
             // 
             // sectionConfiguration

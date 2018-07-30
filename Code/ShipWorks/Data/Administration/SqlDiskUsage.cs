@@ -29,6 +29,17 @@ namespace ShipWorks.Data.Administration
                         EntityType.DownloadEntity
                     };
 
+        static List<EntityType> emailList = new List<EntityType>
+                    {
+                        EntityType.EmailOutboundEntity,
+                        EntityType.EmailOutboundRelationEntity
+                    };
+
+        static List<EntityType> printList = new List<EntityType>
+                    {
+                        EntityType.PrintResultEntity
+                    };
+
         // We're getting the list of order related tables dynamically so that we don't have to remember to add
         // to the list when we add new store types
         static Lazy<List<EntityType>> orderList = new Lazy<List<EntityType>>(() =>
@@ -232,7 +243,13 @@ namespace ShipWorks.Data.Administration
                 using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
                 {
                     await reader.ReadAsync();
-                    return Convert.ToInt64(reader["EmailDataInBytes"].ToString());
+                    long result = await GetTableSpaceUsed(emailList);
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        result += reader.GetInt64(0);
+                    }
+                    return result;
                 }
             }
         }
@@ -254,7 +271,13 @@ namespace ShipWorks.Data.Administration
                 using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
                 {
                     await reader.ReadAsync();
-                    return Convert.ToInt64(reader["PrintResultDataInBytes"].ToString());
+                    long result = await GetTableSpaceUsed(printList);
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        result += reader.GetInt64(0);
+                    }
+                    return result;
                 }
             }
         }
@@ -291,9 +314,9 @@ namespace ShipWorks.Data.Administration
             using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
             {
                 await reader.ReadAsync();
-                if (long.TryParse(reader["LabelData"].ToString(), out long size))
+                if (!reader.IsDBNull(0))
                 {
-                    return size;
+                    return reader.GetInt64(0);
                 }
             }
             return 0;
