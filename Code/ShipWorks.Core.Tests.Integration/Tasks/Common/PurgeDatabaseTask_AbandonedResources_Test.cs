@@ -135,6 +135,19 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             Assert.Null(FetchObjectLabel(label));
         }
 
+        [Fact]
+        public void PurgeDatabaseTask_RemovesObjectLabel_WhenIsDeletedAndItsParentDoesNotExist()
+        {
+            var audit = Create.Audit(context.User, context.Computer)
+                .WithChange(c => c.Set(x => x.EntityID, 1))
+                .Save();
+            var label = CreateObjectLabel(1, deleted: true, parentID: 6);
+
+            testObject.Run(new List<long>(), null);
+
+            Assert.Null(FetchObjectLabel(label));
+        }
+
         private static ResourceEntity FetchResource(IResourceEntity resource)
         {
             using (var sqlAdapter = SqlAdapter.Create(false))
