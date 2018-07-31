@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Administration;
@@ -12,6 +13,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Class that encapsulates what it means to run a purge script.
     /// </summary>
+    [Component]
     public class SqlPurgeScriptRunner : ISqlPurgeScriptRunner
     {
         static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
