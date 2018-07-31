@@ -10,6 +10,7 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
@@ -27,7 +28,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private readonly DataContext context;
         private readonly PurgeDatabaseTask testObject;
         private readonly Random random = new Random();
-        private long nextConsumerID = 0;
 
         public PurgeDatabaseTask_AbandonedResources_Test(DatabaseFixture db)
         {
@@ -43,17 +43,17 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Fact]
         public async Task PurgeDatabaseTask_PurgesTwoResources_WhenHalfOfResourcesAreAbandoned()
         {
-            var resource1 = CreateValidResource();
-            var resource2 = CreateValidResource();
+            var resource1 = CreateValidResource(1);
+            var resource2 = CreateValidResource(2);
             var resource3 = CreateAbandonedResource();
             var resource4 = CreateAbandonedResource();
 
             testObject.Run(new List<long>(), null);
 
-            AssertResourceExists(resource1);
-            AssertResourceExists(resource2);
-            AssertResourceDoesNotExists(resource3);
-            AssertResourceDoesNotExists(resource4);
+            Assert.NotNull(FetchResource(resource1));
+            Assert.NotNull(FetchResource(resource2));
+            Assert.Null(FetchResource(resource3));
+            Assert.Null(FetchResource(resource4));
         }
 
         [Fact]
@@ -66,51 +66,103 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 
             testObject.Run(new List<long>(), null);
 
-            AssertResourceDoesNotExists(resource1);
-            AssertResourceDoesNotExists(resource2);
-            AssertResourceDoesNotExists(resource3);
-            AssertResourceDoesNotExists(resource4);
+            Assert.Null(FetchResource(resource1));
+            Assert.Null(FetchResource(resource2));
+            Assert.Null(FetchResource(resource3));
+            Assert.Null(FetchResource(resource4));
         }
 
         [Fact]
         public async Task PurgeDatabaseTask_PurgesNoAbandonedResources_WhenNoAbandonedResourcesAreOlderThan180Days()
         {
-            var resource1 = CreateValidResource();
-            var resource2 = CreateValidResource();
-            var resource3 = CreateValidResource();
-            var resource4 = CreateValidResource();
+            var resource1 = CreateValidResource(1);
+            var resource2 = CreateValidResource(2);
+            var resource3 = CreateValidResource(3);
+            var resource4 = CreateValidResource(4);
 
             testObject.Run(new List<long>(), null);
 
-            AssertResourceExists(resource1);
-            AssertResourceExists(resource2);
-            AssertResourceExists(resource3);
-            AssertResourceExists(resource4);
+            Assert.NotNull(FetchResource(resource1));
+            Assert.NotNull(FetchResource(resource2));
+            Assert.NotNull(FetchResource(resource3));
+            Assert.NotNull(FetchResource(resource4));
         }
 
-        private static void AssertResourceExists(ResourceEntity resource)
+        [Fact]
+        public void PurgeDatabaseTask_DoesNotRemoveObjectLabel_WhenIsDeletedIsFalse()
+        {
+            var label = CreateObjectLabel(1);
+
+            testObject.Run(new List<long>(), null);
+
+            Assert.NotNull(FetchObjectLabel(label));
+        }
+
+        [Fact]
+        public void PurgeDatabaseTask_DoesNotRemoveObjectLabel_WhenIsDeletedButIsAnAuditChange()
+        {
+            var audit = Create.Audit(context.User, context.Computer)
+                .WithChange(c => c.Set(x => x.EntityID, 1))
+                .Save();
+            var label = CreateObjectLabel(1, deleted: true);
+
+            testObject.Run(new List<long>(), null);
+
+            Assert.NotNull(FetchObjectLabel(label));
+        }
+
+        [Fact]
+        public void PurgeDatabaseTask_DoesNotRemoveObjectLabel_WhenIsDeletedButItsParentIsAnAuditChange()
+        {
+            var audit = Create.Audit(context.User, context.Computer)
+                .WithChange(c => c.Set(x => x.EntityID, 1))
+                .WithChange(c => c.Set(x => x.EntityID, 6))
+                .Save();
+            var label = CreateObjectLabel(1, deleted: true, parentID: 6);
+
+            testObject.Run(new List<long>(), null);
+
+            Assert.NotNull(FetchObjectLabel(label));
+        }
+
+        [Fact]
+        public void PurgeDatabaseTask_RemovesObjectLabel_WhenIsDeletedAndIsNotPartOfAnAuditChange()
+        {
+            var label = CreateObjectLabel(1, deleted: true);
+
+            testObject.Run(new List<long>(), null);
+
+            Assert.Null(FetchObjectLabel(label));
+        }
+
+        private static ResourceEntity FetchResource(IResourceEntity resource)
         {
             using (var sqlAdapter = SqlAdapter.Create(false))
             {
                 var factory = new QueryFactory();
 
                 var resourceQuery = factory.Resource.Where(ResourceFields.ResourceID == resource.ResourceID);
-                var entity = sqlAdapter.FetchFirst(resourceQuery);
-                Assert.NotNull(entity);
+                return sqlAdapter.FetchFirst(resourceQuery);
             }
         }
 
-        private static void AssertResourceDoesNotExists(ResourceEntity resource)
+        private static ObjectLabelEntity FetchObjectLabel(IObjectLabelEntity label)
         {
             using (var sqlAdapter = SqlAdapter.Create(false))
             {
                 var factory = new QueryFactory();
 
-                var resourceQuery = factory.Resource.Where(ResourceFields.ResourceID == resource.ResourceID);
-                var entity = sqlAdapter.FetchFirst(resourceQuery);
-                Assert.Null(entity);
+                var labelQuery = factory.ObjectLabel.Where(ObjectLabelFields.EntityID == label.EntityID);
+                return sqlAdapter.FetchFirst(labelQuery);
             }
         }
+
+        private ObjectLabelEntity CreateObjectLabel(long objectID, bool deleted = false, long? parentID = null) =>
+            Create.Entity<ObjectLabelEntity>()
+                .Set(x => x.EntityID, objectID)
+                .Set(x => x.IsDeleted, deleted)
+                .Set(x => x.ParentID, parentID)
+                .Save();
 
         private ResourceEntity CreateAbandonedResource() =>
             Create.Entity<ResourceEntity>()
@@ -118,14 +170,13 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                 .Set(x => x.Filename, Path.GetRandomFileName())
                 .Save();
 
-        private ResourceEntity CreateValidResource()
+        private ResourceEntity CreateValidResource(long consumerID)
         {
-            nextConsumerID += 1;
             var resource = CreateAbandonedResource();
 
             Create.Entity<ObjectReferenceEntity>()
                 .Set(x => x.EntityID, resource.ResourceID)
-                .Set(x => x.ConsumerID, nextConsumerID)
+                .Set(x => x.ConsumerID, consumerID)
                 .Save();
 
             return resource;
