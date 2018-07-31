@@ -1,1 +1,1 @@
-REG IMPORT TestServers.reg
+REG IMPORT TestServers2.reg

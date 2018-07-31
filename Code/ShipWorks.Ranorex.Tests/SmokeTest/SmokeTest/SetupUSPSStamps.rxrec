@@ -11514,6 +11514,22 @@ RQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB//9k=
 				</path>
 			</info>
 		</mouseitem>
+		<userrecorditem
+		classname="SetupUSPSStamps"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="SelectTestServer"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="79e770bf-b27a-4af8-9399-5b0f40eab8c8">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Click"
 		button="Left"

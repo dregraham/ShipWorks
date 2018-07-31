@@ -1,9 +1,10 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="SetupCarrierTestServers.rxrec" />
+    <Element value="SetupCarrierTestServers.UserCode.cs" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
+    <Element value="SetupUSPSStamps.rxrec" />
     <Element value="SetupCarrierTestServers.rxrec" />
     <Element value="SetupDatabase.rxrec" />
     <Element value="SetupUSPSStamps.UserCode.cs" />
@@ -18,12 +19,12 @@
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
+      <Element value="SmokeTest.SetupUSPSStamps.SelectTestServer()" />
       <Element value="SmokeTest.SetupCarrierTestServers.RunTestServerCMD()" />
       <Element value="SmokeTest.InstallShipWorks.InstallChromium()" />
       <Element value="SmokeTest.SendResultsEmail.SendEmail()" />
       <Element value="SmokeTest.GetComparisonReportDirectory.GetDirectory()" />
       <Element value="SmokeTest.CheckShipWorksVersion.GrabVersion()" />
-      <Element value="SmokeTest.CheckShipWorksVersion.Get_Value_Version()" />
     </Array>
   </Properties>
 </Properties>

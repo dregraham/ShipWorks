@@ -41,17 +41,11 @@ namespace SmokeTest
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         	
         	
-        	if(Environ == "Production")
-        	{
+
             Report.Log(ReportLevel.Info, "Application", "Run TestServers.cmd to change test server settings in registry");
             Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers.cmd", "", "", false);
-        	}
-            
-            else
-            {
-            Report.Log(ReportLevel.Info, "Application", "Run TestServers2.cmd to change test server settings in registry");
-            Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers2.cmd", "", "", false);
-            }
+
+
         }
 
 
