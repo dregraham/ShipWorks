@@ -1,12 +1,11 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="SmokeTest.rxtst" />
+    <Element value="SetupCarrierTestServers.rxrec" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SetupCarrierTestServers.rxrec" />
     <Element value="SetupDatabase.rxrec" />
-    <Element value="SetupUSPSStamps.rxrec" />
     <Element value="SetupUSPSStamps.UserCode.cs" />
     <Element value="SetupCarrierTestServers.UserCode.cs" />
     <Element value="SmokeTest.rxtst" />

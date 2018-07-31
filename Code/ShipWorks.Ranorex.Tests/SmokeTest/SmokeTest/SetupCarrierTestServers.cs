@@ -41,7 +41,7 @@ namespace SmokeTest
         /// </summary>
         public SetupCarrierTestServers()
         {
-            Environ = "";
+            Environ = "Staging";
         }
 
         /// <summary>
