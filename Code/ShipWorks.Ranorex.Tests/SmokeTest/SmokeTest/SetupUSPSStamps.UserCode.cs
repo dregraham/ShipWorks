@@ -83,7 +83,7 @@ namespace SmokeTest
         	
         	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        	if Environ="Production"
+        	if(Environ == "Production")
         	{
         		;
         	}
@@ -94,7 +94,7 @@ namespace SmokeTest
         public void Key_sequence_Username(RepoItemInfo textInfo)
         {
         	
-        	if Environ = "Production"
+        	if(Environ == "Production")
         	{            
         	Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}apptiveBrian' with focus on 'textInfo'.", textInfo);
             textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}apptiveBrian");
@@ -111,7 +111,7 @@ namespace SmokeTest
         public void Key_sequence_Password(RepoItemInfo textInfo)
         {
         	
-        	if Environ = "Production"
+        	if(Environ == "Production")
         	{            
             Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'textInfo'.", textInfo);
             textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}stamps7458");

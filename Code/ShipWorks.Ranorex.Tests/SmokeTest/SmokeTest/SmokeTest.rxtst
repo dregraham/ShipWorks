@@ -404,6 +404,14 @@ rxversion="8.1">
 			name="SetupCarrierTestServers"
 			ref="dd0c2482-f647-44c8-83e5-dd0cad49dc5b"
 			type="Recording">
+				<databinding>
+					<var
+					dataname="Environment"
+					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
+					variableid="17ca3408-2f4e-4402-9ab8-76daf7a287e0"
+					variablename="Environ">
+					</var>
+				</databinding>
 			</testmodule>
 			<testmodule
 			id="36ff11e2-8038-4bff-a181-b581e7588fe8"
@@ -806,6 +814,12 @@ rxversion="8.1">
 					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
 					variableid="2b0a0d62-bfde-418c-b84d-f90b9dd7cc3f"
 					variablename="USPSPostageBalance">
+					</var>
+					<var
+					dataname="Environment"
+					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
+					variableid="d1e2028f-c152-43ca-bea4-f9668b5d3869"
+					variablename="Environ">
 					</var>
 				</databinding>
 			</testmodule>
@@ -1367,7 +1381,7 @@ rxversion="8.1">
 					</param>
 					<param
 					name="Environment"
-					value="Production">
+					value="Staging">
 					</param>
 				</parameters>
 			</testcase>
