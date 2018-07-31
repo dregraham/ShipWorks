@@ -11484,20 +11484,22 @@ CiiigAooooAKKKKACiiigAooooAKKKKACiiigAqlP1uP8/wiiirhuTLYu0UUVBQUUUUAFFFFABRR
 RQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB//9k=
 			</helperscreenshot>
 		</mouseitem>
-		<runapprecorditem
+		<userrecorditem
+		classname="SetupUSPSStamps"
 		enabled="True"
-		maximized="False"
-		optional="False">
+		isexternaltestmethod="False"
+		methodname="SetupUSPSStamps_Run_application"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
 			<comment>
 			</comment>
 			<bindings>
 			</bindings>
-			<filename>
-				TestServers2.cmd
-			</filename>
-			<args>
-			</args>
-		</runapprecorditem>
+			<arguments
+			id="c35d4054-13de-4d07-a84e-6fbca2b57979">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"

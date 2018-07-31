@@ -225,8 +225,7 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.Close.Click(300);
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Application", "Run application 'TestServers2.cmd' with arguments '' in normal mode.", new RecordItemIndex(30));
-            Host.Local.RunApplication("TestServers2.cmd", "", "", false);
+            SetupUSPSStamps_Run_application();
             Delay.Milliseconds(0);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window

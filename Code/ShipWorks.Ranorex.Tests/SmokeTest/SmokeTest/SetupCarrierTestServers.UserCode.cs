@@ -40,7 +40,7 @@ namespace SmokeTest
         	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             Report.Log(ReportLevel.Info, "Application", "Run TestServers.cmd to change test server settings in registry");
-            Host.Local.RunApplication("TestServers.cmd", "", "", false);
+            Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers.cmd", "", "", false);
         
         }
 

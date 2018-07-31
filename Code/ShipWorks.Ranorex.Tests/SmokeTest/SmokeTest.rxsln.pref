@@ -7,6 +7,6 @@
       <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
     </ArrayOfString>
   </SerializedValue>
-  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[Reports[]BatchFile[]Class[]CheckShipWorksVersion.rxrec[]]]]&#xD;&#xA;Solution SmokeTest&#xD;&#xA;Solution SmokeTest" />
+  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[Reports[]BatchFile[]Class[]CheckShipWorksVersion.rxrec[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\SetupUSPSStamps.rxrec&#xD;&#xA;Solution SmokeTest\SmokeTest\ProcessUSPSExpress1EndiciaPriority.rxrec" />
   <StartupProject value="{953B7E7C-91CC-440C-98A0-2F164A8E2CF0}" />
 </Properties>

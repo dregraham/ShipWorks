@@ -77,6 +77,15 @@ namespace SmokeTest
         		   Report.Log(ReportLevel.Info, "Get Value", "The USPS Postage is currently greater than $9,000");
         		}
         	}
+
+        public void SetupUSPSStamps_Run_application()
+        {
+        	
+        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
+        	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            Report.Log(ReportLevel.Info, "Application", "Run TestServers2.cmd to change test server settings in registry");
+            Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers2.cmd", "", "", false);
+        }
        
     }
  

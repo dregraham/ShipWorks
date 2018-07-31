@@ -1,6 +1,18 @@
 ﻿<Properties>
+  <Array name="active">
+    <Element value="SetupUSPSStamps.UserCode.cs" />
+  </Array>
   <Array name="bookmarks" />
-  <Array name="files" />
+  <Array name="files">
+    <Element value="SetupUSPSStamps.UserCode.cs" />
+    <Element value="SetupCarrierTestServers.UserCode.cs" />
+    <Element value="SmokeTest.rxtst" />
+    <Element value="diffpdfcCommands.rxrec" />
+    <Element value="diffpdfcCommands.UserCode.cs" />
+    <Element value="SetupCarrierTestServers.rxrec" />
+    <Element value="SetupUPS.rxrec" />
+    <Element value="SetupUSPSStamps.rxrec" />
+  </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
       <runOnBuild value="False" />
