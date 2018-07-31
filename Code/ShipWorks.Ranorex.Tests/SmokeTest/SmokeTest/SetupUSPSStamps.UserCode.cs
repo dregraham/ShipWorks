@@ -83,8 +83,47 @@ namespace SmokeTest
         	
         	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        	if Environ="Production"
+        	{
+        		;
+        	}
             Report.Log(ReportLevel.Info, "Application", "Run TestServers2.cmd to change test server settings in registry");
             Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers2.cmd", "", "", false);
+        }
+
+        public void Key_sequence_Username(RepoItemInfo textInfo)
+        {
+        	
+        	if Environ = "Production"
+        	{            
+        	Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}apptiveBrian' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}apptiveBrian");
+        	}
+        	
+
+            else
+            {
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}interapptive' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}interapptive");
+            }
+        }
+
+        public void Key_sequence_Password(RepoItemInfo textInfo)
+        {
+        	
+        	if Environ = "Production"
+        	{            
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}stamps7458");
+        	}
+        	
+
+            else
+            {
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}password1");
+            }
+
         }
        
     }

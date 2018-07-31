@@ -41,6 +41,7 @@ namespace SmokeTest
         /// </summary>
         public SetupCarrierTestServers()
         {
+            Environ = "";
         }
 
         /// <summary>
@@ -52,6 +53,18 @@ namespace SmokeTest
         }
 
 #region Variables
+
+        string _Environ;
+
+        /// <summary>
+        /// Gets or sets the value of variable Environ.
+        /// </summary>
+        [TestVariable("17ca3408-2f4e-4402-9ab8-76daf7a287e0")]
+        public string Environ
+        {
+            get { return _Environ; }
+            set { _Environ = value; }
+        }
 
 #endregion
 

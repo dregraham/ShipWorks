@@ -34,7 +34,7 @@ rxversion="8.1">
 		<var
 		id="1683a4b9-e643-4597-af88-1b1ea0cc88cb"
 		name="Environ">
-			Production
+			Staging
 		</var>
 	</variables>
 	<recorditems>

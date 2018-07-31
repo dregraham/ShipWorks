@@ -42,7 +42,7 @@ namespace SmokeTest
         public SetupDatabase()
         {
             SQLModuleVariable = "";
-            Environ = "Production";
+            Environ = "Staging";
         }
 
         /// <summary>

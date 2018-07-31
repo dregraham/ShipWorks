@@ -4,14 +4,16 @@
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
+    <Element value="SetupCarrierTestServers.rxrec" />
+    <Element value="SetupDatabase.UserCode.cs" />
+    <Element value="SetupDatabase.rxrec" />
+    <Element value="SetupUSPSStamps.rxrec" />
     <Element value="SetupUSPSStamps.UserCode.cs" />
     <Element value="SetupCarrierTestServers.UserCode.cs" />
     <Element value="SmokeTest.rxtst" />
     <Element value="diffpdfcCommands.rxrec" />
     <Element value="diffpdfcCommands.UserCode.cs" />
-    <Element value="SetupCarrierTestServers.rxrec" />
     <Element value="SetupUPS.rxrec" />
-    <Element value="SetupUSPSStamps.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

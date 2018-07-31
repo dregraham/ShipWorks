@@ -27,6 +27,10 @@ rxversion="8.1">
 	namespace="SmokeTest">
 	</codegen>
 	<variables>
+		<var
+		id="17ca3408-2f4e-4402-9ab8-76daf7a287e0"
+		name="Environ">
+		</var>
 	</variables>
 	<recorditems>
 		<userrecorditem
