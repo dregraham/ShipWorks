@@ -1,4 +1,7 @@
 ﻿<Properties>
+  <Array name="active">
+    <Element value="SetupUSPSStamps.rxrec" />
+  </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SetupUSPSStamps.UserCode.cs" />
