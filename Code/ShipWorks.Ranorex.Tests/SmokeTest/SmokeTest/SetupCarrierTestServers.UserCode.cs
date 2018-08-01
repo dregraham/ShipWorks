@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WinForms = System.Windows.Forms;
+using System.Diagnostics;
 
 using Ranorex;
 using Ranorex.Core;
@@ -43,7 +44,10 @@ namespace SmokeTest
         	
 
             Report.Log(ReportLevel.Info, "Application", "Run TestServers.cmd to change test server settings in registry");
-            Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers.cmd", "", "", false);
+            
+            Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers.reg");
+			regeditProcess.WaitForExit();
+
 
 
         }

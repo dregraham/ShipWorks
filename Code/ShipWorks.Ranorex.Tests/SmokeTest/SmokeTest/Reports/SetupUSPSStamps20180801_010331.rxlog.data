@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<report
+	progress="">
+	<activity
+		result="Success"
+		duration="0ms"
+		durationms="0"
+		type="root"
+		rid="1557c2cac9797f98"
+		totalerrorcount="0"
+		totalwarningcount="1"
+		totalsuccesstestcasecount="0"
+		totalfailedtestcasecount="0"
+		totalblockedtestcasecount="0"
+		childsuccesscount="0"
+		childfailedcount="0"
+		childblockedcount="0"
+		totalsuccesscount="0"
+		totalfailedcount="0"
+		totalblockedcount="0"
+		totalmaintenancemodecount="0"
+		user="jeman"
+		rxversion="8.1.1.0"
+		host="JEMAN-PC"
+		osversion="Windows 10 64bit"
+		runtimeversion="4.0.30319.42000"
+		procarch="32bit"
+		oslanguage="en-US"
+		dtnlanguage="en-US"
+		screenresolution="5760x1080"
+		timestamp="8/1/2018 1:03:37 AM"
+		timestampiso="2018-08-01T06:03:37"
+		endtime="8/1/2018 1:03:39 AM"
+		timeoutfactor="1"
+		module="SetupUSPSStamps">
+		<detail>
+			SetupUSPSStamps
+		</detail>
+		<varbindings>
+		</varbindings>
+		<item
+			timeRelativeToTestSuiteStartTime="00:01.892"
+			timeRelativeToTestModuleStartTime="00:01.893"
+			timeWallClock="01:03:39"
+			time="00:01.892"
+			level="Warn"
+			category="Data">
+			<message>
+				The following module variables are not bound to a data column:<br/>USPSPostageBalance, Environ
+			</message>
+			<metainfo
+				loglvl="Warn">
+			</metainfo>
+		</item>
+		<item
+			timeRelativeToTestSuiteStartTime="00:01.937"
+			timeRelativeToTestModuleStartTime="00:01.938"
+			timeWallClock="01:03:39"
+			time="00:01.937"
+			level="Info"
+			category="Application">
+			<message>
+				Run TestServers2.cmd to change test server settings in registry
+			</message>
+			<metainfo
+				codefile="C:\Users\jeman.INTERAPPTIVE\Documents\Shipworks3x\Code\ShipWorks.Ranorex.Tests\SmokeTest\SmokeTest\SetupUSPSStamps.UserCode.cs"
+				codeline="142"
+				loglvl="Info">
+			</metainfo>
+		</item>
+	</activity>
+</report>
