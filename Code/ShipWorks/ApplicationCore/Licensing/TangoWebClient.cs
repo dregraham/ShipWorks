@@ -1144,7 +1144,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Get the url
-            string tangoUrl = string.Format("https://www.interapptive.com/{0}/shipworks.php", UseTestServer ? "tango_private" : "account");
+            string tangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
 
             // Set the uri
             postRequest.Uri = new Uri(tangoUrl);
@@ -1163,6 +1163,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
+                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
             };
 
             try
