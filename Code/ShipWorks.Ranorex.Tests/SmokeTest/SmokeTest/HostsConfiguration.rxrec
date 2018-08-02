@@ -29,6 +29,22 @@ rxversion="8.1">
 	<variables>
 	</variables>
 	<recorditems>
+		<userrecorditem
+		classname="HostsConfiguration"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="CopyCorrectHosts"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="e44aab18-32f2-4ded-ba7c-13e872301f55">
+			</arguments>
+		</userrecorditem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"

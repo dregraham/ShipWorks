@@ -79,6 +79,9 @@ namespace SmokeTest
 
             Init();
 
+            CopyCorrectHosts();
+            Delay.Milliseconds(0);
+            
         }
 
 #region Image Feature Data

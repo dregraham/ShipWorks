@@ -48,7 +48,7 @@ namespace PerformanceTesting
             Delay.SpeedFactor = 1.0;
             
             File.Copy("C:\\Windows\\System32\\drivers\\etc\\hosts","C:\\Windows\\System32\\drivers\\etc\\hosts.backup",true);           
-            File.Copy("hostswiremock","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
+            //File.Copy("hostswiremock","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
         }
     }
 }

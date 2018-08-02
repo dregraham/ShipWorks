@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Threading;
+using System.IO;
 using WinForms = System.Windows.Forms;
 
 using Ranorex;
@@ -31,6 +32,11 @@ namespace SmokeTest
         private void Init()
         {
             // Your recording specific initialization code goes here.
+        }
+
+        public void ResetHosts()
+        {
+        	File.Copy("C:\\Windows\\System32\\drivers\\etc\\hosts.backup","C:\\Windows\\System32\\drivers\\etc\\hosts",true);  
         }
 
     }

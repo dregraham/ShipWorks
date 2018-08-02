@@ -19,7 +19,7 @@ using Ranorex;
 using Ranorex.Core;
 using Ranorex.Core.Testing;
 
-namespace PerformanceTesting
+namespace SmokeTest
 {
     /// <summary>
     /// Description of CopyStagingHosts.
@@ -43,10 +43,11 @@ namespace PerformanceTesting
         /// that will in turn invoke this method.</remarks>
         void ITestModule.Run()
         {
+        	
             Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.0;
-            File.Copy("hostsstaging","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
+            File.Copy(@"\\intfs01\Development\Testing\hostsstaging","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
         }
     }
 }

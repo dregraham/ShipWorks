@@ -29,6 +29,22 @@ rxversion="8.1">
 	<variables>
 	</variables>
 	<recorditems>
+		<userrecorditem
+		classname="ResetHostsFile"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="ResetHosts"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="ced21388-7909-4e47-88f5-b0cd86cc8734">
+			</arguments>
+		</userrecorditem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
