@@ -43,7 +43,7 @@ namespace SmokeTest
         	
         	
 
-            Report.Log(ReportLevel.Info, "Application", "Run TestServers.cmd to change test server settings in registry");
+            Report.Log(ReportLevel.Info, "Application", "Run command to change USPS test server setting in registry to production");
             
             Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers.reg");
 			regeditProcess.WaitForExit();

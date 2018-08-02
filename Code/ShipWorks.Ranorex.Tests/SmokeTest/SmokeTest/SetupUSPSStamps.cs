@@ -238,13 +238,13 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.Close.Click(300);
             Delay.Milliseconds(200);
             
-            // Move to the Setup button in the USPS section of the Shipping Settings window
-            Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(30));
-            repo.MainForm.Manage.MoveTo(300);
-            Delay.Milliseconds(200);
-            
             SelectTestServer();
             Delay.Milliseconds(0);
+            
+            // Move to the Setup button in the USPS section of the Shipping Settings window
+            Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(31));
+            repo.MainForm.Manage.MoveTo(300);
+            Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(32));
             repo.MainForm.Manage.Click(300);
