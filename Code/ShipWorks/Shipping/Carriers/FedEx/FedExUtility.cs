@@ -481,34 +481,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool CanDeliverOnSaturday(FedExServiceType serviceType, DateTime shipDate)
         {
-            if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight || serviceType == FedExServiceType.FirstFreight ||
-                 serviceType == FedExServiceType.OneRatePriorityOvernight)
-                && shipDate.DayOfWeek == DayOfWeek.Friday)
+            List<FedExServiceType> eligibleOneDayServices = new List<FedExServiceType>
+            {
+                FedExServiceType.PriorityOvernight,
+                FedExServiceType.FedEx1DayFreight,
+                FedExServiceType.FirstFreight,
+                FedExServiceType.OneRatePriorityOvernight,
+                FedExServiceType.FedExNextDayAfternoon,
+                FedExServiceType.FedExNextDayEarlyMorning,
+                FedExServiceType.FedExNextDayMidMorning,
+                FedExServiceType.FedExNextDayEndOfDay,
+                FedExServiceType.FedExNextDayFreight
+            };
+            
+            List<FedExServiceType> eligibleTwoDayServices = new List<FedExServiceType>
+            {
+                FedExServiceType.FedEx2Day,
+                FedExServiceType.FedEx2DayAM,
+                FedExServiceType.FedEx2DayFreight, 
+                FedExServiceType.OneRate2Day,
+                FedExServiceType.OneRate2DayAM
+            };
+            
+            if (eligibleOneDayServices.Contains(serviceType) && shipDate.DayOfWeek == DayOfWeek.Friday)
             {
                 return true;
             }
 
-            if ((serviceType == FedExServiceType.FedEx2Day || serviceType == FedExServiceType.FedEx2DayAM || serviceType == FedExServiceType.FedEx2DayFreight || 
-                 serviceType == FedExServiceType.OneRate2Day || serviceType ==  FedExServiceType.OneRate2DayAM)
-                && shipDate.DayOfWeek == DayOfWeek.Thursday)
+            if (eligibleTwoDayServices.Contains(serviceType) && shipDate.DayOfWeek == DayOfWeek.Thursday)
             {
                 return true;
             }
-
+            
             if (serviceType == FedExServiceType.InternationalPriority &&
                 (shipDate.DayOfWeek == DayOfWeek.Wednesday || shipDate.DayOfWeek == DayOfWeek.Thursday || shipDate.DayOfWeek == DayOfWeek.Friday))
             {
                 return true;
             }
 
-            if (serviceType == FedExServiceType.FedExNextDayAfternoon ||
-                serviceType == FedExServiceType.FedExNextDayEarlyMorning ||
-                serviceType == FedExServiceType.FedExNextDayMidMorning ||
-                serviceType == FedExServiceType.FedExNextDayEndOfDay ||
-                serviceType == FedExServiceType.FedExNextDayFreight && shipDate.DayOfWeek == DayOfWeek.Friday)
-            {
-                return true;
-            }
             return false;
         }
 

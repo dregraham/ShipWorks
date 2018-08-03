@@ -266,6 +266,138 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         public void IsFreightLtlService_ReturnsFalse_ForInvalidValues(FedExServiceType? value) =>
             Assert.False(FedExUtility.IsFreightLtlService(value));
 
+        [Theory]
+        [InlineData(FedExServiceType.PriorityOvernight)]
+        [InlineData(FedExServiceType.FedEx1DayFreight)]
+        [InlineData(FedExServiceType.FirstFreight)]
+        [InlineData(FedExServiceType.OneRatePriorityOvernight)]
+        [InlineData(FedExServiceType.FedExNextDayAfternoon)]
+        [InlineData(FedExServiceType.FedExNextDayEarlyMorning)]
+        [InlineData(FedExServiceType.FedExNextDayMidMorning)]
+        [InlineData(FedExServiceType.FedExNextDayEndOfDay)]
+        [InlineData(FedExServiceType.FedExNextDayFreight)]
+        public void CanDeliverOnSaturday_ReturnsTrueForEligible1DayService_WhenDayIsFriday(FedExServiceType serviceType)
+        {
+            // Can't set day of week directly, so picked a friday date
+            Assert.True(FedExUtility.CanDeliverOnSaturday(serviceType, new DateTime(2018, 7, 27)));
+        }
+        
+        [Theory]
+        [InlineData(FedExServiceType.PriorityOvernight)]
+        [InlineData(FedExServiceType.FedEx1DayFreight)]
+        [InlineData(FedExServiceType.FirstFreight)]
+        [InlineData(FedExServiceType.OneRatePriorityOvernight)]
+        [InlineData(FedExServiceType.FedExNextDayAfternoon)]
+        [InlineData(FedExServiceType.FedExNextDayEarlyMorning)]
+        [InlineData(FedExServiceType.FedExNextDayMidMorning)]
+        [InlineData(FedExServiceType.FedExNextDayEndOfDay)]
+        [InlineData(FedExServiceType.FedExNextDayFreight)]
+        public void CanDeliverOnSaturday_ReturnsFalseForEligible1DayService_WhenDayIsNotFriday(FedExServiceType serviceType)
+        {
+            List<DateTime> nonFridayDays = new List<DateTime>
+            {
+                new DateTime(2018, 7, 22),
+                new DateTime(2018, 7, 23),
+                new DateTime(2018, 7, 24),
+                new DateTime(2018, 7, 25),
+                new DateTime(2018, 7, 26),
+                new DateTime(2018, 7, 28)
+            };
+
+            bool result = false;
+            
+            foreach (DateTime day in nonFridayDays)
+            {
+                result = result || FedExUtility.CanDeliverOnSaturday(serviceType, day);
+            }
+            
+            Assert.False(result);
+        }
+        
+        [Theory]
+        [InlineData(FedExServiceType.FedEx2Day)]
+        [InlineData(FedExServiceType.FedEx2DayAM)]
+        [InlineData(FedExServiceType.FedEx2DayFreight)]
+        [InlineData(FedExServiceType.OneRate2Day)]
+        [InlineData(FedExServiceType.OneRate2DayAM)]
+        public void CanDeliverOnSaturday_ReturnsTrueForEligible2DayService_WhenDayIsThursday(FedExServiceType serviceType)
+        {
+            // Can't set day of week directly, so picked a friday date
+            Assert.True(FedExUtility.CanDeliverOnSaturday(serviceType, new DateTime(2018, 7, 26)));
+        }
+        
+        [Theory]
+        [InlineData(FedExServiceType.FedEx2Day)]
+        [InlineData(FedExServiceType.FedEx2DayAM)]
+        [InlineData(FedExServiceType.FedEx2DayFreight)]
+        [InlineData(FedExServiceType.OneRate2Day)]
+        [InlineData(FedExServiceType.OneRate2DayAM)]
+        public void CanDeliverOnSaturday_ReturnsFalseForEligible2DayService_WhenDayIsNotThursday(FedExServiceType serviceType)
+        {
+            List<DateTime> nonThursdayDays = new List<DateTime>
+            {
+                new DateTime(2018, 7, 22),
+                new DateTime(2018, 7, 23),
+                new DateTime(2018, 7, 24),
+                new DateTime(2018, 7, 25),
+                new DateTime(2018, 7, 27),
+                new DateTime(2018, 7, 28)
+            };
+
+            bool result = false;
+            
+            foreach (DateTime day in nonThursdayDays)
+            {
+                result = result || FedExUtility.CanDeliverOnSaturday(serviceType, day);
+            }
+            
+            Assert.False(result);
+        }
+        
+        [Theory]
+        [InlineData(FedExServiceType.InternationalPriority)]
+        public void CanDeliverOnSaturday_ReturnsTrueForEligibleInternationalServices_WhenDayIsWednesdayThursdayOrFriday(FedExServiceType serviceType)
+        {
+            List<DateTime> nonFridayDays = new List<DateTime>
+            {
+                new DateTime(2018, 7, 25),
+                new DateTime(2018, 7, 26),
+                new DateTime(2018, 7, 27)
+            };
+
+            bool result = true;
+            
+            foreach (DateTime day in nonFridayDays)
+            {
+                result = result && FedExUtility.CanDeliverOnSaturday(serviceType, day);
+            }
+            
+            Assert.True(result);
+        }
+        
+        [Theory]
+        [InlineData(FedExServiceType.InternationalPriority)]
+        public void CanDeliverOnSaturday_ReturnsFalseForEligibleInternationalServices_WhenDayIsNotWednesdayThursdayOrFriday(FedExServiceType serviceType)
+        {
+            List<DateTime> nonFridayDays = new List<DateTime>
+            {
+                new DateTime(2018, 7, 22),
+                new DateTime(2018, 7, 23),
+                new DateTime(2018, 7, 24),
+                new DateTime(2018, 7, 28)
+            };
+
+            bool result = false;
+            
+            foreach (DateTime day in nonFridayDays)
+            {
+                result = result || FedExUtility.CanDeliverOnSaturday(serviceType, day);
+            }
+            
+            Assert.False(result);
+        }
+        
+
         /// <summary>
         /// Get all services
         /// </summary>
