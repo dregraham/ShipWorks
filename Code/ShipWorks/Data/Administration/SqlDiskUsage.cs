@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -21,9 +23,21 @@ namespace ShipWorks.Data.Administration
                         EntityType.AuditChangeDetailEntity
                     };
 
-        static List<EntityType> resourceList = new List<EntityType>
+        static List<EntityType> downloadList = new List<EntityType>
                     {
-                        EntityType.ResourceEntity
+                        EntityType.DownloadDetailEntity,
+                        EntityType.DownloadEntity
+                    };
+
+        static List<EntityType> emailList = new List<EntityType>
+                    {
+                        EntityType.EmailOutboundEntity,
+                        EntityType.EmailOutboundRelationEntity
+                    };
+
+        static List<EntityType> printList = new List<EntityType>
+                    {
+                        EntityType.PrintResultEntity
                     };
 
         // We're getting the list of order related tables dynamically so that we don't have to remember to add
@@ -35,52 +49,7 @@ namespace ShipWorks.Data.Administration
                 .ToList());
 
         private static List<EntityType> shipSenseList = new List<EntityType> { EntityType.ShipSenseKnowledgebaseEntity };
-
-        /// <summary>
-        /// Indicates how much space the order/order item tables use
-        /// </summary>
-        public static long OrdersUsage => GetTableSpaceUsed(orderList);
-
-        /// <summary>
-        /// Indicates how much space the audit logs take
-        /// </summary>
-        public static long AuditUsage
-        {
-            get { return GetTableSpaceUsed(auditList); }
-        }
-
-        /// <summary>
-        /// Indicates how much space resources take
-        /// </summary>
-        public static long ResourceUsage
-        {
-            get { return GetTableSpaceUsed(resourceList); }
-        }
-
-        /// <summary>
-        /// Indicates how much space ShipSense takes
-        /// </summary>
-        public static long ShipSenseUsage
-        {
-            get { return GetTableSpaceUsed(shipSenseList); }
-        }
-
-        /// <summary>
-        /// Indicates the total space used by the database
-        /// </summary>
-        public static long TotalUsage
-        {
-            get { return GetDatabaseSpaceUsed(); }
-        }
-
-        /// <summary>
-        /// Indicates the remaining space used by the database
-        /// </summary>
-        public static long OtherUsage
-        {
-            get { return TotalUsage - OrdersUsage - AuditUsage - ResourceUsage - ShipSenseUsage; }
-        }
-
+        
         /// <summary>
         /// Indicates the amount of space remaining in the database.  -1 if there is no limit.
         /// </summary>
@@ -92,7 +61,7 @@ namespace ShipWorks.Data.Administration
 
                 if (gbLimit > 0)
                 {
-                    return (gbLimit * 1073741824L) - TotalUsage;
+                    return (gbLimit * 1073741824L) - GetDatabaseSpaceUsed();
                 }
                 else
                 {
@@ -161,6 +130,45 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Indicates the remaining space used by the database
+        /// </summary>
+        public async static Task<long> GetOtherUsage()
+        {
+            return GetDatabaseSpaceUsed()
+                - await GetOrdersUsage() 
+                - await GetAuditUsage() 
+                - await GetResourceEmailData() 
+                - await GetResourcePrintResultData() 
+                - await GetResourceLabelData() 
+                - await GetShipSenseUsage() 
+                - await GetDownloadUsage();
+        }
+
+        /// <summary>
+        /// Indicates how much space the order/order item tables use
+        /// </summary>
+        public async static Task<long> GetOrdersUsage() => 
+            await GetTableSpaceUsed(orderList);
+
+        /// <summary>
+        /// Indicates how much space the download download details tables use
+        /// </summary>
+        public async static Task<long> GetDownloadUsage() => 
+            await GetTableSpaceUsed(downloadList);
+
+        /// <summary>
+        /// Indicates how much space the audit logs take
+        /// </summary>
+        public async static Task<long> GetAuditUsage() =>
+            await GetTableSpaceUsed(auditList);
+
+        /// <summary>
+        /// Indicates how much space ShipSense takes
+        /// </summary>
+        public async static Task<long> GetShipSenseUsage() =>
+            await GetTableSpaceUsed(shipSenseList); 
+
+        /// <summary>
         /// Get the total space used by the database
         /// </summary>
         public static long GetDatabaseSpaceUsed(string databaseName = "")
@@ -188,13 +196,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the space used by the given list of entities.
         /// </summary>
-        private static long GetTableSpaceUsed(Lazy<List<EntityType>> entityList) =>
-            GetTableSpaceUsed(entityList.Value);
+        private async static Task<long> GetTableSpaceUsed(Lazy<List<EntityType>> entityList) =>
+            await GetTableSpaceUsed(entityList.Value);
 
         /// <summary>
         /// Get the space used by the given list of entities.
         /// </summary>
-        private static long GetTableSpaceUsed(List<EntityType> entityList)
+        private async static Task<long> GetTableSpaceUsed(List<EntityType> entityList)
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
@@ -205,9 +213,9 @@ namespace ShipWorks.Data.Administration
                     DbCommand cmd = DbCommandProvider.Create(con);
                     cmd.CommandText = string.Format("EXEC sp_spaceused '{0}'", table);
 
-                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
+                    using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
                     {
-                        reader.Read();
+                        await reader.ReadAsync();
 
                         total += 1024L * Convert.ToInt64(reader["reserved"].ToString().Split(' ')[0]);
                     }
@@ -215,6 +223,103 @@ namespace ShipWorks.Data.Administration
 
                 return total;
             }
+        }
+
+        /// <summary>
+        /// Get the amount of email resource data in bytes
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<long> GetResourceEmailData()
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                DbCommand cmd = DbCommandProvider.Create(con);
+                cmd.CommandText = @"SELECT SUM(DATALENGTH(r.data)) as EmailDataInBytes
+                                        FROM Resource r
+                                        INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID
+                                        INNER JOIN EmailOutbound e on e.PlainPartResourceID = o.ObjectReferenceID
+                                            OR e.HtmlPartResourceID = o.ObjectReferenceID";
+
+                using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
+                {
+                    await reader.ReadAsync();
+                    long result = await GetTableSpaceUsed(emailList);
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        result += reader.GetInt64(0);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the amount of print result resource data in bytes
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<long> GetResourcePrintResultData()
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                DbCommand cmd = DbCommandProvider.Create(con);
+                cmd.CommandText = @"SELECT SUM(DATALENGTH(r.data)) as PrintResultDataInBytes
+	                                    FROM Resource r
+	                                    INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID
+	                                    INNER JOIN PrintResult p on p.ContentResourceID = o.ObjectReferenceID";
+
+                using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
+                {
+                    await reader.ReadAsync();
+                    long result = await GetTableSpaceUsed(printList);
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        result += reader.GetInt64(0);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the amount of label resource data in bytes
+        /// </summary>
+        public async static Task<long> GetResourceLabelData()
+        {
+            long result = 0;
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                string baseQuery = @"SELECT SUM(DATALENGTH(r.data)) as LabelData
+                                        FROM Resource r
+                                        INNER JOIN ObjectReference o ON o.ObjectID = r.ResourceID";
+                
+                result += await GetLabelDataSize(con, $"{baseQuery} INNER JOIN UpsPackage up ON up.UpsPackageID = o.ConsumerID");
+                result += await GetLabelDataSize(con, $"{baseQuery} INNER JOIN FedExPackage fp ON fp.FedExPackageID = o.ConsumerID");
+                result += await GetLabelDataSize(con, $"{baseQuery} INNER JOIN iParcelPackage ip ON ip.iParcelPackageID = o.ConsumerID");
+                result += await GetLabelDataSize(con, $"{baseQuery} INNER JOIN DhlExpressPackage dp ON dp.DhlExpressPackageID = o.ConsumerID");
+                result += await GetLabelDataSize(con, $"{baseQuery} INNER JOIN Shipment s ON s.ShipmentID = o.ConsumerID");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Get the label data size from the given query
+        /// </summary>
+        private async static Task<long> GetLabelDataSize(DbConnection con, string query)
+        {
+            DbCommand cmd = DbCommandProvider.Create(con);
+            cmd.CommandText = query;
+
+            using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd))
+            {
+                await reader.ReadAsync();
+                if (!reader.IsDBNull(0))
+                {
+                    return reader.GetInt64(0);
+                }
+            }
+            return 0;
         }
     }
 }

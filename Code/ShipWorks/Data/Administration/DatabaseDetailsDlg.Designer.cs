@@ -33,12 +33,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.usageRemaining = new System.Windows.Forms.Label();
             this.labelUsageRemaining = new System.Windows.Forms.Label();
-            this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.usageTotal = new System.Windows.Forms.Label();
             this.labelUsageTotal = new System.Windows.Forms.Label();
             this.usageAudit = new System.Windows.Forms.Label();
             this.labelUsageAudit = new System.Windows.Forms.Label();
-            this.usageResources = new System.Windows.Forms.Label();
+            this.usageEmail = new System.Windows.Forms.Label();
             this.labelUsageResources = new System.Windows.Forms.Label();
             this.usageOrders = new System.Windows.Forms.Label();
             this.labelUsageOrders = new System.Windows.Forms.Label();
@@ -51,22 +50,29 @@
             this.labelRemoteConnections = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.linkEnableRemoteConnections = new System.Windows.Forms.LinkLabel();
-            this.infotipSizeRemaining = new ShipWorks.UI.Controls.InfoTip();
-            this.sectionActiveConnection = new ShipWorks.UI.Controls.SectionTitle();
-            this.sectionDiskUsage = new ShipWorks.UI.Controls.SectionTitle();
             this.configureDatabase = new System.Windows.Forms.Button();
-            this.sectionConfiguration = new ShipWorks.UI.Controls.SectionTitle();
             this.usageOther = new System.Windows.Forms.Label();
             this.labelUsageOther = new System.Windows.Forms.Label();
             this.usageShipSense = new System.Windows.Forms.Label();
             this.labelShipSenseUsage = new System.Windows.Forms.Label();
+            this.usagePrintJob = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.usageLabel = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.usageDownloadDetails = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.sectionConfiguration = new ShipWorks.UI.Controls.SectionTitle();
+            this.sectionDiskUsage = new ShipWorks.UI.Controls.SectionTitle();
+            this.sectionActiveConnection = new ShipWorks.UI.Controls.SectionTitle();
+            this.infotipSizeRemaining = new ShipWorks.UI.Controls.InfoTip();
             this.SuspendLayout();
             // 
             // close
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.close.Location = new System.Drawing.Point(272, 368);
+            this.close.Location = new System.Drawing.Point(272, 389);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
             this.close.TabIndex = 0;
@@ -94,48 +100,39 @@
             // 
             // usageRemaining
             // 
-            this.usageRemaining.AutoSize = true;
             this.usageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageRemaining.Location = new System.Drawing.Point(124, 369);
+            this.usageRemaining.Location = new System.Drawing.Point(270, 365);
             this.usageRemaining.Name = "usageRemaining";
-            this.usageRemaining.Size = new System.Drawing.Size(41, 13);
+            this.usageRemaining.Size = new System.Drawing.Size(58, 13);
             this.usageRemaining.TabIndex = 82;
             this.usageRemaining.Text = "14 MB";
+            this.usageRemaining.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelUsageRemaining
             // 
             this.labelUsageRemaining.AutoSize = true;
             this.labelUsageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageRemaining.Location = new System.Drawing.Point(48, 369);
+            this.labelUsageRemaining.Location = new System.Drawing.Point(203, 365);
             this.labelUsageRemaining.Name = "labelUsageRemaining";
             this.labelUsageRemaining.Size = new System.Drawing.Size(70, 13);
             this.labelUsageRemaining.TabIndex = 81;
             this.labelUsageRemaining.Text = "Remaining:";
             // 
-            // kryptonBorderEdge
-            // 
-            this.kryptonBorderEdge.AutoSize = false;
-            this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(35, 344);
-            this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(140, 1);
-            this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            // 
             // usageTotal
             // 
-            this.usageTotal.AutoSize = true;
             this.usageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageTotal.Location = new System.Drawing.Point(124, 349);
+            this.usageTotal.Location = new System.Drawing.Point(270, 341);
             this.usageTotal.Name = "usageTotal";
-            this.usageTotal.Size = new System.Drawing.Size(41, 13);
+            this.usageTotal.Size = new System.Drawing.Size(58, 13);
             this.usageTotal.TabIndex = 79;
             this.usageTotal.Text = "14 MB";
+            this.usageTotal.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelUsageTotal
             // 
             this.labelUsageTotal.AutoSize = true;
             this.labelUsageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageTotal.Location = new System.Drawing.Point(79, 349);
+            this.labelUsageTotal.Location = new System.Drawing.Point(234, 341);
             this.labelUsageTotal.Name = "labelUsageTotal";
             this.labelUsageTotal.Size = new System.Drawing.Size(39, 13);
             this.labelUsageTotal.TabIndex = 78;
@@ -143,59 +140,60 @@
             // 
             // usageAudit
             // 
-            this.usageAudit.AutoSize = true;
-            this.usageAudit.Location = new System.Drawing.Point(124, 267);
+            this.usageAudit.Location = new System.Drawing.Point(113, 248);
             this.usageAudit.Name = "usageAudit";
-            this.usageAudit.Size = new System.Drawing.Size(36, 13);
+            this.usageAudit.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.usageAudit.Size = new System.Drawing.Size(58, 13);
             this.usageAudit.TabIndex = 77;
             this.usageAudit.Text = "14 MB";
+            this.usageAudit.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelUsageAudit
             // 
             this.labelUsageAudit.AutoSize = true;
-            this.labelUsageAudit.Location = new System.Drawing.Point(57, 267);
+            this.labelUsageAudit.Location = new System.Drawing.Point(45, 248);
             this.labelUsageAudit.Name = "labelUsageAudit";
-            this.labelUsageAudit.Size = new System.Drawing.Size(61, 13);
+            this.labelUsageAudit.Size = new System.Drawing.Size(73, 13);
             this.labelUsageAudit.TabIndex = 76;
-            this.labelUsageAudit.Text = "Audit Logs:";
+            this.labelUsageAudit.Text = "Audit History:";
             this.labelUsageAudit.UseMnemonic = false;
             // 
-            // usageResources
+            // usageEmail
             // 
-            this.usageResources.AutoSize = true;
-            this.usageResources.Location = new System.Drawing.Point(124, 289);
-            this.usageResources.Name = "usageResources";
-            this.usageResources.Size = new System.Drawing.Size(36, 13);
-            this.usageResources.TabIndex = 75;
-            this.usageResources.Text = "14 MB";
+            this.usageEmail.Location = new System.Drawing.Point(113, 291);
+            this.usageEmail.Name = "usageEmail";
+            this.usageEmail.Size = new System.Drawing.Size(58, 13);
+            this.usageEmail.TabIndex = 75;
+            this.usageEmail.Text = "14 MB";
+            this.usageEmail.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelUsageResources
             // 
             this.labelUsageResources.AutoSize = true;
-            this.labelUsageResources.Location = new System.Drawing.Point(57, 289);
+            this.labelUsageResources.Location = new System.Drawing.Point(78, 291);
             this.labelUsageResources.Name = "labelUsageResources";
-            this.labelUsageResources.Size = new System.Drawing.Size(61, 13);
+            this.labelUsageResources.Size = new System.Drawing.Size(40, 13);
             this.labelUsageResources.TabIndex = 74;
-            this.labelUsageResources.Text = "Resources:";
+            this.labelUsageResources.Text = "Emails:";
             this.labelUsageResources.UseMnemonic = false;
             // 
             // usageOrders
             // 
-            this.usageOrders.AutoSize = true;
-            this.usageOrders.Location = new System.Drawing.Point(124, 246);
+            this.usageOrders.Location = new System.Drawing.Point(113, 313);
             this.usageOrders.Name = "usageOrders";
-            this.usageOrders.Size = new System.Drawing.Size(36, 13);
+            this.usageOrders.Size = new System.Drawing.Size(58, 13);
             this.usageOrders.TabIndex = 73;
             this.usageOrders.Text = "14 MB";
+            this.usageOrders.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelUsageOrders
             // 
             this.labelUsageOrders.AutoSize = true;
-            this.labelUsageOrders.Location = new System.Drawing.Point(53, 246);
+            this.labelUsageOrders.Location = new System.Drawing.Point(74, 313);
             this.labelUsageOrders.Name = "labelUsageOrders";
-            this.labelUsageOrders.Size = new System.Drawing.Size(65, 13);
+            this.labelUsageOrders.Size = new System.Drawing.Size(44, 13);
             this.labelUsageOrders.TabIndex = 72;
-            this.labelUsageOrders.Text = "Order Data:";
+            this.labelUsageOrders.Text = "Orders:";
             // 
             // labelDatabase
             // 
@@ -284,36 +282,6 @@
             this.linkEnableRemoteConnections.Text = "(Enable support)";
             this.linkEnableRemoteConnections.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnEnableRemoteConnections);
             // 
-            // infotipSizeRemaining
-            // 
-            this.infotipSizeRemaining.Caption = "SQL Server Express has a {0} GB size limit.  \r\n\r\nThere is no limit for paid editi" +
-    "ons of SQL Server.";
-            this.infotipSizeRemaining.Location = new System.Drawing.Point(169, 370);
-            this.infotipSizeRemaining.Name = "infotipSizeRemaining";
-            this.infotipSizeRemaining.Size = new System.Drawing.Size(12, 12);
-            this.infotipSizeRemaining.TabIndex = 83;
-            this.infotipSizeRemaining.Title = "Remaining Size";
-            // 
-            // sectionActiveConnection
-            // 
-            this.sectionActiveConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionActiveConnection.Location = new System.Drawing.Point(13, 11);
-            this.sectionActiveConnection.Name = "sectionActiveConnection";
-            this.sectionActiveConnection.Size = new System.Drawing.Size(333, 22);
-            this.sectionActiveConnection.TabIndex = 93;
-            this.sectionActiveConnection.Text = "Active Connection";
-            // 
-            // sectionDiskUsage
-            // 
-            this.sectionDiskUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionDiskUsage.Location = new System.Drawing.Point(13, 219);
-            this.sectionDiskUsage.Name = "sectionDiskUsage";
-            this.sectionDiskUsage.Size = new System.Drawing.Size(333, 22);
-            this.sectionDiskUsage.TabIndex = 94;
-            this.sectionDiskUsage.Text = "Disk Usage";
-            // 
             // configureDatabase
             // 
             this.configureDatabase.Location = new System.Drawing.Point(46, 178);
@@ -323,6 +291,110 @@
             this.configureDatabase.Text = "Configure Database...";
             this.configureDatabase.UseVisualStyleBackColor = true;
             this.configureDatabase.Click += new System.EventHandler(this.OnConfigureDatabase);
+            // 
+            // usageOther
+            // 
+            this.usageOther.Location = new System.Drawing.Point(270, 313);
+            this.usageOther.Name = "usageOther";
+            this.usageOther.Size = new System.Drawing.Size(58, 13);
+            this.usageOther.TabIndex = 98;
+            this.usageOther.Text = "14 MB";
+            this.usageOther.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelUsageOther
+            // 
+            this.labelUsageOther.AutoSize = true;
+            this.labelUsageOther.Location = new System.Drawing.Point(235, 313);
+            this.labelUsageOther.Name = "labelUsageOther";
+            this.labelUsageOther.Size = new System.Drawing.Size(39, 13);
+            this.labelUsageOther.TabIndex = 97;
+            this.labelUsageOther.Text = "Other:";
+            this.labelUsageOther.UseMnemonic = false;
+            // 
+            // usageShipSense
+            // 
+            this.usageShipSense.Location = new System.Drawing.Point(270, 291);
+            this.usageShipSense.Name = "usageShipSense";
+            this.usageShipSense.Size = new System.Drawing.Size(58, 13);
+            this.usageShipSense.TabIndex = 101;
+            this.usageShipSense.Text = "14 MB";
+            this.usageShipSense.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelShipSenseUsage
+            // 
+            this.labelShipSenseUsage.AutoSize = true;
+            this.labelShipSenseUsage.Location = new System.Drawing.Point(214, 291);
+            this.labelShipSenseUsage.Name = "labelShipSenseUsage";
+            this.labelShipSenseUsage.Size = new System.Drawing.Size(60, 13);
+            this.labelShipSenseUsage.TabIndex = 100;
+            this.labelShipSenseUsage.Text = "ShipSense:";
+            this.labelShipSenseUsage.UseMnemonic = false;
+            // 
+            // usagePrintJob
+            // 
+            this.usagePrintJob.Location = new System.Drawing.Point(270, 248);
+            this.usagePrintJob.Name = "usagePrintJob";
+            this.usagePrintJob.Size = new System.Drawing.Size(58, 13);
+            this.usagePrintJob.TabIndex = 104;
+            this.usagePrintJob.Text = "14 MB";
+            this.usagePrintJob.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(216, 248);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 13);
+            this.label7.TabIndex = 103;
+            this.label7.Text = "Print Jobs:";
+            this.label7.UseMnemonic = false;
+            // 
+            // usageLabel
+            // 
+            this.usageLabel.Location = new System.Drawing.Point(270, 269);
+            this.usageLabel.Name = "usageLabel";
+            this.usageLabel.Size = new System.Drawing.Size(58, 13);
+            this.usageLabel.TabIndex = 106;
+            this.usageLabel.Text = "14 MB";
+            this.usageLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(190, 269);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 13);
+            this.label10.TabIndex = 105;
+            this.label10.Text = "Shipping Labels:";
+            this.label10.UseMnemonic = false;
+            // 
+            // usageDownloadDetails
+            // 
+            this.usageDownloadDetails.Location = new System.Drawing.Point(113, 269);
+            this.usageDownloadDetails.Name = "usageDownloadDetails";
+            this.usageDownloadDetails.Size = new System.Drawing.Size(58, 13);
+            this.usageDownloadDetails.TabIndex = 109;
+            this.usageDownloadDetails.Text = "14 MB";
+            this.usageDownloadDetails.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(23, 269);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(95, 13);
+            this.label9.TabIndex = 108;
+            this.label9.Text = "Download History:";
+            this.label9.UseMnemonic = false;
+            // 
+            // kryptonBorderEdge
+            // 
+            this.kryptonBorderEdge.AutoSize = false;
+            this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(15, 330);
+            this.kryptonBorderEdge.Name = "kryptonBorderEdge";
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(320, 1);
+            this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // sectionConfiguration
             // 
@@ -334,43 +406,35 @@
             this.sectionConfiguration.TabIndex = 96;
             this.sectionConfiguration.Text = "Configuration";
             // 
-            // usageOther
+            // sectionDiskUsage
             // 
-            this.usageOther.AutoSize = true;
-            this.usageOther.Location = new System.Drawing.Point(124, 329);
-            this.usageOther.Name = "usageOther";
-            this.usageOther.Size = new System.Drawing.Size(36, 13);
-            this.usageOther.TabIndex = 98;
-            this.usageOther.Text = "14 MB";
+            this.sectionDiskUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionDiskUsage.Location = new System.Drawing.Point(13, 219);
+            this.sectionDiskUsage.Name = "sectionDiskUsage";
+            this.sectionDiskUsage.Size = new System.Drawing.Size(333, 22);
+            this.sectionDiskUsage.TabIndex = 94;
+            this.sectionDiskUsage.Text = "Disk Usage";
             // 
-            // labelUsageOther
+            // sectionActiveConnection
             // 
-            this.labelUsageOther.AutoSize = true;
-            this.labelUsageOther.Location = new System.Drawing.Point(79, 329);
-            this.labelUsageOther.Name = "labelUsageOther";
-            this.labelUsageOther.Size = new System.Drawing.Size(39, 13);
-            this.labelUsageOther.TabIndex = 97;
-            this.labelUsageOther.Text = "Other:";
-            this.labelUsageOther.UseMnemonic = false;
+            this.sectionActiveConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionActiveConnection.Location = new System.Drawing.Point(13, 11);
+            this.sectionActiveConnection.Name = "sectionActiveConnection";
+            this.sectionActiveConnection.Size = new System.Drawing.Size(333, 22);
+            this.sectionActiveConnection.TabIndex = 93;
+            this.sectionActiveConnection.Text = "Active Connection";
             // 
-            // usageShipSense
+            // infotipSizeRemaining
             // 
-            this.usageShipSense.AutoSize = true;
-            this.usageShipSense.Location = new System.Drawing.Point(124, 309);
-            this.usageShipSense.Name = "usageShipSense";
-            this.usageShipSense.Size = new System.Drawing.Size(36, 13);
-            this.usageShipSense.TabIndex = 101;
-            this.usageShipSense.Text = "14 MB";
-            // 
-            // labelShipSenseUsage
-            // 
-            this.labelShipSenseUsage.AutoSize = true;
-            this.labelShipSenseUsage.Location = new System.Drawing.Point(57, 309);
-            this.labelShipSenseUsage.Name = "labelShipSenseUsage";
-            this.labelShipSenseUsage.Size = new System.Drawing.Size(60, 13);
-            this.labelShipSenseUsage.TabIndex = 100;
-            this.labelShipSenseUsage.Text = "ShipSense:";
-            this.labelShipSenseUsage.UseMnemonic = false;
+            this.infotipSizeRemaining.Caption = "SQL Server Express has a {0} GB size limit.  \r\n\r\nThere is no limit for paid editi" +
+    "ons of SQL Server.";
+            this.infotipSizeRemaining.Location = new System.Drawing.Point(326, 366);
+            this.infotipSizeRemaining.Name = "infotipSizeRemaining";
+            this.infotipSizeRemaining.Size = new System.Drawing.Size(12, 12);
+            this.infotipSizeRemaining.TabIndex = 83;
+            this.infotipSizeRemaining.Title = "Remaining Size";
             // 
             // DatabaseDetailsDlg
             // 
@@ -378,7 +442,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.close;
-            this.ClientSize = new System.Drawing.Size(359, 403);
+            this.ClientSize = new System.Drawing.Size(359, 424);
+            this.Controls.Add(this.usageDownloadDetails);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.usageLabel);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.usagePrintJob);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.usageShipSense);
             this.Controls.Add(this.labelShipSenseUsage);
             this.Controls.Add(this.usageOther);
@@ -404,7 +474,7 @@
             this.Controls.Add(this.labelUsageTotal);
             this.Controls.Add(this.usageAudit);
             this.Controls.Add(this.labelUsageAudit);
-            this.Controls.Add(this.usageResources);
+            this.Controls.Add(this.usageEmail);
             this.Controls.Add(this.labelUsageResources);
             this.Controls.Add(this.usageOrders);
             this.Controls.Add(this.labelUsageOrders);
@@ -434,12 +504,11 @@
         private UI.Controls.InfoTip infotipSizeRemaining;
         private System.Windows.Forms.Label usageRemaining;
         private System.Windows.Forms.Label labelUsageRemaining;
-        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.Label usageTotal;
         private System.Windows.Forms.Label labelUsageTotal;
         private System.Windows.Forms.Label usageAudit;
         private System.Windows.Forms.Label labelUsageAudit;
-        private System.Windows.Forms.Label usageResources;
+        private System.Windows.Forms.Label usageEmail;
         private System.Windows.Forms.Label labelUsageResources;
         private System.Windows.Forms.Label usageOrders;
         private System.Windows.Forms.Label labelUsageOrders;
@@ -460,5 +529,12 @@
         private System.Windows.Forms.Label labelUsageOther;
         private System.Windows.Forms.Label usageShipSense;
         private System.Windows.Forms.Label labelShipSenseUsage;
+        private System.Windows.Forms.Label usagePrintJob;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label usageLabel;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label usageDownloadDetails;
+        private System.Windows.Forms.Label label9;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
     }
 }
