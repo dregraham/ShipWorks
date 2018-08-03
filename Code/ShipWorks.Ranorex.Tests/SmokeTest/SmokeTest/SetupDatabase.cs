@@ -372,16 +372,24 @@ namespace SmokeTest
             Keyboard.Press("{Tab}{Space}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(65));
-            Delay.Duration(10000, false);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 20s.", new RecordItemIndex(65));
+            Delay.Duration(20000, false);
             
-            // Finish
-            Report.Log(ReportLevel.Info, "Keyboard", "Finish\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(66));
-            Keyboard.Press("{Tab}{Space}");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(66));
+            repo.DatabaseUpdateWizard.Next1.MoveTo();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(67));
-            Delay.Duration(10000, false);
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(67));
+            repo.DatabaseUpdateWizard.Next1.Click();
+            Delay.Milliseconds(0);
+            
+            // Finish
+            //Report.Log(ReportLevel.Info, "Keyboard", "Finish\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(68));
+            //Keyboard.Press("{Tab}{Space}");
+            //Delay.Milliseconds(0);
+            
+            //Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(69));
+            //Delay.Duration(10000, false);
             
         }
 
