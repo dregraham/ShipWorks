@@ -184,7 +184,7 @@
     <Compile Include="Tasks\Common\PurgeDatabaseTask_PrintResultsTest.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_LabelsTest.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_Email_Test.cs" />
-    <Compile Include="Tasks\Common\PurgeDatabaseTaskTest.cs" />
+    <Compile Include="Tasks\Common\PurgeDatabaseTask_OrdersTest.cs" />
     <Compile Include="Tasks\Common\PurgeTableData.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_Downloads_Test.cs" />
   </ItemGroup>
