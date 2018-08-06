@@ -181,6 +181,7 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyDownloaderTest.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartRestDownloaderTest.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_AbandonedResources_Test.cs" />
+    <Compile Include="Tasks\Common\PurgeDatabaseTask_Audits_Test.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_PrintResultsTest.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_LabelsTest.cs" />
     <Compile Include="Tasks\Common\PurgeDatabaseTask_Email_Test.cs" />
