@@ -25722,7 +25722,7 @@ av8AbYUbPsm3HHmbt2PfHGa1FAVQqgAAYAHaloFuf//Z
 			</helperscreenshot>
 		</mouseitem>
 		<keysequenceitem
-		KeySequence="{Tab}{Tab}{Tab}{Tab}"
+		KeySequence="{Tab}{Tab}{Tab}{Tab}{Down}"
 		duration="100ms"
 		enabled="True"
 		optional="False"

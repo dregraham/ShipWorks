@@ -606,8 +606,8 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.USPS1.Click(300);
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}'.", new RecordItemIndex(107));
-            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}");
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}{Down}'.", new RecordItemIndex(107));
+            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}{Down}");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.Remove' at Center.", repo.ShippingSettingsDlg.RemoveInfo, new RecordItemIndex(108));
