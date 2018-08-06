@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     [Trait("Category", "IoCRegistration")]
     public class ShipmentTypeSetupWizardRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public ShipmentTypeSetupWizardRegistrationTest()
         {

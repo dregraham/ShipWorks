@@ -16,16 +16,17 @@ public partial class StoredProcedures
     /// This is done by adding png and gif resources to ShipWorks that say 'This resource has been deleted'
     /// and then pointing all of the expired labels to this resource while deleting the old ones.
     /// </summary>
-    /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
+    /// <param name="olderThan">Indicates the date/time to use for determining
     /// which Label records will be purged. Any records with an Shipment.ProcessedDate value earlier than
     /// this date will be purged.</param>
     /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
+    /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
     [SqlProcedure]
-    public static void PurgeLabels(SqlDateTime olderThan, SqlDateTime runUntil)
+    public static void PurgeLabels(SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, olderThan, runUntil);
+        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, olderThan, runUntil, softDelete);
     }
 
     private static string PurgeLabelCommandText
@@ -106,6 +107,9 @@ public partial class StoredProcedures
                     SELECT @zplResourceID = ResourceID FROM [Resource] WHERE [Filename] = '__purged_label_zpl.swr'
                 END
 
+                IF OBJECT_ID('tempdb.dbo.#ResourceIDsToIgnore', 'U') IS NOT NULL
+                    DROP TABLE #ResourceIDsToIgnore; 
+
                 -- Start
                 CREATE TABLE #ResourceIDsToIgnore
                 (
@@ -118,6 +122,9 @@ public partial class StoredProcedures
                 INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@eplResourceID )
                 INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@zplResourceID )
 
+                IF OBJECT_ID('tempdb.dbo.#LabelsToCleanUp', 'U') IS NOT NULL
+                    DROP TABLE #LabelsToCleanUp; 
+
                 -- create temp tables
                 CREATE TABLE #LabelsToCleanUp 
                 ( 
@@ -126,124 +133,37 @@ public partial class StoredProcedures
                     ImageFormat nvarchar(5)
                 )
 
-                -- find all of the UPS labels we want to wipe out
-                INSERT INTO #LabelsToCleanUp
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 
-                        CASE 
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'GIF'
-                        END as ImageFormat		
-                    FROM [UpsPackage]
-                        INNER JOIN [Shipment] ON [UpsPackage].ShipmentID = [Shipment].ShipmentID
-                        INNER JOIN [ObjectReference] ON [UpsPackage].UpsPackageID = [ObjectReference].ConsumerID			
-                    WHERE 
-                        [Shipment].ProcessedDate < @olderThan
-                        AND [Shipment].Processed = 1
-                        AND [Shipment].ShipmentType = 0 --UPS
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
+                ;WITH ShipmentsToPurge AS
+                (
+	                SELECT s.ShipmentID, s.ActualLabelFormat
+	                FROM Shipment s
+	                WHERE s.ProcessedDate < @olderThan	
+                      AND s.Processed = 1
+                ),
+                ObjectReferenceIDs as
+                (
+	                SELECT c.UpsPackageID as [ConsumerID], s.ActualLabelFormat FROM UpsPackage c INNER JOIN ShipmentsToPurge s ON c.ShipmentID = s.ShipmentID
+	                UNION
+	                SELECT c.FedExPackageID as [ConsumerID], s.ActualLabelFormat FROM FedExPackage c INNER JOIN ShipmentsToPurge s ON c.ShipmentID = s.ShipmentID
+	                UNION
+	                SELECT c.DhlExpressPackageID as [ConsumerID], s.ActualLabelFormat FROM DhlExpressPackage c INNER JOIN ShipmentsToPurge s ON c.ShipmentID = s.ShipmentID
+	                UNION
+	                SELECT c.iParcelPackageID as [ConsumerID], s.ActualLabelFormat FROM iParcelPackage c INNER JOIN ShipmentsToPurge s ON c.ShipmentID = s.ShipmentID
+	                UNION
+	                SELECT ShipmentID as [ConsumerID], ActualLabelFormat from ShipmentsToPurge
+                )
 
-                -- find all of the fedex labels we want to wipe out
-                INSERT INTO #LabelsToCleanUp		
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 		
-                        CASE 
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'PNG'
-                        END as ImageFormat
-                    FROM [FedexPackage]
-                        INNER JOIN [Shipment] ON [FedexPackage].ShipmentID = [Shipment].ShipmentID
-                        INNER JOIN [ObjectReference] ON [FedexPackage].FedexPackageID = [ObjectReference].ConsumerID
-                    WHERE 
-                        [Shipment].ProcessedDate < @olderThan	
-                        AND [Shipment].Processed = 1
-                        AND [Shipment].ShipmentType = 6	-- FedEx
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
-    
-                -- find all of the onTrac labels we want to wipe out
-                INSERT INTO #LabelsToCleanUp		
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 
-                        CASE 
-                            WHEN ISNULL(Shipment.ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL(Shipment.ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'GIF'
-                        END as ImageFormat
-                    FROM OnTracShipment
-                        INNER JOIN Shipment ON OnTracShipment.ShipmentID = Shipment.ShipmentID
-                        INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
-                        INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
-                    where 
-                        Shipment.Processed = 1
-                        AND Shipment.ShipmentType = 11	-- OnTrac
-                        AND Shipment.ProcessedDate < @olderThan	
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
-        
-                -- Endicia, Express1, & USPS labels
-                INSERT INTO #LabelsToCleanUp		
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 		
-                        CASE 
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'PNG'
-                        END as ImageFormat
-                    FROM [PostalShipment]
-                        INNER JOIN [Shipment] ON [PostalShipment].ShipmentID = [Shipment].ShipmentID		
-                        INNER JOIN [ObjectReference] ON [PostalShipment].ShipmentID = [ObjectReference].ConsumerID		
-                    WHERE 
-                        [Shipment].ProcessedDate < @olderThan
-                        AND [Shipment].Processed = 1
-                        AND [Shipment].ShipmentType in (2,9,15,4) -- endicia, express1, USPS, w/o postage
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
-
-                -- find all of the iParcel labels we want to wipe out
-                INSERT INTO #LabelsToCleanUp		
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 		
-                        CASE 
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'JPG'
-                        END as ImageFormat
-                    FROM iParcelShipment i
-                        INNER JOIN Shipment ON i.ShipmentID = Shipment.ShipmentID
-                        INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
-                        INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
-                    where 
-                        Shipment.Processed = 1
-                        AND Shipment.ShipmentType = 12	-- iParcel
-                        AND Shipment.ProcessedDate < @olderThan	
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
-
-                -- find all of the Amazon labels we want to wipe out
-                INSERT INTO #LabelsToCleanUp		
-                    SELECT 
-                        [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-                        [ObjectReference].ObjectID AS ResourceID, 		
-                        CASE 
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
-                            WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
-                            ELSE 'PNG'
-                        END as ImageFormat
-                    FROM AmazonShipment
-                        INNER JOIN Shipment ON AmazonShipment.ShipmentID = Shipment.ShipmentID
-                        INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
-                        INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
-                    WHERE 
-                        Shipment.Processed = 1
-                        AND Shipment.ShipmentType = 16	-- Amazon
-                        AND Shipment.ProcessedDate < @olderThan	
-                        AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
-
-                CREATE INDEX IX_ResourceWorking on #LabelsToCleanUp (ObjectReferenceID, ResourceID)		
+                INSERT INTO #LabelsToCleanUp	
+	                SELECT [ObjectReference].ObjectReferenceID AS ObjectReferenceID,
+					       [ObjectReference].ObjectID AS ResourceID, 		
+						   CASE 
+						       WHEN ISNULL(s.ActualLabelFormat, -1) = 0 THEN 'EPL'
+						       WHEN ISNULL(s.ActualLabelFormat, -1) = 1 THEN 'ZPL'
+						       ELSE 'PNG'
+						   END as ImageFormat
+	                FROM ObjectReferenceIDs s 
+		                INNER JOIN [ObjectReference] ON s.ConsumerID = [ObjectReference].ConsumerID		
+	                ORDER BY ObjectReferenceID
 
                 -- see if there's any actual work to do
                 SELECT @count = COUNT(*) FROM #LabelsToCleanUp;
@@ -259,8 +179,6 @@ public partial class StoredProcedures
 
                     WHILE @runUntil IS NULL OR @runUntil > GetUtcDate()
                     BEGIN
-    
-
                         INSERT INTO @currentBatch
                             SELECT TOP (@batchSize) * 
                             FROM #LabelsToCleanUp	

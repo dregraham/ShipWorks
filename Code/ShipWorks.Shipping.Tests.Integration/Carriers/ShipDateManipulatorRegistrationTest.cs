@@ -13,8 +13,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     [Trait("Category", "ContinuousIntegration")]
     public class ShipDateManipulatorRegistrationTest : IDisposable
     {
-        IContainer container;
-        Dictionary<ShipmentTypeCode, Type> expectedRegistrations;
+        readonly IContainer container;
+        readonly Dictionary<ShipmentTypeCode, Type> expectedRegistrations;
 
         public ShipDateManipulatorRegistrationTest()
         {
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             {
                 IShipmentDateManipulator retriever = container.ResolveKeyed<IShipmentDateManipulator>(expectedRegistration.Key);
                 Assert.Equal(expectedRegistration.Value, retriever.GetType());
-            }            
+            }
         }
 
         [Fact]

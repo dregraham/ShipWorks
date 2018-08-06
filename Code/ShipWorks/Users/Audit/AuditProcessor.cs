@@ -114,7 +114,7 @@ namespace ShipWorks.Users.Audit
                             }
                             catch (AuditMissingObjectLabelException objectLabelMissingException)
                             {
-                                HandleAuditMissingObjectLabelException(objectLabelMissingException);
+                                HandleAuditMissingObjectLabelException(objectLabelMissingException, new SqlAdapter(sqlConnection));
                             }
                             catch (Exception ex)
                             {
@@ -148,13 +148,13 @@ namespace ShipWorks.Users.Audit
         /// Handles logging and deletion of offending audit
         /// </summary>
         /// <param name="objectLabelMissingException"></param>
-        private static void HandleAuditMissingObjectLabelException(AuditMissingObjectLabelException objectLabelMissingException)
+        private static void HandleAuditMissingObjectLabelException(AuditMissingObjectLabelException objectLabelMissingException, ISqlAdapter adapter)
         {
             // There's nothing we can do about these...the user will always crash until we remote in to delete the audit.  So just do that now.
             try
             {
                 log.Error(objectLabelMissingException);
-                DeletionService.DeleteAudit(objectLabelMissingException.AuditID);
+                DeletionService.DeleteAudit(objectLabelMissingException.AuditID, adapter);
             }
             catch (Exception ex)
             {

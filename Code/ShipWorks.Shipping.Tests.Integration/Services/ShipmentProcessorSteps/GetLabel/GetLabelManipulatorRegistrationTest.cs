@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services.ShipmentProcessorSteps.G
     [Trait("Category", "ContinuousIntegration")]
     public class GetLabelManipulatorRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public GetLabelManipulatorRegistrationTest()
         {

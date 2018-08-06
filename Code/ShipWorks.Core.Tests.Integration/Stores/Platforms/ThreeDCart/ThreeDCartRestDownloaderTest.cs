@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Moq;
-using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.ChannelAdvisor;
-using ShipWorks.Stores.Platforms.ThreeDCart;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
 {
@@ -38,7 +32,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
         private DbConnection dbConnection;
         private ThreeDCartRestDownloader testObject;
         private readonly ThreeDCartOrder threeDCartOrder;
-        private DateTime orderDate = DateTime.Now;
+        private readonly DateTime orderDate = DateTime.Now;
 
         public ThreeDCartRestDownloaderTest(DatabaseFixture db)
         {
@@ -48,7 +42,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
 
             threeDCartOrder = new ThreeDCartOrder()
             {
-                ShipmentList = new []
+                ShipmentList = new[]
                 {
                     new ThreeDCartShipment()
                     {
@@ -60,7 +54,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
                 OrderItemList = new ThreeDCartOrderItem[0],
                 OrderStatusID = 1,
                 BillingCountry = "US",
-                BillingState="MO", 
+                BillingState = "MO",
                 OrderDate = orderDate
             };
 
@@ -97,7 +91,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
                 .Save();
 
             StatusPresetManager.CheckForChanges();
-            
+
             downloadLogID = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
@@ -119,7 +113,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
         public async Task LoadOrders_CreatesOrderWithPrefixAndNumber_WhenUpgradeDateIsNull()
         {
             var store = CreateStore(null);
-            
+
             threeDCartOrder.InvoiceNumber = 12345;
             threeDCartOrder.InvoiceNumberPrefix = "12";
 

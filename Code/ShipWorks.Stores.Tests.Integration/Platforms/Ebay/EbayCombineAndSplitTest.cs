@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -7,9 +6,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
@@ -40,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
         private readonly EbayOrderSearchEntityComparer comparer;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly EbayOrderSearchEntity expectedOrderSearchA;
         private readonly EbayOrderSearchEntity expectedOrderSearchB;
         private readonly EbayOrderSearchEntity expectedOrderSearchD;

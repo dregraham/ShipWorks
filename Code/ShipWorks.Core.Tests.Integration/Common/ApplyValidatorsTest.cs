@@ -15,8 +15,8 @@ namespace ShipWorks.Core.Tests.Integration.Common
     public class ApplyValidatorsTest : IDisposable
     {
         private readonly IContainer container;
-        private Mock<ITestValidator> first;
-        private Mock<ITestValidator> second;
+        private readonly Mock<ITestValidator> first;
+        private readonly Mock<ITestValidator> second;
 
         public ApplyValidatorsTest()
         {

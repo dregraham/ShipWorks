@@ -21,11 +21,6 @@ namespace ShipWorks.Data
         void DeleteChannel(StoreTypeCode channel, ISecurityContext securityContext);
 
         /// <summary>
-        /// Deletes the given order
-        /// </summary>
-        void DeleteOrder(long orderID);
-
-        /// <summary>
         /// Deletes the given order with the give ISqlAdapter
         /// </summary>
         void DeleteOrder(long orderID, ISqlAdapter adapter);

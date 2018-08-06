@@ -1,6 +1,7 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
@@ -10,6 +11,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// </summary>
     public static class Create
     {
+        /// <summary>
+        /// Create an audit entity
+        /// </summary>
+        public static AuditEntityBuilder Audit(IUserEntity user, IComputerEntity computer) =>
+            new AuditEntityBuilder(user, computer);
+
         /// <summary>
         /// Create a generic entity
         /// </summary>

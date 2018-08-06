@@ -23,6 +23,9 @@ namespace ShipWorks.Actions.Tasks.Common
         AbandonedResources = 5,
 
         [Description("Orders"), ApiValue("PurgeOrders")]
-        Orders = 6
+        Orders = 6,
+
+        [Description("Downloads"), ApiValue("PurgeDownloads")]
+        Downloads = 7
     }
 }

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Administration;
@@ -12,6 +13,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Class that encapsulates what it means to run a purge script.
     /// </summary>
+    [Component]
     public class SqlPurgeScriptRunner : ISqlPurgeScriptRunner
     {
         static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
@@ -35,7 +37,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Anything older will be purged</param>
         /// <param name="runUntilInUtc">Execution should stop after this time</param>
         /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
-        public void RunScript(string scriptName, DateTime olderThanInUtc, DateTime? runUntilInUtc, int retryAttempts)
+        /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
+        public void RunScript(string scriptName, DateTime olderThanInUtc, DateTime? runUntilInUtc, int retryAttempts, bool softDelete)
         {
             // If we detect a deadlock or sql lock, we'll sleep before we try again.
             // The sleep time will be one second times the sleep multiplier, so that we wait a little longer during each loop.
@@ -58,6 +61,7 @@ namespace ShipWorks.Actions.Tasks.Common
                                 command.CommandTimeout = 0;
                                 command.AddParameterWithValue("@olderThan", olderThanInUtc);
                                 command.AddParameterWithValue("@runUntil", (object) runUntilInUtc ?? DBNull.Value);
+                                command.AddParameterWithValue("@softDelete", softDelete);
 
                                 command.ExecuteNonQuery();
                             }

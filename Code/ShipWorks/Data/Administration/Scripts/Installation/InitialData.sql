@@ -153,7 +153,7 @@ VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Sch
 
 PRINT (N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])
-VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml, N'<Settings><CanTimeout value="True"/><TimeoutInHours value="6"/><RetentionPeriodInDays value="180"/><Purges><Item value="2"/><Item value="3"/><Item value="4"/></Purges><ReclaimDiskSpace value="True" /></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
+VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml, N'<Settings><CanTimeout value="True"/><TimeoutInHours value="6"/><RetentionPeriodInDays value="180"/><Purges><Item value="2"/><Item value="3"/><Item value="4"/></Purges><PurgeEmailHistory value="True" /><PurgePrintJobHistory value="True" /><ReclaimDiskSpace value="True" /></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA])

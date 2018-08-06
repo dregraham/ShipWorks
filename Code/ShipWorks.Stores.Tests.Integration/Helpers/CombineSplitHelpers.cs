@@ -17,8 +17,8 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
     public class CombineSplitHelpers
     {
         private readonly DataContext context;
-        private Mock<IOrderSplitUserInteraction> splitInteraction;
-        private Mock<IOrderCombinationUserInteraction> combineInteraction;
+        private readonly Mock<IOrderSplitUserInteraction> splitInteraction;
+        private readonly Mock<IOrderCombinationUserInteraction> combineInteraction;
         private readonly IOrderSplitGateway orderSplitGateway;
 
         public CombineSplitHelpers(DataContext context, Mock<IOrderSplitUserInteraction> splitInteraction,
