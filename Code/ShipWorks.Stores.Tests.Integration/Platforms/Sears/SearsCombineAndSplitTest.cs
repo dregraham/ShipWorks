@@ -6,11 +6,9 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Platforms.Sears;
@@ -40,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
         private readonly SearsCombineOrderSearchProviderComparer comparer;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly SearsOrderDetail expectedOrderSearchA;
         private readonly SearsOrderDetail expectedOrderSearchB;
         private readonly SearsOrderDetail expectedOrderSearchD;
@@ -199,7 +197,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
         [Fact]
         public async Task SplitThenCombineOrder_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA, new Dictionary<long, decimal>{{ orderA.OrderItems.First().OrderItemID, 2 }});
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA, new Dictionary<long, decimal> { { orderA.OrderItems.First().OrderItemID, 2 } });
 
             var orderA_C = await combineSplitHelpers.PerformCombine("10A-1-C", orderA_0, orderB);
 
@@ -232,7 +230,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
                 It.Is<SearsOrderDetail>(o => o.PoNumber == "1000"),
                 It.Is<IEnumerable<SearsTracking>>(t =>
                     HasTracking(t, "1000", "track-123", "100"))));
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<ISearsStoreEntity>(), It.IsAny<SearsOrderDetail>(),
                 It.IsAny<IEnumerable<SearsTracking>>()), Times.Exactly(1));
         }

@@ -6,15 +6,10 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
-using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Orders.Split;
-using ShipWorks.Stores.Platforms.OrderMotion;
 using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
 using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
@@ -39,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
         private readonly OrderMotionStoreEntity store;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
 
@@ -85,7 +80,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
                 .Set(x => x.OrderNumberComplete, "30")
                 .Save();
 
-            orders = new Dictionary<long, OrderEntity> { { 1, orderA }, { 2, orderB }, { 3, orderD } }; 
+            orders = new Dictionary<long, OrderEntity> { { 1, orderA }, { 2, orderB }, { 3, orderD } };
         }
 
         [Fact]
@@ -104,7 +99,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
             var identities_A_4 = await identityProvider.GetOrderIdentifiers(orderA_4);
             var identities_A_5 = await identityProvider.GetOrderIdentifiers(orderA_5);
 
-            //Assert.Equal(1000L, identities_A_0);
             Assert.Equal(new[] { 1000L }, identities_A_0.Select(i => i.OrderMotionShipmentID));
             Assert.Equal(new[] { 1000L }, identities_A_1.Select(i => i.OrderMotionShipmentID));
             Assert.Equal(new[] { 1000L }, identities_A_2.Select(i => i.OrderMotionShipmentID));
@@ -152,7 +146,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
             var identities_D_C = await identityProvider.GetOrderIdentifiers(orderD_C);
 
             Assert.Equal(new[] { 1000L, 2000L }, identities_A_C_1.Select(i => i.OrderMotionShipmentID));
-            Assert.Equal(new[] { 1000L, 2000L, 3000L }, identities_D_C.Select(i => i.OrderMotionShipmentID)); 
+            Assert.Equal(new[] { 1000L, 2000L, 3000L }, identities_D_C.Select(i => i.OrderMotionShipmentID));
         }
 
         [Fact]
@@ -194,7 +188,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
             var orderB_M_C = await combineSplitHelpers.PerformCombine("10A-M-C", orderB, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IOrderMotionCombineOrderSearchProvider>(); 
+            var identityProvider = context.Mock.Container.Resolve<IOrderMotionCombineOrderSearchProvider>();
             var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
 
             Assert.Equal(new[] { 1000L }, identities_B_M_C.Select(i => i.OrderMotionShipmentID));
@@ -294,7 +288,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
             Assert.Equal(new[] { 1000L, 2000L }, identities_A_0.Select(i => i.OrderMotionShipmentID));
             Assert.Equal(new[] { 1000L, 2000L }, identities_A_1.Select(i => i.OrderMotionShipmentID));
         }
-        
+
         public void Dispose() => context.Dispose();
     }
 }

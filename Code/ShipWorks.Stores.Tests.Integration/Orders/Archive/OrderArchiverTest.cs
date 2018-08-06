@@ -6,29 +6,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Actions;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Orders.Archive;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Interapptive.Shared.Threading;
-using ShipWorks.Actions;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using ShipWorks.Tests.Shared;
-using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         private readonly DataContext context;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
         private Mock<IUserLoginWorkflow> userLoginWorkflow;
-        private IProgressProvider progressProvider;
+        private readonly IProgressProvider progressProvider;
 
         public OrderArchiverTest(DatabaseFixture db)
         {
@@ -270,7 +270,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                             shipment.OrderID = order.OrderID;
                             shipment.Order = order;
                             shipment.BestRateEvents = 0;
-                            shipment.ShipSenseEntry = new byte[]{0};
+                            shipment.ShipSenseEntry = new byte[] { 0 };
                             shipment.OriginOriginID = shippingOrigin.ShippingOriginID;
 
                             sqlAdapter.SaveAndRefetch(shipment);
@@ -359,7 +359,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
         {
             ResourceEntity resource = new ResourceEntity();
             resource.InitializeNullsToDefault();
-            resource.Data = new byte[]{0};
+            resource.Data = new byte[] { 0 };
             resource.Filename = Guid.NewGuid().ToString("N");
             resource.Checksum = CalculateChecksum(resource.Filename);
             sqlAdapter.SaveAndRefetch(resource);

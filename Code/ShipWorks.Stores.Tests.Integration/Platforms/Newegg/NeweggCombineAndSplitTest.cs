@@ -39,8 +39,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
         private readonly IOrderSplitGateway orderSplitGateway;
-        private IDataAccess dataAccess;
-        private (string, double)[] emptyResults = Enumerable.Empty<(string, double)>().ToArray();
+        private readonly IDataAccess dataAccess;
+        private readonly (string, double)[] emptyResults = Enumerable.Empty<(string, double)>().ToArray();
 
         public NeweggCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -119,8 +119,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
             Assert.True(identities_A_3.All(i => i.OrderNumber == 10));
             Assert.True(identities_A_4.All(i => i.OrderNumber == 10));
             Assert.True(identities_A_5.All(i => i.OrderNumber == 10));
-
-            var expectedItems = Enumerable.Empty<(string, double)>().ToArray();
 
             await ValidateResults(orderA_0, new[] { ("spn-10", 6.0) }, identityProvider, dataAccess);
 
@@ -297,7 +295,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<INeweggCombineOrderSearchProvider>();
 
-            var identities_A = await identityProvider.GetOrderIdentifiers(orderA);
+            await identityProvider.GetOrderIdentifiers(orderA);
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
 
@@ -324,7 +322,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
             // AFTER:
             // orderD:      [spn-30:30]
             // orderB_1_C:  [spn-20:20], [spn-10:10]
-            
+
             var (orderB_0, orderB_1) = await combineSplitHelpers.PerformSplit(orderB_1_C, 2, 2);
             // AFTER:
             // orderD:      [spn-30:30]
@@ -409,7 +407,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<INeweggCombineOrderSearchProvider>();
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
-            
+
             Assert.Equal(new[] { 10L }, identities_A_C.Select(i => i.OrderNumber).Distinct());
             await ValidateResults(orderA_C, new[] { ("spn-10", 8.0), ("spn-10", 2.0) }, identityProvider, dataAccess);
         }
@@ -462,8 +460,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<INeweggCombineOrderSearchProvider>();
-            var identities_D = await identityProvider.GetOrderIdentifiers(orderD);
-            var identities_A_1_C_1 = await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
+            await identityProvider.GetOrderIdentifiers(orderD);
+            await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
 
             // Unchanged orderD
             await ValidateResults(orderD, new[] { ("spn-30", 30.0) }, identityProvider, dataAccess);
@@ -506,7 +504,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Newegg
             // Combined order
             await ValidateResults(orderB_M_C, new[] { ("spn-10", 2.0) }, identityProvider, dataAccess);
         }
-        
+
 
         private static async Task ValidateResults(OrderEntity order, ValueTuple<string, double>[] expectedItems,
             INeweggCombineOrderSearchProvider identityProvider, IDataAccess dataAccess)

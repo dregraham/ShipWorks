@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     [Trait("Category", "IoCRegistration")]
     public class ShipmentPreProcessorRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public ShipmentPreProcessorRegistrationTest()
         {

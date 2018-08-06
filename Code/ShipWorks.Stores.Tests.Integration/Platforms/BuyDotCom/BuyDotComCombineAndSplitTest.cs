@@ -32,9 +32,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
         private Mock<IOrderSplitUserInteraction> splitInteraction;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
         private readonly BuyDotComStoreEntity store;
-        private OrderEntity orderA;
+        private readonly OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly OrderEntity orderM;
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
@@ -166,9 +166,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
         [Fact]
         public async Task CombineMixManualSplit_WithOrderNumbers()
         {
-            var orderM = Create.CreateManualOrder(store, context.Customer, 10);
+            var manualOrder = Create.CreateManualOrder(store, context.Customer, 10);
 
-            var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, orderM);
+            var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, manualOrder);
             var (orderB_0, orderB_1) = await combineSplitHelpers.PerformSplit(orderB_1_C);
 
             // Get online identities

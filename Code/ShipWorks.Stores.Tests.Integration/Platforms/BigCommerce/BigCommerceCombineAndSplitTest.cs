@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         private readonly CombineSplitHelpers combineSplitHelpers;
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IBigCommerceItemLoader productLoader;
-        private (long, int, int)[] emptyResults = Enumerable.Empty<(long, int, int)>().ToArray();
+        private readonly (long, int, int)[] emptyResults = Enumerable.Empty<(long, int, int)>().ToArray();
 
         public BigCommerceCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             });
 
             orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
-            
+
             combineSplitHelpers = new CombineSplitHelpers(context, splitInteraction, combineInteraction);
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
@@ -81,9 +81,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
         private void CreateDefaultOrders()
         {
-            orderA = CreateBigCommerceOrder(10, 1000, 10);
-            orderB = CreateBigCommerceOrder(20, 2000, 20);
-            orderD = CreateBigCommerceOrder(30, 3000, 30);
+            orderA = CreateBigCommerceOrder(10, 10);
+            orderB = CreateBigCommerceOrder(20, 20);
+            orderD = CreateBigCommerceOrder(30, 30);
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // Result:
             // orderA_M_C:  [spn-100:10], [spn-200:20]
             // orderD:      [spn-30:30]
-            
+
             await ValidateResults(orderA_M_C, emptyResults);
         }
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         public async Task SplitManualCombineWithNotManualOrder_WithOrderNumbers()
         {
             orderA = Create.CreateManualOrder(store, context.Customer, 10);
-            orderB = CreateBigCommerceOrder(20, 2000, 20);
+            orderB = CreateBigCommerceOrder(20, 20);
 
             var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA, 2, 2);
 
@@ -209,7 +209,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         public async Task CombineMixManualSplit_WithOrderNumbers()
         {
             orderA = Create.CreateManualOrder(store, context.Customer, 10);
-            orderB = CreateBigCommerceOrder(20, 2000, 20);
+            orderB = CreateBigCommerceOrder(20, 20);
 
             var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, orderA);
 
@@ -243,7 +243,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // orderD:      [spn-30:30]
             // orderA_1:    [spn-10:2]
             // orderA_C:    [spn-10:8], [spn-20:20]
-            
+
             // Combined order
             await ValidateResults(orderA_C, new[] { (10L, 10, 8), (10L, 20, 20) });
 
@@ -272,7 +272,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // orderB_1_C:  [spn-20:18], [spn-10:8]
             // orderB_0:    [spn-20:18], [spn-10:8]
             // orderB_1:    [spn-20:2],  [spn-10:2]
-            
+
             await ValidateResults(orderB_0, new[] { (10L, 10, 8), (10L, 20, 18) });
 
             await ValidateResults(orderB_1, new[] { (10L, 10, 2), (10L, 20, 2) });
@@ -299,7 +299,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // orderA_1_C:  [spn-20:18], [spn-10:8]
             // orderA_0:    [spn-20:18], [spn-10:8]
             // orderA_1:    [spn-20:2],  [spn-10:2]
-            
+
             await ValidateResults(orderA_0, new[] { (10L, 10, 8), (10L, 20, 18) });
 
             await ValidateResults(orderA_1, new[] { (10L, 10, 2), (10L, 20, 2) });
@@ -328,7 +328,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // orderB:      [spn-20:20]
             // orderD:      [spn-30:30]
             // orderA_C:    [spn-10:8], [spn-10:2]
-            
+
             await ValidateResults(orderA_C, new[] { (10L, 10, 8), (10L, 10, 2) });
         }
 
@@ -339,7 +339,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
             var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA, 2, 2);
             var orderA_1_C = await combineSplitHelpers.PerformCombine("A-1-C", orderA_0, orderA_1);
-            
+
             await ValidateResults(orderA_1_C, new[] { (10L, 10, 8), (10L, 10, 2) });
         }
 
@@ -383,7 +383,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         [Fact]
         public async Task SplitCombineWithManualOrder_WithOrderNumbers()
         {
-            orderA = CreateBigCommerceOrder(10, 1000, 10);
+            orderA = CreateBigCommerceOrder(10, 10);
             orderB = Create.CreateManualOrder(store, context.Customer, 200);
 
             // BEFORE:
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             // RESULT:
             // orderA_0/orderA: [spn-10:8]
             // orderB_M_C:      [spn-200:10] (Manual), [spn-10:2]
-            
+
             // Split orders
             await ValidateResults(orderA_0, new[] { (10L, 10, 8) });
 
@@ -437,7 +437,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             Assert.Equal(expectedItems, actualItems);
         }
 
-        private OrderEntity CreateBigCommerceOrder(long orderNumber, long invoiceNumber, double itemQuantity)
+        private OrderEntity CreateBigCommerceOrder(long orderNumber, double itemQuantity)
         {
             return Create.Order<OrderEntity>(store, context.Customer)
                 .WithItem<BigCommerceOrderItemEntity>(i => i
