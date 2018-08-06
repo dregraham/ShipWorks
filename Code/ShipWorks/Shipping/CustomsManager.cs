@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
         public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, ISqlAdapter adapter) =>
-            LoadCustomsItems(shipment, reloadIfPresent, adapter.SaveAndRefetch);
+            LoadCustomsItems(shipment, reloadIfPresent, MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter)).SaveAndRefetch);
 
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
