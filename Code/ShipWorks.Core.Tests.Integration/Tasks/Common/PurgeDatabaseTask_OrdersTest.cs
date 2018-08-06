@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -32,7 +31,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private readonly DataContext context;
         private const int RetentionPeriodInDays = 30;
         private readonly List<PurgeTableData> tableDataList = new List<PurgeTableData>();
-        private ConfigurationEntity config = new ConfigurationEntity(true);
+        private readonly ConfigurationEntity config = new ConfigurationEntity(true);
 
         public PurgeDatabaseTask_OrdersTest(DatabaseFixture db)
         {
@@ -68,7 +67,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                 DateTime.Now.AddDays(-(RetentionPeriodInDays + 2)),
                 DateTime.Now.AddDays(-1)
             };
-            
+
             bulkOrderCreator.CreateOrderForAllStores();
 
             LoadInitialTableData();
@@ -77,7 +76,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task PurgeDatabaseTask_PurgesOrdersAllOrders(bool auditingEnabled)
+        public void PurgeDatabaseTask_PurgesOrdersAllOrders(bool auditingEnabled)
         {
             Modify.Entity(config).Set(c => c.AuditEnabled = auditingEnabled).Save();
 
@@ -152,7 +151,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private void ValidateEmails(PurgeDatabaseTask testObject)
         {
             var emailTables = tableDataList.Where(t => t.TableName.StartsWith("EmailOutbound"));
-            var objRefTable = tableDataList.First(t => t.TableName.StartsWith("ObjectReference"));
 
             if (!testObject.Purges.Contains(PurgeDatabaseType.Email))
             {
@@ -162,8 +160,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                     Assert.Equal(p.InitialRowCount, p.AfterPurgeRowCount);
                     Assert.True(p.AreTablesEqual());
                 });
-
-                //Assert.True(objRefTable.AreTablesEqual());
             }
             else
             {
@@ -244,26 +240,8 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             }
         }
 
-        private long GetCounts<T>(EntityQuery<T> entityQuery, IPredicate predicate, IEntityFieldCore countBigField) where T : IEntityCore
-        {
-            long counts = 0;
-
-            using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
-            {
-                var countOrderQuery = entityQuery
-                    .Where(predicate)
-                    .Select(countBigField);
-
-                counts = sqlAdapter.FetchScalar<long>(countOrderQuery);
-            }
-
-            return counts;
-        }
-
         private DataTable FetchDataTable<T>(EntityQuery<T> entityQuery, IPredicate predicate) where T : IEntityCore
         {
-            DataTable dataTable;
-
             using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
             {
                 var countOrderQuery = entityQuery
@@ -272,38 +250,5 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                 return sqlAdapter.FetchAsDataTable(countOrderQuery);
             }
         }
-
-        ///// <summary>
-        ///// Helper class for loading/updating/holding table info
-        ///// </summary>
-        //private class TableData
-        //{
-        //    public string TableName;
-        //    public long InitialRowCount = 0;
-        //    public long AfterPurgeRowCount = 0;
-        //    public DataTable InitialTable = null;
-        //    public DataTable AfterPurgeTable = null;
-
-        //    public TableData(string tableName, DataTable initialTable, DataTable afterPurgeTable)
-        //    {
-        //        TableName = tableName;
-        //        InitialTable = initialTable;
-        //        AfterPurgeTable = afterPurgeTable;
-        //        InitialRowCount = InitialTable?.Rows.Count ?? 0;
-        //        AfterPurgeRowCount = AfterPurgeTable?.Rows.Count ?? 0;
-        //    }
-
-        //    public void SetAfterPurgeTable(DataTable after)
-        //    {
-        //        if (after != null)
-        //        {
-        //            AfterPurgeTable = after;
-        //            AfterPurgeRowCount = AfterPurgeTable.Rows.Count;
-        //        }
-        //    }
-
-        //    public bool AreTablesEqual() => InitialTable.Rows.Cast<DataRow>()
-        //                                        .Intersect(AfterPurgeTable.Rows.Cast<DataRow>(), DataRowComparer.Default).Count() == AfterPurgeRowCount;
-        //}
     }
 }

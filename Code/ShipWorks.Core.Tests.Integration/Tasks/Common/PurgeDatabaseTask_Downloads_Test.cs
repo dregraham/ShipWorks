@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -42,7 +41,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesTwoDownloads_WhenHalfOfDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesTwoDownloads_WhenHalfOfDownloadsAreOlderThan180Days()
         {
             var download1 = CreateDownload(DateTime.UtcNow);
             var download2 = CreateDownload(cutoffDate.AddDays(1));
@@ -58,7 +57,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesAllDownloads_WhenAllDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesAllDownloads_WhenAllDownloadsAreOlderThan180Days()
         {
             var download1 = CreateDownload(cutoffDate.AddDays(-1));
             var download2 = CreateDownload(cutoffDate.AddDays(-2));
@@ -74,7 +73,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesNoDownloads_WhenNoDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesNoDownloads_WhenNoDownloadsAreOlderThan180Days()
         {
             var download1 = CreateDownload(cutoffDate.AddDays(1));
             var download2 = CreateDownload(cutoffDate.AddDays(2));
