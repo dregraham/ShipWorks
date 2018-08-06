@@ -54,11 +54,11 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesAllAudits_WhenHalfDownloadsAreOlderThan180Days()
+        public async Task PurgeDatabaseTask_PurgesTwoAudits_WhenHalfDownloadsAreOlderThan180Days()
         {
             var audit1 = CreateAudit(cutoffDate.AddDays(-1));
             var audit2 = CreateAudit(cutoffDate.AddDays(-2));
-            var audit3 = CreateAudit(cutoffDate.AddDays(3));
+            var audit3 = CreateAudit(DateTime.UtcNow);
             var audit4 = CreateAudit(cutoffDate.AddDays(25));
 
             testObject.Run(new List<long>(), null);
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesAllAudits_WhenNoDownloadsAreOlderThan180Days()
+        public async Task PurgeDatabaseTask_PurgesNoAudits_WhenNoDownloadsAreOlderThan180Days()
         {
             var audit1 = CreateAudit(cutoffDate.AddDays(1));
             var audit2 = CreateAudit(cutoffDate.AddDays(2));
@@ -120,13 +120,11 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
 
             var auditChange = Create.Entity<AuditChangeEntity>()
                 .Set(x => x.AuditID, audit.AuditID)
-                .Set(x => x.AuditChangeID, audit.AuditID)
                 .Save();
 
             Create.Entity<AuditChangeDetailEntity>()
                 .Set(x => x.AuditID, audit.AuditID)
                 .Set(x => x.AuditChangeID, auditChange.AuditChangeID)
-                .Set(x => x.AuditChangeDetailID, audit.AuditID)
                 .Save();
 
             return audit;
