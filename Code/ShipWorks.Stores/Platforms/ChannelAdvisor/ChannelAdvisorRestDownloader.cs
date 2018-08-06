@@ -30,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
         private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
-        private int totalOrders;
         private readonly ChannelAdvisorStoreEntity caStore;
 
         /// <summary>
@@ -78,9 +77,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 DateTime start = await GetChannelAdvisorOrderDateStartingPoint();
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
-                totalOrders = ordersResult.ResultCount;
 
-                Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
+                Progress.Detail = $"Downloading orders...";
 
                 while (ordersResult?.Orders?.Any() ?? false)
                 {
@@ -199,8 +197,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
-            Progress.Detail = $"Processing order {QuantitySaved + 1} of {totalOrders}...";
-            Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalOrders, 100);
+            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
             // Check if it has been canceled
             if (!Progress.IsCancelRequested)
