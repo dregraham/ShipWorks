@@ -64,6 +64,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         public override int ServiceType { get; set; } = 0;
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => Shipment.Other.Service;
+
+        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)

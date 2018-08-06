@@ -404,6 +404,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -438,6 +444,8 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
+		///<summary>Reference1. </summary>
+		Reference1,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -486,6 +494,10 @@ namespace ShipWorks.Data.Model
 		AmazonUniqueShipmentID,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>Reference1. </summary>
+		Reference1,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -918,6 +930,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1068,6 +1086,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1380,6 +1404,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1904,6 +1934,8 @@ namespace ShipWorks.Data.Model
 		AllowEbayCombineLocally,
 		///<summary>ArchivalSettingsXml. </summary>
 		ArchivalSettingsXml,
+		///<summary>AuditEnabled. </summary>
+		AuditEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2436,6 +2468,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3044,6 +3082,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4274,6 +4318,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -4652,6 +4702,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4802,6 +4858,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -5238,6 +5300,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -5570,6 +5638,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -6852,6 +6926,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -7428,6 +7508,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>Length. </summary>
+		Length,
+		///<summary>Width. </summary>
+		Width,
+		///<summary>Height. </summary>
+		Height,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7974,6 +8060,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SalesChannelLineNumber. </summary>
@@ -9052,6 +9144,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -9906,12 +10004,20 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
 		ShopifyOrderItemID,
 		///<summary>ShopifyProductID. </summary>
 		ShopifyProductID,
+		///<summary>InventoryItemID. </summary>
+		InventoryItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10632,6 +10738,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -11754,6 +11866,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -12360,6 +12478,12 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
 		OriginalOrderID,
+		///<summary>Length. Inherited from OrderItem</summary>
+		Length,
+		///<summary>Width. Inherited from OrderItem</summary>
+		Width,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
@@ -12476,6 +12600,46 @@ namespace ShipWorks.Data.Model
 		AmountOfFields
 	}
 
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksDisabledDefaultIndexes.</summary>
+	public enum ShipWorksDisabledDefaultIndexesFieldIndex
+	{
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexName</summary>
+		IndexName,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>EnableIndex</summary>
+		EnableIndex,
+		///<summary>IndexID</summary>
+		IndexID,
+		///<summary>IndexColumnId</summary>
+		IndexColumnId,
+		///<summary>IsIncluded</summary>
+		IsIncluded,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : ShipWorksMissingIndexRequests.</summary>
+	public enum ShipWorksMissingIndexRequestsFieldIndex
+	{
+		///<summary>IndexHandle</summary>
+		IndexHandle,
+		///<summary>TableName</summary>
+		TableName,
+		///<summary>IndexAdvantage</summary>
+		IndexAdvantage,
+		///<summary>GroupHandle</summary>
+		GroupHandle,
+		///<summary>ColumnID</summary>
+		ColumnID,
+		///<summary>ColumnName</summary>
+		ColumnName,
+		///<summary>ColumnUsage</summary>
+		ColumnUsage,
+		/// <summary></summary>
+		AmountOfFields
+	}
 
 
 	/// <summary>Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.</summary>
@@ -12935,6 +13099,14 @@ namespace ShipWorks.Data.Model
 		YahooStoreEntity
 	}
 
+	/// <summary>Enum definition for all the typed view types defined in this namespace. Used by the entityfields factory.</summary>
+	public enum TypedViewType
+	{
+		///<summary>ShipWorksDisabledDefaultIndexes</summary>
+		ShipWorksDisabledDefaultIndexesTypedView,
+		///<summary>ShipWorksMissingIndexRequests</summary>
+		ShipWorksMissingIndexRequestsTypedView
+	}
 
 	#region Custom ConstantsEnums Code
 	

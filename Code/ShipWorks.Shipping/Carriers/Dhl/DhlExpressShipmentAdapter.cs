@@ -68,6 +68,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((DhlExpressServiceType) ServiceType);
+
+        /// <summary>
         /// Add a new package to the shipment
         /// </summary>
         public override IPackageAdapter AddPackage()

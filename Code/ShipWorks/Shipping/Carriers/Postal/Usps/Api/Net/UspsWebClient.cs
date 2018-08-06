@@ -937,7 +937,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public async Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment)
+        public async Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
@@ -994,15 +994,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private async Task<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private async Task<TelemetricResult<UspsLabelResponse>> ProcessShipmentInternal(ShipmentEntity shipment,
+            UspsAccountEntity account)
         {
-            Address fromAddress;
-            Address toAddress;
-
-            (Address to, Address from) addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
-            toAddress = addresses.to;
-            fromAddress = addresses.from;
-
+            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
+            (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
+            
             RateV25 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
 
@@ -1030,7 +1027,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             using (ISwsimV69 webService = CreateWebService("Process"))
             {
-                if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope && shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
+                if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope &&
+                    shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
                 {
                     // Envelopes don't support thermal
                     thermalType = null;
@@ -1039,109 +1037,121 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     rate.PrintLayout = "EnvelopePersonal";
 
                     // A separate service call is used for processing envelope according to USPS as of v. 22
-                    result = webService.CreateEnvelopeIndicium(
-                        new CreateEnvelopeIndiciumParameters
-                        {
-                            Item = GetCredentials(account),
-                            IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
-                            Rate = rate,
-                            From = fromAddress,
-                            To = toAddress,
-                            CustomerID = null,
-                            Mode = CreateIndiciumModeV1.Normal,
-                            ImageType = ImageType.Png,
-                            CostCodeId = 0, // cost code ID
-                            HideFIM = false, // do not hide the facing identification mark (FIM)
-                            RateToken = null, // RateToken
-                            OrderId = null
-                        });
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () =>
+                        result = webService.CreateEnvelopeIndicium(
+                            new CreateEnvelopeIndiciumParameters
+                            {
+                                Item = GetCredentials(account),
+                                IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                                Rate = rate,
+                                From = fromAddress,
+                                To = toAddress,
+                                CustomerID = null,
+                                Mode = CreateIndiciumModeV1.Normal,
+                                ImageType = ImageType.Png,
+                                CostCodeId = 0, // cost code ID
+                                HideFIM = false, // do not hide the facing identification mark (FIM)
+                                RateToken = null, // RateToken
+                                OrderId = null
+                            }));
                 }
                 else
                 {
                     // Labels for all other package types other than envelope get created via the CreateIndicium method
-                    result = webService.CreateIndicium(
-                        new CreateIndiciumParameters
-                        {
-                            Item = GetCredentials(account),
-                            IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
-                            TrackingNumber = string.Empty,
-                            Rate = rate,
-                            From = fromAddress,
-                            To = toAddress,
-                            CustomerID = null,
-                            Customs = customs,
-                            SampleOnly = false,  // Sample only,
-                            PostageMode = shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
-                            ImageType = thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
-                            EltronPrinterDPIType = EltronPrinterDPIType.Default,
-                            Memo = UspsUtility.BuildMemoField(shipment.Postal), // Memo
-                            CostCodeId = 0, // Cost Code
-                            DeliveryNotification = false, // delivery notify
-                            ShipmentNotification = null, // shipment notification
-                            RotationDegrees = 0, // Rotation
-                            HorizontalOffset = null,
-                            HorizontalOffsetSpecified = false, // horizontal offset
-                            VerticalOffset = null,
-                            VerticalOffsetSpecified = false, // vertical offset
-                            PrintDensity = null,
-                            PrintDensitySpecified = false, // print density
-                            PrintMemo = null,
-                            PrintMemoSpecified = false, // print memo
-                            PrintInstructions = false,
-                            PrintInstructionsSpecified = true, // print instructions
-                            RequestPostageHash = false, // request postage hash
-                            NonDeliveryOption = NonDeliveryOption.Return, // return to sender
-                            RedirectTo = null, // redirectTo
-                            OriginalPostageHash = null, // OriginalPostageHash
-                            ReturnImageData = true,
-                            ReturnImageDataSpecified = true, // returnImageData,
-                            InternalTransactionNumber = null,
-                            PaperSize = PaperSizeV1.Default,
-                            EmailLabelTo = null,
-                            PayOnPrint = false, // PayOnPrint
-                            ReturnLabelExpirationDays = null, // ReturnLabelExpirationDays
-                            ReturnLabelExpirationDaysSpecified = false, // ReturnLabelExpirationDaysSpecified,
-                            ImageDpi = ImageDpi.ImageDpi203, // ImageDpi
-                            RateToken = null, // RateToken
-                            OrderId = null, // OrderId
-                        });
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () =>
+                        result = webService.CreateIndicium(
+                            new CreateIndiciumParameters
+                            {
+                                Item = GetCredentials(account),
+                                IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                                TrackingNumber = string.Empty,
+                                Rate = rate,
+                                From = fromAddress,
+                                To = toAddress,
+                                CustomerID = null,
+                                Customs = customs,
+                                SampleOnly = false, // Sample only,
+                                PostageMode = shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
+                                ImageType = thermalType == null
+                                    ? ImageType.Png
+                                    : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
+                                EltronPrinterDPIType = EltronPrinterDPIType.Default,
+                                Memo = UspsUtility.BuildMemoField(shipment.Postal), // Memo
+                                CostCodeId = 0, // Cost Code
+                                DeliveryNotification = false, // delivery notify
+                                ShipmentNotification = null, // shipment notification
+                                RotationDegrees = 0, // Rotation
+                                HorizontalOffset = null,
+                                HorizontalOffsetSpecified = false, // horizontal offset
+                                VerticalOffset = null,
+                                VerticalOffsetSpecified = false, // vertical offset
+                                PrintDensity = null,
+                                PrintDensitySpecified = false, // print density
+                                PrintMemo = null,
+                                PrintMemoSpecified = false, // print memo
+                                PrintInstructions = false,
+                                PrintInstructionsSpecified = true, // print instructions
+                                RequestPostageHash = false, // request postage hash
+                                NonDeliveryOption = NonDeliveryOption.Return, // return to sender
+                                RedirectTo = null, // redirectTo
+                                OriginalPostageHash = null, // OriginalPostageHash
+                                ReturnImageData = true,
+                                ReturnImageDataSpecified = true, // returnImageData,
+                                InternalTransactionNumber = null,
+                                PaperSize = PaperSizeV1.Default,
+                                EmailLabelTo = null,
+                                PayOnPrint = false, // PayOnPrint
+                                ReturnLabelExpirationDays = null, // ReturnLabelExpirationDays
+                                ReturnLabelExpirationDaysSpecified = false, // ReturnLabelExpirationDaysSpecified,
+                                ImageDpi = ImageDpi.ImageDpi203, // ImageDpi
+                                RateToken = null, // RateToken
+                                OrderId = null, // OrderId
+                            }));
                 }
-
-                shipment.TrackingNumber = result.TrackingNumber;
-                shipment.ShipmentCost = result.ShipmentCost;
-                shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
-                shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
-
-                // Set the thermal type for the shipment
-                shipment.ActualLabelFormat = (int?) thermalType;
-
-                return new UspsLabelResponse
-                {
-                    Shipment = shipment,
-                    ImageData = result.ImageData,
-                    LabelUrl = result.URL
-                };
             }
+
+            shipment.TrackingNumber = result.TrackingNumber;
+            shipment.ShipmentCost = result.ShipmentCost;
+            shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
+            shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
+
+            // Set the thermal type for the shipment
+            shipment.ActualLabelFormat = (int?) thermalType;
+
+            UspsLabelResponse uspsLabelResponse = new UspsLabelResponse
+            {
+                Shipment = shipment,
+                ImageData = result.ImageData,
+                LabelUrl = result.URL
+            };
+            telemetricResult.SetValue(uspsLabelResponse);
+            return telemetricResult;
         }
 
         /// <summary>
         /// Updates addresses based on shipment properties like ReturnShipment, etc
         /// </summary>
-        private async Task<(Address to, Address from)> FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment)
+        private async Task<(Address to, Address from)> FixWebserviceAddresses(UspsAccountEntity account,
+            ShipmentEntity shipment,
+            TelemetricResult<UspsLabelResponse> telemetricResult)
         {
-            Address toAddress;
+            Address toAddress = null;
             Address fromAddress;
 
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
-                toAddress = await CleanseAddress(account, shipment.OriginPerson, false).ConfigureAwait(false);
+                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
+                    async () => toAddress = await CleanseAddress(account, shipment.OriginPerson, false).ConfigureAwait(false));
                 fromAddress = CreateAddress(shipment.ShipPerson);
             }
             else
             {
                 fromAddress = CreateAddress(shipment.OriginPerson);
-                toAddress = await CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation).ConfigureAwait(false);
+                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
+                    async () => toAddress =
+                        await CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation)
+                            .ConfigureAwait(false));
             }
 
             if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))

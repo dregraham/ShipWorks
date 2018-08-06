@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Autofac.Features.ResolveAnything;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common;
 using ShipWorks.Data.Model;
@@ -12,6 +14,7 @@ using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
@@ -23,6 +26,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         private readonly IShipmentPreparationResult getLabelInput;
         private readonly ShipmentEntity shipment;
         private readonly List<ShipmentEntity> shipments;
+        private Mock<ILabelService> labelService;
+        private TelemetricResult<IDownloadedLabelData> telemetricResult;
 
         public LabelRetrievalStepTest()
         {
@@ -42,6 +47,14 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.Apply(It.IsAny<ShipmentEntity>()))
                 .Returns((ShipmentEntity x) => x);
 
+            labelService = mock.Mock<ILabelService>();
+            telemetricResult = new TelemetricResult<IDownloadedLabelData>("");
+            labelService.Setup(x => x.Create(AnyShipment)).ReturnsAsync(telemetricResult);
+            
+            mock.Mock<ILabelServiceFactory>()
+                .Setup(x => x.Create(ShipmentTypeCode.Other))
+                .Returns(labelService);
+            
             testObject = mock.Create<LabelRetrievalStep>();
         }
 
@@ -81,6 +94,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public async Task GetLabel_ReturnsSecondShipment_WhenFirstHasLicenseError()
         {
+            mock.Mock<ILabelServiceFactory>()
+                .Setup(x => x.Create(ShipmentTypeCode.OnTrac))
+                .Returns(labelService);
+            
             mock.Mock<ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity>>()
                 .Setup(x => x.Apply(shipment))
                 .Returns(new CompositeValidatorResult(false, new[] { "Foo" }));
@@ -126,11 +143,6 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public async Task GetLabel_DelegatesToLabelService()
         {
-            var labelService = mock.Mock<ILabelService>();
-            mock.Mock<ILabelServiceFactory>()
-                .Setup(x => x.Create(ShipmentTypeCode.Other))
-                .Returns(labelService);
-
             var result = await testObject.GetLabel(getLabelInput);
 
             labelService.Verify(x => x.Create(shipment));
@@ -140,9 +152,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         public async Task GetLabel_ReturnsLabelData_WhenLabelIsSuccessful()
         {
             var labelData = mock.Build<IDownloadedLabelData>();
-            var labelService = mock.Mock<ILabelService>();
-            labelService.Setup(x => x.Create(It.IsAny<ShipmentEntity>()))
-                .ReturnsAsync(labelData);
+            telemetricResult.SetValue(labelData);
 
             mock.Mock<ILabelServiceFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>()))

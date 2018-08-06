@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -10,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
@@ -38,8 +40,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Setup(t => t.CreateWebClient())
                 .Returns(webClientMock);
 
-            webClientMock.Setup(w => w.ProcessShipment(shipment))
-                .ReturnsAsync(new UspsLabelResponse());
+            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
+            telemetricResult.SetValue(new UspsLabelResponse());
+            webClientMock.Setup(w => w.ProcessShipment(AnyShipment))
+                         .ReturnsAsync(telemetricResult);
 
             Mock<IIndex<ShipmentTypeCode, IUspsShipmentType>> shipmentTypeRepo = mock.MockRepository.Create<IIndex<ShipmentTypeCode, IUspsShipmentType>>();
             shipmentTypeRepo.Setup(x => x[ShipmentTypeCode.Usps])
@@ -53,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             UspsLabelService testObject = mock.Create<UspsLabelService>();
             await testObject.Create(shipment);
 
-            mock.Mock<IUspsTermsAndConditions>().Verify(tc=>tc.Validate(shipment), Times.Once);
+            mock.Mock<IUspsTermsAndConditions>().Verify(tc => tc.Validate(shipment), Times.Once);
         }
 
         [Fact]
@@ -79,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             RateResult rateResult = new RateResult("rate", "5", 5, postalRateSelectionMock.Object);
 
             mock.Mock<IUspsRatingService>()
-                .Setup(s => s.GetRates(shipment))
+                .Setup(s => s.GetRates(shipment, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Returns(new RateGroup(new[] { rateResult }));
 
             UspsLabelService testObject = mock.Create<UspsLabelService>();
@@ -111,10 +115,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             RateResult rateResult = new RateResult("rate", "5", 5, postalRateSelectionMock.Object);
 
             mock.Mock<IUspsRatingService>()
-                .Setup(s => s.GetRates(shipment))
+                .Setup(s => s.GetRates(shipment, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Returns(new RateGroup(new[] { rateResult }));
 
             var labelServiceMock = mock.CreateMock<ILabelService>();
+            var telemetricResult = new TelemetricResult<IDownloadedLabelData>("");
+            telemetricResult.SetValue(mock.Mock<IDownloadedLabelData>().Object);
+            labelServiceMock.Setup(s => s.Create(AnyShipment)).ReturnsAsync(telemetricResult);
 
             Mock<IIndex<ShipmentTypeCode, ILabelService>> labelServicesRepo = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ILabelService>>();
             labelServicesRepo.Setup(x => x[ShipmentTypeCode.Express1Usps])

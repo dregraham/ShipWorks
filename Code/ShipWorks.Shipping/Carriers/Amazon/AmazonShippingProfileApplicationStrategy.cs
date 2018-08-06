@@ -38,8 +38,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             
             ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
+            ApplyProfileValue(amazonProfile.Reference1, amazonShipment, AmazonShipmentFields.Reference1);
+
             ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
-            
+            ApplyProfileValue(amazonProfile.ShippingProfile.RequestedLabelFormat, amazonShipment, AmazonShipmentFields.RequestedLabelFormat);
+
             IPackageProfileEntity packageProfile = profile.Packages.First();
             if (packageProfile.Weight.GetValueOrDefault() > 0)
             {

@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Connection
 {
@@ -426,9 +427,20 @@ namespace ShipWorks.Data.Connection
                 throw new ArgumentNullException("con");
             }
 
+            // In the case of actions where WorkstationID could be longer than 128 due to the task name,
+            // go ahead and truncate to 127 just to be sure we don't go over the context allowed size.
+            string workstationID = UserSession.WorkstationID.Truncate(127);
+
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandTimeout = 5;
-            cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ COMMITTED";
+            cmd.CommandText = $@"
+                SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+                DECLARE @Ctx varbinary(128)
+                SELECT @Ctx = CONVERT(varbinary(128), '{ workstationID }')
+                SET CONTEXT_INFO @Ctx
+                ";
+
             DbCommandProvider.ExecuteNonQuery(cmd);
         }
 

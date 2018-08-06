@@ -9,6 +9,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Tokens;
 
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// </summary>
         public async Task UpdateOrderStatus(NetworkSolutionsStoreEntity store, long orderID, long statusCode, string comments)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(store, orderID, statusCode, comments, unitOfWork).ConfigureAwait(false);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())

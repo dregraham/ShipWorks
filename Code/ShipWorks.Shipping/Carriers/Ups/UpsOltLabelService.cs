@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates a label for Ups Online Tools
         /// </summary>
-        public override Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             try
             {
@@ -36,9 +37,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsOltShipmentValidator.ValidateShipment(shipment);
 
                 UpsServicePackageTypeSetting.Validate(shipment);
-                UpsLabelResponse upsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
 
-                return Task.FromResult(createDownloadedLabelData(upsLabelResponse));
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                
+                TelemetricResult<UpsLabelResponse> telemetricUpsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
+                
+                telemetricUpsLabelResponse.CopyTo(telemetricResult);
+                telemetricResult.SetValue(createDownloadedLabelData(telemetricUpsLabelResponse.Value));
+                
+                return Task.FromResult(telemetricResult);
             }
             catch (UpsApiException ex)
             {

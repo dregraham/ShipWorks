@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </returns>
         /// <exception cref="System.ArgumentException">nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.</exception>
         /// <exception cref="FedExSoapCarrierException"></exception>
-        public virtual GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest)
+        public virtual TelemetricResult<GenericResult<ProcessShipmentReply>> Ship(ProcessShipmentRequest nativeShipmentRequest)
         {
             using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
             {
@@ -71,16 +71,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>
         /// The ProcessShipmentReply received from FedEx.
         /// </returns>
-        protected GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest, ShipService service)
+        protected TelemetricResult<GenericResult<ProcessShipmentReply>> Ship(ProcessShipmentRequest nativeShipmentRequest, ShipService service)
         {
+            TelemetricResult<GenericResult<ProcessShipmentReply>> result = new TelemetricResult<GenericResult<ProcessShipmentReply>>("API.ResponseTimeInMilliseconds");
+
             try
-            {
-                // Point the service to the correct endpoint
+            {   // Point the service to the correct endpoint
                 service.Url = settings.EndpointUrl;
 
                 // The request should already be configured at this point, so we just need to send
                 // it across the wire to FedEx
-                ProcessShipmentReply processReply = service.processShipment(nativeShipmentRequest);
+                ProcessShipmentReply processReply = null;
+                result.RunTimedEvent(TelemetricEventType.GetLabel, () => processReply = service.processShipment(nativeShipmentRequest));
 
                 // If we are an Interapptive user, save for certification
                 if (InterapptiveOnly.IsInterapptiveUser && nativeShipmentRequest.TransactionDetail != null)
@@ -89,18 +91,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);
                 }
 
-                return GenericResult.FromSuccess(processReply);
+                result.SetValue(GenericResult.FromSuccess(processReply));
+
+                return result;
             }
             catch (SoapException ex)
             {
-                return GenericResult.FromError<ProcessShipmentReply>(new FedExSoapCarrierException(ex));
+                result.SetValue(GenericResult.FromError<ProcessShipmentReply>(new FedExSoapCarrierException(ex)));
+                return result;
             }
             catch (Exception ex)
             {
                 var translated = WebHelper.TranslateWebException(ex, typeof(FedExException));
                 if (translated is FedExException)
                 {
-                    return GenericResult.FromError<ProcessShipmentReply>(translated);
+                    result.SetValue(GenericResult.FromError<ProcessShipmentReply>(translated));
+                    return result;
                 }
 
                 throw translated;

@@ -109,7 +109,7 @@ namespace ShipWorks.Email
 
             emailAccount.OutgoingServer = "";
             emailAccount.OutgoingPort = 25;
-            emailAccount.OutgoingSecurityType = (int) SmtpSecurity.Unsecure;
+            emailAccount.OutgoingSecurityType = (int) SslMode.None;
             emailAccount.OutgoingCredentialSource = (int) EmailSmtpCredentialSource.None;
             emailAccount.OutgoingUsername = "";
             emailAccount.OutgoingPassword = "";
@@ -137,13 +137,11 @@ namespace ShipWorks.Email
         /// </summary>
         public static Smtp LogonToSmtp(EmailAccountEntity account)
         {
-            TlsParameters tls = GetTlsParameters();
-
             Smtp smtp = new Smtp();
 
             try
             {
-                smtp.Connect(account.OutgoingServer, account.OutgoingPort, tls, (SmtpSecurity) account.OutgoingSecurityType);
+                smtp.Connect(account.OutgoingServer, account.OutgoingPort, (SslMode) account.OutgoingSecurityType);
             }
             catch (UriFormatException ex)
             {
@@ -226,14 +224,11 @@ namespace ShipWorks.Email
                 throw new EmailLogonException("Cannot login as POP3 when using an incoming IMAP server.");
             }
 
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             Pop3 pop3 = new Pop3();
 
             try
             {
-                pop3.Connect(account.IncomingServer, account.IncomingPort, tls, (Pop3Security) account.IncomingSecurityType);
+                pop3.Connect(account.IncomingServer, account.IncomingPort, (SslMode) account.IncomingSecurityType);
 
                 string username = account.IncomingUsername;
                 string password = SecureText.Decrypt(account.IncomingPassword, account.IncomingUsername);
@@ -276,14 +271,11 @@ namespace ShipWorks.Email
                 throw new EmailLogonException("Cannot login as IMAP when using an incoming POP3 server.");
             }
 
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             Imap imap = new Imap();
 
             try
             {
-                imap.Connect(account.IncomingServer, account.IncomingPort, tls, (ImapSecurity) account.IncomingSecurityType);
+                imap.Connect(account.IncomingServer, account.IncomingPort, (SslMode) account.IncomingSecurityType);
 
                 string username = account.IncomingUsername;
                 string password = SecureText.Decrypt(account.IncomingPassword, account.IncomingUsername);
@@ -309,18 +301,6 @@ namespace ShipWorks.Email
             }
 
             return imap;
-        }
-
-        /// <summary>
-        /// Generate TlsParameters
-        /// </summary>
-        private static TlsParameters GetTlsParameters()
-        {
-            TlsParameters tls = new TlsParameters();
-            tls.Version |= TlsVersion.TLS11;
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
-            return tls;
         }
 
         /// <summary>

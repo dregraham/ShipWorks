@@ -106,27 +106,32 @@ namespace ShipWorks.SqlServer.General
         /// </summary>
         public static UserContext GetUserContext(SqlConnection con)
         {
-            SqlCommand hostCmd = con.CreateCommand();
-            hostCmd.CommandText = "SELECT HOST_NAME()";
-            string contextInfo = ((string) hostCmd.ExecuteScalar()).Trim();
+            SqlCommand contextCmd = con.CreateCommand();
+            contextCmd.CommandText = "SELECT CONVERT(VARCHAR(128), CONTEXT_INFO())";
+            string contextInfo = contextCmd.ExecuteScalar() as string;
 
-            if (contextInfo.Length < 10)
+            // If its null, we may be trying to do an update from osql or Mgmnt Studio, so we'll try the old way.
+            if (contextInfo == null)
             {
-                // Try context info
-                SqlCommand contextCmd = con.CreateCommand();
-                contextCmd.CommandText = "SELECT CONVERT(VARCHAR(128), CONTEXT_INFO(), 2)";
-                contextInfo = contextCmd.ExecuteScalar() as string;
+                SqlCommand hostCmd = con.CreateCommand();
+                hostCmd.CommandText = "SELECT HOST_NAME()";
+                contextInfo = ((string) hostCmd.ExecuteScalar()).Trim();
 
                 if (contextInfo == null || contextInfo.Length < 10 || contextInfo.Substring(0, 10) == "0000000000")
                 {
-                    throw new InvalidOperationException(errorMissingHostInfo);
+                    throw new InvalidOperationException(errorMissingHostInfo + $" contextInfo was null.");
                 }
+            }
+
+            if (contextInfo.Substring(0, 10) == "0000000000")
+            {
+                throw new InvalidOperationException(errorMissingHostInfo + $" contextInfo(0, 10) was 0000000000 {contextInfo}.");
             }
 
             long computerID;
             if (!long.TryParse(contextInfo.Substring(5, 5), NumberStyles.AllowHexSpecifier, null, out computerID))
             {
-                throw new InvalidOperationException(errorMissingHostInfo);
+                throw new InvalidOperationException(errorMissingHostInfo + $" Couldn't get computerID: {contextInfo.Substring(5, 5)}.");
             }
 
             computerID = (computerID * 1000) + 1;
@@ -134,7 +139,7 @@ namespace ShipWorks.SqlServer.General
             long userID;
             if (!long.TryParse(contextInfo.Substring(0, 5), NumberStyles.AllowHexSpecifier, null, out userID))
             {
-                throw new InvalidOperationException(errorMissingHostInfo);
+                throw new InvalidOperationException(errorMissingHostInfo + $" Couldn't get userID: {contextInfo.Substring(0, 5)}.");
             }
 
             userID = (userID * 1000) + 2;
@@ -151,7 +156,7 @@ namespace ShipWorks.SqlServer.General
                 // See if a store is being deleted
                 deletingStore = contextInfo[10] == 'S';
 
-                // Auditing is deleted for store deletions as well as wheen it's marked to be disabled
+                // Auditing is deleted for store deletions as well as when it's marked to be disabled
                 if (deletingStore || contextInfo[10] == 'D')
                 {
                     auditState = AuditState.Disabled;

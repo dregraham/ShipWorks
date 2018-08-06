@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
-using log4net;
-using Interapptive.Shared.Enums;
 using System.Threading.Tasks;
 using Autofac;
-using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
-using System.Collections.Generic;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -53,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -68,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public async Task UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
-            OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
 
             if (order == null)
             {
@@ -107,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 unitOfWork.AddForSave(basePrototype);
             }
         }
-        
+
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>

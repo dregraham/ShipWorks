@@ -5,6 +5,7 @@ using System.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="wasShipped">If null, leaves unchanged.</param>
         public static void UpdateOrderStatus(EtsyOrderEntity order, bool? wasPaid, bool? wasShipped)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             UpdateOrderStatus(order, wasPaid, wasShipped, unitOfWork);
 
@@ -180,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static void MarkOrderAsNotFound(EtsyOrderEntity missingOrder)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
             MarkOrderAsNotFound(missingOrder, unitOfWork);
 

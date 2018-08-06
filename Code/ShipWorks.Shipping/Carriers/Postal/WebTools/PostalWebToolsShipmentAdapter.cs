@@ -72,6 +72,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((PostalServiceType) ServiceType);
+
+        /// <summary>
         /// Does the given rate match the service selected for the shipment
         /// </summary>
         public override bool DoesRateMatchSelectedService(RateResult rate)

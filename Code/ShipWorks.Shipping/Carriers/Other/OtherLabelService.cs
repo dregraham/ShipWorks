@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Other
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Creates an Other label
         /// </summary>
         /// <param name="shipment"></param>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
             {
@@ -25,7 +26,10 @@ namespace ShipWorks.Shipping.Carriers.Other
                 throw new ShippingException("No service is specified.");
             }
 
-            return Task.FromResult<IDownloadedLabelData>(new NullDownloadedLabelData());
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            telemetricResult.SetValue(new NullDownloadedLabelData());
+            
+            return Task.FromResult(telemetricResult);
         }
 
         /// <summary>

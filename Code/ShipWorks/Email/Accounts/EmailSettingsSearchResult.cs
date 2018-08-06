@@ -18,7 +18,7 @@ namespace ShipWorks.Email.Accounts
         int smtpPort;
         string smtpUsername;
         string smtpPassword;
-        SmtpSecurity smtpSecurity;
+        SslMode sslMode;
 
         string incomingHost;
         EmailIncomingServerType incomingHostType;
@@ -48,7 +48,7 @@ namespace ShipWorks.Email.Accounts
             smtpPort = smtpResult.Port;
             smtpUsername = smtpResult.Username;
             smtpPassword = smtpResult.Password;
-            smtpSecurity = smtpResult.SmtpSecurity;
+            sslMode = smtpResult.SslMode;
 
             incomingHost = incomingResult.Host;
             incomingHostType = incomingResult.HostType;
@@ -94,9 +94,9 @@ namespace ShipWorks.Email.Accounts
             get { return smtpPassword; }
         }
 
-        public SmtpSecurity SmtpSecurity
+        public SslMode SslMode
         {
-            get { return smtpSecurity; }
+            get { return sslMode; }
         }
 
         public string IncomingHost

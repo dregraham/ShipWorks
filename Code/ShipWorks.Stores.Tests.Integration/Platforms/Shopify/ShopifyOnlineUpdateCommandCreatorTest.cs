@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify;
+using ShipWorks.Stores.Platforms.Shopify.DTOs;
 using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -42,6 +43,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Shopify) as ShopifyOnlineUpdateCommandCreator;
 
+            webClient.Setup(x => x.GetShop())
+                .Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 6 } });
+
             store = Create.Store<ShopifyStoreEntity>(StoreTypeCode.Shopify).Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
@@ -63,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, DetailsMatching("track-123", "Foo", string.Empty)));
         }
 
         [Fact]
@@ -76,8 +80,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, AnyString, AnyString, AnyString), Times.Never);
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, DetailsMatching(AnyString, AnyString, AnyString)), Times.Never);
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, DetailsMatching("track-123", "Foo", string.Empty)));
         }
 
         [Fact]
@@ -89,8 +93,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, "track-123", "Foo", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, DetailsMatching("track-123", "Foo", string.Empty)));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, DetailsMatching("track-123", "Foo", string.Empty)));
         }
 
         [Fact]
@@ -102,8 +106,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, AnyString, AnyString, AnyString), Times.Never);
-            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, DetailsMatching(AnyString, AnyString, AnyString)), Times.Never);
+            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, DetailsMatching("track-123", "Foo", string.Empty)));
         }
 
         [Fact]
@@ -116,9 +120,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(50000, "track-456", "Foo", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, DetailsMatching("track-123", "Foo", string.Empty)));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(50000, DetailsMatching("track-456", "Foo", string.Empty)));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, DetailsMatching("track-456", "Foo", string.Empty)));
         }
 
         [Fact]
@@ -128,18 +132,24 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false);
 
-            webClient.Setup(x => x.UploadOrderShipmentDetails(10000, AnyString, AnyString, AnyString))
+            webClient.Setup(x => x.UploadOrderShipmentDetails(10000, DetailsMatching(AnyString, AnyString, AnyString)))
                 .Throws(new ShopifyException("Foo"));
-            webClient.Setup(x => x.UploadOrderShipmentDetails(50000, AnyString, AnyString, AnyString))
+            webClient.Setup(x => x.UploadOrderShipmentDetails(50000, DetailsMatching(AnyString, AnyString, AnyString)))
                 .Throws(new ShopifyException("Foo"));
 
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Foo", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(70000, "track-789", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, DetailsMatching("track-456", "Foo", string.Empty)));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(70000, DetailsMatching("track-789", "Foo", string.Empty)));
         }
+
+        private static ShopifyFulfillment DetailsMatching(string trackingNumber, string carrier, string carrierTrackingUrl) =>
+            It.Is<ShopifyFulfillment>(s =>
+                s.TrackingNumber == trackingNumber &&
+                s.Carrier == carrier &&
+                s.CarrierTrackingUrl == carrierTrackingUrl);
 
         private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual)
         {

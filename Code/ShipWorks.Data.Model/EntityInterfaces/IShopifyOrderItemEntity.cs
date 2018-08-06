@@ -33,6 +33,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ShopifyProductID { get; }
+        /// <summary> The InventoryItemID property of the Entity ShopifyOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopifyOrderItem"."InventoryItemID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> InventoryItemID { get; }
         
         
         

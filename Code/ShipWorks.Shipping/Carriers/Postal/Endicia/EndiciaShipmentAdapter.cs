@@ -66,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
         }
+        
+        /// <summary>
+        /// Service type name
+        /// </summary>
+        public override string ServiceTypeName => EnumHelper.GetDescription((PostalServiceType) ServiceType);
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

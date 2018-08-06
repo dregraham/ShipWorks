@@ -355,6 +355,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DeliveryExperience", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingServiceID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 		}
 		#endregion
 
@@ -481,6 +483,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonProfileFieldIndex.ShippingServiceID, true); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.ShippingServiceID, value); }
+		}
+
+		/// <summary> The Reference1 property of the Entity AmazonProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonProfile"."Reference1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Reference1
+		{
+			get { return (System.String)GetValue((int)AmazonProfileFieldIndex.Reference1, true); }
+			set	{ SetValue((int)AmazonProfileFieldIndex.Reference1, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

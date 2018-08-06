@@ -33,7 +33,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected override RateGroup GetRatesInternal(ShipmentEntity shipment)
+        /// <param name="telemetricResult"></param>
+        protected override RateGroup GetRatesInternal(ShipmentEntity shipment,
+            TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             // Overridden here otherwise relying on the UspsShipmentType to get rates
             // would result in infinite recursion when using auto-routing since the UspsShipmentType 

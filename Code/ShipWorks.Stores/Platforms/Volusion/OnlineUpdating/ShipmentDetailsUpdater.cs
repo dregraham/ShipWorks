@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Combine;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public async Task UploadShipmentDetails(IVolusionStoreEntity store, ShipmentEntity shipment, bool sendEmail)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             await UploadShipmentDetails(store, shipment, sendEmail, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

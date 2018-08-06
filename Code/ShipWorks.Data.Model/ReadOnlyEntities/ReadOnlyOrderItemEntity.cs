@@ -56,6 +56,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsManual = source.IsManual;
             HarmonizedCode = source.HarmonizedCode;
             OriginalOrderID = source.OriginalOrderID;
+            Length = source.Length;
+            Width = source.Width;
+            Height = source.Height;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -187,6 +190,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The Length property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Length"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Decimal Length { get; }
+        /// <summary> The Width property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Width"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Decimal Width { get; }
+        /// <summary> The Height property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Height"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Decimal Height { get; }
         
         
         public IOrderEntity Order { get; }

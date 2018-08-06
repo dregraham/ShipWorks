@@ -442,6 +442,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HarmonizedCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Length", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Width", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Height", fieldHashtable);
 		}
 		#endregion
 
@@ -745,6 +751,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)OrderItemFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The Length property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Length"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal Length
+		{
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Length, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Length, value); }
+		}
+
+		/// <summary> The Width property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Width"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal Width
+		{
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Width, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Width, value); }
+		}
+
+		/// <summary> The Height property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Height"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal Height
+		{
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Height, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Height, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

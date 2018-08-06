@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Creates an Endicia label
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             endiciaShipmentType.ValidateShipment(shipment);
             IShippingSettingsEntity settings = shippingSettings.FetchReadOnly();
@@ -65,49 +65,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EndiciaApiClient endiciaApiClient = new EndiciaApiClient(endiciaShipmentType.AccountRepository,
                 endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
 
+            TelemetricResult<IDownloadedLabelData> telemetricResult =
+                new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            
             if (useExpress1)
             {
-                if (express1Account == null)
-                {
-                    throw new ShippingException("The Express1 account to automatically use when processing with Endicia has not been selected.");
-                }
-
-                int originalShipmentType = shipment.ShipmentType;
-                long? originalEndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID;
-                long endiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-
-                try
-                {
-                    // Check Endicia amount
-                    RateResult endiciaRate = GetEndiciaRate(shipment, endiciaApiClient);
-
-                    // Change the shipment to Express1
-                    shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                    shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
-                    // Check Express1 amount
-                    RateResult express1Rate = GetExpress1Rate(shipment, express1Account);
-
-                    useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
-                }
-                catch (EndiciaApiException apiException)
-                {
-                    throw new ShippingException(apiException.Message, apiException);
-                }
-                finally
-                {
-                    // Reset back to the original values
-                    shipment.ShipmentType = originalShipmentType;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = originalEndiciaAccountID;
-                    shipment.Postal.Endicia.EndiciaAccountID = endiciaAccountID;
-                }
+                useExpress1 = CheckIfExpress1RateIsCheaper(shipment, express1Account, telemetricResult, endiciaApiClient);
             }
 
             // See if this shipment should really go through Express1
             if (useExpress1)
             {
-                return CreateUsingExpress1(shipment, express1Account);
+                return CreateUsingExpress1(shipment, express1Account, telemetricResult);
             }
 
             // This would be set if they have tried to process as Express1 but it failed... make sure its clear since we are not using it.
@@ -115,13 +84,70 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                LabelRequestResponse response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType);
-                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, response));
+                LabelRequestResponse response = null;
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
+                telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
+                
+                return Task.FromResult(telemetricResult);
             }
             catch (EndiciaException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Check if using express 1 results in cheaper rates
+        /// </summary>
+        private bool CheckIfExpress1RateIsCheaper(ShipmentEntity shipment, IEndiciaAccountEntity express1Account,
+                                                  TelemetricResult<IDownloadedLabelData> telemetricResult,
+                                                  EndiciaApiClient endiciaApiClient)
+        {
+            bool useExpress1;
+            if (express1Account == null)
+            {
+                throw new ShippingException(
+                    "The Express1 account to automatically use when processing with Endicia has not been selected.");
+            }
+
+            int originalShipmentType = shipment.ShipmentType;
+            long? originalEndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID;
+            long endiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
+
+            try
+            {
+                // Check Endicia amount
+                // Per John: We don't differentiate between Express1 and Endicia rates because
+                // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
+                RateResult endiciaRate = null;
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => endiciaRate = GetEndiciaRate(shipment, endiciaApiClient));
+                
+                // Change the shipment to Express1
+                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
+                shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
+                shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
+
+                // Check Express1 amount
+                // Per John: We don't differentiate between Express1 and Endicia rates because
+                // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
+                RateResult express1Rate = null;
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => express1Rate = GetExpress1Rate(shipment));
+                
+                useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
+            }
+            catch (EndiciaApiException apiException)
+            {
+                throw new ShippingException(apiException.Message, apiException);
+            }
+            finally
+            {
+                // Reset back to the original values
+                shipment.ShipmentType = originalShipmentType;
+                shipment.Postal.Endicia.OriginalEndiciaAccountID = originalEndiciaAccountID;
+                shipment.Postal.Endicia.EndiciaAccountID = endiciaAccountID;
+            }
+
+            return useExpress1;
         }
 
         /// <summary>
@@ -145,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the label via Express1
         /// </summary>
-        private Task<IDownloadedLabelData> CreateUsingExpress1(ShipmentEntity shipment, IEndiciaAccountEntity express1Account)
+        private Task<TelemetricResult<IDownloadedLabelData>> CreateUsingExpress1(ShipmentEntity shipment, IEndiciaAccountEntity express1Account, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             // Now we turn this into an Express1 shipment...
             shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
@@ -154,10 +180,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Process via Express1
             express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
-            return express1EndiciaLabelService.Create(shipment);
+
+            Task<TelemetricResult<IDownloadedLabelData>> express1LabelData = express1EndiciaLabelService.Create(shipment);
+            telemetricResult.CopyFrom<int>(express1LabelData.Result, true);
+
+            return Task.FromResult(telemetricResult);
         }
 
-        private RateResult GetExpress1Rate(ShipmentEntity shipment, IEndiciaAccountEntity express1Account)
+        /// <summary>
+        /// Get Express1 rates
+        /// </summary>
+        private RateResult GetExpress1Rate(ShipmentEntity shipment)
         {
             // Instantiate the Express1 shipment type, so the correct account repository is used when getting rates
             RateGroup express1Rates = endiciaRatingService.GetRates(shipment);

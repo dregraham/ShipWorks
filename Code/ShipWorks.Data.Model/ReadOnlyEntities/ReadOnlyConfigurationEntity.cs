@@ -52,6 +52,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UseParallelActionQueue = source.UseParallelActionQueue;
             AllowEbayCombineLocally = source.AllowEbayCombineLocally;
             ArchivalSettingsXml = source.ArchivalSettingsXml;
+            AuditEnabled = source.AuditEnabled;
             
             
             
@@ -156,6 +157,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ArchivalSettingsXml { get; }
+        /// <summary> The AuditEnabled property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AuditEnabled"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AuditEnabled { get; }
         
         
         

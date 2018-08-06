@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -31,14 +32,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Creates the label
         /// </summary>
-        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             try
             {
-                return shippingClerkFactory.Create(shipment)
-                    .Ship(shipment)
-                    .Map(createDownloadedLabelData)
-                    .Match(Task.FromResult<IDownloadedLabelData>, ex => { throw ex; });
+                IFedExShippingClerk clerk = shippingClerkFactory.Create(shipment);
+                TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricShipResult = clerk.Ship(shipment);
+                FedExDownloadedLabelData labelData = telemetricShipResult.Value.Map(createDownloadedLabelData).Match(x => x, ex => { throw ex; });
+
+                TelemetricResult<IDownloadedLabelData> telemetry = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                telemetricShipResult.CopyTo(telemetry);
+                telemetry.SetValue(labelData);
+                return Task.FromResult(telemetry);
             }
             catch (FedExException ex)
             {

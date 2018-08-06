@@ -132,6 +132,8 @@ namespace ShipWorks.ApplicationCore.Logging
         GoogleMaps,
         Jet,
         Overstock,
+        CommerceV3,
+        Zentail,
 
         [ApiPrivateLogSource]
         ShipEngine,

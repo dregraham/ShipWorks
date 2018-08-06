@@ -32,6 +32,16 @@ namespace ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes
         [Obsolete("Called by the de-serializer", error: true)]
         public STATestCase() { }
 
+        /// <summary>
+        /// No timeout
+        /// </summary>
+        public int Timeout => 0;
+
+        /// <summary>
+        /// Not supported
+        /// </summary>
+        public Exception InitializationException => null;
+
         public IMethodInfo Method => testCase.Method;
 
         [SuppressMessage("SonarQube", "SW0001:Wrap in exception monitor",

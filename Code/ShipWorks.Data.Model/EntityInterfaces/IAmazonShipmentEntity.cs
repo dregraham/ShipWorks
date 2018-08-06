@@ -111,6 +111,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean Insurance { get; }
+        /// <summary> The Reference1 property of the Entity AmazonShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonShipment"."Reference1"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String Reference1 { get; }
+        /// <summary> The RequestedLabelFormat property of the Entity AmazonShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonShipment"."RequestedLabelFormat"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int32 RequestedLabelFormat { get; }
         
         IShipmentEntity Shipment { get; }
         

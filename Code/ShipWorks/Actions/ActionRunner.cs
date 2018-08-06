@@ -531,7 +531,7 @@ namespace ShipWorks.Actions
 
                                 // Here the task commits anything it needs saved.  If its a short task, then it could do its actual "Run" here too.
                                 log.InfoFormat("ActionStep - Start - Phase2 (Commit)");
-                                await actionTask.Commit(inputKeys, stepContext).ConfigureAwait(false);
+                                await actionTask.Commit(inputKeys, stepContext, adapter).ConfigureAwait(false);
                                 log.InfoFormat("ActionStep - Finished  - Phase2 (Commit)");
                             }
 
@@ -550,6 +550,8 @@ namespace ShipWorks.Actions
 
                             step.StepStatus = (int) ActionQueueStepStatus.Error;
                             step.AttemptError = ex.Message;
+
+                            log.Error("RunStep encountered an exception.", ex);
                         }
                     }
 
@@ -939,9 +941,10 @@ namespace ShipWorks.Actions
         /// </summary>
         private AuditReason GetAuditStepReason(ActionQueueStepEntity step)
         {
-            return new AuditReason(
-                AuditReasonType.Action,
-                string.Format("Action '{0}' - Step {1}: {2}", ActionQueue.ActionName, step.StepIndex + 1, step.StepName));
+            string reasonDetail = $"Action '{ActionQueue.ActionName}' - Step {step.StepIndex + 1}: {step.StepName}";
+
+            // reasonDetail will get saved to the db, so escape the single quote
+            return new AuditReason(AuditReasonType.Action, reasonDetail.Replace("'", "''"));
         }
     }
 }

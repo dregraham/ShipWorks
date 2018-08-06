@@ -1,12 +1,11 @@
-﻿extern alias rebex2015;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
-using rebex2015::Rebex.IO;
-using rebex2015::Rebex.Net;
+using Rebex.IO;
+using Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
 

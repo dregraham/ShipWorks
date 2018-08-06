@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data
@@ -19,6 +20,7 @@ namespace ShipWorks.Data
     /// </summary>
     public static class ConfigurationData
     {
+        static object lockObj = new object();
         static ConfigurationEntity config;
         static IConfigurationEntity configReadOnly;
         static bool needCheckForChanges;
@@ -51,12 +53,15 @@ namespace ShipWorks.Data
         /// </summary>
         public static ConfigurationEntity Fetch()
         {
-            if (needCheckForChanges)
+            lock (lockObj)
             {
-                UpdateConfiguration();
-            }
+                if (needCheckForChanges)
+                {
+                    UpdateConfiguration();
+                }
 
-            return EntityUtility.CloneEntity(config);
+                return EntityUtility.CloneEntity(config);
+            }
         }
 
         /// <summary>
@@ -64,12 +69,15 @@ namespace ShipWorks.Data
         /// </summary>
         public static IConfigurationEntity FetchReadOnly()
         {
-            if (needCheckForChanges)
+            lock (lockObj)
             {
-                UpdateConfiguration();
-            }
+                if (needCheckForChanges)
+                {
+                    UpdateConfiguration();
+                }
 
-            return configReadOnly;
+                return configReadOnly;
+            }
         }
 
         /// <summary>
@@ -77,11 +85,14 @@ namespace ShipWorks.Data
         /// </summary>
         private static void UpdateConfiguration()
         {
-            ConfigurationEntity newConfig = new ConfigurationEntity(true);
-            SqlAdapter.Default.FetchEntity(newConfig);
-            config = newConfig;
-            configReadOnly = newConfig.AsReadOnly();
-            needCheckForChanges = false;
+            lock (lockObj)
+            {
+                ConfigurationEntity newConfig = new ConfigurationEntity(true);
+                SqlAdapter.Default.FetchEntity(newConfig);
+                config = newConfig;
+                configReadOnly = newConfig.AsReadOnly();
+                needCheckForChanges = false;
+            }
         }
 
         /// <summary>
@@ -89,14 +100,18 @@ namespace ShipWorks.Data
         /// </summary>
         public static void Save(ConfigurationEntity configuration)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            lock (lockObj)
             {
-                adapter.SaveAndRefetch(configuration);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveAndRefetch(configuration);
 
-                Interlocked.Exchange(ref config, EntityUtility.CloneEntity(configuration));
+                    config = EntityUtility.CloneEntity(configuration);
+                    configReadOnly = config.AsReadOnly();
+                }
+
+                needCheckForChanges = false;
             }
-
-            needCheckForChanges = false;
         }
 
         /// <summary>
@@ -149,7 +164,8 @@ namespace ShipWorks.Data
                     }
 
                     ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
-                    sqlAdapter.FetchEntity(configurationEntity);
+                    ExcludeIncludeFieldsList includeFieldsList = new ExcludeIncludeFieldsList(false, new[] { ConfigurationFields.ArchivalSettingsXml });
+                    sqlAdapter.FetchEntity(configurationEntity, null, null, includeFieldsList);
                     archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
                 }
                 catch
@@ -180,7 +196,8 @@ namespace ShipWorks.Data
             new[]
             {
                 Functional.Using(SqlSession.Current.OpenConnection(),
-                connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString()))
+                    connection => new KeyValuePair<string, string>("Database.IsArchive", IsArchive(connection).ToString())),
+                new KeyValuePair<string, string>("Auditing.Enabled", FetchReadOnly().AuditEnabled ? "True" : "False")
             };
     }
 }

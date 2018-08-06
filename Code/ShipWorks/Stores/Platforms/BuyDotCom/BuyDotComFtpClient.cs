@@ -1,5 +1,4 @@
-﻿extern alias rebex2015;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using rebex2015::Rebex.IO;
-using rebex2015::Rebex.Net;
+using Rebex.IO;
+using Rebex.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
 

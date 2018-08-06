@@ -1,0 +1,13 @@
+﻿{
+  "admin_graphql_api_id": "gid://shopify/ProductImage/930314846218",
+  "alt": null,
+  "created_at": "2018-01-22T11:05:56-06:00",
+  "height": 276,
+  "id": 930314846218,
+  "position": 1,
+  "product_id": 335263367178,
+  "src": "https://cdn.shopify.com/s/files/1/0195/8594/products/green.png?v=1516640762",
+  "updated_at": "2018-01-22T11:06:02-06:00",
+  "variant_ids": [3, 4, 5],
+  "width": 327
+}

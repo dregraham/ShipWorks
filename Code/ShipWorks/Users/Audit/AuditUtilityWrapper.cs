@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
@@ -44,7 +45,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Audit the given event for the current user on the current computer.
         /// </summary>
-        public async Task AuditAsync(long entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter)
+        public async Task<Unit> AuditAsync(long? entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter)
         {
             AuditEntity audit = new AuditEntity
             {
@@ -60,6 +61,8 @@ namespace ShipWorks.Users.Audit
             };
 
             await sqlAdapter.SaveEntityAsync(audit).ConfigureAwait(false);
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace ShipWorks.Users.Audit
             ParameterValue transactionIdParam = new ParameterValue(ParameterDirection.InputOutput, dbType: DbType.Int64);
             await sqlAdapter.ExecuteSQLAsync(@"SELECT @Id=dbo.GetTransactionID();", new { Id = transactionIdParam })
                             .ConfigureAwait(false);
-            
+
             return Convert.ToInt64(transactionIdParam.Value);
         }
     }

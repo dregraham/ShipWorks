@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -74,17 +75,16 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns><c>true</c> when the task can be run with the given trigger; otherwise <c>false</c>.</returns>
         public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
-            return triggerType == ActionTriggerType.Scheduled;
+            return triggerType == ActionTriggerType.Scheduled ||
+                   (InterapptiveOnly.MagicKeysDown && triggerType == ActionTriggerType.UserInitiated);
         }
 
         /// <summary>
         /// Creates the editor that is used to edit the task.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException">There is not an editor associated with the task for auto archiving databases.</exception>
         public override ActionTaskEditor CreateEditor()
         {
-            // This task should not appear in the UI
-            throw new InvalidOperationException("There is not an editor associated with the task for auto archiving databases.");
+            return new ActionTaskEditor();
         }
 
         /// <summary>

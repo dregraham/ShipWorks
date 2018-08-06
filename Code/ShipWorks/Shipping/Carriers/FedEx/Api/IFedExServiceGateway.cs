@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API to process a shipment.
         /// </summary>
         /// <returns>The ProcessShipmentReply received from FedEx.</returns>
-        GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest);
+        TelemetricResult<GenericResult<ProcessShipmentReply>> Ship(ProcessShipmentRequest nativeShipmentRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API to get locationID

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
@@ -159,12 +160,16 @@ namespace ShipWorks.Actions
             SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.WorkerThread cleaning up queues.");
             sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
+                // This needs to suppress transactions so that it doesn't accidentally pick up an ambient tran and cause issues like MSDTC escalation.
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    anyWorkToDo = gateway.AnyWorkToDo(sqlConnection);
-                    if (anyWorkToDo)
+                    using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
                     {
-                        CleanupQueues(sqlConnection);
+                        anyWorkToDo = gateway.AnyWorkToDo(sqlConnection);
+                        if (anyWorkToDo)
+                        {
+                            CleanupQueues(sqlConnection);
+                        }
                     }
                 }
             });

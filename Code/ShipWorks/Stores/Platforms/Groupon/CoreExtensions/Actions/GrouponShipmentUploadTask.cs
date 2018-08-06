@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -19,7 +16,20 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "GrouponShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class GrouponShipmentUploadTask : StoreInstanceTaskBase
     {
-        const long maxBatchSize = 1000;
+        private IGrouponOnlineUpdater grouponOnlineUpdater;
+        private readonly IShippingManager shippingManager;
+        private readonly IStoreManager storeManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GrouponShipmentUploadTask(IGrouponOnlineUpdater grouponOnlineUpdater, IShippingManager shippingManager,
+            IStoreManager storeManager)
+        {
+            this.grouponOnlineUpdater = grouponOnlineUpdater;
+            this.shippingManager = shippingManager;
+            this.storeManager = storeManager;
+        }
 
         /// <summary>
         /// Should the ActionTask be run async
@@ -68,46 +78,28 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            GrouponStoreEntity store = StoreManager.GetStore(StoreID) as GrouponStoreEntity;
+            GrouponStoreEntity store = storeManager.GetStore(StoreID) as GrouponStoreEntity;
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
-
-            // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-            if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
-            {
-                context.Postpone(inputKeys);
-            }
-            else
-            {
-                context.ConsumingPostponed();
-
-                // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
-            }
+            // Upload the details, first starting with all the postponed input, plus the current input
+            await UpdloadShipmentDetails(store, inputKeys).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private static async Task UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                foreach (long shipmentKey in shipmentKeys)
                 {
-                    IGrouponOnlineUpdater updater = lifetimeScope.Resolve<IGrouponOnlineUpdater>();
+                    ShipmentEntity shipment = shippingManager.GetShipment(shipmentKey).Shipment;
 
-                    foreach (long shipmentKey in shipmentKeys)
-                    {
-                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
-
-                        await updater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
-                    }
+                    await grouponOnlineUpdater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
                 }
             }
             catch (GrouponException ex)

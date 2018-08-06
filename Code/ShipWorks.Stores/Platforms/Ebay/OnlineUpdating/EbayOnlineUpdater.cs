@@ -11,6 +11,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -280,7 +281,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// </summary>
         public void UpdateOnlineStatus(IEbayStoreEntity store, long orderID, bool? paid, bool? shipped)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
+            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
             UpdateOnlineStatus(store, orderID, paid, shipped, unitOfWork);
 
             using (SqlAdapter adapter = new SqlAdapter(true))

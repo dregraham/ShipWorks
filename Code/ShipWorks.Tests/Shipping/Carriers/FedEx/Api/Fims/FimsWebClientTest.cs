@@ -950,7 +950,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             var testObject = mock.Create<FimsWebClient>();
             var response = testObject.Ship(request.Object);
-            return response;
+            return response.Value;
         }
 
         #endregion "Response Tests"

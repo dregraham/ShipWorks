@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -65,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment);
+        Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Populates a usps account entity.
