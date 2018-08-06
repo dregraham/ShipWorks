@@ -388,8 +388,8 @@ namespace SmokeTest
             //Keyboard.Press("{Tab}{Space}");
             //Delay.Milliseconds(0);
             
-            //Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(69));
-            //Delay.Duration(10000, false);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 1m.", new RecordItemIndex(69));
+            Delay.Duration(60000, false);
             
         }
 
