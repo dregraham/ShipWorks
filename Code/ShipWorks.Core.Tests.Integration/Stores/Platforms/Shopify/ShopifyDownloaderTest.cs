@@ -35,8 +35,8 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
         private readonly DownloadEntity downloadEntity;
         private readonly ShopifyStoreEntity shopifyStore;
         private List<JToken> orders;
-        DateTime updatedAt = DateTime.Parse("2017-04-03T15:30:28-05:00").ToUniversalTime();
-        Mock<IShopifyWebClient> webClient = new Mock<IShopifyWebClient>();
+        readonly DateTime updatedAt = DateTime.Parse("2017-04-03T15:30:28-05:00").ToUniversalTime();
+        readonly Mock<IShopifyWebClient> webClient = new Mock<IShopifyWebClient>();
 
         public ShopifyDownloaderTest(DatabaseFixture db)
         {

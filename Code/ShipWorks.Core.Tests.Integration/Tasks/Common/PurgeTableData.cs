@@ -8,20 +8,20 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
     /// </summary>
     public class PurgeTableData
     {
-        public string TableName;
-        public long InitialRowCount = 0;
-        public long AfterPurgeRowCount = 0;
-        public DataTable InitialTable = null;
-        public DataTable AfterPurgeTable = null;
-
         public PurgeTableData(string tableName, DataTable initialTable, DataTable afterPurgeTable)
         {
             TableName = tableName;
             InitialTable = initialTable;
             AfterPurgeTable = afterPurgeTable;
-            InitialRowCount = InitialTable?.Rows.Count ?? 0;
+            InitialRowCount = initialTable?.Rows.Count ?? 0;
             AfterPurgeRowCount = AfterPurgeTable?.Rows.Count ?? 0;
         }
+
+        public string TableName { get; }
+        public long InitialRowCount { get; }
+        public long AfterPurgeRowCount { get; private set; }
+        public DataTable InitialTable { get; }
+        public DataTable AfterPurgeTable { get; private set; }
 
         public void SetAfterPurgeTable(DataTable after)
         {

@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -34,8 +33,8 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private readonly DataContext context;
         private int RetentionPeriodInDays = 30;
         private readonly List<PurgeTableData> tableDataList = new List<PurgeTableData>();
-        private QueryFactory queryFactory = new QueryFactory();
-        private ComputerEntity computer;
+        private readonly QueryFactory queryFactory = new QueryFactory();
+        private readonly ComputerEntity computer;
 
         public PurgeDatabaseTask_PrintResultsTest(DatabaseFixture db)
         {
@@ -50,7 +49,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PrintResultsTest_LessThanRetentionDate_WhenPurgeHistoryIsFalse()
+        public void PurgeDatabaseTask_PrintResultsTest_LessThanRetentionDate_WhenPurgeHistoryIsFalse()
         {
             List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)> resourcesForPurging = new List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)>();
             List<(long ConsumerID, long ResourceID)> resourcesToNotChange = new List<(long ConsumerID, long ResourceID)>();
@@ -127,7 +126,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PrintResultsTest_LessThanRetentionDate_WhenPurgeHistoryIsTrue()
+        public void PurgeDatabaseTask_PrintResultsTest_LessThanRetentionDate_WhenPurgeHistoryIsTrue()
         {
             List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)> resourcesForPurging = new List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)>();
             List<(long ConsumerID, long ResourceID)> resourcesToNotChange = new List<(long ConsumerID, long ResourceID)>();
@@ -192,7 +191,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task PurgeDatabaseTask_PrintResultsTest_NoDeletes_WhenDatesGreaterThanRetentionDate(bool purgePrintJobHistory)
+        public void PurgeDatabaseTask_PrintResultsTest_NoDeletes_WhenDatesGreaterThanRetentionDate(bool purgePrintJobHistory)
         {
             RetentionPeriodInDays = 180;
 
@@ -231,7 +230,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             Assert.True(resourceTable.AfterPurgeTable.Select(@"Filename = '__purged_print_thermal.swr'").None());
 
             // Make sure old rows now point to place holders
-            long newResourceID;
             foreach (var resourceForPurging in resourcesForPurging)
             {
                 long count = GetCounts(queryFactory.ObjectReference,
@@ -357,8 +355,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 
         private DataTable FetchDataTable<T>(EntityQuery<T> entityQuery, IPredicate predicate) where T : IEntityCore
         {
-            DataTable dataTable;
-
             using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
             {
                 var countOrderQuery = entityQuery

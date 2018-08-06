@@ -52,7 +52,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Stores", "Code\Sh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Stores.UI", "Code\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj", "{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Stores.Tests", "Code\ShipWorks.Stores.Tests\ShipWorks.Stores.Tests.csproj", "{671844E9-8696-4979-B050-F46C7FB672A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Stores.Tests", "Code\ShipWorks.Stores.Tests\ShipWorks.Stores.Tests.csproj", "{671844E9-8696-4979-B050-F46C7FB672A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interapptive.Shared.Tests", "Code\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj", "{329FDD27-99C6-48D6-9205-280CFDA3C735}"
 EndProject
@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.UI.Tests", "Code\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Shipping.Tests.Integration", "Code\ShipWorks.Shipping.Tests.Integration\ShipWorks.Shipping.Tests.Integration.csproj", "{549CAF3C-35F2-4E66-9A73-C9455C654123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Core.Tests.Integration", "Code\ShipWorks.Core.Tests.Integration\ShipWorks.Core.Tests.Integration.csproj", "{512C83FD-A6F9-4FB3-88D4-1824742143EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Core.Tests.Integration", "Code\ShipWorks.Core.Tests.Integration\ShipWorks.Core.Tests.Integration.csproj", "{512C83FD-A6F9-4FB3-88D4-1824742143EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B6449065-AFD7-4AE5-887D-F343C4F16969}"
 EndProject
@@ -903,14 +903,14 @@ Global
 		{549CAF3C-35F2-4E66-9A73-C9455C654123}.Release|Win32.Build.0 = Release|Any CPU
 		{549CAF3C-35F2-4E66-9A73-C9455C654123}.Release|x86.ActiveCfg = Release|Any CPU
 		{549CAF3C-35F2-4E66-9A73-C9455C654123}.Release|x86.Build.0 = Release|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Any CPU.Build.0 = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Win32.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Win32.Build.0 = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|x86.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|x86.Build.0 = Debug (No Analyzers)|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Any CPU.Build.0 = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Win32.ActiveCfg = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|Win32.Build.0 = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|x86.ActiveCfg = Debug|Any CPU
+		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (No Analyzers)|x86.Build.0 = Debug|Any CPU
 		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
 		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
 		{512C83FD-A6F9-4FB3-88D4-1824742143EF}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -41,7 +40,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesTwoResources_WhenHalfOfResourcesAreAbandoned()
+        public void PurgeDatabaseTask_PurgesTwoResources_WhenHalfOfResourcesAreAbandoned()
         {
             var resource1 = CreateValidResource(1);
             var resource2 = CreateValidResource(2);
@@ -57,7 +56,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesAllResources_WhenAllResourcesAreAbandoned()
+        public void PurgeDatabaseTask_PurgesAllResources_WhenAllResourcesAreAbandoned()
         {
             var resource1 = CreateAbandonedResource();
             var resource2 = CreateAbandonedResource();
@@ -73,7 +72,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesNoAbandonedResources_WhenNoAbandonedResourcesAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesNoAbandonedResources_WhenNoAbandonedResourcesAreOlderThan180Days()
         {
             var resource1 = CreateValidResource(1);
             var resource2 = CreateValidResource(2);
@@ -101,7 +100,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Fact]
         public void PurgeDatabaseTask_DoesNotRemoveObjectLabel_WhenIsDeletedButIsAnAuditChange()
         {
-            var audit = Create.Audit(context.User, context.Computer)
+            Create.Audit(context.User, context.Computer)
                 .WithChange(c => c.Set(x => x.EntityID, 1))
                 .Save();
             var label = CreateObjectLabel(1, deleted: true);
@@ -114,7 +113,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Fact]
         public void PurgeDatabaseTask_DoesNotRemoveObjectLabel_WhenIsDeletedButItsParentIsAnAuditChange()
         {
-            var audit = Create.Audit(context.User, context.Computer)
+            Create.Audit(context.User, context.Computer)
                 .WithChange(c => c.Set(x => x.EntityID, 1))
                 .WithChange(c => c.Set(x => x.EntityID, 6))
                 .Save();
@@ -138,7 +137,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         [Fact]
         public void PurgeDatabaseTask_RemovesObjectLabel_WhenIsDeletedAndItsParentDoesNotExist()
         {
-            var audit = Create.Audit(context.User, context.Computer)
+            Create.Audit(context.User, context.Computer)
                 .WithChange(c => c.Set(x => x.EntityID, 1))
                 .Save();
             var label = CreateObjectLabel(1, deleted: true, parentID: 6);

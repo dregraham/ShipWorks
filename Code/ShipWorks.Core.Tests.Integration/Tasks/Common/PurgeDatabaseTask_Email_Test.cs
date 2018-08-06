@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -31,7 +30,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private readonly DataContext context;
         private readonly DateTime cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(RetentionPeriodInDays));
         private readonly PurgeDatabaseTask testObject;
-        private readonly Random random = new Random();
 
         public PurgeDatabaseTask_Email_Test(DatabaseFixture db)
         {
@@ -46,7 +44,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_SoftPurgesTwoEmails_WhenHalfOfEmailsAreOld()
+        public void PurgeDatabaseTask_SoftPurgesTwoEmails_WhenHalfOfEmailsAreOld()
         {
             var email1 = CreateEmail(DateTime.UtcNow, plain: "email1_plain", html: "email1_html");
             var email2 = CreateEmail(cutoffDate.AddDays(1), plain: "email2_plain", html: "email2_html");
@@ -62,7 +60,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DoesNotSoftPurgeEmail_WhenNoEmailsAreOld()
+        public void PurgeDatabaseTask_DoesNotSoftPurgeEmail_WhenNoEmailsAreOld()
         {
             var email1 = CreateEmail(DateTime.UtcNow, plain: "email1_plain", html: "email1_html");
             var email2 = CreateEmail(cutoffDate.AddDays(1), plain: "email2_plain", html: "email2_html");
@@ -78,7 +76,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_SoftPurgesAllEmails_WhenAllEmailsAreSentAndOld()
+        public void PurgeDatabaseTask_SoftPurgesAllEmails_WhenAllEmailsAreSentAndOld()
         {
             var email1 = CreateEmail(cutoffDate.AddDays(-1), plain: "email1_plain", html: "email1_html");
             var email2 = CreateEmail(cutoffDate.AddDays(-2), plain: "email2_plain", html: "email2_html");
@@ -94,7 +92,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DoesNotPurgeEmail_WhenOldEmailIsNotSent()
+        public void PurgeDatabaseTask_DoesNotPurgeEmail_WhenOldEmailIsNotSent()
         {
             var email1 = CreateEmail(cutoffDate.AddDays(-1), plain: "email1_plain", html: "email1_html", status: EmailOutboundStatus.Ready);
 
@@ -104,7 +102,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DeletesTwoEmails_WhenHalfOfEmailsAreOld()
+        public void PurgeDatabaseTask_DeletesTwoEmails_WhenHalfOfEmailsAreOld()
         {
             testObject.PurgeEmailHistory = true;
             var email1 = CreateEmail(DateTime.UtcNow, plain: "email1_plain", html: "email1_html");
@@ -121,7 +119,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DoesNotDeleteEmail_WhenNoEmailsAreOld()
+        public void PurgeDatabaseTask_DoesNotDeleteEmail_WhenNoEmailsAreOld()
         {
             testObject.PurgeEmailHistory = true;
             var email1 = CreateEmail(DateTime.UtcNow, plain: "email1_plain", html: "email1_html");
@@ -138,7 +136,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DeletesAllEmails_WhenAllEmailsAreSentAndOld()
+        public void PurgeDatabaseTask_DeletesAllEmails_WhenAllEmailsAreSentAndOld()
         {
             testObject.PurgeEmailHistory = true;
             var email1 = CreateEmail(cutoffDate.AddDays(-1), plain: "email1_plain", html: "email1_html");
@@ -155,7 +153,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_DoesNotDeleteEmail_WhenOldEmailIsNotSent()
+        public void PurgeDatabaseTask_DoesNotDeleteEmail_WhenOldEmailIsNotSent()
         {
             testObject.PurgeEmailHistory = true;
             var email1 = CreateEmail(cutoffDate.AddDays(-1), plain: "email1_plain", html: "email1_html", status: EmailOutboundStatus.Ready);

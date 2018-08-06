@@ -33,7 +33,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         private readonly DataContext context;
         private int RetentionPeriodInDays = 30;
         private readonly List<PurgeTableData> tableDataList = new List<PurgeTableData>();
-        private QueryFactory queryFactory = new QueryFactory();
+        private readonly QueryFactory queryFactory = new QueryFactory();
 
         public PurgeDatabaseTask_LabelsTest(DatabaseFixture db)
         {
@@ -44,7 +44,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesLabels_LessThanRetentionDate()
+        public void PurgeDatabaseTask_PurgesLabels_LessThanRetentionDate()
         {
             List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)> resourcesForPurging = new List<(long ConsumerID, ThermalLanguage LabelFormat, long EntityID, long ResourceID)>();
             List<(long ConsumerID, long ResourceID)> resourcesToNotChange = new List<(long ConsumerID, long ResourceID)>();
@@ -124,7 +124,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesLabels_NoDeletes_WhenDatesGreaterThanRetentionDate()
+        public void PurgeDatabaseTask_PurgesLabels_NoDeletes_WhenDatesGreaterThanRetentionDate()
         {
             RetentionPeriodInDays = 180;
 
@@ -164,7 +164,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             Assert.True(resourceTable.AfterPurgeTable.Select(@"Filename = '__purged_label_zpl.swr'").None());
 
             // Make sure old rows now point to place holders
-            long newResourceID;
             foreach (var resourceForPurging in resourcesForPurging)
             {
                 long count = GetCounts(queryFactory.ObjectReference,
@@ -280,8 +279,6 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 
         private DataTable FetchDataTable<T>(EntityQuery<T> entityQuery, IPredicate predicate) where T : IEntityCore
         {
-            DataTable dataTable;
-
             using (ISqlAdapter sqlAdapter = context.Mock.Container.Resolve<ISqlAdapterFactory>().Create())
             {
                 var countOrderQuery = entityQuery
