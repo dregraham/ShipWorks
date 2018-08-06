@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesAllAudits_WhenAllDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesAllAudits_WhenAllDownloadsAreOlderThan180Days()
         {
             var audit1 = CreateAudit(cutoffDate.AddDays(-1));
             var audit2 = CreateAudit(cutoffDate.AddDays(-2));
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesTwoAudits_WhenHalfDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesTwoAudits_WhenHalfDownloadsAreOlderThan180Days()
         {
             var audit1 = CreateAudit(cutoffDate.AddDays(-1));
             var audit2 = CreateAudit(cutoffDate.AddDays(-2));
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         }
 
         [Fact]
-        public async Task PurgeDatabaseTask_PurgesNoAudits_WhenNoDownloadsAreOlderThan180Days()
+        public void PurgeDatabaseTask_PurgesNoAudits_WhenNoDownloadsAreOlderThan180Days()
         {
             var audit1 = CreateAudit(cutoffDate.AddDays(1));
             var audit2 = CreateAudit(cutoffDate.AddDays(2));
