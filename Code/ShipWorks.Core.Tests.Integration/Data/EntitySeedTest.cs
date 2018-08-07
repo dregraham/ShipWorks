@@ -16,7 +16,6 @@ namespace ShipWorks.Core.Tests.Integration.Data
     public class EntitySeedTest
     {
         private readonly DataContext context;
-        private IDisposable subscriptions;
 
         public EntitySeedTest(DatabaseFixture db)
         {
