@@ -838,7 +838,7 @@ GO
 IF OBJECT_ID(N'[dbo].[QuickFilterNodeUpdateCheckpoint]', 'U') IS NULL
 CREATE TABLE [dbo].[QuickFilterNodeUpdateCheckpoint]
 (
-[CheckpointID] [bigint] NOT NULL IDENTITY(1070, 1000),
+[CheckpointID] [bigint] NOT NULL IDENTITY(1080, 1000),
 [MaxDirtyID] [bigint] NOT NULL,
 [DirtyCount] [int] NOT NULL,
 [State] [int] NOT NULL,
@@ -2515,7 +2515,7 @@ PRINT N'Creating [dbo].[iParcelPackage]'
 GO
 CREATE TABLE [dbo].[iParcelPackage]
 (
-[iParcelPackageID] [bigint] NOT NULL IDENTITY(1093, 1000),
+[iParcelPackageID] [bigint] NOT NULL IDENTITY(1092, 1000),
 [ShipmentID] [bigint] NOT NULL,
 [Weight] [float] NOT NULL,
 [DimsProfileID] [bigint] NOT NULL,
