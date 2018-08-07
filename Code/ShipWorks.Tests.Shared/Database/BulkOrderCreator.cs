@@ -29,18 +29,12 @@ namespace ShipWorks.Tests.Shared.Database
         public BulkOrderCreator(DataContext context)
         {
             this.context = context;
-            //context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
-            //{
-            //    mock.Override<IMessageHelper>();
-            //});
 
             StoreTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>().Select(e => e.Value).Where(stc => stc != StoreTypeCode.Invalid);
 
             ShipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>().Select(e => e.Value).Where(stc => stc != ShipmentTypeCode.None);
 
             OrderDates = new List<DateTime> { DateTime.UtcNow };
-
-            //CreateOrderForAllStores();
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
