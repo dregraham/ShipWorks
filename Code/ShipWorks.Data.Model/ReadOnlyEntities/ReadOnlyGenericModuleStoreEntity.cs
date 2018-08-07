@@ -58,6 +58,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AmazonMerchantID = source.AmazonMerchantID;
             AmazonAuthToken = source.AmazonAuthToken;
             AmazonApiRegion = source.AmazonApiRegion;
+            IncludeMilliseconds = source.IncludeMilliseconds;
             
             
             
@@ -198,6 +199,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String AmazonApiRegion { get; }
+        /// <summary> The IncludeMilliseconds property of the Entity GenericModuleStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleStore"."IncludeMilliseconds"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean IncludeMilliseconds { get; }
         
         
         

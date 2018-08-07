@@ -610,8 +610,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private string FormatDate(DateTime? lastModified)
         {
+            string dateFormat = Store.IncludeMilliseconds ? "o" : "s";
+            
             DateTime date = lastModified ?? DateTime.MinValue;
-            return date.ToString("s");
+            return date.ToString(dateFormat);
         }
     }
 }

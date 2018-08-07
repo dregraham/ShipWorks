@@ -402,8 +402,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             LoadAmazonOrderDetails(order, xpath);
 
+            string dateFormat = GenericModuleStoreEntity.IncludeMilliseconds ? "o" : "s";
+            
             // last modified
-            order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString("s")));
+            order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString(dateFormat)));
 
             // If Parse can tell what timezone it's in, it automatically converts it to local.  We need UTC.
             if (order.OnlineLastModified.Kind == DateTimeKind.Local)
