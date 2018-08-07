@@ -24,47 +24,34 @@ namespace SmokeTest
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
-    ///The ModuleChecker recording.
+    ///The HostsConfiguration recording.
     /// </summary>
-    [TestModule("bbb58594-dd05-44a3-be75-ac0a924900c4", ModuleType.Recording, 1)]
-    public partial class ModuleChecker : ITestModule
+    [TestModule("b066727c-8de6-4f08-a384-909352551362", ModuleType.Recording, 1)]
+    public partial class HostsConfiguration : ITestModule
     {
         /// <summary>
         /// Holds an instance of the SmokeTestRepository repository.
         /// </summary>
         public static SmokeTestRepository repo = SmokeTestRepository.Instance;
 
-        static ModuleChecker instance = new ModuleChecker();
+        static HostsConfiguration instance = new HostsConfiguration();
 
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
-        public ModuleChecker()
+        public HostsConfiguration()
         {
-            Environ = "";
         }
 
         /// <summary>
         /// Gets a static instance of this recording.
         /// </summary>
-        public static ModuleChecker Instance
+        public static HostsConfiguration Instance
         {
             get { return instance; }
         }
 
 #region Variables
-
-        string _Environ;
-
-        /// <summary>
-        /// Gets or sets the value of variable Environ.
-        /// </summary>
-        [TestVariable("ea3c58a2-7d9b-4bbb-8c13-69d12840837c")]
-        public string Environ
-        {
-            get { return _Environ; }
-            set { _Environ = value; }
-        }
 
 #endregion
 
@@ -92,13 +79,7 @@ namespace SmokeTest
 
             Init();
 
-            TurnOffFirefoxPlugin();
-            Delay.Milliseconds(0);
-            
-            CompareModuleChecker();
-            Delay.Milliseconds(0);
-            
-            CopyHosts();
+            CopyCorrectHosts();
             Delay.Milliseconds(0);
             
         }

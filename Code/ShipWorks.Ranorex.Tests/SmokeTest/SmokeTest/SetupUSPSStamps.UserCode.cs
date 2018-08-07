@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WinForms = System.Windows.Forms;
+using System.Diagnostics;
 
 using Ranorex;
 using Ranorex.Core;
@@ -77,6 +78,74 @@ namespace SmokeTest
         		   Report.Log(ReportLevel.Info, "Get Value", "The USPS Postage is currently greater than $9,000");
         		}
         	}
+
+        public void SetupUSPSStamps_Run_application()
+        {
+        	
+        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
+        	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        	if(Environ == "Production")
+        	{
+        		;
+        	}
+            Report.Log(ReportLevel.Info, "Application", "Run TestServers2.cmd to change test server settings in registry");
+            Host.Local.RunApplication(smokeTestPath + @"\ZipFiles\TestServers2.cmd", "", "", false);
+        }
+
+        public void Key_sequence_Username(RepoItemInfo textInfo)
+        {
+        	
+        	if(Environ == "Production")
+        	{            
+        	Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}apptiveBrian' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}apptiveBrian");
+        	}
+        	
+
+            else
+            {
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}interapptive' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}interapptive");
+            }
+        }
+
+        public void Key_sequence_Password(RepoItemInfo textInfo)
+        {
+        	
+        	if(Environ == "Production")
+        	{            
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}stamps7458");
+        	}
+        	
+
+            else
+            {
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'textInfo'.", textInfo);
+            textInfo.FindAdapter<Text>().PressKeys("{LControlKey down}{Akey}{LControlKey up}password1");
+            }
+
+        }
+
+        public void SelectTestServer()
+        {
+        	
+        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
+        	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        	if(Environ == "Production")
+        	{
+            Report.Log(ReportLevel.Info, "Application", "Run command to change USPS test server settings in registry to production");
+            Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers.reg");
+			regeditProcess.WaitForExit();
+        	}
+            
+            else
+            {
+            Report.Log(ReportLevel.Info, "Application", "Run command to change USPS test server settings in registry to testing");
+            Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers2.reg");
+			regeditProcess.WaitForExit();
+            }
+        }
        
     }
  

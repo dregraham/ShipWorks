@@ -240,6 +240,14 @@ rxversion="8.1">
 			name="ModuleChecker"
 			ref="bbb58594-dd05-44a3-be75-ac0a924900c4"
 			type="Recording">
+				<databinding>
+					<var
+					dataname="Environment"
+					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
+					variableid="ea3c58a2-7d9b-4bbb-8c13-69d12840837c"
+					variablename="Environ">
+					</var>
+				</databinding>
 			</testmodule>
 			<smartfoldernode
 			id="254eaed6-bbd9-41f6-8551-df6d373e9aec"
@@ -1002,6 +1010,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="b26bdcce-ee15-4e94-a977-75e3c21f1fe2"
+			name="ResetHostsFile"
+			ref="195f9e46-4670-4b43-8c35-ac85b8b47198"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="b3de4b27-817c-4663-b9ec-0981d51c3263"
 			name="CloseShipOrdersDialog"
 			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
@@ -1367,7 +1381,7 @@ rxversion="8.1">
 					</param>
 					<param
 					name="Environment"
-					value="Production">
+					value="Staging">
 					</param>
 				</parameters>
 			</testcase>
@@ -2334,6 +2348,10 @@ rxversion="8.1">
 						id="03df545f-ec24-4038-8d69-3c805cf12cd4"
 						name="SendInfoEmail">
 						</testmodule>
+						<testmodule
+						id="b26bdcce-ee15-4e94-a977-75e3c21f1fe2"
+						name="ResetHostsFile">
+						</testmodule>
 					</teardown>
 				</testcase>
 			</testsuite>
@@ -2445,6 +2463,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="39771e1c-c880-4a5d-9ba9-b13acb5d2b8a">
+			</testcontainer>
+			<testcontainer
+			id="3dd7222e-fd59-4552-bfe4-b51f60877ed1">
 			</testcontainer>
 			<testcontainer
 			id="4589bd11-842f-46a1-ba7d-75d7ae236236">
@@ -2559,18 +2580,6 @@ rxversion="8.1">
 		name="TestRun">
 			<testcontainer
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
-			</testcontainer>
-			<testcontainer
-			id="21c1fa07-4c36-48a5-a7ce-583e03d7f79e">
-			</testcontainer>
-			<testcontainer
-			id="95eeff4e-218a-4f4b-a4a5-e92d3b071ca1">
-			</testcontainer>
-			<testcontainer
-			id="a4d39d7c-4ad0-4ac9-a2b1-ef03956db7dd">
-			</testcontainer>
-			<testcontainer
-			id="a5271e47-96a7-41c9-b5e2-3dc0ec43957c">
 			</testcontainer>
 			<testcontainer
 			id="cfea8d06-1bda-4e5e-a3a7-52a894247f32">

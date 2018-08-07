@@ -32,6 +32,11 @@ rxversion="8.1">
 		name="USPSPostageBalance">
 			$USPSPostageBalance
 		</var>
+		<var
+		id="d1e2028f-c152-43ca-bea4-f9668b5d3869"
+		name="Environ">
+			Staging
+		</var>
 	</variables>
 	<recorditems>
 		<mouseitem
@@ -11484,20 +11489,22 @@ CiiigAooooAKKKKACiiigAooooAKKKKACiiigAqlP1uP8/wiiirhuTLYu0UUVBQUUUUAFFFFABRR
 RQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB//9k=
 			</helperscreenshot>
 		</mouseitem>
-		<runapprecorditem
+		<userrecorditem
+		classname="SetupUSPSStamps"
 		enabled="True"
-		maximized="False"
-		optional="False">
+		isexternaltestmethod="False"
+		methodname="SelectTestServer"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
 			<comment>
 			</comment>
 			<bindings>
 			</bindings>
-			<filename>
-				TestServers2.cmd
-			</filename>
-			<args>
-			</args>
-		</runapprecorditem>
+			<arguments
+			id="79e770bf-b27a-4af8-9399-5b0f40eab8c8">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"
@@ -19767,200 +19774,39 @@ ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUA
 FFFFABRRRQAUUUUAf//Z
 			</helperscreenshot>
 		</mouseitem>
-		<keysequenceitem
-		KeySequence="{LControlKey down}{Akey}{LControlKey up}interapptive"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupUSPSStamps"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="Key_sequence_Username"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="64e47034-1a0e-4d47-b6dc-d0fcbb703df6">
+		varname="">
 			<comment>
 				Enter the Username
 			</comment>
 			<bindings>
 			</bindings>
-			<info
-			id="66ddea15-f699-4e25-a263-6e2666a46903"
-			sourcename="Recorder">
-				<element
-				capabilities="accessible"
-				dontcache="False"
-				enabled="True"
-				flavor="msaa"
-				hasfocus="False"
-				index="0"
-				prefcap="text"
-				rect="700,301,158,17"
-				role="text"
-				snapElem=""
-				valid="True"
-				visible="True">
-					<attribute
-					name="text"
-					type="System.String">
-					</attribute>
-					<attribute
-					name="accessiblerole"
-					type="System.Windows.Forms.AccessibleRole, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-						Text
-					</attribute>
-					<attribute
-					name="accessiblestate"
-					type="System.Windows.Forms.AccessibleStates, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-						Focusable
-					</attribute>
-					<attribute
-					name="accessiblevalue"
-					type="System.String">
-					</attribute>
-				</element>
-				<path>
-					/form[@controlname='UspsSetupWizard']/container[@controlname='mainPanel']//text[@accessiblerole='Text']
-				</path>
-			</info>
-			<helperscreenshot
-			guid="549e11b5-d2f5-4625-a464-839f337d6b9e">
-				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
-aKzjYAO8kcCBxMhjIx8qgKDj0HB4qslhO0uWgKh8GUYjVSdwPG3kjGevNAG1RWQ+nSrERDHsyGDb
-SPmG8EDnj7uQM8dqtWsDwWMqRRurHJVJgmM49E4xQBdpk0ghheVgSqAk461lW2nt5yh4GEG4MUcR
-j+FgeF47iiWxk8t0NoJfkZYuVxF8zep44I6elAGxRWffIr3cKvam5HlP8ny8crzyRVcWVyJoS8Za
-SLYBIuzBUYzkn5s9aANiisVbGQRFfsjbdynBEZZiAfv87WHPsf51OLS4TDLGoKKrhVPG/ABAyfQf
-rQBp0E4BPpWUbKRZVCw7mDJsnyPlUAZX15wenHNL9h2QWym0EyhCHj+X7+B8xycHoRmgDSikEsKS
-LkB1DDPvTqr2Yljhjikj2hIlG7cDk45H4f1qxTYBRRRSAKKKKACiiigAooooAKKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GjYPV/++2/xoAmoqHYPV/++2/xo2D1f/vtv8aAJqKh2D1f/vtv8aNg
-9X/77b/GgCaiodg9X/77b/GigB1FZzTXJljQyRhlmKMQhww2Z6Z/rTY728eJZPJUJJt2MQMDJAxw
-xJ6+g6UAadFVb0zLbJskVZPMQFtpweR2z/WqqXE9rb728t03y/KAQcjcc5z7elAGpRVW0luXVzcR
-hcAFWwBn8AzfzqJryYxQmJUaSSIPj3yo4yR6njNAF+iswX107hII1lZRlsJtzyRjDMCvT3qUXF0+
-zaYV8yVkGVJ2gbuTzz0FAF6isyS/uFi3KqsYwTKAnGAxGclhjOD60rXt0AzDydoDsBtOcK2Mde/6
-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
-AKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigA
-ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACi
-iigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK
-KACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoooo
-AKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigA
-ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACi
-iigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK
-KACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoooo
-AKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigA
-ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACi
-iigAooooAKKKKACiiigAooooAKKKKAP/2Q==
-			</helperscreenshot>
-		</keysequenceitem>
+			<arguments
+			id="633b8e33-e6b6-4e4c-89a6-3f10221ceed5">
+				<argument
+				argname="textInfo"
+				id="780c90ff-4b7c-412c-be4a-c0da177617af">
+					<argvaluetype>
+						Ranorex.Core.Repository.RepoItemInfo, Ranorex.Core, Culture=neutral
+					</argvaluetype>
+					<argvalue>
+					</argvalue>
+					<info
+					id="66ddea15-f699-4e25-a263-6e2666a46903"
+					sourcename="ItemRecorderEditor">
+						<path>
+							/form[@controlname='UspsSetupWizard']/container[@controlname='mainPanel']//text[@accessiblerole='Text' and @visible='True']
+						</path>
+					</info>
+				</argument>
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"
@@ -20011,26 +19857,39 @@ iigAooooAKKKKACiiigAooooAKKKKAP/2Q==
 				</path>
 			</info>
 		</mouseitem>
-		<keysequenceitem
-		KeySequence="{LControlKey down}{Akey}{LControlKey up}password1"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupUSPSStamps"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="Key_sequence_Password"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="2f3c436f-be6a-498c-b347-bf2c8539c7cb">
+		varname="">
 			<comment>
 				Enter the Password
 			</comment>
 			<bindings>
 			</bindings>
-			<info
-			id="0dae54ca-881b-4dbb-9f13-8afdb3f96ee5"
-			sourcename="ItemRecorderEditor">
-				<path>
-					/form[@controlname='UspsSetupWizard']/container[@controlname='mainPanel']/?/?/text[@controlname='password']
-				</path>
-			</info>
-		</keysequenceitem>
+			<arguments
+			id="42a8ae42-30a9-411d-88d7-683313e40018">
+				<argument
+				argname="textInfo"
+				id="85ff8ae4-8f31-441f-8a81-6c13215706cf">
+					<argvaluetype>
+						Ranorex.Core.Repository.RepoItemInfo, Ranorex.Core, Culture=neutral
+					</argvaluetype>
+					<argvalue>
+					</argvalue>
+					<info
+					id="0dae54ca-881b-4dbb-9f13-8afdb3f96ee5"
+					sourcename="ItemRecorderEditor">
+						<path>
+							/form[@controlname='UspsSetupWizard']/container[@controlname='mainPanel']/?/?/text[@controlname='password' and @visible='True']
+						</path>
+					</info>
+				</argument>
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"

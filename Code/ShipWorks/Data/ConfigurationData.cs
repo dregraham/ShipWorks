@@ -4,11 +4,13 @@ using System.Data.Common;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data
@@ -162,7 +164,8 @@ namespace ShipWorks.Data
                     }
 
                     ConfigurationEntity configurationEntity = new ConfigurationEntity(true);
-                    sqlAdapter.FetchEntity(configurationEntity);
+                    ExcludeIncludeFieldsList includeFieldsList = new ExcludeIncludeFieldsList(false, new[] { ConfigurationFields.ArchivalSettingsXml });
+                    sqlAdapter.FetchEntity(configurationEntity, null, null, includeFieldsList);
                     archivalSettingsXml = configurationEntity.ArchivalSettingsXml;
                 }
                 catch

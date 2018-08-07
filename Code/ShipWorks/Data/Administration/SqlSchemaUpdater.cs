@@ -179,9 +179,6 @@ namespace ShipWorks.Data.Administration
                                 // Update the tables
                                 UpdateScripts(installedSchema, progressScripts);
 
-                                // Execute any support scripts
-                                ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
-
                                 // Functionality starting
                                 progressFunctionality.Starting();
 
@@ -199,6 +196,9 @@ namespace ShipWorks.Data.Administration
                                 }
 
                                 ApplyVersionSpecificUpdates(installedAssembly);
+
+                                // Execute any support scripts
+                                ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
                             }
                         }
                     }
