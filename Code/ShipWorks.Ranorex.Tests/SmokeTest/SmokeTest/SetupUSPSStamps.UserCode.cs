@@ -146,6 +146,20 @@ namespace SmokeTest
 			regeditProcess.WaitForExit();
             }
         }
+
+        public void RemoveWebRegUSPS()
+        {
+        	if(EnvironmentUSPS=="Production")
+        	{
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}{Down}'.");
+            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}{Down}");
+        	}
+        	else
+        	{
+        	Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}'.");
+            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}");	
+        	}
+        }
        
     }
  

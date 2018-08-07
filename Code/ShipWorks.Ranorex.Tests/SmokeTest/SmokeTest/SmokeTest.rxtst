@@ -815,6 +815,12 @@ rxversion="8.1">
 					variableid="2b0a0d62-bfde-418c-b84d-f90b9dd7cc3f"
 					variablename="USPSPostageBalance">
 					</var>
+					<var
+					dataname="Environment"
+					datasourceid="f875647d-7a5c-46d1-bda6-83a5075d93c7"
+					variableid="e79b7d4f-78c2-4975-ac77-96fa89ef2061"
+					variablename="EnvironmentUSPS">
+					</var>
 				</databinding>
 			</testmodule>
 			<testmodule

@@ -37,6 +37,11 @@ rxversion="8.1">
 		name="Environ">
 			Staging
 		</var>
+		<var
+		id="e79b7d4f-78c2-4975-ac77-96fa89ef2061"
+		name="EnvironmentUSPS">
+			Staging
+		</var>
 	</variables>
 	<recorditems>
 		<mouseitem
@@ -25721,18 +25726,22 @@ AMFRkgcDv681JcZ+wwNKgQK0ZkUdF5H6A1dpGAZSrAEEYIPegDNtjsMiSS3g+aTMYhO3GT0YLn9a
 av8AbYUbPsm3HHmbt2PfHGa1FAVQqgAAYAHaloFuf//Z
 			</helperscreenshot>
 		</mouseitem>
-		<keysequenceitem
-		KeySequence="{Tab}{Tab}{Tab}{Tab}{Down}"
-		duration="100ms"
+		<userrecorditem
+		classname="SetupUSPSStamps"
 		enabled="True"
+		isexternaltestmethod="False"
+		methodname="RemoveWebRegUSPS"
+		namespace="SmokeTest"
 		optional="False"
-		presstime="100ms"
-		searchpropertyid="d7b1c2b2-1cbd-4026-a2d9-e803a4841d3b">
+		varname="">
 			<comment>
 			</comment>
 			<bindings>
 			</bindings>
-		</keysequenceitem>
+			<arguments
+			id="52669402-dc1b-43e2-b7d4-424323d1bc60">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"

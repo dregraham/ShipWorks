@@ -43,6 +43,7 @@ namespace SmokeTest
         {
             USPSPostageBalance = "$USPSPostageBalance";
             Environ = "Staging";
+            EnvironmentUSPS = "Staging";
         }
 
         /// <summary>
@@ -77,6 +78,18 @@ namespace SmokeTest
         {
             get { return _Environ; }
             set { _Environ = value; }
+        }
+
+        string _EnvironmentUSPS;
+
+        /// <summary>
+        /// Gets or sets the value of variable EnvironmentUSPS.
+        /// </summary>
+        [TestVariable("e79b7d4f-78c2-4975-ac77-96fa89ef2061")]
+        public string EnvironmentUSPS
+        {
+            get { return _EnvironmentUSPS; }
+            set { _EnvironmentUSPS = value; }
         }
 
 #endregion
@@ -606,8 +619,7 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.USPS1.Click(300);
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}{Down}'.", new RecordItemIndex(107));
-            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}{Down}");
+            RemoveWebRegUSPS();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.Remove' at Center.", repo.ShippingSettingsDlg.RemoveInfo, new RecordItemIndex(108));

@@ -7,6 +7,9 @@ rxversion="8.1">
 	<name>
 		SetupDatabase
 	</name>
+	<description>
+		The SetupDatabase recording.
+	</description>
 	<repeatcount>
 		1
 	</repeatcount>
