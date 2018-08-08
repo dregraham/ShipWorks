@@ -4,22 +4,21 @@
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
-    <Element value="SetupDatabase.rxrec" />
     <Element value="SmokeTest.rxtst" />
-    <Element value="SetupDatabase.UserCode.cs" />
     <Element value="SetupUSPSStamps.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
+      <fileNames value="" />
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
+      <Element value="SmokeTest.SetupUSPSStamps.RemoveWebRegUSPS()" />
+      <Element value="SmokeTest.SetupUSPSStamps.Key_sequence()" />
       <Element value="SmokeTest.ResetHostsFile.ResetHosts()" />
       <Element value="SmokeTest.ModuleChecker.CopyHosts()" />
       <Element value="SmokeTest.HostsConfiguration.CopyCorrectHosts()" />
       <Element value="SmokeTest.SetupUSPSStamps.SelectTestServer()" />
-      <Element value="SmokeTest.SetupCarrierTestServers.RunTestServerCMD()" />
-      <Element value="SmokeTest.InstallShipWorks.InstallChromium()" />
     </Array>
   </Properties>
 </Properties>
