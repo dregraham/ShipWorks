@@ -149,7 +149,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
             submitter.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'} and PaymentStatus eq 'Cleared'");
-            submitter.Variables.Add("$count", "true");
             submitter.Variables.Add("$orderby", "CreatedDateUtc");
             submitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
