@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Threading;
+using System.IO;
 using WinForms = System.Windows.Forms;
 
 using Ranorex;
@@ -48,6 +49,20 @@ namespace SmokeTest
         public void TurnOffFirefoxPlugin()
         {
         	Ranorex.Core.ElementEngine.Instance.Flavors["firefoxweb"].Enabled = false;
+        }
+
+        public void CopyHosts()
+        {
+        	File.Copy("C:\\Windows\\System32\\drivers\\etc\\hosts","C:\\Windows\\System32\\drivers\\etc\\hosts.backup",true);  
+        	if(Environ=="Production")
+        	{
+            File.Copy(@"\\intfs01\Development\Testing\hostsprod","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
+        	}
+        	else
+        	{
+        		
+            File.Copy(@"\\intfs01\Development\Testing\hostsstaging","C:\\Windows\\System32\\drivers\\etc\\hosts",true);
+        	}
         }
 
     }

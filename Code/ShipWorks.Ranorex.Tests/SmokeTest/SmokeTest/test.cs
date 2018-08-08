@@ -24,47 +24,34 @@ namespace SmokeTest
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
-    ///The ModuleChecker recording.
+    ///The test recording.
     /// </summary>
-    [TestModule("bbb58594-dd05-44a3-be75-ac0a924900c4", ModuleType.Recording, 1)]
-    public partial class ModuleChecker : ITestModule
+    [TestModule("18c03c71-1d7d-4ab3-8302-13da39c1265e", ModuleType.Recording, 1)]
+    public partial class test : ITestModule
     {
         /// <summary>
         /// Holds an instance of the SmokeTestRepository repository.
         /// </summary>
         public static SmokeTestRepository repo = SmokeTestRepository.Instance;
 
-        static ModuleChecker instance = new ModuleChecker();
+        static test instance = new test();
 
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
-        public ModuleChecker()
+        public test()
         {
-            Environ = "";
         }
 
         /// <summary>
         /// Gets a static instance of this recording.
         /// </summary>
-        public static ModuleChecker Instance
+        public static test Instance
         {
             get { return instance; }
         }
 
 #region Variables
-
-        string _Environ;
-
-        /// <summary>
-        /// Gets or sets the value of variable Environ.
-        /// </summary>
-        [TestVariable("ea3c58a2-7d9b-4bbb-8c13-69d12840837c")]
-        public string Environ
-        {
-            get { return _Environ; }
-            set { _Environ = value; }
-        }
 
 #endregion
 
@@ -92,12 +79,6 @@ namespace SmokeTest
 
             Init();
 
-            TurnOffFirefoxPlugin();
-            Delay.Milliseconds(0);
-            
-            CompareModuleChecker();
-            Delay.Milliseconds(0);
-            
             CopyHosts();
             Delay.Milliseconds(0);
             

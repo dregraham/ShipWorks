@@ -165,6 +165,7 @@
     <Compile Include="Data\DataAccessAdapterTest.cs" />
     <Compile Include="Data\DeletionServiceTest.cs" />
     <Compile Include="Data\DataProviderRegistrationTest.cs" />
+    <Compile Include="Data\EntitySeedTest.cs" />
     <Compile Include="Data\TransactionDtcTest.cs" />
     <Compile Include="Filters\FilterHelperWrapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

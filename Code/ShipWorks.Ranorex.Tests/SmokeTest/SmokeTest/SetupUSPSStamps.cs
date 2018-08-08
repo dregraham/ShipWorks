@@ -42,6 +42,8 @@ namespace SmokeTest
         public SetupUSPSStamps()
         {
             USPSPostageBalance = "$USPSPostageBalance";
+            Environ = "Staging";
+            EnvironmentUSPS = "Staging";
         }
 
         /// <summary>
@@ -64,6 +66,30 @@ namespace SmokeTest
         {
             get { return _USPSPostageBalance; }
             set { _USPSPostageBalance = value; }
+        }
+
+        string _Environ;
+
+        /// <summary>
+        /// Gets or sets the value of variable Environ.
+        /// </summary>
+        [TestVariable("d1e2028f-c152-43ca-bea4-f9668b5d3869")]
+        public string Environ
+        {
+            get { return _Environ; }
+            set { _Environ = value; }
+        }
+
+        string _EnvironmentUSPS;
+
+        /// <summary>
+        /// Gets or sets the value of variable EnvironmentUSPS.
+        /// </summary>
+        [TestVariable("e79b7d4f-78c2-4975-ac77-96fa89ef2061")]
+        public string EnvironmentUSPS
+        {
+            get { return _EnvironmentUSPS; }
+            set { _EnvironmentUSPS = value; }
         }
 
 #endregion
@@ -225,8 +251,7 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.Close.Click(300);
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Application", "Run application 'TestServers2.cmd' with arguments '' in normal mode.", new RecordItemIndex(30));
-            Host.Local.RunApplication("TestServers2.cmd", "", "", false);
+            SelectTestServer();
             Delay.Milliseconds(0);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
@@ -423,8 +448,7 @@ namespace SmokeTest
             Delay.Milliseconds(200);
             
             // Enter the Username
-            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Username\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}interapptive' with focus on 'UspsSetupWizard.MainPanel.Username'.", repo.UspsSetupWizard.MainPanel.UsernameInfo, new RecordItemIndex(71));
-            repo.UspsSetupWizard.MainPanel.Username.PressKeys("{LControlKey down}{Akey}{LControlKey up}interapptive");
+            Key_sequence_Username(repo.UspsSetupWizard.MainPanel.UsernameInfo);
             Delay.Milliseconds(0);
             
             // Move to the Password field
@@ -438,8 +462,7 @@ namespace SmokeTest
             Delay.Milliseconds(200);
             
             // Enter the Password
-            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}password1' with focus on 'UspsSetupWizard.MainPanel.Password'.", repo.UspsSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(74));
-            repo.UspsSetupWizard.MainPanel.Password.PressKeys("{LControlKey down}{Akey}{LControlKey up}password1");
+            Key_sequence_Password(repo.UspsSetupWizard.MainPanel.PasswordInfo);
             Delay.Milliseconds(0);
             
             // Move to the Next on the Stamps.com Credentials page
@@ -596,8 +619,7 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.USPS1.Click(300);
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Tab}{Down}'.", new RecordItemIndex(107));
-            Keyboard.Press("{Tab}{Tab}{Tab}{Tab}{Down}");
+            RemoveWebRegUSPS();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.Remove' at Center.", repo.ShippingSettingsDlg.RemoveInfo, new RecordItemIndex(108));

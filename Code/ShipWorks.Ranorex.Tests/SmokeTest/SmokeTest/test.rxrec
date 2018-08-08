@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <recordtable
 embeddedrepository="False"
-id="bbb58594-dd05-44a3-be75-ac0a924900c4"
+id="18c03c71-1d7d-4ab3-8302-13da39c1265e"
 mode="Global"
 rxversion="8.1">
 	<name>
-		ModuleChecker
+		test
 	</name>
 	<repeatcount>
 		1
@@ -23,49 +23,14 @@ rxversion="8.1">
 		True
 	</useDefaultItemLogging>
 	<codegen
-	classname="ModuleChecker"
+	classname="test"
 	namespace="SmokeTest">
 	</codegen>
 	<variables>
-		<var
-		id="ea3c58a2-7d9b-4bbb-8c13-69d12840837c"
-		name="Environ">
-		</var>
 	</variables>
 	<recorditems>
 		<userrecorditem
-		classname="ModuleChecker"
-		enabled="True"
-		isexternaltestmethod="False"
-		methodname="TurnOffFirefoxPlugin"
-		namespace="SmokeTest"
-		optional="False"
-		varname="">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<arguments
-			id="104cbca2-83d9-4255-94dc-edf7453d7f63">
-			</arguments>
-		</userrecorditem>
-		<userrecorditem
-		classname="ModuleChecker"
-		enabled="True"
-		isexternaltestmethod="False"
-		methodname="CompareModuleChecker"
-		namespace="SmokeTest"
-		optional="False"
-		varname="">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<arguments
-			id="9d9391a8-71f0-43d1-8d48-f422fc73708e">
-			</arguments>
-		</userrecorditem>
-		<userrecorditem
+		autogenmethod="True"
 		classname="ModuleChecker"
 		enabled="True"
 		isexternaltestmethod="False"
@@ -98,7 +63,7 @@ rxversion="8.1">
 	</repository>
 	<usercodefile
 	lang="CSharp">
-		ModuleChecker.UserCode.cs
+		test.UserCode.cs
 	</usercodefile>
 	<references>
 	</references>

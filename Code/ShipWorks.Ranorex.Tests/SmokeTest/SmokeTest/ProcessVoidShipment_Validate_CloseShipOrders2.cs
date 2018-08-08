@@ -79,31 +79,34 @@ namespace SmokeTest
 
             Init();
 
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 1s.", new RecordItemIndex(0));
+            Delay.Duration(1000, false);
+            
             // Move to the Create Label Button
-            Report.Log(ReportLevel.Info, "Mouse", "Move to the Create Label Button\r\nMouse Left Move item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(0));
+            Report.Log(ReportLevel.Info, "Mouse", "Move to the Create Label Button\r\nMouse Left Move item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(1));
             repo.ShippingDlg.ProcessDropDownButton.MoveTo(300);
             Delay.Milliseconds(200);
             
             // Click the Create Label button
-            Report.Log(ReportLevel.Info, "Mouse", "Click the Create Label button\r\nMouse Left Click item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(1));
+            Report.Log(ReportLevel.Info, "Mouse", "Click the Create Label button\r\nMouse Left Click item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(2));
             repo.ShippingDlg.ProcessDropDownButton.Click(300);
             Delay.Milliseconds(200);
             
             // Wait until the processing Shipments dialog does not exist
-            Report.Log(ReportLevel.Info, "Wait", "Wait until the processing Shipments dialog does not exist\r\nWaiting 30s to not exist. Associated repository item: 'ProcessingShipments.ProcessingShipments'", repo.ProcessingShipments.ProcessingShipmentsInfo, new ActionTimeout(30000), new RecordItemIndex(2));
+            Report.Log(ReportLevel.Info, "Wait", "Wait until the processing Shipments dialog does not exist\r\nWaiting 30s to not exist. Associated repository item: 'ProcessingShipments.ProcessingShipments'", repo.ProcessingShipments.ProcessingShipmentsInfo, new ActionTimeout(30000), new RecordItemIndex(3));
             repo.ProcessingShipments.ProcessingShipmentsInfo.WaitForNotExists(30000);
             
-            // Wait 5s
-            Report.Log(ReportLevel.Info, "Delay", "Wait 5s\r\nWaiting for 10s.", new RecordItemIndex(3));
+            // Wait 10s
+            Report.Log(ReportLevel.Info, "Delay", "Wait 10s\r\nWaiting for 10s.", new RecordItemIndex(4));
             Delay.Duration(10000, false);
             
             // Move to Close button (Ship Orders UI)
-            Report.Log(ReportLevel.Info, "Mouse", "Move to Close button (Ship Orders UI)\r\nMouse Left Move item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(4));
+            Report.Log(ReportLevel.Info, "Mouse", "Move to Close button (Ship Orders UI)\r\nMouse Left Move item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(5));
             repo.ShippingDlg.Close.MoveTo(300);
             Delay.Milliseconds(200);
             
             // Click close button (Ship Orders UI)
-            Report.Log(ReportLevel.Info, "Mouse", "Click close button (Ship Orders UI)\r\nMouse Left Click item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(5));
+            Report.Log(ReportLevel.Info, "Mouse", "Click close button (Ship Orders UI)\r\nMouse Left Click item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(6));
             repo.ShippingDlg.Close.Click(300);
             Delay.Milliseconds(200);
             
