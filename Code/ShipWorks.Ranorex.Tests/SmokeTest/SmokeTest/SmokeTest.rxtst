@@ -1455,12 +1455,6 @@ rxversion="8.1">
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
 			type="Recording">
 			</testmodule>
-			<testmodule
-			id="ff815fef-fdc9-4963-a35d-97ebe88376c2"
-			name="testzip"
-			ref="1f4e0473-9008-45d9-bf38-5a3215c31d09"
-			type="Recording">
-			</testmodule>
 		</flatlistofchildren>
 		<childhierarchy>
 			<testsuite
@@ -2363,10 +2357,6 @@ rxversion="8.1">
 						<testmodule
 						id="b26bdcce-ee15-4e94-a977-75e3c21f1fe2"
 						name="ResetHostsFile">
-						</testmodule>
-						<testmodule
-						id="ff815fef-fdc9-4963-a35d-97ebe88376c2"
-						name="testzip">
 						</testmodule>
 					</teardown>
 				</testcase>

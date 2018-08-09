@@ -44,23 +44,32 @@ namespace SmokeTest
             
             
             
-            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && Environment.MachineName != "V-QA-BEEFCAKE1" && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" && Environment.MachineName != "JEMAN-PC")
+            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && Environment.MachineName != "V-QA-BEEFCAKE1" && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" /*&& Environment.MachineName != "JEMAN-PC"*/)
                 
 
             
             	{
             	string labelDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\";
             	string reportDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\ComparisonReport\\";
+            	
+            	
+            	if(Directory.Exists(labelDirectory))
+            	{
             	using(Ionic.Zip.ZipFile labelszip = new Ionic.Zip.ZipFile())
         			{
             		labelszip.AddDirectory(labelDirectory);
             		labelszip.Save("labels.zip");
         			}
+            	}
+            	
+            	if(Directory.Exists(reportDirectory))
+            	{
             	using(Ionic.Zip.ZipFile reportszip = new Ionic.Zip.ZipFile())
         			{
             		reportszip.AddDirectory(reportDirectory);
             		reportszip.Save("reports.zip");
         			}
+            	}
             try
             {
                 MailMessage mail = new MailMessage();
@@ -72,23 +81,23 @@ namespace SmokeTest
                 mail.To.Add("b.berger@shipworks.com");
                 mail.To.Add("s.madke@shipworks.com");
                 mail.Subject = "Test Mail";
-                mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". + System.Environment.NewLine"
-                			+ "It was ran on: " + gdt.localDate  + ". + System.Environment.NewLine";
-                if(SWVersion.SWVersionNumber.Length > 0)
+                mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". " + System.Environment.NewLine
+                			+ "It was ran on: " + gdt.localDate  + ". " + System.Environment.NewLine;
+                if(SWVersion.SWVersionNumber != null)
                 {
 					mail.Body = mail.Body 
-							+ "The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber  + ". + System.Environment.NewLine";
+							+ "The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber  + ". " + System.Environment.NewLine;
                 }
                 else
                 {
                 	mail.Body = mail.Body 
-                			+ "The smoketest did not return the version of ShipWorks it was ran on. This means that the CheckShipWorksVersion module did not run. This is generally not a good thing, and means something went terribly wrong. This should be investigated.";
+                			+ "The smoketest did not return the version of ShipWorks it was ran on. This means that the CheckShipWorksVersion module did not run. This is generally not a good thing, and means something went terribly wrong. This should be investigated. " + System.Environment.NewLine;
                 }
                 mail.Body = mail.Body 
-		                	+ "The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber  + ". + System.Environment.NewLine"
-                			+ "The PDF label comparison reports are located: " + gcrd.ComparsionDirectory  + ". + System.Environment.NewLine"
-                			+ "The pass/fail report is on " + Environment.MachineName + ", + System.Environment.NewLine"
-                			+ ", and the file is located here: " + "\"" + Ranorex.Core.Reporting.TestReport.ReportEnvironment.ReportViewFilePath +  "\"" + ". + System.Environment.NewLine";
+		                	+ "The PDF label comparison reports are located: " + gcrd.ComparsionDirectory  + ". " + System.Environment.NewLine
+                			+ "The pass/fail report is on " + Environment.MachineName + ", " 
+                			+ "and the file is located here: " + System.Environment.NewLine 
+                			+ "\"" + Ranorex.Core.Reporting.TestReport.ReportEnvironment.ReportViewFilePath +  "\"" + " . " + System.Environment.NewLine + System.Environment.NewLine;
               
                 
                 if(Directory.Exists(labelDirectory))
@@ -153,10 +162,20 @@ namespace SmokeTest
                 		}
                    	}
                  }
-                if((!Directory.Exists(labelDirectory)) | (Directory.EnumerateFileSystemEntries(labelDirectory).IsEmpty()))
+                if/*(*/(!Directory.Exists(labelDirectory)) /*| (Directory.EnumerateFileSystemEntries(labelDirectory).IsEmpty()))*/
                 {
               	 	 mail.Body = mail.Body + "No shipping labels were created during this run of the smoketest. If this was not expected, please check all ranorex and shipworks logs to understand why this occurred.";
-	            }
+	                 Report.Log(ReportLevel.Info, "Email sent with out any attachments.", "\n");
+                }
+              	 	 
+                else
+                {
+                	if(Directory.EnumerateFileSystemEntries(labelDirectory).IsEmpty())
+                	{
+                		mail.Body = mail.Body + "No shipping labels were created during this run of the smoketest. If this was not expected, please check all ranorex and shipworks logs to understand why this occurred.";
+                		Report.Log(ReportLevel.Info, "Email sent with out any attachments.", "\n");
+                	}
+                }
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential("ShipWorksQA@gmail.com", "katieisanerd");
                 SmtpServer.EnableSsl = true;
