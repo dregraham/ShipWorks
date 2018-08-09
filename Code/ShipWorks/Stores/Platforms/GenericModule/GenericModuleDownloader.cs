@@ -402,7 +402,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             LoadAmazonOrderDetails(order, xpath);
 
-            string dateFormat = GenericModuleStoreEntity.IncludeMilliseconds ? "o" : "s";
+            string dateFormat = GenericModuleStoreEntity.IncludeMilliseconds ? "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff" : "s";
             
             // last modified
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString(dateFormat)));
