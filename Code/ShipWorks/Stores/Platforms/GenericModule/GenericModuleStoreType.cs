@@ -129,6 +129,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             get { return ApiLogSource.GenericModuleStore; }
         }
 
+        public string DateFormat => ((GenericModuleStoreEntity) Store).IncludeMilliseconds ?
+            "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff" :
+            "s";
+
         /// <summary>
         /// Gets an instances of the store entity.
         /// </summary>
