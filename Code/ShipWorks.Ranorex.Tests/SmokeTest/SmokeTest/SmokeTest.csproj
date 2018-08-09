@@ -1179,18 +1179,6 @@
       <RepositoryCode>true</RepositoryCode>
       <id>305d9bf3-5856-4aa1-ad6d-cde684b9763e</id>
     </Compile>
-    <Compile Include="test.cs">
-      <BoundTo>ec972c0b-c1cf-47a8-b4b3-e4256c4c064e</BoundTo>
-      <DependentUpon>test.rxrec</DependentUpon>
-      <RecorderCode>true</RecorderCode>
-      <id>027eebd5-913f-49c0-8191-4a6f2da477df</id>
-    </Compile>
-    <Compile Include="test.UserCode.cs">
-      <BoundTo>ec972c0b-c1cf-47a8-b4b3-e4256c4c064e</BoundTo>
-      <DependentUpon>test.rxrec</DependentUpon>
-      <UserCode>true</UserCode>
-      <id>c6464a4b-cd51-4f07-88aa-05937c9bf73c</id>
-    </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
       <DependentUpon>UPSTestServerSetup.rxrec</DependentUpon>
@@ -1739,11 +1727,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <id>5b447ead-a491-49d2-8ef3-5f55e5646911</id>
     </Content>
-    <None Include="test.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
-      <id>ec972c0b-c1cf-47a8-b4b3-e4256c4c064e</id>
-      <recordtableid>18c03c71-1d7d-4ab3-8302-13da39c1265e</recordtableid>
-    </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>06a6246d-01ac-430d-96ec-902a03121b25</id>

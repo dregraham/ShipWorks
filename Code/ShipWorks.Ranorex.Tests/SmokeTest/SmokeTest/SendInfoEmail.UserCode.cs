@@ -51,13 +51,15 @@ namespace SmokeTest
             	{
             	string labelDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\";
             	string reportDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\ComparisonReport\\";
-            	using(Ionic.Zip.ZipFile sourcelabelszip = new Ionic.Zip.ZipFile("labels.zip"))
+            	using(Ionic.Zip.ZipFile labelszip = new Ionic.Zip.ZipFile())
         			{
-            		sourcelabelszip.AddDirectory(labelDirectory);
+            		labelszip.AddDirectory(labelDirectory);
+            		labelszip.Save("labels.zip");
         			}
-            	using(Ionic.Zip.ZipFile sourcelabelszip = new Ionic.Zip.ZipFile("reports.zip"))
+            	using(Ionic.Zip.ZipFile reportszip = new Ionic.Zip.ZipFile())
         			{
-            		sourcelabelszip.AddDirectory(labelDirectory);
+            		reportszip.AddDirectory(reportDirectory);
+            		reportszip.Save("reports.zip");
         			}
             try
             {
@@ -70,12 +72,24 @@ namespace SmokeTest
                 mail.To.Add("b.berger@shipworks.com");
                 mail.To.Add("s.madke@shipworks.com");
                 mail.Subject = "Test Mail";
-                mail.Body = "The smoketest was ran on: " + Environment.MachineName 
-                			+ ". + It was ran on: " + gdt.localDate
-                			+ ". The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber 
-                			+ ". The PDF label comparison reports are located: " + gcrd.ComparsionDirectory
-                			+ ". The pass/fail report is on " + Environment.MachineName
-                			+ ", and the file is located here: \"" + Ranorex.Core.Reporting.TestReport.ReportEnvironment.ReportViewFilePath + "\"";
+                mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". + System.Environment.NewLine"
+                			+ "It was ran on: " + gdt.localDate  + ". + System.Environment.NewLine";
+                if(SWVersion.SWVersionNumber.Length > 0)
+                {
+					mail.Body = mail.Body 
+							+ "The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber  + ". + System.Environment.NewLine";
+                }
+                else
+                {
+                	mail.Body = mail.Body 
+                			+ "The smoketest did not return the version of ShipWorks it was ran on. This means that the CheckShipWorksVersion module did not run. This is generally not a good thing, and means something went terribly wrong. This should be investigated.";
+                }
+                mail.Body = mail.Body 
+		                	+ "The version of ShipWorks it was ran on was: " + SWVersion.SWVersionNumber  + ". + System.Environment.NewLine"
+                			+ "The PDF label comparison reports are located: " + gcrd.ComparsionDirectory  + ". + System.Environment.NewLine"
+                			+ "The pass/fail report is on " + Environment.MachineName + ", + System.Environment.NewLine"
+                			+ ", and the file is located here: " + "\"" + Ranorex.Core.Reporting.TestReport.ReportEnvironment.ReportViewFilePath +  "\"" + ". + System.Environment.NewLine";
+              
                 
                 if(Directory.Exists(labelDirectory))
                 {
@@ -90,16 +104,23 @@ namespace SmokeTest
                 		   			if(File.Exists("diffpdfcoutput.txt"))
                 		   			   {
                 		   			   	mail.Attachments.Add(new Attachment("labels.zip"));
+                		   			   	File.Delete("labels.zip");
 										mail.Attachments.Add(new Attachment("reports.zip"));
+										File.Delete("reports.zip");
 										mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
+										File.Delete("diffpdfcoutput.txt");
 										mail.Body = mail.Body + "Attached are the labels that the smoketest produced, the comparison reports that show the difference between those labels and the known good labels. If there are any issues, please review the attached diffpdfcoutput.txt for errors that were produced during the automated comparison process.";
-                		   			   }
+                		   			   	Report.Log(ReportLevel.Info, "Email sent with labels.zip, reports.zip, and diffpdfcoutput.txt.", "\n");
+                		   				}
+                		   			   
                 		   			else
                 		   			{
                 		   				mail.Attachments.Add(new Attachment("labels.zip"));
+                		   				File.Delete("labels.zip");
 										mail.Attachments.Add(new Attachment("reports.zip"));
+										File.Delete("reports.zip");
 										mail.Body = mail.Body + "Attached are the labels that the smoketest produced, the comparison reports that show the difference between those labels and the known good labels. There was no output from the automated comparison process.";
-
+                		   			   	Report.Log(ReportLevel.Info, "Email sent with labels.zip and reports.zip", "\n");
                 		   			}
                 		   		}
                 		   	}
@@ -108,22 +129,28 @@ namespace SmokeTest
                 		 	  	if(File.Exists("diffpdfcoutput.txt"))
                 		 	  	{
                 		 	  		mail.Attachments.Add(new Attachment("labels.zip"));
+                		 	  		File.Delete("labels.zip");
 									mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
+									File.Delete("diffpdfcoutput.txt");
 									mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Please review the attached diffpdfcoutput.txt for errors that were produced during the automated comparison process.";
+                		 	  	     Report.Log(ReportLevel.Info, "Email sent with labels.zip and diffpdfcoutput.txt.", "\n");
                 		 	  	}
                 		 	  	else
                 		 	  	{
                 		 	  		mail.Attachments.Add(new Attachment("labels.zip"));
+                		 	  		File.Delete("labels.zip");
 									mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Diffpdfc (which was installed on the computer the smoketest was ran on) did not produce any output. Please review the ranorex logs to see what happened.";
-
+									Report.Log(ReportLevel.Info, "Email sent with labels.zip", "\n");
                 		 	  	}
                 			}
                 		}
                 		else
                 		{
 							mail.Attachments.Add(new Attachment("labels.zip"));
+							File.Delete("labels.zip");
 							mail.Body = mail.Body + "Attached are the labels that the smoketest produced. Diffpdfc was not installed on the computer the smoketest was ran on, please manually verify that the labels printed correctly.";
-	               		}
+	               			Report.Log(ReportLevel.Info, "Email sent with labels.zip.", "\n");
+                		}
                    	}
                  }
                 if((!Directory.Exists(labelDirectory)) | (Directory.EnumerateFileSystemEntries(labelDirectory).IsEmpty()))
