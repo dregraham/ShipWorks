@@ -24,6 +24,13 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         [Description("Defines whether UPS should be excluded from best rates")]
         [ApiValue("BestRateUpsRestriction")]
-        BestRateUpsRestriction
+        BestRateUpsRestriction,
+
+        /// <summary>
+        /// A policy type to indicate whether Amazon should be allowed as a carrier.
+        /// </summary>
+        [Description("Defines whether Amazon should be allowed as a carrier")]
+        [ApiValue("AmazonShipmentRestriction")]
+        AmazonShipmentRestriction
     }
 }

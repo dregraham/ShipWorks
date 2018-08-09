@@ -975,7 +975,10 @@
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingPolicyTarget.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingRestrictionType.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
+    <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
