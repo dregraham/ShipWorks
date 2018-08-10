@@ -10,7 +10,6 @@ using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
-
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
@@ -227,15 +226,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Determines if the exception is a timeout
+        /// Determines if the exception is a timeout or internal server error
         /// </summary>
         private static bool ShouldRetryRequest(Exception ex)
         {
-            var statusCode = (((ex as ChannelAdvisorException)?.InnerException as WebException)?.Response as HttpWebResponse)
-                ?.StatusCode;
+            HttpStatusCode? statusCode = (((ex as ChannelAdvisorException)?.InnerException as WebException)?.Response as HttpWebResponse)?
+                .StatusCode;
 
             return statusCode == HttpStatusCode.RequestTimeout ||
-                   statusCode==HttpStatusCode.GatewayTimeout ||
+                   statusCode == HttpStatusCode.GatewayTimeout ||
                    statusCode == HttpStatusCode.InternalServerError;
         }
 
