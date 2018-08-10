@@ -103,7 +103,7 @@
             this.usageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usageRemaining.Location = new System.Drawing.Point(270, 365);
             this.usageRemaining.Name = "usageRemaining";
-            this.usageRemaining.Size = new System.Drawing.Size(58, 13);
+            this.usageRemaining.Size = new System.Drawing.Size(61, 13);
             this.usageRemaining.TabIndex = 82;
             this.usageRemaining.Text = "14 MB";
             this.usageRemaining.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -121,7 +121,7 @@
             // usageTotal
             // 
             this.usageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageTotal.Location = new System.Drawing.Point(270, 341);
+            this.usageTotal.Location = new System.Drawing.Point(273, 341);
             this.usageTotal.Name = "usageTotal";
             this.usageTotal.Size = new System.Drawing.Size(58, 13);
             this.usageTotal.TabIndex = 79;
@@ -140,7 +140,7 @@
             // 
             // usageAudit
             // 
-            this.usageAudit.Location = new System.Drawing.Point(113, 248);
+            this.usageAudit.Location = new System.Drawing.Point(116, 248);
             this.usageAudit.Name = "usageAudit";
             this.usageAudit.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.usageAudit.Size = new System.Drawing.Size(58, 13);
@@ -160,7 +160,7 @@
             // 
             // usageEmail
             // 
-            this.usageEmail.Location = new System.Drawing.Point(113, 291);
+            this.usageEmail.Location = new System.Drawing.Point(116, 291);
             this.usageEmail.Name = "usageEmail";
             this.usageEmail.Size = new System.Drawing.Size(58, 13);
             this.usageEmail.TabIndex = 75;
@@ -179,7 +179,7 @@
             // 
             // usageOrders
             // 
-            this.usageOrders.Location = new System.Drawing.Point(113, 313);
+            this.usageOrders.Location = new System.Drawing.Point(116, 313);
             this.usageOrders.Name = "usageOrders";
             this.usageOrders.Size = new System.Drawing.Size(58, 13);
             this.usageOrders.TabIndex = 73;
@@ -294,7 +294,7 @@
             // 
             // usageOther
             // 
-            this.usageOther.Location = new System.Drawing.Point(270, 313);
+            this.usageOther.Location = new System.Drawing.Point(273, 313);
             this.usageOther.Name = "usageOther";
             this.usageOther.Size = new System.Drawing.Size(58, 13);
             this.usageOther.TabIndex = 98;
@@ -313,7 +313,7 @@
             // 
             // usageShipSense
             // 
-            this.usageShipSense.Location = new System.Drawing.Point(270, 291);
+            this.usageShipSense.Location = new System.Drawing.Point(273, 291);
             this.usageShipSense.Name = "usageShipSense";
             this.usageShipSense.Size = new System.Drawing.Size(58, 13);
             this.usageShipSense.TabIndex = 101;
@@ -332,7 +332,7 @@
             // 
             // usagePrintJob
             // 
-            this.usagePrintJob.Location = new System.Drawing.Point(270, 248);
+            this.usagePrintJob.Location = new System.Drawing.Point(273, 248);
             this.usagePrintJob.Name = "usagePrintJob";
             this.usagePrintJob.Size = new System.Drawing.Size(58, 13);
             this.usagePrintJob.TabIndex = 104;
@@ -351,7 +351,7 @@
             // 
             // usageLabel
             // 
-            this.usageLabel.Location = new System.Drawing.Point(270, 269);
+            this.usageLabel.Location = new System.Drawing.Point(273, 269);
             this.usageLabel.Name = "usageLabel";
             this.usageLabel.Size = new System.Drawing.Size(58, 13);
             this.usageLabel.TabIndex = 106;
@@ -370,7 +370,7 @@
             // 
             // usageDownloadDetails
             // 
-            this.usageDownloadDetails.Location = new System.Drawing.Point(113, 269);
+            this.usageDownloadDetails.Location = new System.Drawing.Point(116, 269);
             this.usageDownloadDetails.Name = "usageDownloadDetails";
             this.usageDownloadDetails.Size = new System.Drawing.Size(58, 13);
             this.usageDownloadDetails.TabIndex = 109;
@@ -430,7 +430,7 @@
             // 
             this.infotipSizeRemaining.Caption = "SQL Server Express has a {0} GB size limit.  \r\n\r\nThere is no limit for paid editi" +
     "ons of SQL Server.";
-            this.infotipSizeRemaining.Location = new System.Drawing.Point(326, 366);
+            this.infotipSizeRemaining.Location = new System.Drawing.Point(332, 366);
             this.infotipSizeRemaining.Name = "infotipSizeRemaining";
             this.infotipSizeRemaining.Size = new System.Drawing.Size(12, 12);
             this.infotipSizeRemaining.TabIndex = 83;
