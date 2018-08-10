@@ -230,10 +230,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static bool ShouldRetryRequest(Exception ex)
         {
-            HttpStatusCode? statusCode = (((ex as ChannelAdvisorException)?.InnerException as WebException)?.Response as HttpWebResponse)?
-                .StatusCode;
+            WebException webException = ((ex as ChannelAdvisorException)?.InnerException as WebException);
+            HttpStatusCode? statusCode = (webException?.Response as HttpWebResponse)?.StatusCode;
 
-            return statusCode == HttpStatusCode.RequestTimeout ||
+            return webException?.Status == WebExceptionStatus.Timeout ||
+                   statusCode == HttpStatusCode.RequestTimeout ||
                    statusCode == HttpStatusCode.GatewayTimeout ||
                    statusCode == HttpStatusCode.InternalServerError;
         }
