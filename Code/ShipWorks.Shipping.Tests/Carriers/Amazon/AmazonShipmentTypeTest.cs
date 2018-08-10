@@ -3,9 +3,11 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
@@ -18,34 +20,65 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     {
         readonly AutoMock mock;
         private readonly ShipmentEntity trackedShipment;
+        private readonly Mock<IDataProvider> dataProvider;
+        private readonly Mock<IStoreManager> storeManager;
+        private readonly Mock<ILicenseService> licenseService;
+        private readonly Mock<ILicense> license;
+
+        private const long nonAmazonOrderID = 1;
+        private const long amazonOrderID = 100;
+        private const long nonAmazonStoreID = 1005;
+        private const long amazonStoreID = 2005;
+        private OrderEntity nonAmazonOrder = new OrderEntity(nonAmazonOrderID);
+        private StoreEntity nonAmazonStore = new StoreEntity(nonAmazonStoreID);
+        private AmazonOrderEntity amazonOrder = new AmazonOrderEntity(amazonOrderID);
+        private AmazonStoreEntity amazonStore = new AmazonStoreEntity(amazonStoreID);
+        private AmazonPrimeShippingPolicyTarget target;
+        private ShipmentEntity shipment;
+        private AmazonShipmentShippingPolicy amazonShipmentShippingPolicy;
 
         public AmazonShipmentTypeTest()
         {
             mock = AutoMock.GetLoose();
             trackedShipment = new ShipmentEntity { TrackingNumber = "foo" };
-        }
 
-        [Fact]
-        public void IsAllowedFor_DelegatesToOrderManager_ToPopulateOrderDetails()
-        {
-            MockShipmentTypeRestriction(EditionRestrictionLevel.None);
+            dataProvider = mock.Mock<IDataProvider>();
+            dataProvider.Setup(d => d.GetEntity(nonAmazonOrderID, It.IsAny<bool>()))
+                .Returns(nonAmazonOrder);
+            dataProvider.Setup(d => d.GetEntity(amazonOrderID, It.IsAny<bool>()))
+                .Returns(amazonOrder);
 
-            mock.Mock<ILicenseService>()
-                .Setup(l => l.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<ShipmentTypeCode>()))
-                .Returns(EditionRestrictionLevel.None);
+            storeManager = mock.Mock<IStoreManager>();
+            storeManager.Setup(d => d.GetStore(nonAmazonStoreID))
+                .Returns(new StoreEntity());
+            storeManager.Setup(d => d.GetStore(amazonStoreID))
+                .Returns(new AmazonStoreEntity());
 
-            ShipmentEntity shipment = new ShipmentEntity();
-            Mock<IOrderManager> orderManager = mock.Mock<IOrderManager>();
+            license = mock.Mock<ILicense>();
+            licenseService = mock.Mock<ILicenseService>();
+            licenseService.Setup(ls => ls.GetLicenses()).Returns(new[] {license.Object});
 
-            orderManager.Setup(o => o.PopulateOrderDetails(shipment))
-                .Callback<ShipmentEntity>(s => s.Order = new AmazonOrderEntity())
-                .Verifiable();
+            amazonOrder.IsPrime = (int) AmazonIsPrime.No;
+            shipment = new ShipmentEntity
+            {
+                Order = amazonOrder
+            };
 
-            AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
+            target = new AmazonPrimeShippingPolicyTarget()
+            {
+                Shipment = shipment,
+                Allowed = false,
+                AmazonOrder = amazonOrder,
+                AmazonCredentials = amazonStore as IAmazonCredentials
+            };
 
-            testObject.IsAllowedFor(shipment);
+            amazonShipmentShippingPolicy = new AmazonShipmentShippingPolicy();
+            amazonShipmentShippingPolicy.Configure("1");
+            amazonShipmentShippingPolicy.Apply(target);
 
-            orderManager.VerifyAll();
+            license
+                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.Amazon, It.IsAny<object>()))
+                .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
         }
 
         [Fact]
@@ -68,17 +101,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(AmazonIsPrime.Unknown, false)]
         public void IsAllowedFor_AmazonStoreAndOrders_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonIsPrime isPrime, bool expected)
         {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Order = new AmazonOrderEntity { IsPrime = (int) isPrime }
-            };
+            amazonOrder.IsPrime = (int) isPrime;
+            target.AmazonOrder = amazonOrder;
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
-
-            mock.Mock<IStoreManager>()
-                .Setup(m => m.GetStore(It.IsAny<long>()))
-                .Returns(new AmazonStoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
-
+            
+            amazonShipmentShippingPolicy.Apply(target);
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
             bool actualValue = testObject.IsAllowedFor(shipment);
@@ -91,10 +119,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(AmazonIsPrime.Unknown, false)]
         public void IsAllowedFor_ChannelAdvisorStoreAndOrders_ReturnsExpectedValue_BasedOnAmazonOrderIsPrime(AmazonIsPrime isPrime, bool expected)
         {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) isPrime }
-            };
+            target.Shipment.Order = new ChannelAdvisorOrderEntity {IsPrime = (int) isPrime};
+            target.AmazonOrder = target.Shipment.Order as IAmazonOrder;
 
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
@@ -102,6 +128,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
 
+            amazonShipmentShippingPolicy.Apply(target);
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
             bool actualValue = testObject.IsAllowedFor(shipment);
@@ -113,10 +140,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(EditionRestrictionLevel.None, true)]
         public void IsAllowedFor_ReturnsExpectedValue_WhenAmazonShipmentTypeIsRestricted(EditionRestrictionLevel restrictionLevel, bool expectedValue)
         {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) AmazonIsPrime.Yes }
-            };
+            target.Shipment.Order = new ChannelAdvisorOrderEntity {IsPrime = (int) AmazonIsPrime.Yes};
+            target.AmazonOrder = target.Shipment.Order as IAmazonOrder;
 
             var store = new ChannelAdvisorStoreEntity { TypeCode = (int) StoreTypeCode.ChannelAdvisor };
 
@@ -130,6 +155,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             MockShipmentTypeRestriction(restrictionLevel);
 
+            amazonShipmentShippingPolicy.Apply(target);
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
             bool isAllowed = testObject.IsAllowedFor(shipment);

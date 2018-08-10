@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace ShipWorks.Shipping.Policies
@@ -11,9 +12,11 @@ namespace ShipWorks.Shipping.Policies
     public enum AmazonPrimeShippingRestrictionType
     {
         // Only allow Amazon carrier for prime orders
+        [Description("Only Amazon Prime Orders are allowed.")]
         OnlyPrime = 1,
 
         // Allow Amazon carrier for all Amazon orders
+        [Description("Any Amazon Order is allowed.")]
         AllOrders = 2
     }
 }

@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
@@ -68,6 +69,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             shipment = Create.Shipment(context.Order)
                 .AsOther()
                 .Save();
+
+            EditionManager.UpdateRestrictions();
         }
 
         [Fact]
