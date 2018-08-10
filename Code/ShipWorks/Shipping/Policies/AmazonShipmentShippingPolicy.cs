@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Policies
                     return;
                 }
                 
-                if (AllAmazonOrdersAllowed || (OnlyAmazonPrimeOrdersAllowed && theTarget.AmazonOrder.IsPrime == (int) AmazonIsPrime.Yes))
+                if (AllAmazonOrdersAllowed || (OnlyAmazonPrimeOrdersAllowed && theTarget.AmazonOrder.IsPrime))
                 {
                     theTarget.Allowed = theTarget.AmazonCredentials != null;
                     return;

@@ -26,6 +26,6 @@ namespace ShipWorks.Shipping.Policies
         /// <summary>
         /// Amazon order entity
         /// </summary>
-        public AmazonOrderEntity AmazonOrder;
+        public IAmazonOrder AmazonOrder;
     }
 }
