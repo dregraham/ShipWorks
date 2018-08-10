@@ -97,6 +97,9 @@ namespace ShipWorks.Shipping.Tests.Services
             license
                 .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.Amazon, It.IsAny<object>()))
                 .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
+
+            amazonOrder.Store = amazonStore;
+            nonAmazonOrder.Store = nonAmazonStore;
         }
 
         [Fact]
@@ -225,6 +228,122 @@ namespace ShipWorks.Shipping.Tests.Services
 
             Assert.Equal(2, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
             Assert.True(testObject.GetAvailableShipmentTypes(carrierAdapter.Object).None(c => c == ShipmentTypeCode.Amazon));
+        }
+
+        [Theory]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        public void GetAvailableShipmentTypes_ReturnsCorrectValues(Ordertype orderType, ShipmentTypeCode shipmentTypeCode, 
+                                                                   RestrictionType restrictionType, AmazonIsPrime isPrime, 
+                                                                   bool expectedAmazonAllowed, bool otherCarriersAllowed)
+        {
+            List<ShipmentTypeCode> enabledShipmentTypeCodes = new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps};
+            List<ShipmentType> shipmentTypes = new List<ShipmentType> {otherShipmentType, uspsShipmentType};
+
+            if (restrictionType != RestrictionType.Hidden)
+            {
+                shipmentTypes.Add(amazonShipmentType);
+            }
+            enabledShipmentTypeCodes.Add(ShipmentTypeCode.Amazon);
+
+            mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
+                .Returns(enabledShipmentTypeCodes);
+            mock.Mock<IShipmentTypeManager>().SetupGet(x => x.ShipmentTypes)
+                .Returns(shipmentTypes);
+
+
+            OrderEntity orderToTest = (orderType == Ordertype.Amazon || orderType == Ordertype.GenericModule && isPrime == AmazonIsPrime.Yes) ? amazonOrder : nonAmazonOrder;
+
+            amazonOrder.IsPrime = (int) isPrime;
+            shipment = new ShipmentEntity
+            {
+                Order = orderToTest,
+                ShipmentTypeCode = shipmentTypeCode
+            };
+
+            target = new AmazonPrimeShippingPolicyTarget()
+            {
+                Shipment = shipment,
+                Allowed = false,
+                AmazonOrder = orderToTest as IAmazonOrder,
+                AmazonCredentials = orderToTest.Store as IAmazonCredentials
+            };
+
+            amazonShipmentShippingPolicy = new AmazonShipmentShippingPolicy();
+            if (restrictionType != RestrictionType.Hidden)
+            {
+                amazonShipmentShippingPolicy.Configure(restrictionType == RestrictionType.PrimeOnly ? "1" : "2");
+            }
+            amazonShipmentShippingPolicy.Apply(target);
+
+            license
+                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.Amazon, It.IsAny<object>()))
+                .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
+
+            ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
+
+            var carrierAdapter = mock.Mock<ICarrierShipmentAdapter>();
+            carrierAdapter.SetupGet(c => c.ShipmentTypeCode).Returns(shipmentTypeCode);
+            carrierAdapter.SetupGet(c => c.Shipment).Returns(shipment);
+
+            var availableTypes = testObject.GetAvailableShipmentTypes(carrierAdapter.Object);
+
+            Assert.Equal(expectedAmazonAllowed, availableTypes.Any(c => c == ShipmentTypeCode.Amazon));
+            Assert.Equal(otherCarriersAllowed, availableTypes.Count() > 1);
+        }
+
+        public enum Ordertype
+        {
+            Amazon = 0,
+            GenericModule = 1,
+            BigCommerce = 2
+        }
+
+        public enum RestrictionType
+        {
+            Hidden = 0,
+            PrimeOnly = 1,
+            AnyAmazon = 2
         }
 
         public void Dispose()
