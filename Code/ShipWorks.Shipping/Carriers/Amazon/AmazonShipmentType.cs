@@ -35,19 +35,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IShippingManager shippingManager;
         private readonly ILicenseService licenseService;
         private readonly IAmazonServiceTypeRepository serviceTypeRepository;
-        private readonly IDataProvider dataProvider;
-        
+        private readonly IOrderManager orderManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService, 
-            IAmazonServiceTypeRepository serviceTypeRepository, IDataProvider dataProvider)
+            IAmazonServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
         {
             this.storeManager = storeManager;
             this.shippingManager = shippingManager;
             this.licenseService = licenseService;
             this.serviceTypeRepository = serviceTypeRepository;
-            this.dataProvider = dataProvider;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonOrderEntity amazonOrder;
             if (shipment.Order == null)
             {
-                shipment.Order = dataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+                orderManager.PopulateOrderDetails(shipment);
                 amazonOrder = shipment.Order as AmazonOrderEntity;
             }
             else
