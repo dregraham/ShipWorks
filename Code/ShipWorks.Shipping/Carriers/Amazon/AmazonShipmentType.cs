@@ -179,16 +179,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return false;
             }
 
-            AmazonOrderEntity amazonOrder;
             if (shipment.Order == null)
             {
                 orderManager.PopulateOrderDetails(shipment);
-                amazonOrder = shipment.Order as AmazonOrderEntity;
             }
-            else
-            {
-                amazonOrder = shipment.Order as AmazonOrderEntity;
-            }
+
+            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
 
             AmazonPrimeShippingPolicyTarget target = new AmazonPrimeShippingPolicyTarget()
             {

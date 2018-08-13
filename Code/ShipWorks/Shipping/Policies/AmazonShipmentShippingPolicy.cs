@@ -54,13 +54,11 @@ namespace ShipWorks.Shipping.Policies
         /// <summary>
         /// Determines whether the specified target is applicable to the shipping policy.
         /// </summary>
-        /// <param name="target">The target is expected to be a ShipmentEntity and ShipmentTypeCode is Amazon.</param>
+        /// <param name="target">The target is expected to be a AmazonPrimeShippingPolicyTarget.</param>
         /// <returns><c>true</c> if the specified target is applicable; otherwise, <c>false</c>.</returns>
         public virtual bool IsApplicable(object target)
         {
-            AmazonPrimeShippingPolicyTarget theTarget = target as AmazonPrimeShippingPolicyTarget;
-
-            return theTarget != null;
+            return target is AmazonPrimeShippingPolicyTarget;
         }
 
         /// <summary>
