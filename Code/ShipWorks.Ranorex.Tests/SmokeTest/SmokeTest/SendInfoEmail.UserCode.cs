@@ -112,9 +112,15 @@ namespace SmokeTest
                 		   		{
                 		   			if(File.Exists("diffpdfcoutput.txt"))
                 		   			   {
-                		   			   	mail.Attachments.Add(new Attachment("labels.zip"));
+                		   			   	using(Attachment label = new Attachment("labels.zip"))
+                						{
+                							mail.Attachments.Add(label);	
+                						}
                 		   			   	File.Delete("labels.zip");
-										mail.Attachments.Add(new Attachment("reports.zip"));
+										using(Attachment reports = new Attachment("reports.zip"))
+                						{
+                							mail.Attachments.Add(reports);	
+                						}
 										File.Delete("reports.zip");
 										mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
 										File.Delete("diffpdfcoutput.txt");
@@ -124,9 +130,15 @@ namespace SmokeTest
                 		   			   
                 		   			else
                 		   			{
-                		   				mail.Attachments.Add(new Attachment("labels.zip"));
+                		   				using(Attachment label = new Attachment("labels.zip"))
+                						{
+                							mail.Attachments.Add(label);	
+                						}
                 		   				File.Delete("labels.zip");
-										mail.Attachments.Add(new Attachment("reports.zip"));
+										using(Attachment reports = new Attachment("reports.zip"))
+                						{
+                							mail.Attachments.Add(reports);	
+                						}
 										File.Delete("reports.zip");
 										mail.Body = mail.Body + "Attached are the labels that the smoketest produced, the comparison reports that show the difference between those labels and the known good labels. There was no output from the automated comparison process.";
                 		   			   	Report.Log(ReportLevel.Info, "Email sent with labels.zip and reports.zip", "\n");
@@ -137,7 +149,10 @@ namespace SmokeTest
                 		   	{
                 		 	  	if(File.Exists("diffpdfcoutput.txt"))
                 		 	  	{
-                		 	  		mail.Attachments.Add(new Attachment("labels.zip"));
+                		 	  		using(Attachment label = new Attachment("labels.zip"))
+                					{
+                						mail.Attachments.Add(label);	
+                					}
                 		 	  		File.Delete("labels.zip");
 									mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
 									File.Delete("diffpdfcoutput.txt");
@@ -155,7 +170,11 @@ namespace SmokeTest
                 		}
                 		else
                 		{
-							mail.Attachments.Add(new Attachment("labels.zip"));
+                			using(Attachment label = new Attachment("labels.zip"))
+                			{
+                				mail.Attachments.Add(label);	
+                			}
+                								
 							File.Delete("labels.zip");
 							mail.Body = mail.Body + "Attached are the labels that the smoketest produced. Diffpdfc was not installed on the computer the smoketest was ran on, please manually verify that the labels printed correctly.";
 	               			Report.Log(ReportLevel.Info, "Email sent with labels.zip.", "\n");
