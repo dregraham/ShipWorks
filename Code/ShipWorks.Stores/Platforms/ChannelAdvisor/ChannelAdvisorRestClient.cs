@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -10,7 +11,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
-using RestSharp.Extensions.MonoHttp;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
