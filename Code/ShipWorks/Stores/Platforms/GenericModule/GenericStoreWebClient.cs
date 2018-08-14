@@ -611,7 +611,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         private string FormatDate(DateTime? lastModified)
         {
             DateTime date = lastModified ?? DateTime.MinValue;
-            return date.ToString("s");
+            
+            return date.ToString(StoreType.DateFormat);
         }
     }
 }

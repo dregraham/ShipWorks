@@ -2398,7 +2398,8 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IncludeMilliseconds] [bit] NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
