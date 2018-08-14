@@ -184,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 orderManager.PopulateOrderDetails(shipment);
             }
 
-            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
             AmazonPrimeShippingPolicyTarget target = new AmazonPrimeShippingPolicyTarget()
             {
