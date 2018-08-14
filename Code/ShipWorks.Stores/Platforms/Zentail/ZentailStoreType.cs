@@ -2,6 +2,8 @@
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -14,13 +16,18 @@ namespace ShipWorks.Stores.Platforms.Zentail
     [Component(RegistrationType.Self)]
     public class ZentailStoreType : GenericModuleStoreType
     {
+        private readonly IShippingManager shippingManager;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ZentailStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) : 
+        public ZentailStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager,
+                                IShippingManager shippingManager, IShipmentTypeManager shipmentTypeManager) :
             base(store, messageHelper, orderManager)
         {
-
+            this.shippingManager = shippingManager;
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -37,5 +44,23 @@ namespace ShipWorks.Stores.Platforms.Zentail
         /// Gets the account settings help URL
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000125142-adding-zentail-to-shipworks";
+
+        /// <summary>
+        /// Get carrier name to upload to ZenTail
+        /// </summary>
+        public override string GetOnlineCarrierName(ShipmentEntity shipment)
+        {
+            if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
+            {
+                shippingManager.EnsureShipmentLoaded(shipment);
+
+                if (shipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
+                {
+                    return "DHL GlobalMail";
+                }
+            }
+
+            return base.GetOnlineCarrierName(shipment);
+        }
     }
 }
