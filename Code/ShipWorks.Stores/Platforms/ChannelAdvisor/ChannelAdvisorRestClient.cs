@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.Collections;
@@ -8,6 +10,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
+using RestSharp.Extensions.MonoHttp;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -171,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
 
             return Functional
-                .Retry(() => ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken), 5, ShouldRetryRequest)
+                .Retry(() => ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
         }
         
@@ -193,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
                 ChannelAdvisorProduct product = Functional
-                    .Retry(() => ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken), 5, ShouldRetryRequest)
+                    .Retry(() => ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken), 10, ShouldRetryRequest)
                     .Match(x => x, ex => throw ex);
 
                 productCache[productID] = product;
@@ -221,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private ChannelAdvisorOrderResult SubmitGetOrders(IHttpVariableRequestSubmitter getOrdersRequestSubmitter, string refreshToken)
         {
             return Functional
-                .Retry(() => ProcessRequest<ChannelAdvisorOrderResult>(getOrdersRequestSubmitter, "GetOrders", refreshToken), 5, ShouldRetryRequest)
+                .Retry(() => ProcessRequest<ChannelAdvisorOrderResult>(getOrdersRequestSubmitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
         }
 
@@ -236,7 +239,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return webException?.Status == WebExceptionStatus.Timeout ||
                    statusCode == HttpStatusCode.RequestTimeout ||
                    statusCode == HttpStatusCode.GatewayTimeout ||
-                   statusCode == HttpStatusCode.InternalServerError;
+                   statusCode == HttpStatusCode.InternalServerError ||
+                   statusCode == HttpStatusCode.ServiceUnavailable;
         }
 
         /// <summary>
@@ -343,8 +347,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private T RetryRequestWithNewToken<T>(IHttpVariableRequestSubmitter request, string action, string refreshToken)
         {
-            request.Variables.Remove("access_token");
-            request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
+            // If the request has variables, it must be the initial request, so replace the variable.
+            // If not, the url came from the last get order response, and the variables are already in the query string,
+            // so adjust them there.
+            if (request.Variables.Any())
+            {
+                request.Variables.Remove("access_token");
+                request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
+            }
+            else
+            {
+                NameValueCollection parameterValues = HttpUtility.ParseQueryString(request.Uri.Query);
+                parameterValues.Set("access_token", GetAccessToken(refreshToken, true));
+                string url = request.Uri.AbsolutePath;
+                request.Uri = new Uri(EndpointBase + url + "?" + parameterValues);
+            }
 
             return ProcessRequest<T>(request, action, refreshToken, false);
         }
