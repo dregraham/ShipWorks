@@ -51,8 +51,23 @@ namespace SmokeTest
             	{
             	string labelDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\";
             	string reportDirectory = "C:\\printpdflabels\\" + FileName.pdfFolder + "\\ComparisonReport\\";
-            	
-            	
+            	if(File.Exists("labels.zip"))
+            	{
+            		File.Delete("labels.zip");
+            	}
+            	if(File.Exists("reports.zip"))
+            	{
+            		File.Delete("reports.zip");
+            	}
+            	if(File.Exists("diffpdfcoutputcurrent.txt"))
+            	{
+            		File.Delete("diffpdfcoutputcurrent.txt");
+            	}
+            	if(File.Exists("diffpdfcoutput.txt"))
+            	{
+            		File.Copy("diffpdfcoutput.txt","diffpdfcoutputcurrent.txt",true);
+            		File.Delete("diffpdfcoutput.txt");
+            	}
             	if(Directory.Exists(labelDirectory))
             	{
             	using(Ionic.Zip.ZipFile labelszip = new Ionic.Zip.ZipFile())
@@ -110,15 +125,15 @@ namespace SmokeTest
                 		   	{
                 		   		if(!Directory.EnumerateFileSystemEntries(reportDirectory).IsEmpty())
                 		   		{
-                		   			if(File.Exists("diffpdfcoutput.txt"))
+                		   			if(File.Exists("diffpdfcoutputcurrent.txt"))
                 		   			   {
                 		   				Attachment label = new Attachment("labels.zip");
                 						mail.Attachments.Add(label);	
    										Attachment reports = new Attachment("reports.zip");
                 						mail.Attachments.Add(reports);	
-                						mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
+                						mail.Attachments.Add(new Attachment("diffpdfcoutputcurrent.txt"));
 										mail.Body = mail.Body + "Attached are the labels that the smoketest produced, the comparison reports that show the difference between those labels and the known good labels. If there are any issues, please review the attached diffpdfcoutput.txt for errors that were produced during the automated comparison process.";
-                		   			   	Report.Log(ReportLevel.Info, "Email sent with labels.zip, reports.zip, and diffpdfcoutput.txt.", "\n");
+                		   			   	Report.Log(ReportLevel.Info, "Email sent with labels.zip, reports.zip, and diffpdfcoutputcurrent.txt.", "\n");
                 		   				}
                 		   			   
                 		   			else
@@ -134,13 +149,13 @@ namespace SmokeTest
                 		   	}
                 		   	if((!Directory.Exists(reportDirectory)) | (Directory.EnumerateFileSystemEntries(reportDirectory).IsEmpty()))
                 		   	{
-                		 	  	if(File.Exists("diffpdfcoutput.txt"))
+                		 	  	if(File.Exists("diffpdfcoutputcurrent.txt"))
                 		 	  	{
 									Attachment label = new Attachment("labels.zip");
 									mail.Attachments.Add(label);	
-									mail.Attachments.Add(new Attachment("diffpdfcoutput.txt"));
-									mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Please review the attached diffpdfcoutput.txt for errors that were produced during the automated comparison process.";
-                		 	  	     Report.Log(ReportLevel.Info, "Email sent with labels.zip and diffpdfcoutput.txt.", "\n");
+									mail.Attachments.Add(new Attachment("diffpdfcoutputcurrent.txt"));
+									mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Please review the attached diffpdfcoutputcurrent.txt for errors that were produced during the automated comparison process.";
+                		 	  	    Report.Log(ReportLevel.Info, "Email sent with labels.zip and diffpdfcoutputcurrent.txt.", "\n");
                 		 	  	}
                 		 	  	else
                 		 	  	{
