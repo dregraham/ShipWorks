@@ -44,7 +44,7 @@ namespace SmokeTest
             
             
             
-            if (Environment.MachineName != "V-QA-AVG-CUSTOM" /*&& Environment.MachineName != "V-QA-BEEFCAKE1"*/ && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" /*&& Environment.MachineName != "JEMAN-PC"*/)
+            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && Environment.MachineName != "V-QA-BEEFCAKE1" && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" && Environment.MachineName != "JEMAN-PC")
                 
 
             
