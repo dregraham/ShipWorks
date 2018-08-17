@@ -285,12 +285,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
 
                 // We should not usually be wrapping an action in a Task.Run if we can avoid it, but in this case
                 // we don't have all the database and/or web calls converted to their async counterparts
-                var results = await Task.Run(async () => await selectedOrders.SelectWithProgress(messageHelper,
+                var results = await Task.Run(() => selectedOrders.SelectWithProgress(messageHelper,
                     "Combining eBay Orders",
                     "ShipWorks is combining eBay Orders.",
                     "Combining Order {0} of {1}...",
-                    CombineOrdersCallback)
-                    .ConfigureAwait(false)).ConfigureAwait(true);
+                    CombineOrdersCallback)).ConfigureAwait(true);
 
                 var exceptions = results.Where(x => x.Failure)
                     .Select(x => x.Exception)

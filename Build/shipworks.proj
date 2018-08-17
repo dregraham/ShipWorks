@@ -289,7 +289,7 @@
     <Message Text="Starting obfuscation..." />
 
     <Exec Command='$(ObfuscationCommand) ' />
-    
+
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
       <Output TaskParameter="Include" ItemName="ObfuscatedAssemblies" />
     </CreateItem>
@@ -367,7 +367,9 @@
     </Exec>
 
     <!-- Batching will kick in, calling this line once per installer type -->
-    <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(SchemaID) ' />
+    <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(SchemaID) ' Condition=" $(SchemaID) &gt; 0 " />
+
+    <Message Text="ERROR: Could not get a valid schema version" Condition=" $(SchemaID) &lt;= 0" />
 
     <!-- Copy the log to the right place.  Due to the way the Inno preprocessor works, we can't pass it in -->
     <Copy SourceFiles='..\Installer\InnoSetup.iss' DestinationFolder='$(LogDirectory)' />

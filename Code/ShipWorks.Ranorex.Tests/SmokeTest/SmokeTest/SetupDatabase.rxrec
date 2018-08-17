@@ -7,6 +7,9 @@ rxversion="8.1">
 	<name>
 		SetupDatabase
 	</name>
+	<description>
+		The SetupDatabase recording.
+	</description>
 	<repeatcount>
 		1
 	</repeatcount>
@@ -34,7 +37,7 @@ rxversion="8.1">
 		<var
 		id="1683a4b9-e643-4597-af88-1b1ea0cc88cb"
 		name="Environ">
-			Production
+			Staging
 		</var>
 	</variables>
 	<recorditems>
@@ -29729,7 +29732,7 @@ q4QAAAAASUVORK5CYII=
 			</bindings>
 		</keysequenceitem>
 		<explicitdelayitem
-		duration="10000ms"
+		duration="20000ms"
 		enabled="True"
 		optional="False">
 			<comment>
@@ -29737,10 +29740,58 @@ q4QAAAAASUVORK5CYII=
 			<bindings>
 			</bindings>
 		</explicitdelayitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="364156f6-d1d4-4094-85c9-1dd458a8a21b"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="35d25ef8-c7e6-4ba1-8459-b3d8df9b50ea"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='DatabaseUpdateWizard']/button[@controlname='next']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="1000ms"
+		enabled="True"
+		loc="Center"
+		movetime="1000ms"
+		optional="False"
+		searchpropertyid="364156f6-d1d4-4094-85c9-1dd458a8a21b"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="35d25ef8-c7e6-4ba1-8459-b3d8df9b50ea"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='DatabaseUpdateWizard']/button[@controlname='next']
+				</path>
+			</info>
+		</mouseitem>
 		<keysequenceitem
 		KeySequence="{Tab}{Space}"
 		duration="100ms"
-		enabled="True"
+		enabled="False"
 		optional="False"
 		presstime="100ms"
 		searchpropertyid="8af2a081-3889-447b-8083-13170d0bb481">
@@ -29751,7 +29802,7 @@ q4QAAAAASUVORK5CYII=
 			</bindings>
 		</keysequenceitem>
 		<explicitdelayitem
-		duration="10000ms"
+		duration="60000ms"
 		enabled="True"
 		optional="False">
 			<comment>

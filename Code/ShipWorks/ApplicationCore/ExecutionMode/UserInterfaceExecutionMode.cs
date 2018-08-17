@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
+using CefSharp;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.UI;
@@ -104,6 +107,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         public override Task Execute()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += Resolver;
+
+            InitializeChromium();
+
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
 
@@ -272,6 +279,44 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             Process.Start(restartInfo);
             log.Info("Restart succeeded.");
+        }
+
+        /// <summary>
+        /// Load the app after configuring Chromium
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void InitializeChromium()
+        {
+            var settings = new CefSettings();
+
+            // Set BrowserSubProcessPath based on app bitness at runtime
+            settings.BrowserSubprocessPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                                                   Environment.Is64BitProcess ? "x64" : "x86",
+                                                   "CefSharp.BrowserSubprocess.exe");
+
+            // Make sure you set performDependencyCheck false
+            Cef.Initialize(settings, performDependencyCheck: false, browserProcessHandler: null);
+        }
+
+        /// <summary>
+        /// Resolve CEF assemblies using correct bitness
+        /// </summary>
+        private static Assembly Resolver(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.StartsWith("CefSharp"))
+            {
+                string assemblyName = args.Name.Split(new[] { ',' }, 2)[0] + ".dll";
+                string archSpecificPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                                                       Environment.Is64BitProcess ? "x64" : "x86",
+                                                       assemblyName);
+
+                if (File.Exists(archSpecificPath))
+                {
+                    return Assembly.LoadFile(archSpecificPath);
+                }
+            }
+
+            return null;
         }
     }
 }

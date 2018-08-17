@@ -19,7 +19,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Stores.Platforms.Ebay.Requests;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -298,11 +297,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry =
                         new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
-                    await sqlDeadlockRetry.ExecuteWithRetryAsync(adapter =>
-                    {
-                        return CombineLocalOrders(adapter, toCombine, ebayOrderID);
-                        // Don't commit because sqlDeadlockRetry will do the commit
-                    }).ConfigureAwait(false);
+                    // Don't commit because sqlDeadlockRetry will do the commit
+                    await sqlDeadlockRetry
+                        .ExecuteWithRetryAsync(adapter => CombineLocalOrders(adapter, toCombine, ebayOrderID))
+                        .ConfigureAwait(false);
 
                     result = true;
                 }

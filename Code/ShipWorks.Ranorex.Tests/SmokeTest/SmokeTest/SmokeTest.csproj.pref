@@ -1,17 +1,26 @@
 ﻿<Properties>
+  <Array name="active">
+    <Element value="SendInfoEmail.UserCode.cs" />
+  </Array>
   <Array name="bookmarks" />
-  <Array name="files" />
+  <Array name="files">
+    <Element value="SmokeTest.rxtst" />
+    <Element value="SetupUSPSStamps.rxrec" />
+    <Element value="SendInfoEmail.rxrec" />
+    <Element value="SendInfoEmail.UserCode.cs" />
+  </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
+      <fileNames value="" />
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
-      <Element value="SmokeTest.SetupCarrierTestServers.RunTestServerCMD()" />
-      <Element value="SmokeTest.InstallShipWorks.InstallChromium()" />
-      <Element value="SmokeTest.SendResultsEmail.SendEmail()" />
-      <Element value="SmokeTest.GetComparisonReportDirectory.GetDirectory()" />
-      <Element value="SmokeTest.CheckShipWorksVersion.GrabVersion()" />
-      <Element value="SmokeTest.CheckShipWorksVersion.Get_Value_Version()" />
+      <Element value="SmokeTest.SetupUSPSStamps.RemoveWebRegUSPS()" />
+      <Element value="SmokeTest.SetupUSPSStamps.Key_sequence()" />
+      <Element value="SmokeTest.ResetHostsFile.ResetHosts()" />
+      <Element value="SmokeTest.ModuleChecker.CopyHosts()" />
+      <Element value="SmokeTest.HostsConfiguration.CopyCorrectHosts()" />
+      <Element value="SmokeTest.SetupUSPSStamps.SelectTestServer()" />
     </Array>
   </Properties>
 </Properties>

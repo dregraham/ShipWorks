@@ -4,17 +4,17 @@
 // Your custom recording code should go in this file.
 // The designer will only add methods to this file, so your custom code won't be overwritten.
 // http://www.ranorex.com
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Drawing;
 using System.Threading;
+using System.IO;
 using WinForms = System.Windows.Forms;
-using System.Diagnostics;
 
 using Ranorex;
 using Ranorex.Core;
@@ -23,7 +23,7 @@ using Ranorex.Core.Testing;
 
 namespace SmokeTest
 {
-    public partial class SetupCarrierTestServers
+    public partial class ResetHostsFile
     {
         /// <summary>
         /// This method gets called right after the recording has been started.
@@ -34,24 +34,10 @@ namespace SmokeTest
             // Your recording specific initialization code goes here.
         }
 
-        public void RunTestServerCMD()
+        public void ResetHosts()
         {
-            // TODO: Replace the following line with your code implementation.
-
-        	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
-        	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        	
-        	
-
-            Report.Log(ReportLevel.Info, "Application", "Run command to change USPS test server setting in registry to production");
-            
-            Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers.reg");
-			regeditProcess.WaitForExit();
-
-
-
+        	File.Copy("C:\\Windows\\System32\\drivers\\etc\\hosts.backup","C:\\Windows\\System32\\drivers\\etc\\hosts",true);  
         }
-
 
     }
 }

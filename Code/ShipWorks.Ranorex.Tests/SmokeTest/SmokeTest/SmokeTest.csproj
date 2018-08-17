@@ -162,6 +162,12 @@
       <UserCode>true</UserCode>
       <id>956afa12-ce89-4c0b-83e4-b547550f6786</id>
     </Compile>
+    <Compile Include="CopyStagingHosts.cs">
+      <id>7e3919f9-7e57-4e61-8629-9ab72e1d8a2b</id>
+    </Compile>
+    <Compile Include="CopyWiremockHosts.cs">
+      <id>1a8ad284-1df8-4529-bf0f-82f61b243d7f</id>
+    </Compile>
     <Compile Include="CreateAnOrder.cs">
       <BoundTo>a3226882-9691-436c-83bd-ed378e862065</BoundTo>
       <DependentUpon>CreateAnOrder.rxrec</DependentUpon>
@@ -401,6 +407,18 @@
       <id>d86afb38-0509-4779-aec2-a29b5b99457c</id>
       <BoundTo>5a87d8ff-11b8-4a66-a68a-dce67012b13b</BoundTo>
       <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="HostsConfiguration.cs">
+      <BoundTo>688ee179-fc6c-4b95-936b-dca2658faca9</BoundTo>
+      <DependentUpon>HostsConfiguration.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>b460df07-cbce-4fd3-8aaa-74e93fb8eb21</id>
+    </Compile>
+    <Compile Include="HostsConfiguration.UserCode.cs">
+      <BoundTo>688ee179-fc6c-4b95-936b-dca2658faca9</BoundTo>
+      <DependentUpon>HostsConfiguration.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>c1e09981-430b-40b8-aecd-b1554dffc850</id>
     </Compile>
     <Compile Include="InstallBullZipPDFCreator.cs">
       <BoundTo>0e902009-d69c-4138-b47b-3d69f2b800f6</BoundTo>
@@ -854,6 +872,18 @@
       <DependentUpon>ProcessDHLExpress.rxrec</DependentUpon>
       <UserCode>true</UserCode>
       <id>6b804708-8756-4207-901c-8efe4ea09126</id>
+    </Compile>
+    <Compile Include="ResetHostsFile.cs">
+      <BoundTo>ad92cd5c-2272-44e4-8da0-42e620bb33c1</BoundTo>
+      <DependentUpon>ResetHostsFile.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>f34ad6ff-1ce1-4d58-bf64-45b1d37c629b</id>
+    </Compile>
+    <Compile Include="ResetHostsFile.UserCode.cs">
+      <BoundTo>ad92cd5c-2272-44e4-8da0-42e620bb33c1</BoundTo>
+      <DependentUpon>ResetHostsFile.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>03dbea74-42c7-4f92-ae8d-6db0d2b15231</id>
     </Compile>
     <Compile Include="SavePrintOutputAsPDF.cs">
       <DependentUpon>SavePrintOutputAsPDF.rxrec</DependentUpon>
@@ -1343,6 +1373,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <recordtableid>64b02dec-3e57-4ffe-8c1a-addde41a0b99</recordtableid>
     </None>
+    <None Include="HostsConfiguration.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>688ee179-fc6c-4b95-936b-dca2658faca9</id>
+      <recordtableid>b066727c-8de6-4f08-a384-909352551362</recordtableid>
+    </None>
     <None Include="InstallBullZipPDFCreator.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>0e902009-d69c-4138-b47b-3d69f2b800f6</id>
@@ -1544,6 +1579,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>54af1d0d-64f1-4a15-9920-cf447a3b7c80</id>
       <recordtableid>3c02dd55-8ec9-43e6-bff4-c07b3d823551</recordtableid>
+    </None>
+    <None Include="ResetHostsFile.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>ad92cd5c-2272-44e4-8da0-42e620bb33c1</id>
+      <recordtableid>195f9e46-4670-4b43-8c35-ac85b8b47198</recordtableid>
     </None>
     <None Include="SavePrintOutputAsPDF.rxrec">
       <id>2f12d8b6-2549-43c8-aa29-eab4b11a037d</id>
