@@ -160,8 +160,7 @@ namespace SmokeTest
                 		 	  	else
                 		 	  	{
                 		 	  		mail.Attachments.Add(new Attachment("labels.zip"));
-                		 	  		File.Delete("labels.zip");
-									mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Diffpdfc (which was installed on the computer the smoketest was ran on) did not produce any output. Please review the ranorex logs to see what happened.";
+                		 	  		mail.Body = mail.Body + "Attached are the labels that the smoketest produced. The comparison reports (pdfs that show the difference between those labels and the known good labels) were not produced. Diffpdfc (which was installed on the computer the smoketest was ran on) did not produce any output. Please review the ranorex logs to see what happened.";
 									Report.Log(ReportLevel.Info, "Email sent with labels.zip", "\n");
                 		 	  	}
                 			}
