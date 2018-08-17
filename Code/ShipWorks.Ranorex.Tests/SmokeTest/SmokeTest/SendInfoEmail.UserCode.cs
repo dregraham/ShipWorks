@@ -44,7 +44,7 @@ namespace SmokeTest
             
             
             
-            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && Environment.MachineName != "V-QA-BEEFCAKE1" && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" /*&& Environment.MachineName != "JEMAN-PC"*/)
+            if (Environment.MachineName != "V-QA-AVG-CUSTOM" /*&& Environment.MachineName != "V-QA-BEEFCAKE1"*/ && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" /*&& Environment.MachineName != "JEMAN-PC"*/)
                 
 
             
@@ -192,8 +192,10 @@ namespace SmokeTest
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential("ShipWorksQA@gmail.com", "katieisanerd");
                 SmtpServer.EnableSsl = true;
-
+				
+                Report.Log(ReportLevel.Info, "This is the line before the send mail command", "\n");
                 SmtpServer.Send(mail);
+                Report.Log(ReportLevel.Info, "This is the line after the send mail command", "\n");
 
             }
             catch (Exception ex)
