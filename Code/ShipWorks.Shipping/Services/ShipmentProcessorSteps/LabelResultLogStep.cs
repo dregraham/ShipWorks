@@ -1,9 +1,9 @@
 ﻿using System;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
             if (result.Success)
             {
-                exception = LogSuccessfulShipment(shipment, result.Store);
+                exception = LogSuccessfulShipment(shipment, result.ShipmentForTango, result.Store);
             }
 
             result.EntityLock?.Dispose();
@@ -129,13 +129,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Log the successful shipment to Tango and ShipSense
         /// </summary>
-        private Exception LogSuccessfulShipment(ShipmentEntity shipment, StoreEntity store)
+        private Exception LogSuccessfulShipment(ShipmentEntity shipment, ShipmentEntity shipmentForTango, StoreEntity store)
         {
             Exception exception = null;
 
             try
             {
-                LogShipmentToTango(shipment, store);
+                LogShipmentToTango(shipment, shipmentForTango, store);
             }
             catch (Exception ex)
             {
@@ -161,14 +161,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Log the shipment to Tango
         /// </summary>
-        private void LogShipmentToTango(ShipmentEntity shipment, StoreEntity store)
+        private void LogShipmentToTango(ShipmentEntity shipment, ShipmentEntity shipmentForTango, StoreEntity store)
         {
             log.InfoFormat("Shipment {0}  - Committed", shipment.ShipmentID);
 
             // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
             if (!shipment.ProcessingCompletesExternally())
             {
-                tangoWebClient.LogShipment(store, shipment);
+                tangoWebClient.LogShipment(store, shipmentForTango);
 
                 log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
 

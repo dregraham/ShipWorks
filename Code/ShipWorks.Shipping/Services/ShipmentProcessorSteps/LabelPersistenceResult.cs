@@ -11,20 +11,29 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelPersistenceResult(ILabelRetrievalResult result)
+        public LabelPersistenceResult(ILabelRetrievalResult result) : this(result, result.OriginalShipment)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LabelPersistenceResult(ILabelRetrievalResult result, ShipmentEntity shipmentForTango)
         {
             Index = result.Index;
             EntityLock = result.EntityLock;
             Exception = result.Exception;
             Canceled = result.Canceled;
             OriginalShipment = result.OriginalShipment;
+            shipmentForTango = shipmentForTango;
             Store = result.Store;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelPersistenceResult(ILabelRetrievalResult result, Exception exception) : this(result)
+        public LabelPersistenceResult(ILabelRetrievalResult result, Exception exception) : this(result, result.OriginalShipment)
         {
             Index = result.Index;
             Exception = exception;
@@ -44,6 +53,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Shipment that is being processed
         /// </summary>
         public ShipmentEntity OriginalShipment { get; }
+
+        /// <summary>
+        /// Shipment that should be sent to Tango
+        /// </summary>
+        public ShipmentEntity ShipmentForTango { get; }
 
         /// <summary>
         /// The store associated with the shipment

@@ -1,10 +1,11 @@
 ﻿using System;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -57,6 +58,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             ShipmentEntity shipment = result.OriginalShipment;
+            ShipmentEntity shipmentForTango = result.OriginalShipment;
 
             using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
             {
@@ -71,9 +73,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                        ResetTemporaryAddressChanges(result, shipment);
-
                         MarkShipmentAsProcessed(shipment);
+
+                        shipmentForTango = EntityUtility.CloneEntity(shipment);
+
+                        ResetTemporaryAddressChanges(result, shipment);
 
                         SaveShipment(shipment, adapter);
 
@@ -90,7 +94,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 }
             }
 
-            return new LabelPersistenceResult(result);
+            return new LabelPersistenceResult(result, shipmentForTango);
         }
 
         /// <summary>
