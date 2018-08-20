@@ -83,6 +83,11 @@ namespace ShipWorks.Shipping.Editing
                 itemsGrid.Rows.Add(row);
             }
 
+            if (itemsGrid.Rows.Count != 0)
+            {
+                itemsGrid.SelectElement(itemsGrid.Rows[0]);   
+            }
+
             ResumeShipSenseFieldChangeEvent();
         }
 
