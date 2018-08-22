@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             Exception = result.Exception;
             Canceled = result.Canceled;
             OriginalShipment = result.OriginalShipment;
-            shipmentForTango = shipmentForTango;
+            ShipmentForTango = shipmentForTango;
             Store = result.Store;
         }
 
