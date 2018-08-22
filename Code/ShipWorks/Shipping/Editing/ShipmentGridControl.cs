@@ -770,12 +770,14 @@ namespace ShipWorks.Shipping.Editing
                     {
                         ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, x =>
                         {
-                            if (forReturn)
-                            {
-                                x.ReturnShipment = forReturn;
-                            }
+                            x.ReturnShipment = forReturn;
                         });
 
+                        if (forReturn)
+                        {
+                            lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(copy, true);
+                        }
+                        
                         // remember for loading later
                         createdShipments.Add(copy);
                     }
