@@ -67,6 +67,10 @@ namespace ShipWorks.Users.Security
             string title = string.Format("Delete {0}", name);
             string message = string.Format("ShipWorks is deleting {0}.", name.ToLowerInvariant());
 
+            
+            ISqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection());
+            adapter.KeepConnectionOpen = true;
+            
             BackgroundExecutor<long> executor = new BackgroundExecutor<long>(owner,
                 title,
                 message,
@@ -91,8 +95,10 @@ namespace ShipWorks.Users.Security
                 {
                     ExecuteCompleted(this, EventArgs.Empty);
                 }
-            };
 
+                adapter?.Dispose();
+            };
+            
             // What to execute for each input item
             executor.ExecuteAsync((entityID, state, issueAdder) =>
             {
@@ -102,7 +108,7 @@ namespace ShipWorks.Users.Security
                 {
                     try
                     {
-                        DeletionService.DeleteEntity(entityID);
+                        DeletionService.DeleteEntity(entityID, adapter);
                     }
                     catch (SqlForeignKeyException)
                     {

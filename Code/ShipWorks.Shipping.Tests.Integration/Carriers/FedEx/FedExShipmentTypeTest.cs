@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Startup;
@@ -137,6 +138,21 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
             var parcelDetail = testObject.GetParcelDetail(shipment, 0);
 
             Assert.Equal(expectedTotalWeight, parcelDetail.TotalWeight);
+        }
+
+        [Fact]
+        public void GetCarrierTrackingUrl_ReturnsCorrectUrl()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsFedEx(x => x.WithPackage().Set(y => y.Service, (int) FedExServiceType.FedExFimsStandard))
+                    .Set(x => x.TrackingNumber = "123456")
+                .Build();
+
+            FedExShipmentType testObject = context.Mock.Create<FedExShipmentType>();
+
+            string url = testObject.GetCarrierTrackingUrl(shipment);
+
+            Assert.Equal("http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=123456", url);
         }
 
         public void Dispose() => context.Dispose();

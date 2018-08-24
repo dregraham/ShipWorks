@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="AssemblyProvider.cs" />
     <Compile Include="AutoMockExtensions.cs" />
+    <Compile Include="Database\BulkOrderCreator.cs" />
     <Compile Include="Carriers\FedEx\BuildFedExShipmentEntity.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTestHelpers.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Database\IntegrationDB\IntegrationDB.cs" />
     <Compile Include="Database\IntegrationDB\TempIntegrationDB.cs" />
     <Compile Include="EmbeddedResourceHelper.cs" />
+    <Compile Include="EntityBuilders\AuditEntityBuilder.cs" />
     <Compile Include="EntityBuilders\CarrierAccountEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Create.cs" />
     <Compile Include="EntityBuilders\EntityBuilder.cs" />

@@ -279,6 +279,18 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
+            <xs:element name="IncludeMilliseconds" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>ShipWorks can include milliseconds in dates.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attribute name="supported" type="xs:boolean" use="required">
+                  <xs:annotation>
+                    <xs:documentation>Specifies whether or not dates should include milliseconds</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

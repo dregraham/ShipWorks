@@ -142,7 +142,7 @@ namespace ShipWorks.Core.Tests.Integration.Actions
         {
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = (int) ActionDispatcher.DetermineActionQueueType(action); ;
+            entity.ActionQueueType = (int) ActionDispatcher.DetermineActionQueueType(action);
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.EntityID = objectID;
@@ -169,6 +169,6 @@ namespace ShipWorks.Core.Tests.Integration.Actions
 
             return entity.ActionQueueID;
         }
-        
+
     }
 }

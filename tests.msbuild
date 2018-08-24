@@ -10,6 +10,7 @@
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\net46\*.tests.dll" />
     <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\*.tests.integration.dll" />
+    <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\net46\*.tests.integration.dll" />
   </ItemGroup>
 
   <Target Name="Units">

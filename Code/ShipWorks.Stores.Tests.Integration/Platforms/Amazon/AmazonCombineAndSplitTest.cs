@@ -6,14 +6,10 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Split;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
@@ -38,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         private readonly AmazonStoreEntity store;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
 
@@ -301,11 +297,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
 
             Assert.Equal(new[] { "1000" }, identities_B_M_C);
-        }
-        
-        private bool IsMatchingShipmentUpload(AmazonOrderUploadDetail orderDetail, string amazonOrderID, string trackingNumber)
-        {
-            return orderDetail.AmazonOrderID == amazonOrderID && orderDetail.Shipment.TrackingNumber == trackingNumber;
         }
 
         public void Dispose() => context.Dispose();

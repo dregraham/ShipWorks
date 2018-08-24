@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new NullShippingBroker();
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace ShipWorks.Filters.Content
@@ -71,7 +70,6 @@ namespace ShipWorks.Filters.Content
 
             LoadDescriptorsFromAssembly(Assembly.GetExecutingAssembly());
             LoadDescriptorsFromAssembly(Assembly.Load("ShipWorks.Stores"));
-
         }
 
         /// <summary>

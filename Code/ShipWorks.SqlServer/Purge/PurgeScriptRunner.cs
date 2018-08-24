@@ -14,6 +14,8 @@ namespace ShipWorks.SqlServer.Purge
 
         public const string RunUntilParameterName = "@runUntil";
 
+        public const string SoftDeleteParameterName = "@softDelete";
+
         /// <summary>
         /// Runs a sql script. Assumes script has paramaters @olderThan and @runUntil.
         /// </summary>
@@ -21,7 +23,8 @@ namespace ShipWorks.SqlServer.Purge
         /// <param name="purgeAppLockName">Checks for this AppLock. If applock is taken, script will not run and purge exception is thrown.</param>
         /// <param name="olderThan">Delete records older than this date</param>
         /// <param name="runUntil">Stop running the script if it runs longer than this time</param>
-        public static void RunPurgeScript(string script, string purgeAppLockName, SqlDateTime olderThan, SqlDateTime runUntil)
+        /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
+        public static void RunPurgeScript(string script, string purgeAppLockName, SqlDateTime olderThan, SqlDateTime runUntil, SqlBoolean softDelete)
         {
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
@@ -33,6 +36,7 @@ namespace ShipWorks.SqlServer.Purge
 
                     command.Parameters.Add(new SqlParameter(OlderThanParameterName, olderThan));
                     command.Parameters.Add(new SqlParameter(RunUntilParameterName, runUntil));
+                    command.Parameters.Add(new SqlParameter(SoftDeleteParameterName, softDelete));
 
                     // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed
                     // to the console of client (i.e. SQL Management Studio)

@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
     {
         private readonly DataContext context;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
-        private IOrderArchiveDataAccess testObject;
+        private readonly IOrderArchiveDataAccess testObject;
         private ISqlAdapterFactory sqlAdapterFactory;
 
         public OrderArchiveDataAccessTest(DatabaseFixture db)

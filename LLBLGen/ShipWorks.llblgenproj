@@ -1440,6 +1440,7 @@
           <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="21" />
           <Field Name="AmazonAuthToken" Type="string" MaxLength="100" FieldIndex="20" />
           <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="19" />
+          <Field Name="IncludeMilliseconds" Type="bool" FieldIndex="22" />
           <Field Name="ModuleDeveloper" Type="string" MaxLength="50" FieldIndex="5" />
           <Field Name="ModuleDownloadPageSize" Type="int" FieldIndex="8" />
           <Field Name="ModuleDownloadStrategy" Type="int" FieldIndex="10" />
@@ -4288,7 +4289,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-07-12T17:54:56.4552334Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-08-07T19:35:30.4887441Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6499,6 +6500,7 @@
                     <Field Name="AmazonMerchantID" Ordinal="21" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="22" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="23" DbType="3" Length="2" />
+                    <Field Name="IncludeMilliseconds" Ordinal="24" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="GridColumnFormat">
@@ -11628,6 +11630,7 @@
             <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
             <FieldMapping FieldName="AmazonAuthToken" TargetFieldName="AmazonAuthToken" />
             <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
+            <FieldMapping FieldName="IncludeMilliseconds" TargetFieldName="IncludeMilliseconds" />
             <FieldMapping FieldName="ModuleDeveloper" TargetFieldName="ModuleDeveloper" />
             <FieldMapping FieldName="ModuleDownloadPageSize" TargetFieldName="ModuleDownloadPageSize" />
             <FieldMapping FieldName="ModuleDownloadStrategy" TargetFieldName="ModuleDownloadStrategy" />

@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
         private readonly MagentoStoreEntity store;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly MagentoOrderSearchEntity expectedOrderSearchA;
         private readonly MagentoOrderSearchEntity expectedOrderSearchB;
         private readonly MagentoOrderSearchEntity expectedOrderSearchD;
@@ -644,7 +644,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_1_C = await identityProvider.GetOrderIdentifiers(orderA_1_C);
-            
+
             Assert.Equal(new[] { expectedOrderSearchA }, identities_A_1_C, comparer);
 
             await restOnlineUpdater.UploadShipmentDetails(orderA_1_C.OrderID, MagentoUploadCommand.Complete, "", false);
@@ -769,7 +769,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 QtyOrdered = quantity
             };
 
-            var webOrder = new Order { Items = new [] { item } };
+            var webOrder = new Order { Items = new[] { item } };
 
             webClientRest.Setup(x => x.GetOrder(magentoOrderID))
                 .Returns(webOrder);

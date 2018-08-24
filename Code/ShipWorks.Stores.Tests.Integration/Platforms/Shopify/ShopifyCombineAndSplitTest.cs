@@ -6,11 +6,8 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
@@ -37,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
         private readonly ShopifyStoreEntity store;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
 

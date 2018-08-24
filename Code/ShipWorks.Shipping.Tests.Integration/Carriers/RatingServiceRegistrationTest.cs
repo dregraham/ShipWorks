@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
+using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -13,14 +14,13 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Startup;
 using Xunit;
-using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
     [Trait("Category", "ContinuousIntegration")]
     public class RatingServiceRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public RatingServiceRegistrationTest()
         {

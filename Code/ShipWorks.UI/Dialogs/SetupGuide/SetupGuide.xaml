@@ -11,7 +11,7 @@
         Title="What's next?"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Width="700">
+        Width="875">
     <Window.Resources>
         <local:SectionToControlConverter x:Key="SectionToControl" />
     </Window.Resources>

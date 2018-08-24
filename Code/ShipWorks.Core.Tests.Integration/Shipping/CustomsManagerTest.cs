@@ -43,7 +43,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void LoadCustomsItems_ThrowsArgumentNull_WhenSqlAdapterIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(shipment, false, null));
+            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(shipment, false, (ISqlAdapter) null));
         }
 
         [Fact]
@@ -171,9 +171,9 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             CustomsManager.GenerateCustomsItems(shipment);
 
-            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                adapter.SaveAndRefetch(shipment);
+                sqlAdapter.SaveAndRefetch(shipment);
             }
 
             Assert.Equal(true, shipment.CustomsGenerated);

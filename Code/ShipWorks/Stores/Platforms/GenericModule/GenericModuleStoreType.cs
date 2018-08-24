@@ -129,6 +129,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             get { return ApiLogSource.GenericModuleStore; }
         }
 
+        public string DateFormat => ((GenericModuleStoreEntity) Store).IncludeMilliseconds ?
+            "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff" :
+            "s";
+
         /// <summary>
         /// Gets an instances of the store entity.
         /// </summary>
@@ -170,6 +174,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             generic.AmazonMerchantID = string.Empty;
             generic.AmazonAuthToken = string.Empty;
             generic.AmazonApiRegion = string.Empty;
+
+            generic.IncludeMilliseconds = false;
         }
 
         /// <summary>
@@ -284,7 +290,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             store.ModuleOnlineCustomerSupport = capabilities.OnlineCustomerSupport;
             store.ModuleOnlineCustomerDataType = (int) capabilities.OnlineCustomerDataType;
             store.ModuleOnlineShipmentDetails = capabilities.OnlineShipmentDetails;
-
+            store.IncludeMilliseconds = capabilities.IncludeMilliseconds;
+            
             // Read communications settings
             GenericModuleCommunications communications = ReadModuleCommunications(webResponse);
 

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -11,8 +13,10 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -85,6 +89,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                         log.Info("LabelPersistenceStep.SaveLabel: adapter.Commit()");
                         adapter.Commit();
                     }
+
+                    using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
+                    {
+                        using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                        {
+                            ClearNonActiveShipmentData(shipment, adapter);
+                        }
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -94,6 +107,45 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             return new LabelPersistenceResult(result, shipmentForTango);
+        }
+
+        /// <summary>
+        /// Clears out any other shipment data that is not application to the actual type of the shipment
+        /// </summary>
+        /// <param name="shipment">Shipment from which to clear extra data</param>
+        /// <param name="adapter">SqlAdapter that will be used to delete other shipment data</param>
+        private static void ClearNonActiveShipmentData(ShipmentEntity shipment, ISqlAdapter adapter)
+        {
+            ClearOtherShipmentData(adapter, shipment, typeof(UpsShipmentEntity), UpsShipmentFields.ShipmentID, ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip);
+            ClearOtherShipmentData(adapter, shipment, typeof(EndiciaShipmentEntity), EndiciaShipmentFields.ShipmentID, ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia);
+            ClearOtherShipmentData(adapter, shipment, typeof(UspsShipmentEntity), UspsShipmentFields.ShipmentID, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.Usps);
+            ClearOtherShipmentData(adapter, shipment, typeof(PostalShipmentEntity), PostalShipmentFields.ShipmentID, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Endicia, ShipmentTypeCode.Usps, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps);
+            ClearOtherShipmentData(adapter, shipment, typeof(FedExShipmentEntity), FedExShipmentFields.ShipmentID, ShipmentTypeCode.FedEx);
+            ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
+            ClearOtherShipmentData(adapter, shipment, typeof(IParcelShipmentEntity), IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
+            ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
+            ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
+            ClearOtherShipmentData(adapter, shipment, typeof(DhlExpressShipmentEntity), DhlExpressShipmentFields.ShipmentID, ShipmentTypeCode.DhlExpress);
+            ClearOtherShipmentData(adapter, shipment, typeof(AmazonShipmentEntity), AmazonShipmentFields.ShipmentID, ShipmentTypeCode.Amazon);
+            ClearOtherShipmentData(adapter, shipment, typeof(AsendiaShipmentEntity), AsendiaShipmentFields.ShipmentID, ShipmentTypeCode.Asendia);
+        }
+
+        /// <summary>
+        /// Clear specified shipment data if not relevant
+        /// </summary>
+        /// <param name="adapter">SqlAdapter that will be used to delete child shipment entities</param>
+        /// <param name="shipment">Shipment from which child shipment data will be deleted</param>
+        /// <param name="childShipmentType">Type of child shipment that should be deleted</param>
+        /// <param name="shipmentIdField">Field that specifies the ShipmentId for the child</param>
+        /// <param name="requiredForTypes">Delete this child shipment unless it is one of the specified types</param>
+        private static void ClearOtherShipmentData(ISqlAdapter adapter, ShipmentEntity shipment, Type childShipmentType, EntityField2 shipmentIdField, params ShipmentTypeCode[] requiredForTypes)
+        {
+            if (requiredForTypes.Contains(shipment.ShipmentTypeCode))
+            {
+                return;
+            }
+
+            adapter.DeleteEntitiesDirectly(childShipmentType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Transactions;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -31,10 +31,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter)
+        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, ISqlAdapter adapter) =>
+            LoadCustomsItems(shipment, reloadIfPresent, MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter)).SaveAndRefetch);
+
+        /// <summary>
+        /// Ensure custom's contents for the given shipment have been created
+        /// </summary>
+        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, Func<ShipmentEntity, bool> saveShipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter));
 
             // If custom's aren't required, then forget it
             if (!IsCustomsRequired(shipment))
@@ -57,15 +62,9 @@ namespace ShipWorks.Shipping
             // Not already generated, have to create
             else
             {
-                // Make sure that these new customs items get persisted
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    GenerateCustomsItems(shipment);
+                GenerateCustomsItems(shipment);
 
-                    adapter.SaveAndRefetch(shipment);
-
-                    scope.Complete();
-                }
+                saveShipment?.Invoke(shipment);
             }
 
             // Consider them loaded.  This is an in-memory field

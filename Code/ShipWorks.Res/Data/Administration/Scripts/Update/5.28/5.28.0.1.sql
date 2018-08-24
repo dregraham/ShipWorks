@@ -81,4 +81,3 @@ GO
 IF (OBJECT_ID(N'[dbo].[RG_Recovery_1_QuickFilterNodeUpdateCheckpoint]', 'U') IS NOT NULL) AND (OBJECT_ID(N'[dbo].[QuickFilterNodeUpdateCheckpoint]', 'U') IS NULL)
 	EXEC sp_rename N'[dbo].[RG_Recovery_1_QuickFilterNodeUpdateCheckpoint]', N'QuickFilterNodeUpdateCheckpoint', N'OBJECT'
 GO
-

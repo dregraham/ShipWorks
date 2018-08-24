@@ -48,20 +48,20 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the entity with the specified EntityID
         /// </summary>
-        public static void DeleteEntity(long entityID)
+        public static void DeleteEntity(long entityID, ISqlAdapter adapter)
         {
             switch (EntityUtility.GetEntityType(entityID))
             {
                 case EntityType.OrderEntity:
-                    DeleteOrder(entityID);
+                    DeleteOrder(entityID, adapter);
                     break;
 
                 case EntityType.CustomerEntity:
-                    DeleteCustomer(entityID);
+                    DeleteCustomer(entityID, adapter);
                     break;
 
                 case EntityType.AuditEntity:
-                    DeleteAudit(entityID);
+                    DeleteAudit(entityID, adapter);
                     break;
 
                 default:
@@ -72,9 +72,9 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the specified audit
         /// </summary>
-        public static void DeleteAudit(long auditID)
+        public static void DeleteAudit(long auditID, ISqlAdapter adapter)
         {
-            DeleteWithCascade(EntityType.AuditEntity, auditID, SqlAdapter.Default);
+            DeleteWithCascade(EntityType.AuditEntity, auditID, adapter);
 
             DataProvider.RemoveEntity(auditID);
         }
@@ -139,26 +139,6 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Delete the specified order.
-        /// </summary>
-        public static void DeleteOrder(long orderID)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.OrdersModify, orderID);
-            }
-
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
-            {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteWithCascade for OrderID {0}", orderID));
-                sqlDeadlockRetry.ExecuteWithRetry(adapter => DeleteWithCascade(EntityType.OrderEntity, orderID, adapter));
-            }
-
-            DataProvider.RemoveEntity(orderID);
-            Messenger.Current.Send(new OrderDeletedMessage(null, orderID));
-        }
-
-        /// <summary>
         /// Delete the specified order within an existing adapter/transaction.
         /// </summary>
         public static void DeleteOrder(long orderID, ISqlAdapter adapter)
@@ -168,7 +148,10 @@ namespace ShipWorks.Data
                 lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.OrdersModify, orderID);
             }
 
-            DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
+            }
 
             DataProvider.RemoveEntity(orderID);
             Messenger.Current.Send(new OrderDeletedMessage(null, orderID));
@@ -177,7 +160,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the specified customer
         /// </summary>
-        public static void DeleteCustomer(long customerID)
+        public static void DeleteCustomer(long customerID, ISqlAdapter adapter)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -186,8 +169,7 @@ namespace ShipWorks.Data
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteCustomer for CustomerID {0}", customerID));
-                sqlDeadlockRetry.ExecuteWithRetry(adapter => DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter));
+                DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter);
             }
 
             DataProvider.RemoveEntity(customerID);

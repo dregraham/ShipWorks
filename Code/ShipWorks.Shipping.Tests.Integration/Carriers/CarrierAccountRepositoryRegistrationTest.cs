@@ -87,6 +87,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>())
             {
                 ICarrierAccountRetriever service = container.ResolveKeyed<ICarrierAccountRetriever>(value);
+                Assert.NotNull(service);
             }
         }
 

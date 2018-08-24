@@ -148,7 +148,7 @@ ALTER TABLE [dbo].[ObjectReference] ADD CONSTRAINT [PK_ObjectReference] PRIMARY 
 GO
 PRINT N'Creating index [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] on [dbo].[ObjectReference]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey]) INCLUDE ([ObjectID])
 GO
 PRINT N'Creating index [IX_SWDefault_ObjectReference_ObjectID] on [dbo].[ObjectReference]'
 GO
@@ -2398,7 +2398,8 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IncludeMilliseconds] [bit] NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
@@ -3266,7 +3267,7 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_RelatedObjectID] ON [dbo].[P
 GO
 PRINT N'Creating index [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID]) INCLUDE ([TemplateType], [ContentResourceID])  
 GO
 ALTER TABLE [dbo].[PrintResult] ENABLE CHANGE_TRACKING
 GO
@@ -5480,6 +5481,8 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AuditChangeDetail]'
 GO
 ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [FK_AuditChangeDetail_AuditChange] FOREIGN KEY ([AuditChangeID]) REFERENCES [dbo].[AuditChange] ([AuditChangeID]) ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [FK_AuditChangeDetail_Audit] FOREIGN KEY ([AuditID]) REFERENCES [dbo].[Audit] ([AuditID])
 GO
 PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
 GO

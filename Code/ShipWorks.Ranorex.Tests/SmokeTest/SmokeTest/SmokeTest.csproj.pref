@@ -1,11 +1,13 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="SetupUSPSStamps.rxrec" />
+    <Element value="SendInfoEmail.UserCode.cs" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SmokeTest.rxtst" />
     <Element value="SetupUSPSStamps.rxrec" />
+    <Element value="SendInfoEmail.rxrec" />
+    <Element value="SendInfoEmail.UserCode.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

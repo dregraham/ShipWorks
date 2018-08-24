@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="850">
     <Grid Grid.Row="0" Background="White">
         <Grid.Resources>
             <Style TargetType="Button">
@@ -31,15 +31,16 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Grid.ColumnSpan="3"
+                   Grid.ColumnSpan="4"
                    Margin="0 0 0 10"
                    FontSize="16"
                    FontWeight="Normal"
                    TextWrapping="Wrap">
-            You can get all of your stores and shipping accounts set up right now.  Or, if you’re ready to start using ShipWorks, you can easily add those later.
+            You can get all of your stores and shipping accounts set up right now. Or, if you’re ready to start using ShipWorks, you can easily add those later.
         </TextBlock>
 
         <Button Grid.Column="0"
@@ -60,7 +61,15 @@
         </Button>
         <Button Grid.Column="2"
                     Grid.Row="1"
-                AutomationProperties.AutomationId="StartUsingShipWorks"
+                    Command="{Binding HowToPrintLabels}">
+            <StackPanel VerticalAlignment="Top">
+                <TextBlock>How to print labels</TextBlock>
+                <Image Source="/ShipWorks.UI;component/Resources/printer.png" />
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="3"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="StartUsingShipWorks"
                     Command="{Binding UseShipWorks}">
             <StackPanel VerticalAlignment="Top">
                 <TextBlock>Start using ShipWorks</TextBlock>

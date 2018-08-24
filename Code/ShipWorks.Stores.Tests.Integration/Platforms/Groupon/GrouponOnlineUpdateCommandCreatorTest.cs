@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -24,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public partial class GrouponOnlineUpdateCommandCreatorTest : IDisposable
+    public class GrouponOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
@@ -33,6 +34,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
         private readonly GrouponOnlineUpdateCommandCreator commandCreator;
 
+        [SuppressMessage("SonarLint", "S3215",
+            Justification = "We're testing the GrouponOnlineUpdateCommandCreator, which is why it's being cast")]
         public GrouponOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
@@ -56,8 +59,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
                 .Set(x => x.Processed, true)
                 .Save();
         }
-
-        private List<GrouponTracking> AnyTracking => It.IsAny<List<GrouponTracking>>();
 
         [Fact]
         public async Task UpdateShipment_MakesOneWebRequest_WhenOrderIsNotCombined()

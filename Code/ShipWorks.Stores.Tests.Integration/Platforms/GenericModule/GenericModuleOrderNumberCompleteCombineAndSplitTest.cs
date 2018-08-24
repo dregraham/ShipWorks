@@ -6,11 +6,8 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Orders.Split;
@@ -37,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
         private readonly GenericModuleStoreEntity store;
         private OrderEntity orderA;
         private OrderEntity orderB;
-        private OrderEntity orderD;
+        private readonly OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
         private readonly CombineSplitHelpers combineSplitHelpers;
 
@@ -252,7 +249,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 
             Assert.Equal(new[] { "10" }, identities_A_C);
         }
-        
+
         [Fact]
         public async Task SplitCombine_SplitSurvivingOrder_WithOrderNumbers()
         {

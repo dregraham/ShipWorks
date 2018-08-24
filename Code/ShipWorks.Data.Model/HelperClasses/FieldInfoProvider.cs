@@ -1683,6 +1683,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
+			this.AddElementFieldInfo("GenericModuleStoreEntity", "IncludeMilliseconds", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.IncludeMilliseconds, 0, 0, 0);
 		}
 		/// <summary>Inits GridColumnFormatEntity's FieldInfo objects</summary>
 		private void InitGridColumnFormatEntityInfos()

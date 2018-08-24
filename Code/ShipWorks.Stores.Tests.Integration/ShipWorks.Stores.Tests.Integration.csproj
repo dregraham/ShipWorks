@@ -1,404 +1,98 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CDB5CFF5-BD9D-4AEB-9A1B-D3DE83962C99}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ShipWorks.Stores.Tests.Integration</RootNamespace>
-    <AssemblyName>ShipWorks.Stores.Tests.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net46</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageId />
+    <Version>1</Version>
+    <Authors />
+    <Company />
+    <Product />
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Extras.Moq, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.Extras.Moq.4.2.1-sw3\lib\net45\Autofac.Extras.Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="HarSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HarSharp.1.0.0\lib\net45\HarSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="HelperSharp, Version=1.0.5358.23405, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HelperSharp.0.0.4.1\lib\net35\HelperSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Hosting.3.1.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Reactive.Testing, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net46\Microsoft.Reactive.Testing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SQL.LocalDB.Test, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQL.LocalDB.Test.1.1.2\lib\net40\SQL.LocalDB.Test.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ComponentModel.Primitives.4.3.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ComponentModel.TypeConverter.4.3.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reactive.PlatformServices.3.1.1\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.2\lib\net35\xunit.abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.assert, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.4.0\lib\netstandard1.1\xunit.assert.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.4.0\lib\net452\xunit.core.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.4.0.4049, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.4.0\lib\net452\xunit.execution.desktop.dll</HintPath>
-    </Reference>
+    <Compile Include="**/*.cs" Exclude="**/*.Designer.cs" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Include="**/*.json;**/*.js;**/*.xml;**/*.pdf;**/*.txt;**/*.har" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Content\CombineOrderTest.cs" />
-    <Compile Include="Content\OrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
-    <Compile Include="DatabaseCollection.cs" />
-    <Compile Include="Extensions\RestClientMockExtensions.cs" />
-    <Compile Include="Helpers\CombineSplitHelpers.cs" />
-    <Compile Include="Helpers\DbHelpers.cs" />
-    <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
-    <Compile Include="Helpers\Response.cs" />
-    <Compile Include="Content\CombineOrderGatewayTest.cs" />
-    <Compile Include="Orders\Archive\OrderArchiveDataAccessTest.cs" />
-    <Compile Include="Orders\Archive\OrderArchiverTest.cs" />
-    <Compile Include="Orders\Split\OrderSplitGatewayTest.cs" />
-    <Compile Include="Orders\Split\OrderSplitterTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonMwsDownloaderTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonQuickSearchTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
-    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceDataAccessTest.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\BuyDotCom\BuyDotComCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\BuyDotCom\BuyDotComDataAccessTest.cs" />
-    <Compile Include="Platforms\BuyDotCom\BuyDotComOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorQuickSearchTest.cs" />
-    <Compile Include="Platforms\CommerceInterface\CommerceInterfaceCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\CommerceInterface\CommerceInterfaceQuickSearchTest.cs" />
-    <Compile Include="Platforms\Ebay\EbayCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.LeaveFeedback.cs" />
-    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.SendMessage.cs" />
-    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
-    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Ebay\EbayQuickSearchTest.cs" />
-    <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleOrderNumberCompleteCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleMultiCombineTest.cs" />
-    <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Groupon\GrouponQuickSearchTest.cs" />
-    <Compile Include="Platforms\Jet\JetCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Jet\JetOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Jet\JetOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\LemonStand\LemonStandQuickSearchTest.cs" />
-    <Compile Include="Platforms\LemonStand\LemonStandCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
-    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
-    <Compile Include="Platforms\Magento\MagentoOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\ClickCartPro\ClickCartProOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
-    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
-    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Miva\MivaOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Newegg\NeweggCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\OrderIdentifierTest.cs" />
-    <Compile Include="Platforms\OrderMotion\OrderMotionCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\OrderMotion\OrderMotionOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Overstock\OverstockCombineTest.cs" />
-    <Compile Include="Platforms\ProStores\ProStoresCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\ProStores\ProStoresQuickSearchTest.cs" />
-    <Compile Include="Platforms\Sears\SearsCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Sears\SearsQuickSearchTest.cs" />
-    <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
-    <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProviderTest.cs" />
-    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProviderTest.cs" />
-    <Compile Include="Platforms\CombineOrderNumberSearchProviderTest.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleStoreTypeTest.cs" />
-    <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoTwoRestUploaderTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
-    <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
-    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.UploadDetails.cs" />
-    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\OnlineCommandCreatorRegistrationTest.cs" />
-    <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
-    <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
-    <Compile Include="Platforms\SplitCombineOrderActionRegistrationTest.cs" />
-    <Compile Include="Platforms\CombineOrderNumberCompleteSearchProviderTest.cs" />
-    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartRestOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartSoapOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Volusion\VolusionOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
-    <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
-    <Compile Include="Platforms\Yahoo\YahooCombineAndSplitTest.cs" />
-    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
-    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.UploadShipmentDetails.cs" />
-    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.ApiUploadShipmentDetails.cs" />
-    <Compile Include="Platforms\Yahoo\YahooOrderCombinationUserInteractionTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
-      <Project>{41528bda-8c69-4ca9-b358-bc4e6a62d6f2}</Project>
-      <Name>ShipWorks.Tests.Integration.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
-      <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
-      <Name>Interapptive.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
-      <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
-      <Name>ShipWorks.Data.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj">
-      <Project>{fcd9a0e9-0954-4249-8bac-3bcbf93e6e10}</Project>
-      <Name>ShipWorks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
-      <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
-      <Name>ShipWorks.Res</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
-      <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
-      <Name>ShipWorks.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
-      <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
-      <Name>ShipWorks.Shipping.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
-      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
-      <Name>ShipWorks.Shipping</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
-      <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>
-      <Name>ShipWorks.Stores.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
-      <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
-      <Name>ShipWorks.Stores</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
-      <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
+      <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
-      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
-      <Name>ShipWorks.ThirdPartyApi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
-      <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
-      <Name>ShipWorks.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\BigCommerce_UpdateStoreToPending.har" />
-    <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\Download_CreatesOrder.har" />
-    <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\Download_PopulatesStatusCodes.har" />
-    <EmbeddedResource Include="Platforms\Groupon\HttpRequests\Download_CreatesOrder.har" />
-    <EmbeddedResource Include="Platforms\Groupon\HttpRequests\Download_CombinesOrder.har" />
-    <None Include="ShipWorks.Stores.Tests.Integration.ruleset" />
+    <None Include="App.config" />
+  </ItemGroup>
+   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac.Extras.Moq" Version="4.2.1-sw3" />
+    <PackageReference Include="Autofac.Mef" Version="4.0.0" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.1" />
+    <PackageReference Include="Desktop.Analyzers" Version="1.1.0" />
+    <PackageReference Include="HarSharp" Version="1.0.0" />
+    <PackageReference Include="HelperSharp" Version="0.0.4.1" />
+    <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
+    <PackageReference Include="log4net" Version="2.0.7" />
+    <PackageReference Include="Microsoft.AnalyzerPowerPack" Version="1.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
+    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="MvvmLightLibs" Version="5.3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Owin" Version="1.0" />
+    <PackageReference Include="Rebex.Mail" Version="2.0.6755" />
+    <PackageReference Include="RestSharpSigned" Version="105.2.3" />
+    <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
+    <PackageReference Include="SQL.LocalDB.Test" Version="1.1.2" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
+    <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Windows.Threading" Version="3.1.1" />
+    <PackageReference Include="System.Runtime.Analyzers" Version="1.1.0" />
+    <PackageReference Include="System.Runtime.InteropServices.Analyzers" Version="1.1.0" />
+    <PackageReference Include="System.Security.Cryptography.Hashing.Algorithms.Analyzers" Version="1.1.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.abstractions" Version="2.0.2" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
+    <PackageReference Include="xunit.assert" Version="2.4.0" />
+    <PackageReference Include="xunit.core" Version="2.4.0" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.4.0" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.msbuild" Version="2.4.0" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.8.1.4648\analyzers\SonarAnalyzer.dll" />
-    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props'))" />
-  </Target>
-  <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
 </Project>

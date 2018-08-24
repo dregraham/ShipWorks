@@ -78,6 +78,7 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(399, 24);
+            this.sectionRecipient.TabIndex = 1;
             // 
             // personControl
             // 
@@ -122,11 +123,13 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(399, 250);
+            this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 347);
             this.sectionLabelOptions.Size = new System.Drawing.Size(399, 24);
+            this.sectionLabelOptions.TabIndex = 4;
             // 
             // cutoffDateDisplay
             // 
@@ -161,7 +164,7 @@
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
             this.sectionFrom.Size = new System.Drawing.Size(399, 24);
-            this.sectionFrom.TabIndex = 5;
+            this.sectionFrom.TabIndex = 0;
             // 
             // originControl
             // 
@@ -271,7 +274,7 @@
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(399, 66);
-            this.sectionOptions.TabIndex = 7;
+            this.sectionOptions.TabIndex = 3;
             // 
             // insuranceControl
             // 

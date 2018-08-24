@@ -578,8 +578,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns>OnlineShipmentID from Tango.</returns>
         /// <exception cref="System.ArgumentNullException">store</exception>
         /// <exception cref="TangoException"></exception>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
         public static string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
@@ -605,114 +603,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Trial shipment logging
             if (license.IsTrial)
             {
-                postRequest.Variables.Add("action", "logtrialshipments");
-                postRequest.Variables.Add("shipments", "1");
-                postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
-                postRequest.Variables.Add("storecode", storeType.TangoCode);
-                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-
+                PrepareLogTrialShipmentRequest(postRequest, shipmentType, storeType);
                 ProcessXmlRequest(postRequest, "LogTrialShipments");
             }
             // Regular shipment logging
             else
             {
-                string tracking = shipment.TrackingNumber;
-
-                // For the purposes of U-PIC logging, CustomsNumber cannot be counted as a true TrackingNumber
-                if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) && !shipment.ShipPerson.IsDomesticCountry())
-                {
-                    tracking = "";
-                }
-
-                List<IInsuranceChoice> insuredPackages =
-                    Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                    .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
-                    .ToList();
-
-                bool shipWorksInsured = false;
-                bool carrierInsured = false;
-                bool pennyOne = false;
-                decimal insuredValue = 0;
-
-                if (insuredPackages.Count > 0)
-                {
-                    IInsuranceChoice insuranceChoice = insuredPackages[0];
-
-                    shipWorksInsured = true;
-                    pennyOne = insuranceChoice.InsurancePennyOne ?? false;
-                    insuredValue = insuranceChoice.InsuranceValue;
-                }
-                else
-                {
-                    carrierInsured = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                        .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                        .Any(
-                            choice =>
-                                choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier &&
-                                choice.InsuranceValue > 0);
-                }
-
-                if (isRetry)
-                {
-                    postRequest.Variables.Add("isretry", "1");
-                }
-
-                postRequest.Variables.Add("action", "logshipmentdetails");
-                postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
-                postRequest.Variables.Add("swordernumber", shipment.Order.OrderNumberComplete);
-                postRequest.Variables.Add("shipdate", shipment.ShipDate.ToString("yyyy-MM-dd HH:mm:ss"));
-                postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
-                postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
-                postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
-
-                if (shipment.InsurancePolicy == null)
-                {
-                    postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
-                }
-                else
-                {
-                    InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? InsuredWith.SuccessfullyInsuredViaApi : InsuredWith.FailedToInsureViaApi;
-                    postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
-                }
-
-                postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
-                postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
-                postRequest.Variables.Add("service", ShippingManager.GetActualServiceUsed(shipment));
-                postRequest.Variables.Add("country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
-                postRequest.Variables.Add("tracking", tracking);
-                postRequest.Variables.Add("firstname", shipment.ShipFirstName);
-                postRequest.Variables.Add("lastname", shipment.ShipLastName);
-                postRequest.Variables.Add("email", shipment.ShipEmail);
-
-                // Send best rate usage data to Tango
-                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
-                postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
-
-                ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
-
-                // Added to prepare for Tango2...
-                postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
-                postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
-                postRequest.Variables.Add("originAccount", shipmentDetail.OriginAccount);
-                postRequest.Variables.Add("originPostalCode", shipment.OriginPostalCode);
-                postRequest.Variables.Add("originCountry", shipment.OriginCountryCode);
-                postRequest.Variables.Add("swtypeOriginal", shipmentDetail.OriginalShipmentType != null ? ((int) shipmentDetail.OriginalShipmentType).ToString() : "");
-                postRequest.Variables.Add("swServiceType", shipmentDetail.ServiceType.ToString());
-                postRequest.Variables.Add("packageCount", shipmentType.GetParcelCount(shipment).ToString());
-                postRequest.Variables.Add("swPackagingType", shipmentDetail.PackagingType.ToString());
-                postRequest.Variables.Add("weight", shipment.TotalWeight.ToString());
-                postRequest.Variables.Add("packageLength", shipmentDetail.PackageLength.ToString());
-                postRequest.Variables.Add("packageWidth", shipmentDetail.PackageWidth.ToString());
-                postRequest.Variables.Add("packageHeight", shipmentDetail.PackageHeight.ToString());
-                postRequest.Variables.Add("recipientCompany", shipment.ShipCompany);
-                postRequest.Variables.Add("recipientPhone", shipment.ShipPhone);
-                postRequest.Variables.Add("recipientPostalCode", shipment.ShipPostalCode);
-                postRequest.Variables.Add("labelFormat", shipment.ActualLabelFormat == null ? "9" : shipment.ActualLabelFormat.Value.ToString());
-                postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
-                postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
-                postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
-
+                PrepareLogShipmentRequest(shipment, isRetry, shipmentType, postRequest);
                 XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogShipmentDetails");
 
                 // Check for error
@@ -721,15 +618,186 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     throw new TangoException(errorNode.InnerText);
                 }
-
-                XmlNode shipmentIDNode = xmlResponse.SelectSingleNode("//OnlineShipmentID");
-                if (shipmentIDNode != null)
-                {
-                    onlineShipmentID = shipmentIDNode.InnerText;
-                }
+                
+                onlineShipmentID = xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
             }
 
             return onlineShipmentID;
+        }
+
+        /// <summary>
+        /// Prepare the log shipment request for a trial shipment
+        /// </summary>
+        private static void PrepareLogTrialShipmentRequest(HttpVariableRequestSubmitter postRequest,
+                                                           ShipmentType shipmentType,
+                                                           StoreType storeType)
+        {
+            postRequest.Variables.Add("action", "logtrialshipments");
+            postRequest.Variables.Add("shipments", "1");
+            postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
+            postRequest.Variables.Add("storecode", storeType.TangoCode);
+            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+        }
+
+        /// <summary>
+        /// Prepare the log shipment request
+        /// </summary>
+        private static void PrepareLogShipmentRequest(ShipmentEntity shipment, bool isRetry,
+                                                      ShipmentType shipmentType,
+                                                      HttpVariableRequestSubmitter postRequest)
+        {
+            string tracking = shipment.TrackingNumber;
+
+            // For the purposes of U-PIC logging, CustomsNumber cannot be counted as a true TrackingNumber
+            if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) &&
+                !shipment.ShipPerson.IsDomesticCountry())
+            {
+                tracking = "";
+            }
+
+            if (isRetry)
+            {
+                postRequest.Variables.Add("isretry", "1");
+            }
+
+            postRequest.Variables.Add("action", "logshipmentdetails");
+            postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
+            postRequest.Variables.Add("shipdate", shipment.ShipDate.ToString("yyyy-MM-dd HH:mm:ss"));
+            postRequest.Variables.Add("labelFormat", shipment.ActualLabelFormat == null ? "9" : shipment.ActualLabelFormat.Value.ToString());
+            postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
+            postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
+
+            // Send best rate usage data to Tango
+            BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
+            postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());          
+            
+            ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
+            AddOrderDetailsToLogShipmentRequest(shipment, postRequest);
+            AddAddressDetailsToLogShipmentRequest(shipment, postRequest);
+            AddInsuranceDetailsToLogShipmentRequest(shipment, postRequest, shipmentType);
+            AddPackageDetailsToLogShipmentRequest(shipment, postRequest, shipmentType, shipmentDetail);
+            AddCarrierDetailsToLogShipmentRequest(shipment, postRequest, shipmentType, shipmentDetail, tracking);
+        }
+
+        /// <summary>
+        /// Add carrier and service details from the given shipment to the log shipment request
+        /// </summary>
+        private static void AddCarrierDetailsToLogShipmentRequest(ShipmentEntity shipment,
+                                                                  HttpVariableRequestSubmitter postRequest,
+                                                                  ShipmentType shipmentType,
+                                                                  ShipmentCommonDetail shipmentDetail,
+                                                                  string tracking)
+        {
+            postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
+            postRequest.Variables.Add("swtypeOriginal", shipmentDetail.OriginalShipmentType != null ?
+                                          ((int) shipmentDetail.OriginalShipmentType).ToString() :
+                                          string.Empty);
+            postRequest.Variables.Add("swServiceType", shipmentDetail.ServiceType.ToString());
+            
+            postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
+            postRequest.Variables.Add("service", ShippingManager.GetActualServiceUsed(shipment));
+            postRequest.Variables.Add("tracking", tracking);
+            postRequest.Variables.Add("originAccount", shipmentDetail.OriginAccount);
+
+        }
+
+        /// <summary>
+        /// Add package details from the given shipment to the log shipment request
+        /// </summary>
+        private static void AddPackageDetailsToLogShipmentRequest(ShipmentEntity shipment,
+                                                                  HttpVariableRequestSubmitter postRequest,
+                                                                  ShipmentType shipmentType,
+                                                                  ShipmentCommonDetail shipmentDetail)
+        {
+            postRequest.Variables.Add("packageCount", shipmentType.GetParcelCount(shipment).ToString());
+            postRequest.Variables.Add("swPackagingType", shipmentDetail.PackagingType.ToString());
+            
+            postRequest.Variables.Add("weight", shipment.TotalWeight.ToString());
+            postRequest.Variables.Add("packageLength", shipmentDetail.PackageLength.ToString());
+            postRequest.Variables.Add("packageWidth", shipmentDetail.PackageWidth.ToString());
+            postRequest.Variables.Add("packageHeight", shipmentDetail.PackageHeight.ToString());
+        }
+
+        /// <summary>
+        /// Add address details from the given shipment to the log shipment request
+        /// </summary>
+        private static void AddAddressDetailsToLogShipmentRequest(ShipmentEntity shipment,
+                                                                  HttpVariableRequestSubmitter postRequest)
+        {
+            postRequest.Variables.Add("firstname", shipment.ShipFirstName);
+            postRequest.Variables.Add("lastname", shipment.ShipLastName);
+            postRequest.Variables.Add("country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
+            postRequest.Variables.Add("email", shipment.ShipEmail);
+            postRequest.Variables.Add("recipientCompany", shipment.ShipCompany);
+            postRequest.Variables.Add("recipientPhone", shipment.ShipPhone);
+            postRequest.Variables.Add("recipientPostalCode", shipment.ShipPostalCode);
+
+            postRequest.Variables.Add("originPostalCode", shipment.OriginPostalCode);
+            postRequest.Variables.Add("originCountry", shipment.OriginCountryCode);
+        }
+
+        /// <summary>
+        /// Add order details from the given shipment to the log shipment request
+        /// </summary>
+        private static void AddOrderDetailsToLogShipmentRequest(ShipmentEntity shipment,
+                                                                HttpVariableRequestSubmitter postRequest)
+        {
+            postRequest.Variables.Add("swordernumber", shipment.Order.OrderNumberComplete);
+            postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
+            postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
+        }
+        
+        /// <summary>
+        /// Add insurance details from the given shipment to the log shipment request
+        /// </summary>
+        private static void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
+                                                                    HttpVariableRequestSubmitter postRequest,
+                                                                    ShipmentType shipmentType)
+        {
+            bool shipWorksInsured = false;
+            bool carrierInsured = false;
+            bool pennyOne = false;
+            decimal insuredValue = 0;
+
+            List<IInsuranceChoice> insuredPackages = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                                 choice.InsuranceValue > 0)
+                .ToList();
+
+            if (insuredPackages.Count > 0)
+            {
+                IInsuranceChoice insuranceChoice = insuredPackages[0];
+
+                shipWorksInsured = true;
+                pennyOne = insuranceChoice.InsurancePennyOne ?? false;
+                insuredValue = insuranceChoice.InsuranceValue;
+            }
+            else
+            {
+                carrierInsured = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                    .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier &&
+                                   choice.InsuranceValue > 0);
+            }
+
+            postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
+            postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
+
+            if (shipment.InsurancePolicy == null)
+            {
+                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
+            }
+            else
+            {
+                InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? 
+                    InsuredWith.SuccessfullyInsuredViaApi : 
+                    InsuredWith.FailedToInsureViaApi;
+                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
+            }
+
+            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
+            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
         }
 
         /// <summary>
@@ -1076,7 +1144,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Get the url
-            string tangoUrl = string.Format("https://www.interapptive.com/{0}/shipworks.php", UseTestServer ? "tango_private" : "account");
+            string tangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
 
             // Set the uri
             postRequest.Uri = new Uri(tangoUrl);
@@ -1095,6 +1163,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
+                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
             };
 
             try

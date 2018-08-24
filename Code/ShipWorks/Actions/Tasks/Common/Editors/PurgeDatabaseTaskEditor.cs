@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
     public partial class PurgeDatabaseTaskEditor : ActionTaskEditor
     {
         private readonly PurgeDatabaseTask task;
+        private IEnumerable<(CheckBox control, PurgeDatabaseType purgeType)> PurgeEditors;
 
         /// <summary>
         /// Constructor
@@ -21,7 +25,23 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             }
 
             this.task = task;
+
+            PurgeEditors = BuildPurgeEditors();
         }
+
+        /// <summary>
+        /// Build the purge editor list
+        /// </summary>
+        private IEnumerable<(CheckBox control, PurgeDatabaseType purgeType)> BuildPurgeEditors() =>
+            new[]
+            {
+                (audit, PurgeDatabaseType.Audit),
+                (email, PurgeDatabaseType.Email),
+                (labels, PurgeDatabaseType.Labels),
+                (printJobs, PurgeDatabaseType.PrintJobs),
+                (downloadHistory, PurgeDatabaseType.Downloads),
+                (orders, PurgeDatabaseType.Orders),
+            };
 
         /// <summary>
         /// Initialize form
@@ -41,68 +61,43 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             retentionPeriodInDays.ValueChanged += OnRetentionPeriodInDaysValueChanged;
 
             LoadPurgeTasks();
-            audit.CheckedChanged += OnPurgeCheckChanged;
-            email.CheckedChanged += OnPurgeCheckChanged;
-            labels.CheckedChanged += OnPurgeCheckChanged;
-            printJobs.CheckedChanged += OnPurgeCheckChanged;
-            orders.CheckedChanged += OnPurgeCheckChanged;
+            PurgeEditors.ForEach(x => x.control.CheckedChanged += OnPurgeCheckChanged);
+
+            SetupSubOption(email, emailHistory, task.PurgeEmailHistory, x => task.PurgeEmailHistory = x);
+            SetupSubOption(printJobs, printJobHistory, task.PurgePrintJobHistory, x => task.PurgePrintJobHistory = x);
+        }
+
+        /// <summary>
+        /// Setup a sub option
+        /// </summary>
+        private void SetupSubOption(CheckBox parent, CheckBox child, bool startChecked, Action<bool> updateChecked)
+        {
+            parent.CheckedChanged += (s, evt) => child.Enabled = parent.Checked;
+            child.Checked = startChecked;
+            child.Enabled = parent.Checked;
+            child.CheckedChanged += (s, evt) => updateChecked(child.Checked);
         }
 
         /// <summary>
         /// Called when [purge check changed].
         /// </summary>
-        private void OnPurgeCheckChanged(object sender, EventArgs e)
-        {
-            task.Purges = new List<PurgeDatabaseType>();
-
-            if (audit.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.Audit);
-            }
- 
-            if (email.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.Email);
-            }
-
-            if (labels.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.Labels);
-            }
-
-            if (printJobs.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.PrintJobs);
-            }
-
-            if (orders.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.Orders);
-            }
-        }
+        private void OnPurgeCheckChanged(object sender, EventArgs e) =>
+            task.Purges = PurgeEditors.Where(x => x.control.Checked).Select(x => x.purgeType).ToList();
 
         /// <summary>
         /// Loads the purge tasks.
         /// </summary>
         /// <exception cref="System.NotImplementedException"></exception>
-        private void LoadPurgeTasks()
-        {
-            if (task.Purges != null)
-            {
-                audit.Checked = task.Purges.Contains(PurgeDatabaseType.Audit);
-                email.Checked = task.Purges.Contains(PurgeDatabaseType.Email);
-                labels.Checked = task.Purges.Contains(PurgeDatabaseType.Labels);
-                printJobs.Checked = task.Purges.Contains(PurgeDatabaseType.PrintJobs);
-                orders.Checked = task.Purges.Contains(PurgeDatabaseType.Orders);
-            }
-        }
+        private void LoadPurgeTasks() =>
+            PurgeEditors
+                .ForEach(x => x.control.Checked = task.Purges?.Contains(x.purgeType) == true);
 
         /// <summary>
         /// Stop after minutes value has been changed
         /// </summary> 
         private void OnTimeoutInHoursValueChanged(object sender, EventArgs eventArgs)
         {
-            task.TimeoutInHours = (int)timeoutInHours.Value;
+            task.TimeoutInHours = (int) timeoutInHours.Value;
         }
 
         /// <summary>
@@ -110,7 +105,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnRetentionPeriodInDaysValueChanged(object sender, EventArgs eventArgs)
         {
-            task.RetentionPeriodInDays = (int)retentionPeriodInDays.Value;
+            task.RetentionPeriodInDays = (int) retentionPeriodInDays.Value;
         }
 
         /// <summary>
@@ -123,11 +118,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Recleaim disk space has changed
+        /// Reclaim disk space has changed
         /// </summary>
         private void OnReclaimDiskSpaceCheckedChanged(object sender, EventArgs e)
         {
             task.ReclaimDiskSpace = reclaimDiskSpaceCheckbox.Checked;
-        }       
+        }
     }
 }

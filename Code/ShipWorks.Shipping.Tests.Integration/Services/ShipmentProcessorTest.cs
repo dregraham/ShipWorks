@@ -260,7 +260,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             await ProcessShipment();
 
             var dialog = dialogCreator?.Invoke() as IShipmentTypeSetupWizard;
-            Assert.IsType(expectedWizardType, dialog.GetUnwrappedWizard());
+            Assert.IsType(expectedWizardType, dialog?.GetUnwrappedWizard());
         }
 
         [Fact]
@@ -302,7 +302,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
-            
+
             messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
@@ -334,7 +334,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
                 w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
-            
+
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
 

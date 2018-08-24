@@ -13,6 +13,7 @@ using log4net;
 using Autofac;
 using Autofac.Core.Lifetime;
 using Interapptive.Shared.Data;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Data.Administration
 {
@@ -40,7 +41,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Initialization
         /// </summary>
-        private void OnLoad(object sender, EventArgs e)
+        private async void OnLoad(object sender, EventArgs e)
         {
             if (SqlSession.IsConfigured)
             {
@@ -72,7 +73,7 @@ namespace ShipWorks.Data.Administration
             }
 
             Refresh();
-            LoadUsage();
+            await LoadUsage();
         }
 
         /// <summary>
@@ -101,27 +102,33 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load database usage information
         /// </summary>
-        private void LoadUsage()
+        private async Task LoadUsage()
         {
-            usageOrders.Text = "";
-            usageResources.Text = "";
-            usageAudit.Text = "";
-            usageTotal.Text = "";
-            usageRemaining.Text = "";
-            usageOther.Text = "";
+            usageOrders.Text = "...";
+            usageEmail.Text = "...";
+            usageAudit.Text = "...";
+            usagePrintJob.Text = "...";
+            usageLabel.Text = "...";
+            usageTotal.Text = "...";
+            usageRemaining.Text = "...";
+            usageOther.Text = "...";
+            usageShipSense.Text = "...";
             infotipSizeRemaining.Visible = false;
 
             if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
             {
                 try
                 {
-                    usageOrders.Text = StringUtility.FormatByteCount(SqlDiskUsage.OrdersUsage);
-                    usageResources.Text = StringUtility.FormatByteCount(SqlDiskUsage.ResourceUsage);
-                    usageAudit.Text = StringUtility.FormatByteCount(SqlDiskUsage.AuditUsage);
-                    usageTotal.Text = StringUtility.FormatByteCount(SqlDiskUsage.TotalUsage);
-                    usageOther.Text = StringUtility.FormatByteCount(SqlDiskUsage.OtherUsage);
-                    usageShipSense.Text = StringUtility.FormatByteCount(SqlDiskUsage.ShipSenseUsage);
-
+                    usageAudit.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetAuditUsage());
+                    usageDownloadDetails.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetDownloadUsage());
+                    usageEmail.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetResourceEmailData());
+                    usageOrders.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetOrdersUsage());
+                    usagePrintJob.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetResourcePrintResultData());
+                    usageLabel.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetResourceLabelData());
+                    usageShipSense.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetShipSenseUsage());
+                    usageOther.Text = StringUtility.FormatByteCount(await SqlDiskUsage.GetOtherUsage());
+                    usageTotal.Text = StringUtility.FormatByteCount(SqlDiskUsage.GetDatabaseSpaceUsed());
+                    
                     long remaining = SqlDiskUsage.SpaceRemaining;
                     if (remaining == -1)
                     {

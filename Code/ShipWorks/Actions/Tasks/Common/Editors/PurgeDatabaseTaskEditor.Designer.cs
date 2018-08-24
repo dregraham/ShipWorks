@@ -43,6 +43,8 @@
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.orders = new System.Windows.Forms.CheckBox();
+            this.emailHistory = new System.Windows.Forms.CheckBox();
+            this.printJobHistory = new System.Windows.Forms.CheckBox();
             this.retentionHeading = new System.Windows.Forms.Label();
             this.timeoutHelp = new ShipWorks.UI.Controls.InfoTip();
             this.emailContentHelp = new ShipWorks.UI.Controls.InfoTip();
@@ -50,6 +52,7 @@
             this.printJobHelp = new ShipWorks.UI.Controls.InfoTip();
             this.reclaimDiskSpaceHelp = new ShipWorks.UI.Controls.InfoTip();
             this.infoTip1 = new ShipWorks.UI.Controls.InfoTip();
+            this.downloadHistory = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +60,7 @@
             // timeoutPurgeCheckbox
             // 
             this.timeoutPurgeCheckbox.AutoSize = true;
-            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 202);
+            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 271);
             this.timeoutPurgeCheckbox.Name = "timeoutPurgeCheckbox";
             this.timeoutPurgeCheckbox.Size = new System.Drawing.Size(185, 17);
             this.timeoutPurgeCheckbox.TabIndex = 10;
@@ -67,7 +70,7 @@
             // timeoutHoursLabel
             // 
             this.timeoutHoursLabel.AutoSize = true;
-            this.timeoutHoursLabel.Location = new System.Drawing.Point(258, 203);
+            this.timeoutHoursLabel.Location = new System.Drawing.Point(258, 272);
             this.timeoutHoursLabel.Name = "timeoutHoursLabel";
             this.timeoutHoursLabel.Size = new System.Drawing.Size(38, 13);
             this.timeoutHoursLabel.TabIndex = 12;
@@ -75,7 +78,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(206, 201);
+            this.timeoutInHours.Location = new System.Drawing.Point(206, 270);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
@@ -126,9 +129,9 @@
             this.email.AutoSize = true;
             this.email.Location = new System.Drawing.Point(21, 92);
             this.email.Name = "email";
-            this.email.Size = new System.Drawing.Size(92, 17);
+            this.email.Size = new System.Drawing.Size(122, 17);
             this.email.TabIndex = 3;
-            this.email.Text = "Email Content";
+            this.email.Text = "Email Message Body";
             this.purgeToolTip.SetToolTip(this.email, "The message body is the only thing that will be deleted. You will still be able t" +
         "o see if an email was sent, when, to whom, and the subject line.");
             this.email.UseVisualStyleBackColor = true;
@@ -158,7 +161,7 @@
             // labels
             // 
             this.labels.AutoSize = true;
-            this.labels.Location = new System.Drawing.Point(21, 115);
+            this.labels.Location = new System.Drawing.Point(21, 184);
             this.labels.Name = "labels";
             this.labels.Size = new System.Drawing.Size(132, 17);
             this.labels.TabIndex = 4;
@@ -182,7 +185,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 182);
+            this.label2.Location = new System.Drawing.Point(3, 251);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 6;
@@ -193,7 +196,7 @@
             this.reclaimDiskSpaceCheckbox.AutoSize = true;
             this.reclaimDiskSpaceCheckbox.Checked = true;
             this.reclaimDiskSpaceCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 226);
+            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 295);
             this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
             this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(192, 17);
             this.reclaimDiskSpaceCheckbox.TabIndex = 19;
@@ -204,7 +207,7 @@
             // orders
             // 
             this.orders.AutoSize = true;
-            this.orders.Location = new System.Drawing.Point(21, 161);
+            this.orders.Location = new System.Drawing.Point(21, 230);
             this.orders.Name = "orders";
             this.orders.Size = new System.Drawing.Size(59, 17);
             this.orders.TabIndex = 27;
@@ -212,6 +215,30 @@
             this.purgeToolTip.SetToolTip(this.orders, "The content of the print job is the only thing that will deleted. You will still " +
         "be able to see your print history and filter against it.");
             this.orders.UseVisualStyleBackColor = true;
+            // 
+            // emailHistory
+            // 
+            this.emailHistory.AutoSize = true;
+            this.emailHistory.Location = new System.Drawing.Point(39, 115);
+            this.emailHistory.Name = "emailHistory";
+            this.emailHistory.Size = new System.Drawing.Size(87, 17);
+            this.emailHistory.TabIndex = 29;
+            this.emailHistory.Text = "Email History";
+            this.purgeToolTip.SetToolTip(this.emailHistory, "The message body is the only thing that will be deleted. You will still be able t" +
+        "o see if an email was sent, when, to whom, and the subject line.");
+            this.emailHistory.UseVisualStyleBackColor = true;
+            // 
+            // printJobHistory
+            // 
+            this.printJobHistory.AutoSize = true;
+            this.printJobHistory.Location = new System.Drawing.Point(39, 161);
+            this.printJobHistory.Name = "printJobHistory";
+            this.printJobHistory.Size = new System.Drawing.Size(85, 17);
+            this.printJobHistory.TabIndex = 30;
+            this.printJobHistory.Text = "Print History";
+            this.purgeToolTip.SetToolTip(this.printJobHistory, "The message body is the only thing that will be deleted. You will still be able t" +
+        "o see if an email was sent, when, to whom, and the subject line.");
+            this.printJobHistory.UseVisualStyleBackColor = true;
             // 
             // retentionHeading
             // 
@@ -226,7 +253,7 @@
             // timeoutHelp
             // 
             this.timeoutHelp.Caption = "Deletion will pick up where it left off the next time it runs.";
-            this.timeoutHelp.Location = new System.Drawing.Point(294, 204);
+            this.timeoutHelp.Location = new System.Drawing.Point(294, 273);
             this.timeoutHelp.Name = "timeoutHelp";
             this.timeoutHelp.Size = new System.Drawing.Size(12, 12);
             this.timeoutHelp.TabIndex = 21;
@@ -236,7 +263,7 @@
             // 
             this.emailContentHelp.Caption = "The message body is the only thing that will be deleted. You will still be able t" +
     "o see if an email was sent, when, to whom, and the subject line.";
-            this.emailContentHelp.Location = new System.Drawing.Point(109, 94);
+            this.emailContentHelp.Location = new System.Drawing.Point(139, 94);
             this.emailContentHelp.Name = "emailContentHelp";
             this.emailContentHelp.Size = new System.Drawing.Size(12, 12);
             this.emailContentHelp.TabIndex = 23;
@@ -246,7 +273,7 @@
             // 
             this.shippingLabelsHelp.Caption = "This only deletes the actual label image. The shipment settings, tracking number," +
     " and all other information is preserved.";
-            this.shippingLabelsHelp.Location = new System.Drawing.Point(149, 117);
+            this.shippingLabelsHelp.Location = new System.Drawing.Point(149, 186);
             this.shippingLabelsHelp.Name = "shippingLabelsHelp";
             this.shippingLabelsHelp.Size = new System.Drawing.Size(12, 12);
             this.shippingLabelsHelp.TabIndex = 24;
@@ -265,7 +292,7 @@
             // reclaimDiskSpaceHelp
             // 
             this.reclaimDiskSpaceHelp.Caption = "This will free up storage by truncating the SQL log file.";
-            this.reclaimDiskSpaceHelp.Location = new System.Drawing.Point(211, 228);
+            this.reclaimDiskSpaceHelp.Location = new System.Drawing.Point(211, 297);
             this.reclaimDiskSpaceHelp.Name = "reclaimDiskSpaceHelp";
             this.reclaimDiskSpaceHelp.Size = new System.Drawing.Size(12, 12);
             this.reclaimDiskSpaceHelp.TabIndex = 26;
@@ -274,16 +301,31 @@
             // infoTip1
             // 
             this.infoTip1.Caption = "When the last order of a customer is deleted, the customer will also be deleted.";
-            this.infoTip1.Location = new System.Drawing.Point(80, 164);
+            this.infoTip1.Location = new System.Drawing.Point(80, 233);
             this.infoTip1.Name = "infoTip1";
             this.infoTip1.Size = new System.Drawing.Size(12, 12);
             this.infoTip1.TabIndex = 28;
             this.infoTip1.Title = "Orders";
             // 
+            // downloadHistory
+            // 
+            this.downloadHistory.AutoSize = true;
+            this.downloadHistory.Location = new System.Drawing.Point(21, 207);
+            this.downloadHistory.Name = "downloadHistory";
+            this.downloadHistory.Size = new System.Drawing.Size(110, 17);
+            this.downloadHistory.TabIndex = 31;
+            this.downloadHistory.Text = "Download History";
+            this.purgeToolTip.SetToolTip(this.downloadHistory, "This only deletes the actual label image. The shipment settings, tracking number," +
+        " and all other information is preserved.");
+            this.downloadHistory.UseVisualStyleBackColor = true;
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.downloadHistory);
+            this.Controls.Add(this.printJobHistory);
+            this.Controls.Add(this.emailHistory);
             this.Controls.Add(this.infoTip1);
             this.Controls.Add(this.orders);
             this.Controls.Add(this.reclaimDiskSpaceHelp);
@@ -305,7 +347,7 @@
             this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(318, 257);
+            this.Size = new System.Drawing.Size(318, 332);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).EndInit();
@@ -337,5 +379,8 @@
         private ShipWorks.UI.Controls.InfoTip reclaimDiskSpaceHelp;
         private System.Windows.Forms.CheckBox orders;
         private ShipWorks.UI.Controls.InfoTip infoTip1;
+        private System.Windows.Forms.CheckBox emailHistory;
+        private System.Windows.Forms.CheckBox printJobHistory;
+        private System.Windows.Forms.CheckBox downloadHistory;
     }
 }

@@ -20,7 +20,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Anything older will be purged</param>
         /// <param name="runUntilInUtc">Execution should stop after this time</param>
         /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
-        void RunScript(string scriptName, DateTime olderThanInUtc, DateTime? runUntilInUtc, int retryAttempts);
+        /// <param name="softDelete">If true, resources/object references will be pointed to dummy entities.  Otherwise the full entity will be deleted.</param>
+        void RunScript(string scriptName, DateTime olderThanInUtc, DateTime? runUntilInUtc, int retryAttempts, bool softDelete);
 
         /// <summary>
         /// Connects to the database and attempts to shrink the database.

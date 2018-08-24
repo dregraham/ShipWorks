@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping
 {
@@ -53,5 +54,15 @@ namespace ShipWorks.Shipping
         /// Get the provider for the specified shipment
         /// </summary>
         ShipmentType Get(IShipmentEntity shipment);
+
+        /// <summary>
+        /// Indicates if the shipment type is postal
+        /// </summary>
+        bool IsPostal(ShipmentTypeCode shipmentType);
+
+        /// <summary>
+        /// Indicates if the shipment type is DHL
+        /// </summary>
+        bool IsDhl(PostalServiceType serviceType);
     }
 }

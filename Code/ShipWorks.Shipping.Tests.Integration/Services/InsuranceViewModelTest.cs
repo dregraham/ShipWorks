@@ -42,7 +42,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private const bool pennyOneYes = true;
         private const bool pennyOneNo = false;
         private const bool insuredYes = true;
-        private const bool insuredNo = false;
         private const InsuranceProvider providerCarrier = InsuranceProvider.Carrier;
         private const InsuranceProvider providerShipWorks = InsuranceProvider.ShipWorks;
         private const Visibility linkVisibleYes = Visibility.Visible;

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon;
 
@@ -116,6 +116,16 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShipmentType Get(ShipmentTypeCode shipmentTypeCode) => shipmentTypeLookup[shipmentTypeCode];
 
+        /// <summary>
+        /// Indicates if the shipment type is postal
+        /// </summary>
+        public bool IsPostal(ShipmentTypeCode shipmentType) => ShipmentTypeManager.IsPostal(shipmentType);
+
+        /// <summary>
+        /// Indicates if the shipment type is DHL
+        /// </summary>
+        public bool IsDhl(PostalServiceType serviceType) => ShipmentTypeManager.IsDhl(serviceType);
+        
         /// <summary>
         /// Get the last rule that is applicable for the given shipment
         /// </summary>

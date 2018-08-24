@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     [Trait("Category", "ContinuousIntegration")]
     public class PrefetchProviderRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public PrefetchProviderRegistrationTest()
         {
