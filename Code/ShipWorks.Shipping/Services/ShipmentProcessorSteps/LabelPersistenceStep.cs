@@ -1,10 +1,12 @@
 ﻿using System;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -57,6 +59,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             ShipmentEntity shipment = result.OriginalShipment;
+            ShipmentEntity shipmentForTango = result.OriginalShipment;
 
             using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
             {
@@ -71,9 +74,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                        ResetTemporaryAddressChanges(result, shipment);
-
                         MarkShipmentAsProcessed(shipment);
+
+                        shipmentForTango = ResetTemporaryAddressChanges(result, shipment);
 
                         SaveShipment(shipment, adapter);
 
@@ -90,7 +93,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 }
             }
 
-            return new LabelPersistenceResult(result);
+            return new LabelPersistenceResult(result, shipmentForTango);
         }
 
         /// <summary>
@@ -140,9 +143,16 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Reset the address changes that were made temporarily for services like GSP
         /// </summary>
-        private void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
+        private ShipmentEntity ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
         {
             log.Info("LabelPersistenceStep.ResetTemporaryAddressChanges");
+
+            if (result.FieldsToRestore.None())
+            {
+                return shipment;
+            }
+
+            var modifiedShipment = EntityUtility.CloneEntity(shipment);
 
             // Now that the label is generated, we can reset the shipping fields the store changed back to their
             // original values before saving to the database
@@ -152,6 +162,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 shipment.SetNewFieldValue((int) fieldIndex, result.Clone.GetCurrentFieldValue((int) fieldIndex));
                 shipment.Fields[(int) fieldIndex].IsChanged = false;
             }
+
+            return modifiedShipment;
         }
 
         /// <summary>

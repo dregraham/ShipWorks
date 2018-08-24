@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private const string ActivationUrl = "https://interapptive.com/ShipWorksNet/ActivationV1.svc";
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
+        private static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
 
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
 
