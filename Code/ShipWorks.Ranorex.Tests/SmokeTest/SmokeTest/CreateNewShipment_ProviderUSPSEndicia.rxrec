@@ -125,12 +125,21 @@ rxversion="8.1">
 				USPS (Endicia)
 			</AttributeValue>
 		</setvaluerecorditem>
+		<explicitdelayitem
+		duration="30000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
 	name="SmokeTestRepository"
 	relativepath="SmokeTestRepository.rxrep"
-	rxversion="8.0">
+	rxversion="8.1">
 		<codegen
 		classname="SmokeTestRepository"
 		namespace="SmokeTest">

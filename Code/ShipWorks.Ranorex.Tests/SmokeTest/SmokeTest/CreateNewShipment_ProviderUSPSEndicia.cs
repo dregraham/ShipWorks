@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -81,23 +81,26 @@ namespace SmokeTest
 
             // Move to Create New button
             Report.Log(ReportLevel.Info, "Mouse", "Move to Create New button\r\nMouse Left Move item 'ShippingDlg.SplitContainer.CreateNew' at Center.", repo.ShippingDlg.SplitContainer.CreateNewInfo, new RecordItemIndex(0));
-            repo.ShippingDlg.SplitContainer.CreateNew.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.CreateNew.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Create New to create new shipment
             Report.Log(ReportLevel.Info, "Mouse", "Click Create New to create new shipment\r\nMouse Left Click item 'ShippingDlg.SplitContainer.CreateNew' at Center.", repo.ShippingDlg.SplitContainer.CreateNewInfo, new RecordItemIndex(1));
-            repo.ShippingDlg.SplitContainer.CreateNew.Click(300);
+            repo.ShippingDlg.SplitContainer.CreateNew.Click();
             Delay.Milliseconds(200);
             
             // Move to the Provider Dropdown
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Provider Dropdown\r\nMouse Left Move item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(2));
-            repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo();
             Delay.Milliseconds(200);
             
             // Set value of Provider Dropdown to USPS (Endicia)
             Report.Log(ReportLevel.Info, "Set value", "Set value of Provider Dropdown to USPS (Endicia)\r\nSetting attribute SelectedItemText to 'USPS (Endicia)' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
             repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
             Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 30s.", new RecordItemIndex(4));
+            Delay.Duration(30000, false);
             
         }
 
