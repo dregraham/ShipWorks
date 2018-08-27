@@ -94,13 +94,14 @@ namespace SmokeTest
             repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo();
             Delay.Milliseconds(200);
             
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
+            repo.ShippingDlg.SplitContainer.ComboShipmentType.Click();
+            Delay.Milliseconds(200);
+            
             // Set value of Provider Dropdown to USPS (Endicia)
-            Report.Log(ReportLevel.Info, "Set value", "Set value of Provider Dropdown to USPS (Endicia)\r\nSetting attribute SelectedItemText to 'USPS (Endicia)' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
+            Report.Log(ReportLevel.Info, "Set value", "Set value of Provider Dropdown to USPS (Endicia)\r\nSetting attribute SelectedItemText to 'USPS (Endicia)' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(4));
             repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
             Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 30s.", new RecordItemIndex(4));
-            Delay.Duration(30000, false);
             
         }
 
