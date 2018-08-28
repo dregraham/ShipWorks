@@ -7,12 +7,12 @@ using System.Linq;
 using System.Management;
 using System.Text.RegularExpressions;
 using System.Threading;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Templates.Tokens;
-using log4net;
-using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -93,7 +93,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the command log folder.
         /// </summary>
-        private static string CommandLogFolder
+        public static string CommandLogFolder
         {
             get
             {

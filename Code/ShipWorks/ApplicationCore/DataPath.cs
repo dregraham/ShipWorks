@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using log4net;
-using ShipWorks.Users;
 using System.Threading;
-using Interapptive.Shared;
-using System.Collections;
-using System.Security.AccessControl;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
-using System.Windows.Forms;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -20,21 +14,32 @@ namespace ShipWorks.ApplicationCore
     public static class DataPath
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(DataPath));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataPath));
 
-        // A file we keep locked to ensure the temp folder isnt wiped out by another running shipworks
-        static FileStream tempFolderLockFile = null;
-        static string tempFolderLockName = "running.lock";
+        // A file we keep locked to ensure the temp folder isn't wiped out by another running shipworks
+        private static FileStream tempFolderLockFile = null;
+        private static readonly string tempFolderLockName = "running.lock";
+
+        private static Func<string> getInstancePath;
+        private static Func<string> getCommonSettingsPath;
+        private static Func<string> getTempPath;
 
         /// <summary>
         /// Ensures that all the data paths have been created.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(string instancePath = null, string commonSettingsPath = null, string tempPath = null)
         {
             if (ShipWorksSession.SessionID == Guid.Empty)
             {
                 throw new InvalidOperationException("SessionID has not been initialized.");
             }
+
+            Func<string> BuildGetter(string path, Func<string> defaultImplementation) =>
+                string.IsNullOrEmpty(path) ? defaultImplementation : () => path;
+
+            getInstancePath = BuildGetter(instancePath, GetInstancePathDefault);
+            getCommonSettingsPath = BuildGetter(commonSettingsPath, GetCommonSettingsPathDefault);
+            getTempPath = BuildGetter(tempPath, GetTempPathDefault);
 
             // Paths we create up front
             string[] paths = new string[]
@@ -61,7 +66,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Provide methhod for background process to register thread to clean up temp folder
+        /// Provide method for background process to register thread to clean up temp folder
         /// </summary>
         public static void RegisterTempFolderCleanup()
         {
@@ -89,24 +94,13 @@ namespace ShipWorks.ApplicationCore
             }
         }
 
-
         /// <summary>
         /// Most ShipWorks settings go in the AllUsers area, since we pay attention to ShipWorks users, not Windows users.
         /// </summary>
-        private static string CommonSettingsRoot
-        {
-            get
-            {
-                string path = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                    @"Interapptive\ShipWorks");
-
-                return path;
-            }
-        }
+        private static string CommonSettingsRoot => getCommonSettingsPath();
 
         /// <summary>
-        /// Root path to all settings that are shared accross all ShipWorks users and instances
+        /// Root path to all settings that are shared across all ShipWorks users and instances
         /// </summary>
         public static string SharedSettings
         {
@@ -136,31 +130,14 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Root of all ShipWorks settings that are specific to the current intall path of shipworks.
+        /// Root of all ShipWorks settings that are specific to the current install path of shipworks.
         /// </summary>
-        public static string InstanceRoot
-        {
-            get
-            {
-                if (ShipWorksSession.InstanceID == Guid.Empty)
-                {
-                    throw new InvalidOperationException("Attempt to access DataPath before InstanceID.");
-                }
-
-                return Path.Combine(CommonSettingsRoot, "Instances\\" + ShipWorksSession.InstanceID.ToString("B"));
-            }
-        }
+        public static string InstanceRoot => getInstancePath();
 
         /// <summary>
         /// Get the folder used to store settings for the given installed instance of ShipWorks.
         /// </summary>
-        public static string InstanceSettings
-        {
-            get
-            {
-                return Path.Combine(InstanceRoot, "Settings");
-            }
-        }
+        public static string InstanceSettings => Path.Combine(InstanceRoot, "Settings");
 
         /// <summary>
         /// Get the folder used to store log files
@@ -222,15 +199,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the root of the temp file storage.
         /// </summary>
-        private static string TempRoot
-        {
-            get
-            {
-                string path = Path.Combine(Path.GetTempPath(), "ShipWorks");
-
-                return path;
-            }
-        }
+        private static string TempRoot => getTempPath();
 
         /// <summary>
         /// The ShipWorks specific temporary folder
@@ -252,7 +221,7 @@ namespace ShipWorks.ApplicationCore
         {
             string path = Path.Combine(ShipWorksTemp, Guid.NewGuid().ToString("N"));
 
-            // Since this is a unique folder, its not created during init
+            // Since this is a unique folder, its not created during initialization
             Directory.CreateDirectory(path);
 
             return path;
@@ -316,10 +285,39 @@ namespace ShipWorks.ApplicationCore
                     }
                 }
             }
-            catch(Exception ex) when (ex is ArgumentOutOfRangeException || ex is IOException || ex is UnauthorizedAccessException)
+            catch (Exception ex) when (ex is ArgumentOutOfRangeException || ex is IOException || ex is UnauthorizedAccessException)
             {
                 log.Error("Failed during temp cleanup.", ex);
             }
+        }
+
+        /// <summary>
+        /// Default implementation of the getCommonSettingsPath func
+        /// </summary>
+        private static string GetCommonSettingsPathDefault() =>
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                @"Interapptive\ShipWorks");
+
+        /// <summary>
+        /// Default implementation of the getInstancePath func
+        /// </summary>
+        private static string GetInstancePathDefault()
+        {
+            if (ShipWorksSession.InstanceID == Guid.Empty)
+            {
+                throw new InvalidOperationException("Attempt to access DataPath before InstanceID.");
+            }
+
+            return Path.Combine(CommonSettingsRoot, "Instances\\" + ShipWorksSession.InstanceID.ToString("B"));
+        }
+
+        /// <summary>
+        /// Default implementation of the getTempPath func
+        /// </summary>
+        private static string GetTempPathDefault()
+        {
+            return Path.Combine(Path.GetTempPath(), "ShipWorks");
         }
     }
 }
