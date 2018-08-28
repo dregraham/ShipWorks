@@ -130,7 +130,7 @@ rxversion="8.1">
 		</mouseitem>
 		<setvaluerecorditem
 		attrname="SelectedItemText"
-		enabled="True"
+		enabled="False"
 		optional="False"
 		searchpropertyid="b3918d34-f1d2-41bb-a637-999d45583d1e">
 			<comment>
@@ -149,24 +149,114 @@ rxversion="8.1">
 				USPS (Endicia)
 			</AttributeValue>
 		</setvaluerecorditem>
-		<WaitForRecordItem
+		<keysequenceitem
+		KeySequence="{Down}"
+		duration="100ms"
 		enabled="True"
 		optional="False"
-		searchpropertyid="9bc2c7f0-e4eb-47a0-ab01-8a522a6e03cc"
-		waitaction="NotExists"
-		waittimeout="40000ms">
+		presstime="100ms"
+		searchpropertyid="038d7f54-5b6e-4caf-ae13-3babcfd1ca0d">
 			<comment>
 			</comment>
 			<bindings>
 			</bindings>
-			<info
-			id="987d7c0b-744f-40e5-b288-eb48b549e8b5"
-			sourcename="RepositoryEditor">
-				<path>
-					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True' and @enabled='True']
-				</path>
-			</info>
-		</WaitForRecordItem>
+		</keysequenceitem>
+		<explicitdelayitem
+		duration="5000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+		<keysequenceitem
+		KeySequence="{Down}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="701aec96-1a67-4609-ac53-3f49d1af8ac0">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+		<explicitdelayitem
+		duration="5000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+		<keysequenceitem
+		KeySequence="{Down}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="150570de-a747-4607-916b-126a24744851">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+		<explicitdelayitem
+		duration="5000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+		<keysequenceitem
+		KeySequence="{Down}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="09f2ac88-07dd-464b-9a91-1561d283b904">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+		<explicitdelayitem
+		duration="5000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+		<keysequenceitem
+		KeySequence="{Down}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="0ab9a294-5633-4d66-94ad-3389758746d0">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+		<keysequenceitem
+		KeySequence="{Return}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="3721e07d-aa87-4a74-a60e-b931f6d5a397">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"

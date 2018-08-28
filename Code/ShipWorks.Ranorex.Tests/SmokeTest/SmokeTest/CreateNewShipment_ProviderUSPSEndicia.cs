@@ -99,12 +99,45 @@ namespace SmokeTest
             Delay.Milliseconds(200);
             
             // Set value of Provider Dropdown to USPS (Endicia)
-            Report.Log(ReportLevel.Info, "Set value", "Set value of Provider Dropdown to USPS (Endicia)\r\nSetting attribute SelectedItemText to 'USPS (Endicia)' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(4));
-            repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
+            //Report.Log(ReportLevel.Info, "Set value", "Set value of Provider Dropdown to USPS (Endicia)\r\nSetting attribute SelectedItemText to 'USPS (Endicia)' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(4));
+            //repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
+            //Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(5));
+            Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Wait", "Waiting 40s to not exist. Associated repository item: 'ShippingDlg.SplitContainer.ComboShipmentType'", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new ActionTimeout(40000), new RecordItemIndex(5));
-            repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo.WaitForNotExists(40000);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(6));
+            Delay.Duration(5000, false);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(7));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(8));
+            Delay.Duration(5000, false);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(9));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(10));
+            Delay.Duration(5000, false);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(11));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(12));
+            Delay.Duration(5000, false);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(13));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Return}'.", new RecordItemIndex(14));
+            Keyboard.Press("{Return}");
+            Delay.Milliseconds(0);
             
         }
 
