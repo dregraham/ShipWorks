@@ -103,35 +103,40 @@ namespace SmokeTest
             //repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
             //Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(5));
+            // usps(expres1)
+            Report.Log(ReportLevel.Info, "Keyboard", "usps(expres1)\r\nKey sequence '{Down}'.", new RecordItemIndex(5));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(6));
             Delay.Duration(5000, false);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(7));
+            // fedex
+            Report.Log(ReportLevel.Info, "Keyboard", "fedex\r\nKey sequence '{Down}'.", new RecordItemIndex(7));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(8));
             Delay.Duration(5000, false);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(9));
+            // ups
+            Report.Log(ReportLevel.Info, "Keyboard", "ups\r\nKey sequence '{Down}'.", new RecordItemIndex(9));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(10));
             Delay.Duration(5000, false);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(11));
+            // ups(worldship)
+            Report.Log(ReportLevel.Info, "Keyboard", "ups(worldship)\r\nKey sequence '{Down}'.", new RecordItemIndex(11));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(12));
             Delay.Duration(5000, false);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Down}'.", new RecordItemIndex(13));
+            // usps (endicia)
+            Report.Log(ReportLevel.Info, "Keyboard", "usps (endicia)\r\nKey sequence '{Down}'.", new RecordItemIndex(13));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
