@@ -155,6 +155,17 @@ namespace ShipWorks.Data.Connection
 
                 return false;
             }
+            catch (SqlException ex)
+            {
+                log.Error("Reconnect failed", ex);
+
+                if (showError)
+                {
+                    MessageHelper.ShowError(this, "There was an an error connecting: " + ex.Message);
+                }
+
+                return false;
+            }
         }
 
         /// <summary>
