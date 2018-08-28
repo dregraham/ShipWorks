@@ -65,6 +65,8 @@ namespace ShipWorks.Data.Connection
                 59,    // SQL: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - An unexpected network error occurred.)
                 1130,  // Win32: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - Not enough server storage is available to process this command.)
                 2,     // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Shared Memory Provider, error: 40 - Could not open a connection to SQL Server)
+                4060,  // SQL: Cannot open database requested by login.
+                18456  // SQL: Login failed for user
             });
 
         /// <summary>
