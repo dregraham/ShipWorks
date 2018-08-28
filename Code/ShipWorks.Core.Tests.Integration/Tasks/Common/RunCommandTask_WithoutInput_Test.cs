@@ -54,20 +54,22 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
         public void Run_ExecutesCommandWithNoOrders_LogsOutput()
         {
             var date = DateTime.Now.ToString();
-            var outputFile = Path.Combine(currentDirectory, "output.txt");
+            testObject.Command = $"echo {date}";
 
-            try
-            {
-                testObject.Command = $"echo {date}";
+            testObject.Run(new List<long>(), stepContext);
 
-                testObject.Run(new List<long>(), stepContext);
+            Assert.Contains("O> " + date, File.ReadAllLines(LatestLogFile()));
+        }
 
-                Assert.Contains("O> " + date, File.ReadAllLines(LatestLogFile()));
-            }
-            finally
-            {
-                File.Delete(outputFile);
-            }
+        [Fact]
+        public void Run_ExecutesCommandWithNoOrders_LogsErorr()
+        {
+            var date = DateTime.Now.ToString();
+            testObject.Command = $"echo {date} 1>&2";
+
+            testObject.Run(new List<long>(), stepContext);
+
+            Assert.Contains("E> " + date + " ", File.ReadAllLines(LatestLogFile()));
         }
 
         [Fact]
@@ -77,22 +79,13 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
                 .Set(x => x.OrderNumber = 1234)
                 .Save();
 
-            var outputFile = Path.Combine(currentDirectory, "output.txt");
-
             stepContext.Step.InputSource = (int) ActionTaskInputSource.Selection;
 
-            try
-            {
-                testObject.Command = "echo Order #{//Order/Number}";
+            testObject.Command = "echo Order #{//Order/Number}";
 
-                testObject.Run(new List<long> { order.OrderID }, stepContext);
+            testObject.Run(new List<long> { order.OrderID }, stepContext);
 
-                Assert.Contains("O> Order #1234", File.ReadAllLines(LatestLogFile()));
-            }
-            finally
-            {
-                File.Delete(outputFile);
-            }
+            Assert.Contains("O> Order #1234", File.ReadAllLines(LatestLogFile()));
         }
 
         [Fact]
@@ -105,27 +98,18 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
                 .Set(x => x.OrderNumber = 5678)
                 .Save();
 
-            var outputFile = Path.Combine(currentDirectory, "output.txt");
-
             stepContext.Step.InputSource = (int) ActionTaskInputSource.Selection;
             testObject.RunCardinality = RunCommandCardinality.OneTime;
 
-            try
-            {
-                testObject.Command = "echo <xsl:for-each select=\"//Order\"><xsl:text>Order #</xsl:text><xsl:value-of select=\"Number\" /><xsl:text> </xsl:text></xsl:for-each>";
+            testObject.Command = "echo <xsl:for-each select=\"//Order\"><xsl:text>Order #</xsl:text><xsl:value-of select=\"Number\" /><xsl:text> </xsl:text></xsl:for-each>";
 
-                testObject.Run(new List<long> { order.OrderID, order2.OrderID }, stepContext);
+            testObject.Run(new List<long> { order.OrderID, order2.OrderID }, stepContext);
 
-                Assert.Contains("O> Order #1234 Order #5678 ", File.ReadAllLines(LatestLogFile()));
-            }
-            finally
-            {
-                File.Delete(outputFile);
-            }
+            Assert.Contains("O> Order #1234 Order #5678 ", File.ReadAllLines(LatestLogFile()));
         }
 
         [Fact]
-        public void Run_ExecutesCommandWithTwoOrders_AndMultipleCardinality_LogsOutput()
+        public void Run_ExecutesCommandWithTwoOrders_AndMultipleCardinality_LogsMultipleOutput()
         {
             var order = Create.Order(context.Store, context.Customer)
                 .Set(x => x.OrderNumber = 1234)
@@ -134,25 +118,53 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
                 .Set(x => x.OrderNumber = 5678)
                 .Save();
 
-            var outputFile = Path.Combine(currentDirectory, "output.txt");
-
             stepContext.Step.InputSource = (int) ActionTaskInputSource.Selection;
             testObject.RunCardinality = RunCommandCardinality.OncePerFilterEntry;
 
-            try
-            {
-                testObject.Command = "echo Order #{//Order/Number}";
+            testObject.Command = "echo Order #{//Order/Number}";
 
-                testObject.Run(new List<long> { order.OrderID, order2.OrderID }, stepContext);
+            testObject.Run(new List<long> { order.OrderID, order2.OrderID }, stepContext);
 
-                var logFiles = LatestLogFiles(2);
-                Assert.Contains("O> Order #1234", File.ReadAllLines(logFiles.Last()));
-                Assert.Contains("O> Order #5678", File.ReadAllLines(logFiles.First()));
-            }
-            finally
-            {
-                File.Delete(outputFile);
-            }
+            var logFiles = LatestLogFiles(2);
+            Assert.Equal(2, logFiles.Count());
+            Assert.Contains("O> Order #1234", File.ReadAllLines(logFiles.Last()));
+            Assert.Contains("O> Order #5678", File.ReadAllLines(logFiles.First()));
+        }
+
+        [Fact]
+        public void Run_FinishesBeforeTimeout_FinishesSuccessfully()
+        {
+            testObject.Command = $"ping localhost -n 3";
+            testObject.CommandTimeout = TimeSpan.FromSeconds(4);
+            testObject.ShouldStopCommandOnTimeout = true;
+
+            testObject.Run(new List<long>(), stepContext);
+
+            Assert.Contains("O> Approximate round trip times in milli-seconds:", File.ReadAllLines(LatestLogFile()));
+        }
+
+        [Fact]
+        public void Run_TakesLongerThanTimeout_ProcessIsKilled()
+        {
+            testObject.Command = $"ping localhost -n 9";
+            testObject.CommandTimeout = TimeSpan.FromSeconds(2);
+            testObject.ShouldStopCommandOnTimeout = true;
+
+            var exception = Assert.Throws<ActionTaskRunException>(() => testObject.Run(new List<long>(), stepContext));
+
+            Assert.StartsWith("The command took longer than", exception.Message);
+        }
+
+        [Fact]
+        public void Run_TakesLongerThanTimeout_ProcessWithSubprocessesIsKilled()
+        {
+            testObject.Command = $"start /B /wait ping localhost -n 9";
+            testObject.CommandTimeout = TimeSpan.FromSeconds(2);
+            testObject.ShouldStopCommandOnTimeout = true;
+
+            var exception = Assert.Throws<ActionTaskRunException>(() => testObject.Run(new List<long>(), stepContext));
+
+            Assert.StartsWith("The command took longer than", exception.Message);
         }
 
         private static IEnumerable<string> LatestLogFiles(int count) =>
