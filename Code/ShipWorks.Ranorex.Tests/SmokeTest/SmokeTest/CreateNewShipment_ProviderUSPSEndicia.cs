@@ -103,6 +103,9 @@ namespace SmokeTest
             repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "USPS (Endicia)");
             Delay.Milliseconds(0);
             
+            Report.Log(ReportLevel.Info, "Wait", "Waiting 40s to not exist. Associated repository item: 'ShippingDlg.SplitContainer.ComboShipmentType'", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new ActionTimeout(40000), new RecordItemIndex(5));
+            repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo.WaitForNotExists(40000);
+            
         }
 
 #region Image Feature Data

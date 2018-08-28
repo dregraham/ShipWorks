@@ -149,6 +149,24 @@ rxversion="8.1">
 				USPS (Endicia)
 			</AttributeValue>
 		</setvaluerecorditem>
+		<WaitForRecordItem
+		enabled="True"
+		optional="False"
+		searchpropertyid="9bc2c7f0-e4eb-47a0-ab01-8a522a6e03cc"
+		waitaction="NotExists"
+		waittimeout="40000ms">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="987d7c0b-744f-40e5-b288-eb48b549e8b5"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True' and @enabled='True']
+				</path>
+			</info>
+		</WaitForRecordItem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
