@@ -1,21 +1,38 @@
-﻿Feature: AddItemUpdateRollup
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
-
-@mytag
-Scenario: Add two numbers
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+﻿@collection:database
+Feature: AddItemUpdateRollup
+    In order to learn SpecFlow
+    As a QA person
+    I want to try writing tests
 
 Scenario: Order item rollup updates after adding item
-	Given an Order with items
-		|Qauntity				|
-		|1						|
-		|3						|
-	When a new item is added to an order
-		|Qauntity				|
-		|1						|
-	Then item quantity rollup shows 5
+    Given an order 
+	And the order has items
+        |Quantity				|
+        |1						|
+        |3						|
+    When a new item is added to an order
+        |Quantity				|
+        |1						|
+    Then item quantity rollup shows 5
+
+Scenario: Order item count rollup updates
+    Given an order 
+	And the order has items
+         | Quantity |
+         | 1        |
+         | 3        |
+    When a new item is added to an order
+        | Quantity |
+        | 2        |
+    Then item count rollup shows 3
+
+Scenario: Order note count rollup updates
+    Given an order
+    And the order has notes
+        | Text    |
+        | Hello   |
+        | Goodbye |
+    When a new note is added to the order
+        | Text |
+        | Wow  |
+    Then note count rollup shows 3

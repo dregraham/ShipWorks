@@ -122,6 +122,12 @@
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\Tasks\PurgeDatabase_DownloadsSteps.cs" />
+    <Compile Include="Testing\AddItemUpdateRollup.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItemUpdateRollup.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Testing\AddItemUpdateRollupSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -160,6 +166,10 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Testing\AddItemUpdateRollup.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddItemUpdateRollup.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
