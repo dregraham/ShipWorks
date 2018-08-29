@@ -196,3 +196,6 @@ test.bat
 ShipWorks.sln.vsext
 build-times*.txt
 .idea/
+
+# SpecFlow feature generated C# files
+**/*.Specs/**/*.feature.cs

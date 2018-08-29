@@ -11,6 +11,8 @@
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\net46\*.tests.dll" />
     <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\*.tests.integration.dll" />
     <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\net46\*.tests.integration.dll" />
+    <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\*.specs.dll" />
+    <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\net46\*.specs.dll" />
   </ItemGroup>
 
   <Target Name="Units">
@@ -25,6 +27,16 @@
   <Target Name="Integration">
     <xunit Assemblies="@(IntegrationAssemblies)"
       Xml="TestResults\integration.xml"
+      IncludeTraits="$(IncludeTraits)"
+      ParallelizeAssemblies="true"
+      ParallelizeTestCollections="true" />
+  </Target>
+
+  <!-- We need the specs to run in parallel so that the correct synchronization context gets set.
+       If they are not run in parallel, some async tests will deadlock -->
+  <Target Name="Specs">
+    <xunit Assemblies="@(SpecsAssemblies)"
+      Xml="TestResults\specs.xml"
       IncludeTraits="$(IncludeTraits)"
       ParallelizeAssemblies="true"
       ParallelizeTestCollections="true" />

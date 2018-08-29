@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shared.Database
             string databaseName = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Select(x => x.GetName().Name)
-                .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
+                .FirstOrDefault(x => (x.Contains("Integration") || x.Contains("Specs")) && x.Contains("ShipWorks"))
                 .Replace("ShipWorks", "SW_" + databasePrefix)
                 .Replace(".", "_");
 
