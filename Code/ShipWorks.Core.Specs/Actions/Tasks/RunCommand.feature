@@ -4,7 +4,7 @@ Feature: RunCommand
 	In order to perform actions not native to ShipWorks
 	As a customer
 	I want to run custom commands from actions
-
+	 
 Scenario: Command with no input logs output correctly
 	Given the command "echo foo"
 	When I run the task with no input
@@ -53,3 +53,12 @@ Scenario: Command finishes before timeout
 	And should stop command on timeout is true
 	When I run the task with no input
 	Then the most recent log should contain "O> Approximate round trip times in milli-seconds:"
+
+Scenario: Process is Killed when run command takes longer than timeout
+	Given the command "ping localhost -n 5"
+	And a command timeout of 2 seconds
+	And should stop command on timeout is true
+	When I run the task with no input
+	Then an error "The command took longer than" is shown
+
+	

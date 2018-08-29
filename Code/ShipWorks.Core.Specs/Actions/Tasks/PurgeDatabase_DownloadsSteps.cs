@@ -97,19 +97,19 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
 
         private DateTime GetDateFromRow(TableRow row)
         {
-            var started = row["Started"];
+            var started = row["Download Start"];
 
             if (started.Equals("now", StringComparison.OrdinalIgnoreCase))
             {
                 return DateTime.UtcNow;
             }
 
-            var match = Regex.Match(started, "([0-9]+) days? (after|before) cutoff");
+            var match = Regex.Match(started, "([0-9]+) days? (older|newer) than cutoff");
             if (match.Success)
             {
                 int days = int.Parse(match.Groups[1].Value);
                 int multiplier = match.Groups[2]
-                        .Value.Equals("after", StringComparison.OrdinalIgnoreCase) ? 1 : -1;
+                        .Value.Equals("newer", StringComparison.OrdinalIgnoreCase) ? 1 : -1;
 
                 return cutoffDate.AddDays(days * multiplier);
             }

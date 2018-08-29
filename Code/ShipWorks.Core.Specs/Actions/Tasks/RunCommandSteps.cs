@@ -96,6 +96,15 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
         public void ThenNthTheMostRecentLogShouldContain(int logNumber, string value) =>
             Assert.Contains(value, File.ReadAllLines(LatestLogFiles(logNumber).Last()).Select(x => x.Trim()));
 
+
+        [Then(@"an error ""(.*)"" is shown")]
+        public void ThenAnErrorIsShown(string p0)
+        {
+            var exception = Assert.Throws<ActionTaskRunException>(() => testObject.Run(new List<long>(), stepContext));
+            Assert.StartsWith("The command took longer than", exception.Message);
+        }
+
+
         [StepArgumentTransformation]
         public IEnumerable<string> TransformToListOfString(string commaSeparatedList) =>
             commaSeparatedList.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
