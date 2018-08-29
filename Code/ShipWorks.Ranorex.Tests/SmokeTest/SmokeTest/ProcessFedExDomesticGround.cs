@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -86,7 +86,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShipOrders1.SplitContainer.ResidentialDetermination' at Center.", repo.ShipOrders1.SplitContainer.ResidentialDeterminationInfo, new RecordItemIndex(1));
-            repo.ShipOrders1.SplitContainer.ResidentialDetermination.MoveTo(300);
+            repo.ShipOrders1.SplitContainer.ResidentialDetermination.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Residential \ Commercial dropdown: Commercial
@@ -101,7 +101,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.SplitContainer.Service' at Center.", repo.ShippingDlg.SplitContainer.ServiceInfo, new RecordItemIndex(4));
-            repo.ShippingDlg.SplitContainer.Service.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.Service.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Service: FedEx Ground®
@@ -116,7 +116,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.SplitContainer.Weight' at Center.", repo.ShippingDlg.SplitContainer.WeightInfo, new RecordItemIndex(7));
-            repo.ShippingDlg.SplitContainer.Weight.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.Weight.MoveTo();
             Delay.Milliseconds(200);
             
             // Select All (CTRL+A)
@@ -137,7 +137,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.DimensionsControl.Lengthiparcel' at Center.", repo.ShippingDlg.DimensionsControl.LengthiparcelInfo, new RecordItemIndex(11));
-            repo.ShippingDlg.DimensionsControl.Lengthiparcel.MoveTo(300);
+            repo.ShippingDlg.DimensionsControl.Lengthiparcel.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Length: 7
@@ -152,7 +152,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.DimensionsControl.Widthiparcel' at Center.", repo.ShippingDlg.DimensionsControl.WidthiparcelInfo, new RecordItemIndex(14));
-            repo.ShippingDlg.DimensionsControl.Widthiparcel.MoveTo(300);
+            repo.ShippingDlg.DimensionsControl.Widthiparcel.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Width: 8
@@ -167,7 +167,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.DimensionsControl.Heightiparcel' at Center.", repo.ShippingDlg.DimensionsControl.HeightiparcelInfo, new RecordItemIndex(17));
-            repo.ShippingDlg.DimensionsControl.Heightiparcel.MoveTo(300);
+            repo.ShippingDlg.DimensionsControl.Heightiparcel.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Height: 9
