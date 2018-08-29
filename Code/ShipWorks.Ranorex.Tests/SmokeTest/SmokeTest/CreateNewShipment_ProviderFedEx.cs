@@ -94,25 +94,29 @@ namespace SmokeTest
             repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo();
             Delay.Milliseconds(200);
             
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
+            repo.ShippingDlg.SplitContainer.ComboShipmentType.Click();
+            Delay.Milliseconds(200);
+            
             // Set Provider: FedEx
-            //Report.Log(ReportLevel.Info, "Set value", "Set Provider: FedEx\r\nSetting attribute SelectedItemText to 'FedEx' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
+            //Report.Log(ReportLevel.Info, "Set value", "Set Provider: FedEx\r\nSetting attribute SelectedItemText to 'FedEx' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(4));
             //repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "FedEx");
             //Delay.Milliseconds(0);
             
             // USPS (Express1)
-            Report.Log(ReportLevel.Info, "Keyboard", "USPS (Express1)\r\nKey sequence '{Down}'.", new RecordItemIndex(4));
+            Report.Log(ReportLevel.Info, "Keyboard", "USPS (Express1)\r\nKey sequence '{Down}'.", new RecordItemIndex(5));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(5));
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(6));
             Delay.Duration(10000, false);
             
             // Fed Ex
-            Report.Log(ReportLevel.Info, "Keyboard", "Fed Ex\r\nKey sequence '{Down}'.", new RecordItemIndex(6));
+            Report.Log(ReportLevel.Info, "Keyboard", "Fed Ex\r\nKey sequence '{Down}'.", new RecordItemIndex(7));
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Return}'.", new RecordItemIndex(7));
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Return}'.", new RecordItemIndex(8));
             Keyboard.Press("{Return}");
             Delay.Milliseconds(0);
             

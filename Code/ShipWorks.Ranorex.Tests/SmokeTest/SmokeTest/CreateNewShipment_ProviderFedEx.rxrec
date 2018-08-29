@@ -104,6 +104,30 @@ rxversion="8.1">
 				</path>
 			</info>
 		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="72717c46-bd48-42fa-a3ac-29c92d7646d1"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="987d7c0b-744f-40e5-b288-eb48b549e8b5"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True' and @enabled='True']
+				</path>
+			</info>
+		</mouseitem>
 		<setvaluerecorditem
 		attrname="SelectedItemText"
 		enabled="False"
