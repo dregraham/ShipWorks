@@ -1,9 +1,10 @@
-﻿Feature: RunCommand
+﻿@tasks
+@collection:database
+Feature: RunCommand
 	In order to perform actions not native to ShipWorks
 	As a customer
 	I want to run custom commands from actions
 
-@mytag
 Scenario: Command with no input logs output correctly
 	Given the command "echo foo"
 	When I run the task with no input

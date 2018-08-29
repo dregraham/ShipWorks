@@ -124,6 +124,14 @@ namespace Interapptive.Shared.Utility
                 GenericResult.FromError<decimal>($"Could not parse {value} as decimal");
 
         /// <summary>
+        /// Parse an enum value
+        /// </summary>
+        public static GenericResult<T> ParseEnum<T>(string value) where T : struct =>
+            Enum.TryParse(value, out T result) ?
+                result :
+                GenericResult.FromError<T>($"Could not parse {value} as enum");
+
+        /// <summary>
         /// Try executing a function
         /// </summary>
         /// <typeparam name="T">Return type of the function</typeparam>
