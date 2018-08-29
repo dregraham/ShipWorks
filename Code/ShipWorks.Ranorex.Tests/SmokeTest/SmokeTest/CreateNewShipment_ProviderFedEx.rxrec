@@ -139,7 +139,7 @@ rxversion="8.1">
 			</bindings>
 		</keysequenceitem>
 		<explicitdelayitem
-		duration="5000ms"
+		duration="10000ms"
 		enabled="True"
 		optional="False">
 			<comment>

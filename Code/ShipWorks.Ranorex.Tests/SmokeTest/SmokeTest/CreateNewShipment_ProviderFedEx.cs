@@ -104,8 +104,8 @@ namespace SmokeTest
             Keyboard.Press("{Down}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(5));
-            Delay.Duration(5000, false);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(5));
+            Delay.Duration(10000, false);
             
             // Fed Ex
             Report.Log(ReportLevel.Info, "Keyboard", "Fed Ex\r\nKey sequence '{Down}'.", new RecordItemIndex(6));
