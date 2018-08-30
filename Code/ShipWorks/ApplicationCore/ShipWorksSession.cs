@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Threading;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
 using log4net;
 using Microsoft.Win32;
-using Interapptive.Shared.Utility;
-using System.Windows.Forms;
-using System.Diagnostics;
-using Interapptive.Shared;
-using System.Threading;
-using ThreadTimer = System.Threading.Timer;
-using Interapptive.Shared.Win32;
 using NDesk.Options;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
+using ThreadTimer = System.Threading.Timer;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -21,19 +16,19 @@ namespace ShipWorks.ApplicationCore
     /// Provides information about the current shipworks application session
     /// </summary>
     public static class ShipWorksSession
-    {        
+    {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksSession));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksSession));
 
         // Unique identifiers for the computer and the installation path of the running ShipWorks
-        static Guid computerID;
-        static Guid instanceID;
+        private static Guid computerID;
+        private static Guid instanceID;
 
         // Uniquely identifies this running session of ShipWorks
-        static Guid sessionID;
+        private static Guid sessionID;
 
         // Timer for logging enviroment data
-        static ThreadTimer logTimer;
+        private static ThreadTimer logTimer;
 
         /// <summary>
         /// Initialize loaded settings and identifiers
@@ -90,14 +85,22 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize loaded settings and identifiers, using the specified InstanceID instead of looking it up from the registry
         /// </summary>
-        public static void Initialize(Guid instanceID)
+        public static void Initialize(Guid instanceID) =>
+            Initialize(instanceID, LoadComputerID(), Guid.NewGuid(), TimeSpan.FromMinutes(30));
+
+        /// <summary>
+        /// Initialize loaded settings and identifiers, using the specified InstanceID instead of looking it up from the registry
+        /// </summary>
+        public static void Initialize(Guid instanceID, Guid computerID, Guid sessionID, TimeSpan? timerInterval)
         {
-            ShipWorksSession.computerID = LoadComputerID();
+            ShipWorksSession.computerID = computerID;
             ShipWorksSession.instanceID = instanceID;
+            ShipWorksSession.sessionID = sessionID;
 
-            sessionID = Guid.NewGuid();
-
-            logTimer = new ThreadTimer(new TimerCallback(OnLogTimer), null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+            if (timerInterval.HasValue)
+            {
+                logTimer = new ThreadTimer(new TimerCallback(OnLogTimer), null, TimeSpan.Zero, timerInterval.Value);
+            }
         }
 
         /// <summary>
@@ -142,8 +145,8 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static Guid LoadInstanceID()
         {
-            return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks\Instances", 
-                        Program.AppLocation, 
+            return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks\Instances",
+                        Program.AppLocation,
                         "ShipWorks could not load the InstanceID.\n\n" +
                         "To fix this problem:\n" +
                             "   (1)  Reinstall the application.\n" +

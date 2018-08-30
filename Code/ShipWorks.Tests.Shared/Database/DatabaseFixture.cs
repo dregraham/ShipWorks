@@ -212,7 +212,11 @@ namespace ShipWorks.Tests.Shared.Database
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
-            ShipWorksSession.Initialize(Guid.NewGuid());
+            ShipWorksSession.Initialize(
+                Guid.Parse("{00000000-0000-0000-0000-000000000001}"),
+                Guid.Parse("{00000000-0000-0000-0000-000000000002}"),
+                Guid.Parse("{00000000-0000-0000-0000-000000000003}"),
+                null);
 
             return new DataContext(mock, context.Item1, context.Item2, container);
         }
