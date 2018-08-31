@@ -4,7 +4,6 @@ using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Import;
@@ -15,7 +14,6 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 {
@@ -1341,6 +1339,35 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             string distributionCenterID = ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).DistributionCenter;
 
             Assert.Equal("DC1", distributionCenterID);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void LoadOrder_IsFBAIsSet(bool isExternallyManaged, bool expectedIsFBA)
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            });
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            distributionCenters.Single(d => d.ID == 1).IsExternallyManaged = isExternallyManaged;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            Assert.Equal(expectedIsFBA, ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).IsFBA);
         }
 
         [Fact]
