@@ -23,6 +23,12 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="AddressValidation\TestAddresses.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AddressValidation\TestAddresses.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
@@ -52,6 +58,7 @@
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="SQL.LocalDB.Test" Version="1.1.2" />
+    <PackageReference Include="Syncfusion.XlsIO.Base46" Version="15.1.0.41" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />

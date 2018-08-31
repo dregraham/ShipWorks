@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -14,6 +15,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.AddressValidation.Predicates;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -26,7 +28,7 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Queue that handles validating order shipping addresses in the background
     /// </summary>
-    internal static class AddressValidationQueue
+    public static class AddressValidationQueue
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AddressValidationQueue));
@@ -45,7 +47,8 @@ namespace ShipWorks.AddressValidation
         private const string BatchSizeRegistryKey = "batchSize";
         private const string ValidationConcurrencyRegistryKey = "requests";
         public const string ValidationConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\ValidationConcurrency";
-        private static readonly Lazy<AddressValidator> addressValidator = new Lazy<AddressValidator>();
+        private static readonly Lazy<AddressValidator> addressValidator = 
+            new Lazy<AddressValidator>(() => new AddressValidator(IoC.UnsafeGlobalLifetimeScope.Resolve<IAddressValidationWebClient>()));
         private static object lockObj = new object();
         private static Task validationThread;
         private static CancellationToken cancellationToken;
@@ -79,7 +82,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Try to validate any orders and shipments that are pending validation
         /// </summary>
-        private static async Task ValidatePendingOrdersAndShipments()
+        public static async Task ValidatePendingOrdersAndShipments()
         {
             if (SqlSession.Current == null)
             {

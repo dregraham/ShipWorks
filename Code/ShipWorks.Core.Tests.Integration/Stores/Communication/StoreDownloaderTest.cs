@@ -23,6 +23,7 @@ using Xunit;
 namespace ShipWorks.Core.Tests.Integration.Stores.Communication
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class StoreDownloaderTest : IDisposable
     {
         private readonly DatabaseFixture db;
