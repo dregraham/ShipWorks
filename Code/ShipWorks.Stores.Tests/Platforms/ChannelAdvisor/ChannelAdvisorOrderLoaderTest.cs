@@ -40,8 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             {
                 ID = 1,
                 Code = "DC1",
-                Name = "DC 1",
-
+                Name = "DC 1"
             }
         };
 
