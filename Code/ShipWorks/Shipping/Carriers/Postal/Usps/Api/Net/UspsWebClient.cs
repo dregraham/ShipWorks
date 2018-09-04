@@ -49,11 +49,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private readonly ILog log;
         private readonly IUspsWebServiceFactory webServiceFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
-
-        static readonly Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
+        private static readonly Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Cleansed address map so we don't do common addresses over and over again
-        static readonly Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
+        private static readonly Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         private readonly ICertificateInspector certificateInspector;
         private readonly UspsResellerType uspsResellerType;
@@ -196,18 +195,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private AccountInfoV27 GetAccountInfoInternal(IUspsAccountEntity account)
         {
-            AccountInfoV27 accountInfo;
-
             using (ISwsimV69 webService = CreateWebService("GetAccountInfo"))
             {
-                // Address and CustomerEmail are not returned by Express1, so do not use them.
-                Address address;
-                string email;
-
-                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+                return webService.GetAccountInfo(GetCredentials(account)).AccountInfo;
             }
-
-            return accountInfo;
         }
 
         /// <summary>
@@ -289,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 location += trackEvent.State;
             }
-            
+
             if (location.Length > 0)
             {
                 location += ", ";
@@ -679,7 +670,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address));
+                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address)).ConfigureAwait(false);
             }
             catch (AggregateException ex)
             {
@@ -999,7 +990,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
-            
+
             RateV25 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
 

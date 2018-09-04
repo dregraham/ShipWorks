@@ -117,8 +117,6 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
             throw new InvalidOperationException($"Could not figure out how to create a date from {started}");
         }
 
-
-
         private static void AssertDownloadExists(DownloadEntity download)
         {
             using (var sqlAdapter = SqlAdapter.Create(false))

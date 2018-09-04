@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" />
   <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -77,12 +78,22 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -123,6 +134,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BestRate.feature</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\BestRateSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -152,6 +164,10 @@
       <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
       <Name>ShipWorks.Res</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
       <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
       <Name>ShipWorks.Shipping.UI</Name>
@@ -163,6 +179,14 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1F6A1DC6-DD72-4279-8747-6789F83711FF}</Project>
+      <Name>ShipWorks.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
@@ -178,6 +202,9 @@
     <Error Condition="!Exists('..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
   </Target>
   <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" />
+  <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
 </Project>

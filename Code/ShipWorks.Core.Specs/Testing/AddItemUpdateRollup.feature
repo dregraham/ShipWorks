@@ -6,7 +6,7 @@ Feature: AddItemUpdateRollup
 
 Scenario: Order item rollup updates after adding item
     Given an order 
-	And the order has items
+    And the order has items
         |Quantity				|
         |1						|
         |3						|
@@ -15,9 +15,10 @@ Scenario: Order item rollup updates after adding item
         |1						|
     Then item quantity rollup shows 5
 
+@ignore
 Scenario: Order item count rollup updates
     Given an order 
-	And the order has items
+    And the order has items
          | Quantity |
          | 1        |
          | 3        |
@@ -26,6 +27,7 @@ Scenario: Order item count rollup updates
         | 2        |
     Then item count rollup shows 3
 
+@ignore
 Scenario: Order note count rollup updates
     Given an order
     And the order has notes

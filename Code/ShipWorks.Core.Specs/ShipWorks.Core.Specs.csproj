@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" />
   <Import Project="..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -71,6 +72,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
@@ -183,7 +193,10 @@
     <Error Condition="!Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.0\build\xunit.core.targets'))" />
     <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.4.0\build\net20\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
   </Target>
   <Import Project="..\..\packages\xunit.core.2.4.0\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.0\build\xunit.core.targets')" />
   <Import Project="..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" />
+  <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
 </Project>

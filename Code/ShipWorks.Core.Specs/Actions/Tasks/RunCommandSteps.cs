@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
@@ -16,6 +18,7 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using TechTalk.SpecFlow;
 using Xunit;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Core.Specs.Actions.Tasks
 {
@@ -25,7 +28,9 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
         private readonly ActionStepContext stepContext;
         private readonly DataContext context;
         private readonly RunCommandTask testObject;
+        private readonly Action<List<long>, ActionStepContext> runAction;
         private Dictionary<string, OrderEntity> orders;
+        private GenericResult<Unit> results;
 
         public RunCommandSteps(DatabaseFixture db)
         {
@@ -51,6 +56,7 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
             LogSession.Configure(new LogOptions { TraceToConsole = false });
 
             testObject = context.Mock.Create<RunCommandTask>();
+            runAction = testObject.Run;
         }
 
         [Given(@"the command ""(.*)""")]
@@ -82,11 +88,11 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
 
         [When(@"I run the task with orders \((.*)\)")]
         public void WhenIRunTheTaskWithOrders(IEnumerable<string> orderNames) =>
-            testObject.Run(orderNames.Select(x => orders[x].OrderID).ToList(), stepContext);
+            results = Try(() => runAction.ToFunc()(orderNames.Select(x => orders[x].OrderID).ToList(), stepContext));
 
         [When(@"I run the task with no input")]
         public void WhenIRunTheTaskWithNoInput() =>
-            testObject.Run(new List<long>(), stepContext);
+            results = Try(() => runAction.ToFunc()(new List<long>(), stepContext));
 
         [Then(@"the most recent log should contain ""(.*)""")]
         public void ThenTheMostRecentLogShouldContain(string value) =>
@@ -96,14 +102,21 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
         public void ThenNthTheMostRecentLogShouldContain(int logNumber, string value) =>
             Assert.Contains(value, File.ReadAllLines(LatestLogFiles(logNumber).Last()).Select(x => x.Trim()));
 
-
         [Then(@"an error ""(.*)"" is shown")]
-        public void ThenAnErrorIsShown(string p0)
-        {
-            var exception = Assert.Throws<ActionTaskRunException>(() => testObject.Run(new List<long>(), stepContext));
-            Assert.StartsWith("The command took longer than", exception.Message);
-        }
-
+        public void ThenAnErrorIsShown(string message) =>
+            results
+                .Match(
+                    x =>
+                    {
+                        Assert.False(true, "No exception was thrown when running the command");
+                        return Unit.Default;
+                    },
+                    ex =>
+                    {
+                        Assert.IsType<ActionTaskRunException>(ex);
+                        Assert.StartsWith(message, ex.Message);
+                        return Unit.Default;
+                    });
 
         [StepArgumentTransformation]
         public IEnumerable<string> TransformToListOfString(string commaSeparatedList) =>
