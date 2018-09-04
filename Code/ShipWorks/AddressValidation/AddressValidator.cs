@@ -26,8 +26,8 @@ namespace ShipWorks.AddressValidation
         /// Creates a new instance of the AddressValidator with the default web client
         /// </summary>
         public AddressValidator()
+            : this(new StampsAddressValidationWebClient())
         {
-            this.webClient = new StampsAddressValidationWebClient();
         }
 
         /// <summary>
