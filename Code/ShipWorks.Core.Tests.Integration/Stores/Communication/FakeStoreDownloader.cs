@@ -22,7 +22,6 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
 
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            
             var orderResult = await InstantiateOrder(new OrderNumberIdentifier(42));
             orderResult.Value.OrderTotal = 0;
             orderResult.Value.OrderDate = DateTime.Now;

@@ -3,19 +3,15 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -34,7 +30,6 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
             this.db = db;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
         }
-
        
         [Theory]
         [InlineData(AddressValidationStoreSettingType.ValidateAndNotify, AddressValidationStoreSettingType.ManualValidationOnly, "US", AddressValidationStatusType.Pending)]
@@ -94,29 +89,5 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
         }
 
         public void Dispose() => context.Dispose();
-    }
-
-    class FakeStoreDownloader : StoreDownloader
-    {
-        private readonly string orderCountryCode;
-
-        public FakeStoreDownloader(string orderCountryCode, StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) 
-            : base(store, storeType, configurationData, sqlAdapterFactory)
-        {
-            this.orderCountryCode = orderCountryCode;
-        }
-
-        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
-        {
-            
-            var orderResult = await InstantiateOrder(new OrderNumberIdentifier(42));
-            orderResult.Value.OrderTotal = 0;
-            orderResult.Value.OrderDate = DateTime.Now;
-            orderResult.Value.OnlineLastModified = DateTime.Now;
-            orderResult.Value.ShipStreet1 = "123 woop st";
-            orderResult.Value.ShipCountryCode = orderCountryCode;
-
-            await SaveDownloadedOrder(orderResult.Value);
-        }
     }
 }
