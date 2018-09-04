@@ -140,6 +140,12 @@
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintResult.cs" />
     <Compile Include="ApplyProfileShortcutMessageIndicatorPipeline.cs" />
+    <Compile Include="Controls\OrderLookupControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OrderLookupControl.Designer.cs">
+      <DependentUpon>OrderLookupControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainGridControlShortcutPipeline.cs" />
     <Compile Include="ToggleAutoPrintPipeline.cs" />
     <Compile Include="VirtualKeyboardPipeline.cs" />
