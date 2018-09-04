@@ -83,6 +83,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         System.Object VariantNew { get; }
         
         
+        IAuditEntity Audit { get; }
         
 
         
@@ -111,6 +112,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class AuditChangeDetailEntity : IAuditChangeDetailEntity
     {
         
+        IAuditEntity IAuditChangeDetailEntity.Audit => Audit;
         
 
         /// <summary>

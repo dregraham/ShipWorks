@@ -26427,6 +26427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.DialogSettings);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.UIMode field instance</summary>
+		public static EntityField2 UIMode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.UIMode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

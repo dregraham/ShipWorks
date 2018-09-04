@@ -573,7 +573,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AuditChangeDetailFieldIndex), "AuditChangeDetailEntity");
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditChangeDetailID", typeof(System.Int64), true, false, true, false,  (int)AuditChangeDetailFieldIndex.AuditChangeDetailID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditChangeID", typeof(System.Int64), false, true, false, false,  (int)AuditChangeDetailFieldIndex.AuditChangeID, 0, 0, 19);
-			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditID", typeof(System.Int64), false, false, false, false,  (int)AuditChangeDetailFieldIndex.AuditID, 0, 0, 19);
+			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditID", typeof(System.Int64), false, true, false, false,  (int)AuditChangeDetailFieldIndex.AuditID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DisplayName", typeof(System.String), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DisplayName, 50, 0, 0);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DisplayFormat", typeof(System.Byte), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DisplayFormat, 0, 0, 3);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DataType", typeof(System.Byte), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DataType, 0, 0, 3);
@@ -3498,6 +3498,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanSettings", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanSettings, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

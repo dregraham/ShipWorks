@@ -93,6 +93,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IUserEntity User { get; }
         
         IEnumerable<IAuditChangeEntity> AuditChanges { get; }
+        IEnumerable<IAuditChangeDetailEntity> AuditChangeDetail { get; }
 
         
 
@@ -124,6 +125,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IUserEntity IAuditEntity.User => User;
         
         IEnumerable<IAuditChangeEntity> IAuditEntity.AuditChanges => AuditChanges;
+        IEnumerable<IAuditChangeDetailEntity> IAuditEntity.AuditChangeDetail => AuditChangeDetail;
 
         /// <summary>
         /// Get a read only version of the entity

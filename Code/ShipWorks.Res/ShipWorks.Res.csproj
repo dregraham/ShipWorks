@@ -511,6 +511,7 @@
     <Content Include="Data\Administration\Scripts\Support\OlaHallengren\IndexOptimize.sql" />
     <Content Include="Data\Administration\Scripts\Update\5.27\5.27.1.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.28\5.28.0.2.sql" />
+    <Content Include="Data\Administration\Scripts\Update\5.31\5.31.0.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

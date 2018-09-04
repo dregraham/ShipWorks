@@ -11398,6 +11398,8 @@ namespace ShipWorks.Data.Model
 		AutoWeigh,
 		///<summary>DialogSettings. </summary>
 		DialogSettings,
+		///<summary>UIMode. </summary>
+		UIMode,
 		/// <summary></summary>
 		AmountOfFields
 	}

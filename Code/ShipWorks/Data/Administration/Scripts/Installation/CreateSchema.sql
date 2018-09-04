@@ -4185,7 +4185,8 @@ CREATE TABLE [dbo].[UserSettings]
 [CustomerFilterExpandedFolders] [xml] NULL,
 [SingleScanSettings] [int] NOT NULL,
 [AutoWeigh] [bit] NOT NULL,
-[DialogSettings] [xml] NULL
+[DialogSettings] [xml] NULL,
+[UIMode] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

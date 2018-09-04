@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShipWorks.ApplicationCore.Enums
+namespace ShipWorks.Settings
 {
     /// <summary>
     /// Shipworks UI Mode

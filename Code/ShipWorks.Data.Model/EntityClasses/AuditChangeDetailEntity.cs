@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private AuditEntity _audit;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,6 +45,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name Audit</summary>
+			public static readonly string Audit = "Audit";
 		}
 		#endregion
 		
@@ -101,6 +104,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_audit = (AuditEntity)info.GetValue("_audit", typeof(AuditEntity));
+				if(_audit!=null)
+				{
+					_audit.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -117,6 +125,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case AuditChangeDetailFieldIndex.AuditChangeID:
 
 					break;
+				case AuditChangeDetailFieldIndex.AuditID:
+					DesetupSyncAudit(true, false);
+					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -131,6 +142,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "Audit":
+					this.Audit = (AuditEntity)entity;
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -153,6 +167,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "Audit":
+					toReturn.Add(Relations.AuditEntityUsingAuditID);
+					break;
 				default:
 					break;				
 			}
@@ -181,6 +198,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Audit":
+					SetupSyncAudit(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -194,6 +214,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Audit":
+					DesetupSyncAudit(false, true);
+					break;
 				default:
 					break;
 			}
@@ -213,6 +236,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_audit!=null)
+			{
+				toReturn.Add(_audit);
+			}
 			return toReturn;
 		}
 		
@@ -232,6 +259,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_audit", (!this.MarkedForDeletion?_audit:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -245,6 +273,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new AuditChangeDetailRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Audit' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAudit()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AuditFields.AuditID, null, ComparisonOperator.Equal, this.AuditID));
+			return bucket;
 		}
 		
 
@@ -290,6 +327,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("Audit", _audit);
 			return toReturn;
 		}
 
@@ -334,6 +372,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _audit</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncAudit(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _audit, new PropertyChangedEventHandler( OnAuditPropertyChanged ), "Audit", ShipWorks.Data.Model.RelationClasses.StaticAuditChangeDetailRelations.AuditEntityUsingAuditIDStatic, true, signalRelatedEntity, "AuditChangeDetail", resetFKFields, new int[] { (int)AuditChangeDetailFieldIndex.AuditID } );
+			_audit = null;
+		}
+
+		/// <summary> setups the sync logic for member _audit</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncAudit(IEntityCore relatedEntity)
+		{
+			if(_audit!=relatedEntity)
+			{
+				DesetupSyncAudit(true, true);
+				_audit = (AuditEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _audit, new PropertyChangedEventHandler( OnAuditPropertyChanged ), "Audit", ShipWorks.Data.Model.RelationClasses.StaticAuditChangeDetailRelations.AuditEntityUsingAuditIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnAuditPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this AuditChangeDetailEntity</param>
 		/// <param name="fields">Fields of this entity</param>
@@ -363,6 +434,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Audit' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAudit
+		{
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory))),	(IEntityRelation)GetRelationsForField("Audit")[0], (int)ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity, (int)ShipWorks.Data.Model.EntityType.AuditEntity, 0, null, null, null, null, "Audit", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -487,6 +565,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Object)GetValue((int)AuditChangeDetailFieldIndex.VariantNew, true); }
 			set	{ SetValue((int)AuditChangeDetailFieldIndex.VariantNew, value); }
+		}
+
+		/// <summary> Gets / sets related entity of type 'AuditEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual AuditEntity Audit
+		{
+			get	{ return _audit; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncAudit(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "AuditChangeDetail", "Audit", _audit, true); 
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

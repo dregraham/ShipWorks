@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.AuditChangeEntityUsingAuditID);
+			toReturn.Add(this.AuditChangeDetailEntityUsingAuditID);
 			toReturn.Add(this.ComputerEntityUsingComputerID);
 			toReturn.Add(this.UserEntityUsingUserID);
 			return toReturn;
@@ -49,6 +50,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(AuditFields.AuditID, AuditChangeFields.AuditID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditChangeEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between AuditEntity and AuditChangeDetailEntity over the 1:n relation they have, using the relation between the fields:
+		/// Audit.AuditID - AuditChangeDetail.AuditID
+		/// </summary>
+		public virtual IEntityRelation AuditChangeDetailEntityUsingAuditID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AuditChangeDetail" , true);
+				relation.AddEntityFieldPair(AuditFields.AuditID, AuditChangeDetailFields.AuditID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditChangeDetailEntity", false);
 				return relation;
 			}
 		}
@@ -97,6 +113,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticAuditRelations
 	{
 		internal static readonly IEntityRelation AuditChangeEntityUsingAuditIDStatic = new AuditRelations().AuditChangeEntityUsingAuditID;
+		internal static readonly IEntityRelation AuditChangeDetailEntityUsingAuditIDStatic = new AuditRelations().AuditChangeDetailEntityUsingAuditID;
 		internal static readonly IEntityRelation ComputerEntityUsingComputerIDStatic = new AuditRelations().ComputerEntityUsingComputerID;
 		internal static readonly IEntityRelation UserEntityUsingUserIDStatic = new AuditRelations().UserEntityUsingUserID;
 

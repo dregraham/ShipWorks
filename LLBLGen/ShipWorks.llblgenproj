@@ -104,6 +104,7 @@
     <TypeShortcut Shortcut="ShipmentTypeCode" Type="ShipWorks.Shipping.ShipmentTypeCode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShortcutHotkey" Type="System.String" />
+    <TypeShortcut Shortcut="UIMode" Type="ShipWorks.Settings.UIMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="VirtualKeys" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
@@ -3108,6 +3109,7 @@
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
+          <Field Name="UIMode" Type="UIMode" FieldIndex="18" />
           <Field Name="UserID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="WindowLayout" Type="byte[]" MaxLength="2147483647" FieldIndex="3" />
         </Fields>
@@ -3518,6 +3520,11 @@
       <NormalRelationship Name="AuditChangeDetail.-AuditChange.AuditChangeDetails" Start=":AuditChangeDetail" End=":AuditChange" EndNavigator="AuditChangeDetails" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="AuditChangeID" PkField="AuditChangeID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="AuditChangeDetail.Audit-Audit.AuditChangeDetail" Start=":AuditChangeDetail" End=":Audit" StartNavigator="Audit" EndNavigator="AuditChangeDetail" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="AuditID" PkField="AuditID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="BestRateProfile.ShippingProfile-ShippingProfile.BestRate" Start=":BestRateProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="BestRate" Type="1" DeleteRuleAction="1">
@@ -4289,7 +4296,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-08-07T19:35:30.4887441Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-04T20:21:32.4694016Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4661,10 +4668,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -4830,7 +4837,7 @@
                     <Field Name="Name" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                   <UniqueConstraints>
-                    <UniqueConstraint Name="UK_Computer_Identifier">
+                    <UniqueConstraint Name="IX_SWDefault_Computer_Identifier">
                       <Field Name="Identifier" />
                     </UniqueConstraint>
                   </UniqueConstraints>
@@ -7337,8 +7344,8 @@
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -7803,7 +7810,7 @@
                     <Field Name="ServiceDisplayName" Ordinal="9" DbType="12" Length="256" />
                   </Fields>
                   <UniqueConstraints>
-                    <UniqueConstraint Name="IX_ServiceStatus">
+                    <UniqueConstraint Name="IX_SWDefault_ServiceStatus">
                       <Field Name="ComputerID" />
                       <Field Name="ServiceType" />
                     </UniqueConstraint>
@@ -8816,6 +8823,7 @@
                     <Field Name="SingleScanSettings" Ordinal="16" DbType="8" Precision="10" />
                     <Field Name="AutoWeigh" Ordinal="17" DbType="2" />
                     <Field Name="DialogSettings" Ordinal="18" IsOptional="true" DbType="26" Length="2147483647" />
+                    <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -9356,6 +9364,11 @@
             <ForeignKeyConstraint Name="dbo:AuditChange:FK_AuditChange_Audit">
               <FieldPairs>
                 <FieldPair PkField="dbo:Audit:AuditID" FkField="dbo:AuditChange:AuditID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AuditChangeDetail:FK_AuditChangeDetail_Audit">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Audit:AuditID" FkField="dbo:AuditChangeDetail:AuditID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:AuditChangeDetail:FK_AuditChangeDetail_AuditChange" DeleteRuleAction="1">
@@ -13337,6 +13350,7 @@
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />
+            <FieldMapping FieldName="UIMode" TargetFieldName="UIMode" />
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
             <FieldMapping FieldName="WindowLayout" TargetFieldName="WindowLayout" />
           </FieldMappings>
