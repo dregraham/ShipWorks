@@ -226,7 +226,16 @@ namespace ShipWorks.Shipping.ScanForms
             Control owner = DisplayHelper.GetActiveForm();
 
             ScanFormBatch scanFormBatch = (ScanFormBatch) menuItem.Tag;
-            scanFormBatch.Print(owner);
+            try
+            {
+                scanFormBatch.Print(owner);
+            }
+            catch (ShippingException ex)
+            {
+                MessageHelper.ShowError(owner, ex.Message);
+
+                log.Error("An error occurred while attempting to print a scan form.", ex);
+            }
         }
     }
 }
