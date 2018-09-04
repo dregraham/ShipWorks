@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             {
                 Tables = schema.Tables as IList<IOdbcColumnSource> ?? schema.Tables.ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns.");
                 ColumnSourceIsTable = false;
