@@ -1,3 +1,4 @@
+using System;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks
@@ -726,7 +727,7 @@ namespace ShipWorks
             this.ribbonSecurityProvider.SetPermission(this.mainMenuItemOrderLookup, ShipWorks.Users.Security.PermissionType.AlwaysGrant);
             this.mainMenuItemOrderLookup.QuickAccessKey = "O";
             this.mainMenuItemOrderLookup.Text = "Order Lookup";
-            this.mainMenuItemOrderLookup.Activate += new System.EventHandler(this.OnDatabaseConfiguration);
+            this.mainMenuItemOrderLookup.Activate += new System.EventHandler(this.OnShowOrderLookupView);
             //
             // mainMenuItemBatchGrid
             //
@@ -735,7 +736,7 @@ namespace ShipWorks
             this.ribbonSecurityProvider.SetPermission(this.mainMenuItemBatchGrid, ShipWorks.Users.Security.PermissionType.AlwaysGrant);
             this.mainMenuItemBatchGrid.QuickAccessKey = "B";
             this.mainMenuItemBatchGrid.Text = "Batch Grid";
-            this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnDatabaseConfiguration);
+            this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnShowBatchView);
             //
             // mainMenuItemSetupDatabase
             //
@@ -2887,7 +2888,6 @@ namespace ShipWorks
             this.ResumeLayout(false);
 
         }
-
         #endregion
 
         private Divelements.SandRibbon.RibbonManager ribbonManager;

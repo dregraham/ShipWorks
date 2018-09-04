@@ -72,6 +72,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -803,8 +804,79 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+
+            UpdateUIMode();
         }
 
+        /// <summary>
+        /// Show the batch view
+        /// </summary>
+        private void OnShowBatchView(object sender, EventArgs e)
+        {
+            UserSession.User.Settings.UIMode = UIMode.Batch;
+
+            // Save the settings
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(UserSession.User.Settings);
+            }
+
+            UpdateUIMode();
+        }
+
+        /// <summary>
+        /// Show the order lookup view
+        /// </summary>
+        private void OnShowOrderLookupView(object sender, EventArgs e)
+        {
+            UserSession.User.Settings.UIMode = UIMode.OrderLookup;
+
+            // Save the settings
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(UserSession.User.Settings);
+            }
+
+            UpdateUIMode();
+        }
+
+        private void UpdateUIMode()
+        {
+            if (UserSession.User.Settings.UIMode == UIMode.OrderLookup)
+            {
+                // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
+                foreach (DockControl control in Panels)
+                {
+                    control.Close();
+                }
+
+                // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
+                // and notifying the grid that the selected filter changed.
+                gridControl.Reset();
+                gridControl.Visible = false;
+
+                // Clear Filter Trees
+                ClearFilterTrees();
+            }
+            else
+            {
+                windowLayoutProvider.LoadLayout(UserSession.User.Settings.WindowLayout);
+                gridMenuLayoutProvider.LoadLayout(UserSession.User.Settings.GridMenuLayout);
+
+                foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+                {
+                    holder.InitializeForCurrentUser();
+                }
+                
+                // Initialize any filter trees
+                InitializeFilterTrees(UserSession.User);
+
+                gridControl.Show();
+                orderFilterTree.Show();
+                customerFilterTree.Show();
+            }
+        }
+        
         /// <summary>
         /// Execute any logon actions that have been queued
         /// </summary>
