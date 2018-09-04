@@ -246,7 +246,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             }
             catch (Exception ex)
             {
-                MessageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns for.");
+                MessageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns.");
                 ColumnSourceIsTable = false;
             }
             
