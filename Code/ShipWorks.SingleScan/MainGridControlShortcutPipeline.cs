@@ -8,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
@@ -22,6 +23,7 @@ namespace ShipWorks.SingleScan
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
@@ -29,10 +31,12 @@ namespace ShipWorks.SingleScan
         public MainGridControlShortcutPipeline(IMessenger messenger,
             ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider, 
+            IUserSession userSession)
         {
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
+            this.userSession = userSession;
             this.currentUserSettings = currentUserSettings;
             this.messenger = messenger;
         }
@@ -43,6 +47,7 @@ namespace ShipWorks.SingleScan
         public IDisposable Register(IMainGridControl mainGridControl)
         {
             subscription = messenger.OfType<ShortcutMessage>()
+                .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch) ||
                             m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)

@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
 
@@ -65,6 +66,7 @@ namespace ShipWorks.ApplicationCore
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
                 Observable.FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
+                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
@@ -73,6 +75,7 @@ namespace ShipWorks.ApplicationCore
 
                 // Wire up observable for debouncing advanced search text box
                 Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
+                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
@@ -80,6 +83,7 @@ namespace ShipWorks.ApplicationCore
 
                 // Wire up observable for doing barcode searches
                 scanMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     // This causes the shipping panel to save if there are unsaved changes
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))

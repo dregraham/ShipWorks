@@ -11,7 +11,9 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using System;
+using ShipWorks.Settings;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.SingleScan.Tests
 {
@@ -28,6 +30,8 @@ namespace ShipWorks.SingleScan.Tests
         public MainGridControlPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            SetUIMode(UIMode.Batch);
 
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
@@ -65,6 +69,18 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void DownloadOnDemand_DoesNotDelgateToDownloader_WhenUIModeIsNotBatch()
+        {
+            SetUIMode(UIMode.OrderLookup);
+
+            testObject.Register(mainGridControl.Object);
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "  foo  ", IntPtr.Zero)));
+            scheduler.Start();
+
+            downloader.Verify(d => d.Download(AnyString), Times.Never);
+        }
+
+        [Fact]
         public void DownloadOnDemand_DoesNotDelegatesToOnDemandDownloader_WhenSingleScanIsDisabled()
         {
             userSettings.SingleScanSettings = (int)SingleScanSettings.Disabled;
@@ -94,6 +110,31 @@ namespace ShipWorks.SingleScan.Tests
             scheduler.Start();
 
             mainGridControl.Verify(g => g.BeginInvoke((Action<string>)mainGridControl.Object.PerformBarcodeSearch, "foo"));
+        }
+
+        [Fact]
+        public void PerformBarcodeSearchAsync_DoesNotDelegateToGridControlWithScannedBarcode_WhenNotBatchMode()
+        {
+            SetUIMode(UIMode.OrderLookup);
+
+            testObject.Register(mainGridControl.Object);
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
+            scheduler.Start();
+
+            mainGridControl.Verify(g => g.BeginInvoke((Action<string>) mainGridControl.Object.PerformBarcodeSearch, AnyString), Times.Never);
+        }
+
+        private void SetUIMode(UIMode uiMode)
+        {
+            mock.Mock<IUserSession>()
+                .SetupGet(s => s.User)
+                .Returns(new UserEntity
+                {
+                    Settings = new UserSettingsEntity
+                    {
+                        UIMode = uiMode
+                    }
+                });
         }
 
         public void Dispose()
