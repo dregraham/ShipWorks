@@ -29,6 +29,7 @@ namespace ShipWorks
             Divelements.SandRibbon.Shortcut shortcut1;
             Divelements.SandRibbon.Menu menu1;
             Divelements.SandRibbon.Menu menu2;
+            Divelements.SandRibbon.Menu menu3;
             Divelements.SandRibbon.Rendering.RibbonRenderer ribbonRenderer1 = new Divelements.SandRibbon.Rendering.RibbonRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.labelStatusTotal = new Divelements.SandRibbon.Label();
@@ -67,6 +68,8 @@ namespace ShipWorks
             this.menuItemBuySupplies = new Divelements.SandRibbon.MenuItem();
             this.menuItemHelpAbout = new Divelements.SandRibbon.MenuItem();
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
             this.buttonArchive = new Divelements.SandRibbon.Button();
@@ -211,6 +214,7 @@ namespace ShipWorks
             this.mainMenuItemOptions = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemSupport = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemDatabase = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemViewMode = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuLogon = new Divelements.SandRibbon.MainMenuItem();
             this.ribbonTabHome = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrders = new Divelements.SandRibbon.RibbonChunk();
@@ -292,6 +296,7 @@ namespace ShipWorks
             shortcut1 = new Divelements.SandRibbon.Shortcut();
             menu1 = new Divelements.SandRibbon.Menu();
             menu2 = new Divelements.SandRibbon.Menu();
+            menu3 = new Divelements.SandRibbon.Menu();
             ((System.ComponentModel.ISupportInitialize) (this.downloadingStatusLabel.PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.emailingStatusLabel.PictureBox)).BeginInit();
             this.panelDockingArea.SuspendLayout();
@@ -706,6 +711,31 @@ namespace ShipWorks
             menu2.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.mainMenuItemSetupDatabase,
             this.mainMenuItemBackupDatabase});
+            //
+            // menu3
+            //
+            menu3.DrawMargin = false;
+            menu3.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.mainMenuItemOrderLookup,
+            this.mainMenuItemBatchGrid});
+            //
+            // mainMenuItemOrderLookup
+            //
+            this.mainMenuItemOrderLookup.Guid = new System.Guid("072bf177-36c3-4809-9297-1c1e62a92e4b");
+            this.mainMenuItemOrderLookup.Image = ((System.Drawing.Image) (resources.GetObject("mainMenuItemSetupDatabase.Image")));
+            this.ribbonSecurityProvider.SetPermission(this.mainMenuItemOrderLookup, ShipWorks.Users.Security.PermissionType.AlwaysGrant);
+            this.mainMenuItemOrderLookup.QuickAccessKey = "O";
+            this.mainMenuItemOrderLookup.Text = "Order Lookup";
+            this.mainMenuItemOrderLookup.Activate += new System.EventHandler(this.OnDatabaseConfiguration);
+            //
+            // mainMenuItemBatchGrid
+            //
+            this.mainMenuItemBatchGrid.Guid = new System.Guid("138732e5-e3fe-4ae6-ae4b-edd7f28590ee");
+            this.mainMenuItemBatchGrid.Image = ((System.Drawing.Image) (resources.GetObject("mainMenuItemSetupDatabase.Image")));
+            this.ribbonSecurityProvider.SetPermission(this.mainMenuItemBatchGrid, ShipWorks.Users.Security.PermissionType.AlwaysGrant);
+            this.mainMenuItemBatchGrid.QuickAccessKey = "B";
+            this.mainMenuItemBatchGrid.Text = "Batch Grid";
+            this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnDatabaseConfiguration);
             //
             // mainMenuItemSetupDatabase
             //
@@ -2116,6 +2146,7 @@ namespace ShipWorks
             this.mainMenuItemOptions,
             this.mainMenuItemSupport,
             this.mainMenuItemDatabase,
+            this.mainMenuItemViewMode,
             this.mainMenuLogon});
             this.applicationMenu.OptionsButtonImage = ((System.Drawing.Image) (resources.GetObject("applicationMenu.OptionsButtonImage")));
             this.applicationMenu.OptionsButtonText = "ShipWorks Opt&ions";
@@ -2150,6 +2181,16 @@ namespace ShipWorks
             menu2});
             this.ribbonSecurityProvider.SetPermission(this.mainMenuItemDatabase, ShipWorks.Users.Security.PermissionType.DatabaseSetup);
             this.mainMenuItemDatabase.Text = "Database";
+            //
+            // mainMenuItemViewMode
+            //
+            this.mainMenuItemViewMode.GroupName = "View Mode";
+            this.mainMenuItemViewMode.Guid = new System.Guid("9bcb14b5-0a25-4dac-bbe6-5c609fc343ec");
+            this.mainMenuItemViewMode.Image = global::ShipWorks.Properties.Resources.data;
+            this.mainMenuItemViewMode.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            menu3});
+            this.ribbonSecurityProvider.SetPermission(this.mainMenuItemViewMode, ShipWorks.Users.Security.PermissionType.AlwaysGrant);
+            this.mainMenuItemViewMode.Text = "View Mode";
             //
             // mainMenuLogon
             //
@@ -2860,6 +2901,8 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonTab ribbonTabAdmin;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkConfiguration;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSetupDatabase;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemOrderLookup;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemBatchGrid;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemBackupDatabase;
         private Divelements.SandRibbon.QuickAccessToolBar quickAccessToolBar;
         private Divelements.SandRibbon.Button buttonShowPanels;
@@ -3093,6 +3136,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.MenuItem menuItemBuySupplies;
         private Divelements.SandRibbon.Separator separator2;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemDatabase;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemViewMode;
         private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
