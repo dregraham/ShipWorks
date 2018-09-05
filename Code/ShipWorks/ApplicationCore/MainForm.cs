@@ -2368,7 +2368,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn)
+            if (UserSession.IsLoggedOn && currentUserSettings.GetUIMode() == UIMode.Batch)
             {
                 gridControl.SaveGridColumnState();
             }
@@ -2390,7 +2390,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn)
+            if (UserSession.IsLoggedOn && currentUserSettings.GetUIMode() == UIMode.Batch)
             {
                 gridControl.ReloadGridColumns();
             }
