@@ -19,13 +19,15 @@ namespace ShipWorks.Users
     {
         private readonly IUserSession userSession;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CurrentUserSettings(IUserSession userSession, IDateTimeProvider dateTimeProvider)
+        public CurrentUserSettings(IUserSession userSession, IDateTimeProvider dateTimeProvider, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.userSession = userSession;
         }
 
@@ -122,7 +124,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Returns the UIMode of the current user
         /// </summary>
-        public UIMode GetUIMode() => userSession.User.Settings.UIMode;
+        public UIMode GetUIMode() => userSession.Settings.UIMode;
 
         /// <summary>
         /// Sets the UIMode for the current user
@@ -132,9 +134,9 @@ namespace ShipWorks.Users
             userSession.User.Settings.UIMode = uiMode;
 
             // Save the settings
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                adapter.SaveAndRefetch(UserSession.User.Settings);
+                adapter.SaveAndRefetch(userSession.User.Settings);
             }
         }
 

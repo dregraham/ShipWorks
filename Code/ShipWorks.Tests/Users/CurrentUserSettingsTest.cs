@@ -4,7 +4,9 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Settings;
 using ShipWorks.Shared.Users;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
@@ -165,6 +167,48 @@ namespace ShipWorks.Tests.Users
             Assert.True(testObject.ShouldShowNotification(UserConditionalNotificationType.CombineOrders));
 
             settings = new UserSettingsEntity();
+        }
+
+        [Fact]
+        public void SetUIMode_SetsUIMode()
+        {
+            var userSettings = new UserSettingsEntity
+            {
+                UIMode = UIMode.OrderLookup
+            };
+
+            mock.Mock<IUserSession>()
+                .Setup(x => x.User)
+                .Returns(new UserEntity
+                {
+                    Settings = userSettings
+                });
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.SetUIMode(UIMode.Batch);
+
+            Assert.Equal(UIMode.Batch, userSettings.UIMode);
+        }
+
+        [Fact]
+        public void SetUIMode_SavesUserEntity()
+        {
+            var userSettings = new UserSettingsEntity
+            {
+                UIMode = UIMode.OrderLookup
+            };
+
+            mock.Mock<IUserSession>()
+                .Setup(x => x.User)
+                .Returns(new UserEntity
+                {
+                    Settings = userSettings
+                });
+
+            var testObject = mock.Create<CurrentUserSettings>();
+            testObject.SetUIMode(UIMode.Batch);
+
+            mock.Mock<ISqlAdapter>().Verify(a=>a.SaveAndRefetch(userSettings));
         }
 
         public void Dispose()
