@@ -69,7 +69,7 @@ namespace ShipWorks
             this.menuItemHelpAbout = new Divelements.SandRibbon.MenuItem();
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
-            this.menu3 = new Divelements.SandRibbon.Menu();
+            this.uiModeMenu = new Divelements.SandRibbon.Menu();
             this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
@@ -730,10 +730,10 @@ namespace ShipWorks
             this.mainMenuItemBackupDatabase.Text = "&Backup";
             this.mainMenuItemBackupDatabase.Activate += new System.EventHandler(this.OnBackupShipWorks);
             // 
-            // menu3
+            // uiModeMenu
             // 
-            this.menu3.DrawMargin = false;
-            this.menu3.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.uiModeMenu.DrawMargin = false;
+            this.uiModeMenu.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.mainMenuItemOrderLookup,
             this.mainMenuItemBatchGrid});
             // 
@@ -2170,7 +2170,7 @@ namespace ShipWorks
             this.mainMenuItemViewMode.Guid = new System.Guid("9bcb14b5-0a25-4dac-bbe6-5c609fc343ec");
             this.mainMenuItemViewMode.Image = global::ShipWorks.Properties.Resources.windows;
             this.mainMenuItemViewMode.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.menu3});
+            this.uiModeMenu});
             this.mainMenuItemViewMode.Text = "View Mode";
             // 
             // mainMenuLogon
@@ -3098,7 +3098,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonUship;
         private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
         private Divelements.SandRibbon.Button buttonInsuranceClaim;
-        private Divelements.SandRibbon.Menu menu3;
+        private Divelements.SandRibbon.Menu uiModeMenu;
     }
 }
 

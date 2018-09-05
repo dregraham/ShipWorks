@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Settings;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users.Security;
@@ -215,7 +216,8 @@ namespace ShipWorks.Users
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
                 SingleScanSettings = (int) SingleScanSettings.Disabled,
-                AutoWeigh = false
+                AutoWeigh = false,
+                UIMode = UIMode.Batch
             };
 
             adapter.SaveAndRefetch(settings);
