@@ -54,7 +54,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public T RunTimedEvent<T>(TelemetricEventType eventType, Func<T> eventToTime)
+        public K RunTimedEvent<K>(TelemetricEventType eventType, Func<K> eventToTime)
         {
             StartTimedEvent(EnumHelper.GetDescription(eventType));
             try
