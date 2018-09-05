@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.SingleScan.Controls
+﻿namespace ShipWorks.OrderLookup.Controls
 {
     partial class OrderLookupControl
     {

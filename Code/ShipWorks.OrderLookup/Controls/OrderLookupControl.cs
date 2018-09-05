@@ -2,7 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.UI.Controls;
 
-namespace ShipWorks.SingleScan.Controls
+namespace ShipWorks.OrderLookup.Controls
 {
     /// <summary>
     /// Control to look up orders for single scan mode
@@ -10,7 +10,6 @@ namespace ShipWorks.SingleScan.Controls
     [Component]
     public partial class OrderLookupControl : UserControl, IOrderLookup
     {
-        
         /// <summary>
         /// Constructor
         /// </summary>

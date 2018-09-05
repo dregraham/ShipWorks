@@ -4,6 +4,7 @@ using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.Controls;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.SingleScan;
@@ -96,7 +97,9 @@ namespace ShipWorks.Startup
             // ShipWorks.SingleScan
             typeof(ScannerService).Assembly,
             // ShipWorks.Data.Model
-            typeof(CommonEntityBase).Assembly
+            typeof(CommonEntityBase).Assembly,
+            // ShipWorks.OrderLookup
+            typeof(OrderLookupControl).Assembly
         };
     }
 }

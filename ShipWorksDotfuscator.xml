@@ -74,6 +74,11 @@
         <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SingleScan.dll" />
       </inputassembly>
+      <inputassembly refid="F82644B2-A787-4221-9D11-7D215D168909">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
+      </inputassembly>
     </asmlist>
   </input>
   <output>
