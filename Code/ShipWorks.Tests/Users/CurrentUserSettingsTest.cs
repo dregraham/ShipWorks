@@ -193,6 +193,8 @@ namespace ShipWorks.Tests.Users
         [Fact]
         public void SetUIMode_SavesUserEntity()
         {
+            Mock<ISqlAdapter> sqlAdapter = mock.FromFactory<ISqlAdapterFactory>().Mock(f => f.Create());
+
             var userSettings = new UserSettingsEntity
             {
                 UIMode = UIMode.OrderLookup
@@ -208,7 +210,7 @@ namespace ShipWorks.Tests.Users
             var testObject = mock.Create<CurrentUserSettings>();
             testObject.SetUIMode(UIMode.Batch);
 
-            mock.Mock<ISqlAdapter>().Verify(a=>a.SaveAndRefetch(userSettings));
+            sqlAdapter.Verify(a=>a.SaveAndRefetch(userSettings));
         }
 
         public void Dispose()
