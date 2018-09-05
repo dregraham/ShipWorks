@@ -760,7 +760,8 @@ namespace ShipWorks
             // We can now show the normal UI
             ApplyCurrentUserLayout();
 
-            UpdateUIMode(user);
+            // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
+            UpdateUIMode(user, false);
             
             log.InfoFormat("UI shown");
 
@@ -836,77 +837,97 @@ namespace ShipWorks
                 adapter.SaveAndRefetch(UserSession.User.Settings);
             }
 
-            UpdateUIMode(UserSession.User);
-            heartBeat.Start();
+            UpdateUIMode(UserSession.User, true);
         }
 
         /// <summary>
         /// Update the UI
         /// </summary>
-        private void UpdateUIMode(IUserEntity user)
+        private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
         {
             heartBeat?.Stop();
 
             if (user.Settings.UIMode == UIMode.OrderLookup)
             {
-                mainMenuItemOrderLookup.Checked = true;
-                mainMenuItemBatchGrid.Checked = false;
-
-                heartBeat = new Heartbeat();
-
-                // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
-                foreach (DockControl control in Panels)
-                {
-                    control.Close();
-                }
-
-                // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
-                // and notifying the grid that the selected filter changed.
-                gridControl.Reset();
-                gridControl.Visible = false;
-
-                // Clear Filter Trees
-                ClearFilterTrees();
-
-                panelDockingArea.Controls.Add(orderLookupControl);
-                orderLookupControl.BringToFront();
+                ToggleOrderLookupMode();
             }
             else
             {
-                panelDockingArea.Controls.Remove(orderLookupControl);
+                ToggleBatchMode(user);
+            }
 
-                mainMenuItemOrderLookup.Checked = false;
-                mainMenuItemBatchGrid.Checked = true;
-
-                heartBeat = new UIHeartbeat(this);
-
-                windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
-                gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
-
-                foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
-                {
-                    holder.InitializeForCurrentUser();
-                }
-
-                // Initialize the grid
-                gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
-                gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
-
-                // Initialize any filter trees
-                InitializeFilterTrees(user);
-
-                // Update all UI items that are related to the current stores
-                UpdateStoreDependentUI();
-
-                gridControl.Show();
-                orderFilterTree.Show();
-                customerFilterTree.Show();
-
-                // Select the active filter
-                SelectInitialFilter(user.Settings);
+            if (startHeartbeat)
+            {
+                heartBeat.Start();
             }
         }
-        
+
+        /// <summary>
+        /// Switch from order lookup to batch mode
+        /// </summary>
+        private void ToggleBatchMode(IUserEntity user)
+        {
+            panelDockingArea.Controls.Remove(orderLookupControl);
+
+            mainMenuItemOrderLookup.Checked = false;
+            mainMenuItemBatchGrid.Checked = true;
+
+            heartBeat = new UIHeartbeat(this);
+
+            windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
+
+            foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+            {
+                holder.InitializeForCurrentUser();
+            }
+
+            // Initialize the grid
+            gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
+            gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
+
+            // Initialize any filter trees
+            InitializeFilterTrees(user);
+
+            // Update all UI items that are related to the current stores
+            UpdateStoreDependentUI();
+
+            gridControl.Show();
+            orderFilterTree.Show();
+            customerFilterTree.Show();
+
+            // Select the active filter
+            SelectInitialFilter(user.Settings);
+        }
+
+        /// <summary>
+        /// Switch from batch to order lookup mode
+        /// </summary>
+        private void ToggleOrderLookupMode()
+        {
+            mainMenuItemOrderLookup.Checked = true;
+            mainMenuItemBatchGrid.Checked = false;
+
+            heartBeat = new Heartbeat();
+
+            // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
+            foreach (DockControl control in Panels)
+            {
+                control.Close();
+            }
+
+            // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
+            // and notifying the grid that the selected filter changed.
+            gridControl.Reset();
+            gridControl.Visible = false;
+
+            // Clear Filter Trees
+            ClearFilterTrees();
+
+            panelDockingArea.Controls.Add(orderLookupControl);
+            orderLookupControl.BringToFront();
+        }
+
         /// <summary>
         /// Execute any logon actions that have been queued
         /// </summary>
