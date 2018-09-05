@@ -58,6 +58,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Email;
@@ -749,14 +750,7 @@ namespace ShipWorks
             ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(LogonToShipWorksAsyncGetLicenseStatus, "checking license status"));
 
             UserEntity user = UserSession.User;
-
-            // Initialize the grid
-            gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
-            gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
-
-            // Initialize any filter trees
-            InitializeFilterTrees(user);
-
+            
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -776,8 +770,7 @@ namespace ShipWorks
             // Get all new\edited templates are installed
             BuiltinTemplates.UpdateTemplates(this);
 
-            // Update all UI items that are related to the current stores
-            UpdateStoreDependentUI();
+            UpdateUIMode(user);
 
             // Update the Detail View UI
             UpdateDetailViewSettingsUI();
@@ -804,8 +797,6 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
-
-            UpdateUIMode();
         }
 
         /// <summary>
@@ -821,7 +812,7 @@ namespace ShipWorks
                 adapter.SaveAndRefetch(UserSession.User.Settings);
             }
 
-            UpdateUIMode();
+            UpdateUIMode(UserSession.User);
         }
 
         /// <summary>
@@ -829,6 +820,8 @@ namespace ShipWorks
         /// </summary>
         private void OnShowOrderLookupView(object sender, EventArgs e)
         {
+            // Save the current layout just in case the user made changes to it
+            SaveCurrentUserSettings();
             UserSession.User.Settings.UIMode = UIMode.OrderLookup;
 
             // Save the settings
@@ -837,12 +830,15 @@ namespace ShipWorks
                 adapter.SaveAndRefetch(UserSession.User.Settings);
             }
 
-            UpdateUIMode();
+            UpdateUIMode(UserSession.User);
         }
 
-        private void UpdateUIMode()
+        /// <summary>
+        /// Update the UI
+        /// </summary>
+        private void UpdateUIMode(IUserEntity user)
         {
-            if (UserSession.User.Settings.UIMode == UIMode.OrderLookup)
+            if (user.Settings.UIMode == UIMode.OrderLookup)
             {
                 // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
                 foreach (DockControl control in Panels)
@@ -860,16 +856,23 @@ namespace ShipWorks
             }
             else
             {
-                windowLayoutProvider.LoadLayout(UserSession.User.Settings.WindowLayout);
-                gridMenuLayoutProvider.LoadLayout(UserSession.User.Settings.GridMenuLayout);
+                windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+                gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
 
                 foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
                 {
                     holder.InitializeForCurrentUser();
                 }
-                
+
+                // Initialize the grid
+                gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
+                gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
+
                 // Initialize any filter trees
-                InitializeFilterTrees(UserSession.User);
+                InitializeFilterTrees(user);
+
+                // Update all UI items that are related to the current stores
+                UpdateStoreDependentUI();
 
                 gridControl.Show();
                 orderFilterTree.Show();
@@ -925,7 +928,7 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the filter trees for display
         /// </summary>
-        private void InitializeFilterTrees(UserEntity user)
+        private void InitializeFilterTrees(IUserEntity user)
         {
             orderFilterTree.LoadLayouts(FilterTarget.Orders);
             orderFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.OrderFilterExpandedFolders));
