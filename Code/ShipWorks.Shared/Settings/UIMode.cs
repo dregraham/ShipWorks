@@ -6,7 +6,7 @@ namespace ShipWorks.Settings
     /// <summary>
     /// Shipworks UI Mode
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum UIMode
     {
         [Description("Batch Mode")]

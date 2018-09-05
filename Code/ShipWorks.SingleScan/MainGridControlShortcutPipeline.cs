@@ -47,10 +47,10 @@ namespace ShipWorks.SingleScan
         public IDisposable Register(IMainGridControl mainGridControl)
         {
             subscription = messenger.OfType<ShortcutMessage>()
-                .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch) ||
                             m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                 .Subscribe(message => HandleQuickSearchMessage(message, mainGridControl));
 
             return subscription;

@@ -66,18 +66,18 @@ namespace ShipWorks.ApplicationCore
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
                 Observable.FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
-                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                     .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
                 Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
-                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 

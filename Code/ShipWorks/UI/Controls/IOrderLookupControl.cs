@@ -1,8 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-
-namespace ShipWorks.UI.Controls
+﻿namespace ShipWorks.UI.Controls
 {
-    [Service]
+    /// <summary>
+    /// Interface or an OrderLookupControl
+    /// </summary>
     public interface IOrderLookupControl
     {
         
