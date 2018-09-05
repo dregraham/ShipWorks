@@ -10815,6 +10815,7 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <None Include="Resources\bonanza.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

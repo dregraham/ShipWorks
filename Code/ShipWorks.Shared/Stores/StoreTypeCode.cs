@@ -419,8 +419,8 @@ namespace ShipWorks.Stores
         Zentail = 84,
 
         [Description("Bonanza")]
-        [StoreTypeIdentity("BONANZA", "BON")]
-        [StoreTypeIcon("shipworks")]
+        [StoreTypeIdentity("WISH", "BON")]
+        [StoreTypeIcon("bonanza")]
         Bonanza = 85
     }
 }
