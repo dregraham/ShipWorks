@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             var foo = await Task.WhenAny(
                 completedTask,
                 Task.Delay(TimeSpan.FromSeconds(10))
-                    .ContinueWith(t => throw new TimeoutException("Never received OrderSelectedChangedMessage")));
+                    .ContinueWith(t => throw new TimeoutException("Never received ShipmentsProcessedMessage")));
         }
 
         [Then(@"the user can not access Best Rate")]

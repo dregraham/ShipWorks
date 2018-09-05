@@ -199,3 +199,4 @@ build-times*.txt
 
 # SpecFlow feature generated C# files
 **/*.Specs/**/*.feature.cs
+results/
