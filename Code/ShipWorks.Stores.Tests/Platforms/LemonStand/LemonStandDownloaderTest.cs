@@ -6,7 +6,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Tests.Shared;
@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
     /// </summary>
     public class LemonStandDownloaderTest
     {
-        readonly StoreEntity store = new LemonStandStoreEntity();
+        private readonly StoreEntity store = new LemonStandStoreEntity();
 
         private readonly string lemonStandOrders;
         private readonly string singleOrder;

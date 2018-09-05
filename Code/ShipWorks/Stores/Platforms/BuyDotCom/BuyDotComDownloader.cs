@@ -10,7 +10,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Spreadsheet;
@@ -19,7 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -30,8 +29,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BuyDotCom)]
     public class BuyDotComDownloader : OrderElementFactoryDownloaderBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
-        GenericCsvMap csvMap;
+        private static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
+        private readonly GenericCsvMap csvMap;
         private readonly IBuyDotComFtpClientFactory ftpClientFactory;
 
         /// <summary>

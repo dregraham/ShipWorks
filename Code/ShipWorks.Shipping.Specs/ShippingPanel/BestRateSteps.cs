@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
@@ -192,16 +193,27 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         }
 
         [Then(@"the user can not access Best Rate")]
-        public void ThenTheUserCanNotAccessBestRate() =>
-            Assert.DoesNotContain(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
+        public Task ThenTheUserCanNotAccessBestRate() =>
+            RetryAssertion(() => Assert.DoesNotContain(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders));
 
         [Then(@"the user can access Best Rate")]
-        public void ThenTheUserCanAccessBestRate() =>
-            Assert.Contains(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
+        public Task ThenTheUserCanAccessBestRate() =>
+            RetryAssertion(() => Assert.Contains(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders));
 
         [Then(@"the provider is USPS")]
-        public void ThenTheProviderIsUSPS() =>
-            Assert.Equal(ShipmentTypeCode.Usps, shippingPanelViewModel.ShipmentType);
+        public Task ThenTheProviderIsUSPS() =>
+            RetryAssertion(() => Assert.Equal(ShipmentTypeCode.Usps, shippingPanelViewModel.ShipmentType));
+
+        /// <summary>
+        /// Retry a given assertion, since we may need to wait for actions to complete
+        /// </summary>
+        /// <param name="action"></param>
+        private Task RetryAssertion(Action action) =>
+            Functional.RetryAsync(() =>
+            {
+                action();
+                return Task.FromResult(Unit.Default);
+            }, 5, TimeSpan.FromSeconds(250), ex => true);
 
         /// <summary>
         /// Create a mocked version of ISwsimV69

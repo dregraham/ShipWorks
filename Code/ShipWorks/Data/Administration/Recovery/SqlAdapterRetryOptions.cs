@@ -2,7 +2,7 @@
 using Interapptive.Shared.Utility;
 using log4net;
 
-namespace ShipWorks.Data.Administration.Retry
+namespace ShipWorks.Data.Administration.Recovery
 {
     /// <summary>
     /// Options for a SqlAdapterRetry
@@ -13,7 +13,7 @@ namespace ShipWorks.Data.Administration.Retry
         private const int defaultRetries = 5;
         private const int defaultDeadlockPriority = -5;
 
-        private static SqlAdapterRetryOptions defaultOptions = new SqlAdapterRetryOptions();
+        private static readonly SqlAdapterRetryOptions defaultOptions = new SqlAdapterRetryOptions();
 
         /// <summary>
         /// Default retry options

@@ -10,7 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -25,13 +25,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.AmeriCommerce)]
     public class AmeriCommerceDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceDownloader));
 
         // total number of orders to be downloaded
-        int totalCount = 0;
+        private int totalCount = 0;
 
         // provider for status codes
-        AmeriCommerceStatusCodeProvider statusProvider;
+        private AmeriCommerceStatusCodeProvider statusProvider;
 
         /// <summary>
         /// Constructor

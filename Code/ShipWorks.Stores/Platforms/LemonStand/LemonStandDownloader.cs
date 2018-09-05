@@ -14,7 +14,7 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -28,12 +28,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LemonStand)]
     public class LemonStandDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(LemonStandDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(LemonStandDownloader));
         private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
-
-        LemonStandStatusCodeProvider statusProvider;
+        private LemonStandStatusCodeProvider statusProvider;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.

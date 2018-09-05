@@ -18,7 +18,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
     public static class DashboardManager
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(DashboardManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DashboardManager));
 
         // Timer for the stopped scheduler notification threshold
         private static readonly System.Windows.Forms.Timer stoppedSchedulerNotificationTimer = new System.Windows.Forms.Timer();
@@ -46,13 +46,13 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private const int stoppedScheduleNotificationThreshold = 600000;
 
         // The panel that the controller uses to display the panel items
-        static Panel panel;
+        private static Panel panel;
 
         // List of dashboard items
-        static List<DashboardItem> dashboardItems = new List<DashboardItem>();
+        private static List<DashboardItem> dashboardItems = new List<DashboardItem>();
 
         // The priority of types in how they should be sorted
-        static List<Type> itemTypeSortOrder = new List<Type>
+        private static List<Type> itemTypeSortOrder = new List<Type>
             {
                 typeof(DashboardActionErrorItem),
                 typeof(DashboardSchedulerServiceStoppedItem),
@@ -64,11 +64,11 @@ namespace ShipWorks.ApplicationCore.Dashboard
             };
 
         // The text to display when the dashboard is working in the background
-        static string busyText = "updating dashboard";
+        private static readonly string busyText = "updating dashboard";
 
         // Work ID for checking tango messages and checking the sw version
-        static Guid checkVersionWorkID;
-        static Guid tangoMessageWorkID;
+        private static Guid checkVersionWorkID;
+        private static Guid tangoMessageWorkID;
 
         // keep track of any local rating issues
         private static ILocalRateValidationResult validationResult;

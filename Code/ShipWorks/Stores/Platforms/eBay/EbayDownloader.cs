@@ -18,7 +18,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -34,7 +34,7 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
+using static ShipWorks.Data.Administration.Recovery.SqlAdapterRetry;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -46,14 +46,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
     public class EbayDownloader : StoreDownloader
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
         private readonly IEbayWebClient webClient;
 
         // The current time according to eBay
-        DateTime eBayOfficialTime;
+        private DateTime eBayOfficialTime;
 
         // Total number of orders expected during this download
-        int expectedCount = -1;
+        private int expectedCount = -1;
 
         /// <summary>
         /// Create the new eBay downloader

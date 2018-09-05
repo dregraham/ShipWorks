@@ -3,7 +3,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Utility
@@ -13,8 +13,8 @@ namespace ShipWorks.Data.Utility
     /// </summary>
     public class TimestampTracker
     {
-        static ILog log = LogManager.GetLogger(typeof(TimestampTracker));
-        long timestamp = 0;
+        private static ILog log = LogManager.GetLogger(typeof(TimestampTracker));
+        private long timestamp = 0;
 
         /// <summary>
         /// String representation of the class is the timestamp value.

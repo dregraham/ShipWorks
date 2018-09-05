@@ -10,7 +10,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,15 +28,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
     public class EbayCombinedOrderCandidate
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(EbayCombinedOrderCandidate));
-
-        List<EbayCombinedOrderComponent> components = new List<EbayCombinedOrderComponent>();
-
-        bool shippingOverridden = false;
-        decimal shippingCost;
-
-        bool adjustmentOverridden = false;
-        decimal adjustment;
+        private static readonly ILog log = LogManager.GetLogger(typeof(EbayCombinedOrderCandidate));
+        private List<EbayCombinedOrderComponent> components = new List<EbayCombinedOrderComponent>();
+        private bool shippingOverridden = false;
+        private decimal shippingCost;
+        private bool adjustmentOverridden = false;
+        private decimal adjustment;
 
 
         /// <summary>

@@ -14,7 +14,7 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopify)]
     public class ShopifyDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
         private readonly IShopifyWebClient webClient = null;
         private readonly IDateTimeProvider dateTimeProvider;
