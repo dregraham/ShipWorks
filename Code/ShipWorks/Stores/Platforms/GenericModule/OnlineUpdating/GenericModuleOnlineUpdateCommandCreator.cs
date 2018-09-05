@@ -10,9 +10,6 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
-using Autofac;
-using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating
@@ -22,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GenericModule)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amosoft)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Bonanza)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Brightpearl)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Cart66Lite)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Cart66Pro)]
