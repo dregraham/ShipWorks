@@ -136,7 +136,7 @@ namespace ShipWorks
         readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
         // Used to keep ShipWorks "pumping" looking for data changes
-        readonly UIHeartbeat heartBeat;
+        Heartbeat heartBeat;
 
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
@@ -757,9 +757,8 @@ namespace ShipWorks
             // We can now show the normal UI
             ApplyCurrentUserLayout();
 
-            // Select the active filter
-            SelectInitialFilter(user.Settings);
-
+            UpdateUIMode(user);
+            
             log.InfoFormat("UI shown");
 
             // Start the dashboard.  Has to be before updating store depending UI - as that affects dashboard display.
@@ -769,8 +768,6 @@ namespace ShipWorks
 
             // Get all new\edited templates are installed
             BuiltinTemplates.UpdateTemplates(this);
-
-            UpdateUIMode(user);
 
             // Update the Detail View UI
             UpdateDetailViewSettingsUI();
@@ -804,15 +801,10 @@ namespace ShipWorks
         /// </summary>
         private void OnShowBatchView(object sender, EventArgs e)
         {
-            UserSession.User.Settings.UIMode = UIMode.Batch;
-
-            // Save the settings
-            using (SqlAdapter adapter = new SqlAdapter())
+            if (UserSession.User.Settings.UIMode != UIMode.Batch)
             {
-                adapter.SaveAndRefetch(UserSession.User.Settings);
+                SaveUIMode(UIMode.Batch);
             }
-
-            UpdateUIMode(UserSession.User);
         }
 
         /// <summary>
@@ -820,9 +812,17 @@ namespace ShipWorks
         /// </summary>
         private void OnShowOrderLookupView(object sender, EventArgs e)
         {
-            // Save the current layout just in case the user made changes to it
-            SaveCurrentUserSettings();
-            UserSession.User.Settings.UIMode = UIMode.OrderLookup;
+            if (UserSession.User.Settings.UIMode != UIMode.OrderLookup)
+            {
+                // Save the current layout just in case the user made changes to it
+                SaveCurrentUserSettings();
+                SaveUIMode(UIMode.OrderLookup);
+            }
+        }
+
+        private void SaveUIMode(UIMode uiMode)
+        {
+            UserSession.User.Settings.UIMode = uiMode;
 
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
@@ -831,6 +831,7 @@ namespace ShipWorks
             }
 
             UpdateUIMode(UserSession.User);
+            heartBeat.Start();
         }
 
         /// <summary>
@@ -838,8 +839,15 @@ namespace ShipWorks
         /// </summary>
         private void UpdateUIMode(IUserEntity user)
         {
+            heartBeat?.Stop();
+
             if (user.Settings.UIMode == UIMode.OrderLookup)
             {
+                mainMenuItemOrderLookup.Checked = true;
+                mainMenuItemBatchGrid.Checked = false;
+
+                heartBeat = new Heartbeat();
+
                 // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
                 foreach (DockControl control in Panels)
                 {
@@ -856,6 +864,11 @@ namespace ShipWorks
             }
             else
             {
+                mainMenuItemOrderLookup.Checked = false;
+                mainMenuItemBatchGrid.Checked = true;
+
+                heartBeat = new UIHeartbeat(this);
+
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
                 gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
 
@@ -877,6 +890,9 @@ namespace ShipWorks
                 gridControl.Show();
                 orderFilterTree.Show();
                 customerFilterTree.Show();
+
+                // Select the active filter
+                SelectInitialFilter(user.Settings);
             }
         }
         
@@ -2634,7 +2650,7 @@ namespace ShipWorks
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
-        private void SelectInitialFilter(UserSettingsEntity settings)
+        private void SelectInitialFilter(IUserSettingsEntity settings)
         {
             long initialID = settings.FilterInitialUseLastActive ?
                 settings.CustomerFilterLastActive : settings.FilterInitialSpecified;

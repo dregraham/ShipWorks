@@ -20,6 +20,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using System.Reactive.Linq;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -467,7 +468,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
-        public void SelectInitialFilter(UserSettingsEntity settings, FilterTarget target)
+        public void SelectInitialFilter(IUserSettingsEntity settings, FilterTarget target)
         {
             // Get last used or initial specified filter based on user settings
             long initialID = settings.FilterInitialUseLastActive ?
@@ -799,7 +800,7 @@ namespace ShipWorks.Filters.Controls
         /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
         /// or if only one target and Customers is not it.
         /// </summary>
-        private long FilterLastActive(UserSettingsEntity settings)
+        private long FilterLastActive(IUserSettingsEntity settings)
         {
             if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
             {
