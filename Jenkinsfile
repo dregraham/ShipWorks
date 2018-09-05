@@ -33,12 +33,15 @@ pipeline {
 		}
 		stage('Integration tests') {
 			parallel {
-				steps {
-					bat 'bundle exec rake test:integration[ContinuousIntegration]'
+				stage('Integration tests') {
+					steps {
+						bat 'bundle exec rake test:integration[ContinuousIntegration]'
+					}
 				}
-
-				steps {
-					bat 'bundle exec rake test:specs'
+				stage('Specs') {
+					steps {
+						bat 'bundle exec rake test:specs'
+					}
 				}
 			}
 		}
