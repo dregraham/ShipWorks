@@ -146,7 +146,7 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
 
-        UserControl orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookupControl>();
+        Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
 
         /// <summary>
         /// Constructor
@@ -806,7 +806,7 @@ namespace ShipWorks
         {
             if (UserSession.User.Settings.UIMode != UIMode.Batch)
             {
-                SaveUIMode(UIMode.Batch);
+                ChangeUIMode(UIMode.Batch);
             }
         }
 
@@ -819,11 +819,14 @@ namespace ShipWorks
             {
                 // Save the current layout just in case the user made changes to it
                 SaveCurrentUserSettings();
-                SaveUIMode(UIMode.OrderLookup);
+                ChangeUIMode(UIMode.OrderLookup);
             }
         }
 
-        private void SaveUIMode(UIMode uiMode)
+        /// <summary>
+        /// Change to the given UI mode
+        /// </summary>
+        private void ChangeUIMode(UIMode uiMode)
         {
             UserSession.User.Settings.UIMode = uiMode;
 

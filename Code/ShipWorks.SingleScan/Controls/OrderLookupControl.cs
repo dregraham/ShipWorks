@@ -8,7 +8,7 @@ namespace ShipWorks.SingleScan.Controls
     /// Control to look up orders for single scan mode
     /// </summary>
     [Component]
-    public partial class OrderLookupControl : UserControl, IOrderLookupControl
+    public partial class OrderLookupControl : UserControl, IOrderLookup
     {
         
         /// <summary>
@@ -18,5 +18,10 @@ namespace ShipWorks.SingleScan.Controls
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Expose the Control
+        /// </summary>
+        public UserControl Control => this;
     }
 }
