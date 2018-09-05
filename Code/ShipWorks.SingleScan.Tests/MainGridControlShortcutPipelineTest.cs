@@ -42,8 +42,6 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
             testObject.Register(mainGridControl.Object);
-
-            SetUIMode(UIMode.Batch);
         }
 
         [Fact]
@@ -91,11 +89,13 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void BarcodeMessage_DoesNotShowIndicator_WhenNotInBatchUIMode()
         {
-            SetUIMode(UIMode.OrderLookup);
-
             mock.Mock<ICurrentUserSettings>()
                 .Setup(s => s.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>()))
                 .Returns(true);
+
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(s => s.GetUIMode())
+                .Returns(UIMode.OrderLookup);
 
             var shortcut = new ShortcutEntity() { Action = KeyboardShortcutCommand.FocusQuickSearch };
             var message = new ShortcutMessage(this, shortcut, ShortcutTriggerType.Barcode, string.Empty);
@@ -138,19 +138,6 @@ namespace ShipWorks.SingleScan.Tests
             scheduler.Start();
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowKeyboardPopup(AnyString), Times.Never);
-        }
-
-        private void SetUIMode(UIMode uiMode)
-        {
-            mock.Mock<IUserSession>()
-                .SetupGet(s => s.User)
-                .Returns(new UserEntity
-                {
-                    Settings = new UserSettingsEntity
-                    {
-                        UIMode = uiMode
-                    }
-                });
         }
 
         public void Dispose()

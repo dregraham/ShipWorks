@@ -23,20 +23,17 @@ namespace ShipWorks.SingleScan
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IUserSession userSession;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public MainGridControlShortcutPipeline(IMessenger messenger,
             ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider, 
-            IUserSession userSession)
+            ISchedulerProvider schedulerProvider)
         {
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
-            this.userSession = userSession;
             this.currentUserSettings = currentUserSettings;
             this.messenger = messenger;
         }
@@ -50,7 +47,7 @@ namespace ShipWorks.SingleScan
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch) ||
                             m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
+                .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                 .Subscribe(message => HandleQuickSearchMessage(message, mainGridControl));
 
             return subscription;

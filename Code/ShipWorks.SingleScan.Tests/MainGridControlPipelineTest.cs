@@ -5,7 +5,6 @@ using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
@@ -25,13 +24,13 @@ namespace ShipWorks.SingleScan.Tests
         private readonly Mock<IMainGridControl> mainGridControl;
         private readonly TestScheduler scheduler;
         private readonly MainGridControlPipeline testObject;
-        private readonly UserSettingsEntity userSettings;
+
+        private SingleScanSettings singleScanSettings = SingleScanSettings.Scan;
+        private UIMode uiMode = UIMode.Batch;
 
         public MainGridControlPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-
-            SetUIMode(UIMode.Batch);
 
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
@@ -49,11 +48,13 @@ namespace ShipWorks.SingleScan.Tests
             mainGridControl.SetupGet(g => g.Visible).Returns(true);
             mainGridControl.SetupGet(g => g.CanFocus).Returns(true);
 
-            userSettings = new UserSettingsEntity()
-            { SingleScanSettings = (int) SingleScanSettings.Scan };
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(s => s.GetSingleScanSettings())
+                .Returns(() => singleScanSettings);
 
-            var userSession = mock.Mock<IUserSession>();
-            userSession.SetupGet(s => s.Settings).Returns(userSettings);
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(s => s.GetUIMode())
+                .Returns(() => uiMode);
 
             testObject = mock.Create<MainGridControlPipeline>();
         }
@@ -71,7 +72,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void DownloadOnDemand_DoesNotDelgateToDownloader_WhenUIModeIsNotBatch()
         {
-            SetUIMode(UIMode.OrderLookup);
+            uiMode = UIMode.OrderLookup;
 
             testObject.Register(mainGridControl.Object);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "  foo  ", IntPtr.Zero)));
@@ -83,7 +84,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void DownloadOnDemand_DoesNotDelegatesToOnDemandDownloader_WhenSingleScanIsDisabled()
         {
-            userSettings.SingleScanSettings = (int)SingleScanSettings.Disabled;
+            singleScanSettings = SingleScanSettings.Disabled;
 
             testObject.Register(mainGridControl.Object);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "  foo  ", IntPtr.Zero)));
@@ -115,26 +116,13 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void PerformBarcodeSearchAsync_DoesNotDelegateToGridControlWithScannedBarcode_WhenNotBatchMode()
         {
-            SetUIMode(UIMode.OrderLookup);
+            uiMode = UIMode.OrderLookup;
 
             testObject.Register(mainGridControl.Object);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             scheduler.Start();
 
             mainGridControl.Verify(g => g.BeginInvoke((Action<string>) mainGridControl.Object.PerformBarcodeSearch, AnyString), Times.Never);
-        }
-
-        private void SetUIMode(UIMode uiMode)
-        {
-            mock.Mock<IUserSession>()
-                .SetupGet(s => s.User)
-                .Returns(new UserEntity
-                {
-                    Settings = new UserSettingsEntity
-                    {
-                        UIMode = uiMode
-                    }
-                });
         }
 
         public void Dispose()

@@ -1,5 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Settings;
 
 namespace ShipWorks.Users
 {
@@ -32,5 +34,20 @@ namespace ShipWorks.Users
         /// Stop showing the given notification for the user
         /// </summary>
         void StopShowingNotificationFor(UserConditionalNotificationType notificationType, TimeSpan waitTime);
+
+        /// <summary>
+        /// Gets the UIMode
+        /// </summary>
+        UIMode GetUIMode();
+
+        /// <summary>
+        /// Sets the UIMode
+        /// </summary>
+        void SetUIMode(UIMode mode);
+
+        /// <summary>
+        /// Gets the users SingleScanSettings
+        /// </summary>
+        SingleScanSettings? GetSingleScanSettings();
     }
 }

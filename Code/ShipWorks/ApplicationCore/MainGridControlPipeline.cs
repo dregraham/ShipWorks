@@ -28,8 +28,8 @@ namespace ShipWorks.ApplicationCore
 
         private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
-        private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IOnDemandDownloader singleScanOnDemandDownloader;
         private readonly IOnDemandDownloader onDemandDownloader;
 
@@ -42,14 +42,14 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public MainGridControlPipeline(
             IMessenger messenger, 
-            IUserSession userSession, 
             IMainForm mainForm, 
             ISchedulerProvider schedulerProvider,
-            IOnDemandDownloaderFactory onDemandDownloaderFactory)
+            IOnDemandDownloaderFactory onDemandDownloaderFactory,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
-            this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
+            this.currentUserSettings = currentUserSettings;
             singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
             onDemandDownloader = onDemandDownloaderFactory.CreateOnDemandDownloader();
             this.mainForm = mainForm;
@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore
                 Observable.FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                     .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
                     .Subscribe(x => gridControl.PerformManualSearch()),
@@ -77,13 +77,13 @@ namespace ShipWorks.ApplicationCore
                 Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for doing barcode searches
                 scanMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .Where(_ => userSession.User.Settings.UIMode == UIMode.Batch)
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                     // This causes the shipping panel to save if there are unsaved changes
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
@@ -175,7 +175,7 @@ namespace ShipWorks.ApplicationCore
             return !barcode.IsNullOrWhiteSpace() &&
                    gridControl.Visible &&
                    gridControl.CanFocus &&
-                   userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled &&
+                   currentUserSettings.GetSingleScanSettings() != SingleScanSettings.Disabled &&
                    !mainForm.AdditionalFormsOpen();
         }
     }

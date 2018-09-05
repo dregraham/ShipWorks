@@ -146,6 +146,7 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
 
+        ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
         Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
 
         /// <summary>
@@ -805,7 +806,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowBatchView(object sender, EventArgs e)
         {
-            if (UserSession.User.Settings.UIMode != UIMode.Batch)
+            if (currentUserSettings.GetUIMode() != UIMode.Batch)
             {
                 ChangeUIMode(UIMode.Batch);
             }
@@ -816,7 +817,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowOrderLookupView(object sender, EventArgs e)
         {
-            if (UserSession.User.Settings.UIMode != UIMode.OrderLookup)
+            if (currentUserSettings.GetUIMode() != UIMode.OrderLookup)
             {
                 // Save the current layout just in case the user made changes to it
                 SaveCurrentUserSettings();
@@ -829,14 +830,8 @@ namespace ShipWorks
         /// </summary>
         private void ChangeUIMode(UIMode uiMode)
         {
-            UserSession.User.Settings.UIMode = uiMode;
-
-            // Save the settings
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.SaveAndRefetch(UserSession.User.Settings);
-            }
-
+            currentUserSettings.SetUIMode(uiMode);
+            
             UpdateUIMode(UserSession.User, true);
         }
 
@@ -847,7 +842,7 @@ namespace ShipWorks
         {
             heartBeat?.Stop();
 
-            if (user.Settings.UIMode == UIMode.OrderLookup)
+            if (currentUserSettings.GetUIMode() == UIMode.OrderLookup)
             {
                 ToggleOrderLookupMode();
             }

@@ -4,6 +4,9 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Connection;
+using ShipWorks.Settings;
 using ShipWorks.Shared.Users;
 
 namespace ShipWorks.Users
@@ -115,5 +118,30 @@ namespace ShipWorks.Users
 
             userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
         }
+
+        /// <summary>
+        /// Returns the UIMode of the current user
+        /// </summary>
+        public UIMode GetUIMode() => userSession.User.Settings.UIMode;
+
+        /// <summary>
+        /// Sets the UIMode for the current user
+        /// </summary>
+        public void SetUIMode(UIMode uiMode)
+        {
+            userSession.User.Settings.UIMode = uiMode;
+
+            // Save the settings
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(UserSession.User.Settings);
+            }
+        }
+
+        /// <summary>
+        /// Returns the current user's single scan settings.
+        /// </summary>
+        /// <returns></returns>
+        public SingleScanSettings? GetSingleScanSettings() => (SingleScanSettings?) userSession.Settings?.SingleScanSettings;
     }
 }
