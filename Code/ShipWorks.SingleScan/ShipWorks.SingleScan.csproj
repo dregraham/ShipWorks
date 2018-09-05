@@ -249,6 +249,9 @@
     <EmbeddedResource Include="AutoPrintConfirmation\AutoPrintConfirmationDialog.resx">
       <DependentUpon>AutoPrintConfirmationDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OrderLookupControl.resx">
+      <DependentUpon>OrderLookupControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScannerRegistrationDialog.resx">
       <DependentUpon>ScannerRegistrationDialog.cs</DependentUpon>
     </EmbeddedResource>

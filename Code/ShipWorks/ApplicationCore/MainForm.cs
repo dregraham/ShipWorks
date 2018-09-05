@@ -101,6 +101,7 @@ using ShipWorks.Templates.Management;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Saving;
 using ShipWorks.UI;
+using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
@@ -144,6 +145,8 @@ namespace ShipWorks
         readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
+
+        UserControl orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookupControl>();
 
         /// <summary>
         /// Constructor
@@ -861,9 +864,14 @@ namespace ShipWorks
 
                 // Clear Filter Trees
                 ClearFilterTrees();
+
+                panelDockingArea.Controls.Add(orderLookupControl);
+                orderLookupControl.BringToFront();
             }
             else
             {
+                panelDockingArea.Controls.Remove(orderLookupControl);
+
                 mainMenuItemOrderLookup.Checked = false;
                 mainMenuItemBatchGrid.Checked = true;
 
