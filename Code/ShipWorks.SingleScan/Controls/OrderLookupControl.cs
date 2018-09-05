@@ -22,6 +22,6 @@ namespace ShipWorks.SingleScan.Controls
         /// <summary>
         /// Expose the Control
         /// </summary>
-        public UserControl Control => this;
+        public Control Control => this;
     }
 }
