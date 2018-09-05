@@ -48,21 +48,25 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public void RunTimedEvent(TelemetricEventType eventType, Action eventToTime)
+        public void RunTimedEvent(TelemetricEventType eventType, Action eventToTime) =>
+            RunTimedEvent(eventType, eventToTime.ToFunc());
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        public T RunTimedEvent<T>(TelemetricEventType eventType, Func<T> eventToTime)
         {
             StartTimedEvent(EnumHelper.GetDescription(eventType));
             try
             {
-                eventToTime();
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
+                return eventToTime();
             }
-            catch (Exception)
+            finally
             {
                 StopTimedEvent(EnumHelper.GetDescription(eventType));
-                throw;
             }
         }
-        
+
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
@@ -80,7 +84,7 @@ namespace Interapptive.Shared.Utility
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Start timing an event
         /// </summary>
@@ -105,10 +109,10 @@ namespace Interapptive.Shared.Utility
             }
 
             stopwatch.Stop();
-            
+
             long elapsed = stopwatch.ElapsedMilliseconds;
             AddEntry($"{baseTelemetryName}.{eventName}", elapsed);
-            
+
             stopwatch.Reset();
         }
 
@@ -159,7 +163,7 @@ namespace Interapptive.Shared.Utility
                 overallTime += totalTimeForEventType;
                 trackedDurationEvent.AddMetric($"{telemetryEventType.Key}", totalTimeForEventType);
             }
-            
+
             trackedDurationEvent.AddMetric(baseTelemetryName, overallTime);
         }
 
@@ -172,7 +176,7 @@ namespace Interapptive.Shared.Utility
             {
                 telemetry[name] = new List<long>();
             }
-            
+
             telemetry[name].Add(time);
         }
     }
