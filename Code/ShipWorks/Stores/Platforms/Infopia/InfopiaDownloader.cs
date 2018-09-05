@@ -11,7 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -30,10 +30,10 @@ namespace ShipWorks.Stores.Platforms.Infopia
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Infopia)]
     public class InfopiaDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(InfopiaDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(InfopiaDownloader));
 
         // count of orders to be downloaded
-        int totalCount = 0;
+        private int totalCount = 0;
 
         /// <summary>
         /// Convenience property for quick access to the specific store entity

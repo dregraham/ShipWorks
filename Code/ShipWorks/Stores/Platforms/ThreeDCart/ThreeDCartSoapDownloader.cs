@@ -14,7 +14,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -29,15 +29,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     [Component]
     public class ThreeDCartSoapDownloader : StoreDownloader, IThreeDCartSoapDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapDownloader));
-        int totalCount;
-        ThreeDCartWebClient webClient;
-        readonly ThreeDCartStoreEntity threeDCartStore;
-        const int MissingCustomerID = 0;
-        DateTime lastModifiedOrderDateProcessed;
+        private static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapDownloader));
+        private int totalCount;
+        private ThreeDCartWebClient webClient;
+        private readonly ThreeDCartStoreEntity threeDCartStore;
+        private const int MissingCustomerID = 0;
+        private DateTime lastModifiedOrderDateProcessed;
 
         // provider for status codes
-        ThreeDCartStatusCodeProvider statusProvider;
+        private ThreeDCartStatusCodeProvider statusProvider;
 
         /// <summary>
         /// Constructor

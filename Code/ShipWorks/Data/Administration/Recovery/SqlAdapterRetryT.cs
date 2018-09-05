@@ -10,7 +10,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using static Interapptive.Shared.Utility.Functional;
 
-namespace ShipWorks.Data.Administration.Retry
+namespace ShipWorks.Data.Administration.Recovery
 {
     /// <summary>
     /// Helper to retry sql adapter commands if an exception type occurs.
@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Administration.Retry
         public void ExecuteWithRetry(Action method) =>
             Using(
                 new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {deadlockPriority}."),
-                _ => method.ToFunc().Retry(retries, retryDelay, ShouldRetry))
+                _ => Retry(method.ToFunc(), retries, retryDelay, ShouldRetry))
             .ThrowOnFailure();
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ShipWorks.Data.Administration.Retry
         public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method) =>
             UsingAsync(
                 new LoggedStopwatch(log, $"ExecuteWithRetry for {commandDescription}, deadlock priority {deadlockPriority}."),
-                _ => method.RetryAsync(retries, retryDelay, ShouldRetry));
+                _ => RetryAsync(method, retries, retryDelay, ShouldRetry));
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.

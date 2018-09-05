@@ -16,7 +16,7 @@ using log4net;
 using Rebex.Mail;
 using Rebex.Net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -36,16 +36,16 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         private readonly ILog log;
 
         // number of email messages to be downloaded
-        int messageCount;
+        private int messageCount;
 
         // Cache of OrderInformationReponses from OrderMotion
-        Dictionary<long, IXPathNavigable> orderResponseCache = new Dictionary<long, IXPathNavigable>();
+        private Dictionary<long, IXPathNavigable> orderResponseCache = new Dictionary<long, IXPathNavigable>();
 
         // cached Items
-        Dictionary<string, bool> loadedItems = new Dictionary<string, bool>();
+        private Dictionary<string, bool> loadedItems = new Dictionary<string, bool>();
 
         // cached item attribute names
-        Dictionary<string, string> itemAttributes = new Dictionary<string, string>();
+        private Dictionary<string, string> itemAttributes = new Dictionary<string, string>();
         private readonly IOrderMotionWebClient webClient;
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Cleans the OrderMotion phone number for use in ShipWorks (Fedex was having issues using the value coming from OrderMotion)
         /// </summary>
-        static string CleanPhone(string phone)
+        private static string CleanPhone(string phone)
         {
             return Regex.Replace(phone, @"[^\d\-]", "");
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.Data.Administration.Retry
+namespace ShipWorks.Data.Administration.Recovery
 {
     /// <summary>
     /// Factory for creating an instance SqlAdapterRetry

@@ -2,13 +2,12 @@
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
@@ -23,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
     /// </summary>
     public abstract class GenericFileSpreadsheetDownloaderBase : GenericFileDownloaderBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase));
 
         /// <summary>
         /// Constructor

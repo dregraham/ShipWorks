@@ -15,7 +15,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private async Task HandleFailedOrderInstantiation(long orderNumber, GenericResult<OrderEntity> result, Order magentoOrder)
         {
             var splitOrders = await FindSplitOrders(orderNumber).ConfigureAwait(false);
-            
+
             if (splitOrders.Count > 0)
             {
                 foreach (var orderEntity in splitOrders.OfType<OrderEntity>())

@@ -151,11 +151,14 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             log4net.LogManager.ResetConfiguration();
 
-            Trace.Listeners.Clear();
-            Trace.Listeners.Add(new DefaultTraceListener());
+            if (logOptions.TraceToConsole)
+            {
+                Trace.Listeners.Clear();
+                Trace.Listeners.Add(new DefaultTraceListener());
 
-            // Turns on console logging
-            BasicConfigurator.Configure(CreateTraceAppender());
+                // Turns on console logging
+                BasicConfigurator.Configure(CreateTraceAppender());
+            }
 
             // Add in application tracing
             if (logOptions.LogShipWorks)

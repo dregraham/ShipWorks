@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
@@ -10,7 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Xml;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,10 +24,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     public class GenericFileXmlDownloader : GenericFileDownloaderBase, IGenericFileXmlDownloader
     {
         // Transform to use, if any
-        XslCompiledTransform xslTransform = null;
+        private XslCompiledTransform xslTransform = null;
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GenericFileXmlDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GenericFileXmlDownloader));
 
         /// <summary>
         /// Constructor

@@ -11,13 +11,13 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using static Interapptive.Shared.Utility.Functional;
-using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
+using static ShipWorks.Data.Administration.Recovery.SqlAdapterRetry;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -28,17 +28,16 @@ namespace ShipWorks.Data.Grid.Paging
     public class PagedSortedKeys : IEnumerable<long>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(PagedSortedKeys));
-        List<long> loadedKeys;
-        volatile int loadedKeyCount;
-
-        volatile bool loadingComplete;
-        volatile bool canceled;
+        private List<long> loadedKeys;
+        private int loadedKeyCount;
+        private bool loadingComplete;
+        private bool canceled;
 
         // Don't allow too many to be fetching at once or we can end up just stalling out completely
-        static SemaphoreSlim semaphore = new SemaphoreSlim(2);
+        private static SemaphoreSlim semaphore = new SemaphoreSlim(2);
 
         // Special single insance of an empty key set
-        static PagedSortedKeys emptyKeys = new PagedSortedKeys(new List<long>());
+        private static readonly PagedSortedKeys emptyKeys = new PagedSortedKeys(new List<long>());
 
         /// <summary>
         /// Constructs a new instance that will load the keys based on the given key field, query, and sort
@@ -162,7 +161,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// </summary>
         private class InternalEnumerable : IEnumerable<long>
         {
-            PagedSortedKeys owner;
+            private PagedSortedKeys owner;
 
             /// <summary>
             /// Constructor

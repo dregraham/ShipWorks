@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
-using System.IO;
-using System.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using log4net.Core;
@@ -16,15 +15,15 @@ namespace ShipWorks.ApplicationCore.Logging
     public class LogOptions
     {
         // What to log
-        bool logShipWorks = true;
-        bool logServices = true;
-        bool logRateCalls = false;
+        private bool logShipWorks = true;
+        private bool logServices = true;
+        private bool logRateCalls = false;
         private Level minLevel = Level.Info;
         private Level maxLevel = Level.Fatal;
-        private static List<Level> allLevels; 
+        private static List<Level> allLevels;
 
         // How many days logs are left behind
-        int maxLogAgeDays = 7;
+        private int maxLogAgeDays = 7;
 
         /// <summary>
         /// Constructor
@@ -173,6 +172,11 @@ namespace ShipWorks.ApplicationCore.Logging
             get { return maxLevel; }
             set { maxLevel = value; }
         }
+
+        /// <summary>
+        /// Should the logger trace to the console
+        /// </summary>
+        public bool TraceToConsole { get; set; } = true;
 
         /// <summary>
         /// Returns a list of all the levels we currently support
