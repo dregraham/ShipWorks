@@ -17,10 +17,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
     public class LabelResultLogStepTest : IDisposable
     {
-        readonly AutoMock mock;
-        Mock<ILabelPersistenceResult> input;
-        ShipmentEntity shipment;
-        StoreEntity store;
+        private readonly AutoMock mock;
+        private Mock<ILabelPersistenceResult> input;
+        private readonly ShipmentEntity shipment;
+        private readonly ShipmentEntity shipmentForTango;
+        private readonly StoreEntity store;
         private readonly Shipping.Services.ShipmentProcessorSteps.LabelResultLogStep testObject;
 
         public LabelResultLogStepTest()
@@ -28,10 +29,12 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             shipment = Create.Shipment(new OrderEntity()).AsOther().Set(x => x.ShipmentID, 1234).Build();
+            shipmentForTango = Create.Shipment(new OrderEntity()).AsOther().Set(x => x.ShipmentID, 5678).Build();
             store = Create.Store<StoreEntity>().Build();
 
             input = mock.Mock<ILabelPersistenceResult>();
             input.SetupGet(x => x.OriginalShipment).Returns(shipment);
+            input.SetupGet(x => x.ShipmentForTango).Returns(shipmentForTango);
             input.SetupGet(x => x.Store).Returns(store);
             input.SetupGet(x => x.Success).Returns(true);
 
@@ -51,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             testObject.Complete(input.Object);
 
-            mock.Mock<ITangoWebClient>().Verify(x => x.LogShipment(store, shipment, false));
+            mock.Mock<ITangoWebClient>().Verify(x => x.LogShipment(store, shipmentForTango, false));
         }
 
         [Fact]
