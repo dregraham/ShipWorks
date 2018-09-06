@@ -895,6 +895,8 @@ namespace ShipWorks
             // Select the active filter
             SelectInitialFilter(user.Settings);
 
+            SendPanelStateMessages();
+
             currentUiMode = UIMode.Batch;
         }
 
