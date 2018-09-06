@@ -53,17 +53,32 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
+        /// Current ShipWorksServiceType
+        /// </summary>
+        public static ShipWorksServiceType CurrentServiceType { get; set; }
+
+        /// <summary>
+        /// Current service display name
+        /// </summary>
+        public static string CurrentServiceDisplayName { get; set; }
+
+        /// <summary>
+        /// Current service status primary key
+        /// </summary>
+        public static long CurrentServiceStatusID { get; set; }
+
+        /// <summary>
         /// Initialize when a user logs in
         /// </summary>
         public static void InitializeForCurrentSession()
         {
+            tableSynchronizer = new TableSynchronizer<ServiceStatusEntity>();
             ComputerManager.InitializeForCurrentSession();
 
             // Add any missing computers 
             SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
             sqlAdapterRetry.ExecuteWithRetry(AddMissingComputers);
 
-            tableSynchronizer = new TableSynchronizer<ServiceStatusEntity>();
             InternalCheckForChanges();
         }
 
@@ -175,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             try
             {
-                adapter.SaveAndRefetch(serviceStatus);
+                adapter.SaveEntity(serviceStatus);
             }
             catch (ORMConcurrencyException ex)
             {
@@ -188,40 +203,64 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Update and persist the last check-in for the service
+        /// Update the service status as "starting"
         /// </summary>
-        /// <param name="serviceStatus">The service for which to check-in.</param>
-        public static void CheckIn(ServiceStatusEntity serviceStatus)
+        public static void Start(ShipWorksServiceType serviceType, string serviceName)
         {
-            try
-            {
-                CheckInInternal(serviceStatus);
-            }
-            catch (ORMEntityOutOfSyncException ex)
-            {
-                log.Warn("ServiceStatusEntity was out of sync when checking in.  Trying again.", ex);
+            ServiceStatusEntity serviceStatus = GetServiceStatus(UserSession.Computer.ComputerID, serviceType);
+            CurrentServiceStatusID = serviceStatus.ServiceStatusID;
+            CurrentServiceType = serviceType;
+            CurrentServiceDisplayName = ShipWorksServiceManager.GetDisplayName(serviceType);
 
-                // Refresh the status and try to run the check in again
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntity(serviceStatus);
-                }
+            serviceStatus = new ServiceStatusEntity(CurrentServiceStatusID)
+            {
+                IsNew = false,
+                LastStartDateTime = DateTime.UtcNow,
+                ServiceFullName = serviceName,
+                ServiceDisplayName = CurrentServiceDisplayName,
+                LastCheckInDateTime = DateTime.UtcNow
+            };
 
-                CheckInInternal(serviceStatus);
-            }
+            log.InfoFormat("Service '{0}' starting at {1}", CurrentServiceDisplayName, serviceStatus.LastCheckInDateTime);
 
             SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
             sqlAdapterRetry.ExecuteWithRetry(() => SaveServiceStatus(SqlAdapter.Default, serviceStatus));
         }
 
         /// <summary>
-        /// Perform the actual check in and logging here so it can be retried if necessary
+        /// Update the service status as "stopping"
         /// </summary>
-        private static void CheckInInternal(ServiceStatusEntity serviceStatus)
+        public static void Stop()
         {
-            serviceStatus.LastCheckInDateTime = DateTime.UtcNow;
+            ServiceStatusEntity serviceStatus = new ServiceStatusEntity(CurrentServiceStatusID)
+                
+            {
+                IsNew = false,
+                LastCheckInDateTime = DateTime.UtcNow,
+                LastStopDateTime = DateTime.UtcNow
+            };
 
-            log.InfoFormat("Service '{0}' checking in at {1}", serviceStatus.ServiceDisplayName, serviceStatus.LastCheckInDateTime);
+            log.InfoFormat("Service '{0}' stopping at {1}", CurrentServiceDisplayName, serviceStatus.LastStopDateTime);
+
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
+            sqlAdapterRetry.ExecuteWithRetry(() => SaveServiceStatus(SqlAdapter.Default, serviceStatus));
+        }
+
+        /// <summary>
+        /// Update and persist the last check-in for the service
+        /// </summary>
+        public static void CheckIn()
+        {
+            ServiceStatusEntity serviceStatus = new ServiceStatusEntity(CurrentServiceStatusID)
+            {
+                IsNew = false,
+                LastCheckInDateTime = DateTime.UtcNow
+            };
+
+            log.InfoFormat("Service '{0}' checking in at {1}", CurrentServiceDisplayName, serviceStatus.LastCheckInDateTime);
+
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
+            sqlAdapterRetry.ExecuteWithRetry(() => SaveServiceStatus(SqlAdapter.Default, serviceStatus));
         }
 
         /// <summary>

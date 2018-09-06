@@ -32,10 +32,7 @@ namespace ShipWorks.ApplicationCore.Services
     public partial class ShipWorksServiceBase : ServiceBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceBase));
-
-        // The entity we use to ping the database with checkins
-        ServiceStatusEntity serviceStatusEntity;
-
+        
         // The last known SQL Session configuration
         bool lastConfigurationSuccess = false;
 
@@ -88,22 +85,6 @@ namespace ShipWorks.ApplicationCore.Services
         {
             get { return base.ServiceName; }
             private set { base.ServiceName = value; }
-        }
-
-        /// <summary>
-        /// Attempts to get the ServiceStatusEntity for this Computer and ServiceType
-        /// </summary>
-        private ServiceStatusEntity CurrentServiceStatusEntity
-        {
-            get
-            {
-                if (serviceStatusEntity == null)
-                {
-                    serviceStatusEntity = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ServiceType);
-                }
-
-                return serviceStatusEntity;
-            }
         }
 
         /// <summary>
@@ -441,13 +422,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected virtual void OnStartCore()
         {
-            // Update the ServiceStatusEntity start and check in times.
-            CurrentServiceStatusEntity.LastStartDateTime = DateTime.UtcNow;
-            CurrentServiceStatusEntity.ServiceFullName = ServiceName;
-            CurrentServiceStatusEntity.ServiceDisplayName = ShipWorksServiceManager.GetDisplayName(ServiceType);
-
-            // Check in right away
-            ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
+            ServiceStatusManager.Start(ServiceType, ServiceName);
         }
 
         /// <summary>
@@ -460,7 +435,7 @@ namespace ShipWorks.ApplicationCore.Services
                 return;
             }
 
-            ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
+            ServiceStatusManager.CheckIn();
         }
 
         /// <summary>
@@ -509,11 +484,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Could be stopping due to losing the connection
             if (lastConfigurationSuccess)
             {
-                // Update the ServiceStatusEntity stop and check in times.
-                CurrentServiceStatusEntity.LastStopDateTime = DateTime.UtcNow;
-
-                // Check in with the stop time
-                ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
+                ServiceStatusManager.Stop();
             }
         }
 
