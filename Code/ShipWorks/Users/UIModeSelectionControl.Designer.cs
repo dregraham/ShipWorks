@@ -31,31 +31,32 @@
             this.orderLookup = new System.Windows.Forms.RadioButton();
             this.batch = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
-            // 
-            // orderLookup
-            // 
-            this.orderLookup.AutoSize = true;
-            this.orderLookup.Checked = true;
-            this.orderLookup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.orderLookup.Location = new System.Drawing.Point(13, 3);
-            this.orderLookup.Name = "orderLookup";
-            this.orderLookup.Size = new System.Drawing.Size(202, 17);
-            this.orderLookup.TabIndex = 0;
-            this.orderLookup.TabStop = true;
-            this.orderLookup.Text = "Lookup and ship orders one at a time";
-            this.orderLookup.UseVisualStyleBackColor = true;
+            
             // 
             // batch
             // 
             this.batch.AutoSize = true;
+            this.batch.Checked = true;
             this.batch.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.batch.Location = new System.Drawing.Point(13, 26);
+            this.batch.Location = new System.Drawing.Point(13, 3);
             this.batch.Name = "batch";
             this.batch.Size = new System.Drawing.Size(172, 17);
-            this.batch.TabIndex = 1;
+            this.batch.TabIndex = 0;
             this.batch.TabStop = true;
             this.batch.Text = "Edit and ship orders in batches";
             this.batch.UseVisualStyleBackColor = true;
+            // 
+            // orderLookup
+            // 
+            this.orderLookup.AutoSize = true;
+            this.orderLookup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.orderLookup.Location = new System.Drawing.Point(13, 26);
+            this.orderLookup.Name = "orderLookup";
+            this.orderLookup.Size = new System.Drawing.Size(202, 17);
+            this.orderLookup.TabIndex = 1;
+            this.orderLookup.TabStop = true;
+            this.orderLookup.Text = "Lookup and ship orders one at a time";
+            this.orderLookup.UseVisualStyleBackColor = true;
             // 
             // UIModeSelectionControl
             // 
