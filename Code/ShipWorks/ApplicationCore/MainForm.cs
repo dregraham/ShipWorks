@@ -1983,7 +1983,7 @@ namespace ShipWorks
         {
             UpdateLoginLogoffMenu();
 
-            uiModeMenu.Visible = UserSession.IsLoggedOn;
+            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)
