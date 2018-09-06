@@ -147,8 +147,10 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
 
         ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-        UIMode currentUiMode = UIMode.Batch;
+        UIMode currentUiMode = UIMode.OrderLookup;
         Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+        
+        private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
         /// Constructor
@@ -865,9 +867,9 @@ namespace ShipWorks
         {
             panelDockingArea.Controls.Remove(orderLookupControl);
 
-            mainMenuItemOrderLookup.Checked = false;
-            mainMenuItemBatchGrid.Checked = true;
-
+            mainMenuItemBatchGrid.Text += unicodeCheckmark;
+            mainMenuItemOrderLookup.Text = mainMenuItemOrderLookup.Text.Replace(unicodeCheckmark, string.Empty);
+            
             heartBeat = new UIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
@@ -902,12 +904,12 @@ namespace ShipWorks
 
         /// <summary>
         /// Switch from batch to order lookup mode
-        /// </summary>
+        /// </summary> 
         private void ToggleOrderLookupMode()
         {
-            mainMenuItemOrderLookup.Checked = true;
-            mainMenuItemBatchGrid.Checked = false;
-
+            mainMenuItemOrderLookup.Text += unicodeCheckmark;
+            mainMenuItemBatchGrid.Text = mainMenuItemBatchGrid.Text.Replace(unicodeCheckmark, string.Empty);
+            
             heartBeat = new Heartbeat();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
@@ -1381,35 +1383,35 @@ namespace ShipWorks
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
             // Save the layout
-            settings.WindowLayout = windowLayoutProvider.SerializeLayout();
-            settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
-
-            // Save the filter expand collapse state
-            settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
-            settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
-
-            // Save the last active filter
-            if (gridControl.IsSearchActive)
+            if (currentUiMode == UIMode.Batch)
             {
-                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                settings.WindowLayout = windowLayoutProvider.SerializeLayout();
+                settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
+
+                // Save the filter expand collapse state
+                settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
+                settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
+            
+                // Save the last active filter
+                if (gridControl.IsSearchActive)
                 {
-                    settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
-                    settings.OrderFilterLastActive = 0;
+                    if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                    {
+                        settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
+                        settings.OrderFilterLastActive = 0;
+                    }
+                    else
+                    {
+                        settings.OrderFilterLastActive = searchRestoreFilterNodeID;
+                        settings.CustomerFilterLastActive = 0;
+                    }
                 }
                 else
                 {
-                    settings.OrderFilterLastActive = searchRestoreFilterNodeID;
-                    settings.CustomerFilterLastActive = 0;
+                    settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
+                    settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
                 }
-            }
-            else
-            {
-                settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
-                settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
-            }
 
-            if (currentUiMode == UIMode.Batch)
-            {
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
