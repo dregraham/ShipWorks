@@ -147,7 +147,7 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
 
         ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-        UIMode currentUiMode = UIMode.Batch;
+        UIMode currentUiMode = UIMode.OrderLookup;
         Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
         
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
@@ -1383,35 +1383,35 @@ namespace ShipWorks
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
             // Save the layout
-            settings.WindowLayout = windowLayoutProvider.SerializeLayout();
-            settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
-
-            // Save the filter expand collapse state
-            settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
-            settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
-
-            // Save the last active filter
-            if (gridControl.IsSearchActive)
+            if (currentUiMode == UIMode.Batch)
             {
-                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                settings.WindowLayout = windowLayoutProvider.SerializeLayout();
+                settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
+
+                // Save the filter expand collapse state
+                settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
+                settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
+            
+                // Save the last active filter
+                if (gridControl.IsSearchActive)
                 {
-                    settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
-                    settings.OrderFilterLastActive = 0;
+                    if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                    {
+                        settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
+                        settings.OrderFilterLastActive = 0;
+                    }
+                    else
+                    {
+                        settings.OrderFilterLastActive = searchRestoreFilterNodeID;
+                        settings.CustomerFilterLastActive = 0;
+                    }
                 }
                 else
                 {
-                    settings.OrderFilterLastActive = searchRestoreFilterNodeID;
-                    settings.CustomerFilterLastActive = 0;
+                    settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
+                    settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
                 }
-            }
-            else
-            {
-                settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
-                settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
-            }
 
-            if (currentUiMode == UIMode.Batch)
-            {
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
