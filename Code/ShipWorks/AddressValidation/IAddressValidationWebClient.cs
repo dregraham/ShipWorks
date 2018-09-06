@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
@@ -6,6 +7,7 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Interface for AddressValidationWebClient
     /// </summary>
+    [Service]
     public interface IAddressValidationWebClient
     {
         /// <summary>

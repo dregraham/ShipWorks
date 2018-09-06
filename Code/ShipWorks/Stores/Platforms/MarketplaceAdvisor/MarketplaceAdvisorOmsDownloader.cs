@@ -8,7 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -28,10 +28,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     [Component]
     public class MarketplaceAdvisorOmsDownloader : StoreDownloader, IMarketplaceAdvisorOmsDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsDownloader));
 
         // Download page size
-        const int pageSize = 200;
+        private const int pageSize = 200;
 
         /// <summary>
         /// Constructor

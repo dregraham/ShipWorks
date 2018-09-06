@@ -1,20 +1,20 @@
-﻿using System.Data.SqlClient;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Triggers;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -23,12 +23,10 @@ namespace ShipWorks.ApplicationCore.Services
     /// </summary>
     public static class ServiceStatusManager
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ServiceStatusManager));
-
-        static TableSynchronizer<ServiceStatusEntity> tableSynchronizer;
-        static bool needCheckForChanges = false;
-
-        const string ormConcurrencyExceptionMessage = 
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceStatusManager));
+        private static TableSynchronizer<ServiceStatusEntity> tableSynchronizer;
+        private static bool needCheckForChanges = false;
+        private const string ormConcurrencyExceptionMessage =
             "Another user has recently made changes.\n\n" +
             "Your changes cannot be saved since they would overwrite the other changes.";
 
@@ -104,7 +102,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 if (tableSynchronizer.Synchronize())
                 {
-                    tableSynchronizer.EntityCollection.Sort((int)ServiceStatusFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
+                    tableSynchronizer.EntityCollection.Sort((int) ServiceStatusFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
                 }
 
                 needCheckForChanges = false;
@@ -116,7 +114,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private static void AddMissingComputers()
         {
-            var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int)e.Value).ToArray();
+            var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int) e.Value).ToArray();
             List<ComputerEntity> computers = ComputerManager.Computers;
 
             foreach (ComputerEntity computer in computers)
@@ -134,7 +132,8 @@ namespace ShipWorks.ApplicationCore.Services
 
                     foreach (int serviceType in missingServiceTypes)
                     {
-                        ServiceStatusEntity serviceStatus = new ServiceStatusEntity {
+                        ServiceStatusEntity serviceStatus = new ServiceStatusEntity
+                        {
                             ServiceType = serviceType,
                             ServiceFullName = string.Empty,
                             ServiceDisplayName = string.Empty,
@@ -181,7 +180,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static ServiceStatusEntity GetServiceStatus(long computerID, ShipWorksServiceType serviceType)
         {
-            return ServicesStatuses.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)serviceType);
+            return ServicesStatuses.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int) serviceType);
         }
 
         /// <summary>
@@ -234,6 +233,7 @@ namespace ShipWorks.ApplicationCore.Services
         public static void Stop()
         {
             ServiceStatusEntity serviceStatus = new ServiceStatusEntity(CurrentServiceStatusID)
+                
             {
                 IsNew = false,
                 LastCheckInDateTime = DateTime.UtcNow,
@@ -271,7 +271,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// need to have the ShipWorks service running.</returns>
         public static List<ServiceStatusEntity> GetComputersRequiringShipWorksService()
         {
-            List<ActionEntity> allScheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int)ActionTriggerType.Scheduled).ToList();
+            List<ActionEntity> allScheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int) ActionTriggerType.Scheduled).ToList();
             List<ServiceStatusEntity> allServices = new List<ServiceStatusEntity>(ServiceStatusManager.ServicesStatuses);
 
             List<long> requiredComputerIDs = new List<long>();
@@ -279,7 +279,7 @@ namespace ShipWorks.ApplicationCore.Services
             if (allScheduledActions.Any())
             {
                 // Find the list of required Computers for actions that specify a named list of computers
-                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.List))
+                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int) ComputerLimitedType.List))
                 {
                     if (allServices.Where(s => action.ComputerLimitedList.Contains(s.ComputerID)).All(s => s.GetStatus() != ServiceStatus.Running))
                     {
@@ -288,7 +288,7 @@ namespace ShipWorks.ApplicationCore.Services
                     }
                 }
 
-                if (allScheduledActions.Any(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.None) && allServices.All(s => s.GetStatus() != ServiceStatus.Running))
+                if (allScheduledActions.Any(a => a.Enabled && a.ComputerLimitedType == (int) ComputerLimitedType.None) && allServices.All(s => s.GetStatus() != ServiceStatus.Running))
                 {
                     // When there are scheduled action configured to run on any computer, but there aren't any computers 
                     // running the service, only add the user's computer to the list

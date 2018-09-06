@@ -9,7 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         DownloadOtherLineItems(caOrder);
-                        
+
                         List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
@@ -126,11 +126,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 string nextToken =
                     $"https://api.channeladvisor.com/v1/Orders({caOrder.ID})/Items?$skip={caOrderItems.Count}&$expand=FulfillmentItems";
-                
+
                 ChannelAdvisorOrderItemsResult nextPage = restClient.GetOrderItems(
                     nextToken,
                     refreshToken);
-                
+
                 caOrderItems.AddRange(nextPage.OrderItems);
                 maxItems += 20;
             }
@@ -214,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // Required by order loader
                 order.Store = Store;
-                
+
                 //Order loader loads the order
                 orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 

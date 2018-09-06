@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
@@ -15,11 +15,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// </summary>
     public class EntityBuilder<T> where T : EntityBase2, new()
     {
-        readonly List<Action<T>> actions = new List<Action<T>>();
-        readonly Dictionary<string, object> fieldValues = new Dictionary<string, object>();
-        bool setDefaultValues = true;
-        readonly Func<T> getEntity;
-        bool setValueIfNullable = false;
+        private readonly List<Action<T>> actions = new List<Action<T>>();
+        private readonly Dictionary<string, object> fieldValues = new Dictionary<string, object>();
+        private bool setDefaultValues = true;
+        private readonly Func<T> getEntity;
+        private bool setValueIfNullable = false;
 
         /// <summary>
         /// Constructor

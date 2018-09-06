@@ -11,7 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -25,14 +25,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ProStores)]
     public class ProStoresDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
         private readonly IProStoresWebClient webClient;
 
         // total download count
-        int totalCount = 0;
+        private int totalCount = 0;
 
         // Be optimistic
-        bool isProVersion = true;
+        private bool isProVersion = true;
 
         /// <summary>
         /// Constructor

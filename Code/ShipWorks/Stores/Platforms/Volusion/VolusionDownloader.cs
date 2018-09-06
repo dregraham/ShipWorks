@@ -13,7 +13,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -33,10 +33,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
         // total number of orders to be imported
         // shipping method map
-        VolusionShippingMethods shippingMethods;
+        private VolusionShippingMethods shippingMethods;
 
         // payment method map
-        VolusionPaymentMethods paymentMethods;
+        private VolusionPaymentMethods paymentMethods;
 
         /// <summary>
         /// Constructor

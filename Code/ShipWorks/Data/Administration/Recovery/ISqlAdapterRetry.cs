@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Data.Administration.Retry
+namespace ShipWorks.Data.Administration.Recovery
 {
     /// <summary>
     /// Helper to retry sql commands

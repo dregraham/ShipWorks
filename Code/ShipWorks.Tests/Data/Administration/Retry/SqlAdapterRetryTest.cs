@@ -3,17 +3,17 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using static ShipWorks.Data.Administration.Retry.SqlAdapterRetry;
+using static ShipWorks.Data.Administration.Recovery.SqlAdapterRetry;
 
 namespace ShipWorks.Tests.Data.Administration.Retry
 {
     public class SqlAdapterRetryTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
         private readonly SqlAdapterRetryOptions testOptions;
 
         public SqlAdapterRetryTest()

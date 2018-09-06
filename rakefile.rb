@@ -265,6 +265,28 @@ namespace :test do
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Integration
 	end
+
+	desc "Execute specs"
+	msbuild :specs, [:categoryFilter] do |msbuild, args|
+		# Delete results from any previous test runs
+		DeleteOldTestRuns("specs")
+
+		# We need the specs to run in parallel so that the correct synchronization context gets set.
+		# If they are not run in parallel, some async tests will deadlock
+		msbuild.parameters = "/m:4"
+
+		unless args.categoryFilter.nil? or args.categoryFilter.empty?
+			# We need to filter the tests based on the categories provided
+			msbuild.parameters += " /p:IncludeTraits=\"Category=#{args.categoryFilter}\""
+			print "Category Parameter #{args.categoryFilter}"
+		end
+
+		print "Executing ShipWorks specs...\r\n\r\n"
+
+		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+		msbuild.properties :configuration => :Debug
+		msbuild.targets :Specs
+	end
 end
 
 ########################################################################

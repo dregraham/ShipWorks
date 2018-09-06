@@ -15,7 +15,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static readonly object BusyLock = new object();
 
         // Indicates if the monitor has been started
-        static bool started = false;
+        private static bool started = false;
         // WS returns the names of the packages differently, so create a mapping of WS package type names 
 
         /// <summary>
