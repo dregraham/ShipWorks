@@ -6,6 +6,7 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -13,14 +14,11 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -36,12 +34,12 @@ using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 using ImageType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ImageType;
 using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.NonDeliveryOption;
 using PackageTypeV7 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV7;
+using PaperSizeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PaperSizeV1;
 using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PurchaseStatus;
 using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ResidentialDeliveryIndicatorType;
 using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ServiceType;
 using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.StatusCodes;
 using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.UrlType;
-using PaperSizeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PaperSizeV1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -59,16 +57,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         // Maps USPS usernames to their latest authenticator tokens
-        static readonly Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
 
         // Maps USPS usernames to the object lock used to make sure only one thread is trying to authenticate at a time
-        static readonly Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
 
         // Cleansed address map so we don't do common addresses over and over again
-        static readonly Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
+        private static readonly Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         // Express1 API service connection info
-        static readonly Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
+        private static readonly Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
 
         private readonly ICertificateInspector certificateInspector;
 
@@ -278,8 +276,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        [NDependIgnoreLongMethod]
-        public List<RateResult> GetRates(ShipmentEntity shipment)
+        public (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
@@ -295,91 +292,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             try
             {
-                List<RateResult> rates = new List<RateResult>();
-
-                foreach (RateV14 uspsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
-                {
-                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(ConvertServiceType(uspsRate.ServiceType));
-
-                    RateResult baseRate = null;
-
-                    // If its a rate that has sig\deliv, then you can's select the core rate itself
-                    if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV6.USADC))
-                    {
-                        baseRate = new RateResult(
-                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
-                        {
-                            Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
-                            ShipmentType = ShipmentTypeCode.Express1Usps,
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
-                        };
-                    }
-                    else
-                    {
-                        baseRate = new RateResult(
-                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-                            uspsRate.Amount,
-                            new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                        {
-                            ShipmentType = ShipmentTypeCode.Express1Usps,
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
-                        };
-                    }
-
-                    PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
-
-                    rates.Add(baseRate);
-
-                    // Add a rate for each add-on
-                    foreach (AddOnV6 addOn in uspsRate.AddOns)
-                    {
-                        string name = null;
-                        PostalConfirmationType confirmationType = PostalConfirmationType.None;
-
-                        switch (addOn.AddOnType)
-                        {
-                            case AddOnTypeV6.USADC:
-                                name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.Delivery;
-                                break;
-
-                            case AddOnTypeV6.USASC:
-                                name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.Signature;
-                                break;
-
-                            case AddOnTypeV6.USAASR:
-                                name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.AdultSignatureRequired;
-                                break;
-
-                            case AddOnTypeV6.USAASRD:
-                                name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.AdultSignatureRestricted;
-                                break;
-                        }
-
-                        if (name != null)
-                        {
-                            RateResult addOnRate = new RateResult(
-                                name,
-                                string.Empty,
-                                uspsRate.Amount + addOn.Amount,
-                                new PostalRateSelection(serviceType, confirmationType))
-                            {
-                                ShipmentType = ShipmentTypeCode.Express1Usps
-                            };
-
-                            PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
-
-                            rates.Add(addOnRate);
-                        }
-                    }
-                }
-
-                return rates;
+                return AuthenticationWrapper(() => GetRatesInternal(shipment, account), account)
+                    .Select(uspsRate => UspsUtility.GetPostalServiceType(ConvertServiceType(uspsRate.ServiceType))
+                        .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
+                    .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
+                        (accumulator, x) => x.Match(
+                                rates => (accumulator.rates.Concat(rates), accumulator.errors),
+                                ex => (accumulator.rates, accumulator.errors.Append(ex))));
             }
             catch (UspsApiException ex)
             {
@@ -399,6 +318,96 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 throw;
             }
         }
+
+        /// <summary>
+        /// Build a RateResult from a USPS rate
+        /// </summary>
+        private static IEnumerable<RateResult> BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV14 uspsRate, PostalServiceType serviceType)
+        {
+            RateResult baseRate;
+
+            // If its a rate that has sig\deliv, then you can's select the core rate itself
+            if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV6.USADC))
+            {
+                baseRate = new RateResult(
+                    PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                    PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
+                {
+                    Tag = new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account),
+                    ShipmentType = ShipmentTypeCode.Express1Usps,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
+                };
+            }
+            else
+            {
+                baseRate = new RateResult(
+                    PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                    PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
+                    uspsRate.Amount,
+                    new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
+                {
+                    ShipmentType = ShipmentTypeCode.Express1Usps,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
+                };
+            }
+
+            PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
+
+            return new[] { baseRate }
+                .Concat(AddRatesForAddOns(uspsRate, serviceType, account));
+        }
+
+        /// <summary>
+        /// Iterates through each rate add on and creates a rate for each
+        /// </summary>
+        private static IEnumerable<RateResult> AddRatesForAddOns(RateV14 uspsRate, PostalServiceType serviceType, UspsAccountEntity account) =>
+            uspsRate.AddOns
+                .Select(addOn =>
+                {
+                    string name = null;
+                    PostalConfirmationType confirmationType = PostalConfirmationType.None;
+
+                    switch (addOn.AddOnType)
+                    {
+                        case AddOnTypeV6.USADC:
+                            name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Delivery;
+                            break;
+
+                        case AddOnTypeV6.USASC:
+                            name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Signature;
+                            break;
+
+                        case AddOnTypeV6.USAASR:
+                            name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.AdultSignatureRequired;
+                            break;
+
+                        case AddOnTypeV6.USAASRD:
+                            name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.AdultSignatureRestricted;
+                            break;
+                    }
+
+                    return (Name: name, ConfirmationType: confirmationType, Amount: addOn.Amount);
+                })
+                .Where(x => x.Name != null)
+                .Select(x =>
+                {
+                    RateResult addOnRate = new RateResult(
+                        x.Name,
+                        string.Empty,
+                        uspsRate.Amount + x.Amount,
+                        new UspsPostalRateSelection(serviceType, x.ConfirmationType, account))
+                    {
+                        ShipmentType = ShipmentTypeCode.Express1Usps
+                    };
+
+                    PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
+
+                    return addOnRate;
+                });
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
@@ -587,7 +596,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         public Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             TelemetricResult<UspsLabelResponse> telemetricLabelResponse = null;
-            
+
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
@@ -653,7 +662,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private TelemetricResult<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
-            
+
             Guid uspsGuid = Guid.Empty;
             string tracking = string.Empty;
             string labelUrl = string.Empty;
@@ -800,13 +809,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            UspsLabelResponse uspsLabelResponse =  new UspsLabelResponse
+            UspsLabelResponse uspsLabelResponse = new UspsLabelResponse
             {
                 Shipment = shipment,
                 ImageData = imageData,
                 LabelUrl = labelUrl
             };
-            
+
             telemetricResult.SetValue(uspsLabelResponse);
             return telemetricResult;
         }
