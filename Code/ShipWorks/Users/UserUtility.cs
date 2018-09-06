@@ -217,7 +217,7 @@ namespace ShipWorks.Users
                 TemplateLastSelected = 0,
                 SingleScanSettings = (int) SingleScanSettings.Disabled,
                 AutoWeigh = false,
-                UIMode = UIMode.Batch
+                UIMode = UIMode.Pending
             };
 
             adapter.SaveAndRefetch(settings);
