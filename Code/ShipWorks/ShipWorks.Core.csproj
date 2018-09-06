@@ -8761,6 +8761,12 @@
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\BackgroundUserLoginWorkflow.cs" />
+    <Compile Include="Users\UIModeSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Users\UIModeSelectionControl.Designer.cs">
+      <DependentUpon>UIModeSelectionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
@@ -11162,6 +11168,9 @@
     <EmbeddedResource Include="Users\Logon\UserChangePasswordDlg.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UserChangePasswordDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Users\UIModeSelectionControl.resx">
+      <DependentUpon>UIModeSelectionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Users\UserManagerDlg.resx">
       <SubType>Designer</SubType>
