@@ -1401,9 +1401,12 @@ namespace ShipWorks
                 settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
             }
 
-            // Save the grid column state
-            gridControl.SaveGridColumnState();
-
+            if (currentUserSettings.GetUIMode() == UIMode.Batch)
+            {
+                // Save the grid column state
+                gridControl.SaveGridColumnState();
+            }
+            
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
             {
