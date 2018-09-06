@@ -37,7 +37,7 @@
             // 
             this.orderLookup.AutoSize = true;
             this.orderLookup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.orderLookup.Location = new System.Drawing.Point(24, 20);
+            this.orderLookup.Location = new System.Drawing.Point(13, 16);
             this.orderLookup.Name = "orderLookup";
             this.orderLookup.Size = new System.Drawing.Size(202, 17);
             this.orderLookup.TabIndex = 0;
@@ -49,7 +49,7 @@
             // 
             this.batch.AutoSize = true;
             this.batch.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.batch.Location = new System.Drawing.Point(24, 43);
+            this.batch.Location = new System.Drawing.Point(13, 39);
             this.batch.Name = "batch";
             this.batch.Size = new System.Drawing.Size(172, 17);
             this.batch.TabIndex = 1;
@@ -61,7 +61,7 @@
             // 
             this.uiModeInstructions.AutoSize = true;
             this.uiModeInstructions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiModeInstructions.Location = new System.Drawing.Point(4, 4);
+            this.uiModeInstructions.Location = new System.Drawing.Point(0, 0);
             this.uiModeInstructions.Name = "uiModeInstructions";
             this.uiModeInstructions.Size = new System.Drawing.Size(157, 13);
             this.uiModeInstructions.TabIndex = 2;

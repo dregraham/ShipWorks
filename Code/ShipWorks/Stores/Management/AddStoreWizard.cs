@@ -25,6 +25,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Filters;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
@@ -995,6 +996,7 @@ namespace ShipWorks.Stores.Management
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     SaveStore(adapter);
+                    SaveUIMode(adapter);
 
                     adapter.Commit();
                 }
@@ -1019,6 +1021,19 @@ namespace ShipWorks.Stores.Management
             finally
             {
                 FilterLayoutContext.PopScope();
+            }
+        }
+
+        /// <summary>
+        /// Saves the selected UIMode 
+        /// </summary>
+        private void SaveUIMode(SqlAdapter adapter)
+        {
+            UserSettingsEntity settings = UserSession.User.Settings;
+            if (settings.UIMode == UIMode.Pending)
+            {
+                uiModeSelectionControl.SaveTo(settings);
+                adapter.SaveAndRefetch(settings);
             }
         }
 
@@ -1205,6 +1220,14 @@ namespace ShipWorks.Stores.Management
         private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
+        }
+
+        private void OnSteppingIntoWizardPageUIMode(object sender, WizardSteppingIntoEventArgs e)
+        {
+            if (UserSession.User.Settings.UIMode != UIMode.Pending)
+            {
+                e.Skip = true;
+            }
         }
     }
 }
