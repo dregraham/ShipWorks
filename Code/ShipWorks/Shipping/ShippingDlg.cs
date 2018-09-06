@@ -2330,7 +2330,15 @@ namespace ShipWorks.Shipping
         /// </summary>
         private async void OnProcessAll(object sender, EventArgs e)
         {
-            await Process(FetchShipmentsFromShipmentControl());
+            IEnumerable<ShipmentEntity> shipments = FetchShipmentsFromShipmentControl();
+            
+            //Check how many are in the list and clear if necessary
+            if (shipments.Count() > 1)
+            {
+                rateControl.ClearSelection();
+            }
+
+            await Process(shipments).ConfigureAwait(false);
         }
 
         /// <summary>

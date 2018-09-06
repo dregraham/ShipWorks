@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
             firstServiceStatus.LastStartDateTime = DateTime.Now.Subtract(new TimeSpan(0, 0, 0, 15));
             SqlAdapter.Default.SaveEntity(firstServiceStatus);
 
-            ServiceStatusManager.CheckIn(firstServiceStatus);
+            ServiceStatusManager.CheckIn();
         }
 
         public void Dispose() => context.Dispose();
