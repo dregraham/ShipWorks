@@ -30,6 +30,8 @@ namespace ShipWorks.Users
         {
             this.components = new System.ComponentModel.Container();
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
+            this.uiModeSelectionControl = new ShipWorks.Users.UIModeSelectionControl();
+            this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
             this.panelAccountType = new System.Windows.Forms.Panel();
             this.accountAdmin = new System.Windows.Forms.RadioButton();
             this.accountStandard = new System.Windows.Forms.RadioButton();
@@ -56,9 +58,9 @@ namespace ShipWorks.Users
             this.label1 = new System.Windows.Forms.Label();
             this.iconSetupComplete = new System.Windows.Forms.PictureBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
+            this.label3 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageAccount.SuspendLayout();
             this.panelAccountType.SuspendLayout();
@@ -66,8 +68,8 @@ namespace ShipWorks.Users
             this.menuCopyRightsFrom.SuspendLayout();
             this.panelAdminAllRights.SuspendLayout();
             this.wizardPageComplete.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -103,6 +105,8 @@ namespace ShipWorks.Users
             // 
             // wizardPageAccount
             // 
+            this.wizardPageAccount.Controls.Add(this.label3);
+            this.wizardPageAccount.Controls.Add(this.uiModeSelectionControl);
             this.wizardPageAccount.Controls.Add(this.helpUserEmail);
             this.wizardPageAccount.Controls.Add(this.panelAccountType);
             this.wizardPageAccount.Controls.Add(this.labelAccountType);
@@ -117,13 +121,29 @@ namespace ShipWorks.Users
             this.wizardPageAccount.Controls.Add(this.label9);
             this.wizardPageAccount.Description = "Setup the account details of the new user.";
             this.wizardPageAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccount.Name = "wizardPageAccount";
             this.wizardPageAccount.Size = new System.Drawing.Size(481, 339);
             this.wizardPageAccount.TabIndex = 0;
             this.wizardPageAccount.Title = "Add New User";
             this.wizardPageAccount.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountPage);
+            // 
+            // uiModeSelectionControl
+            // 
+            this.uiModeSelectionControl.Location = new System.Drawing.Point(24, 239);
+            this.uiModeSelectionControl.Name = "uiModeSelectionControl";
+            this.uiModeSelectionControl.Size = new System.Drawing.Size(235, 56);
+            this.uiModeSelectionControl.TabIndex = 190;
+            // 
+            // helpUserEmail
+            // 
+            this.helpUserEmail.Caption = "The email address will be used to send the user a new password if its forgotten.";
+            this.helpUserEmail.Location = new System.Drawing.Point(373, 62);
+            this.helpUserEmail.Name = "helpUserEmail";
+            this.helpUserEmail.Size = new System.Drawing.Size(12, 12);
+            this.helpUserEmail.TabIndex = 189;
+            this.helpUserEmail.Title = "Email Address";
             // 
             // panelAccountType
             // 
@@ -159,7 +179,7 @@ namespace ShipWorks.Users
             // labelAccountType
             // 
             this.labelAccountType.AutoSize = true;
-            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAccountType.Location = new System.Drawing.Point(21, 150);
             this.labelAccountType.Name = "labelAccountType";
             this.labelAccountType.Size = new System.Drawing.Size(84, 13);
@@ -169,7 +189,7 @@ namespace ShipWorks.Users
             // labelUserAccount
             // 
             this.labelUserAccount.AutoSize = true;
-            this.labelUserAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelUserAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUserAccount.Location = new System.Drawing.Point(21, 8);
             this.labelUserAccount.Name = "labelUserAccount";
             this.labelUserAccount.Size = new System.Drawing.Size(82, 13);
@@ -253,7 +273,7 @@ namespace ShipWorks.Users
             this.wizardPageRights.Controls.Add(this.permissionEditor);
             this.wizardPageRights.Description = "Configure what rights the user has when using ShipWorks.";
             this.wizardPageRights.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageRights.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageRights.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageRights.Location = new System.Drawing.Point(0, 0);
             this.wizardPageRights.Name = "wizardPageRights";
             this.wizardPageRights.Size = new System.Drawing.Size(481, 339);
@@ -264,7 +284,7 @@ namespace ShipWorks.Users
             // 
             // copyRightsFrom
             // 
-            this.copyRightsFrom.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.copyRightsFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.copyRightsFrom.AutoSize = true;
             this.copyRightsFrom.ContextMenuStrip = this.menuCopyRightsFrom;
             this.copyRightsFrom.Image = global::ShipWorks.Properties.Resources.id_card;
@@ -326,13 +346,13 @@ namespace ShipWorks.Users
             // 
             // permissionEditor
             // 
-            this.permissionEditor.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.permissionEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.permissionEditor.AutoScroll = true;
             this.permissionEditor.BackColor = System.Drawing.Color.White;
             this.permissionEditor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.permissionEditor.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.permissionEditor.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.permissionEditor.Location = new System.Drawing.Point(23, 7);
             this.permissionEditor.Name = "permissionEditor";
             this.permissionEditor.Size = new System.Drawing.Size(433, 300);
@@ -344,7 +364,7 @@ namespace ShipWorks.Users
             this.wizardPageComplete.Controls.Add(this.iconSetupComplete);
             this.wizardPageComplete.Description = "The user has been added to ShipWorks.";
             this.wizardPageComplete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageComplete.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageComplete.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageComplete.Location = new System.Drawing.Point(0, 0);
             this.wizardPageComplete.Name = "wizardPageComplete";
             this.wizardPageComplete.Size = new System.Drawing.Size(481, 339);
@@ -370,14 +390,15 @@ namespace ShipWorks.Users
             this.iconSetupComplete.TabIndex = 3;
             this.iconSetupComplete.TabStop = false;
             // 
-            // helpUserEmail
+            // label3
             // 
-            this.helpUserEmail.Caption = "The email address will be used to send the user a new password if its forgotten.";
-            this.helpUserEmail.Location = new System.Drawing.Point(373, 62);
-            this.helpUserEmail.Name = "helpUserEmail";
-            this.helpUserEmail.Size = new System.Drawing.Size(12, 12);
-            this.helpUserEmail.TabIndex = 189;
-            this.helpUserEmail.Title = "Email Address";
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(25, 224);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.TabIndex = 191;
+            this.label3.Text = "UI Mode";
             // 
             // AddUserWizard
             // 
@@ -385,6 +406,7 @@ namespace ShipWorks.Users
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 446);
             this.Name = "AddUserWizard";
+            this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageAccount,
             this.wizardPageRights,
@@ -398,7 +420,7 @@ namespace ShipWorks.Users
             this.Controls.SetChildIndex(this.mainPanel, 0);
             this.Controls.SetChildIndex(this.etchBottom, 0);
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageAccount.ResumeLayout(false);
@@ -412,8 +434,8 @@ namespace ShipWorks.Users
             this.panelAdminAllRights.PerformLayout();
             this.wizardPageComplete.ResumeLayout(false);
             this.wizardPageComplete.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -448,5 +470,7 @@ namespace ShipWorks.Users
         private System.Windows.Forms.ToolStripMenuItem asdfToolStripMenuItem1;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip helpUserEmail;
+        private UIModeSelectionControl uiModeSelectionControl;
+        private System.Windows.Forms.Label label3;
     }
 }

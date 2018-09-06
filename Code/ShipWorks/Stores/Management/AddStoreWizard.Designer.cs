@@ -77,6 +77,7 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
             this.wizardPageUIMode = new ShipWorks.UI.Wizard.WizardPage();
+            this.uiModeInstructions = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.uiModeSelectionControl = new ShipWorks.Users.UIModeSelectionControl();
             this.mainPanel.SuspendLayout();
@@ -640,6 +641,7 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageUIMode
             // 
+            this.wizardPageUIMode.Controls.Add(this.uiModeInstructions);
             this.wizardPageUIMode.Controls.Add(this.label4);
             this.wizardPageUIMode.Controls.Add(this.uiModeSelectionControl);
             this.wizardPageUIMode.Description = "Enter how you plan on using Shipworks.";
@@ -651,6 +653,16 @@ namespace ShipWorks.Stores.Management
             this.wizardPageUIMode.TabIndex = 0;
             this.wizardPageUIMode.Title = "ShipWorks Setup";
             this.wizardPageUIMode.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageUIMode);
+            // 
+            // uiModeInstructions
+            // 
+            this.uiModeInstructions.AutoSize = true;
+            this.uiModeInstructions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiModeInstructions.Location = new System.Drawing.Point(20, 11);
+            this.uiModeInstructions.Name = "uiModeInstructions";
+            this.uiModeInstructions.Size = new System.Drawing.Size(157, 13);
+            this.uiModeInstructions.TabIndex = 3;
+            this.uiModeInstructions.Text = "How do you prefer to ship?";
             // 
             // label4
             // 
@@ -664,9 +676,9 @@ namespace ShipWorks.Stores.Management
             // 
             // uiModeSelectionControl
             // 
-            this.uiModeSelectionControl.Location = new System.Drawing.Point(27, 11);
+            this.uiModeSelectionControl.Location = new System.Drawing.Point(23, 27);
             this.uiModeSelectionControl.Name = "uiModeSelectionControl";
-            this.uiModeSelectionControl.Size = new System.Drawing.Size(235, 81);
+            this.uiModeSelectionControl.Size = new System.Drawing.Size(235, 49);
             this.uiModeSelectionControl.TabIndex = 0;
             // 
             // AddStoreWizard
@@ -780,5 +792,6 @@ namespace ShipWorks.Stores.Management
         private UI.Wizard.WizardPage wizardPageUIMode;
         private Users.UIModeSelectionControl uiModeSelectionControl;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label uiModeInstructions;
     }
 }
