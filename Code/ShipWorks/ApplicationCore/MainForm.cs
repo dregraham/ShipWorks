@@ -149,6 +149,8 @@ namespace ShipWorks
         ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
         UIMode currentUiMode = UIMode.Batch;
         Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+        
+        private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
         /// Constructor
@@ -865,9 +867,9 @@ namespace ShipWorks
         {
             panelDockingArea.Controls.Remove(orderLookupControl);
 
-            mainMenuItemOrderLookup.Checked = false;
-            mainMenuItemBatchGrid.Checked = true;
-
+            mainMenuItemBatchGrid.Text += unicodeCheckmark;
+            mainMenuItemOrderLookup.Text = mainMenuItemOrderLookup.Text.Replace(unicodeCheckmark, string.Empty);
+            
             heartBeat = new UIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
@@ -902,12 +904,12 @@ namespace ShipWorks
 
         /// <summary>
         /// Switch from batch to order lookup mode
-        /// </summary>
+        /// </summary> 
         private void ToggleOrderLookupMode()
         {
-            mainMenuItemOrderLookup.Checked = true;
-            mainMenuItemBatchGrid.Checked = false;
-
+            mainMenuItemOrderLookup.Text += unicodeCheckmark;
+            mainMenuItemBatchGrid.Text = mainMenuItemBatchGrid.Text.Replace(unicodeCheckmark, string.Empty);
+            
             heartBeat = new Heartbeat();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
