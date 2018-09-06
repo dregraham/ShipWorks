@@ -147,6 +147,7 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
 
         ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
+        UIMode currentUiMode = UIMode.Batch;
         Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
 
         /// <summary>
@@ -806,7 +807,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowBatchView(object sender, EventArgs e)
         {
-            if (currentUserSettings.GetUIMode() != UIMode.Batch)
+            if (currentUiMode != UIMode.Batch)
             {
                 ChangeUIMode(UIMode.Batch);
             }
@@ -817,7 +818,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowOrderLookupView(object sender, EventArgs e)
         {
-            if (currentUserSettings.GetUIMode() != UIMode.OrderLookup)
+            if (currentUiMode != UIMode.OrderLookup)
             {
                 // Save the current layout just in case the user made changes to it
                 SaveCurrentUserSettings();
@@ -893,6 +894,8 @@ namespace ShipWorks
 
             // Select the active filter
             SelectInitialFilter(user.Settings);
+
+            currentUiMode = UIMode.Batch;
         }
 
         /// <summary>
@@ -921,6 +924,8 @@ namespace ShipWorks
 
             panelDockingArea.Controls.Add(orderLookupControl);
             orderLookupControl.BringToFront();
+
+            currentUiMode = UIMode.OrderLookup;
         }
 
         /// <summary>
@@ -1401,7 +1406,7 @@ namespace ShipWorks
                 settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
             }
 
-            if (currentUserSettings.GetUIMode() == UIMode.Batch)
+            if (currentUiMode == UIMode.Batch)
             {
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
@@ -2373,7 +2378,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn && currentUserSettings.GetUIMode() == UIMode.Batch)
+            if (UserSession.IsLoggedOn && currentUiMode == UIMode.Batch)
             {
                 gridControl.SaveGridColumnState();
             }
@@ -2395,7 +2400,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn && currentUserSettings.GetUIMode() == UIMode.Batch)
+            if (UserSession.IsLoggedOn && currentUiMode == UIMode.Batch)
             {
                 gridControl.ReloadGridColumns();
             }
