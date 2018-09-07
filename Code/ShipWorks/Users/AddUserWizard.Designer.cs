@@ -30,6 +30,7 @@ namespace ShipWorks.Users
         {
             this.components = new System.ComponentModel.Container();
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.uiModeSelectionControl = new ShipWorks.Users.UIModeSelectionControl();
             this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
             this.panelAccountType = new System.Windows.Forms.Panel();
@@ -58,7 +59,6 @@ namespace ShipWorks.Users
             this.label1 = new System.Windows.Forms.Label();
             this.iconSetupComplete = new System.Windows.Forms.PictureBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.label3 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -129,9 +129,19 @@ namespace ShipWorks.Users
             this.wizardPageAccount.Title = "Add New User";
             this.wizardPageAccount.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountPage);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(21, 224);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.TabIndex = 191;
+            this.label3.Text = "UI Mode";
+            // 
             // uiModeSelectionControl
             // 
-            this.uiModeSelectionControl.Location = new System.Drawing.Point(24, 239);
+            this.uiModeSelectionControl.Location = new System.Drawing.Point(32, 239);
             this.uiModeSelectionControl.Name = "uiModeSelectionControl";
             this.uiModeSelectionControl.Size = new System.Drawing.Size(235, 56);
             this.uiModeSelectionControl.TabIndex = 190;
@@ -389,16 +399,6 @@ namespace ShipWorks.Users
             this.iconSetupComplete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.iconSetupComplete.TabIndex = 3;
             this.iconSetupComplete.TabStop = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(25, 224);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
-            this.label3.TabIndex = 191;
-            this.label3.Text = "UI Mode";
             // 
             // AddUserWizard
             // 
