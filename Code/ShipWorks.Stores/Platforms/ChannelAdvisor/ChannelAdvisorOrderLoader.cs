@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
@@ -200,6 +201,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         itemToSave.DistributionCenter = channelAdvisorDistributionCenter.Code;
                         itemToSave.DistributionCenterName = channelAdvisorDistributionCenter.Name;
+                        itemToSave.IsFBA = channelAdvisorDistributionCenter.IsExternallyManaged;
                     }
                 }
             }
@@ -426,15 +428,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private static void LoadRequestedShippingAndPrimeStatus(ChannelAdvisorOrderEntity orderToSave,
             ChannelAdvisorOrder downloadedOrder)
         {
-            string carrier = downloadedOrder.Fulfillments.FirstOrDefault()?.ShippingCarrier;
-            string shippingClass = downloadedOrder.Fulfillments.FirstOrDefault()?.ShippingClass;
+            ChannelAdvisorFulfillment fulfillment = downloadedOrder.Fulfillments.FirstOrDefault();
+            string carrier = fulfillment?.ShippingCarrier;
+            string shippingClass = fulfillment?.ShippingClass;
 
             if (!string.IsNullOrEmpty(carrier) || !string.IsNullOrEmpty(shippingClass))
             {
                 orderToSave.RequestedShipping = $"{carrier} - {shippingClass}";
             }
 
-            orderToSave.IsPrime = (int) ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
+            orderToSave.IsPrime = (int) ChannelAdvisorHelper.GetIsPrime(fulfillment?.ShippingClass, fulfillment?.ShippingCarrier);
         }
 
         /// <summary>

@@ -24,6 +24,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         ShipmentEntity OriginalShipment { get; }
 
         /// <summary>
+        /// Shipment that should be sent to Tango
+        /// </summary>
+        ShipmentEntity ShipmentForTango { get; }
+
+        /// <summary>
         /// The store associated with the shipment
         /// </summary>
         StoreEntity Store { get; }

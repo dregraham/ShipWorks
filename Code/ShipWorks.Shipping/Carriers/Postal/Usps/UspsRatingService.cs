@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Gets rates for the given shipment
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment) => GetRates(shipment, null);
-        
+
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
@@ -93,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Get rates includes Express1 rates if specified
         /// </summary>
@@ -227,7 +228,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 List<RateGroup> rateGroupsToConsolidate = null;
 
-                if (telemetricResult!=null)
+                if (telemetricResult != null)
                 {
                     telemetricResult.RunTimedEvent(TelemetricEventType.GetRates,
                         () => rateGroupsToConsolidate = GetRateGroupsForAllAccounts(shipment, uspsAccounts));
@@ -289,21 +290,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment,
             TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
-            List<RateResult> uspsRates = null;
-            
-            if (telemetricResult!=null)
-            {
-                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, ()=>uspsRates = CreateWebClient().GetRates(shipment));
-            }
-            else
-            {
-                uspsRates = CreateWebClient().GetRates(shipment);
-            }
-            
-            uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode.Usps);
+            var results = telemetricResult != null ?
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => CreateWebClient().GetRates(shipment)) :
+                CreateWebClient().GetRates(shipment);
 
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, uspsRates));
+            var rates = results.rates
+                .ForEach(r => r.ShipmentType = ShipmentTypeCode.Usps)
+                .ToList();
+
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rates));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
+
+            foreach (var error in results.errors)
+            {
+                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Usps, error));
+            }
 
             return rateGroup;
         }

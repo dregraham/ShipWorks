@@ -196,9 +196,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             switch (type)
             {
-                case ShipmentTypeCode.Other:
-                    return GetOtherShipmentClassCode(shipment);
-
                 case ShipmentTypeCode.iParcel:
                     return GetIParcelShipmentClassCode(shipment);
 
@@ -222,12 +219,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             return "NONE";
         }
-
-        /// <summary>
-        /// Gets the other shipment class code.
-        /// </summary>
-        private static string GetOtherShipmentClassCode(ShipmentEntity shipment) =>
-            shipment.Other.Service;
 
         /// <summary>
         /// Gets the i parcel shipment class code.
@@ -506,7 +497,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                     if (ShipmentTypeManager.IsDhl(service))
                     {
-                        return "DHL";
+                        return "DHL Global Mail";
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
                     {
@@ -522,6 +513,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.iParcel:
                     return "i-Parcel";
+                
+                case ShipmentTypeCode.DhlExpress:
+                    return "DHL EXPRESS";
 
                 case ShipmentTypeCode.Other:
                     return shipment.Other.Carrier;
