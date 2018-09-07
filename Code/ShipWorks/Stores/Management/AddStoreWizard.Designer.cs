@@ -644,7 +644,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageUIMode.Controls.Add(this.uiModeInstructions);
             this.wizardPageUIMode.Controls.Add(this.label4);
             this.wizardPageUIMode.Controls.Add(this.uiModeSelectionControl);
-            this.wizardPageUIMode.Description = "Enter how you plan on using Shipworks.";
+            this.wizardPageUIMode.Description = "Enter how you plan on using ShipWorks.";
             this.wizardPageUIMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageUIMode.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageUIMode.Location = new System.Drawing.Point(0, 0);
