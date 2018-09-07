@@ -1030,6 +1030,9 @@ namespace ShipWorks.Stores.Management
         private void SaveUIMode(SqlAdapter adapter)
         {
             UserSettingsEntity settings = UserSession.User.Settings;
+
+            // The only time the user will be presented with the uiModeSelectionControl is
+            // when the user is first created signified by UIMode being set to Pending.
             if (settings.UIMode == UIMode.Pending)
             {
                 uiModeSelectionControl.SaveTo(settings);
@@ -1222,6 +1225,10 @@ namespace ShipWorks.Stores.Management
             WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
         }
 
+        /// <summary>
+        /// The only time the user will be presented with the uiModeSelectionControl is
+        /// when the user is first created signified by UIMode being set to Pending.
+        /// </summary>
         private void OnSteppingIntoWizardPageUIMode(object sender, WizardSteppingIntoEventArgs e)
         {
             if (UserSession.User.Settings.UIMode != UIMode.Pending)

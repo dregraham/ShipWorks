@@ -121,6 +121,7 @@ namespace ShipWorks
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
     {
+        
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -159,6 +160,7 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
+            
             InitializeComponent();
 
             foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
