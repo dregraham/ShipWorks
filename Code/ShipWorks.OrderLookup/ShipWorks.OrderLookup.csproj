@@ -71,6 +71,7 @@
     <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="OrderFoundMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +86,10 @@
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
       <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
+      <Name>ShipWorks.Data.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
