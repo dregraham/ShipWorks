@@ -88,8 +88,10 @@
     <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="IOrderLookupService.cs" />
     <Compile Include="OrderFoundMessage.cs" />
     <Compile Include="OrderLookupDataService.cs" />
+    <Compile Include="OrderLookupService.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Controls\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
