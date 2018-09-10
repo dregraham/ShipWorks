@@ -12,7 +12,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Data service for the order lookup UI Mode
     /// </summary>
-    public class OrderLookupDataService : IInitializeForCurrentUISession, INotifyPropertyChanged
+    public class OrderLookupDataService : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupDataService
     {
         private readonly IMessenger messenger;
         private IDisposable subscription;
