@@ -33,5 +33,12 @@ namespace ShipWorks.OrderLookup.Tests
             
             Assert.Equal(order, testObject.Order);
         }
+
+        [Fact]
+        public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
+        {
+            OrderLookupDataService testObject = mock.Create<OrderLookupDataService>();
+            Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
+        }
     }
 }
