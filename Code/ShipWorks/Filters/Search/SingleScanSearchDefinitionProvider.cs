@@ -24,6 +24,19 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         public FilterDefinition GetDefinition(string quickSearchString)
         {
+            Condition condition = GetCondition(quickSearchString);
+
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
+            definition.RootContainer.FirstGroup.Conditions.Add(condition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Gets the search condition
+        /// </summary>
+        private Condition GetCondition(string quickSearchString)
+        {
             Condition condition;
             if (singleScanShortcut.AppliesTo(quickSearchString))
             {
@@ -39,10 +52,7 @@ namespace ShipWorks.Filters.Search
                 condition = new SingleScanSearchCondition(quickSearchString);
             }
 
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
-            definition.RootContainer.FirstGroup.Conditions.Add(condition);
-
-            return definition;
+            return condition;
         }
     }
 }

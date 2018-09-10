@@ -20,6 +20,7 @@ namespace ShipWorks.Users
         private readonly IUserSession userSession;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private UIMode? uiMode;
 
         /// <summary>
         /// Constructor
@@ -122,15 +123,16 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Returns the UIMode of the current user
+        /// Returns the local UIMode of the current user
         /// </summary>
-        public UIMode GetUIMode() => userSession.Settings.UIMode;
+        public UIMode GetUIMode() => uiMode ?? userSession.Settings.UIMode;
 
         /// <summary>
         /// Sets the UIMode for the current user
         /// </summary>
         public void SetUIMode(UIMode uiMode)
         {
+            this.uiMode = uiMode;
             userSession.User.Settings.UIMode = uiMode;
 
             // Save the settings
