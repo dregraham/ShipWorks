@@ -7,9 +7,9 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Order was found via OrderLookup
     /// </summary>
-    public struct OrderFoundMessage : IShipWorksMessage
+    public struct OrderLookupSingleScanMessage : IShipWorksMessage
     {
-        public OrderFoundMessage(object sender, OrderEntity order)
+        public OrderLookupSingleScanMessage(object sender, OrderEntity order)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;

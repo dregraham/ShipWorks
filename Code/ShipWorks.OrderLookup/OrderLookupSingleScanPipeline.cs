@@ -56,7 +56,7 @@ namespace ShipWorks.OrderLookup
         {
             if (!(order?.IsNew ?? false))
             {
-                messenger.Send(new OrderFoundMessage(this, order));
+                messenger.Send(new OrderLookupSingleScanMessage(this, order));
             }
         }
 
