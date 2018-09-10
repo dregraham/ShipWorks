@@ -79,6 +79,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\OrderLookupControl.xaml.cs">
+      <DependentUpon>OrderLookupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -133,6 +136,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\OrderLookupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OrderLookupSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
