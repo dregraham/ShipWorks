@@ -54,6 +54,9 @@
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -79,24 +82,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\OrderLookupControl.xaml.cs">
-      <DependentUpon>OrderLookupControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OrderLookupControl\OrderLookupControl.xaml.cs">
+      <DependentUpon>OrderLookupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
+      <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IOrderLookupDataService.cs" />
+    <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupService.cs" />
     <Compile Include="OrderLookupSingleScanMessage.cs" />
     <Compile Include="OrderLookupDataService.cs" />
     <Compile Include="OrderLookupService.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
-    <Compile Include="Controls\OrderLookupSearchControl.xaml.cs">
-      <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,11 +143,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\OrderLookupControl.xaml">
+    <Page Include="Controls\OrderLookupControl\OrderLookupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookupSearchControl.xaml">
+    <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,6 +156,10 @@
     <Resource Include="RobotoFontLicense.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\OrderLookupControl\" />
+    <Folder Include="Controls\OrderLookupSearchControl\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
