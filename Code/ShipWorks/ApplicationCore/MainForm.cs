@@ -121,6 +121,7 @@ namespace ShipWorks
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
     {
+        
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -159,6 +160,7 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
+            
             InitializeComponent();
 
             foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
@@ -861,14 +863,27 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Update the UI mode check boxes
+        /// </summary>
+        private void ToggleUiModeCheckbox(UIMode currentMode)
+        {
+            mainMenuItemBatchGrid.Text = currentMode == UIMode.Batch ?
+                $"{mainMenuItemBatchGrid.Text}{unicodeCheckmark}" :
+                mainMenuItemBatchGrid.Text.Replace(unicodeCheckmark, string.Empty);
+
+            mainMenuItemOrderLookup.Text = currentMode == UIMode.OrderLookup ?
+                $"{mainMenuItemOrderLookup.Text}{unicodeCheckmark}" :
+                mainMenuItemOrderLookup.Text.Replace(unicodeCheckmark, string.Empty);
+        }
+
+        /// <summary>
         /// Switch from order lookup to batch mode
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
             panelDockingArea.Controls.Remove(orderLookupControl);
 
-            mainMenuItemBatchGrid.Text += unicodeCheckmark;
-            mainMenuItemOrderLookup.Text = mainMenuItemOrderLookup.Text.Replace(unicodeCheckmark, string.Empty);
+            ToggleUiModeCheckbox(UIMode.Batch);
             
             heartBeat = new UIHeartbeat(this);
 
@@ -907,8 +922,7 @@ namespace ShipWorks
         /// </summary> 
         private void ToggleOrderLookupMode()
         {
-            mainMenuItemOrderLookup.Text += unicodeCheckmark;
-            mainMenuItemBatchGrid.Text = mainMenuItemBatchGrid.Text.Replace(unicodeCheckmark, string.Empty);
+            ToggleUiModeCheckbox(UIMode.OrderLookup);
             
             heartBeat = new Heartbeat();
 

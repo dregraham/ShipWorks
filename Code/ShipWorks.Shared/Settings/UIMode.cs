@@ -13,6 +13,9 @@ namespace ShipWorks.Settings
         Batch = 0,
         
         [Description("Order Lookup Mode")]
-        OrderLookup = 1
+        OrderLookup = 1,
+        
+        [Description("Pending")]
+        Pending = 2
     }
 }
