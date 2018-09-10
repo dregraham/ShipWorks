@@ -8,12 +8,12 @@ namespace ShipWorks.OrderLookup.Controls
     /// Control to look up orders for single scan mode
     /// </summary>
     [Component]
-    public partial class OrderLookupControl : UserControl, IOrderLookup
+    public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControl()
+        public OrderLookupControlHost()
         {
             InitializeComponent();
         }

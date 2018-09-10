@@ -65,11 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\OrderLookupControl.cs">
+    <Compile Include="Controls\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OrderLookupControl.Designer.cs">
-      <DependentUpon>OrderLookupControl.cs</DependentUpon>
+    <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
+      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,8 +77,8 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\OrderLookupControl.resx">
-      <DependentUpon>OrderLookupControl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\OrderLookupControlHost.resx">
+      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

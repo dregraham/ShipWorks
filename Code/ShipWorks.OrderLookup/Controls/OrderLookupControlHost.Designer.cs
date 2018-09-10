@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.OrderLookup.Controls
 {
-    partial class OrderLookupControl
+    partial class OrderLookupControlHost
     {
         /// <summary> 
         /// Required designer variable.

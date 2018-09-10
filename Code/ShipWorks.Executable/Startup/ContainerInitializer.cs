@@ -99,7 +99,7 @@ namespace ShipWorks.Startup
             // ShipWorks.Data.Model
             typeof(CommonEntityBase).Assembly,
             // ShipWorks.OrderLookup
-            typeof(OrderLookupControl).Assembly
+            typeof(OrderLookupControlHost).Assembly
         };
     }
 }
