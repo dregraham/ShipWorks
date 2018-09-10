@@ -29,7 +29,7 @@ namespace ShipWorks.OrderLookup.Tests
             testObject.InitializeForCurrentSession();
 
             OrderEntity order = new OrderEntity();
-            testMessenger.Send(new OrderFoundMessage(this, order));
+            testMessenger.Send(new OrderLookupSingleScanMessage(this, order));
             
             Assert.Equal(order, testObject.Order);
         }

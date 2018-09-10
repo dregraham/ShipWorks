@@ -64,7 +64,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            subscription = messenger.OfType<OrderFoundMessage>()
+            subscription = messenger.OfType<OrderLookupSingleScanMessage>()
                 .Subscribe(x => Order = x.Order);
         }
     }
