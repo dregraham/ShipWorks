@@ -81,6 +81,7 @@
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="OrderFoundMessage.cs" />
+    <Compile Include="OrderLookupDataService.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
