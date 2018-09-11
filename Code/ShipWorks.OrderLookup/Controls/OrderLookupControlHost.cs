@@ -24,6 +24,9 @@ namespace ShipWorks.OrderLookup.Controls
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Set the element host on load
+        /// </summary>
         protected override void OnLoad(EventArgs e)
         {
             Dock = DockStyle.Fill;
@@ -39,7 +42,7 @@ namespace ShipWorks.OrderLookup.Controls
                 }
             };
 
-            this.Controls.Add(host);
+            Controls.Add(host);
         }
 
         /// <summary>
