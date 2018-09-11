@@ -82,7 +82,7 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public async Task InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
+        public void InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
         {
             OrderEntity order = new OrderEntity() { IsNew = false };
             orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
@@ -91,7 +91,6 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler.Start();
             
-
             Assert.Equal(order, testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
         }
 
