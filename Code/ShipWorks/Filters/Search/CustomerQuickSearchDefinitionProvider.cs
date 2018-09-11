@@ -9,8 +9,14 @@ using ShipWorks.Filters.Content.Conditions.Special;
 
 namespace ShipWorks.Filters.Search
 {
+    /// <summary>
+    /// Definition provider for Customer quick search
+    /// </summary>
     public class CustomerQuickSearchDefinitionProvider : ISearchDefinitionProvider
     {
+        /// <summary>
+        /// Gets the quick search definition
+        /// </summary>
         public IFilterDefinition GetDefinition(string quickSearchString)
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Customers);

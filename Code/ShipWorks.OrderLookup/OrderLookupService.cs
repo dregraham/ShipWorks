@@ -42,26 +42,21 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task<OrderEntity> FindOrder(string scanMsgScannedText)
         {
-            // Download order from store database when applicable
-            await DownloadOrderOnDemand(scanMsgScannedText);
+            await DownloadOrderOnDemand(scanMsgScannedText).ConfigureAwait(false);
 
-            // Get the orderID of the scanned order
             long? orderId = FetchOrderId(scanMsgScannedText);
 
-            // Download the order
-            OrderEntity order = FetchOrder(orderId);
-
-            return order;
+            return FetchOrder(orderId);
         }
         
         /// <summary>
         /// Downloads order from customer's database
         /// </summary>
-        private async Task DownloadOrderOnDemand(string scanMsgScannedText)
+        private Task DownloadOrderOnDemand(string scanMsgScannedText)
         {
             // Downloads the order if needed
             IOnDemandDownloader singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
-            await singleScanOnDemandDownloader.Download(scanMsgScannedText);
+            return singleScanOnDemandDownloader.Download(scanMsgScannedText);
         }
 
         /// <summary>
@@ -70,10 +65,6 @@ namespace ShipWorks.OrderLookup
         private long? FetchOrderId(string scannedText)
         {
             string sql = GenerateSql(scannedText);
-            if (string.IsNullOrEmpty(sql))
-            {
-                return null;
-            }
 
             long? orderId = null;
             using (IDbConnection sqlConnection = sqlSession.OpenConnection())
