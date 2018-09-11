@@ -32,6 +32,11 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                 .Setup(x => x.FetchReadOnly())
                 .Returns(configuration);
 
+            Mock<DbConnection> dbConnection = mock.CreateMock<DbConnection>();
+            mock.Mock<ISqlSession>()
+                .Setup(s => s.OpenConnection())
+                .Returns(dbConnection.Object);
+
             testObject = mock.Create<OrderArchiveFilterRegenerator>();
         }
 

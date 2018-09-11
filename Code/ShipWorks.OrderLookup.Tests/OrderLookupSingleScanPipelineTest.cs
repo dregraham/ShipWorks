@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
+using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -19,22 +22,29 @@ namespace ShipWorks.OrderLookup.Tests
     public class OrderLookupSingleScanPipelineTest
     {
         private readonly AutoMock mock;
-        TestMessenger testMessenger;
+        readonly TestMessenger testMessenger;
         private readonly Mock<IOrderLookupService> orderLookupService;
         private readonly Mock<IMainForm> mainForm;
         private readonly Mock<ICurrentUserSettings> currentUserSettings;
         private readonly OrderLookupSingleScanPipeline testObject;
+        private readonly TestScheduler scheduler;
 
         public OrderLookupSingleScanPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
+            testMessenger = new TestMessenger();
+            mock.Provide<IMessenger>(testMessenger);
+
+            Mock<ISchedulerProvider> scheduleProvider = mock.WithMockImmediateScheduler();
+
+            scheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.Default).Returns(scheduler);
+
+
             orderLookupService = mock.Mock<IOrderLookupService>();
             mainForm = mock.Mock<IMainForm>();
             currentUserSettings = mock.Mock<ICurrentUserSettings>();
-
-            testMessenger = new TestMessenger();
-            mock.Provide<IMessenger>(testMessenger);
 
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
             currentUserSettings.Setup(u => u.GetUIMode()).Returns(UIMode.OrderLookup);
@@ -72,30 +82,27 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
+        public async Task InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
         {
-            testMessenger = new TestMessenger();
-
             OrderEntity order = new OrderEntity() { IsNew = false };
             orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
+            scheduler.Start();
+            
 
             Assert.Equal(order, testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
         }
 
         [Fact]
-        public void InitializeForCurentSession_DoesNotSendOrderLookupSingleScanMessageFromOrderLookupService_WhenOrderIsNew()
+        public void InitializeForCurentSession_DoesNotSendOrderLookupSingleScanMessageFromOrderLookupService_WhenOrderIsNull()
         {
-            testMessenger = new TestMessenger();
-
-            OrderEntity order = new OrderEntity() { IsNew = true };
-            orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
+            orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync((OrderEntity) null);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            Assert.Empty(testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>());
+            Assert.Null(testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
         }
     }
 }
