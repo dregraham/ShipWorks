@@ -9,6 +9,9 @@ namespace ShipWorks.OrderLookup
     /// </summary>
     public struct OrderLookupSingleScanMessage : IShipWorksMessage
     {
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public OrderLookupSingleScanMessage(object sender, OrderEntity order)
         {
             MessageId = Guid.NewGuid();
@@ -30,6 +33,5 @@ namespace ShipWorks.OrderLookup
         /// Order that was found
         /// </summary>
         public OrderEntity Order { get; }
-
     }
 }

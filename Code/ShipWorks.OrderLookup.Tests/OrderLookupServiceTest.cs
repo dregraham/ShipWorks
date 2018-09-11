@@ -32,9 +32,9 @@ namespace ShipWorks.OrderLookup.Tests
                 .Setup(d => d.GenerateRootSql(FilterTarget.Orders))
                 .Returns("GeneratedSql");
 
-            Mock<ISearchDefinitionProvider> searchDefinitionProvider = mock.FromFactory<ISearchDefinitionProviderFactory>()
+            Mock<ISearchDefinitionProvider> searchDefinitionProvider = mock
+                .FromFactory<ISearchDefinitionProviderFactory>()
                 .Mock(m => m.Create(FilterTarget.Orders, true));
-
 
             searchDefinitionProvider
                 .Setup(p => p.GetDefinition(AnyString))
@@ -86,15 +86,15 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public async Task FindOrder_DownloadIsDelegatedToIOnDemandDownlaoder()
+        public async Task FindOrder_DownloadIsDelegatedToIOnDemandDownloader()
         {
             var downloader = mock.FromFactory<IOnDemandDownloaderFactory>()
-                .Mock(f=>f.CreateSingleScanOnDemandDownloader());
+                .Mock(f => f.CreateSingleScanOnDemandDownloader());
 
             var testObject = mock.Create<OrderLookupService>();
             await testObject.FindOrder("blah");
 
-            downloader.Verify(d=>d.Download("blah"), Times.Once);
+            downloader.Verify(d => d.Download("blah"), Times.Once);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace ShipWorks.OrderLookup.Tests
             await testObject.FindOrder("blah");
 
             command
-                .VerifySet(s=>s.CommandText = "Select OrderId from [Order] o where GeneratedSql", Times.Once);
+                .VerifySet(s => s.CommandText = "Select OrderId from [Order] o where GeneratedSql", Times.Once);
         }
 
         [Fact]

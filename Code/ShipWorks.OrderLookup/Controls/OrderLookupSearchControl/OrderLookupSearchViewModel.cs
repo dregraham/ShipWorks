@@ -36,8 +36,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Update the order number when the order changes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Order")

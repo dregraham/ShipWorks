@@ -13,7 +13,7 @@ using ShipWorks.Stores.Communication;
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Service used by OrdeRLookupSingleScanPipeline to assist in finding an order
+    /// Service used by OrderLookupSingleScanPipeline to assist in finding an order
     /// </summary>
     [Component]
     public class OrderLookupService : IOrderLookupService
@@ -65,7 +65,7 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Find cooresponding order
+        /// Find corresponding order
         /// </summary>
         private long? FetchOrderId(string scannedText)
         {
@@ -125,7 +125,7 @@ namespace ShipWorks.OrderLookup
                 }
             }
 
-            // If thhe order is null or new, return null as an order was not found
+            // If the order is null or new, return null as an order was not found
             return order?.IsNew ?? true ? null : order;
         }
     }
