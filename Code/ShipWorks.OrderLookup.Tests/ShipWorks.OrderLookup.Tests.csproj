@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="OrderLookupDataServiceTest.cs" />
     <Compile Include="OrderLookupSearchViewModelTest.cs" />
+    <Compile Include="OrderLookupSingleScanPipelineTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
