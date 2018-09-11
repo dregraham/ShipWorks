@@ -10,6 +10,6 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// The Order Lookup Control
         /// </summary>
-        Control Control { get; }
+        UserControl Control { get; }
     }
 }

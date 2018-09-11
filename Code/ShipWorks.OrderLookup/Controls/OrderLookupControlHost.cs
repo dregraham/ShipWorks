@@ -48,6 +48,6 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Expose the Control
         /// </summary>
-        public Control Control => this;
+        public UserControl Control => this;
     }
 }

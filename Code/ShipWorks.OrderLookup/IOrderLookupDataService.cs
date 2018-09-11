@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup
@@ -7,11 +6,10 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
-    [Service]
     public interface IOrderLookupDataService
     {
         /// <summary>
-        /// The order thats in context
+        /// The order that's in context
         /// </summary>
         OrderEntity Order { get; }
 
