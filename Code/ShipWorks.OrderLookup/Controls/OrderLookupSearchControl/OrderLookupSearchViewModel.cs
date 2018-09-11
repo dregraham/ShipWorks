@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.UI;
@@ -59,6 +60,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Order Number to search for
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string OrderNumber
         {
             get => orderNumber;
@@ -68,6 +70,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Total cost of the shipment
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string TotalCost
         {
             get => totalCost;
@@ -77,6 +80,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Error message to display when a error occurs while searching
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string SearchErrorMessage
         {
             get => searchErrorMessage;
@@ -86,6 +90,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Indicates whether or not an error has occured while searching.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool SearchError
         {
             get => searchError;
