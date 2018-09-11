@@ -1,22 +1,27 @@
-﻿using System.ComponentModel;
-using ShipWorks.Core.UI;
-using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+﻿using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
 {
-    public class OrderLookupViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Main view model for the OrderLookup UI Mode
+    /// </summary>
+    public class OrderLookupViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
-        private IOrderLookupDataService dataService;
+        private readonly IOrderLookupDataService dataService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dataService"></param>
         public OrderLookupViewModel(IOrderLookupDataService dataService)
         {
             this.dataService = dataService;
-            
             OrderLookupSearchViewModel = new OrderLookupSearchViewModel(dataService);
         }
 
+        /// <summary>
+        /// View Model for the search section of the OrderLookup UI Mode
+        /// </summary>
         public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; set; }
     }
 }
