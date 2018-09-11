@@ -11,7 +11,7 @@ namespace ShipWorks.Filters.Search
 {
     public class CustomerQuickSearchDefinitionProvider : ISearchDefinitionProvider
     {
-        public FilterDefinition GetDefinition(string quickSearchString)
+        public IFilterDefinition GetDefinition(string quickSearchString)
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Customers);
 

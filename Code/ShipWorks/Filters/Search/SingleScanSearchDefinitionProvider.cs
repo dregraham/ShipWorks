@@ -22,7 +22,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Gets a filter definition that searches for an exact order number or OrderId based on the prefix
         /// </summary>
-        public FilterDefinition GetDefinition(string quickSearchString)
+        public IFilterDefinition GetDefinition(string quickSearchString)
         {
             Condition condition = GetCondition(quickSearchString);
 

@@ -13,13 +13,16 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content
 {
     /// <summary>
     /// The object model of a filter definition, which is the set of conditions that make up a filter.
     /// </summary>
-    public class FilterDefinition
+    [Component]
+    public class FilterDefinition : IFilterDefinition
     {
         ConditionGroupContainerRoot root;
 
@@ -257,6 +260,12 @@ namespace ShipWorks.Filters.Content
         {
             return IsRelevantToStoreTypes(RootContainer, storeTypes);
         }
+
+        /// <summary>
+        /// Generate SQL from the root container
+        /// </summary>
+        public string GenerateRootSql(FilterTarget fitlerTarget) => 
+            RootContainer.GenerateSql(new SqlGenerationContext(FilterTarget));
 
         /// <summary>
         /// Returns true if the given container is relevant given the specified list of store types

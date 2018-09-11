@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
@@ -72,7 +73,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void PerformRegeneration(XElement regenerationRequiredElement)
         {
-            using (var connection = getSqlSession().OpenConnection())
+            using (var connection = (DbConnection) getSqlSession().OpenConnection())
             {
                 createFilterHelper().RegenerateFilters(connection);
             }

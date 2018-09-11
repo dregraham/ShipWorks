@@ -53,11 +53,6 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void SendOrderMessage(OrderEntity order)
         {
-            if (order?.IsNew ?? true)
-            {
-                order = null;
-            }
-
             messenger.Send(new OrderLookupSingleScanMessage(this, order));
         }
 

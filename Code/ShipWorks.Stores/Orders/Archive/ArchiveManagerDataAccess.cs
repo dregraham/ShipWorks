@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -77,7 +78,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private Task<ISqlDatabaseDetail> GetLiveDatabase(ISqlSession sqlSession) =>
             Functional.UsingAsync(
-                sqlSession.OpenConnection(),
+                (DbConnection) sqlSession.OpenConnection(),
                 con => databaseUtility
                     .GetDatabaseDetails(con)
                     .Map(x => x.Where(IsLiveDatabase(sqlSession.DatabaseName, databaseIdentifier.Get())))
@@ -107,7 +108,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private static Task<IEnumerable<ISqlDatabaseDetail>> GetArchiveDatabases(IShipWorksDatabaseUtility databaseUtility, ISqlSession sqlSession, Guid databaseID) =>
             Functional.UsingAsync(
-                sqlSession.OpenConnection(),
+                (DbConnection) sqlSession.OpenConnection(),
                 databaseUtility.GetDatabaseDetails)
             .Map(databases => databases.Where(x => x.IsArchive && databaseID == x.Guid));
     }

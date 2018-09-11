@@ -7,6 +7,10 @@
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              mc:Ignorable="d">
     <Grid>
-        <orderLookupSearchControl:OrderLookupSearchControl Margin="10" DataContext="{Binding OrderLookupSearchViewModel}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <orderLookupSearchControl:OrderLookupSearchControl Grid.Row="0"  Margin="10" DataContext="{Binding OrderLookupSearchViewModel}" />
     </Grid>
 </UserControl>

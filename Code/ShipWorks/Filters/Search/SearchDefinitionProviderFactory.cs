@@ -14,7 +14,8 @@ namespace ShipWorks.Filters.Search
     /// Creates SearchDefinitionProviderFactory
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class SearchDefinitionProviderFactory
+    [Component]
+    public class SearchDefinitionProviderFactory : ISearchDefinitionProviderFactory
     {
         private readonly IStoreManager storeManager;
         private readonly ISingleScanOrderShortcut singleScanShortcut;

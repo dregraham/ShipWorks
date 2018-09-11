@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -166,6 +167,11 @@ namespace ShipWorks.Data.Connection
 
             return con;
         }
+
+        /// <summary>
+        /// Open a connection using the current properties of the SqlSession
+        /// </summary>
+        IDbConnection ISqlSession.OpenConnection() => OpenConnection();
 
         /// <summary>
         /// Open a connection using the current properties of the SqlSession, but with

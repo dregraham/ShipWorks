@@ -876,7 +876,7 @@ namespace ShipWorks.ApplicationCore
                     definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
                 }
 
-                return definitionProvider.GetDefinition(searchText);
+                return (FilterDefinition) definitionProvider.GetDefinition(searchText);
             }
         }
 

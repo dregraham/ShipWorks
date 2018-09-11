@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Filters.Search;
 using ShipWorks.Stores.Communication;
@@ -18,7 +19,7 @@ namespace ShipWorks.OrderLookup
     public class OrderLookupService : IOrderLookupService
     {
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
-        private readonly SearchDefinitionProviderFactory searchDefinitionProviderFactory;
+        private readonly ISearchDefinitionProviderFactory searchDefinitionProviderFactory;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlSession sqlSession;
 
@@ -26,7 +27,7 @@ namespace ShipWorks.OrderLookup
         /// Constructor
         /// </summary>
         public OrderLookupService(IOnDemandDownloaderFactory onDemandDownloaderFactory,
-            SearchDefinitionProviderFactory searchDefinitionProviderFactory,
+            ISearchDefinitionProviderFactory searchDefinitionProviderFactory,
             ISqlAdapterFactory sqlAdapterFactory,
             ISqlSession sqlSession)
         {
@@ -45,7 +46,7 @@ namespace ShipWorks.OrderLookup
             await DownloadOrderOnDemand(scanMsgScannedText);
 
             // Get the orderID of the scanned order
-            long? orderId = await FetchOrderId(scanMsgScannedText);
+            long? orderId = FetchOrderId(scanMsgScannedText);
 
             // Download the order
             OrderEntity order = FetchOrder(orderId);
@@ -66,7 +67,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Find cooresponding order
         /// </summary>
-        private async Task<long?> FetchOrderId(string scannedText)
+        private long? FetchOrderId(string scannedText)
         {
             string sql = GenerateSql(scannedText);
             if (string.IsNullOrEmpty(sql))
@@ -75,16 +76,16 @@ namespace ShipWorks.OrderLookup
             }
 
             long? orderId = null;
-            using (DbConnection sqlConnection = sqlSession.OpenConnection())
+            using (IDbConnection sqlConnection = sqlSession.OpenConnection())
             {
-                using (DbCommand cmd = sqlConnection.CreateCommand())
+                using (IDbCommand cmd = sqlConnection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 
-                    using (DbDataReader dbDataReader = await cmd.ExecuteReaderAsync())
+                    using (IDataReader dbDataReader = cmd.ExecuteReader())
                     {
-                        while (await dbDataReader.ReadAsync())
+                        while (dbDataReader.Read())
                         {
                             orderId = dbDataReader.GetInt64(0);
                             break;
@@ -103,9 +104,9 @@ namespace ShipWorks.OrderLookup
         {
             ISearchDefinitionProvider searchDefinitionProvider = searchDefinitionProviderFactory.Create(FilterTarget.Orders, true);
 
-            var def = searchDefinitionProvider.GetDefinition(scanMsgScannedText);
+            IFilterDefinition filterDefinition = searchDefinitionProvider.GetDefinition(scanMsgScannedText);
 
-            string whereClause = def.RootContainer.GenerateSql(new SqlGenerationContext(FilterTarget.Orders));
+            string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
             return $"Select OrderId from [Order] o where {whereClause}";
         }
 
@@ -124,7 +125,8 @@ namespace ShipWorks.OrderLookup
                 }
             }
 
-            return order;
+            // If thhe order is null or new, return null as an order was not found
+            return order?.IsNew ?? true ? null : order;
         }
     }
 }
