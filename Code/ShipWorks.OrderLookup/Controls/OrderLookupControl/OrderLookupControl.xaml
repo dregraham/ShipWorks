@@ -7,6 +7,6 @@
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              mc:Ignorable="d">
     <Grid>
-        <orderLookupSearchControl:OrderLookupSearchControl Margin="10"/>
+        <orderLookupSearchControl:OrderLookupSearchControl Margin="10" DataContext="{Binding OrderLookupSearchViewModel}" />
     </Grid>
 </UserControl>

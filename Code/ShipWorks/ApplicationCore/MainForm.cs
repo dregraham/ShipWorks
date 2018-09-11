@@ -147,9 +147,10 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
 
-        ICurrentUserSettings currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
+        ICurrentUserSettings currentUserSettings;
         UIMode currentUiMode = UIMode.OrderLookup;
-        Control orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+        Control orderLookupControl;
+
         
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -160,7 +161,10 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
+            orderLookupControl = (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
             
+            currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
+
             InitializeComponent();
 
             foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())

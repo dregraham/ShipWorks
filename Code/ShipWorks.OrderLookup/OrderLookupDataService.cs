@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -12,11 +13,13 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Data service for the order lookup UI Mode
     /// </summary>
+    [Component(SingleInstance = true)]
     public class OrderLookupDataService : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupDataService
     {
         private readonly IMessenger messenger;
         private IDisposable subscription;
         protected readonly PropertyChangedHandler handler;
+        private OrderEntity order;
 
         /// <summary>
         /// Constructor
@@ -30,7 +33,11 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order that is currently in context
         /// </summary>
-        public OrderEntity Order { get; private set; }
+        public OrderEntity Order
+        {
+            get => order;
+            private set => handler.Set(nameof(Order), ref order, value);
+        }
 
         /// <summary>
         /// Invoked when a property on the order object changes
@@ -65,7 +72,7 @@ namespace ShipWorks.OrderLookup
         public void InitializeForCurrentSession()
         {
             subscription = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(x => Order = x.Order);
+                .Subscribe(orderMessage => Order = orderMessage.Order);
         }
     }
 }
