@@ -48,7 +48,7 @@ namespace ShipWorks.OrderLookup.Tests
         {
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            orderLookupService.Verify(o => o.FindOrder("Foo"));
+            orderLookupService.Verify(o => o.FindOrder("Foo"), Times.Once);
         }
 
         [Fact]
@@ -80,6 +80,7 @@ namespace ShipWorks.OrderLookup.Tests
             orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
+
 
             Assert.Equal(order, testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
         }

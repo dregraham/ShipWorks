@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -44,7 +45,7 @@ namespace ShipWorks.OrderLookup
 
             subscription = messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && userSettings.GetUIMode() == UIMode.OrderLookup)
-                .SelectMany(scanMsg => Observable.FromAsync(() => orderLookupService.FindOrder(scanMsg.ScannedText)))
+                .SelectMany(scanMsg => orderLookupService.FindOrder(scanMsg.ScannedText).ToObservable())
                 .Subscribe(SendOrderMessage);
         }
 
