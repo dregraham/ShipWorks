@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using ShipWorks.Tests.Shared;
@@ -19,8 +20,6 @@ namespace ShipWorks.OrderLookup.Tests
     public class OrderLookupServiceTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly Mock<IDbCommand> command;
-        private readonly Mock<IDataReader> dataReader;
         private readonly Mock<ISqlAdapter> sqlAdapter;
 
         public OrderLookupServiceTest()
@@ -40,31 +39,11 @@ namespace ShipWorks.OrderLookup.Tests
                 .Setup(p => p.GetDefinition(AnyString))
                 .Returns(filterDefinition.Object);
 
-            dataReader = mock.CreateMock<IDataReader>();
-            dataReader
-                .SetupSequence(x => x.Read())
-                .Returns(true)
-                .Returns(false);
-            dataReader
-                .Setup(d => d.GetInt64(0))
-                .Returns(42);
-
-            command = mock.CreateMock<IDbCommand>();
-            command.Setup(c => c.ExecuteReader())
-                .Returns(dataReader.Object);
-
-            var con = mock.CreateMock<IDbConnection>();
-            con.Setup(c => c.CreateCommand())
-                .Returns(command.Object);
-
-            mock.Mock<ISqlSession>()
-                .Setup(c => c.OpenConnection())
-                .Returns(con.Object);
-
             sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.Create());
 
-            sqlAdapter.Setup(a => a.FetchEntity(AnyOrder)).Callback<IEntity2>(o => o.IsNew = false);
+            sqlAdapter.Setup(a => a.FetchQueryAsync<OrderEntity>(AnyString, null))
+                .ReturnsAsync(new List<OrderEntity> { new OrderEntity(42) });
         }
 
         [Fact]
@@ -74,15 +53,6 @@ namespace ShipWorks.OrderLookup.Tests
             var order = await testObject.FindOrder("blah");
 
             Assert.Equal(42, order.OrderID);
-        }
-
-        [Fact]
-        public async Task FindOrder_FetchesOrder_WithExpectedOrderNumber()
-        {
-            var testObject = mock.Create<OrderLookupService>();
-            await testObject.FindOrder("blah");
-
-            sqlAdapter.Verify(a => a.FetchEntity(It.Is<OrderEntity>(o => o.OrderID == 42)), Times.Once);
         }
 
         [Fact]
@@ -102,15 +72,16 @@ namespace ShipWorks.OrderLookup.Tests
         {
             var testObject = mock.Create<OrderLookupService>();
             await testObject.FindOrder("blah");
+            string sql = "Select OrderId from [Order] o where GeneratedSql";
 
-            command
-                .VerifySet(s => s.CommandText = "Select OrderId from [Order] o where GeneratedSql", Times.Once);
+            sqlAdapter.Verify(s=>s.FetchQueryAsync<OrderEntity>(sql, null), Times.Once);
         }
 
         [Fact]
         public async Task FindOrder_ReturnsNull_WhenOrderNotFound()
         {
-            dataReader.Setup(r => r.Read()).Returns(false);
+            sqlAdapter.Setup(a => a.FetchQueryAsync<OrderEntity>(AnyString, null))
+                .ReturnsAsync(new List<OrderEntity>());
 
             var testObject = mock.Create<OrderLookupService>();
             var order = await testObject.FindOrder("blah");

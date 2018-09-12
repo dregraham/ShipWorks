@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private Task<ISqlDatabaseDetail> GetLiveDatabase(ISqlSession sqlSession) =>
             Functional.UsingAsync(
-                (DbConnection) sqlSession.OpenConnection(),
+                sqlSession.OpenConnection(),
                 con => databaseUtility
                     .GetDatabaseDetails(con)
                     .Map(x => x.Where(IsLiveDatabase(sqlSession.DatabaseName, databaseIdentifier.Get())))
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private static Task<IEnumerable<ISqlDatabaseDetail>> GetArchiveDatabases(IShipWorksDatabaseUtility databaseUtility, ISqlSession sqlSession, Guid databaseID) =>
             Functional.UsingAsync(
-                (DbConnection) sqlSession.OpenConnection(),
+                sqlSession.OpenConnection(),
                 databaseUtility.GetDatabaseDetails)
             .Map(databases => databases.Where(x => x.IsArchive && databaseID == x.Guid));
     }

@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
@@ -21,20 +23,17 @@ namespace ShipWorks.OrderLookup
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
         private readonly ISearchDefinitionProviderFactory searchDefinitionProviderFactory;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly ISqlSession sqlSession;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupService(IOnDemandDownloaderFactory onDemandDownloaderFactory,
             ISearchDefinitionProviderFactory searchDefinitionProviderFactory,
-            ISqlAdapterFactory sqlAdapterFactory,
-            ISqlSession sqlSession)
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.searchDefinitionProviderFactory = searchDefinitionProviderFactory;
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.sqlSession = sqlSession;
         }
 
         /// <summary>
@@ -44,11 +43,9 @@ namespace ShipWorks.OrderLookup
         {
             await DownloadOrderOnDemand(scanMsgScannedText).ConfigureAwait(false);
 
-            long? orderId = FetchOrderId(scanMsgScannedText);
-
-            return FetchOrder(orderId);
+            return (await FetchOrder(scanMsgScannedText).ConfigureAwait(false)).FirstOrDefault();
         }
-        
+
         /// <summary>
         /// Downloads order from customer's database
         /// </summary>
@@ -62,30 +59,14 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Find corresponding order
         /// </summary>
-        private long? FetchOrderId(string scannedText)
+        private Task<List<OrderEntity>> FetchOrder(string scannedText)
         {
             string sql = GenerateSql(scannedText);
 
-            long? orderId = null;
-            using (IDbConnection sqlConnection = sqlSession.OpenConnection())
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                using (IDbCommand cmd = sqlConnection.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = sql;
-
-                    using (IDataReader dbDataReader = cmd.ExecuteReader())
-                    {
-                        while (dbDataReader.Read())
-                        {
-                            orderId = dbDataReader.GetInt64(0);
-                            break;
-                        }
-                    }
-                }
+                return sqlAdapter.FetchQueryAsync<OrderEntity>(sql);
             }
-
-            return orderId;
         }
 
         /// <summary>
@@ -93,36 +74,13 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private string GenerateSql(string scanMsgScannedText)
         {
-            ISearchDefinitionProvider searchDefinitionProvider = searchDefinitionProviderFactory.Create(FilterTarget.Orders, true);
+            ISearchDefinitionProvider searchDefinitionProvider =
+                searchDefinitionProviderFactory.Create(FilterTarget.Orders, true);
 
             IFilterDefinition filterDefinition = searchDefinitionProvider.GetDefinition(scanMsgScannedText);
 
             string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
-            return $"Select OrderId from [Order] o where {whereClause}";
-        }
-
-        /// <summary>
-        /// Get order based on order id, return null if not found or orderId is null
-        /// </summary>
-        private OrderEntity FetchOrder(long? orderId)
-        {
-            OrderEntity order = null;
-            if (orderId.HasValue)
-            {
-                order = new OrderEntity(orderId.Value);
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-                {
-                    sqlAdapter.FetchEntity(order);
-                }
-            }
-
-            // If the order is null or new, return null as an order was not found
-            if (order == null || order.IsNew)
-            {
-                return null;
-            }
-            
-            return order;
+            return $"Select * from [Order] o where {whereClause}";
         }
     }
 }

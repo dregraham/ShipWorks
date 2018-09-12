@@ -69,7 +69,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Open a connection using the current properties of the SqlSession
         /// </summary>
-        IDbConnection OpenConnection();
+        DbConnection OpenConnection();
 
         /// <summary>
         /// Open a connection using the current properties of the SqlSession, but with

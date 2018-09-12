@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         private void PerformRegeneration(XElement regenerationRequiredElement)
         {
-            using (var connection = (DbConnection) getSqlSession().OpenConnection())
+            using (var connection = getSqlSession().OpenConnection())
             {
                 createFilterHelper().RegenerateFilters(connection);
             }
