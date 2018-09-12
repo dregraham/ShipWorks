@@ -119,14 +119,19 @@ namespace ShipWorks.OrderLookup
             if (orderId.HasValue)
             {
                 order = new OrderEntity(orderId.Value);
-                using (var sqlAdapter = sqlAdapterFactory.Create())
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     sqlAdapter.FetchEntity(order);
                 }
             }
 
             // If the order is null or new, return null as an order was not found
-            return order?.IsNew ?? true ? null : order;
+            if (order?.IsNew == null || order.IsNew)
+            {
+                return null;
+            }
+            
+            return order;
         }
     }
 }
