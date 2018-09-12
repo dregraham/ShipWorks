@@ -977,6 +977,7 @@
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
     <Compile Include="Filters\Content\IFilterDefinition.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
+    <Compile Include="Filters\Search\ISingleScanSearchDefinitionProvider.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />

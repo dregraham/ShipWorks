@@ -24,20 +24,20 @@ namespace ShipWorks.Stores
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlAdapterRetryFactory sqlAdapterRetryFactory;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
-        private readonly ISearchDefinitionProviderFactory searchDefinitionProviderFactory;
-        
+        private readonly ISingleScanSearchDefinitionProvider singleScanSearchDefinitionProvider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
         public OrderRepository(ISqlAdapterFactory sqlAdapterFactory, 
                                ISqlAdapterRetryFactory sqlAdapterRetryFactory,
                                IOnDemandDownloaderFactory onDemandDownloaderFactory,
-                               ISearchDefinitionProviderFactory searchDefinitionProviderFactory)
+                               ISingleScanSearchDefinitionProvider singleScanSearchDefinitionProvider)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.sqlAdapterRetryFactory = sqlAdapterRetryFactory;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
-            this.searchDefinitionProviderFactory = searchDefinitionProviderFactory;
+            this.singleScanSearchDefinitionProvider = singleScanSearchDefinitionProvider;
         }
 
         /// <summary>
@@ -116,26 +116,12 @@ namespace ShipWorks.Stores
         /// </summary>
         private Task<List<OrderEntity>> FetchOrder(string scannedText)
         {
-            string sql = GenerateSql(scannedText);
+            string sql = singleScanSearchDefinitionProvider.GenerateSql(scannedText);
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 return sqlAdapter.FetchQueryAsync<OrderEntity>(sql);
             }
-        }
-
-        /// <summary>
-        /// Generate sql to fetch order
-        /// </summary>
-        private string GenerateSql(string scanMsgScannedText)
-        {
-            ISearchDefinitionProvider searchDefinitionProvider =
-                searchDefinitionProviderFactory.Create(FilterTarget.Orders, true);
-
-            IFilterDefinition filterDefinition = searchDefinitionProvider.GetDefinition(scanMsgScannedText);
-
-            string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
-            return $"Select * from [Order] o where {whereClause}";
         }
     }
 }

@@ -29,14 +29,6 @@ namespace ShipWorks.Stores.Tests.Orders
                 .Setup(d => d.GenerateRootSql(FilterTarget.Orders))
                 .Returns("GeneratedSql");
 
-            Mock<ISearchDefinitionProvider> searchDefinitionProvider = mock
-                .FromFactory<ISearchDefinitionProviderFactory>()
-                .Mock(m => m.Create(FilterTarget.Orders, true));
-
-            searchDefinitionProvider
-                .Setup(p => p.GetDefinition(AnyString))
-                .Returns(filterDefinition.Object);
-
             sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.Create());
 
@@ -66,13 +58,23 @@ namespace ShipWorks.Stores.Tests.Orders
         }
 
         [Fact]
-        public async Task FindOrder_CommandIsRanWithCorrectSql()
+        public async Task FindOrder_DelegatesToSingleScanSearchDefProviderForSql()
         {
             var testObject = mock.Create<OrderRepository>();
             await testObject.FindOrder("blah");
-            string sql = "Select * from [Order] o where GeneratedSql";
 
-            sqlAdapter.Verify(s => s.FetchQueryAsync<OrderEntity>(sql, null), Times.Once);
+            mock.Mock<ISingleScanSearchDefinitionProvider>().Verify(d => d.GenerateSql("blah"));
+        }
+
+        [Fact]
+        public async Task FindOrder_DelegatesToSqlAdapterWithSqlFromSingleScanSearchDefProvider()
+        {
+            var testObject = mock.Create<OrderRepository>();
+            mock.Mock<ISingleScanSearchDefinitionProvider>().Setup(d => d.GenerateSql("blah")).Returns("FooBar");
+
+            await testObject.FindOrder("blah");
+
+            sqlAdapter.Verify(a => a.FetchQueryAsync<OrderEntity>("FooBar", null));
         }
 
         [Fact]

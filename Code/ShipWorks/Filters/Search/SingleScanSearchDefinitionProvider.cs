@@ -1,4 +1,5 @@
-﻿using ShipWorks.Filters.Content;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 
@@ -7,7 +8,8 @@ namespace ShipWorks.Filters.Search
     /// <summary>
     /// Provides the search definition used when single scan is enabled
     /// </summary>
-    public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
+    [Component]
+    public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider, ISingleScanSearchDefinitionProvider
     {
         private readonly ISingleScanOrderShortcut singleScanShortcut;
 
@@ -53,6 +55,17 @@ namespace ShipWorks.Filters.Search
             }
 
             return condition;
+        }
+
+        /// <summary>
+        /// Generate sql to fetch order
+        /// </summary>
+        public string GenerateSql(string scanMsgScannedText)
+        {
+            IFilterDefinition filterDefinition = GetDefinition(scanMsgScannedText);
+
+            string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
+            return $"Select * from [Order] o where {whereClause}";
         }
     }
 }
