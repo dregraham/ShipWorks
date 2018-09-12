@@ -26,7 +26,6 @@ namespace ShipWorks.OrderLookup.Tests
         readonly TestMessenger testMessenger;
         private readonly Mock<IOrderRepository> orderRepository;
         private readonly Mock<IMainForm> mainForm;
-        private readonly Mock<ICurrentUserSettings> currentUserSettings;
         private readonly OrderLookupSingleScanPipeline testObject;
         private readonly TestScheduler scheduler;
 
@@ -45,10 +44,9 @@ namespace ShipWorks.OrderLookup.Tests
 
             orderRepository = mock.Mock<IOrderRepository>();
             mainForm = mock.Mock<IMainForm>();
-            currentUserSettings = mock.Mock<ICurrentUserSettings>();
 
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
-            currentUserSettings.Setup(u => u.GetUIMode()).Returns(UIMode.OrderLookup);
+            mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
             testObject.InitializeForCurrentSession();
@@ -65,7 +63,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegateToOrderLookupService_WhenNoAdditionalFormsAreOpenAndUIModeIsBatch()
         {
-            currentUserSettings.Setup(u => u.GetUIMode()).Returns(UIMode.Batch);
+            mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 

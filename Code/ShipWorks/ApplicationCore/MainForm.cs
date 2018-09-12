@@ -148,9 +148,7 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
 
         ICurrentUserSettings currentUserSettings;
-        UIMode currentUiMode = UIMode.OrderLookup;
         Control orderLookupControl;
-
         
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -221,6 +219,11 @@ namespace ShipWorks
         /// Collection of panels on the main form
         /// </summary>
         public IEnumerable<DockControl> Panels => sandDockManager.GetDockControls();
+
+        /// <summary>
+        /// Get the current UIMode
+        /// </summary>
+        public UIMode UIMode { get; private set; }
 
         #region Initialization \ Shutdown
 
@@ -815,7 +818,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowBatchView(object sender, EventArgs e)
         {
-            if (currentUiMode != UIMode.Batch)
+            if (UIMode != UIMode.Batch)
             {
                 ChangeUIMode(UIMode.Batch);
             }
@@ -826,7 +829,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowOrderLookupView(object sender, EventArgs e)
         {
-            if (currentUiMode != UIMode.OrderLookup)
+            if (UIMode != UIMode.OrderLookup)
             {
                 // Save the current layout just in case the user made changes to it
                 SaveCurrentUserSettings();
@@ -918,7 +921,7 @@ namespace ShipWorks
 
             SendPanelStateMessages();
 
-            currentUiMode = UIMode.Batch;
+            UIMode = UIMode.Batch;
         }
 
         /// <summary>
@@ -947,7 +950,7 @@ namespace ShipWorks
             panelDockingArea.Controls.Add(orderLookupControl);
             orderLookupControl.BringToFront();
 
-            currentUiMode = UIMode.OrderLookup;
+            UIMode = UIMode.OrderLookup;
         }
 
         /// <summary>
@@ -1401,7 +1404,7 @@ namespace ShipWorks
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
             // Save the layout
-            if (currentUiMode == UIMode.Batch)
+            if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
                 settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
@@ -2400,7 +2403,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn && currentUiMode == UIMode.Batch)
+            if (UserSession.IsLoggedOn && UIMode == UIMode.Batch)
             {
                 gridControl.SaveGridColumnState();
             }
@@ -2422,7 +2425,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn && currentUiMode == UIMode.Batch)
+            if (UserSession.IsLoggedOn && UIMode == UIMode.Batch)
             {
                 gridControl.ReloadGridColumns();
             }
