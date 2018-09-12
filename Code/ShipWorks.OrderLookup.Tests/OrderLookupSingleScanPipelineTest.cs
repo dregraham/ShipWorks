@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
@@ -13,9 +10,8 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
-using ShipWorks.Stores;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Users;
 using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests
