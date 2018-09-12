@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -18,7 +19,7 @@ namespace ShipWorks.OrderLookup
     {
         private readonly IMessenger messenger;
         private IDisposable subscription;
-        protected readonly PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
         private OrderEntity order;
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order that is currently in context
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OrderEntity Order
         {
             get => order;
@@ -47,9 +49,17 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        public void RaisePropertyChanged(string propertyName) 
-            => handler.RaisePropertyChanged(propertyName);
+        public void RaisePropertyChanged(string propertyName) => handler.RaisePropertyChanged(propertyName);
 
+        /// <summary>
+        /// Start listening for order found messages
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            subscription = messenger.OfType<OrderLookupSingleScanMessage>()
+                .Subscribe(orderMessage => Order = orderMessage.Order);
+        }
+        
         /// <summary>
         /// Dispose
         /// </summary>
@@ -64,15 +74,6 @@ namespace ShipWorks.OrderLookup
         public void EndSession()
         {
             Dispose();
-        }
-
-        /// <summary>
-        /// Start listening for order found messages
-        /// </summary>
-        public void InitializeForCurrentSession()
-        {
-            subscription = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(orderMessage => Order = orderMessage.Order);
         }
     }
 }

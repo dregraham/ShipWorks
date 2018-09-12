@@ -34,28 +34,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Update the order number when the order changes
-        /// </summary>
-        private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Order")
-            {
-                if (dataService.Order == null)
-                {
-                    SearchErrorMessage = "No matching orders were found";
-                    SearchError = true;
-                    OrderNumber = string.Empty;
-                }
-                else
-                {
-                    SearchErrorMessage = string.Empty;
-                    SearchError = false;
-                    OrderNumber = dataService.Order.OrderNumberComplete;
-                }
-            }
-        }
-
-        /// <summary>
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -109,6 +87,28 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// Command to create a label
         /// </summary>
         public ICommand CreateLabelCommand { get; set; }
+        
+        /// <summary>
+        /// Update the order number when the order changes
+        /// </summary>
+        private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Order")
+            {
+                if (dataService.Order == null)
+                {
+                    SearchErrorMessage = "No matching orders were found";
+                    SearchError = true;
+                    OrderNumber = string.Empty;
+                }
+                else
+                {
+                    SearchErrorMessage = string.Empty;
+                    SearchError = false;
+                    OrderNumber = dataService.Order.OrderNumberComplete;
+                }
+            }
+        }
         
         /// <summary>
         /// Get the order with the current order number 

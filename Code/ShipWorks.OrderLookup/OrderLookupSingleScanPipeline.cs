@@ -11,7 +11,7 @@ using ShipWorks.Users;
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Listens for scan. Sends OrderFound message when the scan cooresponds to an order
+    /// Listens for scan. Sends OrderFound message when the scan corresponds to an order
     /// </summary>
     public class OrderLookupSingleScanPipeline : IInitializeForCurrentUISession
     {

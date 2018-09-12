@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup
@@ -11,6 +12,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order that's in context
         /// </summary>
+        [Obfuscation(Exclude = true)]
         OrderEntity Order { get; }
 
         /// <summary>
