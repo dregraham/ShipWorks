@@ -117,7 +117,7 @@ namespace ShipWorks.OrderLookup
             }
 
             // If the order is null or new, return null as an order was not found
-            if (order?.IsNew == null || order.IsNew)
+            if (order == null || order.IsNew)
             {
                 return null;
             }
