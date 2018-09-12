@@ -27,6 +27,7 @@
       <Project>{d5b2cf61-e6c6-4a91-a4e5-9aa2515e70c4}</Project>
       <Name>ShipWorks.OrderLookup</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>

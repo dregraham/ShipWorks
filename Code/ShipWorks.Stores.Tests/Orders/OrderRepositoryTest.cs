@@ -1,28 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Search;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Tests.Shared;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.OrderLookup.Tests
+namespace ShipWorks.Stores.Tests.Orders
 {
-    public class OrderLookupServiceTest : IDisposable
+    public class OrderRepositoryTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly Mock<ISqlAdapter> sqlAdapter;
 
-        public OrderLookupServiceTest()
+        public OrderRepositoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -43,13 +41,13 @@ namespace ShipWorks.OrderLookup.Tests
                 .Mock(f => f.Create());
 
             sqlAdapter.Setup(a => a.FetchQueryAsync<OrderEntity>(AnyString, null))
-                .ReturnsAsync(new List<OrderEntity> { new OrderEntity(42) });
+                .ReturnsAsync(new List<OrderEntity> {new OrderEntity(42)});
         }
 
         [Fact]
         public async Task FindOrder_ReturnsFetchedOrder()
         {
-            var testObject = mock.Create<OrderLookupService>();
+            var testObject = mock.Create<OrderRepository>();
             var order = await testObject.FindOrder("blah");
 
             Assert.Equal(42, order.OrderID);
@@ -61,7 +59,7 @@ namespace ShipWorks.OrderLookup.Tests
             var downloader = mock.FromFactory<IOnDemandDownloaderFactory>()
                 .Mock(f => f.CreateSingleScanOnDemandDownloader());
 
-            var testObject = mock.Create<OrderLookupService>();
+            var testObject = mock.Create<OrderRepository>();
             await testObject.FindOrder("blah");
 
             downloader.Verify(d => d.Download("blah"), Times.Once);
@@ -70,11 +68,11 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public async Task FindOrder_CommandIsRanWithCorrectSql()
         {
-            var testObject = mock.Create<OrderLookupService>();
+            var testObject = mock.Create<OrderRepository>();
             await testObject.FindOrder("blah");
-            string sql = "Select OrderId from [Order] o where GeneratedSql";
+            string sql = "Select * from [Order] o where GeneratedSql";
 
-            sqlAdapter.Verify(s=>s.FetchQueryAsync<OrderEntity>(sql, null), Times.Once);
+            sqlAdapter.Verify(s => s.FetchQueryAsync<OrderEntity>(sql, null), Times.Once);
         }
 
         [Fact]
@@ -83,7 +81,7 @@ namespace ShipWorks.OrderLookup.Tests
             sqlAdapter.Setup(a => a.FetchQueryAsync<OrderEntity>(AnyString, null))
                 .ReturnsAsync(new List<OrderEntity>());
 
-            var testObject = mock.Create<OrderLookupService>();
+            var testObject = mock.Create<OrderRepository>();
             var order = await testObject.FindOrder("blah");
 
             Assert.Null(order);

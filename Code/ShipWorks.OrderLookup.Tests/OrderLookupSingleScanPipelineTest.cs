@@ -13,6 +13,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
@@ -23,7 +24,7 @@ namespace ShipWorks.OrderLookup.Tests
     {
         private readonly AutoMock mock;
         readonly TestMessenger testMessenger;
-        private readonly Mock<IOrderLookupService> orderLookupService;
+        private readonly Mock<IOrderRepository> orderRepository;
         private readonly Mock<IMainForm> mainForm;
         private readonly Mock<ICurrentUserSettings> currentUserSettings;
         private readonly OrderLookupSingleScanPipeline testObject;
@@ -42,7 +43,7 @@ namespace ShipWorks.OrderLookup.Tests
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
 
-            orderLookupService = mock.Mock<IOrderLookupService>();
+            orderRepository = mock.Mock<IOrderRepository>();
             mainForm = mock.Mock<IMainForm>();
             currentUserSettings = mock.Mock<ICurrentUserSettings>();
 
@@ -58,7 +59,7 @@ namespace ShipWorks.OrderLookup.Tests
         {
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            orderLookupService.Verify(o => o.FindOrder("Foo"), Times.Once);
+            orderRepository.Verify(o => o.FindOrder("Foo"), Times.Once);
         }
 
         [Fact]
@@ -68,7 +69,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            orderLookupService.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
+            orderRepository.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -78,14 +79,14 @@ namespace ShipWorks.OrderLookup.Tests
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            orderLookupService.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
+            orderRepository.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
         public void InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
         {
             OrderEntity order = new OrderEntity() { IsNew = false };
-            orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
+            orderRepository.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
@@ -97,7 +98,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurentSession_DoesNotSendOrderLookupSingleScanMessageFromOrderLookupService_WhenOrderIsNull()
         {
-            orderLookupService.Setup(o => o.FindOrder("Foo")).ReturnsAsync((OrderEntity) null);
+            orderRepository.Setup(o => o.FindOrder("Foo")).ReturnsAsync((OrderEntity) null);
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 

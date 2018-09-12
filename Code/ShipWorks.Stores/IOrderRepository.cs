@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores
@@ -23,5 +24,10 @@ namespace ShipWorks.Stores
         /// Saves the specified order.
         /// </summary>
         void Save(OrderEntity order);
+        
+        /// <summary>
+        /// Find an order based on scanned message text
+        /// </summary>
+        Task<OrderEntity> FindOrder(string scanMsgScannedText);
     }
 }

@@ -6,6 +6,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup
@@ -18,7 +19,7 @@ namespace ShipWorks.OrderLookup
         private readonly IMessenger messenger;
         private readonly IMainForm mainForm;
         private readonly ICurrentUserSettings userSettings;
-        private readonly IOrderLookupService orderLookupService;
+        private readonly IOrderRepository orderRepository;
 
         private IDisposable subscription;
 
@@ -28,12 +29,12 @@ namespace ShipWorks.OrderLookup
         public OrderLookupSingleScanPipeline(IMessenger messenger,
             IMainForm mainForm,
             ICurrentUserSettings userSettings,
-            IOrderLookupService orderLookupService)
+            IOrderRepository orderRepository)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
             this.userSettings = userSettings;
-            this.orderLookupService = orderLookupService;
+            this.orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace ShipWorks.OrderLookup
 
             subscription = messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && userSettings.GetUIMode() == UIMode.OrderLookup)
-                .SelectMany(scanMsg => orderLookupService.FindOrder(scanMsg.ScannedText).ToObservable())
+                .SelectMany(scanMsg => orderRepository.FindOrder(scanMsg.ScannedText).ToObservable())
                 .Subscribe(SendOrderMessage);
         }
 

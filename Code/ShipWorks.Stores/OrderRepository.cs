@@ -1,9 +1,16 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Search;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores
@@ -15,14 +22,21 @@ namespace ShipWorks.Stores
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlAdapterRetryFactory sqlAdapterRetryFactory;
-
+        private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
+        private readonly ISearchDefinitionProviderFactory searchDefinitionProviderFactory;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
-        public OrderRepository(ISqlAdapterFactory sqlAdapterFactory, ISqlAdapterRetryFactory sqlAdapterRetryFactory)
+        public OrderRepository(ISqlAdapterFactory sqlAdapterFactory, 
+                               ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+                               IOnDemandDownloaderFactory onDemandDownloaderFactory,
+                               ISearchDefinitionProviderFactory searchDefinitionProviderFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.sqlAdapterRetryFactory = sqlAdapterRetryFactory;
+            this.onDemandDownloaderFactory = onDemandDownloaderFactory;
+            this.searchDefinitionProviderFactory = searchDefinitionProviderFactory;
         }
 
         /// <summary>
@@ -74,6 +88,53 @@ namespace ShipWorks.Stores
                 sqlAdapter.SaveAndRefetch(order);
                 sqlAdapter.Commit();
             }
+        }
+        
+        /// <summary>
+        /// Given scanned text, find the associated order
+        /// </summary>
+        public async Task<OrderEntity> FindOrder(string scanMsgScannedText)
+        {
+            await DownloadOrderOnDemand(scanMsgScannedText).ConfigureAwait(false);
+
+            return (await FetchOrder(scanMsgScannedText).ConfigureAwait(false)).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Downloads order from customer's database
+        /// </summary>
+        private Task DownloadOrderOnDemand(string scanMsgScannedText)
+        {
+            // Downloads the order if needed
+            IOnDemandDownloader singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
+            return singleScanOnDemandDownloader.Download(scanMsgScannedText);
+        }
+
+        /// <summary>
+        /// Find corresponding order
+        /// </summary>
+        private Task<List<OrderEntity>> FetchOrder(string scannedText)
+        {
+            string sql = GenerateSql(scannedText);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return sqlAdapter.FetchQueryAsync<OrderEntity>(sql);
+            }
+        }
+
+        /// <summary>
+        /// Generate sql to fetch order
+        /// </summary>
+        private string GenerateSql(string scanMsgScannedText)
+        {
+            ISearchDefinitionProvider searchDefinitionProvider =
+                searchDefinitionProviderFactory.Create(FilterTarget.Orders, true);
+
+            IFilterDefinition filterDefinition = searchDefinitionProvider.GetDefinition(scanMsgScannedText);
+
+            string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
+            return $"Select * from [Order] o where {whereClause}";
         }
     }
 }
