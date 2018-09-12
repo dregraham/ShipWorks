@@ -860,7 +860,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the FilterDefinition that defines what the user is currently searching for
         /// </summary>
-        private FilterDefinition GetSearchDefinition(string searchText)
+        private IFilterDefinition GetSearchDefinition(string searchText)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -876,7 +876,7 @@ namespace ShipWorks.ApplicationCore
                     definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
                 }
 
-                return (FilterDefinition) definitionProvider.GetDefinition(searchText);
+                return definitionProvider.GetDefinition(searchText);
             }
         }
 

@@ -118,7 +118,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// The filter definition to search for.
         /// </summary>
-        public void Search(FilterDefinition definition)
+        public void Search(IFilterDefinition definition)
         {
             Debug.Assert(!Program.MainForm.InvokeRequired, "Designed to be called from the UI thread.");
 
