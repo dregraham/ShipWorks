@@ -7,16 +7,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
     /// </summary>
     public class OrderLookupViewModel
     {
-        private readonly IOrderLookupDataService dataService;
+        private readonly IOrderLookupMessageBus messageBus;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dataService"></param>
-        public OrderLookupViewModel(IOrderLookupDataService dataService)
+        /// <param name="messageBus"></param>
+        public OrderLookupViewModel(IOrderLookupMessageBus messageBus)
         {
-            this.dataService = dataService;
-            OrderLookupSearchViewModel = new OrderLookupSearchViewModel(dataService);
+            this.messageBus = messageBus;
+            OrderLookupSearchViewModel = new OrderLookupSearchViewModel(messageBus);
         }
 
         /// <summary>

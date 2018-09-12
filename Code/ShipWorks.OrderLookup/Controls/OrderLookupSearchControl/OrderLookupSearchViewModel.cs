@@ -11,7 +11,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     /// </summary>
     public class OrderLookupSearchViewModel : INotifyPropertyChanged
     {
-        private readonly IOrderLookupDataService dataService;
+        private readonly IOrderLookupMessageBus messageBus;
         public event PropertyChangedEventHandler PropertyChanged;
         
         private readonly PropertyChangedHandler handler;
@@ -23,10 +23,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IOrderLookupDataService dataService)
+        public OrderLookupSearchViewModel(IOrderLookupMessageBus messageBus)
         {
-            this.dataService = dataService;
-            dataService.PropertyChanged += UpdateOrderNumber;
+            this.messageBus = messageBus;
+            messageBus.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
@@ -95,7 +95,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         {
             if (e.PropertyName == "Order")
             {
-                if (dataService.Order == null)
+                if (messageBus.Order == null)
                 {
                     SearchErrorMessage = "No matching orders were found";
                     SearchError = true;
@@ -105,7 +105,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = dataService.Order.OrderNumberComplete;
+                    OrderNumber = messageBus.Order.OrderNumberComplete;
                 }
             }
         }

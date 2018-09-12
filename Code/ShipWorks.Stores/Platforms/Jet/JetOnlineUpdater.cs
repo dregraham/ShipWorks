@@ -10,6 +10,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Orders;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {

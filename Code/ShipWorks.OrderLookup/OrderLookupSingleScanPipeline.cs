@@ -6,8 +6,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
-using ShipWorks.Stores;
-using ShipWorks.Users;
+using ShipWorks.Stores.Orders;
 
 namespace ShipWorks.OrderLookup
 {

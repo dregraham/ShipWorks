@@ -13,14 +13,14 @@ namespace ShipWorks.OrderLookup.Controls
     [Component]
     public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
-        private readonly IOrderLookupDataService orderLookupDataService;
+        private readonly IOrderLookupMessageBus orderLookupMessageBus;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(IOrderLookupDataService orderLookupDataService)
+        public OrderLookupControlHost(IOrderLookupMessageBus orderLookupMessageBus)
         {
-            this.orderLookupDataService = orderLookupDataService;
+            this.orderLookupMessageBus = orderLookupMessageBus;
             InitializeComponent();
         }
 
@@ -38,7 +38,7 @@ namespace ShipWorks.OrderLookup.Controls
                 Dock = DockStyle.Fill,
                 Child = new OrderLookupControl.OrderLookupControl()
                 {
-                    DataContext = new OrderLookupViewModel(orderLookupDataService)
+                    DataContext = new OrderLookupViewModel(orderLookupMessageBus)
                 }
             };
 

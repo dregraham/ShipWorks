@@ -2,7 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores
+namespace ShipWorks.Stores.Orders
 {
     /// <summary>
     /// Repository for saving order related content

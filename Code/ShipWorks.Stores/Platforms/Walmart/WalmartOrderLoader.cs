@@ -7,6 +7,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart

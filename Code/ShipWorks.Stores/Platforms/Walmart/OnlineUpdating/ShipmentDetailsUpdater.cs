@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating

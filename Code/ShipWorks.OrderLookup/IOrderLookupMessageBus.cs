@@ -7,7 +7,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
-    public interface IOrderLookupDataService
+    public interface IOrderLookupMessageBus
     {
         /// <summary>
         /// The order that's in context

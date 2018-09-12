@@ -4,6 +4,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using ShipWorks.Tests.Shared;

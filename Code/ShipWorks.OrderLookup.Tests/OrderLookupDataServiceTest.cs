@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_SubscribesToOrderFoundMessage()
         {
-            OrderLookupDataService testObject = mock.Create<OrderLookupDataService>();
+            OrderLookupMessageBus testObject = mock.Create<OrderLookupMessageBus>();
 
             testObject.InitializeForCurrentSession();
 
@@ -37,7 +37,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            OrderLookupDataService testObject = mock.Create<OrderLookupDataService>();
+            OrderLookupMessageBus testObject = mock.Create<OrderLookupMessageBus>();
             Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
     }

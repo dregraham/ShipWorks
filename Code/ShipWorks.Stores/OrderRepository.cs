@@ -12,6 +12,7 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Search;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders;
 
 namespace ShipWorks.Stores
 {

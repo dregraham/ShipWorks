@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
@@ -15,7 +14,7 @@ namespace ShipWorks.OrderLookup
     /// Data service for the order lookup UI Mode
     /// </summary>
     [Component(SingleInstance = true)]
-    public class OrderLookupDataService : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupDataService
+    public class OrderLookupMessageBus : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupMessageBus
     {
         private readonly IMessenger messenger;
         private IDisposable subscription;
@@ -25,7 +24,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupDataService(IMessenger messenger)
+        public OrderLookupMessageBus(IMessenger messenger)
         {
             this.messenger = messenger;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
