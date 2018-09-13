@@ -4,7 +4,10 @@ using System.Reflection;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Startup;
+using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using Xunit.Abstractions;
@@ -15,13 +18,21 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
     [Trait("Category", "ContinuousIntegration")]
     public class ActionTaskAsyncTest : IDisposable
     {
-        readonly ITestOutputHelper testOutputHelper;
-        readonly IContainer container;
+        private readonly ITestOutputHelper testOutputHelper;
+        private readonly IContainer container;
 
         public ActionTaskAsyncTest(ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
-            container = ContainerInitializer.Build();
+
+            ShipWorksSession.Initialize(Guid.NewGuid());
+            DataPath.Initialize();
+
+            container = ContainerInitializer.Build(reg =>
+            {
+                reg.Register(x => AutoMockExtensions.GetLooseThatReturnsMocks().Build<ISqlSession>());
+                reg.Register(x => AutoMockExtensions.GetLooseThatReturnsMocks().Build<IOrderArchiver>());
+            });
         }
 
         [Fact]
@@ -115,9 +126,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             try
             {
                 var instance = container.Resolve(x);
-                var typedInstance = instance as ActionTask;
 
-                return typedInstance == null ?
+                return !(instance is ActionTask typedInstance) ?
                     GenericResult.FromError<ActionTask>($"{x.Name} could not be cast to ActionTask") :
                     GenericResult.FromSuccess(typedInstance);
             }

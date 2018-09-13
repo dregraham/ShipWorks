@@ -1,16 +1,3 @@
-using Interapptive.Shared;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Stores;
-using ShipWorks.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,7 +7,22 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Stores;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Controls
 {
@@ -30,16 +32,16 @@ namespace ShipWorks.Data.Controls
     public partial class PersonControl : UserControl
     {
         // Controls if it's always editable, or can go into edit-mode.
-        PersonEditStyle editStyle = PersonEditStyle.Normal;
+        private PersonEditStyle editStyle = PersonEditStyle.Normal;
 
-        // Controls what fields are avialable
-        PersonFields availableFields = PersonFields.All;
+        // Controls what fields are available
+        private PersonFields availableFields = PersonFields.All;
 
         // Controls what fields are required
-        PersonFields requiredFields = PersonFields.None;
+        private PersonFields requiredFields = PersonFields.None;
 
         // Indicates if the control is currently in readonly mode.
-        bool isReadonly = false;
+        private bool isReadonly = false;
 
         /// <summary>
         /// The user has typed something into the control.  This is kind of like TextChanged for a text box,
@@ -53,24 +55,22 @@ namespace ShipWorks.Data.Controls
         public event EventHandler DestinationChanged;
 
         // The adapter from which the current data was loaded
-        List<PersonAdapter> loadedPeople = null;
+        private List<PersonAdapter> loadedPeople = null;
 
         // List of controls on the form and the person fields they are utilized by
-        List<ControlFieldMap> controlFieldMappings;
+        private List<ControlFieldMap> controlFieldMappings;
 
         // Maps a control to the label that labels it on the form
-        Dictionary<Control, Label> labelMap;
+        private Dictionary<Control, Label> labelMap;
+        private AddressSelector addressSelector;
+        private bool isLoadingEntities;
+        private bool shouldSaveAddressSuggestions = false;
+        private AddressAdapter lastValidatedAddress;
+        private string AddressPrefix;
+        private List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+        private StoreEntity store;
 
-        AddressSelector addressSelector;
-        bool isLoadingEntities;
-        bool shouldSaveAddressSuggestions = false;
-
-        AddressAdapter lastValidatedAddress;
-        string AddressPrefix;
-        List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
-        StoreEntity store;
-
-        class ControlFieldMap
+        private class ControlFieldMap
         {
             public ControlFieldMap(Control control, PersonFields fields)
             {
@@ -83,9 +83,9 @@ namespace ShipWorks.Data.Controls
         }
 
         /// <summary>
-        /// Specialied BindingSource that automatically adds non-existing countries to the bound list so we don't just default to Albania
+        /// Specialized BindingSource that automatically adds non-existing countries to the bound list so we don't just default to Albania
         /// </summary>
-        class CountryBindingSource : BindingSource
+        private class CountryBindingSource : BindingSource
         {
             /// <summary>
             /// Constructor
@@ -447,7 +447,7 @@ namespace ShipWorks.Data.Controls
         {
             int nextTop = labelName.Top;
 
-            // Update control positioning and availablility
+            // Update control positioning and availability
             foreach (ControlFieldMap map in controlFieldMappings)
             {
                 bool show = ShowField(map.Fields);
@@ -484,7 +484,7 @@ namespace ShipWorks.Data.Controls
 
                     nextTop = control.Bottom + 6;
 
-                    // Offset the reamining 4 pixels.
+                    // Offset the remaining 4 pixels.
                     if (offsetReadOnly)
                     {
                         nextTop += 4;
@@ -1155,25 +1155,29 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
-            AddressValidator validator = new AddressValidator();
-            Task task = validator.ValidateAsync(address, store, true, (addressEntity, entities) =>
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                shouldSaveAddressSuggestions = true;
+                var validator = lifetimeScope.Resolve<IAddressValidator>();
 
-                validatedAddresses.Clear();
-
-                if (addressEntity != null)
+                Task task = validator.ValidateAsync(address, store, true, (addressEntity, entities) =>
                 {
-                    validatedAddresses.Add(addressEntity);
-                }
+                    shouldSaveAddressSuggestions = true;
 
-                if (entities != null)
-                {
-                    validatedAddresses.AddRange(entities);
-                }
-            });
+                    validatedAddresses.Clear();
 
-            task.Wait();
+                    if (addressEntity != null)
+                    {
+                        validatedAddresses.Add(addressEntity);
+                    }
+
+                    if (entities != null)
+                    {
+                        validatedAddresses.AddRange(entities);
+                    }
+                });
+
+                task.Wait();
+            }
         }
 
         /// <summary>

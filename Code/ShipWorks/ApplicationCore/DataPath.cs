@@ -62,6 +62,7 @@ namespace ShipWorks.ApplicationCore
             }
 
             // Create the file that ensures the temp folder doesn't get deleted by another ShipWorks while we are running.
+            tempFolderLockFile?.Dispose();
             tempFolderLockFile = File.Create(Path.Combine(ShipWorksTemp, tempFolderLockName), 1024, FileOptions.DeleteOnClose);
         }
 

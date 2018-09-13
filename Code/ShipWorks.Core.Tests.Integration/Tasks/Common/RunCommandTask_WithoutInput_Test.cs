@@ -46,6 +46,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
             );
 
             LogSession.Initialize("integration-test");
+            LogSession.Configure(new LogOptions { TraceToConsole = false });
 
             testObject = context.Mock.Create<RunCommandTask>();
         }

@@ -155,7 +155,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         /// <param name="context">Interface with the database</param>
         /// <param name="validatedOrderAddressInfo">The validated order address information.</param>
-        public static void SaveValidatedOrder(ActionStepContext context, ValidatedOrderShipAddress validatedOrderAddressInfo)
+        public static void SaveValidatedOrder(IActionStepContext context, ValidatedOrderShipAddress validatedOrderAddressInfo)
         {
             SaveValidatedOrderShipAddress(new ContextAddressValidationDataAccess(context), validatedOrderAddressInfo);
         }

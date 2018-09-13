@@ -218,6 +218,8 @@ namespace ShipWorks.Tests.Shared.Database
                 Guid.Parse("{00000000-0000-0000-0000-000000000003}"),
                 null);
 
+            DataPath.Initialize();
+
             return new DataContext(mock, context.Item1, context.Item2, container);
         }
 
@@ -271,6 +273,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
             ShipWorksSession.Initialize(Guid.NewGuid());
+
+            DataPath.Initialize();
 
             return new DataContext(mock, context.Item1, context.Item2);
         }

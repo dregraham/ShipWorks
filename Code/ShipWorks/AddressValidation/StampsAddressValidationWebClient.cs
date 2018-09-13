@@ -3,24 +3,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using Quartz.Util;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.AddressValidation
 {
     /// <summary>
     /// Address validator that uses Stamps.com for lookups
     /// </summary>
+    [Component]
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
         private readonly IUspsWebClient uspsWebClient;
@@ -30,26 +29,12 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient()
-			: this(new UspsWebClient(new UspsAccountRepository(),
-	                new UspsWebServiceFactory(new LogEntryFactory()),
-    	            new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
-        	        UspsResellerType.None), 
-                  new StampsAddressValidationResultFactory(), 
-                  new UspsCounterRateAccountRepository(TangoCredentialStore.Instance))
-        {
-            
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public StampsAddressValidationWebClient(
-            IUspsWebClient uspsWebClient, 
+            Func<UspsResellerType, IUspsWebClient> createUspsWebClient,
             IAddressValidationResultFactory addressValidationResultFactory,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
         {
-            this.uspsWebClient = uspsWebClient;
+            this.uspsWebClient = createUspsWebClient(UspsResellerType.None);
             this.addressValidationResultFactory = addressValidationResultFactory;
             this.accountRepository = accountRepository;
         }
@@ -85,9 +70,9 @@ namespace ShipWorks.AddressValidation
                     // Only add the origin to the validation results if it was fully matched
                     if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum)
                     {
-                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType, shouldParseAddress));
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int) validationResult.AddressType, shouldParseAddress));
                     }
-                                        
+
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
                         validationResult.AddressValidationError = TranslateValidationResultMessage(uspsResult);
@@ -103,7 +88,7 @@ namespace ShipWorks.AddressValidation
                     foreach (Address address in uspsResult.Candidates)
                     {
                         validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType, shouldParseAddress));
-                    }   
+                    }
                 }
             }
             catch (UspsException ex)
@@ -152,7 +137,7 @@ namespace ShipWorks.AddressValidation
             {
                 return AddressType.Invalid;
             }
-            
+
             if (IsSecondaryAddressProblem(uspsResult))
             {
                 return AddressType.SecondaryNotFound;
@@ -168,7 +153,7 @@ namespace ShipWorks.AddressValidation
             {
                 return AddressType.Military;
             }
-            
+
             if (IsUsTerritory(uspsResult))
             {
                 return AddressType.UsTerritory;
@@ -223,7 +208,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static AddressType DetermineInternationalCorectness(UspsAddressValidationResults uspsResult)
         {
-            if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum && 
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum &&
                 !string.IsNullOrWhiteSpace(uspsResult.AddressCleansingResult) &&
                 uspsResult.AddressCleansingResult != "Full Address Verified.")
             {
