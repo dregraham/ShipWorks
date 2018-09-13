@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using ShipWorks.ApplicationCore;
@@ -19,7 +20,7 @@ namespace ShipWorks.OrderLookup
         private readonly IMainForm mainForm;
         private readonly IOrderRepository orderRepository;
 
-        private IDisposable subscription;
+        private IDisposable subscriptions;
 
         /// <summary>
         /// Constructor
@@ -40,10 +41,19 @@ namespace ShipWorks.OrderLookup
         {
             EndSession();
 
-            subscription = messenger.OfType<SingleScanMessage>()
+            subscriptions = new CompositeDisposable(
+
+                messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
                 .SelectMany(scanMsg => orderRepository.FindOrder(scanMsg.ScannedText).ToObservable())
-                .Subscribe(SendOrderMessage);
+                .Subscribe(SendOrderMessage),
+
+                messenger.OfType<OrderLookupSearchMessage>()
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .SelectMany(scanMsg => orderRepository.FindOrder(scanMsg.SearchText).ToObservable())
+                .Subscribe(SendOrderMessage)
+
+                );
         }
 
         /// <summary>
@@ -62,6 +72,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// End the session
         /// </summary>
-        public void EndSession() => subscription?.Dispose();
+        public void EndSession() => subscriptions?.Dispose();
     }
 }

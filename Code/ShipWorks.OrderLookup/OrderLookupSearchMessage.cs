@@ -15,6 +15,7 @@ namespace ShipWorks.OrderLookup
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
+            SearchText = searchText;
         }
 
         /// <summary>
@@ -26,5 +27,10 @@ namespace ShipWorks.OrderLookup
         /// Sender
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// The Search Text
+        /// </summary>
+        public string SearchText { get; }
     }
 }
