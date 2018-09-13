@@ -65,7 +65,7 @@ namespace ShipWorks.Filters.Search
             IFilterDefinition filterDefinition = GetDefinition(scanMsgScannedText);
 
             string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
-            return $"Select * from [Order] o where {whereClause}";
+            return $"Select orderId from [Order] o where {whereClause}";
         }
     }
 }

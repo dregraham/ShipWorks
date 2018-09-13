@@ -1,10 +1,12 @@
-﻿using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
 {
     /// <summary>
     /// Main view model for the OrderLookup UI Mode
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class OrderLookupViewModel
     {
         private readonly IOrderLookupMessageBus messageBus;
@@ -12,11 +14,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="messageBus"></param>
-        public OrderLookupViewModel(IOrderLookupMessageBus messageBus)
+        public OrderLookupViewModel(IOrderLookupMessageBus messageBus, OrderLookupSearchViewModel orderLookupSearchViewModel)
         {
             this.messageBus = messageBus;
-            OrderLookupSearchViewModel = new OrderLookupSearchViewModel(messageBus);
+            OrderLookupSearchViewModel = orderLookupSearchViewModel;
         }
 
         /// <summary>

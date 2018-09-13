@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -21,6 +26,7 @@ namespace ShipWorks.Stores
     /// </summary>
     public class OrderRepository : IOrderRepository
     {
+        private readonly ISqlSession sqlSession;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlAdapterRetryFactory sqlAdapterRetryFactory;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
@@ -29,11 +35,13 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
-        public OrderRepository(ISqlAdapterFactory sqlAdapterFactory, 
+        public OrderRepository(ISqlSession sqlSession,
+                               ISqlAdapterFactory sqlAdapterFactory, 
                                ISqlAdapterRetryFactory sqlAdapterRetryFactory,
                                IOnDemandDownloaderFactory onDemandDownloaderFactory,
                                ISingleScanSearchDefinitionProvider singleScanSearchDefinitionProvider)
         {
+            this.sqlSession = sqlSession;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.sqlAdapterRetryFactory = sqlAdapterRetryFactory;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
@@ -98,7 +106,7 @@ namespace ShipWorks.Stores
         {
             await DownloadOrderOnDemand(scanMsgScannedText).ConfigureAwait(false);
 
-            return (await FetchOrder(scanMsgScannedText).ConfigureAwait(false)).FirstOrDefault();
+            return await FetchOrder(scanMsgScannedText).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -114,13 +122,23 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Find corresponding order
         /// </summary>
-        private Task<List<OrderEntity>> FetchOrder(string scannedText)
+        private async Task<OrderEntity> FetchOrder(string scannedText)
         {
-            string sql = singleScanSearchDefinitionProvider.GenerateSql(scannedText);
-
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            using (DbConnection conn = sqlSession.OpenConnection())
             {
-                return sqlAdapter.FetchQueryAsync<OrderEntity>(sql);
+                using (DbCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = singleScanSearchDefinitionProvider.GenerateSql(scannedText);
+
+                    long? orderId = (long?) cmd.ExecuteScalar();
+
+                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(conn))
+                    {
+                        EntityQuery<OrderEntity> orderQuery = new QueryFactory().Order.Where(OrderFields.OrderID == orderId);
+                        return await adapter.FetchFirstAsync(orderQuery);
+                    }
+                }
             }
         }
     }

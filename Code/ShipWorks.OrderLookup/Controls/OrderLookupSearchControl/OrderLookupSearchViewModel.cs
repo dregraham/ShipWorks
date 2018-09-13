@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
@@ -9,11 +11,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     /// <summary>
     /// View model for the OrderLookupSearchControl
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class OrderLookupSearchViewModel : INotifyPropertyChanged
     {
         private readonly IOrderLookupMessageBus messageBus;
+        private readonly IMessenger messenger;
         public event PropertyChangedEventHandler PropertyChanged;
-        
         private readonly PropertyChangedHandler handler;
         private string orderNumber = string.Empty;
         private string totalCost = string.Empty;
@@ -23,9 +26,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IOrderLookupMessageBus messageBus)
+        public OrderLookupSearchViewModel(IOrderLookupMessageBus messageBus, IMessenger messenger)
         {
             this.messageBus = messageBus;
+            this.messenger = messenger;
             messageBus.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
@@ -115,7 +119,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void GetOrder()
         {
-            throw new System.NotImplementedException();
+            messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
         
         /// <summary>

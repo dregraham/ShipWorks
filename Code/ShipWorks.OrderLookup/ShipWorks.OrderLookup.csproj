@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
+    <Compile Include="OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookupSingleScanMessage.cs" />
     <Compile Include="OrderLookupMessageBus.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
