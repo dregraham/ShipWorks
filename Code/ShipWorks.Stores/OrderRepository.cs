@@ -131,7 +131,7 @@ namespace ShipWorks.Stores
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = singleScanSearchDefinitionProvider.GenerateSql(scannedText);
 
-                    long? orderId = (long?) cmd.ExecuteScalar();
+                    long? orderId = (long?) await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.Create(conn))
                     {

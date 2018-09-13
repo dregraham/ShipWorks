@@ -875,12 +875,12 @@ namespace ShipWorks
         private void ToggleUiModeCheckbox(UIMode currentMode)
         {
             mainMenuItemBatchGrid.Text = currentMode == UIMode.Batch ?
-                $"{mainMenuItemBatchGrid.Text}{unicodeCheckmark}" :
-                mainMenuItemBatchGrid.Text.Replace(unicodeCheckmark, string.Empty);
+                $"Batch Grid{unicodeCheckmark}" :
+                "Batch Grid";
 
             mainMenuItemOrderLookup.Text = currentMode == UIMode.OrderLookup ?
-                $"{mainMenuItemOrderLookup.Text}{unicodeCheckmark}" :
-                mainMenuItemOrderLookup.Text.Replace(unicodeCheckmark, string.Empty);
+                $"Order Lookup{unicodeCheckmark}" :
+                "Order Lookup";
         }
 
         /// <summary>
