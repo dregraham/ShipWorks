@@ -96,7 +96,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 .Except(GetExcludedPackageTypes(repository).Cast<PostalPackagingType>());
 
             // The cubic packaging type is only used by Express1/Endicia
-            return packageTypes.Except(new List<PostalPackagingType> { PostalPackagingType.Cubic }).Cast<int>();
+            // Regional box c was discontinued in 2016
+            return packageTypes.Except(new List<PostalPackagingType>
+            {
+                PostalPackagingType.Cubic,
+                PostalPackagingType.RateRegionalBoxC
+            }).Cast<int>();
         }
 
         /// <summary>
