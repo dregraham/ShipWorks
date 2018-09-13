@@ -68,12 +68,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
         {
             // All package types including cubic are available to Express1/Endicia
-            // Regional box c was discontinued in 2016
             return EnumHelper.GetEnumList<PostalPackagingType>()
                 .Select(x => x.Value)
+                .Where(x => !EnumHelper.GetDeprecated(x))
                 .Cast<int>()
-                .Except(GetExcludedPackageTypes(repository))
-                .Except(new List<int>{(int)PostalPackagingType.RateRegionalBoxC});
+                .Except(GetExcludedPackageTypes(repository));
         }
 
         /// <summary>
