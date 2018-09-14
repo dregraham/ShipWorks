@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -10,6 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
     /// <summary>
     /// A repository for USPS counter rate accounts
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class UspsCounterRateAccountRepository :
         ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>, ICarrierAccountRetriever
     {
@@ -129,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             //Nothing to delete for counter rate account.
         }
-        
+
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.

@@ -1,13 +1,15 @@
-﻿using ShipWorks.AddressValidation.Enums;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using System;
 
 namespace ShipWorks.AddressValidation
 {
     /// <summary>
     /// Factory for Creating AddressValidationResult from Address
     /// </summary>
+    [Component]
     public class StampsAddressValidationResultFactory : IAddressValidationResultFactory
     {
         /// <summary>
@@ -73,7 +75,7 @@ namespace ShipWorks.AddressValidation
 
             return address.ZIPCode;
         }
-        
+
         /// <summary>
         /// Convert Stamps.com residential status into ShipWorks residential status
         /// </summary>

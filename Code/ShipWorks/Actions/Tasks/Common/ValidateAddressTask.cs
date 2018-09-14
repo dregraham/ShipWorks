@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
-using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,37 +17,41 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Validate order shipping address", "ValidateAddress", ActionTaskCategory.UpdateLocally)]
     public class ValidateAddressTask : ActionTask
     {
+        private readonly IAddressValidator addressValidator;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ValidateAddressTask(IAddressValidator addressValidator)
+        {
+            this.addressValidator = addressValidator;
+        }
+
+        /// <summary>
+        /// Is this task async
+        /// </summary>
+        public override bool IsAsync => true;
+
         /// <summary>
         /// Create the editor for editing the settings of the task
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new ValidateAddressTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new ValidateAddressTaskEditor();
 
         /// <summary>
         /// How to label the input selection for the task
         /// </summary>
-        public override string InputLabel
-        {
-            get { return "Validate shipping address of:"; }
-        }
+        public override string InputLabel => "Validate shipping address of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get { return EntityType.OrderEntity; }
-        }
+        public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
         /// Run the task over the given input
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
-            AddressValidator validator = new AddressValidator();
-
             foreach (long orderID in inputKeys)
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
@@ -76,9 +78,9 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 try
                 {
-                    Task task = validator.ValidateAsync(order, store, "Ship", true, (originalAddress, suggestedAddresses) =>
-                        ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)));
-                    task.Wait();
+                    await addressValidator.ValidateAsync(order, store, "Ship", true, (originalAddress, suggestedAddresses) =>
+                            ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)))
+                        .ConfigureAwait(false);
                 }
                 catch (AddressValidationException ex)
                 {

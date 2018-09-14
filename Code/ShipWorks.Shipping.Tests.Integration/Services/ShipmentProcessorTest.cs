@@ -282,10 +282,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     }
                 };
 
-                Address address = new Address();
-                string email = "";
-
-                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
             });
 
             webServiceFactory
@@ -329,10 +327,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     }
                 };
 
-                Address address = new Address();
-                string email = "";
-
-                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -374,10 +370,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     }
                 };
 
-                Address address = new Address();
-                string email = "";
-
-                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))

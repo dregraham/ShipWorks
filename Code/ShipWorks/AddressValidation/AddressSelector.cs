@@ -5,19 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Carriers.Postal;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.AddressValidation
 {
@@ -169,15 +171,15 @@ namespace ShipWorks.AddressValidation
         private static bool ShowLimitedDataLabelForAdapter(IAddressAdapter addressAdapter)
         {
             if (addressAdapter.AddressType == (int) AddressType.InternationalAmbiguous &&
-                SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus))
+                SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
             {
                 return true;
             }
-            
+
             // If there is an error stored in the adapter and the address is international and its status is not bad address
             // we assume that it is a limited data address
             if (!string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) &&
-                SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus) &&
+                SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus) &&
                 !addressAdapter.IsDomesticCountry())
             {
                 return true;
@@ -211,7 +213,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static string GetSuggestionLabelForValidationStatus(IAddressAdapter addressAdapter)
         {
-            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
+            switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Valid:
                 case AddressValidationStatusType.NotChecked:
@@ -286,7 +288,7 @@ namespace ShipWorks.AddressValidation
                 item.Click += (obj, args) => OnValidationErrorMenuClick(entityAdapter);
                 menuItems.Add(item);
             }
-            
+
             if (originalValidatedAddress != null)
             {
                 menuItems.Add(CreateMenuItem(originalValidatedAddress, entityAdapter, store));
@@ -386,7 +388,10 @@ namespace ShipWorks.AddressValidation
         {
             OnAddressSelecting();
 
-            await UpdateSelectedAddressIfRequred(selectedAddress, store);
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                await UpdateSelectedAddressIfRequred(lifetimeScope, selectedAddress, store);
+            }
 
             AddressAdapter originalAddress = new AddressAdapter();
             addressToUpdate.CopyTo(originalAddress);
@@ -405,13 +410,15 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// When a suggested address is selected, it might not have a value for residential or PO Box
         /// </summary>
-        private static Task UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress, StoreEntity store)
+        private static Task UpdateSelectedAddressIfRequred(ILifetimeScope lifetimeScope, ValidatedAddressEntity selectedAddress, StoreEntity store)
         {
             if (!selectedAddress.IsOriginal &&
                 selectedAddress.ResidentialStatus == (int) ValidationDetailStatusType.Unknown &&
                 selectedAddress.POBox == (int) ValidationDetailStatusType.Unknown)
             {
-                AddressValidator addressValidator = new AddressValidator();
+                var addressValidator = lifetimeScope.Resolve<IAddressValidator>();
+                var sqlAdapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
+
                 return addressValidator.ValidateAsync(selectedAddress, store, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
@@ -419,7 +426,7 @@ namespace ShipWorks.AddressValidation
                         selectedAddress.POBox != (int) ValidationDetailStatusType.Unknown) &&
                         !selectedAddress.IsNew)
                     {
-                        using (SqlAdapter sqlAdapter = SqlAdapter.Default)
+                        using (var sqlAdapter = sqlAdapterFactory.Create())
                         {
                             sqlAdapter.SaveAndRefetch(selectedAddress);
                             sqlAdapter.Commit();

@@ -13,12 +13,12 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class ContextAddressValidationDataAccess : IAddressValidationDataAccess
     {
-        private readonly ActionStepContext context;
+        private readonly IActionStepContext context;
 
         /// <summary>
         /// Instantiate the object
         /// </summary>
-        public ContextAddressValidationDataAccess(ActionStepContext context)
+        public ContextAddressValidationDataAccess(IActionStepContext context)
         {
             this.context = context;
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -50,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         public RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
+            var results = CreateWebClient().GetRates(shipment);
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, results.rates));
 
             if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
             {

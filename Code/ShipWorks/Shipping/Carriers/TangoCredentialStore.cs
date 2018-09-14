@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using log4net;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoCredentialStore));
 
         private static readonly FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
-        
+
         private static DateTime lastFailure;
 
         // The lazy loaded singleton instance variable.
@@ -71,8 +71,7 @@ namespace ShipWorks.Shipping.Carriers
         public const string UspsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
 
         public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
-        
-        
+
         /// <summary>
         /// Private constructor.
         /// </summary>
@@ -82,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers
             productionCredentials = new Dictionary<string, string>();
             productionCertVerificationData = new Dictionary<string, string>();
         }
-        
+
         /// <summary>
         /// The instance of this Tangle Credential store singleton.
         /// </summary>
@@ -101,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return fedExSettingsRepo.UseTestServer ? 
+                return fedExSettingsRepo.UseTestServer ?
                     TestCredentialFedExAccountNumber : GetCredentialValue(FedExAccountNumberKeyName);
             }
         }
@@ -113,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return fedExSettingsRepo.UseTestServer ? 
+                return fedExSettingsRepo.UseTestServer ?
                     TestCredentialFedExMeterNumber : GetCredentialValue(FedExMeterNumberKeyName);
             }
         }
@@ -125,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return fedExSettingsRepo.UseTestServer ? 
+                return fedExSettingsRepo.UseTestServer ?
                     TestCredentialFedExUsername : GetCredentialValue(FedExUserNameKeyName);
             }
         }
@@ -137,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return fedExSettingsRepo.UseTestServer ? 
+                return fedExSettingsRepo.UseTestServer ?
                     TestCredentialFedExPassword : GetCredentialValue(FedExPasswordKeyName);
             }
         }
@@ -161,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return UpsWebClient.UseTestServer ? 
+                return UpsWebClient.UseTestServer ?
                     TestCredentialUpsUserId : GetCredentialValue(UpsUserIdKeyName);
             }
         }
@@ -173,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return UpsWebClient.UseTestServer ? 
+                return UpsWebClient.UseTestServer ?
                     TestCredentialUpsPassword : GetCredentialValue(UpsPasswordKeyName);
             }
         }
@@ -185,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return UpsWebClient.UseTestServer ? 
+                return UpsWebClient.UseTestServer ?
                     TestCredentialUpsAccessKey : GetCredentialValue(UpsAccessKeyKeyName);
             }
         }
@@ -201,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers
                     TestCredentialUpsCertificateVerificationData : GetCertificateVerificationDataValue(UpsCertificateVerificationDataKeyName);
             }
         }
-        
+
         /// <summary>
         /// Gets data to verify the SSL certificate from USPS
         /// </summary>
