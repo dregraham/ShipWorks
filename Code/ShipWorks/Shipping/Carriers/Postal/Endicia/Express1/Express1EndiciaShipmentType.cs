@@ -70,6 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             // All package types including cubic are available to Express1/Endicia
             return EnumHelper.GetEnumList<PostalPackagingType>()
                 .Select(x => x.Value)
+                .Where(x => !EnumHelper.GetDeprecated(x))
                 .Cast<int>()
                 .Except(GetExcludedPackageTypes(repository));
         }

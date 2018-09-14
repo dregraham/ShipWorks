@@ -10,6 +10,8 @@ using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -449,7 +451,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        public List<RateResult> GetRates(ShipmentEntity shipment)
+        public (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
@@ -465,46 +467,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                List<RateResult> rates = new List<RateResult>();
-
-                foreach (RateV25 uspsRate in ExceptionWrapper(() => GetRatesInternal(shipment, account), account))
-                {
-                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(uspsRate.ServiceType);
-
-                    RateResult baseRate;
-
-                    // If its a rate that has sig\deliv, then you can's select the core rate itself
-                    if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV11.USADC))
-                    {
-                        baseRate = new RateResult(
-                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
-                        {
-                            Tag = new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account),
-                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
-                        };
-                    }
-                    else
-                    {
-                        baseRate = new RateResult(
-                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-                            uspsRate.Amount,
-                            new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
-                        {
-                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
-                        };
-                    }
-
-                    PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
-
-                    rates.Add(baseRate);
-
-                    // Add a rate for each add-on
-                    AddRatesForAddOns(uspsRate, serviceType, account, rates);
-                }
-
-                return rates;
+                return ExceptionWrapper(() => GetRatesInternal(shipment, account), account)
+                    .Select(uspsRate => UspsUtility.GetPostalServiceType(uspsRate.ServiceType)
+                        .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
+                    .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
+                        (accumulator, x) => x.Match(
+                                rates => (accumulator.rates.Concat(rates), accumulator.errors),
+                                ex => (accumulator.rates, accumulator.errors.Append(ex))));
             }
             catch (UspsApiException ex)
             {
@@ -526,53 +495,89 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
+        /// Build a RateResult from a USPS rate
+        /// </summary>
+        private static IEnumerable<RateResult> BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV25 uspsRate, PostalServiceType serviceType)
+        {
+            RateResult baseRate;
+
+            // If its a rate that has sig\deliv, then you can's select the core rate itself
+            if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV11.USADC))
+            {
+                baseRate = new RateResult(
+                    PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                    PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate))
+                {
+                    Tag = new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account),
+                    ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
+                };
+            }
+            else
+            {
+                baseRate = new RateResult(
+                    PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                    PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
+                    uspsRate.Amount,
+                    new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
+                {
+                    ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
+                };
+            }
+
+            PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
+
+            return new[] { baseRate }
+                .Concat(AddRatesForAddOns(uspsRate, serviceType, account));
+        }
+
+        /// <summary>
         /// Iterates through each rate add on and creates a rate for each
         /// </summary>
-        private static void AddRatesForAddOns(RateV25 uspsRate, PostalServiceType serviceType, UspsAccountEntity account, List<RateResult> rates)
-        {
-            // Add a rate for each add-on
-            foreach (AddOnV11 addOn in uspsRate.AddOns)
-            {
-                string name = null;
-                PostalConfirmationType confirmationType = PostalConfirmationType.None;
-
-                switch (addOn.AddOnType)
+        private static IEnumerable<RateResult> AddRatesForAddOns(RateV25 uspsRate, PostalServiceType serviceType, UspsAccountEntity account) =>
+            uspsRate.AddOns
+                .Select(addOn =>
                 {
-                    case AddOnTypeV11.USADC:
-                        name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
-                        confirmationType = PostalConfirmationType.Delivery;
-                        break;
+                    string name = null;
+                    PostalConfirmationType confirmationType = PostalConfirmationType.None;
 
-                    case AddOnTypeV11.USASC:
-                        name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
-                        confirmationType = PostalConfirmationType.Signature;
-                        break;
+                    switch (addOn.AddOnType)
+                    {
+                        case AddOnTypeV11.USADC:
+                            name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Delivery;
+                            break;
 
-                    case AddOnTypeV11.USAASR:
-                        name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
-                        confirmationType = PostalConfirmationType.AdultSignatureRequired;
-                        break;
+                        case AddOnTypeV11.USASC:
+                            name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Signature;
+                            break;
 
-                    case AddOnTypeV11.USAASRD:
-                        name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
-                        confirmationType = PostalConfirmationType.AdultSignatureRestricted;
-                        break;
-                }
+                        case AddOnTypeV11.USAASR:
+                            name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.AdultSignatureRequired;
+                            break;
 
-                if (name != null)
+                        case AddOnTypeV11.USAASRD:
+                            name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.AdultSignatureRestricted;
+                            break;
+                    }
+
+                    return (Name: name, ConfirmationType: confirmationType, Amount: addOn.Amount);
+                })
+                .Where(x => x.Name != null)
+                .Select(x =>
                 {
                     RateResult addOnRate = new RateResult(
-                        name,
+                        x.Name,
                         string.Empty,
-                        uspsRate.Amount + addOn.Amount,
-                        new UspsPostalRateSelection(serviceType, confirmationType, account));
+                        uspsRate.Amount + x.Amount,
+                        new UspsPostalRateSelection(serviceType, x.ConfirmationType, account));
 
                     PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
 
-                    rates.Add(addOnRate);
-                }
-            }
-        }
+                    return addOnRate;
+                });
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper

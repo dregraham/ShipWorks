@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -9,9 +12,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public static class UspsUtility
     {
-        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = 
+        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation =
             new Dictionary<ServiceType, PostalServiceType>
         {
             {ServiceType.USFC, PostalServiceType.FirstClass},
@@ -102,14 +102,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get our internal service type that represents the given USPS API service type
         /// </summary>
-        public static PostalServiceType GetPostalServiceType(ServiceType uspsServiceType)
+        public static GenericResult<PostalServiceType> GetPostalServiceType(ServiceType uspsServiceType)
         {
             if (uspsServiceTypeTranslation.ContainsKey(uspsServiceType))
             {
                 return uspsServiceTypeTranslation[uspsServiceType];
             }
 
-            throw new InvalidOperationException(string.Format("Invalid USPS service type {0}", uspsServiceType));
+            return new InvalidOperationException(string.Format("Invalid USPS service type {0}", uspsServiceType));
         }
 
         /// <summary>

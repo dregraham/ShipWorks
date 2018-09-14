@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
@@ -92,7 +93,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             ShipmentEntity shipment = CreateShipment();
 
             IUspsWebClient webClient = GetWebClient(resellerType);
-            return webClient.GetRates(shipment);
+            return webClient.GetRates(shipment).rates.ToList();
         }
 
         private IUspsWebClient GetWebClient(UspsResellerType resellerType)

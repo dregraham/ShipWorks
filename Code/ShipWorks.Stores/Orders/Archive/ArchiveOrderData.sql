@@ -407,7 +407,7 @@ BEGIN
 	/*************************************/
 	/*   Purge Abandoned Resources       */
 	/*************************************/
-	exec PurgeAbandonedResources @runUntil = null, @olderThan = NULL
+	exec PurgeAbandonedResources @runUntil = null, @olderThan = NULL, @softDelete = 1
     
 	/* The "All" Order filter does not get updated by filter regen, so force it's count to be correct. */
 	UPDATE FilterNodeContent SET [Count] = (SELECT COUNT(*) FROM [Order]) WHERE FilterNodeContentID = -26

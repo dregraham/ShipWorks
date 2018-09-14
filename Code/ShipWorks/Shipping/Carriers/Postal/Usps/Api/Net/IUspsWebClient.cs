@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        List<RateResult> GetRates(ShipmentEntity shipment);
+        (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment);
 
         /// <summary>
         /// Creates the scan form.
