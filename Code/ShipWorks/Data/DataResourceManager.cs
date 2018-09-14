@@ -447,6 +447,7 @@ namespace ShipWorks.Data
                                     command.CommandTimeout = timeoutSeconds;
                                     command.AddParameterWithValue("@olderThan", DateTime.UtcNow);
                                     command.AddParameterWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
+                                    command.AddParameterWithValue("@softDelete", 1);
 
                                     command.ExecuteNonQuery();
                                 }
