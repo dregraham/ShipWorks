@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Returns(bestRateSetting == "on" ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden);
 
         [Given(@"a Best Rate shipment is loaded in the Shipping Panel")]
-        public async Task GivenABestRateShipmentIsLoadedInTheShippingPanel()
+        public void GivenABestRateShipmentIsLoadedInTheShippingPanel()
         {
             var shipment = Create.Shipment(context.Order)
                 .AsBestRate(s =>
