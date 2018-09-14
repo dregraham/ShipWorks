@@ -16,6 +16,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Settings;
 using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.SingleScan
@@ -34,6 +35,7 @@ namespace ShipWorks.SingleScan
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IMainForm mainForm;
         private readonly IAutoPrintService autoPrintService;
 
         private IDisposable scanMessagesConnection;
@@ -42,13 +44,18 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
         /// </summary>
-        public AutoPrintServicePipeline(IAutoPrintService autoPrintService, IMessenger messenger,
-            ISchedulerProvider schedulerProvider, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory)
+        public AutoPrintServicePipeline(
+            IAutoPrintService autoPrintService, 
+            IMessenger messenger,
+            ISchedulerProvider schedulerProvider, 
+            Func<Type, ILog> logFactory, 
+            ISqlAdapterFactory sqlAdapterFactory, 
+            IMainForm mainForm)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
-
+            this.mainForm = mainForm;
             scanMessages = messenger.OfType<SingleScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
             this.autoPrintService = autoPrintService;
@@ -71,13 +78,14 @@ namespace ShipWorks.SingleScan
             // picked up before we are finished with possessing the current order.
             // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
-                .Where(autoPrintService.AllowAutoPrint)
+                .Where(x => autoPrintService.AllowAutoPrint(x))
                 .Do(x => EndScanMessagesObservation())
                 .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
                     TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds),
                     schedulerProvider.Default,
                     (scanMsg, filterCountsUpdatedMessage) =>
                         new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
+                .Where(x => x.OrderID != null)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)

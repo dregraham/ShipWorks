@@ -47,56 +47,5 @@ namespace ShipWorks.OrderLookup.Tests
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
             testObject.InitializeForCurrentSession();
         }
-
-        [Fact]
-        public void InitializeForCurrentSession_DelegatesToOrderLookupService_WhenNoAdditionalFormsAreNotOpenAndUIModeIsOrderLookup()
-        {
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
-
-            orderRepository.Verify(o => o.FindOrder("Foo"), Times.Once);
-        }
-
-        [Fact]
-        public void InitializeForCurrentSession_DoesNotDelegateToOrderLookupService_WhenNoAdditionalFormsAreOpenAndUIModeIsBatch()
-        {
-            mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
-
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
-
-            orderRepository.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
-        }
-
-        [Fact]
-        public void InitializeForCurrentSession_DoesNotDelegateToOrderLookupService_WhenAdditionalFormsAreOpenAndUIModeIsOrderLookup()
-        {
-            mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(true);
-
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
-
-            orderRepository.Verify(o => o.FindOrder(It.IsAny<string>()), Times.Never);
-        }
-
-        [Fact]
-        public void InitializeForCurentSession_SendsOrderLookupSingleScanMessageFromOrderLookupService()
-        {
-            OrderEntity order = new OrderEntity() { IsNew = false };
-            orderRepository.Setup(o => o.FindOrder("Foo")).ReturnsAsync(order);
-
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
-
-            scheduler.Start();
-            
-            Assert.Equal(order, testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
-        }
-
-        [Fact]
-        public void InitializeForCurentSession_DoesNotSendOrderLookupSingleScanMessageFromOrderLookupService_WhenOrderIsNull()
-        {
-            orderRepository.Setup(o => o.FindOrder("Foo")).ReturnsAsync((OrderEntity) null);
-
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
-
-            Assert.Null(testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
-        }
     }
 }

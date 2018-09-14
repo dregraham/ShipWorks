@@ -24,10 +24,5 @@ namespace ShipWorks.Stores.Orders
         /// Saves the specified order.
         /// </summary>
         void Save(OrderEntity order);
-        
-        /// <summary>
-        /// Find an order based on scanned message text
-        /// </summary>
-        Task<OrderEntity> FindOrder(string scanMsgScannedText);
     }
 }

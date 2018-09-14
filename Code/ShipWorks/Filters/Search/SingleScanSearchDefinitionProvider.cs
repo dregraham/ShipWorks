@@ -8,8 +8,7 @@ namespace ShipWorks.Filters.Search
     /// <summary>
     /// Provides the search definition used when single scan is enabled
     /// </summary>
-    [Component]
-    public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider, ISingleScanSearchDefinitionProvider
+    public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
     {
         private readonly ISingleScanOrderShortcut singleScanShortcut;
 
@@ -55,17 +54,6 @@ namespace ShipWorks.Filters.Search
             }
 
             return condition;
-        }
-
-        /// <summary>
-        /// Generate sql to fetch order
-        /// </summary>
-        public string GenerateSql(string scanMsgScannedText)
-        {
-            IFilterDefinition filterDefinition = GetDefinition(scanMsgScannedText);
-
-            string whereClause = filterDefinition.GenerateRootSql(FilterTarget.Orders);
-            return $"Select orderId from [Order] o where {whereClause}";
         }
     }
 }

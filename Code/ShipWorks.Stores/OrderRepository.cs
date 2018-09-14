@@ -29,23 +29,18 @@ namespace ShipWorks.Stores
         private readonly ISqlSession sqlSession;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlAdapterRetryFactory sqlAdapterRetryFactory;
-        private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
-        private readonly ISingleScanSearchDefinitionProvider singleScanSearchDefinitionProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
-        public OrderRepository(ISqlSession sqlSession,
-                               ISqlAdapterFactory sqlAdapterFactory, 
-                               ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-                               IOnDemandDownloaderFactory onDemandDownloaderFactory,
-                               ISingleScanSearchDefinitionProvider singleScanSearchDefinitionProvider)
+        public OrderRepository(
+            ISqlSession sqlSession,
+            ISqlAdapterFactory sqlAdapterFactory, 
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory)
         {
             this.sqlSession = sqlSession;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.sqlAdapterRetryFactory = sqlAdapterRetryFactory;
-            this.onDemandDownloaderFactory = onDemandDownloaderFactory;
-            this.singleScanSearchDefinitionProvider = singleScanSearchDefinitionProvider;
         }
 
         /// <summary>
@@ -96,49 +91,6 @@ namespace ShipWorks.Stores
             {
                 sqlAdapter.SaveAndRefetch(order);
                 sqlAdapter.Commit();
-            }
-        }
-        
-        /// <summary>
-        /// Given scanned text, find the associated order
-        /// </summary>
-        public async Task<OrderEntity> FindOrder(string scanMsgScannedText)
-        {
-            await DownloadOrderOnDemand(scanMsgScannedText).ConfigureAwait(false);
-
-            return await FetchOrder(scanMsgScannedText).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Downloads order from customer's database
-        /// </summary>
-        private Task DownloadOrderOnDemand(string scanMsgScannedText)
-        {
-            // Downloads the order if needed
-            IOnDemandDownloader singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
-            return singleScanOnDemandDownloader.Download(scanMsgScannedText);
-        }
-
-        /// <summary>
-        /// Find corresponding order
-        /// </summary>
-        private async Task<OrderEntity> FetchOrder(string scannedText)
-        {
-            using (DbConnection conn = sqlSession.OpenConnection())
-            {
-                using (DbCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = singleScanSearchDefinitionProvider.GenerateSql(scannedText);
-
-                    long? orderId = (long?) await cmd.ExecuteScalarAsync().ConfigureAwait(false);
-
-                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(conn))
-                    {
-                        EntityQuery<OrderEntity> orderQuery = new QueryFactory().Order.Where(OrderFields.OrderID == orderId);
-                        return await adapter.FetchFirstAsync(orderQuery);
-                    }
-                }
             }
         }
     }

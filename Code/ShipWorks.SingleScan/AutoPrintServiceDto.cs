@@ -14,14 +14,14 @@ namespace ShipWorks.SingleScan
         public AutoPrintServiceDto(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
             SingleScanMessage scanMessage)
         {
-            MatchedOrderCount = singleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
+            MatchedOrderCount = singleScanFilterUpdateCompleteMessage?.FilterNodeContent?.Count ?? 0;
             ScannedBarcode = scanMessage.ScannedText;
 
-            bool orderNotFound = singleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
-                                     singleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
-                                     singleScanFilterUpdateCompleteMessage.OrderId == null;
+            bool orderNotFound = singleScanFilterUpdateCompleteMessage?.FilterNodeContent == null ||
+                                     singleScanFilterUpdateCompleteMessage?.FilterNodeContent.Count < 1 ||
+                                     singleScanFilterUpdateCompleteMessage?.OrderId == null;
 
-            OrderID = orderNotFound ? (long?) null : singleScanFilterUpdateCompleteMessage.OrderId.Value;
+            OrderID = orderNotFound ? (long?) null : singleScanFilterUpdateCompleteMessage?.OrderId.Value;
         }
 
         /// <summary>
