@@ -17,6 +17,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
@@ -24,6 +25,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -136,12 +138,18 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Set(x => x.ContentWeight, 2)
                 .Save();
 
-            messenger.Send(new OrderSelectionChangingMessage(this, new[] { context.Order.OrderID }));
+            //var shipment = ShippingManager.CreateShipment(context.Order);
+            var shipmentAdapter = context.Container.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
 
-            await Task.WhenAny(
-                messenger.OfType<OrderSelectionChangedMessage>().FirstAsync().ToTask(),
-                Task.Delay(TimeSpan.FromSeconds(10))
-                    .ContinueWith(t => throw new TimeoutException("Never received OrderSelectedChangedMessage")));
+            var message = new OrderSelectionChangedMessage(
+                this,
+                new IOrderSelection[]
+                {
+                    new LoadedOrderSelection(context.Order, new [] { shipmentAdapter }, Enumerable.Empty<KeyValuePair<long, ShippingAddressEditStateType>>())
+                },
+                null);
+
+            shippingPanelViewModel.LoadOrder(message);
         }
 
         [Given(@"the only rate is USPS Priority Mail")]
@@ -163,18 +171,20 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         }
 
         [When(@"a shipment is loaded")]
-        public async Task WhenAShipmentIsLoaded()
+        public void WhenAShipmentIsLoaded()
         {
-            messenger.Send(new OrderSelectionChangingMessage(this, new[] { context.Order.OrderID }));
+            var shipment = ShippingManager.CreateShipment(context.Order);
+            var shipmentAdapter = context.Container.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
 
-            var completedTask = Task.WhenAll(
-                messenger.OfType<ShipmentChangedMessage>().FirstAsync().ToTask(),
-                messenger.OfType<OrderSelectionChangedMessage>().FirstAsync().ToTask());
+            var message = new OrderSelectionChangedMessage(
+                this,
+                new IOrderSelection[]
+                {
+                    new LoadedOrderSelection(context.Order, new [] { shipmentAdapter }, Enumerable.Empty<KeyValuePair<long, ShippingAddressEditStateType>>())
+                },
+                null);
 
-            await Task.WhenAny(
-                completedTask,
-                Task.Delay(TimeSpan.FromSeconds(10))
-                    .ContinueWith(t => throw new TimeoutException("Never received OrderSelectedChangedMessage")));
+            shippingPanelViewModel.LoadOrder(message);
         }
 
         [When(@"the shipment is processed")]
@@ -193,12 +203,12 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         }
 
         [Then(@"the user can not access Best Rate")]
-        public Task ThenTheUserCanNotAccessBestRate() =>
-            RetryAssertion(() => Assert.DoesNotContain(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders));
+        public void ThenTheUserCanNotAccessBestRate() =>
+            Assert.DoesNotContain(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
 
         [Then(@"the user can access Best Rate")]
-        public Task ThenTheUserCanAccessBestRate() =>
-            RetryAssertion(() => Assert.Contains(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders));
+        public void ThenTheUserCanAccessBestRate() =>
+            Assert.Contains(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
 
         [Then(@"the provider is USPS")]
         public Task ThenTheProviderIsUSPS() =>
