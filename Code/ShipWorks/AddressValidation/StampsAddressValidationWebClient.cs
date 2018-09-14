@@ -6,12 +6,10 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Quartz.Util;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.AddressValidation
@@ -24,7 +22,7 @@ namespace ShipWorks.AddressValidation
     {
         private readonly IUspsWebClient uspsWebClient;
         private readonly IAddressValidationResultFactory addressValidationResultFactory;
-        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
+        private readonly UspsCounterRateAccountRepository accountRepository;
 
         /// <summary>
         /// Constructor
@@ -32,7 +30,7 @@ namespace ShipWorks.AddressValidation
         public StampsAddressValidationWebClient(
             Func<UspsResellerType, IUspsWebClient> createUspsWebClient,
             IAddressValidationResultFactory addressValidationResultFactory,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
+            UspsCounterRateAccountRepository accountRepository)
         {
             this.uspsWebClient = createUspsWebClient(UspsResellerType.None);
             this.addressValidationResultFactory = addressValidationResultFactory;
