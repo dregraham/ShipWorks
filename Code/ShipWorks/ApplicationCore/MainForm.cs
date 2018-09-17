@@ -121,35 +121,32 @@ namespace ShipWorks
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
     {
-        
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
         // Indicates if the background async login was a success.  This is to make sure we don't keep going on the UI thread
         // if it failed.
-        bool logonAsyncLoadSuccess = false;
-
-        readonly ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
+        private bool logonAsyncLoadSuccess = false;
+        private readonly ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
 
         // We have to remember these so that we can restore them after blanking the UI
-        readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
+        private readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
+        private IDictionary<RibbonTab, Func<UIMode, bool>> shouldTabBeEnabled;
 
         // Used to manage the UI state of the online update commands
-        readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
+        private readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
         // Used to keep ShipWorks "pumping" looking for data changes
-        Heartbeat heartBeat;
+        private Heartbeat heartBeat;
 
         // The FilterNode to restore if search is canceled
-        long searchRestoreFilterNodeID = 0;
-
-        readonly Lazy<DockControl> shipmentDock;
+        private long searchRestoreFilterNodeID = 0;
+        private readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
+        private ICurrentUserSettings currentUserSettings;
+        private Control orderLookupControl;
 
-        ICurrentUserSettings currentUserSettings;
-        Control orderLookupControl;
-        
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
@@ -160,7 +157,7 @@ namespace ShipWorks
         public MainForm()
         {
             orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
-            
+
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
             InitializeComponent();
@@ -178,6 +175,15 @@ namespace ShipWorks
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
 
             InitializeCustomEnablerComponents();
+
+            shouldTabBeEnabled = new Dictionary<RibbonTab, Func<UIMode, bool>>
+            {
+                { ribbonTabGridViewHome, x => x == UIMode.Batch },
+                { ribbonTabGridViewCreate, x => x == UIMode.Batch },
+                { ribbonTabView, x => x == UIMode.Batch },
+                { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
+                { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
+            };
         }
 
         /// <summary>
@@ -290,8 +296,9 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + UspsAccountManager.Express1Accounts.Count + UspsAccountManager.UspsAccounts.Count) > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
-            ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
+            ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
+            ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFields, () => UIMode == UIMode.OrderLookup);
 
             // Prepare stuff that needs prepare for dealing with UI changes for Editions
             PrepareEditionManagedUI();
@@ -766,7 +773,7 @@ namespace ShipWorks
             ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(LogonToShipWorksAsyncGetLicenseStatus, "checking license status"));
 
             UserEntity user = UserSession.User;
-            
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -775,7 +782,7 @@ namespace ShipWorks
 
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
             UpdateUIMode(user, false);
-            
+
             log.InfoFormat("UI shown");
 
             // Start the dashboard.  Has to be before updating store depending UI - as that affects dashboard display.
@@ -843,7 +850,7 @@ namespace ShipWorks
         private void ChangeUIMode(UIMode uiMode)
         {
             currentUserSettings.SetUIMode(uiMode);
-            
+
             UpdateUIMode(UserSession.User, true);
         }
 
@@ -862,6 +869,11 @@ namespace ShipWorks
             {
                 ToggleBatchMode(user);
             }
+
+            ribbon.Tabs.Clear();
+            EnableRibbonTabs();
+
+            buttonManageFilters.Visible = UIMode == UIMode.Batch;
 
             if (startHeartbeat)
             {
@@ -891,7 +903,7 @@ namespace ShipWorks
             panelDockingArea.Controls.Remove(orderLookupControl);
 
             ToggleUiModeCheckbox(UIMode.Batch);
-            
+
             heartBeat = new UIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
@@ -930,7 +942,7 @@ namespace ShipWorks
         private void ToggleOrderLookupMode()
         {
             ToggleUiModeCheckbox(UIMode.OrderLookup);
-            
+
             heartBeat = new Heartbeat();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
@@ -1246,14 +1258,7 @@ namespace ShipWorks
             // Show the tool bar
             ribbon.ToolBar = quickAccessToolBar;
 
-            // Add back in the tabs
-            foreach (RibbonTab tab in ribbonTabs)
-            {
-                ribbon.Tabs.Add(tab);
-
-                // Preserve order
-                tab.SendToBack();
-            }
+            EnableRibbonTabs();
 
             // Show all status bar strips
             statusBar.MainStrip.Visible = true;
@@ -1277,6 +1282,29 @@ namespace ShipWorks
             // Show main UI areas
             panelDockingArea.Visible = true;
         }
+
+        /// <summary>
+        /// Enable the ribbon tabs
+        /// </summary>
+        private void EnableRibbonTabs()
+        {
+            // Add back in the tabs
+            foreach (RibbonTab tab in ribbonTabs.Where(TabAppliesToUIMode))
+            {
+                ribbon.Tabs.Add(tab);
+
+                // Preserve order
+                tab.SendToBack();
+            }
+
+            ribbonSecurityProvider.UpdateSecurityUI();
+        }
+
+        /// <summary>
+        /// Does the specific tab apply to the current UI mode
+        /// </summary>
+        private bool TabAppliesToUIMode(RibbonTab tab) =>
+            shouldTabBeEnabled.TryGetValue(tab, out Func<UIMode, bool> func) ? func(UIMode) : true;
 
         /// <summary>
         /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
@@ -1412,7 +1440,7 @@ namespace ShipWorks
                 // Save the filter expand collapse state
                 settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
                 settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
-            
+
                 // Save the last active filter
                 if (gridControl.IsSearchActive)
                 {
@@ -1436,7 +1464,7 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            
+
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -1863,7 +1891,7 @@ namespace ShipWorks
             var ribbonActions = enabledActions.Where(a => a.Trigger.ShowOnRibbon);
 
             // Get the ribbon chunk that holds our action buttons
-            var actionChunk = ribbonTabHome.Chunks.Cast<RibbonChunk>().Where(c => c.Text == ribbonChunkName).SingleOrDefault();
+            var actionChunk = ribbonTabGridViewHome.Chunks.Cast<RibbonChunk>().Where(c => c.Text == ribbonChunkName).SingleOrDefault();
 
             // Maybe we need to remove it
             if (actionChunk != null)
@@ -1880,7 +1908,7 @@ namespace ShipWorks
                 // If there are no actions, kill the chunk
                 if (!ribbonActions.Any())
                 {
-                    ribbonTabHome.Chunks.Remove(actionChunk);
+                    ribbonTabGridViewHome.Chunks.Remove(actionChunk);
                 }
             }
 
@@ -1891,7 +1919,7 @@ namespace ShipWorks
                 if (actionChunk == null)
                 {
                     actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, ItemJustification = ItemJustification.Near };
-                    ribbonTabHome.Chunks.Add(actionChunk);
+                    ribbonTabGridViewHome.Chunks.Add(actionChunk);
                 }
 
                 // Add all the buttons
@@ -1970,7 +1998,7 @@ namespace ShipWorks
         /// <summary>
         /// User has clicked a custom action button
         /// </summary>
-        void OnCustomActionButton(object sender, EventArgs e)
+        private void OnCustomActionButton(object sender, EventArgs e)
         {
             long actionID = (long) ((SandButton) sender).Tag;
 
@@ -1980,7 +2008,7 @@ namespace ShipWorks
         /// <summary>
         /// User has clicked a custom action menu
         /// </summary>
-        void OnCustomActionMenu(object sender, EventArgs e)
+        private void OnCustomActionMenu(object sender, EventArgs e)
         {
             long actionID = (long) ((ToolStripMenuItem) sender).Tag;
 
@@ -2354,7 +2382,7 @@ namespace ShipWorks
         /// <summary>
         /// Called when items have been removed from the DataProvider.EntityCache b\c they are known to be dirty
         /// </summary>
-        void OnEntityChangeDetected(object sender, EventArgs e)
+        private void OnEntityChangeDetected(object sender, EventArgs e)
         {
             ForceHeartbeat(HeartbeatOptions.ForceReload);
         }
@@ -2390,7 +2418,7 @@ namespace ShipWorks
         /// <summary>
         /// Logic that happens when a modal window is opening
         /// </summary>
-        void OnEnterThreadModal(object sender, EventArgs e)
+        private void OnEnterThreadModal(object sender, EventArgs e)
         {
             if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
@@ -2412,7 +2440,7 @@ namespace ShipWorks
         /// <summary>
         /// Modal window is closing
         /// </summary>
-        void OnLeaveThreadModal(object sender, EventArgs e)
+        private void OnLeaveThreadModal(object sender, EventArgs e)
         {
             if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
@@ -2434,7 +2462,7 @@ namespace ShipWorks
         /// <summary>
         /// A connection sensitive scope is about to be acquired
         /// </summary>
-        void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
+        private void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
         {
             // Search has to be canceled before potential changing databases, otherwise it wouldn't have a chance to cleanup in the current database.
             gridControl.CancelSearch();
@@ -2443,7 +2471,7 @@ namespace ShipWorks
         /// <summary>
         /// When an action is ran it could cause filtering side affects so we force the heartbeat right away
         /// </summary>
-        void OnActionRan(object sender, EventArgs e)
+        private void OnActionRan(object sender, EventArgs e)
         {
             ForceHeartbeat(HeartbeatOptions.ChangesExpected);
         }
@@ -2511,7 +2539,7 @@ namespace ShipWorks
         /// <summary>
         /// Called when one of the filter windows gets displayed.  It then brings focus to the correct filter.
         /// </summary>
-        void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
+        private void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
         {
             // Get the dockable window so that we can get the filter tree
             DockControl dockableWindowFilters = (DockableWindow) sender;
@@ -2840,7 +2868,7 @@ namespace ShipWorks
         /// <summary>
         /// A download is starting
         /// </summary>
-        void OnDownloadStarting(object sender, EventArgs e)
+        private void OnDownloadStarting(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2857,7 +2885,7 @@ namespace ShipWorks
         /// <summary>
         /// A download has ended
         /// </summary>
-        void OnDownloadComplete(object sender, DownloadCompleteEventArgs e)
+        private void OnDownloadComplete(object sender, DownloadCompleteEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2963,7 +2991,7 @@ namespace ShipWorks
         /// <summary>
         /// Emailing is beginning
         /// </summary>
-        void OnEmailStarting(object sender, EventArgs e)
+        private void OnEmailStarting(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2979,7 +3007,7 @@ namespace ShipWorks
         /// <summary>
         /// Emailing has ended
         /// </summary>
-        void OnEmailComplete(object sender, EmailCommunicationCompleteEventArgs e)
+        private void OnEmailComplete(object sender, EmailCommunicationCompleteEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -3375,7 +3403,7 @@ namespace ShipWorks
         /// <summary>
         /// When closing a order or customer filter, switch to the other one.
         /// </summary>
-        void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
+        private void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
         {
             if (UserSession.IsLoggedOn)
             {
@@ -4266,7 +4294,7 @@ namespace ShipWorks
         /// <summary>
         /// User input is required to help resolve what email settings should be used during an email generation operation
         /// </summary>
-        void OnEmailResolveSettings(object sender, EmailSettingsResolveEventArgs e)
+        private void OnEmailResolveSettings(object sender, EmailSettingsResolveEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -4418,7 +4446,7 @@ namespace ShipWorks
         /// <summary>
         /// It is necessary to prompt the user for a file or folder name during a save operation
         /// </summary>
-        void OnSavePromptForFile(object sender, SavePromptForFileEventArgs e)
+        private void OnSavePromptForFile(object sender, SavePromptForFileEventArgs e)
         {
             if (InvokeRequired)
             {

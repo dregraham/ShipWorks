@@ -24,6 +24,7 @@ namespace ShipWorks.Users.Security
         [PermissionScope(PermissionScope.Global)] ManageFilters = 13,
         [PermissionScope(PermissionScope.Global)] ManageTemplates = 14,
         [PermissionScope(PermissionScope.Global)] ManageEmailAccounts = 15,
+        [PermissionScope(PermissionScope.Global)] ManageFields = 16,
 
         [PermissionScope(PermissionScope.Global)] CustomersSendEmail = 20,
         [PermissionScope(PermissionScope.Global)] CustomersCreateEdit = 21,
