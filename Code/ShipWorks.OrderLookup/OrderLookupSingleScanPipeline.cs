@@ -64,7 +64,6 @@ namespace ShipWorks.OrderLookup
                 .SelectMany(x => orderRepository.GetOrderID(x.SearchText).ToObservable())
                 .SelectMany(x => orderRepository.GetOrder(x))
                 .Subscribe(SendOrderMessage)
-
                 );
         }
 
