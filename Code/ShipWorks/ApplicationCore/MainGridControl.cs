@@ -462,7 +462,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void ReloadGridColumns()
         {
-            if (ActiveGrid.ActiveFilterNode != null)
+            if (ActiveGrid?.ActiveFilterNode != null)
             {
                 ActiveGrid.ReloadColumns();
             }
@@ -473,7 +473,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void SaveGridColumnState()
         {
-            if (ActiveGrid.ActiveFilterNode != null)
+            if (ActiveGrid?.ActiveFilterNode != null)
             {
                 ActiveGrid.SaveColumns();
             }
