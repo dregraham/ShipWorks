@@ -197,18 +197,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private AccountInfoV27 GetAccountInfoInternal(IUspsAccountEntity account)
         {
-            AccountInfoV27 accountInfo;
-
             using (ISwsimV69 webService = CreateWebService("GetAccountInfo"))
             {
-                // Address and CustomerEmail are not returned by Express1, so do not use them.
-                Address address;
-                string email;
-
-                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+                return webService.GetAccountInfo(GetCredentials(account)).AccountInfo;
             }
-
-            return accountInfo;
         }
 
         /// <summary>
@@ -683,7 +675,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address));
+                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address)).ConfigureAwait(false);
             }
             catch (AggregateException ex)
             {

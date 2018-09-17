@@ -12,7 +12,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     [Component]
     public class YahooApiDownloader : StoreDownloader, IYahooApiDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(YahooApiDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(YahooApiDownloader));
 
         private readonly IYahooApiWebClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;

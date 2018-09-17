@@ -18,7 +18,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Actions
 
         // Makes sure the database doesn't change while running actions
         private static ApplicationBusyToken busyToken;
-        private static object runningLock = new object();
+        private static readonly object runningLock = new object();
 
         private ActionQueueGateway gateway;
 

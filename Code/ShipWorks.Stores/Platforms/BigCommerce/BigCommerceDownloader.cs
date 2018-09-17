@@ -13,7 +13,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -30,16 +30,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BigCommerce)]
     public class BigCommerceDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
-        int totalCount;
-        IBigCommerceWebClient webClient;
-        readonly BigCommerceStoreEntity bigCommerceStore;
-        const int MissingCustomerID = 0;
-
-        IBigCommerceStatusCodeProvider statusProvider;
-        readonly IBigCommerceWebClientFactory webClientFactory;
-        readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
-        readonly IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory;
+        private static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
+        private int totalCount;
+        private IBigCommerceWebClient webClient;
+        private readonly BigCommerceStoreEntity bigCommerceStore;
+        private const int MissingCustomerID = 0;
+        private IBigCommerceStatusCodeProvider statusProvider;
+        private readonly IBigCommerceWebClientFactory webClientFactory;
+        private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
+        private readonly IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory;
 
         /// <summary>
         /// Constructor

@@ -16,7 +16,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shared.Database
             string databaseName = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Select(x => x.GetName().Name)
-                .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
+                .FirstOrDefault(x => (x.Contains("Integration") || x.Contains("Specs")) && x.Contains("ShipWorks"))
                 .Replace("ShipWorks", "SW_" + databasePrefix)
                 .Replace(".", "_");
 
@@ -212,7 +212,13 @@ namespace ShipWorks.Tests.Shared.Database
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
-            ShipWorksSession.Initialize(Guid.NewGuid());
+            ShipWorksSession.Initialize(
+                Guid.Parse("{00000000-0000-0000-0000-000000000001}"),
+                Guid.Parse("{00000000-0000-0000-0000-000000000002}"),
+                Guid.Parse("{00000000-0000-0000-0000-000000000003}"),
+                null);
+
+            DataPath.Initialize();
 
             return new DataContext(mock, context.Item1, context.Item2, container);
         }
@@ -267,6 +273,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
             ShipWorksSession.Initialize(Guid.NewGuid());
+
+            DataPath.Initialize();
 
             return new DataContext(mock, context.Item1, context.Item2);
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Moq;
 using Newtonsoft.Json;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;

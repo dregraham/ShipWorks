@@ -11,7 +11,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -26,10 +26,10 @@ namespace ShipWorks.Stores.Platforms.PayPal
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PayPal)]
     public class PayPalDownloader : StoreDownloader
     {
-        const int maxIntialDownload = 365;
+        private const int maxIntialDownload = 365;
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(PayPalDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PayPalDownloader));
 
         /// <summary>
         /// Convenience property for quick access to the specific store entity

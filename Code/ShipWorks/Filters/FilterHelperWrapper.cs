@@ -3,7 +3,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;

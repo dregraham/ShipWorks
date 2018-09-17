@@ -368,6 +368,8 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register<ITangoWebClient>((x) => x.Resolve<ITangoWebClientFactory>().CreateWebClient());
 
+            builder.Register<ICredentialStore>(x => TangoCredentialStore.Instance);
+
             builder.RegisterType<DataResourceManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

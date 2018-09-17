@@ -8,7 +8,7 @@ using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -32,10 +32,10 @@ namespace ShipWorks.Data
     public static class DeletionService
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(DeletionService));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DeletionService));
 
         // Global flag indicating if we are currently in the process of deleting the store
-        static volatile bool deletingStore = false;
+        private static bool deletingStore = false;
 
         /// <summary>
         /// Indicates if ShipWorks is currently in the process of deleting a store

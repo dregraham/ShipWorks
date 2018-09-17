@@ -9,7 +9,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     [Component]
     public class ChannelAdvisorDownloader : StoreDownloader, IChannelAdvisorSoapDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorDownloader));
         // total download count
         private int totalCount;
 
@@ -467,7 +467,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 return;
             }
-            
+
             PopulateItemInventoryDetails(orderItem, matchingItem);
             PopulateItemAttributes(soapClient, orderItem);
             PopulateImages(soapClient, orderItem);
@@ -517,7 +517,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 orderItem.MPN = matchingItem.MPN;
             }
-            
+
             orderItem.Length = matchingItem.Length ?? 0;
             orderItem.Width = matchingItem.Width ?? 0;
             orderItem.Height = matchingItem.Height ?? 0;

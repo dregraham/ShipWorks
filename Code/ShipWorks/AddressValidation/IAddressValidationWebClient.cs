@@ -1,5 +1,5 @@
-﻿using Interapptive.Shared.Business;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.AddressValidation
 {

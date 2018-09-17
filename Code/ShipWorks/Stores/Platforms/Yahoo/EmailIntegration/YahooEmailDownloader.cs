@@ -16,7 +16,7 @@ using Rebex.Mail;
 using Rebex.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
@@ -32,13 +32,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
     [Component]
     public class YahooEmailDownloader : StoreDownloader, IYahooEmailDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailDownloader));
 
         // Regex for extracting the image url
-        static Regex thumbRegex = new Regex(
+        private static Regex thumbRegex = new Regex(
             "src[ ]*=[ ]*('|\")?(?<url>[^ >]*)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-        int messageCount = 0;
+        private int messageCount = 0;
 
         /// <summary>
         /// Constructor
