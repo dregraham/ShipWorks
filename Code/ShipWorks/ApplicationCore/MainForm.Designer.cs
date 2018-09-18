@@ -426,6 +426,7 @@ namespace ShipWorks
             // 
             // buttonDeleteCustomer
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonDeleteCustomer, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.buttonDeleteCustomer.Guid = new System.Guid("acf571fa-b3ae-4e65-a734-a35a44d36aaf");
             this.buttonDeleteCustomer.Image = global::ShipWorks.Properties.Resources.customer_delete;
             this.ribbonSecurityProvider.SetPermission(this.buttonDeleteCustomer, ShipWorks.Users.Security.PermissionType.CustomersDelete);
@@ -833,6 +834,7 @@ namespace ShipWorks
             // 
             // buttonDeleteOrders
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonDeleteOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonDeleteOrders.Guid = new System.Guid("acf571fa-b3ae-4e65-a734-a35a44d36aaf");
             this.buttonDeleteOrders.Image = global::ShipWorks.Properties.Resources.order_delete;
             this.ribbonSecurityProvider.SetPermission(this.buttonDeleteOrders, ShipWorks.Users.Security.PermissionType.OrdersModify);
@@ -869,6 +871,7 @@ namespace ShipWorks
             // 
             // buttonEditCustomer
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonEditCustomer, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneCustomer);
             this.buttonEditCustomer.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
             this.buttonEditCustomer.Image = global::ShipWorks.Properties.Resources.customer_edit32;
             this.buttonEditCustomer.Margin = new Divelements.SandRibbon.WidgetEdges(3, 0, 3, 0);
@@ -880,6 +883,7 @@ namespace ShipWorks
             // 
             // buttonEditOrder
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonEditOrder, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
             this.buttonEditOrder.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
             this.buttonEditOrder.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.buttonEditOrder.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
@@ -1336,6 +1340,10 @@ namespace ShipWorks
             this.toolStripMenuItemOpenShipWorks.Text = "Open ShipWorks";
             this.toolStripMenuItemOpenShipWorks.Click += new System.EventHandler(this.OnTaskTrayMenuOpenShipWorks);
             // 
+            // kryptonManager
+            // 
+            this.kryptonManager.GlobalPaletteMode = ComponentFactory.Krypton.Toolkit.PaletteModeManager.Office2010Blue;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -1434,6 +1442,7 @@ namespace ShipWorks
             // 
             // contextOrderEditOrder
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderEditOrder, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
             this.contextOrderEditOrder.Image = global::ShipWorks.Properties.Resources.order_edit;
             this.contextOrderEditOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderEditOrder, new System.Guid("e17b12c8-b5b7-4b48-a8c1-c51f108f57e0"));
@@ -1472,6 +1481,7 @@ namespace ShipWorks
             // 
             this.contextOrderLocalStatus.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stuffToolStripMenuItem});
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderLocalStatus, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderLocalStatus.Image = global::ShipWorks.Properties.Resources.document_pulse;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderLocalStatus, new System.Guid("00fdea99-3f34-49bc-87de-92fc0636b5b8"));
             this.contextOrderLocalStatus.Name = "contextOrderLocalStatus";
@@ -1491,6 +1501,7 @@ namespace ShipWorks
             this.contextOrderOnlineUpdate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.orderContextUpdateOnlineEbay,
             this.orderContextUpdateOnlineOsCommerce});
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderOnlineUpdate, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderOnlineUpdate.Image = global::ShipWorks.Properties.Resources.server_from_client;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderOnlineUpdate, new System.Guid("16ff9a2f-0a14-4efc-acac-f872844d18e7"));
             this.contextOrderOnlineUpdate.Name = "contextOrderOnlineUpdate";
@@ -1606,6 +1617,7 @@ namespace ShipWorks
             // 
             // contextOrderEditCustomer
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderEditCustomer, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
             this.contextOrderEditCustomer.Image = global::ShipWorks.Properties.Resources.customer_edit;
             this.contextOrderEditCustomer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderEditCustomer, new System.Guid("62812a8e-8883-4b6a-95d3-fe840ad7f92b"));
@@ -1616,6 +1628,7 @@ namespace ShipWorks
             // 
             // contextOrderLookupCustomer
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderLookupCustomer, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
             this.contextOrderLookupCustomer.Image = ((System.Drawing.Image)(resources.GetObject("contextOrderLookupCustomer.Image")));
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderLookupCustomer, new System.Guid("4cff76a9-1bdb-498e-8198-aa7d87adae45"));
             this.contextOrderLookupCustomer.Name = "contextOrderLookupCustomer";
@@ -1633,6 +1646,7 @@ namespace ShipWorks
             // 
             // contextOrderShipOrders
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderShipOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderShipOrders.Image = global::ShipWorks.Properties.Resources.box_closed16;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderShipOrders, new System.Guid("af9da9af-d77f-4994-99cc-da3e1fbca237"));
             this.contextOrderShipOrders.Name = "contextOrderShipOrders";
@@ -1642,6 +1656,7 @@ namespace ShipWorks
             // 
             // contextOrderTrackShipments
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderTrackShipments, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderTrackShipments.Image = global::ShipWorks.Properties.Resources.box_view16;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderTrackShipments, new System.Guid("7b697c6c-60cf-460f-b2d6-8bb2be1abbc4"));
             this.contextOrderTrackShipments.Name = "contextOrderTrackShipments";
@@ -1651,6 +1666,7 @@ namespace ShipWorks
             // 
             // contextOrderInsuranceClaim
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderInsuranceClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderInsuranceClaim, new System.Guid("ce0039b3-5b6e-4e8b-9a5d-d01ed5047a9e"));
             this.contextOrderInsuranceClaim.Name = "contextOrderInsuranceClaim";
@@ -1666,6 +1682,7 @@ namespace ShipWorks
             // 
             // contextOrderCopy
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderCopy, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderCopy.Image = global::ShipWorks.Properties.Resources.copy;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCopy, new System.Guid("3789e9b4-00cb-4736-95b6-b9a0605da02b"));
             this.contextOrderCopy.Name = "contextOrderCopy";
@@ -1681,6 +1698,7 @@ namespace ShipWorks
             // contextOrderQuickPrint
             // 
             this.contextOrderQuickPrint.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderQuickPrint, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderQuickPrint.Image = global::ShipWorks.Properties.Resources.printer_ok;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderQuickPrint, new System.Guid("43becaa8-f22c-4e38-b0b6-5a2060a4aba5"));
             this.contextOrderQuickPrint.Name = "contextOrderQuickPrint";
@@ -1717,6 +1735,7 @@ namespace ShipWorks
             // contextOrderPrint
             // 
             this.contextOrderPrint.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderPrint, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderPrint.Image = global::ShipWorks.Properties.Resources.printer1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderPrint, new System.Guid("d35c6b65-49ff-4486-beb4-41d619e06e9a"));
             this.contextOrderPrint.Name = "contextOrderPrint";
@@ -1727,6 +1746,7 @@ namespace ShipWorks
             // contextOrderPreview
             // 
             this.contextOrderPreview.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderPreview, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderPreview.Image = global::ShipWorks.Properties.Resources.printer_view16;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderPreview, new System.Guid("11333623-2689-4994-899a-fe26ac9603a7"));
             this.contextOrderPreview.Name = "contextOrderPreview";
@@ -1743,6 +1763,7 @@ namespace ShipWorks
             // contextOrderEmailNow
             // 
             this.contextOrderEmailNow.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderEmailNow, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderEmailNow.Image = global::ShipWorks.Properties.Resources.mail_forward1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderEmailNow, new System.Guid("492594ee-bbff-40d9-ad5f-21ddc30b7514"));
             this.contextOrderEmailNow.Name = "contextOrderEmailNow";
@@ -1754,6 +1775,7 @@ namespace ShipWorks
             // contextOrderComposeEmail
             // 
             this.contextOrderComposeEmail.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderComposeEmail, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderComposeEmail.Image = global::ShipWorks.Properties.Resources.mail_write1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderComposeEmail, new System.Guid("d90d9f70-3a46-41f9-b9ff-59f444c995a7"));
             this.contextOrderComposeEmail.Name = "contextOrderComposeEmail";
@@ -1773,6 +1795,7 @@ namespace ShipWorks
             // contextOrderSave
             // 
             this.contextOrderSave.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderSave, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderSave.Image = global::ShipWorks.Properties.Resources.disk_blue1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSave, new System.Guid("2ddae66f-6e3f-4cd3-8f3f-6e993340d720"));
             this.contextOrderSave.Name = "contextOrderSave";
@@ -1784,6 +1807,7 @@ namespace ShipWorks
             // contextOrderSaveOpen
             // 
             this.contextOrderSaveOpen.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.contextOrderSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSaveOpen, new System.Guid("45740634-1267-49c5-ba6c-ee0f5f5be1d7"));
             this.contextOrderSaveOpen.Name = "contextOrderSaveOpen";
@@ -1817,6 +1841,7 @@ namespace ShipWorks
             // contextCustomerEmailNow
             // 
             this.contextCustomerEmailNow.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerEmailNow, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerEmailNow.Image = global::ShipWorks.Properties.Resources.mail_forward1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerEmailNow, new System.Guid("8a832f81-a470-44cb-a984-7e7e4f93c2f1"));
             this.contextCustomerEmailNow.Name = "contextCustomerEmailNow";
@@ -1829,6 +1854,7 @@ namespace ShipWorks
             // contextCustomerSave
             // 
             this.contextCustomerSave.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSave, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerSave.Image = global::ShipWorks.Properties.Resources.disk_blue1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSave, new System.Guid("2ea96f33-c914-40ff-9828-deb1556e1b4e"));
             this.contextCustomerSave.Name = "contextCustomerSave";
@@ -1840,6 +1866,7 @@ namespace ShipWorks
             // contextCustomerComposeEmail
             // 
             this.contextCustomerComposeEmail.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerComposeEmail, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerComposeEmail.Image = global::ShipWorks.Properties.Resources.mail_write1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerComposeEmail, new System.Guid("403d8e5c-5669-4fa0-bc7f-041bc60bdb28"));
             this.contextCustomerComposeEmail.Name = "contextCustomerComposeEmail";
@@ -1875,6 +1902,7 @@ namespace ShipWorks
             // 
             // contextCustomerEditCustomer
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerEditCustomer, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneCustomer);
             this.contextCustomerEditCustomer.Image = global::ShipWorks.Properties.Resources.customer_edit;
             this.contextCustomerEditCustomer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerEditCustomer, new System.Guid("0a6cb638-1ff9-489d-b325-2ef305c5e460"));
@@ -1905,6 +1933,7 @@ namespace ShipWorks
             // 
             // contextCustomerNewOrder
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerNewOrder, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneCustomer);
             this.contextCustomerNewOrder.Image = global::ShipWorks.Properties.Resources.order_add;
             this.contextCustomerNewOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerNewOrder, new System.Guid("a06e626d-7849-46e5-9526-a644e67f525e"));
@@ -1916,6 +1945,7 @@ namespace ShipWorks
             // 
             // contextCustomerLookupOrders
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerLookupOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneCustomer);
             this.contextCustomerLookupOrders.Image = ((System.Drawing.Image)(resources.GetObject("contextCustomerLookupOrders.Image")));
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerLookupOrders, new System.Guid("5dc6ab77-dc4e-41c6-b535-082207de7e20"));
             this.contextCustomerLookupOrders.Name = "contextCustomerLookupOrders";
@@ -1931,6 +1961,7 @@ namespace ShipWorks
             // 
             // contextCustomerCopy
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerCopy, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerCopy.Image = global::ShipWorks.Properties.Resources.copy;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerCopy, new System.Guid("b29c29bf-0ea0-428e-b2cd-4bca4006366e"));
             this.contextCustomerCopy.Name = "contextCustomerCopy";
@@ -1971,6 +2002,7 @@ namespace ShipWorks
             // 
             // buttonShipOrders
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonShipOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonShipOrders.Guid = new System.Guid("21097c48-9a4b-4722-8ec3-b9e2afec93c2");
             this.buttonShipOrders.Image = ((System.Drawing.Image)(resources.GetObject("buttonShipOrders.Image")));
             this.buttonShipOrders.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
@@ -1981,6 +2013,7 @@ namespace ShipWorks
             // 
             // buttonTrackOrders
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonTrackOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonTrackOrders.Guid = new System.Guid("3d49345d-8c97-4a62-9e3b-24acb41ba469");
             this.buttonTrackOrders.Image = global::ShipWorks.Properties.Resources.box_view32;
             this.buttonTrackOrders.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
@@ -1992,6 +2025,7 @@ namespace ShipWorks
             // buttonLocalStatus
             // 
             this.buttonLocalStatus.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonLocalStatus, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonLocalStatus.Guid = new System.Guid("020d3d77-23ad-4391-9bcc-60be5437b4aa");
             this.buttonLocalStatus.Image = ((System.Drawing.Image)(resources.GetObject("buttonLocalStatus.Image")));
             this.buttonLocalStatus.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 2);
@@ -2008,6 +2042,7 @@ namespace ShipWorks
             // buttonUpdateOnline
             // 
             this.buttonUpdateOnline.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonUpdateOnline, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonUpdateOnline.Guid = new System.Guid("e9d81cb9-ec6b-44f6-bdfa-46c2f61811f9");
             this.buttonUpdateOnline.Image = ((System.Drawing.Image)(resources.GetObject("buttonUpdateOnline.Image")));
             this.buttonUpdateOnline.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 2);
@@ -2024,6 +2059,7 @@ namespace ShipWorks
             // buttonPrint
             // 
             this.buttonPrint.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonPrint, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonPrint.Guid = new System.Guid("7c807fb3-5927-4863-a5b0-df4304072d0d");
             this.buttonPrint.Image = global::ShipWorks.Properties.Resources.printer;
             this.buttonPrint.PopupWidget = this.popupPrint;
@@ -2038,6 +2074,7 @@ namespace ShipWorks
             // buttonPreview
             // 
             this.buttonPreview.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonPreview, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonPreview.Guid = new System.Guid("89968f25-4ba5-4ea9-98a2-f9ff5388848a");
             this.buttonPreview.Image = global::ShipWorks.Properties.Resources.printer_view32;
             this.buttonPreview.PopupWidget = this.popupPreview;
@@ -2052,6 +2089,7 @@ namespace ShipWorks
             // buttonEmailSend
             // 
             this.buttonEmailSend.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonEmailSend, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonEmailSend.Guid = new System.Guid("ab2f4742-e91d-460c-8bde-6dff7fa7a0ea");
             this.buttonEmailSend.Image = global::ShipWorks.Properties.Resources.mail_forward;
             this.ribbonSecurityProvider.SetPermission(this.buttonEmailSend, ShipWorks.Users.Security.PermissionType.EntityTypeSendEmail);
@@ -2068,6 +2106,7 @@ namespace ShipWorks
             // buttonEmailCompose
             // 
             this.buttonEmailCompose.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonEmailCompose, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonEmailCompose.Guid = new System.Guid("e9dcfc44-0b5f-4986-abbd-2ba5ebd70880");
             this.buttonEmailCompose.Image = global::ShipWorks.Properties.Resources.mail_write;
             this.ribbonSecurityProvider.SetPermission(this.buttonEmailCompose, ShipWorks.Users.Security.PermissionType.EntityTypeSendEmail);
@@ -2083,6 +2122,7 @@ namespace ShipWorks
             // buttonSave
             // 
             this.buttonSave.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonSave, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonSave.Guid = new System.Guid("8add2e06-529e-46b6-83d9-28e1d38bbf2a");
             this.buttonSave.Image = global::ShipWorks.Properties.Resources.disk_blue;
             this.buttonSave.PopupWidget = this.popupSave;
@@ -2097,6 +2137,7 @@ namespace ShipWorks
             // buttonSaveOpen
             // 
             this.buttonSaveOpen.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonSaveOpen.Guid = new System.Guid("2e88ebc9-2b6a-4b87-8136-89fb142a9658");
             this.buttonSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window;
             this.buttonSaveOpen.PopupWidget = this.popupSaveOpen;
@@ -2111,6 +2152,7 @@ namespace ShipWorks
             // buttonQuickPrint
             // 
             this.buttonQuickPrint.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonQuickPrint, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonQuickPrint.Guid = new System.Guid("b1074a38-344c-473d-80c4-c3cc5c71b196");
             this.buttonQuickPrint.Image = global::ShipWorks.Properties.Resources.printer_ok1;
             this.buttonQuickPrint.PopupWidget = this.popupQuickPrint;
@@ -2124,6 +2166,7 @@ namespace ShipWorks
             // 
             // buttonInsuranceClaim
             // 
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonInsuranceClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonInsuranceClaim.Guid = new System.Guid("e21c1c0c-938a-4f01-a9fe-0b02075221bd");
             this.buttonInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message32;
             this.buttonInsuranceClaim.Text = "File Claim";
