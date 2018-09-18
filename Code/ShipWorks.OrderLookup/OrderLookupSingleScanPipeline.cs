@@ -53,18 +53,28 @@ namespace ShipWorks.OrderLookup
 
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Do(x => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(x.ScannedText))
+                .SelectMany(x => Download<SingleScanMessage>(x.ScannedText, x))
                 .SelectMany(x => AutoPrint(x))
                 .SelectMany(x => orderRepository.GetOrder(x.OrderID))
                 .Subscribe(SendOrderMessage),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Do(x => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(x.SearchText))
+                .SelectMany(x=> Download<OrderLookupSearchMessage>(x.SearchText, x))
                 .SelectMany(x => orderRepository.GetOrderID(x.SearchText).ToObservable())
                 .SelectMany(x => orderRepository.GetOrder(x))
                 .Subscribe(SendOrderMessage)
                 );
+        }
+
+        /// <summary>
+        /// Downloads the order and returns the message
+        /// </summary>
+        public async Task<T> Download<T>(string message, T toReturn)
+        {
+            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message);
+
+            return toReturn;
         }
 
         /// <summary>
