@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Insurance
     /// </summary>
     public partial class InsuranceSelectionControl : UserControl
     {
-        List<IInsuranceChoice> loadedInsurance = new List<IInsuranceChoice>();
+        private List<IInsuranceChoice> loadedInsurance = new List<IInsuranceChoice>();
 
         /// <summary>
         /// The user has edited\changed something about the insurance
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Insurance
         public event EventHandler InsuranceOptionsChanged;
 
         // So we know when not to raise the changed event
-        bool loading = false;
+        private bool loading = false;
 
         // The last value. This tracks if the value has changed.
         private decimal? lastValue = null;
@@ -163,6 +163,14 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void UpdateCostDisplay(ShipmentEntity shipment, decimal value)
         {
+            //using (var lifetimeScope = IoC.BeginLifetimeScope())
+            //{
+            //    var storeTypeManager = lifetimeScope.Resolve<IStoreTypeManager>();
+            //    var storeType = storeTypeManager.GetType(shipment);
+
+            //    var shipmentToUse = storeType.WillOverrideShipmentDetailsChangeShipment(shipment) ? EntityUtility.CloneEntity(shipment) : shipment;
+            //    storeType.OverrideShipmentDetails(shipmentToUse);
+
             // Get the cost 
             InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, value);
 
@@ -172,14 +180,15 @@ namespace ShipWorks.Shipping.Insurance
             }
             else
             {
-                ShowShipWorksInsuranceCost(shipment, cost);
+                ShowShipWorksInsuranceCost(shipment.ShipmentTypeCode, cost);
             }
+            //}
         }
 
         /// <summary>
         /// Updates the controls to show the ShipWorks insurance cost.
         /// </summary>
-        private void ShowShipWorksInsuranceCost(ShipmentEntity shipment, InsuranceCost cost)
+        private void ShowShipWorksInsuranceCost(ShipmentTypeCode shipmentTypeCode, InsuranceCost cost)
         {
             // See if there is an info message to display
             if (cost.InfoMessage != null)
@@ -239,7 +248,7 @@ namespace ShipWorks.Shipping.Insurance
                 {
                     linkSavings.Visible = true;
                     linkSavings.Text = "Add coverage for the first $100";
-                    linkSavings.Tag = (ShipmentTypeCode) shipment.ShipmentType;
+                    linkSavings.Tag = shipmentTypeCode;
                 }
             }
         }
