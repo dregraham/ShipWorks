@@ -100,6 +100,11 @@ namespace ShipWorks.Shipping.Services
         IEnumerable<IPackageAdapter> GetPackageAdapters();
 
         /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        IEnumerable<IPackageAdapter> GetPackageAdaptersAndEnsureShipmentIsLoaded();
+
+        /// <summary>
         /// List of customs items for the shipment
         /// </summary>
         IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters();
