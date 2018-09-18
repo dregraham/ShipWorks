@@ -102,9 +102,17 @@
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupControl\OrderLookupViewModel.cs" />
+    <Compile Include="Controls\OrderLookupFromControl.xaml.cs">
+      <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OrderLookupToControl.xaml.cs">
+      <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupToViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
@@ -165,7 +173,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\OrderLookupFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
