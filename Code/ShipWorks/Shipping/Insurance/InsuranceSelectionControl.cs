@@ -163,15 +163,6 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void UpdateCostDisplay(ShipmentEntity shipment, decimal value)
         {
-            //using (var lifetimeScope = IoC.BeginLifetimeScope())
-            //{
-            //    var storeTypeManager = lifetimeScope.Resolve<IStoreTypeManager>();
-            //    var storeType = storeTypeManager.GetType(shipment);
-
-            //    var shipmentToUse = storeType.WillOverrideShipmentDetailsChangeShipment(shipment) ? EntityUtility.CloneEntity(shipment) : shipment;
-            //    storeType.OverrideShipmentDetails(shipmentToUse);
-
-            // Get the cost 
             InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, value);
 
             if (shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks)
@@ -182,7 +173,6 @@ namespace ShipWorks.Shipping.Insurance
             {
                 ShowShipWorksInsuranceCost(shipment.ShipmentTypeCode, cost);
             }
-            //}
         }
 
         /// <summary>
