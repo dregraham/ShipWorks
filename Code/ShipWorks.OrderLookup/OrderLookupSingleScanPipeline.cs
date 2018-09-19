@@ -53,39 +53,35 @@ namespace ShipWorks.OrderLookup
 
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .SelectMany(x => Download<SingleScanMessage>(x.ScannedText, x))
-                .SelectMany(x => AutoPrint(x))
-                .SelectMany(x => orderRepository.GetOrder(x.OrderID))
-                .Subscribe(SendOrderMessage),
+                .Subscribe(x => OnSingleScanMessage(x)),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .SelectMany(x=> Download<OrderLookupSearchMessage>(x.SearchText, x))
-                .SelectMany(x => orderRepository.GetOrderID(x.SearchText).ToObservable())
-                .SelectMany(x => orderRepository.GetOrder(x))
-                .Subscribe(SendOrderMessage)
+                .Subscribe(x => OnOrderLookupSearchMessage(x))
                 );
         }
 
         /// <summary>
-        /// Downloads the order and returns the message
+        /// Download order, auto print if needed, send order message
         /// </summary>
-        public async Task<T> Download<T>(string message, T toReturn)
+        private async Task OnSingleScanMessage(SingleScanMessage message)
         {
-            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message);
-
-            return toReturn;
+            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
+            long orderId = orderRepository.GetOrderID(message.ScannedText);
+            await orderLookupAutoPrintService.AutoPrintShipment(orderId, message);
+            OrderEntity order = await orderRepository.GetOrder(orderId);
+            SendOrderMessage(order);
         }
 
         /// <summary>
-        /// Do AutoPrint for the order
+        /// Download order, send order message
         /// </summary>
-        private async Task<(long OrderID, SingleScanMessage Message)> AutoPrint(SingleScanMessage message)
+        private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
-            long orderId = await orderRepository.GetOrderID(message.ScannedText);
-            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId, message);
-
-            return (orderId, message);
+            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
+            long orderId = orderRepository.GetOrderID(message.SearchText);
+            OrderEntity order = await orderRepository.GetOrder(orderId);
+            SendOrderMessage(order);
         }
 
         /// <summary>
