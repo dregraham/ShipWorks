@@ -80,16 +80,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Command for getting orders
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand GetOrderCommand { get; set; }
 
         /// <summary>
         /// Command for resetting the order
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ResetCommand { get; set; }
 
         /// <summary>
         /// Command to create a label
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
         
         /// <summary>
