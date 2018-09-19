@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.UI;
+using Interapptive.Shared.UI;
+using ShipWorks.AddressValidation;
+using ShipWorks.Shipping;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls
 {
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
-    public class OrderLookupToViewModel : INotifyPropertyChanged
+    public class OrderLookupToViewModel : AddressViewModel
     {
         private readonly IOrderLookupMessageBus messageBus;
-        private readonly PropertyChangedHandler handler;
+        
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public OrderLookupToViewModel(IOrderLookupMessageBus messageBus)
+        public OrderLookupToViewModel(IOrderLookupMessageBus messageBus, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
+            :base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
             this.messageBus = messageBus;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.messageBus.PropertyChanged += MessageBus_PropertyChanged;
+        }
+
+        private void MessageBus_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Order" && messageBus.Order != null)
+            {
+                base.Load(messageBus.ShipmentAdapter.Shipment.ShipPerson, messageBus.ShipmentAdapter.Store);
+            }
         }
     }
 }

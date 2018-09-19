@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,6 +8,8 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
 {
@@ -17,6 +20,7 @@ namespace ShipWorks.OrderLookup
     public class OrderLookupMessageBus : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupMessageBus
     {
         private readonly IMessenger messenger;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
         private OrderEntity order;
@@ -24,9 +28,10 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupMessageBus(IMessenger messenger)
+        public OrderLookupMessageBus(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.messenger = messenger;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -39,6 +44,11 @@ namespace ShipWorks.OrderLookup
             get => order;
             private set => handler.Set(nameof(Order), ref order, value, true);
         }
+
+        /// <summary>
+        /// The shipment adapter for the order in context
+        /// </summary>
+        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
         /// Invoked when a property on the order object changes
@@ -56,9 +66,18 @@ namespace ShipWorks.OrderLookup
         public void InitializeForCurrentSession()
         {
             subscription = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(orderMessage => Order = orderMessage.Order);
+                .Subscribe(orderMessage => LoadOrder(orderMessage.Order));
         }
         
+        /// <summary>
+        /// Load an order
+        /// </summary>
+        private void LoadOrder(OrderEntity order)
+        {
+            ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
+            Order = order;
+        }
+
         /// <summary>
         /// Dispose
         /// </summary>
