@@ -870,23 +870,33 @@ namespace ShipWorks
                 ToggleBatchMode(user);
             }
 
-            ribbon.ToolBar = UIMode == UIMode.Batch ? quickAccessToolBar : null;
-            if (ribbon.ToolBar != null)
-            {
-                var items = ribbon.ToolBar.Items.OfType<WidgetBase>().ToArray();
-                ribbon.ToolBar.Items.Clear();
-                ribbon.ToolBar.Items.AddRange(items);
-            }
+            ToggleQuickAccessToolbar(ribbon, quickAccessToolBar, UIMode);
 
             ribbon.Tabs.Clear();
             EnableRibbonTabs();
 
             buttonManageFilters.Visible = UIMode == UIMode.Batch;
-            //quickAccessToolBar.Visible = UIMode == UIMode.Batch;
 
             if (startHeartbeat)
             {
                 heartBeat.Start();
+            }
+        }
+
+        /// <summary>
+        /// Toggle the display of the quick access tool bar
+        /// </summary>
+        /// <remarks>We've got to remove and re-add the items when showing the tool bar because when showing it
+        /// in some circumstances, the buttons would appear on top of each other.</remarks>
+        private static void ToggleQuickAccessToolbar(Ribbon ribbon, QuickAccessToolBar quickAccessToolBar, UIMode uiMode)
+        {
+            ribbon.ToolBar = uiMode == UIMode.Batch ? quickAccessToolBar : null;
+
+            if (ribbon.ToolBar != null)
+            {
+                var items = ribbon.ToolBar.Items.OfType<WidgetBase>().ToArray();
+                ribbon.ToolBar.Items.Clear();
+                ribbon.ToolBar.Items.AddRange(items);
             }
         }
 
