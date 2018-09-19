@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Newtonsoft.Json;
@@ -18,21 +20,32 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         private readonly IOrderLookupMessageBus messageBus;
         private string output = string.Empty;
 
+        ObservableCollection<INotifyPropertyChanged> column1;
+        ObservableCollection<INotifyPropertyChanged> column2;
+        ObservableCollection<INotifyPropertyChanged> column3;
+
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModel(IOrderLookupMessageBus messageBus, OrderLookupSearchViewModel orderLookupSearchViewModel)
+        public OrderLookupViewModel(IOrderLookupMessageBus messageBus,
+            OrderLookupSearchViewModel orderLookupSearchViewModel,
+            OrderLookupFromViewModel fromViewModel,
+            OrderLookupToViewModel toViewModel)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.messageBus = messageBus;
             messageBus.PropertyChanged += UpdateOutput;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
+            Column1 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>() { fromViewModel });
+            Column2 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>() { toViewModel });
+            Column3 = new ObservableCollection<INotifyPropertyChanged>();
         }
 
         /// <summary>
         /// View Model for the search section of the OrderLookup UI Mode
         /// </summary>
-        public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; set; }
+        public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; set; }        
 
         /// <summary>
         /// Order Number to search for
@@ -42,6 +55,36 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         {
             get => output;
             set => handler.Set(nameof(Output), ref output, value);
+        }
+
+        /// <summary>
+        /// Order Number to search for
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<INotifyPropertyChanged> Column1
+        {
+            get => column1;
+            set => handler.Set(nameof(Column1), ref column1, value);
+        }
+
+        /// <summary>
+        /// Order Number to search for
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<INotifyPropertyChanged> Column2
+        {
+            get => column2;
+            set => handler.Set(nameof(Column2), ref column2, value);
+        }
+
+        /// <summary>
+        /// Order Number to search for
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<INotifyPropertyChanged> Column3
+        {
+            get => column3;
+            set => handler.Set(nameof(Column3), ref column3, value);
         }
 
         /// <summary>
