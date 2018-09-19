@@ -9,7 +9,7 @@ using ShipWorks.Core.UI;
 
 namespace ShipWorks.OrderLookup.Controls
 {
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
     public class OrderLookupToViewModel : INotifyPropertyChanged
     {
         private readonly IOrderLookupMessageBus messageBus;

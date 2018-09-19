@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Newtonsoft.Json;
 using ShipWorks.Core.UI;
@@ -24,21 +25,24 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         ObservableCollection<INotifyPropertyChanged> column2;
         ObservableCollection<INotifyPropertyChanged> column3;
 
-
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupViewModel(IOrderLookupMessageBus messageBus,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
-            OrderLookupFromViewModel fromViewModel,
-            OrderLookupToViewModel toViewModel)
+            IIndex<OrderLookupPanels, INotifyPropertyChanged> lookupPanels)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.messageBus = messageBus;
             messageBus.PropertyChanged += UpdateOutput;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
-            Column1 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>() { fromViewModel });
-            Column2 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>() { toViewModel });
+
+            Column1 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>()
+            {
+                lookupPanels[OrderLookupPanels.From],
+                lookupPanels[OrderLookupPanels.To]
+            });
+            Column2 = new ObservableCollection<INotifyPropertyChanged>();
             Column3 = new ObservableCollection<INotifyPropertyChanged>();
         }
 

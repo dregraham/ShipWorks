@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
+using Autofac.Features.Indexed;
 
 namespace ShipWorks.OrderLookup.Controls
 {
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.From)]
     public class OrderLookupFromViewModel : INotifyPropertyChanged
     {
         private readonly IOrderLookupMessageBus messageBus;
