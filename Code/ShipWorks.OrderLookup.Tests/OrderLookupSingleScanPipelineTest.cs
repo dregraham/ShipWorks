@@ -11,7 +11,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Orders;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -97,7 +96,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_DelegatesToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).ReturnsAsync(123);
+            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
@@ -108,7 +107,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_DoesNotDelegateToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).ReturnsAsync(123);
+            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
             OrderLookupSearchMessage message = new OrderLookupSearchMessage(this, "Foo");
             testMessenger.Send(message);
 
@@ -129,7 +128,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_DelegatesToOrderLookupOrderRepositoryGetOrder_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).ReturnsAsync(123);
+            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
@@ -140,7 +139,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_SendsOrderLookupSingleScanMessage()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).ReturnsAsync(123);
+            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
 
             OrderEntity order = new OrderEntity();
             orderRepository.Setup(o => o.GetOrder(123)).ReturnsAsync(order);

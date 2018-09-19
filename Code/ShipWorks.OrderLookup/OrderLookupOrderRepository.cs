@@ -40,7 +40,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the OrderId matching the search text
         /// </summary>
-        public Task<long> GetOrderID(string searchText)
+        public long GetOrderID(string searchText)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
@@ -60,7 +60,7 @@ namespace ShipWorks.OrderLookup
                         cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
                     }
                     
-                    return Task.FromResult((long?) cmd.ExecuteScalar() ?? 0);
+                    return (long?) cmd.ExecuteScalar() ?? 0;
                 }
             }
         }
