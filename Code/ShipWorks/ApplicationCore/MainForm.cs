@@ -870,10 +870,19 @@ namespace ShipWorks
                 ToggleBatchMode(user);
             }
 
+            ribbon.ToolBar = UIMode == UIMode.Batch ? quickAccessToolBar : null;
+            if (ribbon.ToolBar != null)
+            {
+                var items = ribbon.ToolBar.Items.OfType<WidgetBase>().ToArray();
+                ribbon.ToolBar.Items.Clear();
+                ribbon.ToolBar.Items.AddRange(items);
+            }
+
             ribbon.Tabs.Clear();
             EnableRibbonTabs();
 
             buttonManageFilters.Visible = UIMode == UIMode.Batch;
+            //quickAccessToolBar.Visible = UIMode == UIMode.Batch;
 
             if (startHeartbeat)
             {
