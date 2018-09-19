@@ -53,11 +53,11 @@ namespace ShipWorks.OrderLookup
 
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Subscribe(x => OnSingleScanMessage(x)),
+                .Subscribe(x => OnSingleScanMessage(x).ToObservable()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Subscribe(x => OnOrderLookupSearchMessage(x))
+                .Subscribe(x => OnOrderLookupSearchMessage(x).ToObservable())
                 );
         }
 
