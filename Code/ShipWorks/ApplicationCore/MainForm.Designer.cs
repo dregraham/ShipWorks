@@ -1819,6 +1819,7 @@ namespace ShipWorks
             // contextCustomerSaveOpen
             // 
             this.contextCustomerSaveOpen.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSaveOpen, new System.Guid("a51ed164-e911-4e9c-9b6c-ead7435456de"));
             this.contextCustomerSaveOpen.Name = "contextCustomerSaveOpen";
