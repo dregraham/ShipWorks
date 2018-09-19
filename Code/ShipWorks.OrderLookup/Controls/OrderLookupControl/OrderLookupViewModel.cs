@@ -32,6 +32,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         /// <summary>
         /// View Model for the search section of the OrderLookup UI Mode
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; set; }
 
         /// <summary>
