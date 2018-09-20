@@ -42,7 +42,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
                 lookupPanels[OrderLookupPanels.From],
                 lookupPanels[OrderLookupPanels.To]
             });
-            Column2 = new ObservableCollection<INotifyPropertyChanged>();
+            Column2 = new ObservableCollection<INotifyPropertyChanged>()
+            {
+                lookupPanels[OrderLookupPanels.LabelOptions]
+            };
             Column3 = new ObservableCollection<INotifyPropertyChanged>();
         }
 

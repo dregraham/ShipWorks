@@ -14,5 +14,9 @@ namespace ShipWorks.OrderLookup.Controls
         [ApiValue("To")]
         [Description("To")]
         To,
+
+        [ApiValue("LabelOptions")]
+        [Description("Label Options")]
+        LabelOptions
     }
 }

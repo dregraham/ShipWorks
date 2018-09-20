@@ -4,7 +4,6 @@ using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Controls.AddressControl;
-using Autofac.Features.Indexed;
 using System.Reflection;
 
 namespace ShipWorks.OrderLookup.Controls

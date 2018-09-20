@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.LabelOptions.OrderLookupLabelOptionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="500">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Text="Ship Date:" 
+                   Style="{StaticResource fieldLabel}"/>
+
+        <DatePicker Grid.Row="0"
+                    Grid.Column="1"
+                    SelectedDate="{Binding ShipDate}"
+                    Style="{StaticResource formDatePicker}"/>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Text="Stealth:"
+                   Style="{StaticResource fieldLabel}"/>
+
+        <CheckBox Grid.Row="1"
+                  Grid.Column="1"
+                  IsChecked="{Binding Stealth, UpdateSourceTrigger=PropertyChanged}" 
+                  Style="{StaticResource formCheckBox}"
+                  Content="Hide Postage"/>
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Text="No Postage:"
+                   Style="{StaticResource fieldLabel}"/>
+
+        <CheckBox Grid.Row="2"
+                  Grid.Column="1"
+                  IsChecked="{Binding NoPostage, UpdateSourceTrigger=PropertyChanged}"
+                  Style="{StaticResource formCheckBox}"
+                  Content="Generate label that is not postage-paid"/>
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Text="Requested Label Format:" 
+                   Style="{StaticResource fieldLabel}"/>
+
+        <ComboBox Grid.Row="3"
+                  Grid.Column="1" 
+                  ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding RequestedLabelFormat, UpdateSourceTrigger=PropertyChanged}"
+                  Style="{StaticResource formComboBox}"/>
+
+    </Grid>
+</UserControl>
