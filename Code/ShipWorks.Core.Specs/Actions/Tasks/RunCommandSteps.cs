@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using BoDi;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
@@ -15,7 +16,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using TechTalk.SpecFlow;
 using Xunit;
 using static Interapptive.Shared.Utility.Functional;
@@ -25,14 +25,22 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
     [Binding]
     public class RunCommandSteps
     {
-        private readonly ActionStepContext stepContext;
-        private readonly DataContext context;
-        private readonly RunCommandTask testObject;
-        private readonly Action<List<long>, ActionStepContext> runAction;
-        private Dictionary<string, OrderEntity> orders;
+        private ActionStepContext stepContext;
+        private DataContext context;
+        private RunCommandTask testObject;
+        private Action<List<long>, ActionStepContext> runAction;
         private GenericResult<Unit> results;
+        private readonly IObjectContainer objectContainer;
+        private readonly DatabaseFixture db;
 
-        public RunCommandSteps(DatabaseFixture db)
+        public RunCommandSteps(IObjectContainer objectContainer, DatabaseFixture db)
+        {
+            this.objectContainer = objectContainer;
+            this.db = db;
+        }
+
+        [BeforeScenario]
+        public void SetupDatabaseContext()
         {
             stepContext = new ActionStepContext(
                 new ActionQueueEntity { ActionVersion = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 } },
@@ -43,6 +51,8 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
             {
                 mock.Override<IMessageHelper>();
             });
+
+            objectContainer.RegisterInstanceAs(context);
 
             var currentDirectory = Path.Combine(Directory.GetCurrentDirectory(), "results");
 
@@ -59,6 +69,9 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
             runAction = testObject.Run;
         }
 
+        private IDictionary<string, OrderEntity> Orders =>
+            objectContainer.Resolve<IDictionary<string, OrderEntity>>();
+
         [Given(@"the command ""(.*)""")]
         public void GivenTheCommand(string command) =>
             testObject.Command = command;
@@ -71,13 +84,6 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
         public void GivenARunCardinalityOfOneTime(RunCommandCardinality cardinality) =>
             testObject.RunCardinality = cardinality;
 
-        [Given(@"the following orders")]
-        public void GivenTheFollowingOrders(Table table) =>
-            orders = table.Rows
-                .ToDictionary(
-                    x => x["Name"],
-                    x => Create.Order(context.Store, context.Customer).Set(o => o.OrderNumber = int.Parse(x["Number"])).Save());
-
         [Given(@"a command timeout of (.*) seconds")]
         public void GivenACommandTimeoutOfSeconds(int timeoutInSeconds) =>
             testObject.CommandTimeout = TimeSpan.FromSeconds(timeoutInSeconds);
@@ -88,7 +94,7 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
 
         [When(@"I run the task with orders \((.*)\)")]
         public void WhenIRunTheTaskWithOrders(IEnumerable<string> orderNames) =>
-            results = Try(() => runAction.ToFunc()(orderNames.Select(x => orders[x].OrderID).ToList(), stepContext));
+            results = Try(() => runAction.ToFunc()(orderNames.Select(x => Orders[x].OrderID).ToList(), stepContext));
 
         [When(@"I run the task with no input")]
         public void WhenIRunTheTaskWithNoInput() =>
