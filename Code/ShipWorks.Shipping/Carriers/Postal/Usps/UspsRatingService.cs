@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 CreateWebClient().GetRates(shipment);
 
             var rates = results.rates
-                .ForEach(r => r.ShipmentType = ShipmentTypeCode.Usps)
+                .Do(r => r.ShipmentType = ShipmentTypeCode.Usps)
                 .ToList();
 
             RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rates));
