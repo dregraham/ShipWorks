@@ -42,11 +42,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
                 lookupPanels[OrderLookupPanels.From],
                 lookupPanels[OrderLookupPanels.To]
             });
+
             Column2 = new ObservableCollection<INotifyPropertyChanged>()
             {
+                lookupPanels[OrderLookupPanels.ShipmentDetails],
                 lookupPanels[OrderLookupPanels.LabelOptions],
                 lookupPanels[OrderLookupPanels.Reference]
             };
+
             Column3 = new ObservableCollection<INotifyPropertyChanged>();
         }
 

@@ -118,6 +118,7 @@
     <Compile Include="Controls\OrderLookupFromControl.xaml.cs">
       <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OrderLookupShipmentDetailsDataTemplateSelector.cs" />
     <Compile Include="Controls\OrderLookupFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
@@ -127,6 +128,10 @@
       <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupToViewModel.cs" />
+    <Compile Include="Controls\OrderLookupShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\OrderLookupFromDataTemplateSelector.cs" />
     <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
       <DependentUpon>ReferenceControl.xaml</DependentUpon>
@@ -215,6 +220,10 @@
     <Page Include="Controls\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderLookupShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Reference\ReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>

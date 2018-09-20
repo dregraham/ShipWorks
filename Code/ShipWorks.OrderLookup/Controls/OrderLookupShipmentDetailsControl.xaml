@@ -1,0 +1,252 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.OrderLookupShipmentDetailsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DataContext="{d:DesignInstance local:OrderLookupShipmentDetailsViewModel}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <sui:ShipmentAdapterToServiceTypesConverter x:Key="ShipmentAdapterToServiceTypesConverter" />
+            <sui:ShipmentAdapterToPostalConfirmationTypesConverter x:Key="ShipmentAdapterToPostalConfirmationTypesConverter" />
+            <sui:ShipmentAdapterToPackagingTypesConverter x:Key="ShipmentAdapterToPackagingTypesConverter" />
+            <sui:ShipmentAdapterToDimensionProfilesConverter x:Key="ShipmentAdapterToDimensionProfilesConverter" />
+            <local:OrderLookupShipmentDetailsDataTemplateSelector x:Key="orderLookupShipmentDetailsDataTemplateSelector" />
+
+            <DataTemplate x:Key="default">
+                <TextBox>Default Content</TextBox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="usps">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{DynamicResource fieldLabel}"
+                        Text="Service:" />
+
+                    <ui:ShipWorksComboBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        DisplayMemberPath="Value"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                        SelectedValuePath="Key"
+                        Style="{DynamicResource formComboBox}">
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter.ServiceType" />
+                        </ComboBox.SelectedValue>
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentAdapterToServiceTypesConverter}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter" />
+                        </ComboBox.ItemsSource>
+                    </ui:ShipWorksComboBox>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{DynamicResource fieldLabel}"
+                        Text="Confirmation:" />
+
+                    <ui:ShipWorksComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        DisplayMemberPath="Value"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                        SelectedValuePath="Key"
+                        Style="{DynamicResource formComboBox}">
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter?.Shipment?.Postal?.Confirmation" />
+                        </ComboBox.SelectedValue>
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentAdapterToPostalConfirmationTypesConverter}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter" />
+                        </ComboBox.ItemsSource>
+                    </ui:ShipWorksComboBox>
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Style="{DynamicResource fieldLabel}"
+                        Text="Packaging:" />
+
+                    <ui:ShipWorksComboBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="10,0,0,5"
+                        DisplayMemberPath="Value"
+                        SelectedValuePath="Key"
+                        Style="{DynamicResource formComboBox}">
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentAdapterToPackagingTypesConverter}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter" />
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter?.Shipment?.Postal?.PackagingType" />
+                        </ComboBox.SelectedValue>
+                    </ui:ShipWorksComboBox>
+
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="10,0,0,10"
+                        Orientation="Horizontal">
+                        <CheckBox
+                            Margin="0,0,5,0"
+                            Content="Non-Machinable"
+                            IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NonMachinable, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <CheckBox Content="Non-Rectangular" IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NonRectangular}" />
+                    </StackPanel>
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Style="{DynamicResource fieldLabel}"
+                        Text="Weight:" />
+
+                    <ui:WeightControl
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        AcceptApplyWeightKeyboardShortcut="True"
+                        ErrorMessage="{Binding WeightErrorMessage}"
+                        Weight="{Binding MessageBus.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Style="{DynamicResource fieldLabel}"
+                        Text="Dimesnsions:" />
+
+                    <ui:ShipWorksComboBox
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Margin="10,0,0,5"
+                        DisplayMemberPath="Value"
+                        SelectedItem="{Binding SelectedDimensionsProfile, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Key"
+                        Style="{DynamicResource formComboBox}">
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentAdapterToDimensionProfilesConverter}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter" />
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID" />
+                        </ComboBox.SelectedValue>
+                    </ui:ShipWorksComboBox>
+
+
+                    <Grid
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        Margin="10,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            Grid.Column="0"
+                            Height="23"
+                            Margin="0,0,5,0"
+                            VerticalContentAlignment="Center"
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength}" />
+
+                        <TextBox
+                            Grid.Column="1"
+                            Height="23"
+                            Margin="0,0,5,0"
+                            VerticalContentAlignment="Center"
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
+
+                        <TextBox
+                            Grid.Column="2"
+                            Height="23"
+                            Margin="0,0,5,0"
+                            VerticalContentAlignment="Center"
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
+                        <TextBlock
+                            Grid.Column="3"
+                            VerticalAlignment="Center"
+                            Text="in." />
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Margin="5,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="0,0,0,1"
+                            Foreground="Gray"
+                            Style="{StaticResource fieldLabel}"
+                            Text="Add to weight" />
+
+                        <CheckBox
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight}"
+                            Style="{StaticResource formCheckBox}" />
+
+                        <TextBox
+                            Grid.Column="2"
+                            Margin="5,0,0,0"
+                            IsEnabled="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{DynamicResource formTextBox}"
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock>in stack panel</TextBlock>
+        <ContentControl ContentTemplateSelector="{StaticResource orderLookupShipmentDetailsDataTemplateSelector}">
+            <ContentControl.Content>
+                <Binding Path="." />
+            </ContentControl.Content>
+        </ContentControl>
+    </StackPanel>
+</UserControl>
