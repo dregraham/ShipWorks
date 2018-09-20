@@ -29,6 +29,7 @@ namespace ShipWorks.OrderLookup.Tests
             testObject.InitializeForCurrentSession();
 
             OrderEntity order = new OrderEntity();
+            order.Shipments.Add(new ShipmentEntity());
             testMessenger.Send(new OrderLookupSingleScanMessage(this, order));
             
             Assert.Equal(order, testObject.Order);
