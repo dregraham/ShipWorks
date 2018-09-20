@@ -4,11 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="500">
+             d:DesignHeight="150" d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance local:OrderLookupLabelOptionsControlViewModel}">
     
     <UserControl.Resources>
         <ResourceDictionary>
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -40,23 +44,27 @@
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Text="Stealth:"
-                   Style="{StaticResource fieldLabel}"/>
+                   Style="{StaticResource fieldLabel}"
+                   Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
 
         <CheckBox Grid.Row="1"
                   Grid.Column="1"
                   IsChecked="{Binding Stealth, UpdateSourceTrigger=PropertyChanged}" 
                   Style="{StaticResource formCheckBox}"
-                  Content="Hide Postage"/>
+                  Content="Hide Postage"
+                  Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
 
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Text="No Postage:"
-                   Style="{StaticResource fieldLabel}"/>
+                   Style="{StaticResource fieldLabel}"
+                   Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}"/>
 
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
                   IsChecked="{Binding NoPostage, UpdateSourceTrigger=PropertyChanged}"
                   Style="{StaticResource formCheckBox}"
+                  Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}"
                   Content="Generate label that is not postage-paid"/>
 
         <TextBlock Grid.Row="3"

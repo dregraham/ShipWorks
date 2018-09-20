@@ -7,6 +7,7 @@
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:controls ="clr-namespace:ShipWorks.OrderLookup.Controls"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:labelOptions="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
              mc:Ignorable="d"
              >
     <UserControl.Resources>
@@ -18,6 +19,11 @@
         <DataTemplate DataType="{x:Type controls:OrderLookupToViewModel}">
             <Expander Header="To:">
                 <controls:OrderLookupToControl />
+            </Expander>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type labelOptions:OrderLookupLabelOptionsControlViewModel}">
+            <Expander Header="Label Options:">
+                <labelOptions:OrderLookupLabelOptionsControl />
             </Expander>
         </DataTemplate>
     </UserControl.Resources>
