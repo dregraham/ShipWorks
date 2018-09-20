@@ -5,6 +5,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Controls.AddressControl;
 using Autofac.Features.Indexed;
+using System.Reflection;
 
 namespace ShipWorks.OrderLookup.Controls
 {
@@ -25,6 +26,15 @@ namespace ShipWorks.OrderLookup.Controls
         }
 
         /// <summary>
+        /// Is address validation enabled or not
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupMessageBus MessageBus
+        {
+            get { return messageBus; }
+        }
+
+        /// <summary>
         /// Update when the order changes
         /// </summary>
         private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -32,6 +42,7 @@ namespace ShipWorks.OrderLookup.Controls
             if (e.PropertyName == "Order" && messageBus.Order != null)
             {
                 base.Load(messageBus.ShipmentAdapter.Shipment.OriginPerson, messageBus.ShipmentAdapter.Store);
+                handler.RaisePropertyChanged(nameof(MessageBus));
             }
         }
     }

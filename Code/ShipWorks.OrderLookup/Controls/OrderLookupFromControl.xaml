@@ -4,10 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:sw="http://schemas.shipworks.com/sw"
+             xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
+             mc:Ignorable="d" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <sui:OriginAddressListConverter x:Key="OriginAddressList" />
+        <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+    </UserControl.Resources>
     <StackPanel>
-        <ui:Address/>
+
+        <TextBlock>Origin:</TextBlock>
+        <ui:ShipWorksComboBox
+            DisplayMemberPath="Key"
+            SelectedValuePath="Value"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+            x:Name="OriginDropDown">
+            <ComboBox.ItemsSource>
+                <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
+            </ComboBox.ItemsSource>
+            <ComboBox.SelectedValue>
+                <Binding Path="OriginAddressType" />
+            </ComboBox.SelectedValue>
+        </ui:ShipWorksComboBox>
+
+        <ui:Address>
+            <ui:Address.IsEnabled>
+                <Binding Path="MessageBus.ShipmentAllowEditing" Mode="OneWay"/>
+            </ui:Address.IsEnabled>
+        </ui:Address>
     </StackPanel>
 </UserControl>

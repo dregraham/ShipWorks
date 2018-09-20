@@ -45,6 +45,8 @@ namespace ShipWorks.OrderLookup
             private set => handler.Set(nameof(Order), ref order, value, true);
         }
 
+        public bool ShipmentAllowEditing { get; private set; }
+
         /// <summary>
         /// The shipment adapter for the order in context
         /// </summary>
@@ -75,6 +77,7 @@ namespace ShipWorks.OrderLookup
         private void LoadOrder(OrderEntity order)
         {
             ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
+            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
             Order = order;
         }
 

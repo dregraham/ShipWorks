@@ -16,6 +16,14 @@ namespace ShipWorks.OrderLookup
         [Obfuscation(Exclude = true)]
         OrderEntity Order { get; }
 
+        /// <summary>
+        /// Doss the Shipment allow editing
+        /// </summary>
+        bool ShipmentAllowEditing { get; }
+
+        /// <summary>
+        /// The orders shipment adapter
+        /// </summary>
         ICarrierShipmentAdapter ShipmentAdapter { get; }
 
         /// <summary>

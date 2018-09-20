@@ -8,7 +8,7 @@ using Autofac.Features.OwnedInstances;
 using ShipWorks.ApplicationCore;
 using ShipWorks.UI.Controls.Design;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
+namespace ShipWorks.Shipping.UI.ValueConverters
 {
     /// <summary>
     /// Convert a shipment type into a list of available origin addresses

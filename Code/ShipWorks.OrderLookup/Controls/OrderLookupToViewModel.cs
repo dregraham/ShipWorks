@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
@@ -11,7 +12,7 @@ namespace ShipWorks.OrderLookup.Controls
     public class OrderLookupToViewModel : AddressViewModel
     {
         private readonly IOrderLookupMessageBus messageBus;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,6 +22,17 @@ namespace ShipWorks.OrderLookup.Controls
         {
             this.messageBus = messageBus;
             this.messageBus.PropertyChanged += MessageBusPropertyChanged;
+
+            IsAddressValidationEnabled = true;
+        }
+
+        /// <summary>
+        /// Is address validation enabled or not
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupMessageBus MessageBus
+        {
+            get { return messageBus; }
         }
 
         /// <summary>

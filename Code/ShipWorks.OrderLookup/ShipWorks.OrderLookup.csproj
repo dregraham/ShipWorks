@@ -157,6 +157,14 @@
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj">
       <Project>{490753AB-DA9F-4150-AAA4-651ABDBC2B2E}</Project>
       <Name>ShipWorks.SingleScan</Name>
