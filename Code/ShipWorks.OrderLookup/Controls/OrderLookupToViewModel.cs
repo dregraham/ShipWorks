@@ -12,16 +12,21 @@ namespace ShipWorks.OrderLookup.Controls
     {
         private readonly IOrderLookupMessageBus messageBus;
         
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLookupToViewModel(IOrderLookupMessageBus messageBus, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             :base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
             this.messageBus = messageBus;
-            this.messageBus.PropertyChanged += MessageBus_PropertyChanged;
+            this.messageBus.PropertyChanged += MessageBusPropertyChanged;
         }
 
-        private void MessageBus_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Update when the order changes
+        /// </summary>
+        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Order" && messageBus.Order != null)
             {

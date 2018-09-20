@@ -8,6 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="500">
     <StackPanel>
-        <ui:Address/>
+        <Expander>
+            <ui:Address/>
+        </Expander>
     </StackPanel>
 </UserControl>
