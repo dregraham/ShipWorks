@@ -24,6 +24,7 @@ namespace ShipWorks.OrderLookup
         private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
         private OrderEntity order;
+        private bool shipmentAllowEditing;
 
         /// <summary>
         /// Constructor
@@ -45,7 +46,15 @@ namespace ShipWorks.OrderLookup
             private set => handler.Set(nameof(Order), ref order, value, true);
         }
 
-        public bool ShipmentAllowEditing { get; private set; }
+        /// <summary>
+        /// Can the shipment be edited
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShipmentAllowEditing
+        {
+            get => shipmentAllowEditing;
+            private set => handler.Set(nameof(Order), ref shipmentAllowEditing, value, true);
+        }
 
         /// <summary>
         /// The shipment adapter for the order in context

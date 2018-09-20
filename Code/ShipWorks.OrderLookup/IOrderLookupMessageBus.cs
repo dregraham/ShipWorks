@@ -17,7 +17,7 @@ namespace ShipWorks.OrderLookup
         OrderEntity Order { get; }
 
         /// <summary>
-        /// Doss the Shipment allow editing
+        /// Does the Shipment allow editing
         /// </summary>
         bool ShipmentAllowEditing { get; }
 

@@ -43,6 +43,7 @@ namespace ShipWorks.OrderLookup.Controls
             if (e.PropertyName == "Order" && messageBus.Order != null)
             {
                 base.Load(messageBus.ShipmentAdapter.Shipment.ShipPerson, messageBus.ShipmentAdapter.Store);
+                handler.RaisePropertyChanged(nameof(MessageBus));
             }
         }
     }
