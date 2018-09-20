@@ -11,8 +11,38 @@
     <UserControl.Resources>
         <sui:OriginAddressListConverter x:Key="OriginAddressList" />
         <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+        <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
+
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+
+
     </UserControl.Resources>
     <StackPanel>
+        <TextBlock>
+            <TextBlock.Visibility>
+                <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
+            </TextBlock.Visibility>
+            Account:
+        </TextBlock>
+        <ui:ShipWorksComboBox x:Name="AccountDropDown"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
+            DisplayMemberPath="Description"
+            SelectedValuePath="AccountId">
+            <ComboBox.SelectedValue>
+                <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
+            </ComboBox.SelectedValue>
+            <ComboBox.IsEnabled>
+                <Binding Path="MessageBus.ShipmentAdapter.SupportsRateShopping" Converter="{StaticResource InvertBoolean}"/>
+            </ComboBox.IsEnabled>
+            <ComboBox.Visibility>
+                <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
+            </ComboBox.Visibility>
+            <ComboBox.ItemsSource>
+                <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToAccountsConverter}" Mode="OneWay" />
+            </ComboBox.ItemsSource>
+        </ui:ShipWorksComboBox>
 
         <TextBlock>Origin:</TextBlock>
         <ui:ShipWorksComboBox
@@ -25,7 +55,7 @@
                 <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
             </ComboBox.ItemsSource>
             <ComboBox.SelectedValue>
-                <Binding Path="OriginAddressType" />
+                <Binding Path="MessageBus.ShipmentAdapter.Shipment.OriginOriginID" />
             </ComboBox.SelectedValue>
         </ui:ShipWorksComboBox>
 

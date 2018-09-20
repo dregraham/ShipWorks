@@ -42,7 +42,7 @@
             <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
             <localvc:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <vc:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
-            <localvc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
+            <vc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:DefaultWhenNullOrEmptyConverter x:Key="DefaultWhenNullOrEmpty" />

@@ -78,6 +78,12 @@ namespace ShipWorks.OrderLookup
         {
             ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
             ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+
+            if (ShipmentAdapter != null)
+            {
+                ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+            }
+            
             Order = order;
         }
 
