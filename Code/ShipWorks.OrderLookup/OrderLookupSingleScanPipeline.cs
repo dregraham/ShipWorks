@@ -10,6 +10,8 @@ using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
 using System.Threading.Tasks;
 using ShipWorks.SingleScan;
+using System.Linq;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.OrderLookup
 {
@@ -67,9 +69,15 @@ namespace ShipWorks.OrderLookup
         private async Task OnSingleScanMessage(SingleScanMessage message)
         {
             await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
-            long orderId = orderRepository.GetOrderID(message.ScannedText);
-            await orderLookupAutoPrintService.AutoPrintShipment(orderId, message);
-            OrderEntity order = await orderRepository.GetOrder(orderId);
+            long? orderId = orderRepository.GetOrderID(message.ScannedText);
+            OrderEntity order = null;
+
+            if (orderId.HasValue)
+            {
+                var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message);
+                order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+            }
+
             SendOrderMessage(order);
         }
 
@@ -79,8 +87,9 @@ namespace ShipWorks.OrderLookup
         private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
             await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
-            long orderId = orderRepository.GetOrderID(message.SearchText);
-            OrderEntity order = await orderRepository.GetOrder(orderId);
+            long? orderId = orderRepository.GetOrderID(message.SearchText);
+
+            OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
             SendOrderMessage(order);
         }
 
