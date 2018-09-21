@@ -22,7 +22,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.LabelOptions)]
     public class OrderLookupLabelOptionsControlViewModel : INotifyPropertyChanged
     {
-        private readonly IOrderLookupMessageBus messageBus;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IFedExUtility fedExUtility;
         private readonly PropertyChangedHandler handler;
@@ -41,11 +40,13 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         public OrderLookupLabelOptionsControlViewModel(IOrderLookupMessageBus messageBus, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
         {
-            this.messageBus = messageBus;
+            MessageBus = messageBus;
+            MessageBus.PropertyChanged += MessageBusPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
             this.fedExUtility = fedExUtility;
-            this.messageBus.PropertyChanged += MessageBusPropertyChanged;
-
+            
+            shipDate = DateTime.Today;
+            
             handler = new PropertyChangedHandler(this, () => PropertyChanged); 
        }
 
@@ -120,13 +121,19 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         }
 
         /// <summary>
+        /// The order lookup message bus
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupMessageBus MessageBus { get; }
+
+        /// <summary>
         /// Update when the order changes
         /// </summary>
         private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order" && messageBus.Order != null)
+            if (e.PropertyName == "Order" && MessageBus.Order != null)
             {
-                ShipmentEntity shipment = messageBus.ShipmentAdapter.Shipment;
+                ShipmentEntity shipment = MessageBus.ShipmentAdapter.Shipment;
                 
                 // Set properties from the new shipment
                 ShipDate = shipment.ShipDate;
@@ -148,7 +155,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 
                 // Set the available label formats for the new shipment
                 LabelFormats = EnumHelper.GetEnumList<LabelFormatType>(x => ShouldIncludeLabelFormatInList(shipment, x))
-                    .Select(x => x.Value).ToList();            
+                    .Select(x => x.Value).ToList();
+                
+                // Update the message bus
+                handler.RaisePropertyChanged(nameof(MessageBus));
             }
         }
 

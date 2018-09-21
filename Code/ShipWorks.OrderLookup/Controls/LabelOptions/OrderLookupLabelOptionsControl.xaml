@@ -7,19 +7,18 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="500"
-             d:DataContext="{d:DesignInstance local:OrderLookupLabelOptionsControlViewModel}">
-    
+             d:DataContext="{d:DesignInstance local:OrderLookupLabelOptionsControlViewModel}"
+             FontSize="12"
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
-    <Grid Margin="5">
+    <Grid Margin="5" IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -51,7 +50,7 @@
                   Grid.Column="1"
                   IsChecked="{Binding Stealth, UpdateSourceTrigger=PropertyChanged}" 
                   Style="{StaticResource formCheckBox}"
-                  Content="Hide Postage"
+                  Content="Hide Postage"                
                   Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
 
         <TextBlock Grid.Row="2"
