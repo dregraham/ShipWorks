@@ -41,6 +41,8 @@ namespace ShipWorks.OrderLookup.Controls
                 MessageBus.Order != null)
             {
                 base.Load(MessageBus.ShipmentAdapter.Shipment.OriginPerson, MessageBus.ShipmentAdapter.Store);
+
+                
             }
 
             if (e.PropertyName == "OriginOriginID")

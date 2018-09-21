@@ -6,63 +6,96 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
+             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
              mc:Ignorable="d" d:DesignWidth="800">
 
     <UserControl.Resources>
         <sui:OriginAddressListConverter x:Key="OriginAddressList" />
         <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
         <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
-
+        <local:OrderLookupFromDataTemplateSelector x:Key="orderLookupFromDataTemplateSelector"/>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:InvertBooleanConverter x:Key="InvertBoolean" />
 
 
-    </UserControl.Resources>
-    <StackPanel>
-        <TextBlock>
-            <TextBlock.Visibility>
-                <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
-            </TextBlock.Visibility>
+        <UserControl x:Key="BaseAddressConrol">
+            <StackPanel>
+                <TextBlock>
+                    <TextBlock.Visibility>
+                        <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
+                    </TextBlock.Visibility>
             Account:
-        </TextBlock>
-        <ui:ShipWorksComboBox x:Name="AccountDropDown"
+                </TextBlock>
+                <ui:ShipWorksComboBox x:Name="AccountDropDown"
             SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
             DisplayMemberPath="Description"
             SelectedValuePath="AccountId">
-            <ComboBox.SelectedValue>
-                <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
-            </ComboBox.SelectedValue>
-            <ComboBox.IsEnabled>
-                <Binding Path="MessageBus.ShipmentAdapter.SupportsRateShopping" Converter="{StaticResource InvertBoolean}"/>
-            </ComboBox.IsEnabled>
-            <ComboBox.Visibility>
-                <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
-            </ComboBox.Visibility>
-            <ComboBox.ItemsSource>
-                <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToAccountsConverter}" Mode="OneWay" />
-            </ComboBox.ItemsSource>
-        </ui:ShipWorksComboBox>
+                    <ComboBox.SelectedValue>
+                        <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
+                    </ComboBox.SelectedValue>
+                    <ComboBox.IsEnabled>
+                        <Binding Path="MessageBus.ShipmentAdapter.SupportsRateShopping" Converter="{StaticResource InvertBoolean}"/>
+                    </ComboBox.IsEnabled>
+                    <ComboBox.Visibility>
+                        <Binding Path="MessageBus.ShipmentAdapter.SupportsAccounts" Converter="{StaticResource BooleanToVisibility}"/>
+                    </ComboBox.Visibility>
+                    <ComboBox.ItemsSource>
+                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToAccountsConverter}" Mode="OneWay" />
+                    </ComboBox.ItemsSource>
+                </ui:ShipWorksComboBox>
 
-        <TextBlock>Origin:</TextBlock>
-        <ui:ShipWorksComboBox
+                <TextBlock>Origin:</TextBlock>
+                <ui:ShipWorksComboBox
             DisplayMemberPath="Key"
             SelectedValuePath="Value"
             SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
             x:Name="OriginDropDown">
-            <ComboBox.ItemsSource>
-                <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
-            </ComboBox.ItemsSource>
-            <ComboBox.SelectedValue>
-                <Binding Path="MessageBus.ShipmentAdapter.Shipment.OriginOriginID" />
-            </ComboBox.SelectedValue>
-        </ui:ShipWorksComboBox>
+                    <ComboBox.ItemsSource>
+                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
+                    </ComboBox.ItemsSource>
+                    <ComboBox.SelectedValue>
+                        <Binding Path="MessageBus.ShipmentAdapter.Shipment.OriginOriginID" />
+                    </ComboBox.SelectedValue>
+                </ui:ShipWorksComboBox>
 
-        <ui:Address>
-            <ui:Address.IsEnabled>
-                <Binding Path="MessageBus.ShipmentAllowEditing" Mode="OneWay"/>
-            </ui:Address.IsEnabled>
-        </ui:Address>
+                <ui:Address>
+                    <ui:Address.IsEnabled>
+                        <Binding Path="MessageBus.ShipmentAllowEditing" Mode="OneWay"/>
+                    </ui:Address.IsEnabled>
+                </ui:Address>
+            </StackPanel>
+        </UserControl>
+
+        <DataTemplate x:Key="usps">
+            <StackPanel>
+                <ContentControl Content="{StaticResource BaseAddressConrol}"/>
+                <TextBlock>USPS Validation</TextBlock>
+                <CheckBox>
+                    Require full address validation
+                    <CheckBox.IsChecked>
+                        <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
+                    </CheckBox.IsChecked>
+                </CheckBox>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="default">
+            <StackPanel>
+                <ContentControl Content="{StaticResource BaseAddressConrol}"/>
+            </StackPanel>
+        </DataTemplate>
+
+    </UserControl.Resources>
+    
+    <StackPanel>
+
+        <ContentControl ContentTemplateSelector="{StaticResource orderLookupFromDataTemplateSelector}">
+            <ContentControl.Content>
+                <Binding Path="."/>
+            </ContentControl.Content>
+        </ContentControl>
+
     </StackPanel>
 </UserControl>

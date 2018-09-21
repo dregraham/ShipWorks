@@ -127,6 +127,7 @@
       <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupToViewModel.cs" />
+    <Compile Include="Controls\OrderLookupFromDataTemplateSelector.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
