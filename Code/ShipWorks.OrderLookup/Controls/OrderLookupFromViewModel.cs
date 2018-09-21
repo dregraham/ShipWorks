@@ -6,6 +6,8 @@ using ShipWorks.Shipping;
 using ShipWorks.UI.Controls.AddressControl;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using System.Reactive.Linq;
 
 namespace ShipWorks.OrderLookup.Controls
 {
@@ -15,6 +17,8 @@ namespace ShipWorks.OrderLookup.Controls
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.From)]
     public class OrderLookupFromViewModel : AddressViewModel
     {
+        IDisposable autoSave;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -24,6 +28,17 @@ namespace ShipWorks.OrderLookup.Controls
         {
             MessageBus = messageBus;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
+        }
+
+        /// <summary>
+        /// Save changes to the base entity whenever properties are changed in the view model
+        /// </summary>
+        private void Save()
+        {
+            if (MessageBus?.ShipmentAdapter?.Shipment?.OriginPerson != null)
+            {
+                SaveToEntity(MessageBus.ShipmentAdapter.Shipment.OriginPerson);
+            }
         }
 
         /// <summary>
@@ -37,12 +52,18 @@ namespace ShipWorks.OrderLookup.Controls
         /// </summary>
         private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (MessageBus.Order == null)
+            {
+                autoSave?.Dispose();
+            }
+
             if (e.PropertyName == "Order" &&
                 MessageBus.Order != null)
             {
                 base.Load(MessageBus.ShipmentAdapter.Shipment.OriginPerson, MessageBus.ShipmentAdapter.Store);
-
-                
+                autoSave?.Dispose();
+                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
+                handler.RaisePropertyChanged(nameof(MessageBus));
             }
 
             if (e.PropertyName == "OriginOriginID")
@@ -54,9 +75,8 @@ namespace ShipWorks.OrderLookup.Controls
                 StoreEntity store = MessageBus.ShipmentAdapter.Store;
 
                 base.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
+                handler.RaisePropertyChanged(nameof(MessageBus));
             }
-
-            handler.RaisePropertyChanged(nameof(MessageBus));
         }
     }
 }
