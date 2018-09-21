@@ -104,7 +104,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             {
                 if (messageBus.Order == null)
                 {
-                    SearchErrorMessage = "No matching orders were found";
+                    SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
                     OrderNumber = string.Empty;
                 }
