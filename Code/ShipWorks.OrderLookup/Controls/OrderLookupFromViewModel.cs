@@ -31,6 +31,12 @@ namespace ShipWorks.OrderLookup.Controls
         }
 
         /// <summary>
+        /// Is address validation enabled or not
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupMessageBus MessageBus { get; }
+        
+        /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
         /// </summary>
         private void Save()
@@ -40,12 +46,6 @@ namespace ShipWorks.OrderLookup.Controls
                 SaveToEntity(MessageBus.ShipmentAdapter.Shipment.OriginPerson);
             }
         }
-
-        /// <summary>
-        /// Is address validation enabled or not
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus { get; }
 
         /// <summary>
         /// Update when the order changes
