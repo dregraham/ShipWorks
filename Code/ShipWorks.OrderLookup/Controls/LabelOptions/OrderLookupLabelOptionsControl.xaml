@@ -12,7 +12,7 @@
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -27,55 +27,73 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   Text="Ship Date:" 
-                   Style="{StaticResource fieldLabel}"/>
+                   Grid.Column="1"
+                   Text="Ship Date" 
+                   Style="{StaticResource FieldLabel}"/>
 
         <DatePicker Grid.Row="0"
-                    Grid.Column="1"
-                    SelectedDate="{Binding MessageBus.ShipmentAdapter.ShipDate}"
-                    Style="{StaticResource formDatePicker}"/>
+                    Grid.Column="2"
+                    SelectedDate="{Binding MessageBus.ShipmentAdapter.ShipDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+                    Style="{StaticResource FormDatePicker}"/>
 
         <TextBlock Grid.Row="1"
-                   Grid.Column="0"
-                   Text="Stealth:"
-                   Style="{StaticResource fieldLabel}"
+                   Grid.Column="1"
+                   Text="Stealth"
+                   Style="{StaticResource FieldLabel}"
                    Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
 
         <CheckBox Grid.Row="1"
-                  Grid.Column="1"
+                  Grid.Column="2"
                   IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.Usps.HidePostage, UpdateSourceTrigger=PropertyChanged}" 
-                  Style="{StaticResource formCheckBox}"
+                  Style="{StaticResource FormCheckBox}"
                   Content="Hide Postage"                
                   Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
 
         <TextBlock Grid.Row="2"
-                   Grid.Column="0"
-                   Text="No Postage:"
-                   Style="{StaticResource fieldLabel}"
+                   Grid.Column="1"
+                   Text="No Postage"
+                   Style="{StaticResource FieldLabel}"
                    Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}"/>
 
         <CheckBox Grid.Row="2"
-                  Grid.Column="1"
+                  Grid.Column="2"
                   IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NoPostage, UpdateSourceTrigger=PropertyChanged}"
-                  Style="{StaticResource formCheckBox}"
+                  Style="{StaticResource FormCheckBox}"
                   Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}"
                   Content="Generate label that is not postage-paid"/>
 
+        <Button Grid.Row="3"
+                Grid.Column="0"
+                Background="Transparent"
+                BorderBrush="{x:Null}"
+                Width="15"
+                Height="15"
+                Margin="0 0 3 10"
+                Command="{Binding OpenPrinterArticleCommand}"
+                Template="{StaticResource IconButtonTemplate}">
+
+            <Path Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" 
+                  Fill="Gray"
+                  Stretch="Fill"/>
+        </Button>
+
         <TextBlock Grid.Row="3"
-                   Grid.Column="0"
-                   Text="Requested Label Format:" 
-                   Style="{StaticResource fieldLabel}"/>
+                Grid.Column="1"
+                TextWrapping="Wrap"
+                Text="Requested Label Format"
+                Style="{StaticResource FieldLabel}"/>
 
         <ui:ShipWorksComboBox Grid.Row="3"
-                  Grid.Column="1" 
+                  Grid.Column="2" 
+                  MinWidth="100"
                   ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding RequestedLabelFormat, UpdateSourceTrigger=PropertyChanged}"
-                  Style="{StaticResource formComboBox}"/>
+                  Style="{StaticResource FormComboBox}"/>
 
     </Grid>
 </UserControl>

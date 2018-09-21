@@ -4,21 +4,21 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    <Style x:Key="formTextBox" TargetType="{x:Type TextBox}">
+    <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="23"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
-    <Style x:Key="formComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
+    <Style x:Key="FormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="23"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
-    <Style x:Key="formCheckBox" TargetType="{x:Type CheckBox}">
+    <Style x:Key="FormCheckBox" TargetType="{x:Type CheckBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -26,7 +26,7 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
-    <Style x:Key="formDatePicker" TargetType="{x:Type DatePicker}"
+    <Style x:Key="FormDatePicker" TargetType="{x:Type DatePicker}"
            BasedOn="{StaticResource DatePickerStyle.Centered}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -35,16 +35,43 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
-    <Style x:Key="header" TargetType="{x:Type TextBlock}">
+    <Style x:Key="Header" TargetType="{x:Type TextBlock}">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Margin" Value="0 0 0 5"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
-    <Style x:Key="fieldLabel" TargetType="{x:Type TextBlock}">
+    <Style x:Key="FieldLabel" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="0 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-         <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="TextAlignment" Value="Right"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
+
+    <ControlTemplate x:Key="IconButtonTemplate" TargetType="{x:Type ButtonBase}">
+        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Button.IsDefaulted" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFBEE6FD"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF3C7FB1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="#FF838383"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

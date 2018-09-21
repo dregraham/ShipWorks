@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -26,9 +29,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IFedExUtility fedExUtility;
         private readonly PropertyChangedHandler handler;
-        private DateTime shipDate;
-        private bool stealth;
-        private bool noPostage;
         private bool allowStealth;
         private bool allowNoPostage;
         private List<ThermalLanguage> labelFormats;
@@ -45,9 +45,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             this.shipmentTypeManager = shipmentTypeManager;
             this.fedExUtility = fedExUtility;
             
-            shipDate = DateTime.Today;
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
             
-            handler = new PropertyChangedHandler(this, () => PropertyChanged); 
+            OpenPrinterArticleCommand = new RelayCommand(OpenPrinterArticle);
        }
         
         /// <summary>
@@ -101,6 +101,12 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus { get; }
+        
+        /// <summary>
+        /// Command to open the printer article
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand OpenPrinterArticleCommand { get; }
 
         /// <summary>
         /// Update when the order changes
@@ -169,6 +175,14 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Open the printer help article
+        /// </summary>
+        private void OpenPrinterArticle()
+        {
+            Process.Start("http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i");
         }
     }
 }
