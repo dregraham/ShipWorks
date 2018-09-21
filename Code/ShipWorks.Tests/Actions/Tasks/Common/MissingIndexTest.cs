@@ -140,6 +140,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                     row.ColumnUsage = column.Included;
                     return row;
                 })
-                .ForEach(view.Rows.Add);
+                .Do(view.Rows.Add)
+                .ToList();
     }
 }
