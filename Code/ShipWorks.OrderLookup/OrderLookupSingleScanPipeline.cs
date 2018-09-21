@@ -27,6 +27,8 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private IDisposable subscriptions;
 
+        bool processingScan = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -42,6 +44,7 @@ namespace ShipWorks.OrderLookup
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
+            
         }
 
         /// <summary>
@@ -52,13 +55,14 @@ namespace ShipWorks.OrderLookup
             EndSession();
 
             subscriptions = new CompositeDisposable(
-
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Do(_ => processingScan = true)
                 .Subscribe(x => OnSingleScanMessage(x).ToObservable()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Do(_ => processingScan = true)
                 .Subscribe(x => OnOrderLookupSearchMessage(x).ToObservable())
                 );
         }
@@ -68,17 +72,25 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async Task OnSingleScanMessage(SingleScanMessage message)
         {
-            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
-            long? orderId = orderRepository.GetOrderID(message.ScannedText);
-            OrderEntity order = null;
-
-            if (orderId.HasValue)
+            try
             {
-                var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message);
-                order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
-            }
 
-            SendOrderMessage(order);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
+                long? orderId = orderRepository.GetOrderID(message.ScannedText);
+                OrderEntity order = null;
+
+                if (orderId.HasValue)
+                {
+                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message);
+                    order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+                }
+
+                SendOrderMessage(order);
+            } 
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>
@@ -86,11 +98,18 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
-            await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
-            long? orderId = orderRepository.GetOrderID(message.SearchText);
+            try
+            {
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
+                long? orderId = orderRepository.GetOrderID(message.SearchText);
 
-            OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
-            SendOrderMessage(order);
+                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
+                SendOrderMessage(order);
+            }
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>
