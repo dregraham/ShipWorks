@@ -70,6 +70,12 @@
 
         <DataTemplate x:Key="usps">
             <StackPanel>
+                <CheckBox>Rate Shopping
+
+                    <CheckBox.IsChecked>
+                        <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
+                    </CheckBox.IsChecked>
+                </CheckBox>
                 <ContentControl Content="{StaticResource BaseAddressConrol}"/>
                 <TextBlock>USPS Validation</TextBlock>
                 <CheckBox>
