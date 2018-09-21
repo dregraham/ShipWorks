@@ -44,7 +44,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
             });
             Column2 = new ObservableCollection<INotifyPropertyChanged>()
             {
-                lookupPanels[OrderLookupPanels.LabelOptions]
+                lookupPanels[OrderLookupPanels.LabelOptions],
+                lookupPanels[OrderLookupPanels.Reference]
             };
             Column3 = new ObservableCollection<INotifyPropertyChanged>();
         }

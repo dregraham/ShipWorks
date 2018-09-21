@@ -128,6 +128,10 @@
     </Compile>
     <Compile Include="Controls\OrderLookupToViewModel.cs" />
     <Compile Include="Controls\OrderLookupFromDataTemplateSelector.cs" />
+    <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
+      <DependentUpon>ReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
@@ -211,6 +215,10 @@
     <Page Include="Controls\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Reference\ReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\OrderLookupStyle.xaml">
       <SubType>Designer</SubType>
