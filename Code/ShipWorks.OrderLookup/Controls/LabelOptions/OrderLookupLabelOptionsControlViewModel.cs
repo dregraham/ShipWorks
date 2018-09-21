@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
@@ -28,10 +29,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         private DateTime shipDate;
         private bool stealth;
         private bool noPostage;
-        private LabelFormatType requestedLabelFormat;
         private bool allowStealth;
         private bool allowNoPostage;
-        private List<LabelFormatType> labelFormats;
+        private List<ThermalLanguage> labelFormats;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,47 +49,23 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             
             handler = new PropertyChangedHandler(this, () => PropertyChanged); 
        }
-
-        /// <summary>
-        /// Ship date of the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public DateTime ShipDate
-        {
-            get => shipDate;            
-            set => handler.Set(nameof(ShipDate), ref shipDate, value);
-        }
-
-        /// <summary>
-        /// Stealth option for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Stealth
-        {
-            get => stealth;
-            set => handler.Set(nameof(Stealth), ref stealth, value);
-        }
-
-        /// <summary>
-        /// Whether or not to hide postage on the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool NoPostage
-        {
-            get => noPostage;
-            set => handler.Set(nameof(NoPostage), ref noPostage, value);
-        }
-
+        
         /// <summary>
         /// Requested label format for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public LabelFormatType RequestedLabelFormat
+        public ThermalLanguage RequestedLabelFormat
         {
-            get => requestedLabelFormat;
-            set => handler.Set(nameof(RequestedLabelFormat), ref requestedLabelFormat, value);
+            get => MessageBus?.ShipmentAdapter?.Shipment?.RequestedLabelFormat != null ?
+                (ThermalLanguage) MessageBus?.ShipmentAdapter?.Shipment?.RequestedLabelFormat :
+                ThermalLanguage.None;
+            set
+            {
+                MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat = (int) value;
+                handler.RaisePropertyChanged(nameof(MessageBus));
+            }
         }
-        
+
         /// <summary>
         /// Requested label format for the shipment
         /// </summary>
@@ -114,7 +90,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// List of available label formats for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<LabelFormatType> LabelFormats
+        public List<ThermalLanguage> LabelFormats
         {
             get => labelFormats;
             set => handler.Set(nameof(LabelFormats), ref labelFormats, value);
@@ -135,12 +111,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             {
                 ShipmentEntity shipment = MessageBus.ShipmentAdapter.Shipment;
                 
-                // Set properties from the new shipment
-                ShipDate = shipment.ShipDate;
-                requestedLabelFormat = (LabelFormatType) shipment.RequestedLabelFormat;
-                Stealth = shipment.Postal?.Usps?.HidePostage ?? false;
-                NoPostage = shipment.Postal?.NoPostage ?? false;
-                
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
                 {
@@ -154,7 +124,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 }
                 
                 // Set the available label formats for the new shipment
-                LabelFormats = EnumHelper.GetEnumList<LabelFormatType>(x => ShouldIncludeLabelFormatInList(shipment, x))
+                LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
                     .Select(x => x.Value).ToList();
                 
                 // Update the message bus
@@ -165,33 +135,33 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Whether or not the given label format is allowed for the shipment
         /// </summary>
-        private bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, LabelFormatType labelFormat)
+        private bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, ThermalLanguage labelFormat)
         {
             switch (shipment.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Asendia:
                 case ShipmentTypeCode.Amazon:
                 case ShipmentTypeCode.DhlExpress:
-                    if (labelFormat == LabelFormatType.EPL)
+                    if (labelFormat == ThermalLanguage.EPL)
                     {
                         return false;
                     }
                     break;
                 case ShipmentTypeCode.FedEx:
-                    if (labelFormat == LabelFormatType.EPL &&
+                    if (labelFormat == ThermalLanguage.EPL &&
                         fedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
                     {
                         return false;
                     }
 
-                    if (labelFormat != LabelFormatType.Standard &&
+                    if (labelFormat != ThermalLanguage.None &&
                         (shipment.FedEx.Packages?.Any(package => package.DangerousGoodsEnabled) ?? false))
                     {
                         return false;
                     }
                     break;
                 case ShipmentTypeCode.iParcel:
-                    if (labelFormat == LabelFormatType.ZPL)
+                    if (labelFormat == ThermalLanguage.ZPL)
                     {
                         return false;
                     }

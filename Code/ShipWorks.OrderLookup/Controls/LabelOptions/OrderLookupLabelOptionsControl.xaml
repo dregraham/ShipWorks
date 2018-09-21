@@ -37,7 +37,7 @@
 
         <DatePicker Grid.Row="0"
                     Grid.Column="1"
-                    SelectedDate="{Binding ShipDate}"
+                    SelectedDate="{Binding MessageBus.ShipmentAdapter.ShipDate}"
                     Style="{StaticResource formDatePicker}"/>
 
         <TextBlock Grid.Row="1"
@@ -48,7 +48,7 @@
 
         <CheckBox Grid.Row="1"
                   Grid.Column="1"
-                  IsChecked="{Binding Stealth, UpdateSourceTrigger=PropertyChanged}" 
+                  IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.Usps.HidePostage, UpdateSourceTrigger=PropertyChanged}" 
                   Style="{StaticResource formCheckBox}"
                   Content="Hide Postage"                
                   Visibility="{Binding AllowStealth, Converter={StaticResource BoolToVis}}"/>
@@ -61,7 +61,7 @@
 
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
-                  IsChecked="{Binding NoPostage, UpdateSourceTrigger=PropertyChanged}"
+                  IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NoPostage, UpdateSourceTrigger=PropertyChanged}"
                   Style="{StaticResource formCheckBox}"
                   Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}"
                   Content="Generate label that is not postage-paid"/>
@@ -71,7 +71,7 @@
                    Text="Requested Label Format:" 
                    Style="{StaticResource fieldLabel}"/>
 
-        <ComboBox Grid.Row="3"
+        <ui:ShipWorksComboBox Grid.Row="3"
                   Grid.Column="1" 
                   ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding RequestedLabelFormat, UpdateSourceTrigger=PropertyChanged}"
