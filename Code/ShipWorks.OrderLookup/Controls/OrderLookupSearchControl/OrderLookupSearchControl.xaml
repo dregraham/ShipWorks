@@ -75,7 +75,7 @@
         
         <TextBlock Grid.Column="0"
                    Grid.Row="0"
-                   Text="Order ID:"
+                   Text="Order Number:"
                    Margin="0 0 10 0"/>
         
         <TextBox Grid.Column="1"
