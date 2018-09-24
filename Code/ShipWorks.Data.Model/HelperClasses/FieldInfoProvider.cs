@@ -1582,6 +1582,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
+			this.AddElementFieldInfo("FilterNodeContentEntity", "EntityExistsQuery", typeof(System.String), false, false, false, true,  (int)FilterNodeContentFieldIndex.EntityExistsQuery, 2147483647, 0, 0);
 		}
 		/// <summary>Inits FilterNodeContentDetailEntity's FieldInfo objects</summary>
 		private void InitFilterNodeContentDetailEntityInfos()

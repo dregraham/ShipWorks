@@ -27,6 +27,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
         string initialSql;
         string updateSql;
+        string existsSql;
         byte[] columnMask;
         int joinMask;
 
@@ -135,8 +136,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<EntityField2> columnsUsed, ICollection<FilterNodeJoinType> joinsUsed)
-            : this(filterCountID, initialSql, updateSql, CreateColumnMask(columnsUsed), CreateJoinMask(joinsUsed))
+        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, string existsSql, ICollection<EntityField2> columnsUsed, ICollection<FilterNodeJoinType> joinsUsed)
+            : this(filterCountID, initialSql, updateSql, existsSql, CreateColumnMask(columnsUsed), CreateJoinMask(joinsUsed))
         {
 
         }
@@ -144,7 +145,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, byte[] columnMask, int joinMask)
+        public FilterSqlResult(long filterCountID, string initialSql, string updateSql, string existsSql, byte[] columnMask, int joinMask)
         {
             this.columnMask = columnMask;
             this.joinMask = joinMask;
@@ -157,7 +158,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
             this.initialSql = GenerateSql(filterCountID, initialSql);
             this.updateSql = GenerateSql(filterCountID, updateSql);
-
+            this.existsSql = existsSql;
         }
 
         /// <summary>
@@ -255,6 +256,14 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         public string UpdateSql
         {
             get { return updateSql; }
+        }
+
+        /// <summary>
+        /// The full, complete, executable SQL statement to do the entity exists query
+        /// </summary>
+        public string ExistsSql
+        {
+            get { return existsSql; }
         }
 
         /// <summary>

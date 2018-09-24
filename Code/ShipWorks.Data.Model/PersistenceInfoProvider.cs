@@ -1639,7 +1639,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FilterNodeContentEntity's mappings</summary>
 		private void InitFilterNodeContentEntityMappings()
 		{
-			this.AddElementMapping("FilterNodeContentEntity", @"ShipWorksLocal", @"dbo", "FilterNodeContent", 10, 0);
+			this.AddElementMapping("FilterNodeContentEntity", @"ShipWorksLocal", @"dbo", "FilterNodeContent", 11, 0);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "FilterNodeContentID", "FilterNodeContentID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "CountVersion", "CountVersion", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -1650,6 +1650,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterNodeContentEntity", "JoinMask", "JoinMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Cost", "Cost", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Count", "Count", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
+			this.AddElementFieldMapping("FilterNodeContentEntity", "EntityExistsQuery", "EntityExistsQuery", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 10);
 		}
 
 		/// <summary>Inits FilterNodeContentDetailEntity's mappings</summary>

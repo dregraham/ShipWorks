@@ -627,6 +627,7 @@ namespace ShipWorks.Filters
             // We need the count ID before we can fill these in
             content.InitialCalculation = "";
             content.UpdateCalculation = "";
+            content.EntityExistsQuery = "";
 
             // Save it, creates the ID
             adapter.SaveEntity(content, false, false);
@@ -637,6 +638,7 @@ namespace ShipWorks.Filters
             // Update the calculations
             content.InitialCalculation = filterSql.InitialSql;
             content.UpdateCalculation = filterSql.UpdateSql;
+            content.EntityExistsQuery = filterSql.ExistsSql;
             content.ColumnMask = filterSql.ColumnMask;
             content.JoinMask = filterSql.JoinMask;
 

@@ -46,6 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             JoinMask = source.JoinMask;
             Cost = source.Cost;
             Count = source.Count;
+            EntityExistsQuery = source.EntityExistsQuery;
             
             
             
@@ -114,6 +115,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Count { get; }
+        /// <summary> The EntityExistsQuery property of the Entity FilterNodeContent<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FilterNodeContent"."EntityExistsQuery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String EntityExistsQuery { get; }
         
         
         

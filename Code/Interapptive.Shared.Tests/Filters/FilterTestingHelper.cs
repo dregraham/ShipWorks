@@ -9,6 +9,8 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Search;
 
 namespace Interapptive.Shared.Tests.Filters
@@ -129,6 +131,26 @@ namespace Interapptive.Shared.Tests.Filters
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets XML for an order number filter definition
+        /// </summary>
+        public static string OrderNumberDefinitionXml(long orderNumber)
+        {
+            FilterDefinition filterDefinitions = new FilterDefinition(FilterTarget.Orders)
+            {
+                RootContainer = new ConditionGroupContainer(new ConditionGroup())
+            };
+
+            filterDefinitions.RootContainer.FirstGroup.Conditions.Add(new OrderNumberCondition
+            {
+                IsNumeric = false,
+                StringOperator = StringOperator.BeginsWith,
+                StringValue = orderNumber.ToString()
+            });
+
+            return filterDefinitions.GetXml();
         }
     }
 }

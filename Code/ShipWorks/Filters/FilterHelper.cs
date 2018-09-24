@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Transactions;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
@@ -204,6 +203,7 @@ namespace ShipWorks.Filters
             content.Status = (int) FilterCountStatus.Ready;
             content.InitialCalculation = "";
             content.UpdateCalculation = "";
+            content.EntityExistsQuery = "";
             content.ColumnMask = new byte[0];
             content.JoinMask = 0;
             content.Cost = 0;
@@ -512,196 +512,59 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Indicates if the given object is in the filter contents of the specified filter content id
+        /// Get a list of template IDs that apply to an entity ID, based on template/filter rules.
         /// </summary>
-        public static bool IsObjectInFilterContent(long objectID, long filterContentID)
+        private static bool DoesFilterNodeApplyToEntity(long entityID, long filterNodeID)
+        {
+            List<long> results = new List<long>();
+
+            using (new LoggedStopwatch(log, $"FilterHelper.DoesFilterNodeApplyToEntity Running: {entityID}, {filterNodeID}"))
+            {
+                using (DbConnection conn = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand command = DbCommandProvider.Create(conn))
+                    {
+                        command.CommandText = "DoesFilterNodeApplyToEntity";
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.AddParameterWithValue("@entityID", entityID);
+                        command.AddParameterWithValue("@filterNodeID", filterNodeID);
+
+                        using (DbDataReader reader = DbCommandProvider.ExecuteReader(command))
+                        {
+                            while (reader.Read())
+                            {
+                                results.Add(reader.GetInt64(0));
+                            }
+                        }
+                    }
+                }
+            }
+
+            return results.Contains(filterNodeID);
+        }
+
+        /// <summary>
+        /// Indicates if the given object is in the filter contents of the specified filter node id
+        /// </summary>
+        public static bool IsObjectInFilterContent(long objectID, long filterNodeID)
         {
             // If its a top-level, like "Orders", assume the object is in it
-            if (BuiltinFilter.IsTopLevelKey(filterContentID))
+            if (BuiltinFilter.IsTopLevelKey(filterNodeID))
             {
                 return true;
             }
 
-            if (EntityUtility.GetEntitySeed(filterContentID) != 14)
+            if (EntityUtility.GetEntitySeed(filterNodeID) != 7)
             {
-                throw new InvalidOperationException(string.Format("{0} is not a valid FilterNodeContentID", filterContentID));
+                throw new InvalidOperationException($"{filterNodeID} is not a valid FilterNodeID");
             }
 
-            // If we are within a transaction right now, we don't want the FilterNodeContent table locked into that
+            // If we are within a transaction right now, we don't want the FilterNode table locked into that
             // transaction.  We may block if filter are being updated, but at least we won't cause blocking.
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    int count = FilterNodeContentDetailCollection.GetCount(adapter,
-                        FilterNodeContentDetailFields.FilterNodeContentID == filterContentID &
-                        FilterNodeContentDetailFields.EntityID == objectID);
-
-                    return count != 0;
-                }
+                return DoesFilterNodeApplyToEntity(objectID, filterNodeID);
             }
-        }
-
-        /// <summary>
-        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
-        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
-        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
-        /// </summary>
-        public static bool EnsureFiltersUpToDate(TimeSpan timeout)
-        {
-            byte[] rowVersion;
-
-            // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
-            {
-                // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
-                // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
-                // up-to-date
-                using (DbConnection con = SqlSession.Current.OpenConnection())
-                {
-                    rowVersion = (byte[]) DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
-                }
-            }
-
-            return EnsureFiltersUpToDate(timeout, rowVersion);
-        }
-
-        /// <summary>
-        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
-        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
-        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
-        /// </summary>
-        public static bool EnsureFiltersUpToDate(TimeSpan timeout, byte[] rowVersion)
-        {
-            Stopwatch timer = Stopwatch.StartNew();
-
-            // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
-            {
-                log.InfoFormat("Ensuring filters are at least as up to date as {0}", SqlUtility.GetTimestampValue(rowVersion));
-
-                // Keep going until we run out of time
-                while (timer.Elapsed < timeout)
-                {
-                    using (DbConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        object result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)");
-
-                        // No dirty means we're up to date
-                        if (result == null || ((byte[]) result).Length == 0)
-                        {
-                            log.InfoFormat("There are no dirty objects, filters are up to date.");
-                            return true;
-                        }
-
-                        // Still some dirty - but they are all edited after we first entered this method, which means they are
-                        // at least as up-to-date as when we were called - which is all we can hope for
-                        if (SqlUtility.GetTimestampValue((byte[]) result) > SqlUtility.GetTimestampValue(rowVersion))
-                        {
-                            log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
-                            return true;
-                        }
-
-                        log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[]) result), SqlUtility.GetTimestampValue(rowVersion));
-                    }
-
-                    // Ensure counts are running
-                    FilterContentManager.CalculateUpdateCounts();
-
-                    // Wait a little before looping again
-                    Thread.Sleep(TimeSpan.FromSeconds(.5));
-                }
-            }
-
-            log.InfoFormat("Timed out trying to ensure filters were updated.");
-            return false;
-        }
-
-        /// <summary>
-        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
-        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
-        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
-        /// </summary>
-        public static void EnsureQuickFiltersUpToDate()
-        {
-            byte[] rowVersion;
-
-            // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
-            {
-                // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
-                // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
-                // up-to-date
-                using (DbConnection con = SqlSession.Current.OpenConnection())
-                {
-                    rowVersion = (byte[]) DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
-                }
-            }
-
-            EnsureQuickFiltersUpToDate(rowVersion);
-        }
-
-        /// <summary>
-        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
-        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
-        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
-        /// </summary>
-        public static void EnsureQuickFiltersUpToDate(byte[] rowVersion)
-        {
-            int iteration = 0;
-
-            while (true)
-            {
-                iteration++;
-
-                // Can't calculate filters within a transaction - would hose everything up
-                using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    log.InfoFormat($"Ensuring QUICK filters are at least as up to date as {SqlUtility.GetTimestampValue(rowVersion)}, iteration {iteration}.");
-
-                    if (QuickFiltersAreUpToDate(rowVersion))
-                    {
-                        return;
-                    }
-
-                    // Ensure counts are running
-                    FilterContentManager.CalculateUpdateQuickFilterCounts();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Determines if quick filters are up to date as far as rowVersion is concerned.
-        /// </summary>
-        static bool QuickFiltersAreUpToDate(byte[] rowVersion)
-        {
-            object result;
-            using (DbConnection con = SqlSession.Current.OpenConnection())
-            {
-                result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM QuickFilterNodeContentDirty WITH (NOLOCK)");
-
-                // No dirty means we're up to date
-                if (result == null || ((byte[]) result).Length == 0)
-                {
-                    log.InfoFormat("There are no dirty objects, QUICK filters are up to date.");
-                    return true;
-                }
-
-                // Still some dirty - but they are all edited after we first entered this method, which means they are
-                // at least as up-to-date as when we were called - which is all we can hope for
-                if (SqlUtility.GetTimestampValue((byte[]) result) > SqlUtility.GetTimestampValue(rowVersion))
-                {
-                    log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
-                    return true;
-                }
-            }
-
-            log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[]) result), SqlUtility.GetTimestampValue(rowVersion));
-
-            // Sleep 50ms so we don't slam SQL Server every couple of ms.
-            Thread.Sleep(50);
-
-            return false;
         }
 
         /// <summary>

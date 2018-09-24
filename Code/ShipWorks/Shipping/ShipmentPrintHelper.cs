@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -60,40 +61,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static TemplateEntity DetermineGroupTemplate(ShippingPrintOutputEntity group, ShipmentEntity shipment)
         {
-            // Test each rule in the group in order to see what template matches
-            foreach (ShippingPrintOutputRuleEntity rule in group.Rules)
+            var matchingRule = group.Rules.FirstOrDefault(r => r.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID || 
+                                                       FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, r.FilterNodeID));
+
+            if (matchingRule != null)
             {
-                TemplateEntity template = TemplateManager.Tree.GetTemplate(rule.TemplateID);
-                if (template != null)
-                {
-                    if (rule.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID)
-                    {
-                        return template;
-                    }
-
-                    long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                    if (filterContentID != null)
-                    {
-                        if (FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, filterContentID.Value))
-                        {
-                            return template;
-                        }
-                        else
-                        {
-                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: ShipmentID wasn't found in filter content, trying again.");
-
-                            // Double check that quick filters are up to date, and check the filter content again.
-                            FilterHelper.EnsureQuickFiltersUpToDate();
-
-                            if (FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, filterContentID.Value))
-                            {
-                                return template;
-                            }
-
-                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: Event after calling EnsureQuickFiltersUpToDate(), ShipmentID wasn't found in filter content, trying again.");
-                        }
-                    }
-                }
+                return TemplateManager.Tree.GetTemplate(matchingRule.TemplateID);
             }
 
             return null;
@@ -118,7 +91,7 @@ namespace ShipWorks.Shipping
             // get the existing groups
             List<ShippingPrintOutputEntity> existingGroups = ShippingPrintOutputManager.GetOutputGroups(shipmentType);
 
-            // Cant be transacted, b\c if templates are mising we show ui and need to check TemplateManager for changes.
+            // Cant be transacted, b\c if templates are missing we show UI and need to check TemplateManager for changes.
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 ShippingPrintOutputManager.CheckForChangesNeeded();
