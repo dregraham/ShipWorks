@@ -49,7 +49,7 @@
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
-                        Style="{DynamicResource fieldLabel}"
+                        Style="{DynamicResource FieldLabel}"
                         Text="Service:" />
 
                     <ui:ShipWorksComboBox
@@ -58,7 +58,7 @@
                         DisplayMemberPath="Value"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource formComboBox}">
+                        Style="{DynamicResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter.ServiceType" />
                         </ComboBox.SelectedValue>
@@ -73,7 +73,7 @@
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
-                        Style="{DynamicResource fieldLabel}"
+                        Style="{DynamicResource FieldLabel}"
                         Text="Confirmation:" />
 
                     <ui:ShipWorksComboBox
@@ -82,7 +82,7 @@
                         DisplayMemberPath="Value"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource formComboBox}">
+                        Style="{DynamicResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter?.Shipment?.Postal?.Confirmation" />
                         </ComboBox.SelectedValue>
@@ -97,7 +97,7 @@
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="0"
-                        Style="{DynamicResource fieldLabel}"
+                        Style="{DynamicResource FieldLabel}"
                         Text="Packaging:" />
 
                     <ui:ShipWorksComboBox
@@ -106,7 +106,7 @@
                         Margin="10,0,0,5"
                         DisplayMemberPath="Value"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource formComboBox}">
+                        Style="{DynamicResource FormComboBox}">
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentAdapterToPackagingTypesConverter}"
@@ -134,7 +134,7 @@
                     <TextBlock
                         Grid.Row="5"
                         Grid.Column="0"
-                        Style="{DynamicResource fieldLabel}"
+                        Style="{DynamicResource FieldLabel}"
                         Text="Weight:" />
 
                     <ui:WeightControl
@@ -147,7 +147,7 @@
                     <TextBlock
                         Grid.Row="6"
                         Grid.Column="0"
-                        Style="{DynamicResource fieldLabel}"
+                        Style="{DynamicResource FieldLabel}"
                         Text="Dimesnsions:" />
 
                     <ui:ShipWorksComboBox
@@ -157,7 +157,7 @@
                         DisplayMemberPath="Value"
                         SelectedItem="{Binding SelectedDimensionsProfile, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource formComboBox}">
+                        Style="{DynamicResource FormComboBox}">
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentAdapterToDimensionProfilesConverter}"
@@ -185,6 +185,7 @@
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength}" />
 
                         <TextBox
@@ -192,6 +193,7 @@
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
 
                         <TextBox
@@ -199,7 +201,9 @@
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
+
                         <TextBlock
                             Grid.Column="3"
                             VerticalAlignment="Center"
@@ -219,20 +223,20 @@
                             Grid.Column="0"
                             Margin="0,0,0,1"
                             Foreground="Gray"
-                            Style="{StaticResource fieldLabel}"
+                            Style="{StaticResource FieldLabel}"
                             Text="Add to weight" />
 
                         <CheckBox
                             Grid.Column="1"
                             Margin="5,0,0,0"
                             IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight}"
-                            Style="{StaticResource formCheckBox}" />
+                            Style="{StaticResource FormCheckBox}" />
 
                         <TextBox
                             Grid.Column="2"
                             Margin="5,0,0,0"
                             IsEnabled="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{DynamicResource formTextBox}"
+                            Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </Grid>
