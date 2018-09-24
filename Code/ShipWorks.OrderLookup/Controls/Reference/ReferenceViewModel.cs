@@ -5,13 +5,19 @@ using ShipWorks.Core.UI;
 
 namespace ShipWorks.OrderLookup.Controls.Reference
 {
+    /// <summary>
+    /// View model for order lookup reference control
+    /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Reference)]
     public class ReferenceViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IOrderLookupMessageBus messageBus;
-        protected readonly PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         public ReferenceViewModel(IOrderLookupMessageBus messageBus)
         {
             this.messageBus = messageBus;
@@ -20,13 +26,10 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         }
 
         /// <summary>
-        /// Is address validation enabled or not
-        /// </summary>
+        /// The order lookup message bus
+        /// </summary
         [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus
-        {
-            get { return messageBus; }
-        }
+        public IOrderLookupMessageBus MessageBus => messageBus;
 
         /// <summary>
         /// Update when the order changes

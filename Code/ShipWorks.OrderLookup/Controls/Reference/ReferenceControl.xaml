@@ -2,9 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
-             mc:Ignorable="d">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:ReferenceViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -37,7 +38,7 @@
         <TextBlock Grid.Row="2" Grid.Column="0">
             Memo 3:
         </TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Width="250">
+        <TextBox Grid.Row="2" Grid.Column="1" Width="250">
             <TextBox.Text>
                 <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Memo3" />
             </TextBox.Text>
