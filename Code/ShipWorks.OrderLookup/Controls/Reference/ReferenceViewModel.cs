@@ -27,7 +27,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
 
         /// <summary>
         /// The order lookup message bus
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus => messageBus;
 

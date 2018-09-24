@@ -9,6 +9,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:labelOptions="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
              xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+             xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
              mc:Ignorable="d"
              >
     <UserControl.Resources>
@@ -30,6 +31,11 @@
         <DataTemplate DataType="{x:Type reference:ReferenceViewModel}">
             <Expander Header="Reference:">
                 <reference:ReferenceControl />
+            </Expander>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
+            <Expander Header="Customs:">
+                <customs:OrderLookupCustomsControl />
             </Expander>
         </DataTemplate>
         <DataTemplate DataType="{x:Type controls:OrderLookupShipmentDetailsViewModel}">

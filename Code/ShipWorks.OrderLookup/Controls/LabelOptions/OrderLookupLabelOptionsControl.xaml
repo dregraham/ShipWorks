@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:printers="clr-namespace:ShipWorks.Common.IO.Hardware.Printers;assembly=ShipWorks.Core"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance local:OrderLookupLabelOptionsControlViewModel}"
@@ -12,7 +13,8 @@
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>            
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/> 
+            <ui:IntToEnumConverter x:Key="IntToEnum"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -92,8 +94,7 @@
                   Grid.Column="2" 
                   MinWidth="100"
                   ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding RequestedLabelFormat, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type printers:ThermalLanguage}}"
                   Style="{StaticResource FormComboBox}"/>
-
     </Grid>
 </UserControl>

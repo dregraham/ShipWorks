@@ -25,6 +25,10 @@ namespace ShipWorks.OrderLookup.Controls
         
         [ApiValue("Reference")]
         [Description("Reference")]
-        Reference
+        Reference,
+        
+        [ApiValue("Customs")]
+        [Description("Customs")]
+        Customs
     }
 }

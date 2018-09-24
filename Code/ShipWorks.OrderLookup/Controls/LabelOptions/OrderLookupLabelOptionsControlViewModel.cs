@@ -49,22 +49,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             
             OpenPrinterArticleCommand = new RelayCommand(OpenPrinterArticle);
        }
-        
-        /// <summary>
-        /// Requested label format for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ThermalLanguage RequestedLabelFormat
-        {
-            get => MessageBus?.ShipmentAdapter?.Shipment?.RequestedLabelFormat != null ?
-                (ThermalLanguage) MessageBus?.ShipmentAdapter?.Shipment?.RequestedLabelFormat :
-                ThermalLanguage.None;
-            set
-            {
-                MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat = (int) value;
-                handler.RaisePropertyChanged(nameof(MessageBus));
-            }
-        }
 
         /// <summary>
         /// Requested label format for the shipment

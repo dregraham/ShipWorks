@@ -50,7 +50,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
                 lookupPanels[OrderLookupPanels.Reference]
             };
 
-            Column3 = new ObservableCollection<INotifyPropertyChanged>();
+            Column3 = new ObservableCollection<INotifyPropertyChanged>()
+            {
+                lookupPanels[OrderLookupPanels.Customs]
+            };
         }
 
         /// <summary>
