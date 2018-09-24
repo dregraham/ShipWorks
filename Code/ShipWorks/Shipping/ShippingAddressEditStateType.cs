@@ -41,6 +41,6 @@ namespace ShipWorks.Shipping
         /// The shipment is to be printed from Amazons carriers
         /// </summary>
         [Description("Amazon Seller Fulfilled Prime")]
-        AmazonSfp = 3,
+        AmazonSfp = 4,
     }
 }

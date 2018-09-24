@@ -129,7 +129,7 @@ namespace ShipWorks.SingleScan
                 if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
                 {
                     ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
-                    int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdapters().Count();
+                    int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdaptersAndEnsureShipmentIsLoaded().Count();
 
                     if (packageCount > 1 && !ShouldPrintAndProcessShipmentWithMultiplePackages(packageCount, scannedBarcode))
                     {

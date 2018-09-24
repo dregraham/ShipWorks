@@ -84,6 +84,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                     configure?.Invoke(row);
                     return row;
                 })
-                .ForEach(view.Rows.Add);
+                .Do(view.Rows.Add)
+            .ToList();
     }
 }

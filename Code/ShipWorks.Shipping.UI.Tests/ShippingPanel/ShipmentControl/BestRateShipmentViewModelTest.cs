@@ -455,7 +455,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
             shipmentAdapter.SetupProperty(x => x.ContentWeight);
-            shipmentAdapter.Setup(x => x.GetPackageAdapters()).Returns(new[] { package1.Object });
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(new[] { package1.Object });
 
             var testObject = mock.Create<BestRateShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
@@ -617,7 +617,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                     new Mock<IPackageAdapter>()
                 };
 
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
+            shipmentAdapter.Setup(sa => sa.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
 
             BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
 
@@ -798,7 +798,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(false);
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
+            shipmentAdapter.Setup(sa => sa.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(packageAdapters);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
 
