@@ -45,6 +45,7 @@ namespace ShipWorks.OrderLookup.Tests
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
+            orderRepository.Setup(o => o.GetOrderID(AnyString)).Returns(123);
 
             Mock<IOnDemandDownloaderFactory> downloadFactory = mock.Mock<IOnDemandDownloaderFactory>();
             downloader = mock.Mock<IOnDemandDownloader>();
