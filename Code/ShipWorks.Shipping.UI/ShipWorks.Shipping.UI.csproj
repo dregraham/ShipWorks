@@ -398,10 +398,6 @@
     <Compile Include="ShippingPanel\ShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
-    <Compile Include="ValueConverters\ShipmentAdapterToDimensionProfilesConverter.cs" />
-    <Compile Include="ValueConverters\ShipmentAdapterToPackagingTypesConverter.cs" />
-    <Compile Include="ValueConverters\ShipmentAdapterToPostalConfirmationTypesConverter.cs" />
-    <Compile Include="ValueConverters\ShipmentAdapterToServiceTypesConverter.cs" />
     <Compile Include="ValueConverters\ShipmentTypeToAccountsConverter.cs" />
     <Compile Include="Carriers\None\NoneServiceControl.cs">
       <SubType>UserControl</SubType>

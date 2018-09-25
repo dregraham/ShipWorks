@@ -13,7 +13,7 @@
         <sui:OriginAddressListConverter x:Key="OriginAddressList" />
         <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
         <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
-        <local:OrderLookupFromDataTemplateSelector x:Key="orderLookupFromDataTemplateSelector"/>
+        <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:InvertBooleanConverter x:Key="InvertBoolean" />
 
@@ -96,12 +96,15 @@
     </UserControl.Resources>
     
     <StackPanel>
-
-        <ContentControl ContentTemplateSelector="{StaticResource orderLookupFromDataTemplateSelector}">
-            <ContentControl.Content>
-                <Binding Path="."/>
-            </ContentControl.Content>
-        </ContentControl>
-
+        <StackPanel>
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplate>
+                    <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
     </StackPanel>
 </UserControl>

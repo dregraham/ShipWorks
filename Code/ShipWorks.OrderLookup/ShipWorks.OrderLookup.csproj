@@ -131,7 +131,6 @@
     <Compile Include="Controls\OrderLookupFromControl.xaml.cs">
       <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentTypeToOrderLookupShipmentTemplateConverter.cs" />
     <Compile Include="Controls\OrderLookupFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
@@ -145,7 +144,7 @@
       <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\OrderLookupFromDataTemplateSelector.cs" />
+    <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
     <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
       <DependentUpon>ReferenceControl.xaml</DependentUpon>

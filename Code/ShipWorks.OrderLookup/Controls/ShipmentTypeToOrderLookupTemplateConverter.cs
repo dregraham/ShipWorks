@@ -10,8 +10,17 @@ namespace ShipWorks.OrderLookup.Controls
     /// <summary>
     /// Data template selector based on shipment type code
     /// </summary>
-    public class ShipmentTypeToOrderLookupShipmentTemplateConverter : IMultiValueConverter
+    
+    public class ShipmentTypeToOrderLookupTemplateConverter : IMultiValueConverter
     {
+        /// <summary>
+        /// Looks for the template matching the name expected for the shipmentypecode. 
+
+        /// </summary>
+        /// <remarks>
+        /// If not found or unknown shipmenttypecode or no shipmenttypecode, "default" template is returned.
+        /// If not found, null is returned.
+        /// </remarks>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             FrameworkElement element = values[1] as FrameworkElement;
@@ -19,22 +28,34 @@ namespace ShipWorks.OrderLookup.Controls
             {
                 throw new InvalidOperationException("Invalid FrameworkElement in OrderLookupShipmentTypeToOrderLookupShipmentDetailsConverter");
             }
-            
-            if (values[0] is ShipmentTypeCode shipmentTypeCode )
+
+            string templateToUse = "";
+            if (values[0] is ShipmentTypeCode shipmentTypeCode)
             {
                 switch (shipmentTypeCode)
                 {
                     case ShipmentTypeCode.Usps:
-                        return element.FindResource("usps") as DataTemplate;                        
+                        templateToUse = "usps";
+                        break;
                 }
             }
 
-            return element.FindResource("default") as DataTemplate;
+            object template = null;
+            if (!string.IsNullOrEmpty(templateToUse))
+            {
+                template = element.TryFindResource(templateToUse);
+            }
+            if (template == null)
+            {
+                template = element.TryFindResource("default");
+            }
 
-            return null;
+            return template as DataTemplate;
         }
 
-
+        /// <summary>
+        /// Not Implemented
+        /// </summary>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
