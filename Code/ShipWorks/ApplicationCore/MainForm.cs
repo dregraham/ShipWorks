@@ -146,6 +146,7 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
         private ICurrentUserSettings currentUserSettings;
         private Control orderLookupControl;
+        private IShipmentHistory shipmentHistory;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -157,6 +158,7 @@ namespace ShipWorks
         public MainForm()
         {
             orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+            shipmentHistory = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentHistory>();
 
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
@@ -985,6 +987,35 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when the currently selected ribbon tab has changed
+        /// </summary>
+        private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
+        {
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            {
+                ToggleVisiblePanel(orderLookupControl, shipmentHistory.Control);
+            }
+            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
+            {
+                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl);
+                shipmentHistory.Update();
+            }
+        }
+
+        /// <summary>
+        /// Toggle which control is visible in the panel docking area
+        /// </summary>
+        private void ToggleVisiblePanel(Control toAdd, Control toRemove)
+        {
+            panelDockingArea.Controls.Remove(toRemove);
+
+            if (!panelDockingArea.Controls.Contains(toAdd))
+            {
+                panelDockingArea.Controls.Add(toAdd);
+            }
+        }
+
+        /// <summary>
         /// Execute any logon actions that have been queued
         /// </summary>
         private void ExecuteLogonActions()
@@ -1483,6 +1514,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
+
+            shipmentHistory.SaveGridColumnState();
 
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())

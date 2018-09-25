@@ -2193,6 +2193,7 @@ namespace ShipWorks
             this.ribbon.TabIndex = 0;
             this.ribbon.ToolBar = this.quickAccessToolBar;
             this.ribbon.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.OnHelpRequested);
+            this.ribbon.SelectedTabChanged += OnRibbonSelectedTabChanged;
             // 
             // applicationMenu
             // 
