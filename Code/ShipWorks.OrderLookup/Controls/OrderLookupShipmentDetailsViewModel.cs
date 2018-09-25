@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using GalaSoft.MvvmLight;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.OrderLookup;
-using ShipWorks.OrderLookup.Controls;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.OrderLookup.Controls
 {
@@ -24,14 +12,18 @@ namespace ShipWorks.OrderLookup.Controls
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler handler;
-        
+        private readonly IDimensionsManager dimensionsManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentDetailsViewModel(IOrderLookupMessageBus messageBus)
-		{
-            this.MessageBus = messageBus;
-            this.MessageBus.PropertyChanged += MessageBusPropertyChanged;
+        public OrderLookupShipmentDetailsViewModel(
+            IOrderLookupMessageBus messageBus, 
+            IDimensionsManager dimensionsManager)
+        {
+            MessageBus = messageBus;
+            this.dimensionsManager = dimensionsManager;
+            MessageBus.PropertyChanged += MessageBusPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -41,21 +33,43 @@ namespace ShipWorks.OrderLookup.Controls
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus { get; private set; }
 
+        [Obfuscation(Exclude = true)]
+        public bool ProfileSelected
+        {
+            get => MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
+        }
+
         /// <summary>
         /// Update when order changes
         /// </summary>
         private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order" && MessageBus.Order != null)
+            if (MessageBus.Order != null)
             {
-                handler.RaisePropertyChanged(nameof(MessageBus));
+                if (e.PropertyName == "Order")
+                {
+                    handler.RaisePropertyChanged(nameof(MessageBus));
+                }
+
+                if (e.PropertyName == "DimsProfileID")
+                {
+                    Data.Model.EntityClasses.PostalShipmentEntity postal = MessageBus.ShipmentAdapter.Shipment.Postal;
+                    if (postal.DimsProfileID > 0)
+                    {
+                        DimensionsProfileEntity profile = dimensionsManager.GetProfile(postal.DimsProfileID);
+                        if (profile != null)
+                        {
+                            postal.DimsLength = profile.Length;
+                            postal.DimsWidth = profile.Width;
+                            postal.DimsHeight = profile.Height;
+                            postal.DimsWeight = profile.Weight;
+                        }
+                    }
+                    handler.RaisePropertyChanged(nameof(ProfileSelected));
+                }
             }
+
+
         }
-
-
-
-
-
-
     }
 }

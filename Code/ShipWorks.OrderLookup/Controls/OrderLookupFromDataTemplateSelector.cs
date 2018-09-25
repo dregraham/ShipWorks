@@ -22,10 +22,8 @@ namespace ShipWorks.OrderLookup.Controls
 
                 switch (viewModel.MessageBus?.ShipmentAdapter?.ShipmentTypeCode)
                 {
-                    case ShipmentTypeCode.Usps:
-                        return element.FindResource("usps") as DataTemplate;
-                    default:
-                        return element.FindResource("default") as DataTemplate;
+               
+
                 }
             }
 

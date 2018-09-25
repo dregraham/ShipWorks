@@ -131,7 +131,7 @@
     <Compile Include="Controls\OrderLookupFromControl.xaml.cs">
       <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupShipmentDetailsDataTemplateSelector.cs" />
+    <Compile Include="Controls\ShipmentTypeToOrderLookupShipmentTemplateConverter.cs" />
     <Compile Include="Controls\OrderLookupFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">

@@ -18,8 +18,9 @@
             <sui:ShipmentAdapterToPostalConfirmationTypesConverter x:Key="ShipmentAdapterToPostalConfirmationTypesConverter" />
             <sui:ShipmentAdapterToPackagingTypesConverter x:Key="ShipmentAdapterToPackagingTypesConverter" />
             <sui:ShipmentAdapterToDimensionProfilesConverter x:Key="ShipmentAdapterToDimensionProfilesConverter" />
-            <local:OrderLookupShipmentDetailsDataTemplateSelector x:Key="orderLookupShipmentDetailsDataTemplateSelector" />
-
+            <local:ShipmentTypeToOrderLookupShipmentTemplateConverter x:Key="ShipmentTypeToOrderLookupShipmentTemplateConverter" />
+            <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+            <ui:BooleanComparisonConverter x:Key="BooleanComparisonConverter" />
             <DataTemplate x:Key="default">
                 <TextBox>Default Content</TextBox>
             </DataTemplate>
@@ -66,7 +67,8 @@
                             <Binding
                                 Converter="{StaticResource ShipmentAdapterToServiceTypesConverter}"
                                 Mode="OneWay"
-                                Path="MessageBus.ShipmentAdapter" />
+                                Path="MessageBus.ShipmentAdapter"
+                                UpdateSourceTrigger="PropertyChanged" />
                         </ComboBox.ItemsSource>
                     </ui:ShipWorksComboBox>
 
@@ -84,7 +86,7 @@
                         SelectedValuePath="Key"
                         Style="{DynamicResource FormComboBox}">
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter?.Shipment?.Postal?.Confirmation" />
+                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Confirmation" />
                         </ComboBox.SelectedValue>
                         <ComboBox.ItemsSource>
                             <Binding
@@ -105,6 +107,7 @@
                         Grid.Column="1"
                         Margin="10,0,0,5"
                         DisplayMemberPath="Value"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
                         Style="{DynamicResource FormComboBox}">
                         <ComboBox.ItemsSource>
@@ -114,7 +117,7 @@
                                 Path="MessageBus.ShipmentAdapter" />
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter?.Shipment?.Postal?.PackagingType" />
+                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.PackagingType" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
@@ -140,6 +143,7 @@
                     <ui:WeightControl
                         Grid.Row="5"
                         Grid.Column="1"
+                        Margin="10,0,0,5"
                         AcceptApplyWeightKeyboardShortcut="True"
                         ErrorMessage="{Binding WeightErrorMessage}"
                         Weight="{Binding MessageBus.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
@@ -148,27 +152,38 @@
                         Grid.Row="6"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Dimesnsions:" />
+                        Text="Dimensions:" />
 
-                    <ui:ShipWorksComboBox
+                    <StackPanel
                         Grid.Row="6"
                         Grid.Column="1"
-                        Margin="10,0,0,5"
-                        DisplayMemberPath="Value"
-                        SelectedItem="{Binding SelectedDimensionsProfile, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedValuePath="Key"
-                        Style="{DynamicResource FormComboBox}">
-                        <ComboBox.ItemsSource>
-                            <Binding
-                                Converter="{StaticResource ShipmentAdapterToDimensionProfilesConverter}"
-                                Mode="OneWay"
-                                Path="MessageBus.ShipmentAdapter" />
-                        </ComboBox.ItemsSource>
-                        <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID" />
-                        </ComboBox.SelectedValue>
-                    </ui:ShipWorksComboBox>
-
+                        Orientation="Horizontal">
+                        <ui:ShipWorksComboBox
+                            Margin="10,0,0,5"
+                            DisplayMemberPath="Value"
+                            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                            SelectedValuePath="Key"
+                            Style="{DynamicResource FormComboBox}">
+                            <ComboBox.ItemsSource>
+                                <Binding
+                                    Converter="{StaticResource ShipmentAdapterToDimensionProfilesConverter}"
+                                    Mode="OneWay"
+                                    Path="MessageBus.ShipmentAdapter" />
+                            </ComboBox.ItemsSource>
+                            <ComboBox.SelectedValue>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID"
+                                    UpdateSourceTrigger="PropertyChanged" />
+                            </ComboBox.SelectedValue>
+                        </ui:ShipWorksComboBox>
+                        <Button
+                            Margin="3,0,0,0"
+                            VerticalAlignment="Center"
+                            Click="OnManageDimensionsProfiles"
+                            Content="Manage..."
+                            Style="{StaticResource Link}" />
+                    </StackPanel>
 
                     <Grid
                         Grid.Row="7"
@@ -185,14 +200,16 @@
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{DynamicResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength}" />
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength, Mode=TwoWay}" />
 
                         <TextBox
                             Grid.Column="1"
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
 
@@ -201,6 +218,7 @@
                             Height="23"
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{DynamicResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
 
@@ -235,9 +253,15 @@
                         <TextBox
                             Grid.Column="2"
                             Margin="5,0,0,0"
-                            IsEnabled="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight, UpdateSourceTrigger=PropertyChanged}"
                             Style="{DynamicResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.IsEnabled>
+                                <MultiBinding Converter="{StaticResource BooleanComparisonConverter}">
+                                    <Binding Converter="{StaticResource InvertBooleanConverter}" Path="ProfileSelected" />
+                                    <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight" />
+                                </MultiBinding>
+                            </TextBox.IsEnabled>
+                        </TextBox>
                     </Grid>
                 </Grid>
             </DataTemplate>
@@ -246,11 +270,13 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <TextBlock>in stack panel</TextBlock>
-        <ContentControl ContentTemplateSelector="{StaticResource orderLookupShipmentDetailsDataTemplateSelector}">
-            <ContentControl.Content>
-                <Binding Path="." />
-            </ContentControl.Content>
+        <ContentControl Content="{Binding .}">
+            <ContentControl.ContentTemplate>
+                <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupShipmentTemplateConverter}">
+                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding RelativeSource="{RelativeSource Self}" />
+                </MultiBinding>
+            </ContentControl.ContentTemplate>
         </ContentControl>
     </StackPanel>
 </UserControl>

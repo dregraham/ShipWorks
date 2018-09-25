@@ -92,6 +92,11 @@ namespace ShipWorks.OrderLookup
             {
                 ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
             }
+
+            if (ShipmentAdapter?.Shipment?.Postal != null)
+            {
+                ShipmentAdapter.Shipment.Postal.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+            }
             
             Order = order;
         }

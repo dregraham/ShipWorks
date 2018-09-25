@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         /// <summary>
         /// To be called by designer
         /// </summary>
-        public ShipmentAdapterToDimensionProfilesConverter()
+        public ShipmentAdapterToDimensionProfilesConverter() : this(null)
         {
 
         }
@@ -47,9 +47,10 @@ namespace ShipWorks.Shipping.UI.ValueConverters
                 return Enumerable.Empty<KeyValuePair<string, long>>();
             }
 
-            return dimensionsManager
-                .Profiles(shipmentAdapter.GetPackageAdapters().FirstOrDefault())
-                .ToDictionary(profile => profile.DimensionsProfileID, profile => profile.Name);
+            List<DimensionsProfileEntity> dimensionProfiles = dimensionsManager.Profiles(shipmentAdapter.GetPackageAdapters().FirstOrDefault()).ToList();
+            
+
+            return dimensionProfiles.ToDictionary(profile => profile.DimensionsProfileID, profile => profile.Name);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
