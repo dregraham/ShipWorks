@@ -29,6 +29,10 @@ namespace ShipWorks.OrderLookup.Controls
         
         [ApiValue("Customs")]
         [Description("Customs")]
-        Customs
+        Customs,
+        
+        [ApiValue("Rates")]
+        [Description("Rates")]
+        Rates
     }
 }

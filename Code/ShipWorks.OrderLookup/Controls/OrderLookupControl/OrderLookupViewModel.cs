@@ -52,6 +52,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
 
             Column3 = new ObservableCollection<INotifyPropertyChanged>()
             {
+                lookupPanels[OrderLookupPanels.Rates],
                 lookupPanels[OrderLookupPanels.Customs]
             };
         }

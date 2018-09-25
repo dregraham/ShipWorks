@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\OrderLookupFromDataTemplateSelector.cs" />
+    <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
     <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
       <DependentUpon>ReferenceControl.xaml</DependentUpon>
     </Compile>
@@ -154,8 +155,10 @@
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
+    <Compile Include="IOrderLookupRatingService.cs" />
     <Compile Include="OrderLookupAutoPrintService.cs" />
     <Compile Include="OrderLookupOrderRepository.cs" />
+    <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookupSingleScanMessage.cs" />
     <Compile Include="OrderLookupMessageBus.cs" />
@@ -256,6 +259,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

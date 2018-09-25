@@ -21,13 +21,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     /// </summary>
     public partial class RatingPanelViewModel : IDisposable, INotifyPropertyChanged
     {
-        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-
+        
+        protected Func<ISecurityContext> securityContextRetriever;
+        
+        private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscriptions;
-        private readonly IMessenger messenger;
         private RateResult selectedRate;
-        private readonly Func<ISecurityContext> securityContextRetriever;
         private long? orderID;
 
         /// <summary>
@@ -41,10 +41,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="messenger"></param>
         public RatingPanelViewModel(IMessenger messenger, IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, Func<ISecurityContext> securityContextRetriever) : this()
         {
-            this.messenger = messenger;
             this.securityContextRetriever = securityContextRetriever;
 
             subscriptions = new CompositeDisposable(
