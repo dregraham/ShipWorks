@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
@@ -62,6 +63,11 @@ namespace ShipWorks.OrderLookup
         public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
+        /// The pacakge adpaters for the order in context
+        /// </summary>
+        public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
+
+        /// <summary>
         /// Invoked when a property on the order object changes
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -92,6 +98,7 @@ namespace ShipWorks.OrderLookup
 
                 if (ShipmentAdapter != null)
                 {
+                    PackageAdapters = ShipmentAdapter.GetPackageAdapters();
                     ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
                 }
 

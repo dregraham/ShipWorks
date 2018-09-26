@@ -116,7 +116,7 @@ namespace ShipWorks.OrderLookup.Controls
         {
             if (MessageBus.Order != null)
             {
-                if (DimensionProfiles == null)
+                if (e.PropertyName == "Order")
                 {
                     RefreshDimensionalProfiles();
                 }
@@ -171,7 +171,7 @@ namespace ShipWorks.OrderLookup.Controls
         private void RefreshDimensionalProfiles()
         {
             DimensionProfiles =
-                dimensionsManager.Profiles(MessageBus.ShipmentAdapter?.GetPackageAdapters().FirstOrDefault()).ToList();
+                dimensionsManager.Profiles(MessageBus.PackageAdapters.FirstOrDefault()).ToList();
 
             if (DimensionProfiles.None(d => d.DimensionsProfileID ==
                                             MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID))
@@ -209,7 +209,6 @@ namespace ShipWorks.OrderLookup.Controls
             }
             else
             {
-
                 PostalShipmentType postalShipmentType =
                     (PostalShipmentType) shipmentTypeManager.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode);
                 PostalServiceType postalServiceType = (PostalServiceType) MessageBus.ShipmentAdapter.ServiceType;
