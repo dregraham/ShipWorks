@@ -82,7 +82,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
 
-            Assert.Equal("No matching orders were found", testObject.SearchErrorMessage);
+            Assert.Equal("No matching orders were found.", testObject.SearchErrorMessage);
         }
 
         [Fact]

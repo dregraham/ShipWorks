@@ -16,6 +16,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the orders order id matching the search text
         /// </summary>
-        Task<long> GetOrderID(string searchText);
+        long? GetOrderID(string searchText);
     }
 }

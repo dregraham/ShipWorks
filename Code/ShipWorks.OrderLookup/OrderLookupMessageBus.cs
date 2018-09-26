@@ -37,7 +37,7 @@ namespace ShipWorks.OrderLookup
         public OrderEntity Order
         {
             get => order;
-            private set => handler.Set(nameof(Order), ref order, value);
+            private set => handler.Set(nameof(Order), ref order, value, true);
         }
 
         /// <summary>

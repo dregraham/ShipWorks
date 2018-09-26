@@ -10,6 +10,8 @@ using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
 using System.Threading.Tasks;
 using ShipWorks.SingleScan;
+using System.Linq;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.OrderLookup
 {
@@ -24,6 +26,8 @@ namespace ShipWorks.OrderLookup
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private IDisposable subscriptions;
+
+        bool processingScan = false;
 
         /// <summary>
         /// Constructor
@@ -40,6 +44,7 @@ namespace ShipWorks.OrderLookup
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
+            
         }
 
         /// <summary>
@@ -50,33 +55,61 @@ namespace ShipWorks.OrderLookup
             EndSession();
 
             subscriptions = new CompositeDisposable(
-
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Do(x => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(x.ScannedText))
-                .SelectMany(x => AutoPrint(x))
-                .SelectMany(x => orderRepository.GetOrder(x.OrderID))
-                .Subscribe(SendOrderMessage),
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Do(_ => processingScan = true)
+                .Subscribe(x => OnSingleScanMessage(x).ToObservable()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
-                .Do(x => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(x.SearchText))
-                .SelectMany(x => orderRepository.GetOrderID(x.SearchText).ToObservable())
-                .SelectMany(x => orderRepository.GetOrder(x))
-                .Subscribe(SendOrderMessage)
-
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Do(_ => processingScan = true)
+                .Subscribe(x => OnOrderLookupSearchMessage(x).ToObservable())
                 );
         }
 
         /// <summary>
-        /// Do AutoPrint for the order
+        /// Download order, auto print if needed, send order message
         /// </summary>
-        private async Task<(long OrderID, SingleScanMessage Message)> AutoPrint(SingleScanMessage message)
+        private async Task OnSingleScanMessage(SingleScanMessage message)
         {
-            long orderId = await orderRepository.GetOrderID(message.ScannedText);
-            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId, message);
+            try
+            {
 
-            return (orderId, message);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
+                long? orderId = orderRepository.GetOrderID(message.ScannedText);
+                OrderEntity order = null;
+
+                if (orderId.HasValue)
+                {
+                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message);
+                    order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+                }
+
+                SendOrderMessage(order);
+            } 
+            finally
+            {
+                processingScan = false;
+            }
+        }
+
+        /// <summary>
+        /// Download order, send order message
+        /// </summary>
+        private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
+        {
+            try
+            {
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
+                long? orderId = orderRepository.GetOrderID(message.SearchText);
+
+                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
+                SendOrderMessage(order);
+            }
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>

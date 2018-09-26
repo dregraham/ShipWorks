@@ -80,16 +80,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Command for getting orders
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand GetOrderCommand { get; set; }
 
         /// <summary>
         /// Command for resetting the order
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ResetCommand { get; set; }
 
         /// <summary>
         /// Command to create a label
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
         
         /// <summary>
@@ -101,7 +104,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             {
                 if (messageBus.Order == null)
                 {
-                    SearchErrorMessage = "No matching orders were found";
+                    SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
                     OrderNumber = string.Empty;
                 }

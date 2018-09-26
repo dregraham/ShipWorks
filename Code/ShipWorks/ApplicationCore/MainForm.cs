@@ -1589,16 +1589,20 @@ namespace ShipWorks
 
             // Update the state of the ui for the update online commands
             buttonUpdateOnline.Visible = OnlineUpdateCommandProvider.HasOnlineUpdateCommands();
-            gridMenuLayoutProvider.UpdateStoreDependentUI();
 
-            // The available columns depend on the store types that exist
-            FilterNodeColumnManager.InitializeForCurrentSession();
-            gridControl.ReloadGridColumns();
-
-            // Update the panels based on the current store set
-            foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+            if (UIMode != UIMode.OrderLookup)
             {
-                holder.UpdateStoreDependentUI();
+                gridMenuLayoutProvider.UpdateStoreDependentUI();
+
+                // The available columns depend on the store types that exist
+                FilterNodeColumnManager.InitializeForCurrentSession();
+                gridControl.ReloadGridColumns();
+
+                // Update the panels based on the current store set
+                foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+                {
+                    holder.UpdateStoreDependentUI();
+                }
             }
 
             // Update the availability of ribbon items based on security
