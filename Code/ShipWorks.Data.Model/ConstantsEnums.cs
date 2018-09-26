@@ -9492,6 +9492,8 @@ namespace ShipWorks.Data.Model
 		BilledType,
 		///<summary>BilledWeight. </summary>
 		BilledWeight,
+		///<summary>ProcessedWithUiMode. </summary>
+		ProcessedWithUiMode,
 		/// <summary></summary>
 		AmountOfFields
 	}

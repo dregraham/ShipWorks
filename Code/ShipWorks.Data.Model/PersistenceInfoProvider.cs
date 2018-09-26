@@ -2866,7 +2866,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 73, 0);
+			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 74, 0);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShipmentEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShipmentEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2940,6 +2940,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, "VarChar", 128, 0, 0, false, "", null, typeof(System.String), 70);
 			this.AddElementFieldMapping("ShipmentEntity", "BilledType", "BilledType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 71);
 			this.AddElementFieldMapping("ShipmentEntity", "BilledWeight", "BilledWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 72);
+			this.AddElementFieldMapping("ShipmentEntity", "ProcessedWithUiMode", "ProcessedWithUiMode", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 73);
 		}
 
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>

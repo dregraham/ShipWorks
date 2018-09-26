@@ -2411,6 +2411,7 @@
           <Field Name="ProcessedComputerID" Type="long" IsOptional="true" FieldIndex="9" />
           <Field Name="ProcessedDate" Type="datetime" IsOptional="true" FieldIndex="7" />
           <Field Name="ProcessedUserID" Type="long" IsOptional="true" FieldIndex="8" />
+          <Field Name="ProcessedWithUiMode" Type="UIMode" IsOptional="true" FieldIndex="73" />
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="19" />
           <Field Name="ResidentialDetermination" Type="int" FieldIndex="41" />
           <Field Name="ResidentialResult" Type="bool" FieldIndex="42" />
@@ -4296,7 +4297,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-04T20:21:32.4694016Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-26T17:59:15.2875771Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7966,6 +7967,7 @@
                     <Field Name="OnlineShipmentID" Ordinal="71" DbType="24" Length="128" />
                     <Field Name="BilledType" Ordinal="72" DbType="8" Precision="10" />
                     <Field Name="BilledWeight" Ordinal="73" DbType="6" Precision="38" />
+                    <Field Name="ProcessedWithUiMode" Ordinal="74" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -12643,6 +12645,7 @@
             <FieldMapping FieldName="ProcessedComputerID" TargetFieldName="ProcessedComputerID" />
             <FieldMapping FieldName="ProcessedDate" TargetFieldName="ProcessedDate" />
             <FieldMapping FieldName="ProcessedUserID" TargetFieldName="ProcessedUserID" />
+            <FieldMapping FieldName="ProcessedWithUiMode" TargetFieldName="ProcessedWithUiMode" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ResidentialDetermination" TargetFieldName="ResidentialDetermination" />
             <FieldMapping FieldName="ResidentialResult" TargetFieldName="ResidentialResult" />

@@ -22112,6 +22112,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BilledWeight);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ProcessedWithUiMode field instance</summary>
+		public static EntityField2 ProcessedWithUiMode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ProcessedWithUiMode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

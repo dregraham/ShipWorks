@@ -1240,7 +1240,8 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
 [OnlineShipmentID] [varchar] (128) NOT NULL,
 [BilledType] [int] NOT NULL,
-[BilledWeight] [float] NOT NULL
+[BilledWeight] [float] NOT NULL,
+[ProcessedWithUiMode] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
