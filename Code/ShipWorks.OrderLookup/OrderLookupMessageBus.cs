@@ -54,7 +54,7 @@ namespace ShipWorks.OrderLookup
         public bool ShipmentAllowEditing
         {
             get => shipmentAllowEditing;
-            private set => handler.Set(nameof(Order), ref shipmentAllowEditing, value, true);
+            private set => handler.Set(nameof(ShipmentAllowEditing), ref shipmentAllowEditing, value, true);
         }
 
         /// <summary>
