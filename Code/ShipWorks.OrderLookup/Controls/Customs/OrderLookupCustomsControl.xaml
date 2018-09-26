@@ -11,11 +11,13 @@
              xmlns:postal="clr-namespace:ShipWorks.Shipping.Carriers.Postal;assembly=ShipWorks.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:OrderLookupCustomsControlViewModel}">
+             d:DataContext="{d:DesignInstance local:OrderLookupCustomsControlViewModel}"
+             FontSize="12"
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
@@ -25,7 +27,7 @@
             <ui:IntToEnumConverter x:Key="IntToEnum"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -41,36 +43,39 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Value"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Text="Value"
+                       Style="{StaticResource FieldLabel}"/>
             <TextBox Grid.Row="0" Grid.Column="1"
-                     Style="{StaticResource Grid.TextBox.Number}"
+                     Style="{StaticResource FormNumberTextBox}"
                      Text="{Binding MessageBus.ShipmentAdapter.Shipment.CustomsValue, StringFormat=C,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
-                <i:Interaction.Behaviors>
+                <!--<i:Interaction.Behaviors>
                     <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$"
                                                   EmptyValue="" MaxLength="15" />
                     <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
-                </i:Interaction.Behaviors>
+                </i:Interaction.Behaviors>-->
             </TextBox>
-            
+
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Content" 
                        Visibility="{Binding CustomsContentTypeAllowed, 
-                       Converter={StaticResource BooleanToVisibility}}"/>
+                       Converter={StaticResource BooleanToVisibility}}"
+                       Style="{StaticResource FieldLabel}"/>
             <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1" 
                                   Visibility="{Binding CustomsContentTypeAllowed, 
                                   Converter={StaticResource BooleanToVisibility}}"
                                   ItemsSource="{Binding Path=CustomsContentTypes}"
-                                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.CustomsContentType, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type postal:PostalCustomsContentType}}">
+                                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.CustomsContentType, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type postal:PostalCustomsContentType}}"
+                                  Style="{StaticResource FormComboBox}">
                 <ui:ShipWorksComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
                     </DataTemplate>
                 </ui:ShipWorksComboBox.ItemTemplate>
             </ui:ShipWorksComboBox>
-            
-        </Grid>  
-        
+        </Grid>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -103,17 +108,16 @@
                             Margin="0, 0, 0, 4"
                             Command="{Binding AddCustomsItemCommand}" />
                 <Button Style="{StaticResource Button.Delete}"
-                            Command="{Binding DeleteCustomsItemCommand}" />
+                        Command="{Binding DeleteCustomsItemCommand, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
         <GroupBox Grid.Row="2" Header="Selected Content"
-                      Margin="0, 8, 4, 0"
-                      Padding="4, 4, 4, 4">
+                      Margin="0, 10, 0, 0">
             <Grid>
                 <Grid.Resources>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
-                    <Style TargetType="ComboBox" BasedOn="{StaticResource Grid.ComboBox.Default}" />
-                    <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource FieldLabel}" />
+                    <Style TargetType="ui:ShipWorksComboBox" BasedOn="{StaticResource FormComboBox}" />
+                    <Style TargetType="TextBox" BasedOn="{StaticResource FormTextBox}" />
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -127,53 +131,61 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0">Quantity</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="0 10 0 10"
+                           Text="Quantity"/>
                 <TextBox Grid.Row="0" Grid.Column="1"
-                             Style="{StaticResource Grid.TextBox.Number}"
+                         Margin="10 10 0 10"
+                             Style="{StaticResource FormNumberTextBox}"
                              Text="{Binding SelectedCustomsItem.Quantity,
                                  Converter={StaticResource EmptyDouble},
                                  ConverterParameter=1,
                                  ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
-                    <i:Interaction.Behaviors>
+                    <!--<i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$"
                                                       EmptyValue="" MaxLength="6" />
-                    </i:Interaction.Behaviors>
+                    </i:Interaction.Behaviors>-->
                 </TextBox>
-                <TextBlock Grid.Row="1" Grid.Column="0">Description</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Text="Description"/>
                 <TextBox Grid.Row="1" Grid.Column="1"
-                             Validation.ErrorTemplate="{StaticResource Template.Error.TextBox}"
-                             MaxLength="150"
-                             Text="{Binding SelectedCustomsItem.Description,
-                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
-                <TextBlock Grid.Row="2" Grid.Column="0">Weight</TextBlock>
+                         Validation.ErrorTemplate="{StaticResource Template.Error.TextBox}"
+                         MaxLength="150"
+                         Text="{Binding SelectedCustomsItem.Description,
+                                ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="Weight"/>
                 <ui:WeightControl Grid.Row="2" Grid.Column="1"
-                                      ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
-                                      Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                            ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
-                <TextBlock Grid.Row="3" Grid.Column="0">Value</TextBlock>
+                                  ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
+                                  Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Text="Value"/>
                 <TextBox Grid.Row="3" Grid.Column="1"
-                             Style="{StaticResource Grid.TextBox.Number}"
+                             Style="{StaticResource FormNumberTextBox}"
                              Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                     ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
-                    <i:Interaction.Behaviors>
+                    <!--<i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior
                             RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue=""
                             MaxLength="15" />
-                    </i:Interaction.Behaviors>
+                    </i:Interaction.Behaviors>-->
                 </TextBox>
-                <TextBlock Grid.Row="4" Grid.Column="0">Harmonized Code</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                           Text="Harmonized Code"/>
                 <TextBox Grid.Row="4" Grid.Column="1"
-                             Style="{StaticResource Grid.TextBox.Number}"
-                             MaxLength="14"
-                             Text="{Binding SelectedCustomsItem.HarmonizedCode,
-                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
-                <TextBlock Grid.Row="5" Grid.Column="0">Country of Origin</TextBlock>
-                <ComboBox Grid.Row="5" Grid.Column="1"
-                              x:Name="CountryComboBox"
-                              DisplayMemberPath="Key"
-                              SelectedValuePath="Value"
-                              SelectedValue="{Binding SelectedCustomsItem.CountryOfOrigin}"
-                              ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}" />
+                         Style="{StaticResource FormNumberTextBox}"
+                         MaxLength="14"
+                         Text="{Binding SelectedCustomsItem.HarmonizedCode,
+                            ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                <TextBlock Grid.Row="5" Grid.Column="0"
+                           Text="Country of Origin"/>
+                <ui:ShipWorksComboBox Grid.Row="5" Grid.Column="1"
+                          x:Name="CountryComboBox"
+                          DisplayMemberPath="Key"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding SelectedCustomsItem.CountryOfOrigin}"
+                          ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"/>
             </Grid>
         </GroupBox>
     </Grid>

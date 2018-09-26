@@ -2,7 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
@@ -48,6 +50,17 @@
         <Setter Property="TextAlignment" Value="Right"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
+
+    <Style x:Key="FormNumberTextBox" TargetType="{x:Type TextBox}"
+           BasedOn="{StaticResource Grid.TextBox.Number}">
+        <Setter Property="Margin" Value="10 0 0 10"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="23"/>
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>   
 
     <Style x:Key="Link" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand" />
