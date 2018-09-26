@@ -13,7 +13,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
     /// <summary>
     /// Main view model for the OrderLookup UI Mode
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [Component(RegisterAs = RegistrationType.Self)]
     public class OrderLookupViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

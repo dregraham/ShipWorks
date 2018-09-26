@@ -10,7 +10,7 @@ namespace ShipWorks.OrderLookup.Controls
     /// <summary>
     /// Control to look up orders for single scan mode
     /// </summary>
-    [Component]
+    [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
     public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
         private readonly OrderLookupViewModel orderLookupViewModel;
