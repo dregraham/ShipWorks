@@ -85,17 +85,20 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void LoadOrder(OrderEntity order)
         {
-            ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
-            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-
-            if (ShipmentAdapter != null)
+            if (order != null)
             {
-                ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
-            }
+                ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
+                ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
 
-            if (ShipmentAdapter?.Shipment?.Postal != null)
-            {
-                ShipmentAdapter.Shipment.Postal.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                if (ShipmentAdapter != null)
+                {
+                    ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                }
+
+                if (ShipmentAdapter?.Shipment?.Postal != null)
+                {
+                    ShipmentAdapter.Shipment.Postal.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                }
             }
             
             Order = order;
