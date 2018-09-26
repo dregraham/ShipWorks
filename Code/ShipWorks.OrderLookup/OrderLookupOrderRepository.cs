@@ -67,7 +67,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task<OrderEntity> GetOrder(long orderID)
         {
-            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(false);
+            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(true);
             return result.Shipments.First().Order;
         }
     }

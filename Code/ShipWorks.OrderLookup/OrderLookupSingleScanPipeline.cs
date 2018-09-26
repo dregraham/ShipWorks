@@ -74,17 +74,17 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(false);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.ScannedText);
                 OrderEntity order = null;
 
                 if (orderId.HasValue)
                 {
-                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(false);
+                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
                     order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
                     if (order == null)
                     {
-                        order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(false);
+                        order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
                     }
                 }
 
@@ -103,10 +103,15 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(false);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.SearchText);
 
-                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value).ConfigureAwait(false) : null;
+                OrderEntity order = null;
+                if (orderId.HasValue)
+                {
+                    order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                }
+
                 SendOrderMessage(order);
             }
             finally
