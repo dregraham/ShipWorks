@@ -27,8 +27,7 @@ namespace ShipWorks.OrderLookup
         public OrderLookupOrderRepository(
             ISqlSession sqlSession, 
             ISqlAdapterFactory sqlAdapterFactory,
-            IOrderLoader orderLoader
-           )
+            IOrderLoader orderLoader)
         {
             this.sqlSession = sqlSession;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -68,7 +67,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task<OrderEntity> GetOrder(long orderID)
         {
-            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000));
+            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(false);
             return result.Shipments.First().Order;
         }
     }

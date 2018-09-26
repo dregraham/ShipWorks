@@ -74,8 +74,7 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(false);
                 long? orderId = orderRepository.GetOrderID(message.ScannedText);
                 OrderEntity order = null;
 
@@ -104,10 +103,10 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(false);
                 long? orderId = orderRepository.GetOrderID(message.SearchText);
 
-                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
+                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value).ConfigureAwait(false) : null;
                 SendOrderMessage(order);
             }
             finally

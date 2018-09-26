@@ -120,8 +120,7 @@ namespace ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
-    {
-        
+    {        
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
