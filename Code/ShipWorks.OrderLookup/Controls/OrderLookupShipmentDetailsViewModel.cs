@@ -240,6 +240,12 @@ namespace ShipWorks.OrderLookup.Controls
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
+                // Service is carrier specific, so update message bus when it changes
+                if (e.PropertyName == "Service")
+                {
+                    handler.RaisePropertyChanged(nameof(MessageBus));
+                }
+				
                 if (e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Order")
                 {
                     RefreshPackageTypes();
@@ -254,6 +260,7 @@ namespace ShipWorks.OrderLookup.Controls
                 {
                     RefreshServiceTypes();
                 }
+            }
             }
 
         }

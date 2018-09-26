@@ -20,6 +20,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         private readonly IOrderLookupMessageBus messageBus;
         private readonly IOrderLookupRatingService ratingService;
         private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
+        private RateResult selectedRate;
 
         /// <summary>
         /// Constructor
@@ -34,6 +35,22 @@ namespace ShipWorks.OrderLookup.Controls.Rating
 
             messageBus.PropertyChanged += MessageBusPropertyChanged;
             this.securityContextRetriever = securityContextRetriever;
+        }
+
+        /// <summary>
+        /// The currently selected rate
+        /// </summary>
+        public override RateResult SelectedRate
+        {
+            get => selectedRate;
+            set
+            {
+                selectedRate = value;
+                messageBus.ShipmentAdapter.SelectServiceFromRate(selectedRate);
+                
+                handler.Set(nameof(SelectedRate), ref selectedRate, value); 
+                handler.RaisePropertyChanged(nameof(messageBus));
+            }
         }
 
         /// <summary>

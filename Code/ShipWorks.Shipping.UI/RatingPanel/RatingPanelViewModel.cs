@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public event PropertyChangedEventHandler PropertyChanged;
         
         protected Func<ISecurityContext> securityContextRetriever;
-        
-        private readonly PropertyChangedHandler handler;
+        protected readonly PropertyChangedHandler handler;
+
         private readonly IDisposable subscriptions;
         private RateResult selectedRate;
         private long? orderID;
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Currently selected rate
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RateResult SelectedRate
+        public virtual RateResult SelectedRate
         {
             get { return selectedRate; }
             set { handler.Set(nameof(SelectedRate), ref selectedRate, value); }
