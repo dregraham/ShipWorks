@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +25,7 @@ namespace ShipWorks.OrderLookup.Controls
     public class OrderLookupShipmentDetailsViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected readonly PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
         private readonly IDimensionsManager dimensionsManager;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
@@ -53,19 +52,7 @@ namespace ShipWorks.OrderLookup.Controls
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            ManageDimensionalProfiles = new RelayCommand(() => ManageDimensionalProfilesAction());
-        }
-
-        /// <summary>
-        /// Shows the manage dimensional profiles dialog and updates the local profile collection after it closes
-        /// </summary>
-        private void ManageDimensionalProfilesAction()
-        {
-            using (DimensionsManagerDlg dlg = new DimensionsManagerDlg())
-            {
-                dlg.ShowDialog();
-                RefreshDimensionalProfiles();
-            }
+            ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
         }
 
         /// <summary>
@@ -74,23 +61,15 @@ namespace ShipWorks.OrderLookup.Controls
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
 
-        private void RefreshDimensionalProfiles()
-        {
-            DimensionProfiles =
-                dimensionsManager.Profiles(MessageBus.ShipmentAdapter?.GetPackageAdapters().FirstOrDefault()).ToList();
-
-            if (DimensionProfiles.None(d => d.DimensionsProfileID == MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID))
-            {
-                MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
-            }
-        }
-
         /// <summary>
         /// The ViewModel message bus
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus { get; private set; }
+        public IOrderLookupMessageBus MessageBus { get; }
 
+        /// <summary>
+        /// The dimension profiles
+        /// </summary>
         public List<DimensionsProfileEntity> DimensionProfiles
         {
             get => dimensionProfiles;
@@ -101,10 +80,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected
-        {
-            get => MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
-        }
+        public bool IsProfileSelected => MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of valid PackageTypes
@@ -113,22 +89,6 @@ namespace ShipWorks.OrderLookup.Controls
         {
             get => packageTypes;
             set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
-        }
-
-        /// <summary>
-        /// Refresh the package types
-        /// </summary>
-        public void RefreshPackageTypes()
-        {
-            if (MessageBus.ShipmentAdapter?.Shipment == null)
-            {
-                PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
-            }
-            else
-            {
-                PackageTypes = shipmentPackageTypesBuilderFactory.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode)
-                .BuildPackageTypeDictionary(new[] { MessageBus.ShipmentAdapter.Shipment });
-            }
         }
 
         /// <summary>
@@ -141,9 +101,105 @@ namespace ShipWorks.OrderLookup.Controls
         }
 
         /// <summary>
+        /// Collection of ServiceTypes
+        /// </summary>
+        public IEnumerable<KeyValuePair<int, string>> ServiceTypes
+        {
+            get => serviceTypes;
+            set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
+        }
+
+        /// <summary>
+        /// Update when order changes
+        /// </summary>
+        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (MessageBus.Order != null)
+            {
+                if (DimensionProfiles == null)
+                {
+                    RefreshDimensionalProfiles();
+                }
+
+                if (e.PropertyName == "Order" || e.PropertyName == "Service")
+                {
+                    handler.RaisePropertyChanged(nameof(MessageBus));
+                }
+
+                if (e.PropertyName == "DimsProfileID")
+                {
+                    PostalShipmentEntity postal = MessageBus.ShipmentAdapter.Shipment.Postal;
+                    if (postal.DimsProfileID != 0)
+                    {
+                        DimensionsProfileEntity profile =
+                            DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == postal.DimsProfileID);
+
+                        if (profile != null)
+                        {
+                            postal.DimsLength = profile.Length;
+                            postal.DimsWidth = profile.Width;
+                            postal.DimsHeight = profile.Height;
+                            postal.DimsWeight = profile.Weight;
+                        }
+                    }
+
+                    handler.RaisePropertyChanged(nameof(IsProfileSelected));
+                }
+
+                if (e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Order")
+                {
+                    RefreshPackageTypes();
+                }
+
+                if (e.PropertyName == "Order" || e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Service" ||
+                    e.PropertyName == "PackagingType")
+                {
+                    RefreshConfirmationTypes();
+                }
+
+                if (e.PropertyName == "Order" || e.PropertyName == "ShipmentTypeCode" ||
+                    e.PropertyName == "ShipCountryCode")
+                {
+                    RefreshServiceTypes();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Refresh the dimension profiles
+        /// </summary>
+        private void RefreshDimensionalProfiles()
+        {
+            DimensionProfiles =
+                dimensionsManager.Profiles(MessageBus.ShipmentAdapter?.GetPackageAdapters().FirstOrDefault()).ToList();
+
+            if (DimensionProfiles.None(d => d.DimensionsProfileID ==
+                                            MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID))
+            {
+                MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
+            }
+        }
+        
+        /// <summary>
+        /// Refresh the package types
+        /// </summary>
+        private void RefreshPackageTypes()
+        {
+            if (MessageBus.ShipmentAdapter?.Shipment == null)
+            {
+                PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
+            }
+            else
+            {
+                PackageTypes = shipmentPackageTypesBuilderFactory.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode)
+                    .BuildPackageTypeDictionary(new[] {MessageBus.ShipmentAdapter.Shipment});
+            }
+        }
+        
+        /// <summary>
         /// Refresh the confirmation types
         /// </summary>
-        public void RefreshConfirmationTypes()
+        private void RefreshConfirmationTypes()
         {
             // Check to see if object is a postal shipment adapter
             if (MessageBus.ShipmentAdapter != null &&
@@ -154,38 +210,32 @@ namespace ShipWorks.OrderLookup.Controls
             else
             {
 
-                PostalShipmentType postalShipmentType = ((PostalShipmentType) shipmentTypeManager.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode));
+                PostalShipmentType postalShipmentType =
+                    (PostalShipmentType) shipmentTypeManager.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode);
                 PostalServiceType postalServiceType = (PostalServiceType) MessageBus.ShipmentAdapter.ServiceType;
 
                 // See if all have confirmation as an option or not
-                PostalPackagingType packagingType = (PostalPackagingType) MessageBus.ShipmentAdapter.Shipment.Postal.PackagingType;
+                PostalPackagingType packagingType =
+                    (PostalPackagingType) MessageBus.ShipmentAdapter.Shipment.Postal.PackagingType;
                 ConfirmationTypes = postalShipmentType
-                    .GetAvailableConfirmationTypes(MessageBus.ShipmentAdapter.Shipment.ShipCountryCode, postalServiceType, packagingType)
-                    .ToDictionary(serviceType => (int) serviceType, serviceType => EnumHelper.GetDescription(serviceType));
+                    .GetAvailableConfirmationTypes(MessageBus.ShipmentAdapter.Shipment.ShipCountryCode,
+                                                   postalServiceType, packagingType)
+                    .ToDictionary(serviceType => (int) serviceType,
+                                  serviceType => EnumHelper.GetDescription(serviceType));
             }
         }
-
-        /// <summary>
-        /// Collection of ServiceTypes
-        /// </summary>
-        public IEnumerable<KeyValuePair<int, string>> ServiceTypes
-        {
-            get => serviceTypes;
-            set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
-        }
-
-
+        
         /// <summary>
         /// Refresh the ServiceTypes
         /// </summary>
-        public void RefreshServiceTypes()
+        private void RefreshServiceTypes()
         {
             Dictionary<int, string> updatedServices = new Dictionary<int, string>();
 
             try
             {
                 updatedServices = shipmentServicesBuilderFactory.Get(MessageBus.ShipmentAdapter.ShipmentTypeCode)
-                    .BuildServiceTypeDictionary(new[] { MessageBus.ShipmentAdapter.Shipment });
+                    .BuildServiceTypeDictionary(new[] {MessageBus.ShipmentAdapter.Shipment});
             }
             catch (InvalidRateGroupShippingException)
             {
@@ -205,64 +255,15 @@ namespace ShipWorks.OrderLookup.Controls
         }
 
         /// <summary>
-        /// Update when order changes
+        /// Shows the manage dimensional profiles dialog and updates the local profile collection after it closes
         /// </summary>
-        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ManageDimensionalProfilesAction()
         {
-            if (MessageBus.Order != null)
+            using (DimensionsManagerDlg dlg = new DimensionsManagerDlg())
             {
-                if (DimensionProfiles == null)
-                {
-                    RefreshDimensionalProfiles();
-                }
-
-                if (e.PropertyName == "Order")
-                {
-                    handler.RaisePropertyChanged(nameof(MessageBus));
-                }
-
-                if (e.PropertyName == "DimsProfileID")
-                {
-                    PostalShipmentEntity postal = MessageBus.ShipmentAdapter.Shipment.Postal;
-                    if (postal.DimsProfileID != 0)
-                    {
-                        DimensionsProfileEntity profile = DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == postal.DimsProfileID);
-
-                        if (profile != null)
-                        {
-                            postal.DimsLength = profile.Length;
-                            postal.DimsWidth = profile.Width;
-                            postal.DimsHeight = profile.Height;
-                            postal.DimsWeight = profile.Weight;
-                        }
-                    }
-
-                    handler.RaisePropertyChanged(nameof(IsProfileSelected));
-                }
-
-                // Service is carrier specific, so update message bus when it changes
-                if (e.PropertyName == "Service")
-                {
-                    handler.RaisePropertyChanged(nameof(MessageBus));
-                }
-				
-                if (e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Order")
-                {
-                    RefreshPackageTypes();
-                }
-
-                if (e.PropertyName == "Order" || e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Service" || e.PropertyName == "PackagingType")
-                {
-                    RefreshConfirmationTypes();
-                }
-
-                if (e.PropertyName == "Order" || e.PropertyName=="ShipmentTypeCode" || e.PropertyName == "ShipCountryCode")
-                {
-                    RefreshServiceTypes();
-                }
+                dlg.ShowDialog();
+                RefreshDimensionalProfiles();
             }
-            }
-
         }
     }
 }
