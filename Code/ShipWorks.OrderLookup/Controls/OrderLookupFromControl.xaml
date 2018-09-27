@@ -92,8 +92,8 @@
             <DataTemplate x:Key="usps">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="85"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="85" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -138,14 +138,14 @@
 
             <DataTemplate x:Key="default">
                 <StackPanel>
-                    <ContentControl Content="{StaticResource AccountLabel}" />
-                    <ContentControl Content="{StaticResource AccountComboBox}" />
                     <ContentControl Content="{StaticResource BaseAddressConrol}" />
                 </StackPanel>
             </DataTemplate>
+
         </ResourceDictionary>
+
     </UserControl.Resources>
-    <StackPanel Style="{StaticResource PanelWrapper}" >
+    <StackPanel Style="{StaticResource PanelWrapper}">
         <ContentControl Content="{Binding .}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
