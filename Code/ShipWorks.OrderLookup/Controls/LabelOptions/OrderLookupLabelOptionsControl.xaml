@@ -17,6 +17,7 @@
             <ui:IntToEnumConverter x:Key="IntToEnum"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -40,8 +41,9 @@
 
         <DatePicker Grid.Row="0"
                     Grid.Column="2"
+                    Margin="10 0 0 10"
                     SelectedDate="{Binding MessageBus.ShipmentAdapter.ShipDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
-                    Style="{StaticResource FormDatePicker}"/>
+                    Style="{StaticResource DatePicker}"/>
 
         <TextBlock Grid.Row="1"
                    Grid.Column="1"
@@ -92,7 +94,7 @@
 
         <ui:ShipWorksComboBox Grid.Row="3"
                   Grid.Column="2" 
-                  MinWidth="100"
+                  MinWidth="100"                              
                   ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type printers:ThermalLanguage}}"
                   Style="{StaticResource FormComboBox}"/>

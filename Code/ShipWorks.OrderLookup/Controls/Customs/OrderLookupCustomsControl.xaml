@@ -9,6 +9,7 @@
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;assembly=ShipWorks.Shipping.UI"
              xmlns:postal="clr-namespace:ShipWorks.Shipping.Carriers.Postal;assembly=ShipWorks.Core"
+             xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:OrderLookupCustomsControlViewModel}"
@@ -155,10 +156,13 @@
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0"
                            Text="Weight"/>
-                <ui:WeightControl Grid.Row="2" Grid.Column="1"
+                <controls:OrderLookupWeightControl
+                    Margin="10 0 0 10"
+                    Grid.Row="2" Grid.Column="1"></controls:OrderLookupWeightControl>
+                <!--<ui:WeightControl Grid.Row="2" Grid.Column="1"
                                   ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
                                   Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>-->
                 <TextBlock Grid.Row="3" Grid.Column="0"
                            Text="Value"/>
                 <TextBox Grid.Row="3" Grid.Column="1"
