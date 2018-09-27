@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
@@ -41,10 +42,9 @@
     </Style>
 
     <Style x:Key="FormDatePicker" TargetType="{x:Type DatePicker}"
-           BasedOn="{StaticResource DatePickerStyle.Centered}">
+           BasedOn="{StaticResource DatePicker}">
         <Setter Property="Margin" Value="10 0 0 10"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>        
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
