@@ -119,9 +119,14 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Set default values even if the field allows null values
         /// </summary>
-        public EntityBuilder<T> SetDefaultsOnNullableFields()
+        public EntityBuilder<T> SetDefaultsOnNullableFields() => SetDefaultsOnNullableFields(true);
+
+        /// <summary>
+        /// Set default values even if the field allows null values
+        /// </summary>
+        public EntityBuilder<T> SetDefaultsOnNullableFields(bool shouldSetDefaults)
         {
-            setValueIfNullable = true;
+            setValueIfNullable = shouldSetDefaults;
             return this;
         }
 

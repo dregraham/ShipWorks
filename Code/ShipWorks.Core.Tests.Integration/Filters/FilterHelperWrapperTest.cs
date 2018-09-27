@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Linq;
+using Interapptive.Shared.Tests.Filters;
+using Interapptive.Shared.Threading;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
@@ -23,24 +28,22 @@ namespace ShipWorks.Core.Tests.Integration.Filters
             testObject = context.Mock.Create<FilterHelperWrapper>();
 
             var filter = Create.Entity<FilterEntity>()
+                .Set(f => f.Definition = FilterTestingHelper.OrderNumberDefinitionXml(context.Order.OrderNumber))
+                .Set(f => f.Name = $"Filter for {context.Order.OrderNumber}")
+                .Set(f => f.IsFolder = false)
+                .Set(f => f.State = (int) FilterState.Enabled)
                 .Save();
 
-            var sequence = Create.Entity<FilterSequenceEntity>()
-                .Set(x => x.Filter, filter)
-                .Save();
+            FilterNodeEntity rootOrderFilter = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
 
-            var content = Create.Entity<FilterNodeContentEntity>()
-                .Save();
+            var node = FilterLayoutContext.Current.AddFilter(filter, rootOrderFilter, 0).First();
 
-            Create.Entity<FilterNodeContentDetailEntity>()
-                .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.EntityID, context.Order.OrderID)
-                .Save();
+            FilterLayoutContext.Current.Reload();
 
-            var node = Create.Entity<FilterNodeEntity>()
-                .Set(x => x.FilterSequence, sequence)
-                .Set(x => x.FilterNodeContent, content)
-                .Save();
+            testObject.RegenerateFilters(SqlSession.Current.OpenConnection());
+
+            IProgressReporter progressReporter = new ProgressItem("calc initial filter counts");
+            testObject.CalculateInitialFilterCounts(SqlSession.Current.OpenConnection(), progressReporter, 0);
 
             rule = Create.Entity<ShippingProviderRuleEntity>()
                 .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Usps)
@@ -58,7 +61,7 @@ namespace ShipWorks.Core.Tests.Integration.Filters
         [Fact]
         public void IsObjectInFilterContent_ReturnsFalse_WhenFilterContentIsNull()
         {
-            var result = testObject.IsObjectInFilterContent(context.Order.OrderID, new ShippingProviderRuleEntity());
+            var result = testObject.IsObjectInFilterContent(context.Order.OrderID, new ShippingProviderRuleEntity{ FilterNodeID = 1007});
             Assert.False(result);
         }
 

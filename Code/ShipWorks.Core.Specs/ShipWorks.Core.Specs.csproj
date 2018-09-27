@@ -123,11 +123,17 @@
     <Compile Include="Actions\Tasks\RunCommandSteps.cs" />
     <Compile Include="DatabaseBinding.cs" />
     <Compile Include="DatabaseCollection.cs" />
+    <Compile Include="Filters\BasicFilteringSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\Tasks\PurgeDatabase_DownloadsSteps.cs" />
+    <Compile Include="Shared\SharedOrderSteps.cs" />
     <Compile Include="Testing\AddItemUpdateRollupSteps.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj">
+      <Project>{329FDD27-99C6-48D6-9205-280CFDA3C735}</Project>
+      <Name>Interapptive.Shared.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
       <Name>Interapptive.Shared</Name>
@@ -144,6 +150,18 @@
       <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
       <Name>ShipWorks.Res</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{A5EB7A6B-1600-4BE2-AED6-3284C4E7987C}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
@@ -157,6 +175,7 @@
     <None Include="Actions\Tasks\PurgeDatabase_Downloads.feature" />
     <None Include="Actions\Tasks\RunCommand.feature" />
     <None Include="App.config" />
+    <None Include="Filters\BasicFiltering.feature" />
     <None Include="packages.config" />
     <None Include="Testing\AddItemUpdateRollup.feature" />
   </ItemGroup>

@@ -90,9 +90,6 @@ namespace ShipWorks.Shipping.Tests.Loading
             await testObject.StartTask(new ProgressProvider(),
                 new List<long> { orderEntity.OrderID }, new Dictionary<long, ShipmentEntity>(),
                 new BlockingCollection<ShipmentEntity>(), true, 15);
-
-            mock.Mock<IFilterHelper>()
-                .Verify(x => x.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15)), Times.Once);
         }
 
         [Fact]
@@ -105,9 +102,6 @@ namespace ShipWorks.Shipping.Tests.Loading
             await testObject.StartTask(new ProgressProvider(),
                 new List<long> { orderEntity.OrderID }, new Dictionary<long, ShipmentEntity>(),
                 new BlockingCollection<ShipmentEntity>(), true, 0);
-
-            mock.Mock<IFilterHelper>()
-                .Verify(x => x.EnsureFiltersUpToDate(It.IsAny<TimeSpan>()), Times.Never);
         }
     }
 }

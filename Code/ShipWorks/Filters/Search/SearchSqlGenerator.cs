@@ -34,6 +34,7 @@ namespace ShipWorks.Filters.Search
         {
             string initialSql;
             string updateSql;
+            string existsSql;
             ICollection<EntityField2> columnsUsed;
             ICollection<FilterNodeJoinType> joinsUsed;
 
@@ -41,6 +42,7 @@ namespace ShipWorks.Filters.Search
             {
                 initialSql = string.Format(FilterSqlTemplates.FolderEmpty, (int) FilterCountStatus.Ready);
                 updateSql = initialSql;
+                existsSql = initialSql;
 
                 columnsUsed = new List<EntityField2>();
                 joinsUsed = new List<FilterNodeJoinType>();
@@ -73,13 +75,20 @@ namespace ShipWorks.Filters.Search
                     predicate,
                     (int) FilterCountStatus.Ready);
 
+                existsSql = string.Format(FilterSqlTemplates.ExistsQuery,
+                    scope.TableAlias,
+                    generationContext.GetColumnName(scope.PrimaryKey),
+                    scope.GetFromClause(),
+                    predicate,
+                    (int) FilterCountStatus.Ready);
+
                 columnsUsed = generationContext.ColumnsUsed;
                 joinsUsed = generationContext.JoinsUsed;
 
                 Debug.Assert(generationContext.IndentLevel == 1, "IndentLevel should be back to 1");
             }
 
-            return new FilterSqlResult(countID, initialSql, updateSql, columnsUsed, joinsUsed);
+            return new FilterSqlResult(countID, initialSql, updateSql, existsSql, columnsUsed, joinsUsed);
         }
     }
 }

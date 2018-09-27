@@ -27,12 +27,6 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Ensure filters are up to date
-        /// </summary>
-        public bool EnsureFiltersUpToDate(TimeSpan timeout) =>
-            FilterHelper.EnsureFiltersUpToDate(timeout);
-
-        /// <summary>
         /// Indicates if the given object is in the filter contents of the specified filter content id
         /// </summary>
         public bool IsObjectInFilterContent(long orderID, IRuleEntity rule)
@@ -42,10 +36,7 @@ namespace ShipWorks.Filters
                 return false;
             }
 
-            long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-
-            return filterContentID != null &&
-                FilterHelper.IsObjectInFilterContent(orderID, filterContentID.Value);
+            return FilterHelper.IsObjectInFilterContent(orderID, rule.FilterNodeID);
         }
 
         /// <summary>

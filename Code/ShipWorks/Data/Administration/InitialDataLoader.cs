@@ -473,6 +473,7 @@ namespace ShipWorks.Data.Administration
                     content.Status = (int) FilterCountStatus.Ready;
                     content.InitialCalculation = "";
                     content.UpdateCalculation = "";
+                    content.EntityExistsQuery = "";
                     content.ColumnMask = new byte[0];
                     content.JoinMask = 0;
                     adapter.SaveAndRefetch(content);

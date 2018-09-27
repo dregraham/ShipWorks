@@ -1,0 +1,1 @@
+SELECT TOP 1 CONVERT(BIGINT, <SwFilterNodeID />) AS [FilterNodeID] WHERE 1 = 0

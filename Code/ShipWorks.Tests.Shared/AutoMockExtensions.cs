@@ -100,7 +100,6 @@ namespace ShipWorks.Tests.Shared
         public static Mock<IFilterHelper> WithFilterHelper(this AutoMock mock, bool result)
         {
             Mock<IFilterHelper> mockObject = mock.Mock<IFilterHelper>();
-            mockObject.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(result);
 
             return mockObject;
         }
