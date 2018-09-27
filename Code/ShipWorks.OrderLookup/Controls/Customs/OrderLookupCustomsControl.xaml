@@ -27,7 +27,7 @@
             <ui:IntToEnumConverter x:Key="IntToEnum"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5">
+    <Grid Margin="5" IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>

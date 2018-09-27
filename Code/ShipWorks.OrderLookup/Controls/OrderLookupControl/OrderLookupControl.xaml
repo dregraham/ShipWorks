@@ -12,43 +12,51 @@
              xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
              xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
              mc:Ignorable="d"
-             >
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type controls:OrderLookupFromViewModel}">
-            <Expander Header="From:">
-                <controls:OrderLookupFromControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type controls:OrderLookupToViewModel}">
-            <Expander Header="To:">
-                <controls:OrderLookupToControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type labelOptions:OrderLookupLabelOptionsControlViewModel}">
-            <Expander Header="Label Options:">
-                <labelOptions:OrderLookupLabelOptionsControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type reference:ReferenceViewModel}">
-            <Expander Header="Reference:">
-                <reference:ReferenceControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type controls:OrderLookupShipmentDetailsViewModel}">
-            <Expander Header="Shipment Details:">
-                <controls:OrderLookupShipmentDetailsControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">
-            <Expander Header="Rates:">
-                <ratingPanel:RatingPanelControl />
-            </Expander>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
-            <Expander Header="Customs:">
-                <customs:OrderLookupCustomsControl />
-            </Expander>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource Expander.Style}">
+            
+            </Style>
+            <DataTemplate DataType="{x:Type controls:OrderLookupFromViewModel}">
+                <Expander Header="From:">
+                    <controls:OrderLookupFromControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type controls:OrderLookupToViewModel}">
+                <Expander Header="To:">
+                    <controls:OrderLookupToControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type labelOptions:OrderLookupLabelOptionsControlViewModel}">
+                <Expander Header="Label Options:">
+                    <labelOptions:OrderLookupLabelOptionsControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type reference:ReferenceViewModel}">
+                <Expander Header="Reference:">
+                    <reference:ReferenceControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type controls:OrderLookupShipmentDetailsViewModel}">
+                <Expander Header="Shipment Details:">
+                    <controls:OrderLookupShipmentDetailsControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">
+                <Expander Header="Rates:">
+                    <ratingPanel:RatingPanelControl />
+                </Expander>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
+                <Expander Header="Customs:">
+                    <customs:OrderLookupCustomsControl />
+                </Expander>
+            </DataTemplate>
+        </ResourceDictionary>        
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
