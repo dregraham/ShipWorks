@@ -190,8 +190,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 throw new NullReferenceException("overriddenShipment.Postal cannot be null.");
             }
 
-            shipment.Insurance = shipment.Postal.Insurance;
-
             PostalServiceType serviceType = (PostalServiceType) overriddenShipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) overriddenShipment.Postal.PackagingType;
 

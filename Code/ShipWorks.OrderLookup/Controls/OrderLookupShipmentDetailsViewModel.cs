@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.UI.ShippingPanel;
 
 namespace ShipWorks.OrderLookup.Controls
 {
@@ -43,13 +44,14 @@ namespace ShipWorks.OrderLookup.Controls
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory)
+            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IInsuranceViewModel insuranceViewModel)
         {
             MessageBus = messageBus;
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
+            InsuranceViewModel = insuranceViewModel;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -66,6 +68,9 @@ namespace ShipWorks.OrderLookup.Controls
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus { get; }
+
+        [Obfuscation(Exclude = true)]
+        public IInsuranceViewModel InsuranceViewModel { get; }
 
         /// <summary>
         /// The dimension profiles
@@ -121,6 +126,14 @@ namespace ShipWorks.OrderLookup.Controls
                     RefreshDimensionalProfiles();
                 }
 
+                if (e.PropertyName == "Order" || 
+                    e.PropertyName == "Service" || 
+                    e.PropertyName == "ShipmentTypeCode" || 
+                    e.PropertyName == "ShipCountryCode")
+                {
+                    RefreshInsurance();
+                }
+
                 if (e.PropertyName == "Order" || e.PropertyName == "Service")
                 {
                     handler.RaisePropertyChanged(nameof(MessageBus));
@@ -165,6 +178,14 @@ namespace ShipWorks.OrderLookup.Controls
             }
         }
         
+        /// <summary>
+        /// Refreshes Insurance
+        /// </summary>
+        private void RefreshInsurance()
+        {
+            InsuranceViewModel.Load(MessageBus.PackageAdapters, MessageBus.PackageAdapters.FirstOrDefault(), MessageBus.ShipmentAdapter);
+        }
+
         /// <summary>
         /// Refresh the dimension profiles
         /// </summary>

@@ -75,7 +75,10 @@
         <Setter Property="Width" Value="auto"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-    </Style>   
+    </Style>
+    <Style x:Key="FormWrapPanel" TargetType="{x:Type WrapPanel}">
+        <Setter Property="Margin" Value="10 0 0 0" />
+    </Style>
 
     <Style x:Key="Link" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand" />

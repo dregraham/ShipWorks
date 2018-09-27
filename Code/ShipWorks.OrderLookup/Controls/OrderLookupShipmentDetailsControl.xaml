@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance;assembly=ShipWorks.Shipping.UI"
     d:DataContext="{d:DesignInstance local:OrderLookupShipmentDetailsViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -36,9 +37,10 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="85" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -205,7 +207,7 @@
                     <Grid
                         Grid.Row="10"
                         Grid.Column="1"
-                        Margin="5,0,0,0">
+                        Margin="5,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
@@ -213,7 +215,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock
                             Grid.Column="0"
-                            Margin="0,0,0,1"
+                            Margin="5,0,0,1"
                             Foreground="Gray"
                             Style="{StaticResource FieldLabel}"
                             Text="Add to weight" />
@@ -237,6 +239,11 @@
                             </TextBox.IsEnabled>
                         </TextBox>
                     </Grid>
+                    <local:OrderLookupInsuranceControl
+                        Grid.Row="11"
+                        Grid.Column ="0"
+                        Grid.ColumnSpan="2"
+                        DataContext="{Binding InsuranceViewModel}" />
                 </Grid>
             </DataTemplate>
 

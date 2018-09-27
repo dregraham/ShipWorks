@@ -1,0 +1,128 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.OrderLookupInsuranceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
+    xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
+    d:DesignHeight="100"
+    d:DesignWidth="400"
+    Grid.IsSharedSizeScope="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/InsuranceStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance'}" />
+        <CheckBox
+            Name="IsInsured"
+            Grid.Row="0"
+            Grid.Column="1"
+            VerticalContentAlignment="Center"
+            Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+            IsChecked="{Binding Insurance}"
+            Style="{StaticResource FormCheckBox}" />
+
+        <WrapPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Horizontal"
+            Style="{StaticResource FormWrapPanel}">
+            <TextBlock
+                Margin="0,0,4,0"
+                VerticalAlignment="Center"
+                Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}" />
+            <TextBox
+                VerticalAlignment="Center"
+                IsEnabled="{Binding Insurance}"
+                Style="{StaticResource Grid.TextBox.Number}"
+                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
+            <Image
+                Width="12"
+                Height="12"
+                Margin="4,0,4,0"
+                Style="{StaticResource Image.InfoTip}"
+                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}">
+                <Image.ToolTip>
+                    <ToolTip>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="2,4,5,2"
+                                VerticalAlignment="Top"
+                                Stretch="None"
+                                Style="{StaticResource Image.Info20x20}" />
+
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock FontWeight="Bold" Text="{Binding InsuranceInfoTipCaptionText}" />
+                                <TextBlock Text="{Binding InsuranceInfoTipDisplayText}" />
+                            </StackPanel>
+                        </Grid>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+
+            <TextBlock
+                Margin="4,0,4,0"
+                VerticalAlignment="Center"
+                Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}"
+                Visibility="{Binding CostVisibility, FallbackValue=Visible}">
+                <TextBlock.Style>
+                    <Style BasedOn="{StaticResource Grid.Cell}" TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Insurance}" Value="True">
+                                <Setter Property="Foreground" Value="#FF008066" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Insurance}" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <Button
+                VerticalAlignment="Center"
+                Command="{Binding ShowInsurancePromoDialogCommand}"
+                Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"
+                Style="{StaticResource Insurance.Button.Link}"
+                Visibility="{Binding LinkVisibility, FallbackValue=Visible}" />
+        </WrapPanel>
+    </Grid>
+</UserControl>
