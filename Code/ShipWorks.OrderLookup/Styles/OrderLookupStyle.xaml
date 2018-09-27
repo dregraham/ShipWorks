@@ -110,15 +110,17 @@
                               Background="#FAFAFA">                            
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="19"/>
-                            </Grid.ColumnDefinitions>                            
-                            <ContentPresenter Grid.Column="0" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
-                            <Path x:Name="arrow" Grid.Column="1" Data="M 1,1.5 L 4.5,5 L 8,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="#666" StrokeThickness="2" VerticalAlignment="Center"/>
+                                <ColumnDefinition Width="29"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Column="0" HorizontalAlignment="Left" Margin="10,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                            <Path x:Name="arrow" 
+                                  Margin="0 0 10 0"
+                                  Grid.Column="1" Data=" M 1,1.5 L 6.5,7 L 12,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="Black" StrokeThickness="2.5" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                            <Setter Property="Data" TargetName="arrow" Value="M 1,6.5  L 6.5,1  L 12,6.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -151,7 +153,10 @@
                         
                         <DockPanel>
                             <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Content="{TemplateBinding Header}" DockPanel.Dock="Top" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource Expander.HeaderFocusVisual}" 
-                                          FontWeight="Bold" FontStyle="Normal" FontSize="12" FontStretch="{TemplateBinding FontStretch}"
+                                          FontWeight="Bold" 
+                                          FontStyle="Normal" 
+                                          FontSize="12" 
+                                          FontStretch="{TemplateBinding FontStretch}"
                                           FontFamily="/ShipWorks.OrderLookup;component/#Roboto" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource Expander.DownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Visibility="Collapsed" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </DockPanel>
