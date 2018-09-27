@@ -974,6 +974,9 @@
     <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
     <Compile Include="Data\FilterTelemetryService.cs" />
     <Compile Include="Data\Grid\Columns\Definitions\ShipmentsHistoryColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Paging\EntityGatewayUtility.cs" />
+    <Compile Include="Data\Grid\Paging\PageDetails.cs" />
+    <Compile Include="Data\Grid\Paging\Pager.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />

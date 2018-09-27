@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -23,7 +22,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -181,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return adapters;
         }
-        
+
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -392,10 +390,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription((iParcelServiceType) shipment.IParcel.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((iParcelServiceType) shipment.IParcel.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((iParcelServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(iParcelServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get the total packages contained by the shipment

@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (226 + 2));
+			this.InitClass( (227 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -197,6 +197,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitPostalProfileEntityInfos();
 			InitPostalShipmentEntityInfos();
 			InitPrintResultEntityInfos();
+			InitProcessedShipmentEntityInfos();
 			InitProStoresOrderEntityInfos();
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
@@ -2549,6 +2550,39 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PrintResultEntity", "PageMarginTop", typeof(System.Double), false, false, false, false,  (int)PrintResultFieldIndex.PageMarginTop, 0, 0, 38);
 			this.AddElementFieldInfo("PrintResultEntity", "PageWidth", typeof(System.Double), false, false, false, false,  (int)PrintResultFieldIndex.PageWidth, 0, 0, 38);
 			this.AddElementFieldInfo("PrintResultEntity", "PageHeight", typeof(System.Double), false, false, false, false,  (int)PrintResultFieldIndex.PageHeight, 0, 0, 38);
+		}
+		/// <summary>Inits ProcessedShipmentEntity's FieldInfo objects</summary>
+		private void InitProcessedShipmentEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProcessedShipmentFieldIndex), "ProcessedShipmentEntity");
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentID", typeof(System.Int64), true, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentType", typeof(ShipWorks.Shipping.ShipmentTypeCode), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentType, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipDate", typeof(System.DateTime), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Insurance", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "InsuranceProvider", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.InsuranceProvider, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedComputerID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Voided", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Voided, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TotalWeight", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TotalWeight, 0, 9, 29);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TrackingNumber", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TrackingNumber, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentCost", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentCost, 0, 4, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipAddressValidationStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipAddressValidationStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipResidentialStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipResidentialStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipPOBox", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipPOBox, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipMilitaryAddress", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipMilitaryAddress, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ActualLabelFormat", typeof(Nullable<System.Int32>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ActualLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderID", typeof(System.Int64), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderNumberComplete", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderNumberComplete, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Service", typeof(System.String), false, false, true, true,  (int)ProcessedShipmentFieldIndex.Service, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ShipUSTerritory, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
 		}
 		/// <summary>Inits ProStoresOrderEntity's FieldInfo objects</summary>
 		private void InitProStoresOrderEntityInfos()

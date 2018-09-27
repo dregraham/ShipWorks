@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -22,18 +20,18 @@ namespace ShipWorks.Data.Grid.Paging
     public abstract class PagedEntityGateway : IEntityGateway
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(PagedEntityGateway));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PagedEntityGateway));
 
         // Size of a page to pull back
-        const int pageSize = 25;
+        private static readonly Pager pager = new Pager(25);
 
         // Used to fetch entities once we know their ID's
-        IEntityProvider entityProvider;
-        EntityField2 primaryKeyField;
+        private IEntityProvider entityProvider;
+        private readonly EntityField2 primaryKeyField;
 
         // The primary keys of the current gateway in sorted order
-        PagedSortedKeys sortedKeys = null;
-        volatile bool closed = false;
+        private PagedSortedKeys sortedKeys = null;
+        private bool closed = false;
 
         /// <summary>
         /// Creates a cache based on the specified entity and prefetch
@@ -153,7 +151,6 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Get the entity that corresponds to the specified row, according to the current sort.
         /// </summary>
-        [NDependIgnoreLongMethod]
         public EntityBase2 GetEntityFromRow(int row, TimeSpan? timeout)
         {
             Stopwatch timer = Stopwatch.StartNew();
@@ -161,108 +158,50 @@ namespace ShipWorks.Data.Grid.Paging
             // Index into the page of sorted rows to determine the ID we are looking for
             long entityID = sortedKeys.GetKeyFromIndex(row, timeout) ?? -1;
 
-            // If null (in whish case we would have set to -1 above) was returned then it indicates an invalid row index
+            // If null (in which case we would have set to -1 above) was returned then it indicates an invalid row index
             if (entityID == -1)
             {
                 return null;
             }
 
-            // If the entity is already in our cache return it, or if the consumer doesnt want to fetch it just return either way
+            // If the entity is already in our cache return it, or if the consumer doesn't want to fetch it just return either way
             EntityBase2 entity = entityProvider.GetEntity(entityID, false);
             if (entity != null || closed)
             {
                 return entity;
             }
 
-            int page = 1 + (row - (row % pageSize)) / pageSize;
-
-            // Determine the first and last rows in the given page
-            int pageStart = (page - 1) * pageSize;
-            int pageEnd = page * pageSize - 1;
-
             // We will query for a whole 'page' of entities at a time
-            List<long> keysInPage = new List<long>();
-            for (int i = pageStart; i <= pageEnd; i++)
-            {
-                long? keyToFetch = sortedKeys.GetKeyFromIndex(i, (timeout == null) ? null : timeout - timer.Elapsed);
+            List<long> keysInPage = pager
+                .PageForRow(row)
+                .EnumerateRows()
+                .Select(x => sortedKeys.GetKeyFromIndex(x, (timeout == null) ? null : timeout - timer.Elapsed))
+                .TakeWhile(x => x.HasValue)
+                .Select(x => x.Value)
+                .ToList();
 
-                if (keyToFetch != null)
-                {
-                    keysInPage.Add(keyToFetch.Value);
-                }
-                else
-                {
-                    // Passed the last index in the key list
-                    break;
-                }
-            }
+            List<EntityBase2> entitiesInPage = EntityGatewayUtility.ExecuteWithTimeout(timeout, timer,
+                () => entityProvider.GetEntities(keysInPage));
 
-            List<EntityBase2> entitiesInPage = null;
-
-            // If there was a timeout, we have to execute the fetch asynchronously
-            if (timeout != null)
-            {
-                TimeSpan timeRemaining = timeout.Value - timer.Elapsed;
-
-                // Only bother if there is still time remaining
-                if (timeRemaining > TimeSpan.Zero)
-                {
-                    // Kickoff the background task
-                    var task = Task.Factory.StartNew(() =>
-                        {
-                            return entityProvider.GetEntities(keysInPage);
-                        });
-
-                    // SpinWait until its completed, or until the timeout expires.  Don't use events here, b\c they pump (due to COM STA), which
-                    // can then make this re-entrant.
-                    SpinWait.SpinUntil(() => task.IsCompleted || (timeout - timer.Elapsed) < TimeSpan.Zero);
-
-                    // If it actually finished, grab the results
-                    if (task.IsCompleted)
-                    {
-                        entitiesInPage = task.Result;
-                    }
-                }
-            }
-            else
-            {
-                // Timeout doesn't matter, just do it
-                entitiesInPage = entityProvider.GetEntities(keysInPage);
-            }
-
-            if (entitiesInPage != null)
-            {
-                // Get it from the fetched list instead of th cache - with the cache there could be a race condition where it gets removed right away
-                entity = entitiesInPage.FirstOrDefault(e => (long) e.Fields.PrimaryKeyFields[0].CurrentValue == entityID);
-            }
-
-            return entity;
+            // Get it from the fetched list instead of th cache - with the cache there could be a race condition where it gets removed right away
+            return entitiesInPage?.FirstOrDefault(e => (long) e.Fields.PrimaryKeyFields[0].CurrentValue == entityID);
         }
 
         /// <summary>
         /// Get the number of rows exposed by the current gateway configuration.  The full number may not be known yet if still loading in the background,
         /// in which case the result set will indicate that.
         /// </summary>
-        public virtual PagedRowCount GetRowCount()
-        {
-            return sortedKeys.GetCount();
-        }
+        public virtual PagedRowCount GetRowCount() => sortedKeys.GetCount();
 
         /// <summary>
         /// The primary key field of the table the gateway is for
         /// </summary>
-        protected EntityField2 PrimaryKeyField
-        {
-            get { return primaryKeyField; }
-        }
+        protected EntityField2 PrimaryKeyField => primaryKeyField;
 
         /// <summary>
         /// Get the relation\predicate that will be used to filter the query that requests records.
         /// </summary>
-        protected virtual RelationPredicateBucket GetQueryFilter()
-        {
-            return null;
-        }
+        protected virtual RelationPredicateBucket GetQueryFilter() => null;
 
         /// <summary>
         /// Generate a SortDefinition based on the given clauses and relations

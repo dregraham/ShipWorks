@@ -6,12 +6,10 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -97,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 .Except(GetExcludedPackageTypes(repository).Cast<PostalPackagingType>());
 
             // The cubic packaging type is only used by Express1/Endicia
-            return packageTypes.Except(new List<PostalPackagingType> {PostalPackagingType.Cubic}).Cast<int>();
+            return packageTypes.Except(new List<PostalPackagingType> { PostalPackagingType.Cubic }).Cast<int>();
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             PostalProfileEntity postal = profile.Postal;
-            
+
             postal.Service = (int) PostalServiceType.PriorityMail;
             postal.Confirmation = (int) PostalConfirmationType.Delivery;
 
@@ -276,12 +274,26 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Get the service description for the shipment
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return string.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((PostalServiceType) shipment.Postal.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((PostalServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(PostalServiceType service) =>
+            string.Format("USPS {0}", EnumHelper.GetDescription(service));
 
         /// <summary>
         /// Get the USPS shipment details

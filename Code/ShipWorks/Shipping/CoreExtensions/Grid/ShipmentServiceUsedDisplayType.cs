@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.CoreExtensions.Grid
 {
@@ -35,13 +31,17 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            ShipmentEntity shipment = value as ShipmentEntity;
-            if (shipment == null)
+            if (value is ShipmentEntity shipment)
             {
-                return "";
+                return ShippingManager.GetActualServiceUsed(shipment);
             }
 
-            return ShippingManager.GetActualServiceUsed(shipment);
+            if (value is ProcessedShipmentEntity processedShipment)
+            {
+                return ShippingManager.GetActualServiceUsed(processedShipment.ShipmentType, processedShipment.Service);
+            }
+
+            return string.Empty;
         }
     }
 }

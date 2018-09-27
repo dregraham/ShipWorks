@@ -8611,6 +8611,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProcessedShipment.</summary>
+	public enum ProcessedShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>ShipmentType. </summary>
+		ShipmentType,
+		///<summary>ShipDate. </summary>
+		ShipDate,
+		///<summary>Insurance. </summary>
+		Insurance,
+		///<summary>InsuranceProvider. </summary>
+		InsuranceProvider,
+		///<summary>ProcessedDate. </summary>
+		ProcessedDate,
+		///<summary>ProcessedUserID. </summary>
+		ProcessedUserID,
+		///<summary>ProcessedComputerID. </summary>
+		ProcessedComputerID,
+		///<summary>Voided. </summary>
+		Voided,
+		///<summary>VoidedDate. </summary>
+		VoidedDate,
+		///<summary>VoidedUserID. </summary>
+		VoidedUserID,
+		///<summary>VoidedComputerID. </summary>
+		VoidedComputerID,
+		///<summary>TotalWeight. </summary>
+		TotalWeight,
+		///<summary>TrackingNumber. </summary>
+		TrackingNumber,
+		///<summary>ShipmentCost. </summary>
+		ShipmentCost,
+		///<summary>ShipSenseStatus. </summary>
+		ShipSenseStatus,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>ActualLabelFormat. </summary>
+		ActualLabelFormat,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ProcessedWithUiMode. </summary>
+		ProcessedWithUiMode,
+		///<summary>CombineSplitStatus. </summary>
+		CombineSplitStatus,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrder.</summary>
 	public enum ProStoresOrderFieldIndex
 	{
@@ -12949,6 +13011,8 @@ namespace ShipWorks.Data.Model
 		PostalShipmentEntity,
 		///<summary>PrintResult</summary>
 		PrintResultEntity,
+		///<summary>ProcessedShipment</summary>
+		ProcessedShipmentEntity,
 		///<summary>ProStoresOrder</summary>
 		ProStoresOrderEntity,
 		///<summary>ProStoresOrderSearch</summary>

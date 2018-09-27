@@ -13,7 +13,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Endicia;
@@ -21,7 +20,6 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -109,19 +107,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the service description for the shipment
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((PostalServiceType) shipment.Postal.Service);
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((PostalServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// </summary>
+        private string GetServiceDescriptionInternal(PostalServiceType service)
         {
             string carrier;
-            PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
-
             if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return "Consolidator";
             }
+
             // The shipment is an Endicia shipment, check to see if it's DHL
             carrier = ShipmentTypeManager.IsEndiciaDhl(service) ? "DHL Global Mail" : "USPS";
 
-            return $"{carrier} {EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)}";
+            return $"{carrier} {EnumHelper.GetDescription(service)}";
         }
 
         /// <summary>
@@ -242,7 +252,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Insurance = shipment.Postal.Endicia.Insurance;
             }
         }
-               
+
         /// <summary>
         /// Checks to see if the shipment allows scan based payment returns
         /// </summary>

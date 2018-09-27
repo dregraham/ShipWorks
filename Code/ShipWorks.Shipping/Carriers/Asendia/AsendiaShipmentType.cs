@@ -140,10 +140,23 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription(shipment.Asendia.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal(shipment.Asendia.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((AsendiaServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(AsendiaServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Gets the best rate shipping broker for Asendia
@@ -248,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 .Cast<int>()
                 .Except(GetExcludedServiceTypes(repository));
         }
-        
+
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -260,15 +273,15 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             AsendiaProfileEntity asendia = profile.Asendia;
 
             asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any() ?
-                accountRepository.AccountsReadOnly.First().AsendiaAccountID : 
+                accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 0;
 
             asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            asendia.NonMachinable = false;           
+            asendia.NonMachinable = false;
         }
-        
+
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

@@ -20044,6 +20044,151 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ProcessedShipmentEntity</summary>
+	public partial class ProcessedShipmentFields
+	{
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipmentType field instance</summary>
+		public static EntityField2 ShipmentType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipmentType);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipDate field instance</summary>
+		public static EntityField2 ShipDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipDate);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.InsuranceProvider field instance</summary>
+		public static EntityField2 InsuranceProvider
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.InsuranceProvider);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ProcessedDate field instance</summary>
+		public static EntityField2 ProcessedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ProcessedDate);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ProcessedUserID field instance</summary>
+		public static EntityField2 ProcessedUserID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ProcessedUserID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ProcessedComputerID field instance</summary>
+		public static EntityField2 ProcessedComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ProcessedComputerID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.Voided field instance</summary>
+		public static EntityField2 Voided
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Voided);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.VoidedDate field instance</summary>
+		public static EntityField2 VoidedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.VoidedDate);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.VoidedUserID field instance</summary>
+		public static EntityField2 VoidedUserID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.VoidedUserID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.VoidedComputerID field instance</summary>
+		public static EntityField2 VoidedComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.VoidedComputerID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.TotalWeight field instance</summary>
+		public static EntityField2 TotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.TotalWeight);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.TrackingNumber field instance</summary>
+		public static EntityField2 TrackingNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.TrackingNumber);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipmentCost field instance</summary>
+		public static EntityField2 ShipmentCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipmentCost);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipSenseStatus field instance</summary>
+		public static EntityField2 ShipSenseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipSenseStatus);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ActualLabelFormat field instance</summary>
+		public static EntityField2 ActualLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ActualLabelFormat);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Service);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ProcessedWithUiMode field instance</summary>
+		public static EntityField2 ProcessedWithUiMode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ProcessedWithUiMode);}
+		}
+		/// <summary>Creates a new ProcessedShipmentEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.CombineSplitStatus);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ProStoresOrderEntity</summary>
 	public partial class ProStoresOrderFields
 	{

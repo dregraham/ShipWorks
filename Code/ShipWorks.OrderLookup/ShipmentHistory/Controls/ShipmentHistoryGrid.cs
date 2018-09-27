@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content.Panels;
-using ShipWorks.Users;
-using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
 {
@@ -26,11 +16,9 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
     {
         private const long ReloadValue = 0;
         private const long FilterValue = 1;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly IDateTimeProvider dateTimeProvider;
-        private readonly Func<IUserSession> getUserSession;
-        private List<ShipmentEntity> entities;
+        private readonly Func<ShipmentHistoryEntityGateway> createGateway;
         private string searchText;
+        private ShipmentHistoryEntityGateway gateway;
 
         /// <summary>
         /// Constructor
@@ -39,14 +27,13 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         {
         }
 
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryGrid(ISqlAdapterFactory sqlAdapterFactory, IDateTimeProvider dateTimeProvider, Func<IUserSession> getUserSession) : this()
+        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway) : this()
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
-            this.getUserSession = getUserSession;
-            this.dateTimeProvider = dateTimeProvider;
+            this.createGateway = createGateway;
         }
 
         /// <summary>
@@ -94,39 +81,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// Create the gateway used by the underlying entity grid
         /// </summary>
         protected override IEntityGateway CreateGateway(long entityID) =>
-            new LocalCollectionEntityGateway<ShipmentEntity>(entityID == FilterValue ? FilterEntities() : LoadEntities());
-
-        /// <summary>
-        /// Load the entities from the database
-        /// </summary>
-        /// <returns></returns>
-        private List<ShipmentEntity> LoadEntities()
-        {
-            var currentUser = getUserSession();
-
-            var query = new QueryFactory();
-
-            var shipmentQuery = query.Shipment
-                .Where(ShipmentFields.Processed == true)
-                .AndWhere(ShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date)
-                .AndWhere(ShipmentFields.ProcessedUserID == currentUser.User.UserID)
-                .AndWhere(ShipmentFields.ProcessedComputerID == currentUser.Computer.ComputerID)
-                .WithPath(ShipmentEntity.PrefetchPathOrder);
-
-            return entities = Using(
-                    sqlAdapterFactory.Create(),
-                    x => x.FetchQuery(shipmentQuery))
-                .OfType<ShipmentEntity>()
-                .ToList();
-        }
-
-        /// <summary>
-        /// Filter the list of entities
-        /// </summary>
-        private List<ShipmentEntity> FilterEntities() =>
-            entities.Where(x =>
-                    x.TrackingNumber?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true ||
-                    x.Order.OrderNumberComplete.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            entityID == FilterValue ?
+                gateway.Filter(searchText) :
+                (gateway = createGateway());
     }
 }

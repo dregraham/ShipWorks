@@ -524,7 +524,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ReturnsClearance = false;
             profile.FedEx.ThirdPartyConsignee = false;
         }
-        
+
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
@@ -680,10 +680,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the carrier specific description of the shipping service used
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return string.Format("{0}", EnumHelper.GetDescription((FedExServiceType) shipment.FedEx.Service));
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((FedExServiceType) shipment.FedEx.Service);
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((FedExServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used
+        /// </summary>
+        private string GetServiceDescriptionInternal(FedExServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get the FedEx account number used for the shipment
@@ -917,7 +928,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             FedExSettings fedExSettings = new FedExSettings(SettingsRepository);
 
-            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber) 
+            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber)
                 && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
             {
                 return string.Format(fedExSettings.FimsTrackEndpointUrlFormat, shipment.TrackingNumber);

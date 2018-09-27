@@ -970,7 +970,7 @@
       <EntityDefinition Name="EtsyOrderItem" ObjectID="63576b1d-238c-42d5-a8b7-c574008fc266" InheritanceType="2">
         <Fields>
           <Field Name="ListingID" Type="string" MaxLength="50" FieldIndex="0" />
-          <Field Name="TransactionID" Type="string" MaxLength="300" FieldIndex="1" />
+          <Field Name="TransactionID" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EtsyStore" ObjectID="b71e1a57-e10a-461d-8ce4-df530fb72b96" InheritanceType="2">
@@ -2229,6 +2229,38 @@
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="TemplateID" Type="long" IsOptional="true" FieldIndex="5" />
           <Field Name="TemplateType" Type="int" IsOptional="true" FieldIndex="6" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProcessedShipment" ObjectID="5cf191c2-ba1e-48a3-b95a-47267bc8e702">
+        <Fields>
+          <Field Name="ActualLabelFormat" Type="int" IsReadOnly="true" IsOptional="true" Precision="10" FieldIndex="21" />
+          <Field Name="CombineSplitStatus" Type="int" Precision="10" FieldIndex="27" />
+          <Field Name="Insurance" Type="bool" IsReadOnly="true" FieldIndex="3" />
+          <Field Name="InsuranceProvider" Type="int" IsReadOnly="true" Precision="10" FieldIndex="4" />
+          <Field Name="OrderID" Type="long" IsReadOnly="true" Precision="19" FieldIndex="22" />
+          <Field Name="OrderNumberComplete" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="23" />
+          <Field Name="ProcessedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="7" />
+          <Field Name="ProcessedDate" Type="datetime" IsReadOnly="true" IsOptional="true" FieldIndex="5" />
+          <Field Name="ProcessedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="6" />
+          <Field Name="ProcessedWithUiMode" Type="int" IsOptional="true" Precision="10" FieldIndex="26" />
+          <Field Name="RequestedLabelFormat" Type="int" IsReadOnly="true" Precision="10" FieldIndex="20" />
+          <Field Name="Service" Type="string" IsReadOnly="true" IsOptional="true" MaxLength="50" FieldIndex="24" />
+          <Field Name="ShipAddressValidationStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="16" />
+          <Field Name="ShipDate" Type="datetime" IsReadOnly="true" FieldIndex="2" />
+          <Field Name="ShipmentCost" Type="decimal" IsReadOnly="true" Precision="19" Scale="4" FieldIndex="14" />
+          <Field Name="ShipmentID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ShipmentType" Type="ShipmentTypeCode" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipMilitaryAddress" Type="int" IsReadOnly="true" Precision="10" FieldIndex="19" />
+          <Field Name="ShipPOBox" Type="int" IsReadOnly="true" Precision="10" FieldIndex="18" />
+          <Field Name="ShipResidentialStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="17" />
+          <Field Name="ShipSenseStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="15" />
+          <Field Name="ShipUSTerritory" Type="int" Precision="10" FieldIndex="25" />
+          <Field Name="TotalWeight" Type="decimal" IsReadOnly="true" Precision="29" Scale="9" FieldIndex="12" />
+          <Field Name="TrackingNumber" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="13" />
+          <Field Name="Voided" Type="bool" IsReadOnly="true" FieldIndex="8" />
+          <Field Name="VoidedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="11" />
+          <Field Name="VoidedDate" Type="datetime" IsReadOnly="true" IsOptional="true" FieldIndex="9" />
+          <Field Name="VoidedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="10" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ProStoresOrder" ObjectID="5e455c0a-8a3d-4dd1-972c-dfb9fe4564f2" InheritanceType="2">
@@ -4297,7 +4329,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-26T17:59:15.2875771Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-27T16:41:55.0934978Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4669,10 +4701,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6348,7 +6380,7 @@
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDirty">
-                  <PkConstraintName Name="PK_FilterNodeContentDirty" />
+                  <PkConstraintName Name="PK_FilterNodeContentDirty_1" />
                   <Fields>
                     <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
@@ -6636,7 +6668,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackage" />
+                  <PkConstraintName Name="PK_iParcelPackageNew" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -7344,9 +7376,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -8133,7 +8165,7 @@
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
+                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                   </Fields>
                 </Table>
@@ -9195,6 +9227,38 @@
                 </Table>
               </Tables>
               <Views>
+                <View Name="ProcessedShipmentsView">
+                  <Fields>
+                    <Field Name="ShipmentID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="ShipmentType" Ordinal="2" DbType="8" Precision="10" />
+                    <Field Name="ShipDate" Ordinal="3" DbType="4" />
+                    <Field Name="Insurance" Ordinal="4" DbType="2" />
+                    <Field Name="InsuranceProvider" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="ProcessedDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="ProcessedUserID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ProcessedComputerID" Ordinal="8" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ProcessedWithUiMode" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Voided" Ordinal="10" DbType="2" />
+                    <Field Name="VoidedDate" Ordinal="11" IsOptional="true" DbType="4" />
+                    <Field Name="VoidedUserID" Ordinal="12" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="VoidedComputerID" Ordinal="13" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="14" DbType="5" Precision="29" Scale="9" />
+                    <Field Name="TrackingNumber" Ordinal="15" DbType="12" Length="50" />
+                    <Field Name="ShipmentCost" Ordinal="16" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="ShipSenseStatus" Ordinal="17" DbType="8" Precision="10" />
+                    <Field Name="ShipAddressValidationStatus" Ordinal="18" DbType="8" Precision="10" />
+                    <Field Name="ShipResidentialStatus" Ordinal="19" DbType="8" Precision="10" />
+                    <Field Name="ShipPOBox" Ordinal="20" DbType="8" Precision="10" />
+                    <Field Name="ShipMilitaryAddress" Ordinal="21" DbType="8" Precision="10" />
+                    <Field Name="ShipUSTerritory" Ordinal="22" DbType="8" Precision="10" />
+                    <Field Name="RequestedLabelFormat" Ordinal="23" DbType="8" Precision="10" />
+                    <Field Name="ActualLabelFormat" Ordinal="24" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="OrderID" Ordinal="25" DbType="0" Precision="19" />
+                    <Field Name="OrderNumberComplete" Ordinal="26" DbType="12" Length="50" />
+                    <Field Name="CombineSplitStatus" Ordinal="27" DbType="8" Precision="10" />
+                    <Field Name="Service" Ordinal="28" IsOptional="true" DbType="12" Length="50" />
+                  </Fields>
+                </View>
                 <View Name="ShipWorksDisabledDefaultIndexes">
                   <Fields>
                     <Field Name="TableName" Ordinal="1" DbType="12" Length="128" />
@@ -9234,30 +9298,35 @@
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
+                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
                 <StoredProcedure Name="PurgeAudit">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
+                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
                 <StoredProcedure Name="PurgeEmailOutbound">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
+                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
                 <StoredProcedure Name="PurgeLabels">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
+                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
                 <StoredProcedure Name="PurgePrintResult">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
+                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
                 <StoredProcedure Name="ResetShipSense" />
@@ -12464,6 +12533,38 @@
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="TemplateID" TargetFieldName="TemplateID" />
             <FieldMapping FieldName="TemplateType" TargetFieldName="TemplateType" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProcessedShipment" TargetName="ShipWorksLocal:dbo:ProcessedShipmentsView" ActionCombination="4">
+          <FieldMappings>
+            <FieldMapping FieldName="ActualLabelFormat" TargetFieldName="ActualLabelFormat" />
+            <FieldMapping FieldName="CombineSplitStatus" TargetFieldName="CombineSplitStatus" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
+            <FieldMapping FieldName="ProcessedComputerID" TargetFieldName="ProcessedComputerID" />
+            <FieldMapping FieldName="ProcessedDate" TargetFieldName="ProcessedDate" />
+            <FieldMapping FieldName="ProcessedUserID" TargetFieldName="ProcessedUserID" />
+            <FieldMapping FieldName="ProcessedWithUiMode" TargetFieldName="ProcessedWithUiMode" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipAddressValidationStatus" TargetFieldName="ShipAddressValidationStatus" />
+            <FieldMapping FieldName="ShipDate" TargetFieldName="ShipDate" />
+            <FieldMapping FieldName="ShipmentCost" TargetFieldName="ShipmentCost" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="ShipmentType" TargetFieldName="ShipmentType" />
+            <FieldMapping FieldName="ShipMilitaryAddress" TargetFieldName="ShipMilitaryAddress" />
+            <FieldMapping FieldName="ShipPOBox" TargetFieldName="ShipPOBox" />
+            <FieldMapping FieldName="ShipResidentialStatus" TargetFieldName="ShipResidentialStatus" />
+            <FieldMapping FieldName="ShipSenseStatus" TargetFieldName="ShipSenseStatus" />
+            <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
+            <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" />
+            <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
+            <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
+            <FieldMapping FieldName="VoidedDate" TargetFieldName="VoidedDate" />
+            <FieldMapping FieldName="VoidedUserID" TargetFieldName="VoidedUserID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ProStoresOrder" TargetName="ShipWorksLocal:dbo:ProStoresOrder">

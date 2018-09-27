@@ -91,6 +91,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
+        /// Get the carrier specific description of the shipping service used.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) => serviceCode;
+
+        /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used across shipment types
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
@@ -129,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -213,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazon.Reference1 = "Order {//Order/Number}";
             amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
-       
+
         /// <summary>
         /// Updates the total weight of the shipment
         /// </summary>
