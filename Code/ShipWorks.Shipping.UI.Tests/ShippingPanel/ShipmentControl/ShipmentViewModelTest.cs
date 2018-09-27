@@ -619,7 +619,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
             shipmentAdapter.SetupProperty(x => x.ContentWeight);
-            shipmentAdapter.Setup(x => x.GetPackageAdapters()).Returns(new[] { package1.Object, package2.Object });
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(new[] { package1.Object, package2.Object });
 
             var testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
@@ -782,7 +782,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                     new Mock<IPackageAdapter>()
                 };
 
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
+            shipmentAdapter.Setup(sa => sa.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
@@ -957,7 +957,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         {
             IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new[] { packageAdapter, mock.CreateMock<IPackageAdapter>().Object });
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -973,7 +973,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         {
             IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new[] { packageAdapter, mock.CreateMock<IPackageAdapter>().Object });
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -1003,7 +1003,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new[] { packageAdapter, expectedPackageAdapter, mock.CreateMock<IPackageAdapter>().Object });
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -1020,7 +1020,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+            shipmentAdapter.Setup(x => x.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new[] { mock.CreateMock<IPackageAdapter>().Object, expectedPackageAdapter, packageAdapter });
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -1044,7 +1044,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(true);
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
+            shipmentAdapter.Setup(sa => sa.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(packageAdapters);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
 

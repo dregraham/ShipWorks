@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             RefreshServiceTypes();
             RefreshPackageTypes();
 
-            PackageAdapters = new ObservableCollection<PackageAdapterWrapper>(shipmentAdapter.GetPackageAdapters().Select(x => new PackageAdapterWrapper(x)));
+            PackageAdapters = new ObservableCollection<PackageAdapterWrapper>(shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().Select(x => new PackageAdapterWrapper(x)));
 
             RefreshDimensionsProfiles();
 

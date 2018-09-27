@@ -90,7 +90,7 @@ namespace ShipWorks.SingleScan
             {
                 ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipment);
 
-                foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdapters())
+                foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 {
                     if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > WeightDifferenceToIgnore ||
                         packageAdapter.Weight < MinimumWeight)

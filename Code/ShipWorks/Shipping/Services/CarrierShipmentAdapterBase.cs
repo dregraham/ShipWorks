@@ -5,7 +5,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -177,14 +176,23 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
-        public IEnumerable<IPackageAdapter> GetPackageAdapters()
+        public IEnumerable<IPackageAdapter> GetPackageAdapters() =>
+            shipmentType.GetPackageAdapters(Shipment);
+
+        /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        /// <remarks>
+        /// This version of GetPackageAdapters calls EnsureShipmentLoaded which will most likely trigger a save to the database.
+        /// Use the other version of this method if you don't want or need that behavior.</remarks>
+        public IEnumerable<IPackageAdapter> GetPackageAdaptersAndEnsureShipmentIsLoaded()
         {
             if (!Shipment.Processed)
             {
                 UpdateDynamicData();
             }
 
-            return shipmentType.GetPackageAdapters(Shipment);
+            return GetPackageAdapters();
         }
 
         /// <summary>

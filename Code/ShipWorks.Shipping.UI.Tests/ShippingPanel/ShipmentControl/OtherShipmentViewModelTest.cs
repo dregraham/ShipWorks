@@ -420,7 +420,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(false);
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
+            shipmentAdapter.Setup(sa => sa.GetPackageAdaptersAndEnsureShipmentIsLoaded()).Returns(packageAdapters);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
             //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
