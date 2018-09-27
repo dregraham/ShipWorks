@@ -841,7 +841,6 @@ namespace ShipWorks
             if (UIMode != UIMode.OrderLookup)
             {
                 // Save the current layout just in case the user made changes to it
-                SaveCurrentUserSettings();
                 ChangeUIMode(UIMode.OrderLookup);
             }
         }
@@ -851,6 +850,8 @@ namespace ShipWorks
         /// </summary>
         private void ChangeUIMode(UIMode uiMode)
         {
+            SaveCurrentUserSettings();
+
             currentUserSettings.SetUIMode(uiMode);
 
             UpdateUIMode(UserSession.User, true);
@@ -1514,8 +1515,10 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-
-            shipmentHistory.SaveGridColumnState();
+            else if (UIMode == UIMode.OrderLookup)
+            {
+                shipmentHistory.SaveGridColumnState();
+            }
 
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
