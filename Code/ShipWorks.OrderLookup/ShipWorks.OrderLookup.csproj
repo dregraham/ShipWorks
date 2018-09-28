@@ -163,6 +163,8 @@
       <DependentUpon>ReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
+    <Compile Include="Controls\Weight\IOrderLookupWeightControlViewModel.cs" />
+    <Compile Include="Controls\Weight\OrderLookupWeightControlViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />

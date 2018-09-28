@@ -158,7 +158,8 @@
                            Text="Weight"/>
                 <controls:OrderLookupWeightControl
                     Margin="10 0 0 10"
-                    Grid.Row="2" Grid.Column="1"></controls:OrderLookupWeightControl>
+                    Grid.Row="2" Grid.Column="1"
+                    DataContext="{Binding WeightControlViewModel}"/>
                 <!--<ui:WeightControl Grid.Row="2" Grid.Column="1"
                                   ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
                                   Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,

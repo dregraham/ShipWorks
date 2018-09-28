@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Styles">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <Color x:Key="BorderColor">#d7d7d7</Color>
     <Color x:Key="IconColor">#4b4b4b</Color>
