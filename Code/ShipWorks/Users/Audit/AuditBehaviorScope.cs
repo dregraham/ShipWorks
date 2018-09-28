@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Transactions;
 using Interapptive.Shared.Collections;
+using log4net;
+
 
 namespace ShipWorks.Users.Audit
 {
@@ -18,6 +21,8 @@ namespace ShipWorks.Users.Audit
         static AsyncLocal<int> superUserCount = new AsyncLocal<int>();
         static AsyncLocal<ImmutableStackContainer<AuditReason>> reasonStack = new AsyncLocal<ImmutableStackContainer<AuditReason>>();
         static AsyncLocal<ImmutableStackContainer<AuditState>> stateStack = new AsyncLocal<ImmutableStackContainer<AuditState>>();
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(AuditBehaviorScope));
 
         // The active user behavior
         AuditBehaviorUser userBehavior = AuditBehaviorUser.Default;
@@ -152,7 +157,8 @@ namespace ShipWorks.Users.Audit
         {
             if (changing && Transaction.Current != null)
             {
-                throw new InvalidOperationException("Cannot change connection-altering property when transaction is already in progress: " + property);
+                Debug.Assert(Transaction.Current != null, "Cannot change connection-altering property when transaction is already in progress");
+                log.Error("Cannot change connection-altering property when transaction is already in progress");
             }
         }
 
