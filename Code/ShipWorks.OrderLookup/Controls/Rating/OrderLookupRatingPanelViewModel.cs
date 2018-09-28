@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
@@ -20,6 +24,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         private readonly IOrderLookupMessageBus messageBus;
         private readonly IOrderLookupRatingService ratingService;
         private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
+        private readonly IMessenger messenger;
         private RateResult selectedRate;
 
         /// <summary>
@@ -27,12 +32,12 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         public OrderLookupRatingPanelViewModel(IOrderLookupMessageBus messageBus, IOrderLookupRatingService ratingService,
                                                IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup,
-                                               Func<ISecurityContext> securityContextRetriever)
+                                               Func<ISecurityContext> securityContextRetriever, IMessenger messenger)
         {
             this.messageBus = messageBus;
             this.ratingService = ratingService;
             this.rateHashingServiceLookup = rateHashingServiceLookup;
-
+            this.messenger = messenger;
             messageBus.PropertyChanged += MessageBusPropertyChanged;
             this.securityContextRetriever = securityContextRetriever;
         }
@@ -63,9 +68,11 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 rateHashingServiceLookup[messageBus.ShipmentAdapter.Shipment.ShipmentTypeCode]
                     .IsRatingField(e.PropertyName))
             {
-                GenericResult<RateGroup> rates = ratingService.GetRates(messageBus.ShipmentAdapter.Shipment);
+                messenger.Send(new ShipmentChangedMessage(this, messageBus.ShipmentAdapter));
                 
-                LoadRates(new RatesRetrievedMessage(this, ratingService.LatestRateHash, rates, messageBus.ShipmentAdapter));
+                //GenericResult<RateGroup> rates = ratingService.GetRates(messageBus.ShipmentAdapter.Shipment);
+                
+                //LoadRates(new RatesRetrievedMessage(this, ratingService.LatestRateHash, rates, messageBus.ShipmentAdapter));
             }
         }
     }
