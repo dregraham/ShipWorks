@@ -13,7 +13,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
@@ -21,7 +21,7 @@
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
@@ -31,7 +31,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
     </Style>
@@ -41,7 +41,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
     </Style>    
@@ -51,7 +51,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
     </Style>
     
     <Style x:Key="Header" TargetType="{x:Type TextBlock}">
@@ -79,7 +79,7 @@
         <Setter Property="Height" Value="28"/>
         <Setter Property="Width" Value="auto"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>

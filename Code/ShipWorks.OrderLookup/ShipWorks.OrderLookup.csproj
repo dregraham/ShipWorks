@@ -154,6 +154,9 @@
       <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
+      <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
     <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
@@ -269,6 +272,10 @@
     <Page Include="Controls\Weight\ScaleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Rating\OrderLookupRatingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Weight\WeightControl.xaml">
       <Generator>MSBuild:Compile</Generator>

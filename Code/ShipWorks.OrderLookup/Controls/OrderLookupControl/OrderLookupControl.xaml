@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:controls ="clr-namespace:ShipWorks.OrderLookup.Controls"
              xmlns:dd="urn:gong-wpf-dragdrop"
@@ -11,6 +10,7 @@
              xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
              xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
              xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
+             xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
              mc:Ignorable="d"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
@@ -48,7 +48,7 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">
                 <Expander Header="Rates">
-                    <ratingPanel:RatingPanelControl />
+                    <rating:OrderLookupRatingControl></rating:OrderLookupRatingControl>
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
