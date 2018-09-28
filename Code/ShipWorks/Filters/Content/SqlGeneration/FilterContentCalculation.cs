@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -76,8 +78,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 var masks = GenerateFolderMasks();
 
                 return new FilterSqlResult(countID,
-                    GenerateFolderSql(true),
-                    GenerateFolderSql(false),
+                    GenerateFolderSql(FilterQueryType.Initial, Enumerable.Empty<string>()),
+                    GenerateFolderSql(FilterQueryType.Update, Enumerable.Empty<string>()),
+                    GenerateFolderSql(FilterQueryType.Exists, masks.ExistsSqls),
                     masks.Item1,
                     masks.Item2);
             }
@@ -85,8 +88,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             {
                 return new FilterSqlResult(
                     countID,
-                    GetFilterSql(true),
-                    GetFilterSql(false),
+                    GetFilterSql(FilterQueryType.Initial),
+                    GetFilterSql(FilterQueryType.Update),
+                    GetFilterSql(FilterQueryType.Exists),
                     filterSqlContext.ColumnsUsed,
                     filterSqlContext.JoinsUsed);
             }
@@ -95,14 +99,41 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Get the SQL to execute for a filter node.
         /// </summary>
-        private string GetFilterSql(bool initial)
+        private string GetFilterSql(FilterQueryType filterQueryType)
         {
             SqlGenerationScope scope = filterSqlContext.TopLevelScope;
 
-            return string.Format(initial ? FilterSqlTemplates.FilterInitial : FilterSqlTemplates.FilterUpdate,
+            string fromClause = scope.GetFromClause();
+            string queryFormat;
+            if (filterQueryType == FilterQueryType.Initial)
+            {
+                queryFormat = FilterSqlTemplates.FilterInitial;
+            }
+            else if (filterQueryType == FilterQueryType.Update)
+            {
+                queryFormat = FilterSqlTemplates.FilterUpdate;
+            }
+            else
+            {
+                queryFormat = FilterSqlTemplates.ExistsQuery;
+
+                if (scope.ExistsWhereClauses.Any())
+                {
+                    string existsWhereClause = string.Empty;
+                    foreach (string scopeExistsWhereClause in scope.ExistsWhereClauses)
+                    {
+                        existsWhereClause += $" {scopeExistsWhereClause} {Environment.NewLine} AND ";
+                    }
+
+                    var regex = new Regex(Regex.Escape("WHERE"));
+                    filterSqlPredicate = regex.Replace(filterSqlPredicate, $"WHERE {existsWhereClause} {Environment.NewLine} ", 1);
+                }
+            }
+
+            return string.Format(queryFormat,
                 scope.TableAlias,
                 filterSqlContext.GetColumnName(scope.PrimaryKey),
-                scope.GetFromClause(),
+                fromClause,
                 filterSqlPredicate,
                 (int) FilterCountStatus.Ready);
         }
@@ -110,18 +141,26 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Generate the SQL for a folder
         /// </summary>
-        private string GenerateFolderSql(bool initial)
+        private string GenerateFolderSql(FilterQueryType filterQueryType, IEnumerable<string> existsSqls)
         {
-            List<long> childContentKeys = GetChildContentKeys(node);
+            List<(long FilterNodeContentID, string EntityExistsQuery)> childContentKeys = GetChildContentKeys(node);
 
-            if (childContentKeys.Count == 0)
+            if (childContentKeys.None())
             {
-                return string.Format(FilterSqlTemplates.FolderEmpty,
-                    (int) FilterCountStatus.Ready);
+                if (filterQueryType != FilterQueryType.Exists)
+                {
+                    return string.Format(FilterSqlTemplates.FolderEmpty,
+                        (int) FilterCountStatus.Ready);
+                }
+                else
+                {
+                    // Don't return anything.
+                    return FilterSqlTemplates.ExistsQueryEmpty;
+                }
             }
 
             StringBuilder childInList = new StringBuilder();
-            foreach (long childCountID in childContentKeys)
+            foreach (long childCountID in childContentKeys.Select(x => x.FilterNodeContentID))
             {
                 if (childInList.Length > 0)
                 {
@@ -131,32 +170,52 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 childInList.AppendFormat("{0}", childCountID);
             }
 
-            return string.Format(initial ? FilterSqlTemplates.FolderInitial : FilterSqlTemplates.FolderUpdate,
-                childInList,
-                (int) FilterCountStatus.Ready);
+            string folderSql = string.Empty;
+            switch (filterQueryType)
+            {
+                case FilterQueryType.Initial:
+                    folderSql = string.Format(FilterSqlTemplates.FolderInitial, childInList, (int) FilterCountStatus.Ready);
+                    break;
+                case FilterQueryType.Update:
+                    folderSql = string.Format(FilterSqlTemplates.FolderUpdate, childInList, (int) FilterCountStatus.Ready);
+                    break;
+                case FilterQueryType.Exists:
+                    folderSql = String.Join($"{Environment.NewLine} UNION {Environment.NewLine} ", existsSqls);
+                    folderSql = string.Format(FilterSqlTemplates.ExistsQueryFolder, folderSql);
+                    break;
+            }
+
+            return folderSql;
         }
 
         /// <summary>
         /// Get the ID of every content ID that is associated with a child node
         /// </summary>
-        private List<long> GetChildContentKeys(FilterNodeEntity parent)
+        private List<(long FilterNodeContentID, string EntityExistsQuery)> GetChildContentKeys(FilterNodeEntity parent)
         {
             if (!node.Filter.IsFolder)
             {
                 throw new InvalidOperationException("Cannot get child count IDs for a filter.");
             }
 
-            List<long> contentKeys = new List<long>();
+            List<(long FilterNodeContentID, string EntityExistsQuery)> contentKeys = new List<(long FilterNodeContentID, string EntityExistsQuery)>();
 
             foreach (FilterNodeEntity child in parent.ChildNodes)
             {
                 if (child.Filter.IsFolder)
                 {
                     contentKeys.AddRange(GetChildContentKeys(child));
+                    //support this so that sub folders get their filternodeid returned if they have subs that apply
                 }
                 else
                 {
-                    contentKeys.Add(child.FilterNodeContentID);
+                    if (child.FilterNodeContent == null)
+                    {
+                        child.FilterNodeContent = new FilterNodeContentEntity(child.FilterNodeContentID);
+                        SqlAdapter.Default.FetchEntity(child.FilterNodeContent);
+                    }
+
+                    contentKeys.Add((child.FilterNodeContentID, child.FilterNodeContent.EntityExistsQuery));
                 }
             }
 
@@ -233,20 +292,20 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Create the column mask and join mask for the folder, which is the mask of all fields affected by the child filters
         /// </summary>
-        private Tuple<byte[], int> GenerateFolderMasks()
+        private (byte[] ChildMasks, int JoinMasks, List<string> ExistsSqls) GenerateFolderMasks()
         {
             ResultsetFields resultFields = new ResultsetFields(2);
             resultFields.DefineField(FilterNodeContentFields.ColumnMask, 0, "ColumnMask", "");
             resultFields.DefineField(FilterNodeContentFields.JoinMask, 1, "JoinMask", "");
 
-            var childContentKeys = GetChildContentKeys(node);
+            List<(long FilterNodeContentID, string EntityExistsQuery)> childContentKeys = GetChildContentKeys(node);
             if (childContentKeys.Count == 0)
             {
-                return Tuple.Create(new byte[0], 0);
+                return (new byte[0], 0, Enumerable.Empty<string>().ToList());
             }
 
             RelationPredicateBucket bucket = new RelationPredicateBucket(
-                FilterNodeContentFields.FilterNodeContentID == childContentKeys);
+                FilterNodeContentFields.FilterNodeContentID == childContentKeys.Select(x => x.FilterNodeContentID).ToList());
 
             List<byte[]> childMasks = new List<byte[]>();
             int joinMasks = 0;
@@ -264,7 +323,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 }
             });
 
-            return Tuple.Create(FilterNodeColumnMaskUtility.CreateUnionedBitmask(childMasks), joinMasks);
+            return (FilterNodeColumnMaskUtility.CreateUnionedBitmask(childMasks), joinMasks, childContentKeys.Select(x => x.EntityExistsQuery).ToList());
         }
     }
 }

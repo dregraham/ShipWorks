@@ -240,6 +240,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             }
         }
 
+        // List of "exists" sql for determining if an entity applies to a filter
+        public List<string> ExistsWhereClauses { get; set; } = new List<string>();
+
         /// <summary>
         /// Get the parent scope for the given entity type
         /// </summary>
@@ -276,6 +279,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Start with our own declaration
             StringBuilder fromBuilder = new StringBuilder(TableDeclaration);
 
+            ExistsWhereClauses = new List<string>();
+
             // Now we have to inner join all parents
             foreach (SqlGenerationScope parentScope in parentScopes)
             {
@@ -285,6 +290,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                     parentScope.GetFromClause(),
                     TableAlias, relation.GetFKFieldPersistenceInfo(0).SourceColumnName,
                     parentScope.TableAlias, relation.GetPKFieldPersistenceInfo(0).SourceColumnName);
+
+                ExistsWhereClauses.Add($"{parentScope.TableAlias}.[{parentScope.PrimaryKey.Name}] = (SELECT [{parentScope.PrimaryKey.Name}] FROM [{table}] WHERE [{PrimaryKey.Name}] = @ExistsQueryObjectID)");
             }
 
             if (parentScopes.Count > 0)

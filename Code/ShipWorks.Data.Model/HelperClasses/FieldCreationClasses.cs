@@ -9132,6 +9132,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentFieldIndex.Count);}
 		}
+		/// <summary>Creates a new FilterNodeContentEntity.EntityExistsQuery field instance</summary>
+		public static EntityField2 EntityExistsQuery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentFieldIndex.EntityExistsQuery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterNodeContentDetailEntity</summary>

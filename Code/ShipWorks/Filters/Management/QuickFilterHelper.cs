@@ -43,6 +43,7 @@ namespace ShipWorks.Filters.Management
             content.Status = (int) FilterCountStatus.Ready;
             content.InitialCalculation = "";
             content.UpdateCalculation = "";
+            content.EntityExistsQuery = "";
             content.ColumnMask = new byte[0];
             content.JoinMask = 0;
 

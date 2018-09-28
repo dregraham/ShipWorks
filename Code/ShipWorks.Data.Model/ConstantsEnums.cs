@@ -3948,6 +3948,8 @@ namespace ShipWorks.Data.Model
 		Cost,
 		///<summary>Count. </summary>
 		Count,
+		///<summary>EntityExistsQuery. </summary>
+		EntityExistsQuery,
 		/// <summary></summary>
 		AmountOfFields
 	}
