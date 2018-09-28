@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ProcessedShipmentFields.ShipmentID),
 
                 new GridColumnDefinition("{A11F61D6-0630-4BA6-9F1D-4A0A5B06C131}",
-                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.Standard, ShowDate = false },
+                    new GridDateDisplayType { ShowDate = false, TimeDisplayFormat = TimeDisplayFormat.Standard },
                     "Processed Time", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ProcessedShipmentFields.ProcessedDate),
 
