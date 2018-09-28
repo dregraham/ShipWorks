@@ -121,13 +121,11 @@
                         Style="{DynamicResource FieldLabel}"
                         Text="Weight:" />
 
-                    <ui:WeightControl
+                    <local:OrderLookupWeightControl
                         Grid.Row="5"
                         Grid.Column="1"
                         Margin="10,0,0,5"
-                        AcceptApplyWeightKeyboardShortcut="True"
-                        ErrorMessage="{Binding WeightErrorMessage}"
-                        Weight="{Binding MessageBus.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                        DataContext="{Binding OrderLookupWeightControlViewModel}"/>
 
                     <TextBlock
                         Grid.Row="6"
