@@ -157,7 +157,7 @@ namespace ShipWorks.Users.Audit
         {
             if (changing && Transaction.Current != null)
             {
-                Debug.Assert(Transaction.Current != null, "Cannot change connection-altering property when transaction is already in progress");
+                Debug.Assert(true, "Cannot change connection-altering property when transaction is already in progress");
                 log.Error("Cannot change connection-altering property when transaction is already in progress");
             }
         }
