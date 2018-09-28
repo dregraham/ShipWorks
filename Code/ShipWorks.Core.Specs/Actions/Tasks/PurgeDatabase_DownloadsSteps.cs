@@ -22,7 +22,7 @@ using static Interapptive.Shared.Utility.Functional;
 namespace ShipWorks.Core.Specs.Actions.Tasks
 {
     [Binding]
-    public class PurgeDatabase_DownloadsSteps
+    public class PurgeDatabase_DownloadsSteps : IDisposable
     {
         private const int RetentionPeriodInDays = 180;
         private readonly DateTime cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(RetentionPeriodInDays));
@@ -147,6 +147,11 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
                 var detailEntity = sqlAdapter.FetchFirst(detailQuery);
                 Assert.Null(detailEntity);
             }
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
         }
     }
 }
