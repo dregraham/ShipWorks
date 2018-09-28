@@ -58,7 +58,7 @@
             </DataTemplate>
         </ResourceDictionary>        
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
