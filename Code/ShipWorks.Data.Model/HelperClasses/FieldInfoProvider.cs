@@ -2561,12 +2561,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "Insurance", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "InsuranceProvider", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.InsuranceProvider, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedDate, 0, 0, 0);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedUserID, 0, 0, 19);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedComputerID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedComputerID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedComputerID, 0, 0, 19);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "Voided", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Voided, 0, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedDate, 0, 0, 0);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedUserID, 0, 0, 19);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "TotalWeight", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TotalWeight, 0, 9, 29);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "TrackingNumber", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TrackingNumber, 50, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentCost", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentCost, 0, 4, 19);

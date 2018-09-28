@@ -107,6 +107,30 @@ namespace ShipWorks.Data.Model.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((ProcessedShipmentFieldIndex)fieldIndex)
+			{
+				case ProcessedShipmentFieldIndex.ProcessedUserID:
+
+					break;
+				case ProcessedShipmentFieldIndex.ProcessedComputerID:
+
+					break;
+				case ProcessedShipmentFieldIndex.VoidedUserID:
+
+					break;
+				case ProcessedShipmentFieldIndex.VoidedComputerID:
+
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>

@@ -3910,6 +3910,26 @@
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="ProcessedShipment.-Computer." Start=":ProcessedShipment" End=":Computer" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProcessedComputerID" PkField="ComputerID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProcessedShipment.-Computer._1" Start=":ProcessedShipment" End=":Computer" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="VoidedComputerID" PkField="ComputerID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProcessedShipment.-User." Start=":ProcessedShipment" End=":User" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProcessedUserID" PkField="UserID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProcessedShipment.-User._1" Start=":ProcessedShipment" End=":User" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="VoidedUserID" PkField="UserID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="ProStoresOrderSearch.ProStoresOrder-ProStoresOrder.ProStoresOrderSearch" Start=":ProStoresOrderSearch" End=":ProStoresOrder" StartNavigator="ProStoresOrder" EndNavigator="ProStoresOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />

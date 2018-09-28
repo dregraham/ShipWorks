@@ -1,8 +1,11 @@
 ﻿using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.SortProviders;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -46,19 +49,19 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ProcessedShipmentFields.ShipmentID),
 
                 new GridColumnDefinition("{A11F61D6-0630-4BA6-9F1D-4A0A5B06C131}",
-                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
-                    "Process Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
+                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.Standard, ShowDate = false },
+                    "Processed Time", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ProcessedShipmentFields.ProcessedDate),
 
                 new GridColumnDefinition("{5BA29E77-584E-4E36-8761-206F7002260D}",
                     new GridUserDisplayType(), "Processed By", new object[] { "Joe", Resources.user_16 },
-                    ProcessedShipmentFields.ProcessedUserID,
-                    UserFields.Username),
-
+                    new GridColumnFieldValueProvider(ProcessedShipmentFields.ProcessedUserID),
+                    new GridColumnAdvancedSortProvider(UserFields.Username, UserFields.UserID, ProcessedShipmentFields.ProcessedUserID, JoinHint.Right)),
+                
                 new GridColumnDefinition("{7A3953A2-91FC-4385-A77F-251F49C4CD4C}",
-                    new GridComputerDisplayType(), "Processed On", "\\ShippingPC",
-                    ProcessedShipmentFields.ProcessedComputerID,
-                    ComputerFields.Name),
+                    new GridComputerDisplayType(), "Processed On", @"\\ShippingPC",
+                    new GridColumnFieldValueProvider(ProcessedShipmentFields.ProcessedComputerID),
+                    new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ProcessedShipmentFields.ProcessedComputerID, JoinHint.Right)),
 
                 new GridColumnDefinition("{CC32BBA2-B1D6-4644-8500-4CEC0DE401C4}",
                     new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
@@ -72,13 +75,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{877CEDD3-F2E6-497F-8E74-9119791C1083}",
                     new GridUserDisplayType(), "Voided By", new object[] { "Joe", Resources.user_16 },
-                    ProcessedShipmentFields.VoidedUserID,
-                    UserFields.Username),
+                    new GridColumnFieldValueProvider(ProcessedShipmentFields.VoidedUserID),
+                    new GridColumnAdvancedSortProvider(UserFields.Username, UserFields.UserID, ProcessedShipmentFields.VoidedUserID, JoinHint.Right)),
 
                 new GridColumnDefinition("{0B136818-6FCB-455B-95CE-F3FDF20B342C}",
                     new GridComputerDisplayType(), "Voided On", "\\ShippingPC",
-                    ProcessedShipmentFields.VoidedComputerID,
-                    ComputerFields.Name),
+                    new GridColumnFieldValueProvider(ProcessedShipmentFields.VoidedComputerID),
+                    new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ProcessedShipmentFields.VoidedComputerID, JoinHint.Right)),
 
                 new GridColumnDefinition("{7AC435CD-3D41-4DCE-A97C-4912A3E52744}",
                     new GridWeightDisplayType(), "Weight", 3.1,
@@ -131,7 +134,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ProcessedShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
 
                 new GridColumnDefinition("{628D74DD-B10A-4E04-A929-F524E0CC3096}", false,
-                    new GridActualLabelFormatDisplayType(), "Actual Label Format", ThermalLanguage.None,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
                     ProcessedShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }

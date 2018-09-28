@@ -37,6 +37,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.GridColumnFormatEntityUsingUserID);
 			toReturn.Add(this.NoteEntityUsingUserID);
 			toReturn.Add(this.PermissionEntityUsingUserID);
+			toReturn.Add(this.ProcessedShipmentEntityUsingProcessedUserID);
+			toReturn.Add(this.ProcessedShipmentEntityUsingVoidedUserID);
 			toReturn.Add(this.ShipmentEntityUsingProcessedUserID);
 			toReturn.Add(this.ShipmentEntityUsingVoidedUserID);
 			toReturn.Add(this.TemplateUserSettingsEntityUsingUserID);
@@ -152,6 +154,36 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between UserEntity and ProcessedShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// User.UserID - ProcessedShipment.ProcessedUserID
+		/// </summary>
+		public virtual IEntityRelation ProcessedShipmentEntityUsingProcessedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(UserFields.UserID, ProcessedShipmentFields.ProcessedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProcessedShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between UserEntity and ProcessedShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// User.UserID - ProcessedShipment.VoidedUserID
+		/// </summary>
+		public virtual IEntityRelation ProcessedShipmentEntityUsingVoidedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(UserFields.UserID, ProcessedShipmentFields.VoidedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProcessedShipmentEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between UserEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
 		/// User.UserID - Shipment.ProcessedUserID
 		/// </summary>
@@ -252,6 +284,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation GridColumnFormatEntityUsingUserIDStatic = new UserRelations().GridColumnFormatEntityUsingUserID;
 		internal static readonly IEntityRelation NoteEntityUsingUserIDStatic = new UserRelations().NoteEntityUsingUserID;
 		internal static readonly IEntityRelation PermissionEntityUsingUserIDStatic = new UserRelations().PermissionEntityUsingUserID;
+		internal static readonly IEntityRelation ProcessedShipmentEntityUsingProcessedUserIDStatic = new UserRelations().ProcessedShipmentEntityUsingProcessedUserID;
+		internal static readonly IEntityRelation ProcessedShipmentEntityUsingVoidedUserIDStatic = new UserRelations().ProcessedShipmentEntityUsingVoidedUserID;
 		internal static readonly IEntityRelation ShipmentEntityUsingProcessedUserIDStatic = new UserRelations().ShipmentEntityUsingProcessedUserID;
 		internal static readonly IEntityRelation ShipmentEntityUsingVoidedUserIDStatic = new UserRelations().ShipmentEntityUsingVoidedUserID;
 		internal static readonly IEntityRelation TemplateUserSettingsEntityUsingUserIDStatic = new UserRelations().TemplateUserSettingsEntityUsingUserID;

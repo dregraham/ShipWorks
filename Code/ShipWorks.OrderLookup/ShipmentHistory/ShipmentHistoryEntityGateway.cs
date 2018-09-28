@@ -84,7 +84,15 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
 
                 var sortedQuery = sortDefinition.SortExpression
                     .OfType<ISortClause>()
-                    .Aggregate(queryStarter, (query, clause) => query.OrderBy(clause));
+                    .Aggregate(queryStarter, (query, clause) =>
+                    {
+                        if (sortDefinition.Relations?.Count > 0)
+                        {
+                            queryStarter = queryStarter.From(sortDefinition.Relations);
+                        }
+
+                        return query.OrderBy(clause);
+                    });
 
                 var shipmentQuery = sortedQuery
                     .Select(() => new ShipmentHistoryHeader(
