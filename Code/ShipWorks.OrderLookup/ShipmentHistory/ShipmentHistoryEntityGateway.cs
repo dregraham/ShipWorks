@@ -52,7 +52,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
             shipmentHeaders = copyFrom.shipmentHeaders;
             cache = copyFrom.cache;
             fetchDataTask = copyFrom.fetchDataTask;
-            cancellationToken = cancellationToken;
+            cancellationToken = copyFrom.cancellationToken;
 
             this.isDataFetched = true;
             this.filterTerm = filterTerm;

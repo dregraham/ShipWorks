@@ -13,9 +13,9 @@ namespace ShipWorks
         Control Control { get; }
 
         /// <summary>
-        /// Update the history
+        /// Refresh the history
         /// </summary>
-        void Update();
+        void ReloadShipmentData();
 
         /// <summary>
         /// Save the grid column state

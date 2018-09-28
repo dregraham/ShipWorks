@@ -44,7 +44,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Update the history
         /// </summary>
-        public void Update()
+        public void ReloadShipmentData()
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getUserSession().User.Username;
             shipmentGrid.Reload();
