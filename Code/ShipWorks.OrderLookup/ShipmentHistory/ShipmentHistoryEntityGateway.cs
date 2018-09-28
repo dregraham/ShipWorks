@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -36,6 +38,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         private ImmutableArray<ShipmentHistoryHeader> filteredList;
         private readonly string filterTerm = string.Empty;
         private bool isDataFetched = false;
+        private CancellationTokenSource cancellationToken;
+        private Task fetchDataTask;
 
         /// <summary>
         /// Copy constructor
@@ -47,6 +51,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
             userSession = copyFrom.userSession;
             shipmentHeaders = copyFrom.shipmentHeaders;
             cache = copyFrom.cache;
+            fetchDataTask = copyFrom.fetchDataTask;
+            cancellationToken = cancellationToken;
 
             this.isDataFetched = true;
             this.filterTerm = filterTerm;
@@ -74,16 +80,24 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// </summary>
         public void Open(SortDefinition sortDefinition)
         {
-            if (!isDataFetched)
+            if (isDataFetched)
             {
-                var factory = new QueryFactory();
-                var queryStarter = factory.ProcessedShipment
-                        .Where(ProcessedShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date)
-                        .AndWhere(ProcessedShipmentFields.ProcessedUserID == userSession.User.UserID)
-                        .AndWhere(ProcessedShipmentFields.ProcessedWithUiMode == UIMode.OrderLookup);
+                fetchDataTask = (fetchDataTask ?? Task.CompletedTask)
+                    .ContinueWith(_ => UpdateFilteredList());
 
-                var sortedQuery = sortDefinition.SortExpression
-                    .OfType<ISortClause>()
+                return;
+            }
+
+            cancellationToken = new CancellationTokenSource();
+
+            var factory = new QueryFactory();
+            var queryStarter = factory.ProcessedShipment
+                    .Where(ProcessedShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date)
+                    .AndWhere(ProcessedShipmentFields.ProcessedUserID == userSession.User.UserID)
+                    .AndWhere(ProcessedShipmentFields.ProcessedWithUiMode == UIMode.OrderLookup);
+
+            var sortedQuery = sortDefinition.SortExpression
+                .OfType<ISortClause>()
                     .Aggregate(queryStarter, (query, clause) =>
                     {
                         if (sortDefinition.Relations?.Count > 0)
@@ -94,21 +108,26 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                         return query.OrderBy(clause);
                     });
 
-                var shipmentQuery = sortedQuery
-                    .Select(() => new ShipmentHistoryHeader(
-                        ProcessedShipmentFields.ShipmentID.ToValue<long>(),
-                        ProcessedShipmentFields.TrackingNumber.ToValue<string>(),
-                        ProcessedShipmentFields.OrderID.ToValue<long>(),
-                        ProcessedShipmentFields.OrderNumberComplete.ToValue<string>()));
+            var shipmentQuery = sortedQuery
+                .Select(() => new ShipmentHistoryHeader(
+                    ProcessedShipmentFields.ShipmentID.ToValue<long>(),
+                    ProcessedShipmentFields.TrackingNumber.ToValue<string>(),
+                    ProcessedShipmentFields.OrderID.ToValue<long>(),
+                    ProcessedShipmentFields.OrderNumberComplete.ToValue<string>()));
 
-                shipmentHeaders = Using(
-                        sqlAdapterFactory.Create(),
-                        x => x.FetchQuery(shipmentQuery))
-                    .ToImmutableArray();
+            fetchDataTask = UsingAsync(
+                    sqlAdapterFactory.Create(),
+                    x => x.FetchQueryAsync(shipmentQuery, cancellationToken.Token))
+                .ContinueWith(task =>
+                {
+                    shipmentHeaders = task.Result.ToImmutableArray();
+                    isDataFetched = true;
+                })
+                .ContinueWith(task => UpdateFilteredList());
+        }
 
-                isDataFetched = true;
-            }
-
+        private void UpdateFilteredList()
+        {
             filteredList = shipmentHeaders.Where(x => x.MatchesFilter(filterTerm)).ToImmutableArray();
         }
 
@@ -117,7 +136,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// </summary>
         public void Close()
         {
-            filteredList = ImmutableArray<ShipmentHistoryHeader>.Empty;
+            cancellationToken?.Cancel();
+            fetchDataTask = null;
 
             isDataFetched = false;
         }
@@ -158,6 +178,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         public EntityBase2 GetEntityFromRow(int row, TimeSpan? timeout)
         {
             Stopwatch timer = Stopwatch.StartNew();
+
+            if (filteredList.Length < row)
+            {
+                return null;
+            }
 
             var shipmentID = filteredList[row].ShipmentID;
             if (cache.Contains(shipmentID))
@@ -203,6 +228,9 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// <summary>
         /// Get the number of rows to display
         /// </summary>
-        public PagedRowCount GetRowCount() => new PagedRowCount(filteredList.Length, true);
+        public PagedRowCount GetRowCount() =>
+            fetchDataTask?.IsCompleted == true ?
+                new PagedRowCount(filteredList.Length, true) :
+                new PagedRowCount(0, false);
     }
 }
