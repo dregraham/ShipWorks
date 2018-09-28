@@ -58,7 +58,7 @@
                 VerticalAlignment="Center"
                 IsEnabled="{Binding Insurance}"
                 Style="{StaticResource Grid.TextBox.Number}"
-                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
 
             <Image
                 Width="12"

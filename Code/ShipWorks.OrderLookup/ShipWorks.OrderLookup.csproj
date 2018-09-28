@@ -154,17 +154,12 @@
       <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\OrderLookupWeightControl.xaml.cs">
-      <DependentUpon>OrderLookupWeightControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
     <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
       <DependentUpon>ReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
-    <Compile Include="Controls\Weight\IOrderLookupWeightControlViewModel.cs" />
-    <Compile Include="Controls\Weight\OrderLookupWeightControlViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
@@ -267,11 +262,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\OrderLookupWeightControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\Reference\ReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\ScaleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\WeightControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\WeightInput.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

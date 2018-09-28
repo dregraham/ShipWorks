@@ -9,7 +9,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.OrderLookup.Controls.Weight;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -45,8 +44,8 @@ namespace ShipWorks.OrderLookup.Controls
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IInsuranceViewModel insuranceViewModel,
-            IOrderLookupWeightControlViewModel orderLookupWeightControlViewModel)
+            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, 
+            IInsuranceViewModel insuranceViewModel)
         {
             MessageBus = messageBus;
             this.dimensionsManager = dimensionsManager;
@@ -54,7 +53,6 @@ namespace ShipWorks.OrderLookup.Controls
             this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             InsuranceViewModel = insuranceViewModel;
-            OrderLookupWeightControlViewModel = orderLookupWeightControlViewModel;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -74,8 +72,7 @@ namespace ShipWorks.OrderLookup.Controls
 
         [Obfuscation(Exclude = true)]
         public IInsuranceViewModel InsuranceViewModel { get; }
-        public IOrderLookupWeightControlViewModel OrderLookupWeightControlViewModel { get; }
-
+        
         /// <summary>
         /// The dimension profiles
         /// </summary>

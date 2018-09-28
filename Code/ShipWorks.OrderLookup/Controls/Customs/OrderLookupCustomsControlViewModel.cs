@@ -11,7 +11,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
-using ShipWorks.OrderLookup.Controls.Weight;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Services;
@@ -36,12 +35,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// ctor
         /// </summary>
-        public OrderLookupCustomsControlViewModel(IOrderLookupMessageBus messageBus, IShipmentTypeManager shipmentTypeManager, IOrderLookupWeightControlViewModel weightControlViewModel)
+        public OrderLookupCustomsControlViewModel(IOrderLookupMessageBus messageBus, IShipmentTypeManager shipmentTypeManager)
         {
             MessageBus = messageBus;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
-            WeightControlViewModel = weightControlViewModel;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -52,7 +50,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus { get; }
 
-        public IOrderLookupWeightControlViewModel WeightControlViewModel { get; }
 
         /// <summary>
         /// The list of customs items

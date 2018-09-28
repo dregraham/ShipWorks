@@ -19,6 +19,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
@@ -156,14 +157,11 @@
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0"
                            Text="Weight"/>
-                <controls:OrderLookupWeightControl
-                    Margin="10 0 0 10"
-                    Grid.Row="2" Grid.Column="1"
-                    DataContext="{Binding WeightControlViewModel}"/>
-                <!--<ui:WeightControl Grid.Row="2" Grid.Column="1"
+                <ui:WeightControl Grid.Row="2" Grid.Column="1"
                                   ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
                                   Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>-->
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+                                  Style="{StaticResource OrderLookupWeightControl}"/>
                 <TextBlock Grid.Row="3" Grid.Column="0"
                            Text="Value"/>
                 <TextBox Grid.Row="3" Grid.Column="1"
