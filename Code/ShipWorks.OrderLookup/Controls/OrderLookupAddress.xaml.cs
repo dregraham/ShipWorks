@@ -9,10 +9,12 @@ namespace ShipWorks.OrderLookup.Controls
     /// </summary>
     public partial class OrderLookupAddress : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLookupAddress()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }
     }
 }

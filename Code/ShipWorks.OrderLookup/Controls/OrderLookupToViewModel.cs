@@ -10,6 +10,9 @@ using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls
 {
+    /// <summary>
+    /// ViewModel for To panel in the OrderLookup view
+    /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
     public class OrderLookupToViewModel : AddressViewModel
     {

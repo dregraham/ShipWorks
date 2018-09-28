@@ -15,7 +15,6 @@ namespace ShipWorks.OrderLookup.Controls
     {
         /// <summary>
         /// Looks for the template matching the name expected for the shipmentypecode. 
-
         /// </summary>
         /// <remarks>
         /// If not found or unknown shipmenttypecode or no shipmenttypecode, "default" template is returned.

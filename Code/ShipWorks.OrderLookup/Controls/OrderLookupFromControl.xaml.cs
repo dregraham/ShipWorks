@@ -20,6 +20,9 @@ namespace ShipWorks.OrderLookup.Controls
     /// </summary>
     public partial class OrderLookupFromControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLookupFromControl()
         {
             InitializeComponent();

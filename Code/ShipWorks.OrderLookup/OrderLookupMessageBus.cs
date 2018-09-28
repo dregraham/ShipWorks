@@ -60,11 +60,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The shipment adapter for the order in context
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
         /// The pacakge adpaters for the order in context
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
 
         /// <summary>

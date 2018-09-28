@@ -20,6 +20,9 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     /// </summary>
     public partial class OrderLookupCustomsControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLookupCustomsControl()
         {
             InitializeComponent();

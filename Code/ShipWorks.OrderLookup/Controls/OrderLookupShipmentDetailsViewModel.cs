@@ -70,12 +70,16 @@ namespace ShipWorks.OrderLookup.Controls
         [Obfuscation(Exclude = true)]
         public IOrderLookupMessageBus MessageBus { get; }
 
+        /// <summary>
+        /// Insurance information
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public IInsuranceViewModel InsuranceViewModel { get; }
         
         /// <summary>
         /// The dimension profiles
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public List<DimensionsProfileEntity> DimensionProfiles
         {
             get => dimensionProfiles;
@@ -91,6 +95,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Collection of valid PackageTypes
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<KeyValuePair<int, string>> PackageTypes
         {
             get => packageTypes;
@@ -100,6 +105,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Collection of ConfirmationTypes
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<KeyValuePair<int, string>> ConfirmationTypes
         {
             get => confirmationTypes;
@@ -109,6 +115,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Collection of ServiceTypes
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<KeyValuePair<int, string>> ServiceTypes
         {
             get => serviceTypes;
