@@ -5,32 +5,45 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Height" Value="23"/>
+        <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
+        <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
     <Style x:Key="MultiLineFormTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
+        <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
     <Style x:Key="FormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Height" Value="23"/>
+        <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
+        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
     </Style>
     <Style x:Key="StackedFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Height" Value="23"/>
+        <Setter Property="Height" Value="28"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
+        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
     </Style>    
     <Style x:Key="FormCheckBox" TargetType="{x:Type CheckBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
@@ -38,6 +51,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
     </Style>
     
     <Style x:Key="Header" TargetType="{x:Type TextBlock}">
@@ -62,10 +76,13 @@
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Height" Value="23"/>
+        <Setter Property="Height" Value="28"/>
         <Setter Property="Width" Value="auto"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="#676767"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
+        <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
     <Style x:Key="FormWrapPanel" TargetType="{x:Type WrapPanel}">
         <Setter Property="Margin" Value="10 0 0 0" />
