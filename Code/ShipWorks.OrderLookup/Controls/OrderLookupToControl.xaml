@@ -47,11 +47,6 @@
                             Style="{StaticResource Header}"
                             Text="USPS Validation" />
 
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Style="{StaticResource FieldLabel}"
-                            Text="USPS Validation" />
                         <CheckBox
                             Grid.Row="1"
                             Grid.Column="1"
