@@ -12,7 +12,8 @@
              xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
              xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
              mc:Ignorable="d"
-             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+             Background="#e7eef7">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
