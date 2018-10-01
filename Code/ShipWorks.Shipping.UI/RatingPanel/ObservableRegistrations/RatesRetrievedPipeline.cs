@@ -57,6 +57,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Subscribe(this, viewModel.LoadRates));
         }
 
+        /// <summary>
+        /// Act when ORderSelectionChangingMessage or OrderLookupSingleScanMessage received.
+        /// </summary>
+        /// <returns></returns>
         private IObservable<IShipWorksMessage> GetResumeObservable()
         {
             return messenger.OfType<OrderSelectionChangingMessage>().Select(x=>x as IShipWorksMessage).Merge(messenger.OfType<OrderLookupSingleScanMessage>().Select(x => x as IShipWorksMessage));

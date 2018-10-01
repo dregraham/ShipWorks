@@ -7,6 +7,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -45,7 +46,11 @@ namespace ShipWorks.OrderLookup
         public OrderEntity Order
         {
             get => order;
-            private set => handler.Set(nameof(Order), ref order, value, true);
+            private set
+            {
+                order = value;
+                RaisePropertyChanged(nameof(Order));
+            }
         }
 
         /// <summary>
@@ -81,6 +86,7 @@ namespace ShipWorks.OrderLookup
         public void RaisePropertyChanged(string propertyName)
         {
             handler.RaisePropertyChanged(propertyName);
+            
             if (ShipmentAdapter != null && ShipmentAdapter.Shipment != null)
             {
                 messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
@@ -115,6 +121,11 @@ namespace ShipWorks.OrderLookup
                 if (ShipmentAdapter?.Shipment?.Postal != null)
                 {
                     ShipmentAdapter.Shipment.Postal.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                }
+
+                if (ShipmentAdapter != null)
+                {
+                    messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                 }
             }
             
