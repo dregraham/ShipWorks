@@ -8,7 +8,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Controls.AddressControl;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.To
 {
     /// <summary>
     /// ViewModel for To panel in the OrderLookup view

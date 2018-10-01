@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
     /// Interaction logic for Insurance.xaml

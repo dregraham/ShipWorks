@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Reactive.Linq;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.From
 {
     /// <summary>
     /// View model for the From address 

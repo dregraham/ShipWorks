@@ -4,6 +4,7 @@ using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

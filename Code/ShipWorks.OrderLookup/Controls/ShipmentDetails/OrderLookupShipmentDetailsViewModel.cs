@@ -17,7 +17,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
     /// Viewmodel for orderlookup

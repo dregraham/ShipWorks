@@ -9,6 +9,7 @@ using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;

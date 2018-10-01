@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using ShipWorks.Shipping.Editing;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
     /// Shipment Details for the Order Lookup View

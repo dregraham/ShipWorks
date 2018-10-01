@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:controls ="clr-namespace:ShipWorks.OrderLookup.Controls"
+             xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
+             xmlns:to="clr-namespace:ShipWorks.OrderLookup.Controls.To"
+             xmlns:details="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:labelOptions="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
              xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
@@ -22,14 +25,14 @@
             <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource Expander.Style}">
             
             </Style>
-            <DataTemplate DataType="{x:Type controls:OrderLookupFromViewModel}">
+            <DataTemplate DataType="{x:Type from:OrderLookupFromViewModel}">
                 <Expander Header="From:">
-                    <controls:OrderLookupFromControl />
+                    <from:OrderLookupFromControl />
                 </Expander>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type controls:OrderLookupToViewModel}">
+            <DataTemplate DataType="{x:Type to:OrderLookupToViewModel}">
                 <Expander Header="To:">
-                    <controls:OrderLookupToControl />
+                    <to:OrderLookupToControl />
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type labelOptions:OrderLookupLabelOptionsControlViewModel}">
@@ -42,9 +45,9 @@
                     <reference:ReferenceControl />
                 </Expander>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type controls:OrderLookupShipmentDetailsViewModel}">
+            <DataTemplate DataType="{x:Type details:OrderLookupShipmentDetailsViewModel}">
                 <Expander Header="Shipment Details">
-                    <controls:OrderLookupShipmentDetailsControl />
+                    <details:OrderLookupShipmentDetailsControl />
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">

@@ -13,17 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShipWorks.OrderLookup.Controls
+namespace ShipWorks.OrderLookup.Controls.To
 {
     /// <summary>
-    /// Interaction logic for OrderLookupFromControl.xaml
+    /// Interaction logic for OrderLookupToControl.xaml
     /// </summary>
-    public partial class OrderLookupFromControl : UserControl
+    public partial class OrderLookupToControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromControl()
+        public OrderLookupToControl()
         {
             InitializeComponent();
         }

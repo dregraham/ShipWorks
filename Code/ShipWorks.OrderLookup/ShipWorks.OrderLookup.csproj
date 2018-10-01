@@ -115,7 +115,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\OrderLookupInsuranceControl.xaml.cs">
+    <Compile Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml.cs">
       <DependentUpon>OrderLookupInsuranceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupAddress.xaml.cs">
@@ -129,32 +129,32 @@
       <DependentUpon>OrderLookupLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControlViewModel.cs" />
-    <Compile Include="Controls\OrderLookupControlHost.cs">
+    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
+    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupControl\OrderLookupControl.xaml.cs">
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupControl\OrderLookupViewModel.cs" />
-    <Compile Include="Controls\OrderLookupFromControl.xaml.cs">
+    <Compile Include="Controls\From\OrderLookupFromControl.xaml.cs">
       <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupFromViewModel.cs" />
+    <Compile Include="Controls\From\OrderLookupFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupToControl.xaml.cs">
+    <Compile Include="Controls\To\OrderLookupToControl.xaml.cs">
       <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupToViewModel.cs" />
-    <Compile Include="Controls\OrderLookupShipmentDetailsControl.xaml.cs">
+    <Compile Include="Controls\To\OrderLookupToViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml.cs">
       <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
       <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
     </Compile>
@@ -186,7 +186,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\OrderLookupControlHost.resx">
+    <EmbeddedResource Include="Controls\OrderLookupControl\OrderLookupControlHost.resx">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -229,7 +229,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\OrderLookupInsuranceControl.xaml">
+    <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -249,7 +249,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookupFromControl.xaml">
+    <Page Include="Controls\From\OrderLookupFromControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -257,11 +257,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookupToControl.xaml">
+    <Page Include="Controls\To\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookupShipmentDetailsControl.xaml">
+    <Page Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
