@@ -31,10 +31,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
             return new GridColumnDefinitionCollection
             {
-                new GridColumnDefinition("{175794CD-E6A4-444A-9019-12F9D704C2C8}",
+                new GridColumnDefinition("{175794CD-E6A4-444A-9019-12F9D704C2C8}", true,
                     new GridEntityDisplayType { AllowHyperlink = false }, "Order", new GridEntityDisplayInfo(6, EntityType.OrderEntity, "Order 1028"),
                     ProcessedShipmentFields.OrderID,
                     ProcessedShipmentFields.OrderNumberComplete),
+
+                new GridColumnDefinition("{A11F61D6-0630-4BA6-9F1D-4A0A5B06C131}", true,
+                    new GridDateDisplayType { ShowDate = false, TimeDisplayFormat = TimeDisplayFormat.Standard },
+                    "Processed Time", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
+                    ProcessedShipmentFields.ProcessedDate),
 
                 new GridColumnDefinition("{9449449A-7332-4472-85BD-378AD5433DE3}", true,
                     new GridProviderDisplayType(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
@@ -44,14 +49,17 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new ShipmentServiceUsedDisplayType(), "Service", "First Class",
                     ProcessedShipmentFields.ShipmentType),
 
+                new GridColumnDefinition("{1B81177C-5B5C-4F02-B1AD-CBADAE84B0B1}", true,
+                    new GridTextDisplayType(), "Tracking", "1Z0139787879870954",
+                    ProcessedShipmentFields.TrackingNumber),
+
+                new GridColumnDefinition("{E34B855B-C5DB-4B22-96F9-25B71DB63CDB}", true,
+                    new GridMoneyDisplayType(), "Cost", 4.18m,
+                    ProcessedShipmentFields.ShipmentCost),
+
                 new GridColumnDefinition("{0F413267-F462-45A2-AFBA-F27EAF268E5C}",
                     new ShipmentInsuredDisplayType(), "Insured By", new ShipmentEntity { Insurance = true, InsuranceProvider = (int) InsuranceProvider.ShipWorks },
                     ProcessedShipmentFields.ShipmentID),
-
-                new GridColumnDefinition("{A11F61D6-0630-4BA6-9F1D-4A0A5B06C131}",
-                    new GridDateDisplayType { ShowDate = false, TimeDisplayFormat = TimeDisplayFormat.Standard },
-                    "Processed Time", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
-                    ProcessedShipmentFields.ProcessedDate),
 
                 new GridColumnDefinition("{5BA29E77-584E-4E36-8761-206F7002260D}",
                     new GridUserDisplayType(), "Processed By", new object[] { "Joe", Resources.user_16 },
@@ -86,14 +94,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{7AC435CD-3D41-4DCE-A97C-4912A3E52744}",
                     new GridWeightDisplayType(), "Weight", 3.1,
                     ProcessedShipmentFields.TotalWeight),
-
-                new GridColumnDefinition("{1B81177C-5B5C-4F02-B1AD-CBADAE84B0B1}", true,
-                    new GridTextDisplayType(), "Tracking", "1Z0139787879870954",
-                    ProcessedShipmentFields.TrackingNumber),
-
-                new GridColumnDefinition("{E34B855B-C5DB-4B22-96F9-25B71DB63CDB}",
-                    new GridMoneyDisplayType(), "Cost", 4.18m,
-                    ProcessedShipmentFields.ShipmentCost),
 
                 new GridColumnDefinition("{100CFCA1-DB69-4D63-9B6C-FEDFB9A9F14B}", false,
                     new GridEnumDisplayType<ShipSenseStatus>(EnumSortMethod.Value), "ShipSense", ShipSenseStatus.Applied,
