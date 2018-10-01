@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.Customs.OrderLookupCustomsControl"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,9 +10,10 @@
              xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;assembly=ShipWorks.Shipping.UI"
              xmlns:postal="clr-namespace:ShipWorks.Shipping.Carriers.Postal;assembly=ShipWorks.Core"
              xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
+             x:Class="ShipWorks.OrderLookup.Controls.Customs.OrderLookupCustomsControl"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:OrderLookupCustomsControlViewModel}"
+             d:DataContext="{d:DesignInstance {x:Type local:OrderLookupCustomsControlViewModel}}"
              FontSize="12"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
@@ -26,7 +27,7 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:EnumDescriptionConverter x:Key="EnumDescription" />
-            <ui:IntToEnumConverter x:Key="IntToEnum"/>
+            <ui:IntToEnumConverter x:Key="IntToEnum"/>            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="5" IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
@@ -51,8 +52,7 @@
                        Style="{StaticResource FieldLabel}"/>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Style="{StaticResource FormNumberTextBox}"
-                     Text="{Binding MessageBus.ShipmentAdapter.Shipment.CustomsValue, StringFormat=C,
-                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
+                     Text="{Binding MessageBus.ShipmentAdapter.Shipment.CustomsValue, NotifyOnValidationError=true, StringFormat=C, ValidatesOnDataErrors=true}">
                 <!--<i:Interaction.Behaviors>
                     <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$"
                                                   EmptyValue="" MaxLength="15" />
@@ -61,14 +61,12 @@
             </TextBox>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Content" 
-                       Visibility="{Binding CustomsContentTypeAllowed, 
-                       Converter={StaticResource BooleanToVisibility}}"
+                       Visibility="{Binding CustomsContentTypeAllowed, Converter={StaticResource BooleanToVisibility}}"
                        Style="{StaticResource FieldLabel}"/>
             <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1" 
-                                  Visibility="{Binding CustomsContentTypeAllowed, 
-                                  Converter={StaticResource BooleanToVisibility}}"
-                                  ItemsSource="{Binding Path=CustomsContentTypes}"
-                                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.CustomsContentType, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type postal:PostalCustomsContentType}}"
+                                  Visibility="{Binding CustomsContentTypeAllowed, Converter={StaticResource BooleanToVisibility}}"
+                                  ItemsSource="{Binding CustomsContentTypes}"
+                                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.CustomsContentType, ConverterParameter={x:Type postal:PostalCustomsContentType}, Converter={StaticResource IntToEnum}}"
                                   Style="{StaticResource FormComboBox}">
                 <ui:ShipWorksComboBox.ItemTemplate>
                     <DataTemplate>
@@ -98,7 +96,7 @@
                             <TextBlock Text="No description"
                                            Foreground="LightGray"
                                            FontStyle="Italic"
-                                           Visibility="{Binding Description, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter=''}" />
+                                           Visibility="{Binding Description, ConverterParameter='', Converter={StaticResource VisibleWhenEqualToParameter}}" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -117,9 +115,9 @@
                       Margin="0, 10, 0, 0">
             <Grid>
                 <Grid.Resources>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource FieldLabel}" />
-                    <Style TargetType="ui:ShipWorksComboBox" BasedOn="{StaticResource FormComboBox}" />
-                    <Style TargetType="TextBox" BasedOn="{StaticResource FormTextBox}" />
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}" />
+                    <Style TargetType="{x:Type ui:ShipWorksComboBox}" BasedOn="{StaticResource FormComboBox}" />
+                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource FormTextBox}" />
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -139,10 +137,7 @@
                 <TextBox Grid.Row="0" Grid.Column="1"
                          Margin="10 10 0 10"
                              Style="{StaticResource FormNumberTextBox}"
-                             Text="{Binding SelectedCustomsItem.Quantity,
-                                 Converter={StaticResource EmptyDouble},
-                                 ConverterParameter=1,
-                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
+                             Text="{Binding SelectedCustomsItem.Quantity, ConverterParameter=1, Converter={StaticResource EmptyDouble}, NotifyOnValidationError=true, ValidatesOnDataErrors=true}">
                     <!--<i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$"
                                                       EmptyValue="" MaxLength="6" />
@@ -153,8 +148,7 @@
                 <TextBox Grid.Row="1" Grid.Column="1"
                          Validation.ErrorTemplate="{StaticResource Template.Error.TextBox}"
                          MaxLength="150"
-                         Text="{Binding SelectedCustomsItem.Description,
-                                ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                         Text="{Binding SelectedCustomsItem.Description, NotifyOnValidationError=true, ValidatesOnDataErrors=true}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0"
                            Text="Weight"/>
                 <ui:WeightControl Grid.Row="2" Grid.Column="1"
@@ -166,8 +160,7 @@
                            Text="Value"/>
                 <TextBox Grid.Row="3" Grid.Column="1"
                              Style="{StaticResource FormNumberTextBox}"
-                             Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
+                             Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, Mode=TwoWay, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}">
                     <!--<i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior
                             RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue=""
@@ -179,8 +172,7 @@
                 <TextBox Grid.Row="4" Grid.Column="1"
                          Style="{StaticResource FormNumberTextBox}"
                          MaxLength="14"
-                         Text="{Binding SelectedCustomsItem.HarmonizedCode,
-                            ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                         Text="{Binding SelectedCustomsItem.HarmonizedCode, NotifyOnValidationError=true, ValidatesOnDataErrors=true}" />
                 <TextBlock Grid.Row="5" Grid.Column="0"
                            Text="Country of Origin"/>
                 <ui:ShipWorksComboBox Grid.Row="5" Grid.Column="1"
@@ -188,7 +180,8 @@
                           DisplayMemberPath="Key"
                           SelectedValuePath="Value"
                           SelectedValue="{Binding SelectedCustomsItem.CountryOfOrigin}"
-                          ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"/>
+                          ItemsSource="{Binding Mode=OneTime, Source={x:Static geography:CountryList.Countries}}"
+                                      Style="{StaticResource FormComboBox}"/>
             </Grid>
         </GroupBox>
     </Grid>
