@@ -11,11 +11,6 @@ namespace ShipWorks.Filters
     public interface IFilterHelper
     {
         /// <summary>
-        /// Ensure filters are up to date
-        /// </summary>
-        bool EnsureFiltersUpToDate(TimeSpan timeout);
-
-        /// <summary>
         /// Indicates if the given object is in the filter contents of the specified filter content id
         /// </summary>
         bool IsObjectInFilterContent(long orderID, IRuleEntity rule);

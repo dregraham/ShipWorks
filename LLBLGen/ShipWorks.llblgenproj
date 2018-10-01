@@ -1364,6 +1364,7 @@
           <Field Name="Cost" Type="int" FieldIndex="8" />
           <Field Name="Count" Type="int" FieldIndex="9" />
           <Field Name="CountVersion" Type="long" FieldIndex="2" />
+          <Field Name="EntityExistsQuery" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="FilterNodeContentID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="InitialCalculation" Type="string" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="JoinMask" Type="int" FieldIndex="7" />
@@ -4349,7 +4350,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-09-27T16:41:55.0934978Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-08-07T19:35:30.4887441Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6390,6 +6391,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -11654,6 +11656,7 @@
             <FieldMapping FieldName="Cost" TargetFieldName="Cost" />
             <FieldMapping FieldName="Count" TargetFieldName="Count" />
             <FieldMapping FieldName="CountVersion" TargetFieldName="CountVersion" />
+            <FieldMapping FieldName="EntityExistsQuery" TargetFieldName="EntityExistsQuery" />
             <FieldMapping FieldName="FilterNodeContentID" TargetFieldName="FilterNodeContentID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="InitialCalculation" TargetFieldName="InitialCalculation" />
             <FieldMapping FieldName="JoinMask" TargetFieldName="JoinMask" />

@@ -23,6 +23,7 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj" />
     <None Remove="AddressValidation\TestAddresses.xlsx" />
   </ItemGroup>
   <ItemGroup>

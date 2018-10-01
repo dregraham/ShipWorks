@@ -980,6 +980,7 @@
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
+    <Compile Include="Filters\Content\SqlGeneration\FilterQueryType.cs" />
     <Compile Include="Filters\Content\IFilterDefinition.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
@@ -10678,6 +10679,9 @@
     <None Include="Resources\add - Copy.png" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryFolder.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQuery.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryEmpty.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

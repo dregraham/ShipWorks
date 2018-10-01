@@ -4,7 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -23,17 +25,17 @@ namespace ShipWorks.Shipping
     /// </summary>
     public static class ShipmentPrintHelper
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentPrintHelper));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentPrintHelper));
 
         /// <summary>
         /// Determine what templates to use to print the given shipment with based on rules of the shipment type
         /// </summary>
-        public static List<TemplateEntity> DetermineTemplatesToPrint(ShipmentEntity shipment)
+        public static List<TemplateEntity> DetermineTemplatesToPrint(IShipmentEntity shipment)
         {
             List<TemplateEntity> templates = new List<TemplateEntity>();
 
             // Get all the configured groups for this shipment
-            List<ShippingPrintOutputEntity> groups = ShippingPrintOutputManager.GetOutputGroups((ShipmentTypeCode) shipment.ShipmentType);
+            List<ShippingPrintOutputEntity> groups = ShippingPrintOutputManager.GetOutputGroups(shipment.ShipmentTypeCode);
 
             // There will be 0 or 1 templates per group
             foreach (ShippingPrintOutputEntity group in groups)
@@ -58,42 +60,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Determine the template to use for the given group.  If there are no matches, null is returned
         /// </summary>
-        private static TemplateEntity DetermineGroupTemplate(ShippingPrintOutputEntity group, ShipmentEntity shipment)
+        private static TemplateEntity DetermineGroupTemplate(ShippingPrintOutputEntity group, IShipmentEntity shipment)
         {
-            // Test each rule in the group in order to see what template matches
-            foreach (ShippingPrintOutputRuleEntity rule in group.Rules)
+            var matchingRule = group.Rules.FirstOrDefault(r => r.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID || 
+                                                       FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, r.FilterNodeID));
+
+            if (matchingRule != null)
             {
-                TemplateEntity template = TemplateManager.Tree.GetTemplate(rule.TemplateID);
-                if (template != null)
-                {
-                    if (rule.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID)
-                    {
-                        return template;
-                    }
-
-                    long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                    if (filterContentID != null)
-                    {
-                        if (FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, filterContentID.Value))
-                        {
-                            return template;
-                        }
-                        else
-                        {
-                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: ShipmentID wasn't found in filter content, trying again.");
-
-                            // Double check that quick filters are up to date, and check the filter content again.
-                            FilterHelper.EnsureQuickFiltersUpToDate();
-
-                            if (FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, filterContentID.Value))
-                            {
-                                return template;
-                            }
-
-                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: Event after calling EnsureQuickFiltersUpToDate(), ShipmentID wasn't found in filter content, trying again.");
-                        }
-                    }
-                }
+                return TemplateManager.Tree.GetTemplate(matchingRule.TemplateID);
             }
 
             return null;
@@ -306,7 +280,7 @@ namespace ShipWorks.Shipping
                 return template.TemplateID;
             }
 
-            // Didn't find it, we have to let the user pick or creat a new one
+            // Didn't find it, we have to let the user pick or create a new one
             using (PrintRuleInstallMissingTemplateDlg dlg = new PrintRuleInstallMissingTemplateDlg(fullName))
             {
                 dlg.ShowDialog(owner);

@@ -2263,7 +2263,8 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
-[Count] [int] NOT NULL
+[Count] [int] NOT NULL,
+[EntityExistsQuery] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContent] on [dbo].[FilterNodeContent]'
@@ -7660,4 +7661,157 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'NonMachinable'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'SaturdayDelivery'
+GO
+
+PRINT N'Adding FilterNodeSetSwFilterNodeID trigger'
+GO
+CREATE TRIGGER FilterNodeSetSwFilterNodeID 
+   ON  FilterNode
+   WITH ENCRYPTION
+   AFTER INSERT,UPDATE
+AS 
+BEGIN
+	SET NOCOUNT ON;
+
+    declare @FilterNodeID bigint
+    declare @FilterNodeContentID bigint
+	select @FilterNodeID = FilterNodeID, @FilterNodeContentID = FilterNodeContentID from inserted
+
+	update FilterNodeContent
+	set EntityExistsQuery = REPLACE(EntityExistsQuery, '<SwFilterNodeID />', convert(nvarchar(40), @FilterNodeID))
+	where FilterNodeContentID = @FilterNodeContentID
+END
+GO
+
+PRINT 'Creating FilterInfo view.'
+GO
+IF EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[FilterInfo]'))
+	DROP VIEW [dbo].[FilterInfo]
+GO
+CREATE VIEW FilterInfo WITH ENCRYPTION AS
+	SELECT f.Name, f.FilterID, f.IsFolder, f.State, f.[Definition], n.FilterNodeID, c.*
+		FROM FilterNode n INNER JOIN FilterSequence s ON n.FilterSequenceID = s.FilterSequenceID 
+						  INNER JOIN Filter f ON s.FilterID = f.FilterID 
+						  INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
+GO
+
+PRINT 'Creating AreFilterCountsUpToDate.'
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AreFilterCountsUpToDate]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+BEGIN
+	DROP FUNCTION [dbo].[AreFilterCountsUpToDate]
+END
+GO
+CREATE FUNCTION [dbo].[AreFilterCountsUpToDate](@currentDbts binary(8))
+RETURNS BIT
+WITH ENCRYPTION
+AS
+BEGIN
+	DECLARE @upToDate bit = 0
+	DECLARE @rowVersion rowversion
+	DECLARE @filterNodeContentDirtyMinRowVersion timestamp
+
+	IF (@currentDbts IS NULL OR @currentDbts = CONVERT(VARBINARY, 0x0))
+	BEGIN
+		SELECT @rowVersion = @@DBTS
+	END
+	ELSE
+	BEGIN
+		SELECT @rowVersion = CONVERT(rowversion, @currentDbts)
+	END
+
+	SELECT @filterNodeContentDirtyMinRowVersion = MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)
+	
+	IF @filterNodeContentDirtyMinRowVersion is null or len(@filterNodeContentDirtyMinRowVersion) = 0
+	BEGIN
+		SET @upToDate = 1
+	END
+	ELSE
+	BEGIN
+		IF @filterNodeContentDirtyMinRowVersion > @rowVersion
+		BEGIN
+			SET @upToDate = 1
+		END
+	END
+	
+	RETURN(@upToDate);
+END
+GO
+
+PRINT 'Creating AreQuickFilterCountsUpToDate.'
+GO
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AreQuickFilterCountsUpToDate]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+BEGIN
+	DROP FUNCTION [dbo].[AreQuickFilterCountsUpToDate]
+END
+GO
+
+CREATE FUNCTION dbo.AreQuickFilterCountsUpToDate(@currentDbts binary(8))
+RETURNS BIT
+WITH ENCRYPTION
+AS
+BEGIN
+	DECLARE @upToDate bit = 0
+	DECLARE @rowVersion rowversion
+	DECLARE @quickFilterNodeContentDirtyMinRowVersion timestamp
+	
+	IF (@currentDbts IS NULL OR @currentDbts = CONVERT(VARBINARY, 0x0))
+	BEGIN
+		SELECT @rowVersion = @@DBTS
+	END
+	ELSE
+	BEGIN
+		SELECT @rowVersion = CONVERT(rowversion, @currentDbts)
+	END
+
+	SELECT @quickFilterNodeContentDirtyMinRowVersion = MIN(RowVersion) FROM QuickFilterNodeContentDirty WITH (NOLOCK)
+
+	IF @quickFilterNodeContentDirtyMinRowVersion is null or len(@quickFilterNodeContentDirtyMinRowVersion) = 0
+	BEGIN
+		SET @upToDate = 1
+	END
+	ELSE
+	BEGIN
+		IF @quickFilterNodeContentDirtyMinRowVersion > @rowVersion
+		BEGIN
+			SET @upToDate = 1
+		END
+	END
+
+	RETURN(@upToDate);
+END
+GO
+
+PRINT N'Adding DoesFilterNodeApplyToEntity stored procedure'
+GO
+CREATE PROCEDURE DoesFilterNodeApplyToEntity
+(
+	@entityID BIGINT,
+	@filterNodeID BIGINT
+)
+WITH ENCRYPTION
+AS
+BEGIN
+
+	DECLARE @upToDate bit
+	SELECT @upToDate = dbo.AreFilterCountsUpToDate(NULL) & dbo.AreFilterCountsUpToDate(NULL)
+	
+	IF @upToDate = 1
+	BEGIN
+		SELECT fi.FilterNodeID 
+		FROM FilterNodeContentDetail fncd, FilterInfo fi
+		WHERE fncd.FilterNodeContentID = fi.FilterNodeContentID
+		  AND fncd.ObjectID = @entityID
+		  AND fi.FilterNodeID = @filterNodeID
+	END
+	ELSE
+	BEGIN
+		DECLARE @sql nvarchar(max)
+		select @sql = fn.EntityExistsQuery
+		from FilterInfo fn
+		WHERE fn.FilterNodeID = @filterNodeID
+
+		EXECUTE sp_executesql @sql, N'@ExistsQueryObjectID bigint, @filterNodeID bigint', @ExistsQueryObjectID = @entityID, @filterNodeID = @filterNodeID
+	END
+END
 GO

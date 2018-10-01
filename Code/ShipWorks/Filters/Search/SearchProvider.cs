@@ -525,6 +525,7 @@ namespace ShipWorks.Filters.Search
                 content.Status = (int) FilterCountStatus.RunningInitialCount;
                 content.InitialCalculation = "";
                 content.UpdateCalculation = "";
+                content.EntityExistsQuery = "";
                 content.Cost = 0;
                 content.Count = 0;
                 content.CountVersion = 0;
