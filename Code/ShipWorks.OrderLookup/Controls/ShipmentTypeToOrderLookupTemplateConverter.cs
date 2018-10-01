@@ -31,12 +31,7 @@ namespace ShipWorks.OrderLookup.Controls
             string templateToUse = "";
             if (values[0] is ShipmentTypeCode shipmentTypeCode)
             {
-                switch (shipmentTypeCode)
-                {
-                    case ShipmentTypeCode.Usps:
-                        templateToUse = "usps";
-                        break;
-                }
+                templateToUse = Enum.GetName(typeof(ShipmentTypeCode), shipmentTypeCode).ToLower();
             }
 
             object template = null;
