@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_SubscribesToOrderFoundMessage()
         {
-            OrderLookupMessageBus testObject = mock.Create<OrderLookupMessageBus>();
+            ViewModelOrchestrator testObject = mock.Create<ViewModelOrchestrator>();
 
             testObject.InitializeForCurrentSession();
 
@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            OrderLookupMessageBus testObject = mock.Create<OrderLookupMessageBus>();
+            ViewModelOrchestrator testObject = mock.Create<ViewModelOrchestrator>();
             Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
     }

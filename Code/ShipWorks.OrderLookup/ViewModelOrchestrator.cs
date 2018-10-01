@@ -20,7 +20,7 @@ namespace ShipWorks.OrderLookup
     /// Data service for the order lookup UI Mode
     /// </summary>
     [Component(SingleInstance = true)]
-    public class OrderLookupMessageBus : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupMessageBus
+    public class ViewModelOrchestrator : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupMessageBus
     {
         private readonly IMessenger messenger;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
@@ -32,7 +32,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupMessageBus(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+        public ViewModelOrchestrator(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.messenger = messenger;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
@@ -86,11 +86,11 @@ namespace ShipWorks.OrderLookup
         public void RaisePropertyChanged(string propertyName)
         {
             handler.RaisePropertyChanged(propertyName);
-            
+
             if (ShipmentAdapter != null && ShipmentAdapter.Shipment != null)
             {
                 messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
-            }            
+            }
         }
 
         /// <summary>
@@ -109,18 +109,27 @@ namespace ShipWorks.OrderLookup
         {
             if (order != null)
             {
+                if (ShipmentAdapter != null)
+                {
+                    ShipmentAdapter.Shipment.PropertyChanged -= RaisePropertyChanged;
+                }
+                if (ShipmentAdapter?.Shipment?.Postal != null)
+                {
+                    ShipmentAdapter.Shipment.Postal.PropertyChanged -= RaisePropertyChanged;
+                }
+
                 ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
                 ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
 
                 if (ShipmentAdapter != null)
                 {
                     PackageAdapters = ShipmentAdapter.GetPackageAdapters();
-                    ShipmentAdapter.Shipment.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                    ShipmentAdapter.Shipment.PropertyChanged += RaisePropertyChanged;
                 }
 
                 if (ShipmentAdapter?.Shipment?.Postal != null)
                 {
-                    ShipmentAdapter.Shipment.Postal.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);
+                    ShipmentAdapter.Shipment.Postal.PropertyChanged += RaisePropertyChanged;
                 }
 
                 if (ShipmentAdapter != null)
@@ -131,6 +140,11 @@ namespace ShipWorks.OrderLookup
             
             Order = order;
         }
+
+        /// <summary>
+        /// Call the RaisePropropertyChanged with propertyname
+        /// </summary>
+        private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(e.PropertyName);
 
         /// <summary>
         /// Dispose

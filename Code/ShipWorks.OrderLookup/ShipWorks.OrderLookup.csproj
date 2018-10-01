@@ -173,9 +173,9 @@
     <Compile Include="OrderLookupOrderRepository.cs" />
     <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupSearchMessage.cs" />
-    <Compile Include="OrderLookupMessageBus.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModelOrchestrator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
