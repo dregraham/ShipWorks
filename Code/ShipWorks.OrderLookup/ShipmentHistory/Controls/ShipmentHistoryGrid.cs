@@ -43,6 +43,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         {
             base.OnLoad(e);
 
+            entityGrid.AllowMultipleSelection = false;
             entityGrid.Dock = DockStyle.Fill;
             addLink.Visible = false;
         }
