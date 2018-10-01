@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupEditableComboBoxStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupCheckBoxStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
@@ -37,6 +38,10 @@
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
         <Setter Property="Template" Value="{StaticResource OrderLookupComboBoxTemplate}"/>
+    </Style>
+    <Style x:Key="EditableFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}"
+           BasedOn="{StaticResource FormComboBox}">
+        <Setter Property="Template" Value="{StaticResource OrderLookupEditableComboBoxTemplate}"/>
     </Style>
     <Style x:Key="StackedFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}"
            BasedOn="{StaticResource FormComboBox}">

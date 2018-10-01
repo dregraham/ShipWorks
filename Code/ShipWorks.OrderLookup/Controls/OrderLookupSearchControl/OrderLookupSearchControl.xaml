@@ -203,9 +203,9 @@
         </Grid>
         
 
-        <TextBlock Grid.Column="1"
+        <TextBlock Grid.Column="0"
                    Grid.Row="1"
-                   Grid.ColumnSpan="7"                   
+                   Grid.ColumnSpan="3"                   
                    Text="{Binding SearchErrorMessage}"
                    Visibility="{Binding SearchError, Converter={StaticResource BoolToVis}}"/>
     </Grid>

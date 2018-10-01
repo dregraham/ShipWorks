@@ -199,7 +199,7 @@
                 IsTextSearchEnabled="True"
                 ItemsSource="{Binding SelectedValue, ElementName=CountryComboBox, Converter={StaticResource StateProvinceConverter}}"
                 Text="{Binding StateProvCode}"
-                Style="{StaticResource FormComboBox}" />
+                Style="{StaticResource EditableFormComboBox}" />
 
             <TextBlock
                 Grid.Row="4"
