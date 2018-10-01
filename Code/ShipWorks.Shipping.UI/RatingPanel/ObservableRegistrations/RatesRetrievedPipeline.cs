@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
@@ -40,7 +42,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .IgnoreBetweenMessages(
                         messenger.OfType<OpenShippingDialogMessage>(),
-                        messenger.OfType<OrderSelectionChangingMessage>())
+                        GetResumeObservable())
                     .Subscribe(this, _ => viewModel.ShowSpinner()),
                 messenger.OfType<RatesRetrievingMessage>()
                     .Trackable()
@@ -51,8 +53,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Dump(this)
                     .IgnoreBetweenMessages(
                         messenger.OfType<OpenShippingDialogMessage>().Trackable().Select(this, x => "Window closing"),
-                        messenger.OfType<OrderSelectionChangingMessage>().Trackable().Select(this, x => "Window opening"))
+                        GetResumeObservable().Trackable().Select(this, x => "Window opening"))
                     .Subscribe(this, viewModel.LoadRates));
+        }
+
+        private IObservable<IShipWorksMessage> GetResumeObservable()
+        {
+            return messenger.OfType<OrderSelectionChangingMessage>().Select(x=>x as IShipWorksMessage).Merge(messenger.OfType<OrderLookupSingleScanMessage>().Select(x => x as IShipWorksMessage));
         }
 
         /// <summary>

@@ -158,8 +158,6 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
-            orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
-            
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
             InitializeComponent();
@@ -304,6 +302,8 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
         }
 
         /// <summary>

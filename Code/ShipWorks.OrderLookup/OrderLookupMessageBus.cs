@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -77,7 +78,14 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        public void RaisePropertyChanged(string propertyName) => handler.RaisePropertyChanged(propertyName);
+        public void RaisePropertyChanged(string propertyName)
+        {
+            handler.RaisePropertyChanged(propertyName);
+            if (ShipmentAdapter != null && ShipmentAdapter.Shipment != null)
+            {
+                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
+            }            
+        }
 
         /// <summary>
         /// Start listening for order found messages

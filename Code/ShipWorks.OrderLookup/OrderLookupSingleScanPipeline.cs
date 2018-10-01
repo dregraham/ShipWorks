@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ShipWorks.SingleScan;
 using System.Linq;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.OrderLookup
 {

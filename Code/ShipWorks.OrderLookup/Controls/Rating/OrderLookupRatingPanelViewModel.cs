@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -11,6 +12,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.UI.RatingPanel;
+using ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.OrderLookup.Controls.Rating
@@ -22,57 +24,29 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     public class OrderLookupRatingPanelViewModel : RatingPanelViewModel
     {
         private readonly IOrderLookupMessageBus messageBus;
-        private readonly IOrderLookupRatingService ratingService;
-        private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
-        private readonly IMessenger messenger;
-        private RateResult selectedRate;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupRatingPanelViewModel(IOrderLookupMessageBus messageBus, IOrderLookupRatingService ratingService,
-                                               IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup,
-                                               Func<ISecurityContext> securityContextRetriever, IMessenger messenger)
+        public OrderLookupRatingPanelViewModel(IOrderLookupMessageBus messageBus, 
+            IMessenger messenger, 
+            IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, 
+            Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
             this.messageBus = messageBus;
-            this.ratingService = ratingService;
-            this.rateHashingServiceLookup = rateHashingServiceLookup;
-            this.messenger = messenger;
-            messageBus.PropertyChanged += MessageBusPropertyChanged;
-            this.securityContextRetriever = securityContextRetriever;
         }
 
         /// <summary>
         /// The currently selected rate
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public override RateResult SelectedRate
         {
-            get => selectedRate;
+            get => base.SelectedRate;
             set
             {
-                selectedRate = value;
-                messageBus.ShipmentAdapter.SelectServiceFromRate(selectedRate);
-                
-                handler.Set(nameof(SelectedRate), ref selectedRate, value); 
-                handler.RaisePropertyChanged(nameof(messageBus));
-            }
-        }
-
-        /// <summary>
-        /// Update when the order changes
-        /// </summary>
-        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // Reload rates if the order or any fields that affect rating change
-            if ((e.PropertyName == "Order" && messageBus.Order != null) ||
-                rateHashingServiceLookup[messageBus.ShipmentAdapter.Shipment.ShipmentTypeCode]
-                    .IsRatingField(e.PropertyName))
-            {
-                messenger.Send(new ShipmentChangedMessage(this, messageBus.ShipmentAdapter));
-                
-                //GenericResult<RateGroup> rates = ratingService.GetRates(messageBus.ShipmentAdapter.Shipment);
-                
-                //LoadRates(new RatesRetrievedMessage(this, ratingService.LatestRateHash, rates, messageBus.ShipmentAdapter));
+                base.SelectedRate = value;
+                messageBus.ShipmentAdapter.SelectServiceFromRate(value);
             }
         }
     }

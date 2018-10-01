@@ -173,7 +173,6 @@
     <Compile Include="OrderLookupOrderRepository.cs" />
     <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupSearchMessage.cs" />
-    <Compile Include="OrderLookupSingleScanMessage.cs" />
     <Compile Include="OrderLookupMessageBus.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
