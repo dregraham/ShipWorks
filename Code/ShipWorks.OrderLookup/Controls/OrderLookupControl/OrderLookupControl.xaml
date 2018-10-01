@@ -14,7 +14,9 @@
              xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
              xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
              xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
+             xmlns:orderLookupControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupControl"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance orderLookupControl:OrderLookupViewModel}"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
              Background="#e7eef7">
     <UserControl.Resources>

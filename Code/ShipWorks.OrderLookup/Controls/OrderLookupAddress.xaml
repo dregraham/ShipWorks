@@ -189,7 +189,7 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
-                State \ Prov
+                State / Prov
             </TextBlock>
             <ui:ShipWorksComboBox
                 Grid.Row="3"
