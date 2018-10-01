@@ -120,8 +120,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                     x => x.FetchQueryAsync(shipmentQuery, cancellationToken.Token))
                 .ContinueWith(task =>
                 {
-                    shipmentHeaders = task.Result.ToImmutableArray();
-                    isDataFetched = true;
+                    isDataFetched = task.Status == TaskStatus.RanToCompletion;
+                    if (isDataFetched)
+                    {
+                        shipmentHeaders = task.Result.ToImmutableArray();
+                    }
                 })
                 .ContinueWith(task => UpdateFilteredList());
         }
