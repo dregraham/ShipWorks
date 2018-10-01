@@ -158,7 +158,6 @@ namespace ShipWorks
         public MainForm()
         {
             orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
-            shipmentHistory = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentHistory>();
 
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
@@ -506,6 +505,9 @@ namespace ShipWorks
                 }
 
                 SaveCurrentUserSettings();
+
+                shipmentHistory?.Dispose();
+                shipmentHistory = null;
 
                 UserSession.Logoff(clearRememberMe);
             }
@@ -994,7 +996,7 @@ namespace ShipWorks
         {
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
-                ToggleVisiblePanel(orderLookupControl, shipmentHistory.Control);
+                ToggleVisiblePanel(orderLookupControl, shipmentHistory?.Control);
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
@@ -1008,9 +1010,12 @@ namespace ShipWorks
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd, Control toRemove)
         {
-            panelDockingArea.Controls.Remove(toRemove);
+            if (toRemove != null)
+            {
+                panelDockingArea.Controls.Remove(toRemove);
+            }
 
-            if (!panelDockingArea.Controls.Contains(toAdd))
+            if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
                 panelDockingArea.Controls.Add(toAdd);
             }
@@ -1310,6 +1315,8 @@ namespace ShipWorks
             ribbon.ToolBar = quickAccessToolBar;
 
             EnableRibbonTabs();
+
+            shipmentHistory = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentHistory>();
 
             // Show all status bar strips
             statusBar.MainStrip.Visible = true;

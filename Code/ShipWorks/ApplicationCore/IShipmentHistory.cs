@@ -1,11 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace ShipWorks
 {
     /// <summary>
     /// Shipment history
     /// </summary>
-    public interface IShipmentHistory
+    public interface IShipmentHistory : IDisposable
     {
         /// <summary>
         /// Control to display the history

@@ -284,6 +284,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(PayPalStoreEntity),
                     typeof(PermissionEntity),
                     typeof(PostalProfileEntity),
+                    typeof(ProcessedShipmentEntity),
                     typeof(ProStoresOrderSearchEntity),
                     typeof(ProStoresStoreEntity),
                     typeof(ResourceEntity),

@@ -11,9 +11,10 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
     /// Shipment history panel for the OrderLookup mode
     /// </summary>
     [Component(RegistrationType.SpecificService, Service = typeof(IShipmentHistory))]
-    public partial class ShipmentHistoryPanel : UserControl, IShipmentHistory
+    public partial class ShipmentHistoryPanel : UserControl, IShipmentHistory, IDisposable
     {
         private readonly ShipmentHistoryGrid shipmentGrid;
+        private readonly Func<IUserSession> getUserSession;
 
         /// <summary>
         /// Constructor
@@ -22,8 +23,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         {
             InitializeComponent();
         }
-
-        private readonly Func<IUserSession> getUserSession;
 
         /// <summary>
         /// Constructor
