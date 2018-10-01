@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupCheckBoxStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -48,6 +49,7 @@
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
+        <Setter Property="Template" Value="{StaticResource OrderLookupCheckBoxTemplate}"/>
     </Style>
     
     <Style x:Key="Header" TargetType="{x:Type TextBlock}">
