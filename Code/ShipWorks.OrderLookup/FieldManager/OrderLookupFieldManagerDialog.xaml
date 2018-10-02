@@ -5,9 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.FieldManager"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     Title="Configure Fields"
     Width="500"
     Height="650"
+    d:DataContext="{d:DesignInstance local:OrderLookupFieldManagerDesignerViewModel,
+                                     IsDesignTimeCreatable=True}"
     Background="{x:Static SystemColors.ControlBrush}"
     ResizeMode="CanResizeWithGrip"
     ShowInTaskbar="False"
@@ -22,6 +25,42 @@
         </Grid.RowDefinitions>
 
         <TextBlock>Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
+
+        <ScrollViewer Grid.Row="1">
+            <ListBox ItemsSource="{Binding Sections}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <Expander IsEnabled="True" IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel IsEnabled="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListView
+                                            Name="sectionFieldsList"
+                                            Margin="10"
+                                            ItemsSource="{Binding SectionFields, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <WrapPanel Orientation="Horizontal">
+                                                    <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}" />
+                                                </WrapPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </Expander>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
+            </ListBox>
+        </ScrollViewer>
+        
         <Button
             Grid.Row="2"
             Command="{Binding Save}"

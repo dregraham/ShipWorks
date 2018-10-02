@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutRepository.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
     <Compile Include="FieldManager\SectionFieldLayout.cs" />
     <Compile Include="FieldManager\SectionLayout.cs" />
     <Compile Include="Controls\OrderLookupControlHost.cs">
