@@ -31,7 +31,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
+        private readonly ShipmentTypeProvider shipmentTypeProvider;
+
         private List<DimensionsProfileEntity> dimensionProfiles;
+        private Dictionary<int, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
@@ -45,13 +48,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentTypeManager shipmentTypeManager,
             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, 
-            IInsuranceViewModel insuranceViewModel)
+            IInsuranceViewModel insuranceViewModel, 
+            ShipmentTypeProvider shipmentTypeProvider)
         {
             MessageBus = messageBus;
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
+            this.shipmentTypeProvider = shipmentTypeProvider;
             InsuranceViewModel = insuranceViewModel;
             MessageBus.PropertyChanged += MessageBusPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -93,6 +98,16 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public bool IsProfileSelected => MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
 
         /// <summary>
+        /// Collection of ServiceTypes
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Dictionary<int, string> Providers
+        {
+            get => providers;
+            set => handler.Set(nameof(Providers), ref providers, value);
+        }        
+
+        /// <summary>
         /// Collection of valid PackageTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -120,7 +135,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => serviceTypes;
             set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
-        }
+        }        
 
         /// <summary>
         /// Update when order changes
@@ -131,7 +146,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == "Order")
                 {
-                    RefreshDimensionalProfiles();
+                    RefreshProviders();
+                    RefreshDimensionalProfiles();                    
                 }
 
                 if (e.PropertyName == "Order" || 
@@ -183,6 +199,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Refresh the list of available providers
+        /// </summary>
+        private void RefreshProviders()
+        {            
+            Providers = new Dictionary<int,string>();
+            foreach(ShipmentTypeCode shipmentType in shipmentTypeProvider.GetAvailableShipmentTypes(MessageBus.ShipmentAdapter))
+            {
+                Providers.Add((int) shipmentType, EnumHelper.GetDescription(shipmentType));
             }
         }
         

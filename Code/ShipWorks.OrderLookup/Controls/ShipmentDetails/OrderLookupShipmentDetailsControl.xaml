@@ -24,7 +24,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="usps">
-                <Grid Margin="5">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -46,66 +46,93 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Text="Req. Shipping"
+                               Style="{StaticResource FieldLabel}"/>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="1"
+                               Text="{Binding MessageBus.Order.RequestedShipping, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="10 0 0 10"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource FieldLabel}"/>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Provider"
+                               Style="{StaticResource FieldLabel}"/>
+
+                    <ui:ShipWorksComboBox Grid.Row="1"
+                                          Grid.Column="1"
+                                          DisplayMemberPath="Value"
+                                          ItemsSource="{Binding Providers}"
+                                          SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                                          SelectedValuePath="Key"
+                                          Style="{StaticResource FormComboBox}"
+                                          SelectedValue="{Binding MessageBus.ShipmentAdapter.Shipment.ShipmentType, UpdateSourceTrigger=PropertyChanged}">
+                    </ui:ShipWorksComboBox>
+
                     <TextBlock
-                        Grid.Row="0"
+                        Grid.Row="2"
                         Grid.Column="0"
-                        Style="{DynamicResource FieldLabel}"
+                        Style="{StaticResource FieldLabel}"
                         Text="Service" />
 
                     <ui:ShipWorksComboBox
-                        Grid.Row="0"
+                        Grid.Row="2"
                         Grid.Column="1"
                         DisplayMemberPath="Value"
                         ItemsSource="{Binding ServiceTypes}"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource FormComboBox}">
+                        Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter.ServiceType" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
                     <TextBlock
-                        Grid.Row="1"
+                        Grid.Row="3"
                         Grid.Column="0"
-                        Style="{DynamicResource FieldLabel}"
+                        Style="{StaticResource FieldLabel}"
                         Text="Confirmation" />
 
                     <ui:ShipWorksComboBox
-                        Grid.Row="1"
+                        Grid.Row="3"
                         Grid.Column="1"
                         DisplayMemberPath="Value"
                         ItemsSource="{Binding ConfirmationTypes}"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource FormComboBox}">
+                        Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Confirmation" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
                     <TextBlock
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="0"
-                        Style="{DynamicResource FieldLabel}"
+                        Style="{StaticResource FieldLabel}"
                         Text="Packaging" />
 
                     <ui:ShipWorksComboBox
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="1"
                         Margin="10,0,0,5"
                         DisplayMemberPath="Value"
                         ItemsSource="{Binding PackageTypes}"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="Key"
-                        Style="{DynamicResource FormComboBox}">
+                        Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.PackagingType" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
                     <StackPanel
-                        Grid.Row="3"
+                        Grid.Row="5"
                         Grid.Column="1"
                         Margin="10,0,0,10"
                         Orientation="Horizontal">
@@ -122,26 +149,26 @@
                     </StackPanel>
 
                     <TextBlock
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="0"
-                        Style="{DynamicResource FieldLabel}"
+                        Style="{StaticResource FieldLabel}"
                         Text="Weight" />
                     <ui:WeightControl
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="1"
                         AcceptApplyWeightKeyboardShortcut="True"
                         ErrorMessage="{Binding WeightErrorMessage}"
                         Style="{StaticResource OrderLookupWeightControl}"
                         Weight="{Binding MessageBus.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
-                    
+
                     <TextBlock
-                        Grid.Row="6"
+                        Grid.Row="7"
                         Grid.Column="0"
-                        Style="{DynamicResource FieldLabel}"
+                        Style="{StaticResource FieldLabel}"
                         Text="Dimensions" />
 
                     <StackPanel
-                        Grid.Row="6"
+                        Grid.Row="7"
                         Grid.Column="1"
                         Orientation="Horizontal">
                         <ui:ShipWorksComboBox
@@ -150,7 +177,7 @@
                             ItemsSource="{Binding DimensionProfiles}"
                             SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                             SelectedValuePath="DimensionsProfileID"
-                            Style="{DynamicResource FormComboBox}">
+                            Style="{StaticResource FormComboBox}">
                             <ComboBox.SelectedValue>
                                 <Binding
                                     Mode="TwoWay"
@@ -167,7 +194,7 @@
                     </StackPanel>
 
                     <Grid
-                        Grid.Row="7"
+                        Grid.Row="8"
                         Grid.Column="1"
                         Margin="10,0,0,10">
                         <Grid.ColumnDefinitions>
@@ -182,7 +209,7 @@
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{DynamicResource FormTextBox}"
+                            Style="{StaticResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength, Mode=TwoWay}" />
 
                         <TextBox
@@ -191,7 +218,7 @@
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{DynamicResource FormTextBox}"
+                            Style="{StaticResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
 
                         <TextBox
@@ -200,7 +227,7 @@
                             Margin="0,0,5,0"
                             VerticalContentAlignment="Center"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{DynamicResource FormTextBox}"
+                            Style="{StaticResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
 
                         <TextBlock
@@ -210,7 +237,7 @@
                     </Grid>
 
                     <Grid
-                        Grid.Row="10"
+                        Grid.Row="9"
                         Grid.Column="1"
                         Margin="5,0,0,10">
                         <Grid.ColumnDefinitions>
@@ -234,7 +261,7 @@
                         <TextBox
                             Grid.Column="2"
                             Margin="5,0,0,0"
-                            Style="{DynamicResource FormTextBox}"
+                            Style="{StaticResource FormTextBox}"
                             Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.IsEnabled>
                                 <MultiBinding Converter="{StaticResource BooleanComparisonConverter}">
@@ -245,7 +272,7 @@
                         </TextBox>
                     </Grid>
                     <local:OrderLookupInsuranceControl
-                        Grid.Row="11"
+                        Grid.Row="10"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         DataContext="{Binding InsuranceViewModel}" />
@@ -254,7 +281,7 @@
 
         </ResourceDictionary>
     </UserControl.Resources>
-
+    
     <StackPanel>
         <ContentControl Content="{Binding .}">
             <ContentControl.ContentTemplate>
