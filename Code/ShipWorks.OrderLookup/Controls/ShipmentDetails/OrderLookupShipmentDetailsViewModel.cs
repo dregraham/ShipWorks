@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly ShipmentTypeProvider shipmentTypeProvider;
 
         private List<DimensionsProfileEntity> dimensionProfiles;
-        private Dictionary<int, string> providers;
+        private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
@@ -102,7 +102,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of ServiceTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Dictionary<int, string> Providers
+        public Dictionary<ShipmentTypeCode, string> Providers
         {
             get => providers;
             set => handler.Set(nameof(Providers), ref providers, value);
@@ -153,7 +153,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == "Order" || 
                     e.PropertyName == "Service" || 
-                    e.PropertyName == "ShipmentTypeCode" || 
+                    e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || 
                     e.PropertyName == "ShipCountryCode")
                 {
                     RefreshInsurance();
@@ -184,18 +184,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
-                if (e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Order")
+                if (e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Order")
                 {
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == "Order" || e.PropertyName == "ShipmentTypeCode" || e.PropertyName == "Service" ||
+                if (e.PropertyName == "Order" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Service" ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == "Order" || e.PropertyName == "ShipmentTypeCode" ||
+                if (e.PropertyName == "Order" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) ||
                     e.PropertyName == "ShipCountryCode")
                 {
                     RefreshServiceTypes();
@@ -208,10 +208,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshProviders()
         {            
-            Providers = new Dictionary<int,string>();
+            Providers = new Dictionary<ShipmentTypeCode, string>();
             foreach(ShipmentTypeCode shipmentType in shipmentTypeProvider.GetAvailableShipmentTypes(Orchestrator.ShipmentAdapter))
             {
-                Providers.Add((int) shipmentType, EnumHelper.GetDescription(shipmentType));
+                Providers.Add(shipmentType, EnumHelper.GetDescription(shipmentType));
             }
         }
         

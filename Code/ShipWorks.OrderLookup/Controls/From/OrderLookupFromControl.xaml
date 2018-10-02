@@ -59,7 +59,7 @@
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                 Mode="OneWay"
-                                Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                                Path="Orchestrator.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                     </ui:ShipWorksComboBox>
                 </StackPanel>
@@ -82,7 +82,7 @@
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"
                                 Mode="OneWay"
-                                Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                                Path="Orchestrator.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
                             <Binding Path="Orchestrator.ShipmentAdapter.Shipment.OriginOriginID" />
@@ -161,7 +161,7 @@
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    	<Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding Path="Orchestrator.ShipmentTypeCode" />
                         <Binding RelativeSource="{RelativeSource Self}" />
                     </MultiBinding>
                 </ContentControl.ContentTemplate>

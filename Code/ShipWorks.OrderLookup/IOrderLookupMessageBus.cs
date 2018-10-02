@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -25,6 +26,11 @@ namespace ShipWorks.OrderLookup
         /// The orders shipment adapter
         /// </summary>
         ICarrierShipmentAdapter ShipmentAdapter { get; }
+
+        /// <summary>
+        /// ShipmentType
+        /// </summary>
+        ShipmentTypeCode ShipmentTypeCode { get; set; }
 
         /// <summary>
         /// The pacakge adpaters for the order in context

@@ -82,6 +82,38 @@ namespace ShipWorks.OrderLookup
         public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
 
         /// <summary>
+        /// ShipmentType of selected shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShipmentTypeCode ShipmentTypeCode
+        {
+            get => ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
+            set
+            {
+                if (value != ShipmentTypeCode)
+                {
+                    SaveToDatabase();
+                    using (handler.SuppressChangeNotifications())
+                    {
+                        RemovePropertyChangedEventsFromEntities();
+
+                        shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
+
+                        RefreshPropertiesFromOrder(order);
+
+                        AddPropertyChangedEventsToEntities();
+
+                        if (ShipmentAdapter != null)
+                        {
+                            messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                        }
+                    }
+                    RaisePropertyChanged(nameof(ViewModelOrchestrator));
+                }
+            }
+        }
+
+        /// <summary>
         /// Invoked when a property on the order object changes
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -109,7 +141,12 @@ namespace ShipWorks.OrderLookup
                 return;
             }
 
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
+            IDictionary<ShipmentEntity, Exception> errors;
+            using (handler.SuppressChangeNotifications())
+            {
+                errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
+            }
+
             DisplayError(errors);
         }
 
@@ -147,36 +184,59 @@ namespace ShipWorks.OrderLookup
 
             if (order != null)
             {
-                if (ShipmentAdapter != null)
-                {
-                    ShipmentAdapter.Shipment.PropertyChanged -= RaisePropertyChanged;
-                }
-                if (ShipmentAdapter?.Shipment?.Postal != null)
-                {
-                    ShipmentAdapter.Shipment.Postal.PropertyChanged -= RaisePropertyChanged;
-                }
+                RemovePropertyChangedEventsFromEntities();
 
-                ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
-                ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+                RefreshPropertiesFromOrder(order);
 
-                if (ShipmentAdapter != null)
-                {
-                    PackageAdapters = ShipmentAdapter.GetPackageAdapters();
-                    ShipmentAdapter.Shipment.PropertyChanged += RaisePropertyChanged;
-                }
-
-                if (ShipmentAdapter?.Shipment?.Postal != null)
-                {
-                    ShipmentAdapter.Shipment.Postal.PropertyChanged += RaisePropertyChanged;
-                }
+                AddPropertyChangedEventsToEntities();
 
                 if (ShipmentAdapter != null)
                 {
                     messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                 }
+
+                RaisePropertyChanged(nameof(ShipmentTypeCode));
             }
-            
+
             Order = order;
+        }
+
+        private void RefreshPropertiesFromOrder(OrderEntity order)
+        {
+            ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
+            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+            if (ShipmentAdapter != null)
+            {
+                PackageAdapters = ShipmentAdapter.GetPackageAdapters();
+            }
+        }
+
+        private void AddPropertyChangedEventsToEntities()
+        {
+            if (ShipmentAdapter != null)
+            {
+                ShipmentAdapter.Shipment.PropertyChanged += RaisePropertyChanged;
+            }
+
+            if (ShipmentAdapter?.Shipment?.Postal != null)
+            {
+                ShipmentAdapter.Shipment.Postal.PropertyChanged += RaisePropertyChanged;
+            }
+        }
+
+        /// <summary>
+        /// Remove property changed events from shipment entities
+        /// </summary>
+        private void RemovePropertyChangedEventsFromEntities()
+        {
+            if (ShipmentAdapter != null)
+            {
+                ShipmentAdapter.Shipment.PropertyChanged -= RaisePropertyChanged;
+            }
+            if (ShipmentAdapter?.Shipment?.Postal != null)
+            {
+                ShipmentAdapter.Shipment.Postal.PropertyChanged -= RaisePropertyChanged;
+            }
         }
 
         /// <summary>

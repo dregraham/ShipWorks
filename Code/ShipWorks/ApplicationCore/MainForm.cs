@@ -147,7 +147,9 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
 
         ICurrentUserSettings currentUserSettings;
-        Control orderLookupControl;
+
+        ILifetimeScope orderLookupLifetimeScope;
+        UserControl orderLookupControl;
         
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -301,9 +303,7 @@ namespace ShipWorks
 
             ApplyDisplaySettings();
 
-            ApplyEditingContext();
-
-            orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+            ApplyEditingContext();            
         }
 
         /// <summary>
@@ -887,7 +887,12 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-            panelDockingArea.Controls.Remove(orderLookupControl);
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl);
+                orderLookupLifetimeScope?.Dispose();
+                orderLookupLifetimeScope = null;
+            }
 
             ToggleUiModeCheckbox(UIMode.Batch);
             
@@ -946,6 +951,8 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
+            orderLookupLifetimeScope = IoC.BeginLifetimeScope();
+            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>().Control;
             panelDockingArea.Controls.Add(orderLookupControl);
             orderLookupControl.BringToFront();
 
