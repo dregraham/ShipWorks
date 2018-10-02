@@ -41,8 +41,7 @@
                         DisplayMemberPath="Description"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="AccountId"
-                        Style="{StaticResource FormComboBox}"
-                        SelectionChanged="UpdateAccountDescription">
+                        Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding Path="Orchestrator.ShipmentAdapter.AccountId" />
                         </ComboBox.SelectedValue>
@@ -71,8 +70,7 @@
                         DisplayMemberPath="Key"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                         SelectedValuePath="Value"
-                        Style="{StaticResource StackedFormComboBox}"
-                        SelectionChanged="UpdateOriginDescription">
+                        Style="{StaticResource StackedFormComboBox}">
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"
@@ -119,10 +117,9 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Content="Automatically use the USPS account with the least expensive Rate"
-                        Style="{StaticResource FormCheckBox}"
-                        Click="RateShoppingClicked">
+                        Style="{StaticResource FormCheckBox}">
                         <CheckBox.IsChecked>
-                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
+                            <Binding Path="RateShop" />
                         </CheckBox.IsChecked>
                     </CheckBox>
                     <StackPanel Grid.Row="2" Grid.Column="1">
@@ -149,12 +146,12 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Expander x:Name="Expander" Header="From">
+    <Expander x:Name="Expander" Header="{Binding Title}">
         <StackPanel Style="{StaticResource PanelWrapper}">
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                    	<Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                         <Binding RelativeSource="{RelativeSource Self}" />
                     </MultiBinding>
                 </ContentControl.ContentTemplate>

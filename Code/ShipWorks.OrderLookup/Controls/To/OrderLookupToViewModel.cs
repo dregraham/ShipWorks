@@ -16,6 +16,7 @@ namespace ShipWorks.OrderLookup.Controls.To
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
     public class OrderLookupToViewModel : AddressViewModel
     {
+        private string title;
         IDisposable autoSave;
 
         /// <summary>
@@ -29,6 +30,17 @@ namespace ShipWorks.OrderLookup.Controls.To
             Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
 
             IsAddressValidationEnabled = true;
+            Title = "To";
+        }
+
+        /// <summary>
+        ///The addresses title
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Title
+        {
+            get { return title; }
+            set { handler.Set(nameof(Title), ref title, value); }
         }
 
         /// <summary>
@@ -66,6 +78,13 @@ namespace ShipWorks.OrderLookup.Controls.To
                 autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
 
                 handler.RaisePropertyChanged(nameof(Orchestrator));
+
+                string isDomestic = string.Empty;
+                if (Orchestrator?.ShipmentAdapter?.IsDomestic != null)
+                {
+                    isDomestic = Orchestrator.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
+                }
+                Title = $"To {FullName} {isDomestic}";
             }
         }
     }

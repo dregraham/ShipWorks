@@ -29,8 +29,8 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// Constructor
         /// </summary>
         public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator, 
-            IMessenger messenger, 
-            IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, 
+            IMessenger messenger,
+            IEnumerable<IRatingPanelGlobalPipeline> globalPipelines,
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
             this.orchestrator = orchestrator;

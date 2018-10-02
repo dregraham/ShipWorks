@@ -35,9 +35,7 @@
 
             </DataTemplate>
             <DataTemplate DataType="{x:Type to:OrderLookupToViewModel}">
-                <Expander Header="To:">
-                    <to:OrderLookupToControl />
-                </Expander>
+                <to:OrderLookupToControl />
             </DataTemplate>
             <DataTemplate DataType="{x:Type labelOptions:OrderLookupLabelOptionsControlViewModel}">
                 <Expander Header="Label Options">

@@ -61,15 +61,18 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel Style="{StaticResource PanelWrapper}" >
-        <ContentControl Content="{Binding .}">
-            <ContentControl.ContentTemplate>
-                <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
-                    <Binding RelativeSource="{RelativeSource Self}" />
-                </MultiBinding>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
-    </StackPanel>
+    <Expander Header="{Binding Title}">
+        <StackPanel Style="{StaticResource PanelWrapper}" >
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplate>
+                    <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                        <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
+    </Expander>
+
 </UserControl>
 
