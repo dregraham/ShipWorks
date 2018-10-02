@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.Reference.ReferenceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance reference:ReferenceViewModel}"
+             FontSize="12"
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="5"
+          IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource FieldLabel}"
+                   Text="Memo 1"/>
+        <TextBox Grid.Row="0" Grid.Column="1"
+                 Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Memo1" />
+            </TextBox.Text>
+        </TextBox>
+        
+        <TextBlock Grid.Row="1" Grid.Column="0"
+                   Style="{StaticResource FieldLabel}"
+                   Text="Memo 2"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Memo2" />
+            </TextBox.Text>
+        </TextBox>
+
+        <TextBlock Grid.Row="2" Grid.Column="0"
+                   Style="{StaticResource FieldLabel}"
+                   Text="Memo 3"/>
+        <TextBox Grid.Row="2" Grid.Column="1"
+                 Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Memo3" />
+            </TextBox.Text>
+        </TextBox>
+    </Grid>
+</UserControl>

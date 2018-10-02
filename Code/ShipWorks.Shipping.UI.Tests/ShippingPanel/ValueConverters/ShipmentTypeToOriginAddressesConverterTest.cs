@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
+using ShipWorks.Shipping.UI.ValueConverters;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

@@ -54,6 +54,9 @@
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ComponentFactory.Krypton.Toolkit.dll</HintPath>
@@ -71,6 +74,9 @@
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.22, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\gong-wpf-dragdrop.1.1.0.22\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -80,17 +86,21 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -100,6 +110,7 @@
     <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -122,16 +133,35 @@
     <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
     <Compile Include="FieldManager\SectionFieldLayout.cs" />
     <Compile Include="FieldManager\SectionLayout.cs" />
-    <Compile Include="Controls\OrderLookupControlHost.cs">
+    <Compile Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml.cs">
+      <DependentUpon>OrderLookupInsuranceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupAddress.xaml.cs">
+      <DependentUpon>OrderLookupAddress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\OrderLookupCustomsControl.xaml.cs">
+      <DependentUpon>OrderLookupCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\OrderLookupCustomsControlViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControl.xaml.cs">
+      <DependentUpon>OrderLookupLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControlViewModel.cs" />
+    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OrderLookupControlHost.Designer.cs">
+    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupControl\OrderLookupControl.xaml.cs">
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupControl\OrderLookupViewModel.cs" />
+    <Compile Include="Controls\From\OrderLookupFromControl.xaml.cs">
+      <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\OrderLookupFromViewModel.cs" />
+    <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
     </Compile>
@@ -149,19 +179,37 @@
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryPanel.Designer.cs">
       <DependentUpon>ShipmentHistoryPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\To\OrderLookupToControl.xaml.cs">
+      <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\OrderLookupToViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
+      <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
+    <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
+    <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
+      <DependentUpon>ReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="IOrderLookupMessageBus.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
+    <Compile Include="IOrderLookupRatingService.cs" />
     <Compile Include="OrderLookupAutoPrintService.cs" />
     <Compile Include="OrderLookupOrderRepository.cs" />
+    <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupSearchMessage.cs" />
-    <Compile Include="OrderLookupSingleScanMessage.cs" />
-    <Compile Include="OrderLookupMessageBus.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryEntityGateway.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryHeader.cs" />
+    <Compile Include="ViewModelOrchestrator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -172,7 +220,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\OrderLookupControlHost.resx">
+    <EmbeddedResource Include="Controls\OrderLookupControl\OrderLookupControlHost.resx">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShipmentHistory\Controls\ShipmentHistoryPanel.resx">
@@ -187,6 +235,14 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
+      <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj">
       <Project>{490753AB-DA9F-4150-AAA4-651ABDBC2B2E}</Project>
@@ -210,11 +266,83 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\OrderLookupAddress.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Customs\OrderLookupCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LabelOptions\OrderLookupLabelOptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OrderLookupControl\OrderLookupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\From\OrderLookupFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\To\OrderLookupToControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\ReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\ScaleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Rating\OrderLookupRatingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Weight\WeightControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\WeightInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupCheckBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupDatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupEditableComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,6 +356,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,7 +2,7 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.OrderLookup
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// Order was found via OrderLookup

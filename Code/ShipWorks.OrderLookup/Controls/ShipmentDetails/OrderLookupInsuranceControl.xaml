@@ -1,0 +1,138 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.OrderLookupInsuranceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
+    xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
+    d:DesignHeight="100"
+    d:DesignWidth="400"
+    Grid.IsSharedSizeScope="False"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/InsuranceStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <valueConverters:TrimEndColonConverter x:Key="TrimEndColon" />
+            <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Button
+                Width="15"
+                Height="15"
+                Margin="4,0,4,0"
+                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}"
+                Background="Transparent"
+                BorderBrush="{x:Null}" 
+                VerticalAlignment="Top" 
+                
+                Template="{StaticResource IconButtonTemplate}">
+                <Path Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" 
+                  Fill="Gray"
+                  Stretch="Fill"/>
+                <Button.ToolTip>
+                    <ToolTip>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="2,4,5,2"
+                                VerticalAlignment="Top"
+                                Stretch="None"
+                                Style="{StaticResource Image.Info20x20}" />
+
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock FontWeight="Bold" Text="{Binding InsuranceInfoTipCaptionText}" />
+                                <TextBlock Text="{Binding InsuranceInfoTipDisplayText}" />
+                            </StackPanel>
+                        </Grid>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <TextBlock
+        
+            Style="{StaticResource FieldLabel}"
+            Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance', Converter={StaticResource TrimEndColon}}" />
+        </StackPanel>
+        <CheckBox
+            Name="IsInsured"
+            Grid.Row="0"
+            Grid.Column="1"
+            VerticalContentAlignment="Center"
+            Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+            IsChecked="{Binding Insurance}"
+            Style="{StaticResource FormCheckBox}" />
+
+        <WrapPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Horizontal"
+            Style="{StaticResource FormWrapPanel}"
+            Visibility="{Binding Insurance, Converter={StaticResource BooleanToVisibility}}">
+            <TextBlock
+                Margin="0,0,4,0"
+                VerticalAlignment="Center"
+                Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value', Converter={StaticResource TrimEndColon}}" />
+            <TextBox
+                VerticalAlignment="Center"
+                IsEnabled="{Binding Insurance}"
+                Style="{StaticResource Grid.TextBox.Number}"
+                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Margin="4,0,4,0"
+                VerticalAlignment="Center"
+                Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}"
+                Visibility="{Binding CostVisibility, FallbackValue=Visible}">
+                <TextBlock.Style>
+                    <Style BasedOn="{StaticResource Grid.Cell}" TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Insurance}" Value="True">
+                                <Setter Property="Foreground" Value="#FF008066" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Insurance}" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <Button
+                VerticalAlignment="Center"
+                Command="{Binding ShowInsurancePromoDialogCommand}"
+                Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"
+                Style="{StaticResource Insurance.Button.Link}"
+                Visibility="{Binding LinkVisibility, FallbackValue=Visible}" />
+        </WrapPanel>
+    </Grid>
+</UserControl>

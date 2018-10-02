@@ -18,5 +18,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets the valid packaging types.
         /// </summary>
         List<FedExPackagingType> GetValidPackagingTypes(FedExServiceType serviceType);
+
+        /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
+        bool IsFimsService(FedExServiceType fedExService);
     }
 }

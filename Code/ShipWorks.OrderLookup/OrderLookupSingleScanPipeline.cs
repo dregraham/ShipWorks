@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ShipWorks.SingleScan;
 using System.Linq;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.OrderLookup
 {
@@ -74,15 +75,18 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.ScannedText);
                 OrderEntity order = null;
 
                 if (orderId.HasValue)
                 {
-                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message);
+                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
                     order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+                    if (order == null)
+                    {
+                        order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                    }
                 }
 
                 SendOrderMessage(order);
@@ -100,10 +104,15 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText);
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.SearchText);
 
-                OrderEntity order = orderId.HasValue ? await orderRepository.GetOrder(orderId.Value) : null;
+                OrderEntity order = null;
+                if (orderId.HasValue)
+                {
+                    order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                }
+
                 SendOrderMessage(order);
             }
             finally

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Data;
 using Interapptive.Shared.Collections;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
+namespace ShipWorks.Shipping.UI.ValueConverters
 {
     /// <summary>
     /// Merge a list of addressess with a selected address

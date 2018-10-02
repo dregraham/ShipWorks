@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
+using ShipWorks.Shipping.UI.ValueConverters;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters

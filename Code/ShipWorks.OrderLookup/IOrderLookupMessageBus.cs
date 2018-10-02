@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
 {
@@ -12,8 +14,22 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order that's in context
         /// </summary>
-        [Obfuscation(Exclude = true)]
         OrderEntity Order { get; }
+
+        /// <summary>
+        /// Does the Shipment allow editing
+        /// </summary>
+        bool ShipmentAllowEditing { get; }
+
+        /// <summary>
+        /// The orders shipment adapter
+        /// </summary>
+        ICarrierShipmentAdapter ShipmentAdapter { get; }
+
+        /// <summary>
+        /// The pacakge adpaters for the order in context
+        /// </summary>
+        IEnumerable<IPackageAdapter> PackageAdapters { get; }
 
         /// <summary>
         /// Event raised when an order property changes

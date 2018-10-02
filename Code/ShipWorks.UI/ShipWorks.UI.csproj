@@ -255,6 +255,7 @@
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
+    <Compile Include="ValueConverters\IntToEnumConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />
     <Compile Include="ValueConverters\CharToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\TrimEndColonConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />

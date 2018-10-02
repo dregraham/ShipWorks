@@ -1,0 +1,164 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.From.OrderLookupFromControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
+    xmlns:sw="http://schemas.shipworks.com/sw"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <sui:OriginAddressListConverter x:Key="OriginAddressList" />
+            <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+            <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
+            <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
+            <UserControl x:Key="AccountLabel">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Account">
+                        <TextBlock.Visibility>
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="MessageBus.ShipmentAdapter.SupportsAccounts" />
+                        </TextBlock.Visibility>
+                    </TextBlock>
+                </StackPanel>
+            </UserControl>
+
+            <UserControl x:Key="AccountComboBox">
+                <StackPanel>
+                    <ui:ShipWorksComboBox
+                        x:Name="AccountDropDown"
+                        ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
+                        DisplayMemberPath="Description"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                        SelectedValuePath="AccountId"
+                        Style="{StaticResource FormComboBox}"
+                        SelectionChanged="UpdateAccountDescription">
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
+                        </ComboBox.SelectedValue>
+                        <ComboBox.IsEnabled>
+                            <Binding Converter="{StaticResource InvertBoolean}" Path="MessageBus.ShipmentAdapter.SupportsRateShopping" />
+                        </ComboBox.IsEnabled>
+                        <ComboBox.Visibility>
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="MessageBus.ShipmentAdapter.SupportsAccounts" />
+                        </ComboBox.Visibility>
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentTypeToAccountsConverter}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                        </ComboBox.ItemsSource>
+                    </ui:ShipWorksComboBox>
+                </StackPanel>
+            </UserControl>
+
+            <UserControl x:Key="BaseAddressConrol">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
+                    <ui:ShipWorksComboBox
+                        x:Name="OriginDropDown"
+                        ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+                        DisplayMemberPath="Key"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                        SelectedValuePath="Value"
+                        Style="{StaticResource StackedFormComboBox}"
+                        SelectionChanged="UpdateOriginDescription">
+                        <ComboBox.ItemsSource>
+                            <Binding
+                                Converter="{StaticResource ShipmentTypeToOriginAddresses}"
+                                Mode="OneWay"
+                                Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedValue>
+                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.OriginOriginID" />
+                        </ComboBox.SelectedValue>
+                    </ui:ShipWorksComboBox>
+
+                    <local:OrderLookupAddress>
+                        <local:OrderLookupAddress.IsEnabled>
+                            <Binding Mode="OneWay" Path="MessageBus.ShipmentAllowEditing" />
+                        </local:OrderLookupAddress.IsEnabled>
+                    </local:OrderLookupAddress>
+                </StackPanel>
+            </UserControl>
+
+            <DataTemplate x:Key="usps">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="85" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{StaticResource Header}"
+                        Text="USPS" />
+
+                    <ContentControl
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="{StaticResource AccountLabel}" />
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="Automatically use the USPS account with the least expensive Rate"
+                        Style="{StaticResource FormCheckBox}"
+                        Click="RateShoppingClicked">
+                        <CheckBox.IsChecked>
+                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
+                        </CheckBox.IsChecked>
+                    </CheckBox>
+                    <StackPanel Grid.Row="2" Grid.Column="1">
+                        <ContentControl Content="{StaticResource AccountComboBox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2">
+                        <ContentControl
+                            Grid.Row="3"
+                            Grid.ColumnSpan="2"
+                            Content="{StaticResource BaseAddressConrol}" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="default">
+                <StackPanel>
+                    <ContentControl Content="{StaticResource BaseAddressConrol}" />
+                </StackPanel>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Expander x:Name="Expander" Header="From">
+        <StackPanel Style="{StaticResource PanelWrapper}">
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplate>
+                    <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
+    </Expander>
+</UserControl>

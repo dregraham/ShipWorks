@@ -9,6 +9,7 @@ using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
@@ -45,6 +46,7 @@ namespace ShipWorks.OrderLookup.Tests
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
+            orderRepository.Setup(o => o.GetOrderID(AnyString)).Returns(123);
 
             Mock<IOnDemandDownloaderFactory> downloadFactory = mock.Mock<IOnDemandDownloaderFactory>();
             downloader = mock.Mock<IOnDemandDownloader>();

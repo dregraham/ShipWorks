@@ -1,0 +1,77 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.To.OrderLookupToControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
+            
+            <UserControl x:Key="BaseAddressControl">
+                <local:OrderLookupAddress>
+                    <local:OrderLookupAddress.IsEnabled>
+                        <Binding Mode="OneWay" Path="MessageBus.ShipmentAllowEditing" />
+                    </local:OrderLookupAddress.IsEnabled>
+                </local:OrderLookupAddress>
+            </UserControl>
+
+            <DataTemplate x:Key="default">
+                <ContentControl Content="{StaticResource BaseAddressControl}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="usps">
+                <StackPanel>
+                    <ContentControl Content="{StaticResource BaseAddressControl}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Style="{StaticResource Header}"
+                            Text="USPS Validation" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Content="Require full address validation"
+                            Style="{StaticResource FormCheckBox}">
+                            <CheckBox.IsChecked>
+                                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
+                            </CheckBox.IsChecked>
+                        </CheckBox>
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel Style="{StaticResource PanelWrapper}" >
+        <ContentControl Content="{Binding .}">
+            <ContentControl.ContentTemplate>
+                <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding RelativeSource="{RelativeSource Self}" />
+                </MultiBinding>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
+    </StackPanel>
+</UserControl>
+
