@@ -46,12 +46,16 @@
                   IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}"
                   Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}"
                   ItemsSource="{Binding Rates}"
-                  SelectedItem="{Binding SelectedRate}"                    
+                  SelectedItem="{Binding SelectedRate}"                        
+                  SelectionUnit="FullRow"
                   CanUserResizeColumns="True"                  
                   HorizontalGridLinesBrush="{StaticResource BorderColor}"
-                  VerticalGridLinesBrush="{StaticResource BorderColor}">
-            <DataGrid.RowStyle>
+                  VerticalGridLinesBrush="{StaticResource BorderColor}">            
+            <DataGrid.RowStyle>                
                 <Style TargetType="DataGridRow">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource SelectionColor}"/>
+                    </Style.Resources>
                     <Setter Property="IsEnabled">
                         <Setter.Value >
                             <MultiBinding Converter="{StaticResource BooleanAnd}">
@@ -62,13 +66,15 @@
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="Height" Value="25" />
+                    <Setter Property="Height" Value="25" />                    
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="Padding" Value="2 3"/>
                     <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto"/>
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type DataGridCell}">
