@@ -47,5 +47,29 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// </summary>
         [Description("List of fields in this section")]
         public IEnumerable<SectionFieldLayout> SectionFields { get; set; } = new List<SectionFieldLayout>();
+
+        /// <summary>
+        /// Copy the given SectionLayout to this instance.  SectionFields are NOT copied.
+        /// </summary>
+        public void Copy(SectionLayout toCopy)
+        {
+            if (!toCopy.Id.Equals(Id, StringComparison.CurrentCultureIgnoreCase))
+            {
+                throw new InvalidOperationException("Copying SectionLayouts with different Ids is not supported.");
+            }
+
+            Name = toCopy.Name;
+            Row = toCopy.Row;
+            Column = toCopy.Column;
+            Selected = toCopy.Selected;
+        }
+
+        /// <summary>
+        /// Create a clone of this SectionLayout
+        /// </summary>
+        public SectionLayout Clone()
+        {
+            return (SectionLayout) MemberwiseClone();
+        }
     }
 }

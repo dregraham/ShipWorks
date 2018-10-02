@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Newtonsoft.Json;
@@ -13,14 +16,16 @@ namespace ShipWorks.OrderLookup.FieldManager
     [Component]
     public class OrderLookupFieldLayoutRepository : IOrderLookupFieldLayoutRepository
     {
-        private IShippingSettings shippingSettings;
+        private readonly IShippingSettings shippingSettings;
+        private readonly IOrderLookupFieldLayoutDefaults defaultsProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFieldLayoutRepository(IShippingSettings shippingSettings)
+        public OrderLookupFieldLayoutRepository(IShippingSettings shippingSettings, IOrderLookupFieldLayoutDefaults defaultsProvider)
         {
             this.shippingSettings = shippingSettings;
+            this.defaultsProvider = defaultsProvider;
         }
 
         /// <summary>
@@ -29,10 +34,30 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// <returns></returns>
         public IEnumerable<SectionLayout> Fetch()
         {
-            string jsonFieldLayouts = shippingSettings.FetchReadOnly().OrderLookupFieldLayout;
+            // Create a clone so we don't modify the defaultsProvider's copy
+            List<SectionLayout> defaultSectionLayouts = defaultsProvider.GetDefaults().Select(d => d.Clone()).ToList();
 
+            string jsonFieldLayouts = shippingSettings.FetchReadOnly().OrderLookupFieldLayout;
             IEnumerable<SectionLayout> fieldLayouts = null;
-            return jsonFieldLayouts.TryParseJson(out fieldLayouts) ? fieldLayouts : Defaults();
+
+            if (!jsonFieldLayouts.TryParseJson(out fieldLayouts))
+            {
+                return defaultSectionLayouts;
+            }
+            
+            foreach (SectionLayout defaultSectionLayout in defaultSectionLayouts.Intersect(fieldLayouts, (opd1, opd2) => opd1.Id == opd2.Id))
+            {
+                SectionLayout sectionLayout = fieldLayouts.First(fl => fl.Id == defaultSectionLayout.Id);
+                defaultSectionLayout.Copy(sectionLayout);
+
+                foreach (SectionFieldLayout defaultSectionFieldLayout in defaultSectionLayout.SectionFields.Intersect(sectionLayout.SectionFields, (opd1, opd2) => opd1.Id == opd2.Id))
+                {
+                    SectionFieldLayout sectionFieldLayout = sectionLayout.SectionFields.First(sf => sf.Id == defaultSectionFieldLayout.Id);
+                    defaultSectionFieldLayout.Copy(sectionFieldLayout);
+                }
+            }
+
+            return defaultSectionLayouts;
         }
 
         /// <summary>
@@ -44,61 +69,6 @@ namespace ShipWorks.OrderLookup.FieldManager
             ShippingSettingsEntity settings = shippingSettings.Fetch();
             settings.OrderLookupFieldLayout = json;
             shippingSettings.Save(settings);
-        }
-
-        /// <summary>
-        /// Load default layouts
-        /// </summary>
-        private IEnumerable<SectionLayout> Defaults()
-        {
-            List<SectionLayout> sectionLayouts = new List<SectionLayout>();
-
-            sectionLayouts.Add(new SectionLayout()
-            {
-                Name = "To Address",
-                Id = "ToAddress",
-                Row = 0,
-                Column = 0,
-                SectionFields = new List<SectionFieldLayout>()
-                    {
-                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                        new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1, Selected = false},
-                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 2 }
-                    }
-            });
-
-            sectionLayouts.Add(new SectionLayout()
-            {
-                Name = "From Address",
-                Id = "FromAddress",
-                Selected = false,
-                Row = 0,
-                Column = 1,
-                SectionFields = new List<SectionFieldLayout>()
-                {
-                    new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                    new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1 },
-                    new SectionFieldLayout() { Id = "City", Name = "City", Row = 2, Selected = false },
-                    new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 3, Selected = false }
-                }
-            });
-
-            sectionLayouts.Add(new SectionLayout()
-            {
-                Name = "Label Options",
-                Id = "LabelOptions",
-                Selected = false,
-                Row = 1,
-                Column = 0,
-                SectionFields = new List<SectionFieldLayout>()
-                {
-                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date", Row = 0 },
-                    new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage", Row = 1, Selected = false  },
-                    new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format", Row = 2 }
-                }
-            });
-
-            return sectionLayouts;
         }
     }
 }

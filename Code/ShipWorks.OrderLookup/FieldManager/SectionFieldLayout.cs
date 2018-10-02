@@ -34,5 +34,28 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// </summary>
         [Description("Row that this field should be in")]
         public int Row { get; set; } = 0;
+
+        /// <summary>
+        /// Copy the given SectionFieldLayout to this instance.
+        /// </summary>
+        public void Copy(SectionFieldLayout toCopy)
+        {
+            if (!toCopy.Id.Equals(Id, StringComparison.CurrentCultureIgnoreCase))
+            {
+                throw new InvalidOperationException("Copying SectionFieldLayouts with different Ids is not supported.");
+            }
+
+            Name = toCopy.Name;
+            Row = toCopy.Row;
+            Selected = toCopy.Selected;
+        }
+
+        /// <summary>
+        /// Create a clone of this SectionFieldLayout
+        /// </summary>
+        public SectionFieldLayout Clone()
+        {
+            return (SectionFieldLayout) MemberwiseClone();
+        }
     }
 }

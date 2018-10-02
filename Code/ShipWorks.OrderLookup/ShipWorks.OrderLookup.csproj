@@ -128,6 +128,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
