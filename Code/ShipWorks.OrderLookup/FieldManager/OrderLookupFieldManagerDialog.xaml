@@ -7,15 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
     Title="Configure Fields"
-    Width="500"
-    Height="650"
+    Width="470"
+    Height="520"
+    MinWidth="250"
+    MinHeight="300"
     d:DataContext="{d:DesignInstance local:OrderLookupFieldManagerDesignerViewModel,
                                      IsDesignTimeCreatable=True}"
+    AllowsTransparency="True"
+    Background="Transparent"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     ResizeMode="CanResizeWithGrip"
     ShowInTaskbar="False"
+    Style="{DynamicResource OrderLookupWindow}"
     WindowStartupLocation="CenterOwner"
-    WindowStyle="ToolWindow"
+    WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
@@ -23,6 +28,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="./FieldManagerStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
             <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
                 <Setter Property="Margin" Value="0" />
             </Style>
@@ -40,14 +46,14 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="8">
+    <Grid Grid.Row="1" Margin="16,8,8,8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock>Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
+        <TextBlock TextWrapping="Wrap">Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
 
         <ScrollViewer Grid.Row="1" Margin="0,8">
             <ItemsControl ItemsSource="{Binding Sections}" Style="{StaticResource FieldListBox}">
@@ -71,7 +77,10 @@
                                             Text="{Binding Name, Mode=OneTime}" />
                                     </CheckBox>
                                 </Expander.Header>
-                                <ItemsControl ItemsSource="{Binding SectionFields, Mode=OneTime}" Style="{StaticResource FieldListBox}">
+                                <ItemsControl
+                                    IsEnabled="{Binding Selected}"
+                                    ItemsSource="{Binding SectionFields, Mode=OneTime}"
+                                    Style="{StaticResource FieldListBox}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Style="{StaticResource FieldBorder}">
