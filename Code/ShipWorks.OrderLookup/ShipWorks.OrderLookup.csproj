@@ -122,6 +122,11 @@
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FieldManager\OrderLookupFieldManagerDialog.xaml.cs">
+      <DependentUpon>OrderLookupFieldManagerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -197,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FieldManager\OrderLookupFieldManagerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

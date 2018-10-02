@@ -72,6 +72,7 @@ using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
+using ShipWorks.OrderLookup;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
@@ -107,6 +108,7 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
 using TD.SandDock;
+using static Interapptive.Shared.Utility.Functional;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
@@ -1020,6 +1022,14 @@ namespace ShipWorks
                 panelDockingArea.Controls.Add(toAdd);
             }
         }
+
+        /// <summary>
+        /// Open the shipping settings window
+        /// </summary>
+        private void OnManageOrderLookupFields(object sender, EventArgs e) =>
+            Using(
+                IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IOrderLookupFieldManager>().ShowManager());
 
         /// <summary>
         /// Execute any logon actions that have been queued

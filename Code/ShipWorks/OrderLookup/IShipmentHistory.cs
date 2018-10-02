@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ShipWorks
+namespace ShipWorks.OrderLookup
 {
     /// <summary>
     /// Shipment history
