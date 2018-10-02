@@ -22,7 +22,7 @@
             <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
-
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
             <UserControl x:Key="AccountLabel">
                 <StackPanel>
                     <TextBlock Style="{StaticResource FieldLabel}" Text="Account">
@@ -41,7 +41,8 @@
                         DisplayMemberPath="Description"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                         SelectedValuePath="AccountId"
-                        Style="{StaticResource FormComboBox}">
+                        Style="{StaticResource FormComboBox}"
+                        SelectionChanged="UpdateAccountDescription">
                         <ComboBox.SelectedValue>
                             <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
                         </ComboBox.SelectedValue>
@@ -70,7 +71,8 @@
                         DisplayMemberPath="Key"
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                         SelectedValuePath="Value"
-                        Style="{StaticResource StackedFormComboBox}">
+                        Style="{StaticResource StackedFormComboBox}"
+                        SelectionChanged="UpdateOriginDescription">
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"
@@ -117,7 +119,8 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Content="Automatically use the USPS account with the least expensive Rate"
-                        Style="{StaticResource FormCheckBox}">
+                        Style="{StaticResource FormCheckBox}"
+                        Click="RateShoppingClicked">
                         <CheckBox.IsChecked>
                             <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
                         </CheckBox.IsChecked>
@@ -146,14 +149,16 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <StackPanel Style="{StaticResource PanelWrapper}">
-        <ContentControl Content="{Binding .}">
-            <ContentControl.ContentTemplate>
-                <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
-                    <Binding RelativeSource="{RelativeSource Self}" />
-                </MultiBinding>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
-    </StackPanel>
+    <Expander x:Name="Expander" Header="From">
+        <StackPanel Style="{StaticResource PanelWrapper}">
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplate>
+                    <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
+    </Expander>
 </UserControl>

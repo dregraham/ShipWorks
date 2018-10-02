@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.OrderLookupControl.OrderLookupControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:controls ="clr-namespace:ShipWorks.OrderLookup.Controls"
              xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
@@ -28,9 +28,9 @@
             
             </Style>
             <DataTemplate DataType="{x:Type from:OrderLookupFromViewModel}">
-                <Expander Header="From:">
-                    <from:OrderLookupFromControl />
-                </Expander>
+
+                <from:OrderLookupFromControl />
+
             </DataTemplate>
             <DataTemplate DataType="{x:Type to:OrderLookupToViewModel}">
                 <Expander Header="To:">
