@@ -39,6 +39,7 @@
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
     <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />

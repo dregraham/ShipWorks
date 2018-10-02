@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.OrderLookup.Controls.FieldEditor
+namespace ShipWorks.OrderLookup.FieldManager
 {
     /// <summary>
     /// Fields in a section layout definition

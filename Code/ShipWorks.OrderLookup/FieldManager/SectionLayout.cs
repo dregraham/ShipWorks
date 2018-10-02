@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.OrderLookup.Controls.FieldEditor
+namespace ShipWorks.OrderLookup.FieldManager
 {
     /// <summary>
     /// Section layout definition
