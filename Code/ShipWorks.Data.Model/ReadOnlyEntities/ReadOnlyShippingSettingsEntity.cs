@@ -433,7 +433,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The OrderLookupFieldLayout property of the Entity ShippingSettings<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingSettings"."OrderLookupFieldLayout"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4000<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String OrderLookupFieldLayout { get; }
         

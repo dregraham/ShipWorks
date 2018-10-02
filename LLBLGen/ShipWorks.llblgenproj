@@ -2625,7 +2625,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
-          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="4000" FieldIndex="54" />
+          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="54" />
           <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
           <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="53" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
@@ -4351,7 +4351,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-02T11:58:47.8592372Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-02T21:05:28.810239Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8190,7 +8190,7 @@
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                     <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
-                    <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="4000" />
+                    <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">

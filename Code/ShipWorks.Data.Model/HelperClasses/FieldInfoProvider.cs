@@ -2987,7 +2987,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineApiKey", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineApiKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
-			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 4000, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()
