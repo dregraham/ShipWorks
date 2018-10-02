@@ -64,7 +64,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Expander Header="{Binding Title}">
+    <Expander Header="{Binding Title}" IsExpanded="True">
         <StackPanel Style="{StaticResource PanelWrapper}" >
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplate>
