@@ -19,6 +19,9 @@
             </ResourceDictionary.MergedDictionaries>
 
             <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <valueConverters:TrimEndColonConverter x:Key="TrimEndColon" />
+            <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -30,43 +33,21 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Style="{StaticResource FieldLabel}"
-            Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance'}" />
-        <CheckBox
-            Name="IsInsured"
-            Grid.Row="0"
-            Grid.Column="1"
-            VerticalContentAlignment="Center"
-            Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
-            IsChecked="{Binding Insurance}"
-            Style="{StaticResource FormCheckBox}" />
-
-        <WrapPanel
-            Grid.Row="1"
-            Grid.Column="1"
-            Orientation="Horizontal"
-            Style="{StaticResource FormWrapPanel}">
-            <TextBlock
-                Margin="0,0,4,0"
-                VerticalAlignment="Center"
-                Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}" />
-            <TextBox
-                VerticalAlignment="Center"
-                IsEnabled="{Binding Insurance}"
-                Style="{StaticResource Grid.TextBox.Number}"
-                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
-
-            <Image
-                Width="12"
-                Height="12"
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Button
+                Width="15"
+                Height="15"
                 Margin="4,0,4,0"
-                Style="{StaticResource Image.InfoTip}"
-                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}">
-                <Image.ToolTip>
+                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}"
+                Background="Transparent"
+                BorderBrush="{x:Null}" 
+                VerticalAlignment="Top" 
+                
+                Template="{StaticResource IconButtonTemplate}">
+                <Path Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" 
+                  Fill="Gray"
+                  Stretch="Fill"/>
+                <Button.ToolTip>
                     <ToolTip>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -95,8 +76,37 @@
                             </StackPanel>
                         </Grid>
                     </ToolTip>
-                </Image.ToolTip>
-            </Image>
+                </Button.ToolTip>
+            </Button>
+            <TextBlock
+        
+            Style="{StaticResource FieldLabel}"
+            Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance', Converter={StaticResource TrimEndColon}}" />
+        </StackPanel>
+        <CheckBox
+            Name="IsInsured"
+            Grid.Row="0"
+            Grid.Column="1"
+            VerticalContentAlignment="Center"
+            Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+            IsChecked="{Binding Insurance}"
+            Style="{StaticResource FormCheckBox}" />
+
+        <WrapPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Horizontal"
+            Style="{StaticResource FormWrapPanel}"
+            Visibility="{Binding Insurance, Converter={StaticResource BooleanToVisibility}}">
+            <TextBlock
+                Margin="0,0,4,0"
+                VerticalAlignment="Center"
+                Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value', Converter={StaticResource TrimEndColon}}" />
+            <TextBox
+                VerticalAlignment="Center"
+                IsEnabled="{Binding Insurance}"
+                Style="{StaticResource Grid.TextBox.Number}"
+                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
                 Margin="4,0,4,0"
