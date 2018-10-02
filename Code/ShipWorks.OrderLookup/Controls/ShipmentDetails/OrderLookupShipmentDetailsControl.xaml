@@ -10,7 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:OrderLookupShipmentDetailsViewModel}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -51,7 +52,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Service:" />
+                        Text="Service" />
 
                     <ui:ShipWorksComboBox
                         Grid.Row="0"
@@ -70,7 +71,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Confirmation:" />
+                        Text="Confirmation" />
 
                     <ui:ShipWorksComboBox
                         Grid.Row="1"
@@ -89,7 +90,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Packaging:" />
+                        Text="Packaging" />
 
                     <ui:ShipWorksComboBox
                         Grid.Row="2"
@@ -126,7 +127,7 @@
                         Grid.Row="5"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Weight:" />
+                        Text="Weight" />
                     <ui:WeightControl
                         Grid.Row="5"
                         Grid.Column="1"
@@ -139,7 +140,7 @@
                         Grid.Row="6"
                         Grid.Column="0"
                         Style="{DynamicResource FieldLabel}"
-                        Text="Dimensions:" />
+                        Text="Dimensions" />
 
                     <StackPanel
                         Grid.Row="6"

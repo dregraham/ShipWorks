@@ -34,7 +34,8 @@
                                 VerticalAlignment="Center"
                                 MaxWeight="{TemplateBinding MaxWeight}"
                                 Style="{StaticResource OrderLookupWeightInput}"
-                                Weight="{Binding Weight, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                                Weight="{Binding Weight, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
+                                FontFamily="/ShipWorks.OrderLookup;component/#Roboto"/>
                             <ui:ScaleButton
                                 x:Name="PART_ScaleButton"
                                 Grid.Column="1"
