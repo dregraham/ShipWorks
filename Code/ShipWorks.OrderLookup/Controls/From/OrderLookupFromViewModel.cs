@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Business;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.OrderLookup.Controls.From
@@ -136,14 +137,15 @@ namespace ShipWorks.OrderLookup.Controls.From
         {
             ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentAdapter.ShipmentTypeCode;
 
-            string OriginDescription = shipmentTypeManager.Get(shipmentTypeCode)
+            string originDescription = shipmentTypeManager.Get(shipmentTypeCode)
                 .GetOrigins().First(w => w.Value == Orchestrator.ShipmentAdapter.Shipment.OriginOriginID).Key;
 
-            string AccountDescription = carrierAccountRetrieverFactory.Create(shipmentTypeCode)
-                .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment).AccountDescription;
+            ICarrierAccount account = carrierAccountRetrieverFactory.Create(shipmentTypeCode)
+                .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment);
 
-            string headerAccountText = RateShop ? "(Rate Shopping)" : AccountDescription;
-            Title = $"From Account: {headerAccountText}, {OriginDescription}";
+            string accountDescription = account == null ? "No Accounts" : account.AccountDescription;
+            string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
+            Title = $"From Account: {headerAccountText}, {originDescription}";
         }
     }
 }
