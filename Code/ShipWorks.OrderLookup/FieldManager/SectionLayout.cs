@@ -25,18 +25,6 @@ namespace ShipWorks.OrderLookup.FieldManager
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
-        /// Row that this section should be in
-        /// </summary>
-        [Description("Row that this section should be in")]
-        public int Row { get; set; } = 0;
-
-        /// <summary>
-        /// Column that this section should be in
-        /// </summary>
-        [Description("Column that this section should be in")]
-        public int Column { get; set; } = 0;
-
-        /// <summary>
         /// Is this section selected?
         /// </summary>
         [Description("Is this section selected")]
