@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.OrderLookup.FieldManager
 {
     /// <summary>
     /// Class for retrieving default order lookup field layouts
     /// </summary>
+    [Component]
     public class OrderLookupFieldLayoutDefaults : IOrderLookupFieldLayoutDefaults
     {
         /// <summary>
@@ -22,7 +24,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 {
                     new SectionFieldLayout() { Id = "USPSAccountSelector", Name = "USPS - Account Selector" },
                     new SectionFieldLayout() { Id = "FullName", Name = "Full Name" },
-                    new SectionFieldLayout() { Id = "Company", Name = "Company" }, 
+                    new SectionFieldLayout() { Id = "Company", Name = "Company" },
                     new SectionFieldLayout() { Id = "Street", Name = "Street" },
                     new SectionFieldLayout() { Id = "City", Name = "City" },
                     new SectionFieldLayout() { Id = "StateProvince", Name = "State Province" },
@@ -51,7 +53,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                     new SectionFieldLayout() { Id = "Country", Name = "Country" },
                     new SectionFieldLayout() { Id = "Email", Name = "Email" },
                     new SectionFieldLayout() { Id = "Phone", Name = "Phone" },
-                    new SectionFieldLayout() { Id = "USPSRequireFullAddressValidation", Name = "USPS - Require full address validation" }, 
+                    new SectionFieldLayout() { Id = "USPSRequireFullAddressValidation", Name = "USPS - Require full address validation" },
                     new SectionFieldLayout() { Id = "AddressType", Name = "Address Type" }
                 }
             });
