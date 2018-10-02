@@ -8,22 +8,22 @@
     xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
     d:DesignWidth="800"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type from:OrderLookupFromViewModel}}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <sui:OriginAddressListConverter x:Key="OriginAddressList" />
             <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
             <UserControl x:Key="AccountLabel">
                 <StackPanel>
                     <TextBlock Style="{StaticResource FieldLabel}" Text="Account">
@@ -65,7 +65,7 @@
                 </StackPanel>
             </UserControl>
 
-            <UserControl x:Key="BaseAddressConrol">
+            <UserControl x:Key="BaseAddressControl">
                 <StackPanel>
                     <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
                     <ui:ShipWorksComboBox
@@ -140,16 +140,14 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2">
                         <ContentControl
-                            Grid.Row="3"
-                            Grid.ColumnSpan="2"
-                            Content="{StaticResource BaseAddressConrol}" />
+                            Content="{StaticResource BaseAddressControl}" />
                     </StackPanel>
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="default">
                 <StackPanel>
-                    <ContentControl Content="{StaticResource BaseAddressConrol}" />
+                    <ContentControl Content="{StaticResource BaseAddressControl}" />
                 </StackPanel>
             </DataTemplate>
 
