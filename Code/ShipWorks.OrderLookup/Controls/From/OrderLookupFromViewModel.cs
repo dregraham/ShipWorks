@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
             Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
 
-            Title = "From";
+            UpdateTitle();
         }
 
         /// <summary>
@@ -135,17 +135,35 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         private void UpdateTitle()
         {
-            ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentAdapter.ShipmentTypeCode;
+            string headerAccountText = string.Empty;
+            string AccountDescription = string.Empty;
+            string newTitle = "From";
 
-            string originDescription = shipmentTypeManager.Get(shipmentTypeCode)
-                .GetOrigins().First(w => w.Value == Orchestrator.ShipmentAdapter.Shipment.OriginOriginID).Key;
+            if (Orchestrator.ShipmentAdapter != null)
+            {
+                ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentAdapter.ShipmentTypeCode;
+                long originID = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
 
-            ICarrierAccount account = carrierAccountRetrieverFactory.Create(shipmentTypeCode)
-                .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment);
+                List<KeyValuePair<string, long>> origins = shipmentTypeManager.Get(shipmentTypeCode).GetOrigins();
 
-            string accountDescription = account == null ? "No Accounts" : account.AccountDescription;
-            string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
-            Title = $"From Account: {headerAccountText}, {originDescription}";
+                string OriginDescription = string.Empty;
+                if (origins.Any(o => o.Value == originID))
+                {
+                    OriginDescription = origins.First(w => w.Value == originID).Key;
+                }
+
+                AccountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
+                    .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+
+                headerAccountText = RateShop ? "(Rate Shopping)" : AccountDescription;
+
+                if (!string.IsNullOrWhiteSpace(headerAccountText) && !string.IsNullOrWhiteSpace(OriginDescription))
+                {
+                    newTitle = $"From Account: {headerAccountText}, {OriginDescription}";
+                }
+            }
+
+            Title = newTitle;
         }
     }
 }

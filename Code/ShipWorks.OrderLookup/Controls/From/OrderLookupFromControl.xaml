@@ -125,6 +125,9 @@
                         Grid.Column="1"
                         Content="Automatically use the USPS account with the least expensive Rate"
                         Style="{StaticResource FormCheckBox}">
+                        <CheckBox.IsEnabled>
+                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                        </CheckBox.IsEnabled>
                         <CheckBox.IsChecked>
                             <Binding Path="RateShop" />
                         </CheckBox.IsChecked>
