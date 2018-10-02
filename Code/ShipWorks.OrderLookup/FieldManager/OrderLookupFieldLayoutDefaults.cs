@@ -2,6 +2,9 @@
 
 namespace ShipWorks.OrderLookup.FieldManager
 {
+    /// <summary>
+    /// Class for retrieving default order lookup field layouts
+    /// </summary>
     public class OrderLookupFieldLayoutDefaults : IOrderLookupFieldLayoutDefaults
     {
         /// <summary>
@@ -15,7 +18,6 @@ namespace ShipWorks.OrderLookup.FieldManager
             {
                 Name = "From Address",
                 Id = "FromAddress",
-                Selected = false,
                 SectionFields = new List<SectionFieldLayout>()
                 {
                     new SectionFieldLayout() { Id = "USPSAccountSelector", Name = "USPS - Account Selector" },
@@ -113,6 +115,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = "FedExSignatureAndReference",
                 SectionFields = new List<SectionFieldLayout>()
                 {
+                    new SectionFieldLayout() { Id = "SignatureRequired", Name = "Signature Required" },
                     new SectionFieldLayout() { Id = "ReferenceNumber", Name = "Reference Number" },
                     new SectionFieldLayout() { Id = "InvoiceNumber", Name = "Invoice Number" },
                     new SectionFieldLayout() { Id = "PostOfficeNumber", Name = "Post Office Number" },
@@ -153,7 +156,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 {
                     new SectionFieldLayout() { Id = "Reference", Name = "Reference" },
                     new SectionFieldLayout() { Id = "Reference2", Name = "Reference 2" },
-                    new SectionFieldLayout() { Id = "Instruction", Name = "Instruction" }
+                    new SectionFieldLayout() { Id = "Instructions", Name = "Instructions" }
                 }
             });
 

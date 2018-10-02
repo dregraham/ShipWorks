@@ -59,7 +59,7 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
         public void Fetch_ReturnsCorrectOrderLookupFieldLayoutValue_WhenDbValueHasExtraSectionLayout()
         {
             List<SectionLayout> defaultSectionLayouts = Defaults().ToList();
-            defaultSectionLayouts.Add(new SectionLayout() { Id = "asdf", Column = 9, Name = "testing", Row = 3, Selected = false, SectionFields = Enumerable.Empty<SectionFieldLayout>()});
+            defaultSectionLayouts.Add(new SectionLayout() { Id = "asdf", Name = "testing", Selected = false, SectionFields = Enumerable.Empty<SectionFieldLayout>()});
 
             string shippingSettingsJson = JsonConvert.SerializeObject(defaultSectionLayouts);
             shippingSettings.Setup(ss => ss.FetchReadOnly()).Returns(new ShippingSettingsEntity() { OrderLookupFieldLayout = shippingSettingsJson });
@@ -93,7 +93,7 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
             shippingSettings.Setup(ss => ss.FetchReadOnly()).Returns(new ShippingSettingsEntity() { OrderLookupFieldLayout = shippingSettingsJson });
 
             List<SectionLayout> defaultsWithNewSectionLayout = DefaultsWithDifferentValues().ToList();
-            defaultsWithNewSectionLayout.Add(new SectionLayout() { Id = "asdf", Column = 9, Name = "testing", Row = 3, Selected = false, SectionFields = Enumerable.Empty<SectionFieldLayout>() });
+            defaultsWithNewSectionLayout.Add(new SectionLayout() { Id = "asdf", Name = "testing", Selected = false, SectionFields = Enumerable.Empty<SectionFieldLayout>() });
 
             defaultsProvider.Setup(dp => dp.GetDefaults()).Returns(defaultsWithNewSectionLayout);
 
@@ -157,14 +157,12 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
             {
                 Name = "To Address",
                 Id = "ToAddress",
-                Row = 0,
-                Column = 0,
                 Selected = true,
                 SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                        new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1, Selected = false},
-                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 2 }
+                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name"},
+                        new SectionFieldLayout() { Id = "Street", Name = "Street", Selected = false},
+                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province" }
                     }
             });
 
@@ -173,14 +171,12 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Name = "From Address",
                 Id = "FromAddress",
                 Selected = false,
-                Row = 0,
-                Column = 1,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                    new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1 },
-                    new SectionFieldLayout() { Id = "City", Name = "City", Row = 2, Selected = false },
-                    new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 3, Selected = false }
+                    new SectionFieldLayout() { Id = "FullName", Name = "Full Name" },
+                    new SectionFieldLayout() { Id = "Street", Name = "Street"},
+                    new SectionFieldLayout() { Id = "City", Name = "City", Selected = false },
+                    new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Selected = false }
                 }
             });
 
@@ -189,13 +185,11 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Name = "Label Options",
                 Id = "LabelOptions",
                 Selected = false,
-                Row = 1,
-                Column = 0,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date", Row = 0 },
-                    new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage", Row = 1, Selected = false  },
-                    new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format", Row = 2 }
+                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date"},
+                    new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage", Selected = false },
+                    new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format" }
                 }
             });
 
@@ -219,14 +213,12 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
             {
                 Name = "To Address New",
                 Id = "ToAddress",
-                Row = 10,
-                Column = 10,
                 Selected = false,
                 SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name New", Row = 2, Selected = false },
-                        new SectionFieldLayout() { Id = "Street", Name = "Street New", Row = 2, Selected = true},
-                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province New", Row = 22, Selected = false }
+                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name New", Selected = false },
+                        new SectionFieldLayout() { Id = "Street", Name = "Street New", Selected = true},
+                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province New", Selected = false }
                     }
             });
 
@@ -235,14 +227,12 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Name = "From Address New",
                 Id = "FromAddress",
                 Selected = false,
-                Row = 30,
-                Column = 31,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "FullName", Name = "Full Name New", Row = 30, Selected = false },
-                    new SectionFieldLayout() { Id = "Street", Name = "Street New", Row = 31, Selected = false},
-                    new SectionFieldLayout() { Id = "City", Name = "City New", Row = 32, Selected = true },
-                    new SectionFieldLayout() { Id = "StateProvince", Name = "State Province New", Row = 33, Selected = true }
+                    new SectionFieldLayout() { Id = "FullName", Name = "Full Name New", Selected = false },
+                    new SectionFieldLayout() { Id = "Street", Name = "Street New", Selected = false},
+                    new SectionFieldLayout() { Id = "City", Name = "City New", Selected = true },
+                    new SectionFieldLayout() { Id = "StateProvince", Name = "State Province New", Selected = true }
                 }
             });
 
@@ -251,13 +241,11 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Name = "Label Options New",
                 Id = "LabelOptions",
                 Selected = false,
-                Row = 41,
-                Column = 40,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date New", Row = 40, Selected = false },
-                    new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage New", Row = 41, Selected = true  },
-                    new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format New", Row = 42, Selected = false }
+                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date New", Selected = false },
+                    new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage New", Selected = true  },
+                    new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format New", Selected = false }
                 }
             });
 

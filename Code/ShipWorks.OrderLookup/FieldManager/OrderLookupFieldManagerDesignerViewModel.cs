@@ -19,13 +19,11 @@ namespace ShipWorks.OrderLookup.FieldManager
                 {
                     Name = "To Address",
                     Id = "ToAddress",
-                    Row = 0,
-                    Column = 0,
                     SectionFields = new List<SectionFieldLayout>()
                         {
-                            new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                            new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1, Selected = false},
-                            new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 2 }
+                            new SectionFieldLayout() { Id = "FullName", Name = "Full Name" },
+                            new SectionFieldLayout() { Id = "Street", Name = "Street", Selected = false},
+                            new SectionFieldLayout() { Id = "StateProvince", Name = "State Province" }
                         }
                 },
                 new SectionLayout()
@@ -33,14 +31,12 @@ namespace ShipWorks.OrderLookup.FieldManager
                     Name = "From Address",
                     Id = "FromAddress",
                     Selected = false,
-                    Row = 0,
-                    Column = 1,
                     SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name", Row = 0 },
-                        new SectionFieldLayout() { Id = "Street", Name = "Street", Row = 1 },
-                        new SectionFieldLayout() { Id = "City", Name = "City", Row = 2, Selected = false },
-                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Row = 3, Selected = false }
+                        new SectionFieldLayout() { Id = "FullName", Name = "Full Name"},
+                        new SectionFieldLayout() { Id = "Street", Name = "Street"},
+                        new SectionFieldLayout() { Id = "City", Name = "City", Selected = false },
+                        new SectionFieldLayout() { Id = "StateProvince", Name = "State Province", Selected = false }
                     }
                 },
                 new SectionLayout()
@@ -48,13 +44,11 @@ namespace ShipWorks.OrderLookup.FieldManager
                     Name = "Label Options",
                     Id = "LabelOptions",
                     Selected = false,
-                    Row = 1,
-                    Column = 0,
                     SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date", Row = 0 },
-                        new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage", Row = 1, Selected = false  },
-                        new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format", Row = 2 }
+                        new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date" },
+                        new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage", Selected = false  },
+                        new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format" }
                     }
                 }
             };
