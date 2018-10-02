@@ -105,6 +105,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\FieldEditor\SectionFieldLayout.cs" />
+    <Compile Include="Controls\FieldEditor\SectionLayout.cs" />
     <Compile Include="Controls\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
