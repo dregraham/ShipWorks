@@ -155,7 +155,7 @@
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="10" />
         <Setter Property="FontFamily" Value="Tahoma" />
         <Setter Property="FontSize" Value="8.25 pt" />
         <Setter Property="FontStyle" Value="Normal" />
@@ -178,8 +178,9 @@
                                           FontStyle="Normal" 
                                           FontSize="12" 
                                           FontStretch="{TemplateBinding FontStretch}"
-                                          FontFamily="/ShipWorks.OrderLookup;component/#Roboto" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource Expander.DownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Visibility="Collapsed" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                          FontFamily="/ShipWorks.OrderLookup;component/#Roboto" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Style="{StaticResource Expander.DownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Visibility="Collapsed" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"/>
                         </DockPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
