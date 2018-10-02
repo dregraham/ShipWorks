@@ -7,7 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 
-namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
+namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
     /// <summary>
     /// Main view model for the OrderLookup UI Mode
@@ -17,7 +17,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly IOrderLookupMessageBus messageBus;
 
         ObservableCollection<INotifyPropertyChanged> column1;
         ObservableCollection<INotifyPropertyChanged> column2;
@@ -26,12 +25,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModel(IOrderLookupMessageBus messageBus,
+        public OrderLookupViewModel(IViewModelOrchestrator orchestrator,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
             IIndex<OrderLookupPanels, INotifyPropertyChanged> lookupPanels)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.messageBus = messageBus;
+            Orchestrator = orchestrator;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
             Column1 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>()
@@ -89,5 +88,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
             get => column3;
             set => handler.Set(nameof(Column3), ref column3, value);
         }
+        public IViewModelOrchestrator Orchestrator { get; private set; }
     }
 }

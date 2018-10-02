@@ -100,7 +100,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         private void UpdateExpanderHeader()
         {
-            bool rateShop = (DataContext as OrderLookupFromViewModel)?.MessageBus.ShipmentAdapter.SupportsRateShopping ?? false;
+            bool rateShop = (DataContext as OrderLookupFromViewModel)?.Orchestrator.ShipmentAdapter.SupportsRateShopping ?? false;
 
             string headerAccountText = rateShop ? "(Rate Shopping)" : AccountDescription;
             Expander.Header = "From Account: " + headerAccountText + ", " + OriginDescription;

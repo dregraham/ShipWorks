@@ -27,7 +27,7 @@
                 <StackPanel>
                     <TextBlock Style="{StaticResource FieldLabel}" Text="Account">
                         <TextBlock.Visibility>
-                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="MessageBus.ShipmentAdapter.SupportsAccounts" />
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="Orchestrator.ShipmentAdapter.SupportsAccounts" />
                         </TextBlock.Visibility>
                     </TextBlock>
                 </StackPanel>
@@ -44,19 +44,19 @@
                         Style="{StaticResource FormComboBox}"
                         SelectionChanged="UpdateAccountDescription">
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.AccountId" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.AccountId" />
                         </ComboBox.SelectedValue>
                         <ComboBox.IsEnabled>
-                            <Binding Converter="{StaticResource InvertBoolean}" Path="MessageBus.ShipmentAdapter.SupportsRateShopping" />
+                            <Binding Converter="{StaticResource InvertBoolean}" Path="Orchestrator.ShipmentAdapter.SupportsRateShopping" />
                         </ComboBox.IsEnabled>
                         <ComboBox.Visibility>
-                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="MessageBus.ShipmentAdapter.SupportsAccounts" />
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="Orchestrator.ShipmentAdapter.SupportsAccounts" />
                         </ComboBox.Visibility>
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                 Mode="OneWay"
-                                Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                                Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                     </ui:ShipWorksComboBox>
                 </StackPanel>
@@ -77,16 +77,16 @@
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"
                                 Mode="OneWay"
-                                Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                                Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.OriginOriginID" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.OriginOriginID" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
                     <local:OrderLookupAddress>
                         <local:OrderLookupAddress.IsEnabled>
-                            <Binding Mode="OneWay" Path="MessageBus.ShipmentAllowEditing" />
+                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
                         </local:OrderLookupAddress.IsEnabled>
                     </local:OrderLookupAddress>
                 </StackPanel>
@@ -122,7 +122,7 @@
                         Style="{StaticResource FormCheckBox}"
                         Click="RateShoppingClicked">
                         <CheckBox.IsChecked>
-                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
                         </CheckBox.IsChecked>
                     </CheckBox>
                     <StackPanel Grid.Row="2" Grid.Column="1">
@@ -154,7 +154,7 @@
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                        <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                         <Binding RelativeSource="{RelativeSource Self}" />
                     </MultiBinding>
                 </ContentControl.ContentTemplate>

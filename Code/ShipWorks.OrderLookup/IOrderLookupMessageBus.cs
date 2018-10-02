@@ -9,7 +9,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
-    public interface IOrderLookupMessageBus
+    public interface IViewModelOrchestrator
     {
         /// <summary>
         /// The order that's in context
@@ -40,5 +40,10 @@ namespace ShipWorks.OrderLookup
         /// Raise property changed event when an order property changes
         /// </summary>
         void RaisePropertyChanged(string propertyName);
+
+        /// <summary>
+        /// Saves changes to the database
+        /// </summary>
+        void SaveToDatabase();
     }
 }

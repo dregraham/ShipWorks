@@ -16,18 +16,17 @@ namespace ShipWorks.OrderLookup.Controls.To
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
     public class OrderLookupToViewModel : AddressViewModel
     {
-        private readonly IOrderLookupMessageBus messageBus;
         IDisposable autoSave;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupToViewModel(IOrderLookupMessageBus messageBus, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupToViewModel(IViewModelOrchestrator orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
-            :base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
+            : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
-            this.messageBus = messageBus;
-            this.messageBus.PropertyChanged += MessageBusPropertyChanged;
+            Orchestrator = orchestrator;
+            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
 
             IsAddressValidationEnabled = true;
         }
@@ -36,40 +35,37 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus
-        {
-            get { return messageBus; }
-        }
+        public IViewModelOrchestrator Orchestrator { get; private set; }        
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
         /// </summary>
         private void Save()
         {
-            if (MessageBus?.ShipmentAdapter?.Shipment?.ShipPerson != null)
+            if (Orchestrator?.ShipmentAdapter?.Shipment?.ShipPerson != null)
             {
-                SaveToEntity(MessageBus.ShipmentAdapter.Shipment.ShipPerson);
+                SaveToEntity(Orchestrator.ShipmentAdapter.Shipment.ShipPerson);
             }
         }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (MessageBus.Order == null)
+            if (Orchestrator.Order == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "Order" && messageBus.Order != null)
+            if (e.PropertyName == "Order" && Orchestrator.Order != null)
             {
-                base.Load(messageBus.ShipmentAdapter.Shipment.ShipPerson, messageBus.ShipmentAdapter.Store);
+                base.Load(Orchestrator.ShipmentAdapter.Shipment.ShipPerson, Orchestrator.ShipmentAdapter.Store);
 
                 autoSave?.Dispose();
                 autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
 
-                handler.RaisePropertyChanged(nameof(MessageBus));
+                handler.RaisePropertyChanged(nameof(Orchestrator));
             }
         }
     }

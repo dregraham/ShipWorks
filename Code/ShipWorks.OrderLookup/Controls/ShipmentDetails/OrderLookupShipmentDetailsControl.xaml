@@ -53,7 +53,7 @@
 
                     <TextBlock Grid.Row="0"
                                Grid.Column="1"
-                               Text="{Binding MessageBus.Order.RequestedShipping, UpdateSourceTrigger=PropertyChanged}"
+                               Text="{Binding Orchestrator.Order.RequestedShipping, UpdateSourceTrigger=PropertyChanged}"
                                Margin="10 0 0 10"
                                HorizontalAlignment="Left"
                                Style="{StaticResource FieldLabel}"/>
@@ -70,7 +70,7 @@
                                           SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                                           SelectedValuePath="Key"
                                           Style="{StaticResource FormComboBox}"
-                                          SelectedValue="{Binding MessageBus.ShipmentAdapter.Shipment.ShipmentType, UpdateSourceTrigger=PropertyChanged}">
+                                          SelectedValue="{Binding Orchestrator.ShipmentAdapter.Shipment.ShipmentType, UpdateSourceTrigger=PropertyChanged}">
                     </ui:ShipWorksComboBox>
 
                     <TextBlock
@@ -88,7 +88,7 @@
                         SelectedValuePath="Key"
                         Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.ServiceType" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.ServiceType" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
@@ -107,7 +107,7 @@
                         SelectedValuePath="Key"
                         Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Confirmation" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Confirmation" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
@@ -127,7 +127,7 @@
                         SelectedValuePath="Key"
                         Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
-                            <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.PackagingType" />
+                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.PackagingType" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
@@ -139,11 +139,11 @@
                         <CheckBox
                             Margin="0,0,5,0"
                             Content="Non-Machinable"
-                            IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NonMachinable, UpdateSourceTrigger=PropertyChanged}" 
+                            IsChecked="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.NonMachinable, UpdateSourceTrigger=PropertyChanged}" 
                             Style="{StaticResource FormCheckBox}"/>
 
                         <CheckBox Content="Non-Rectangular"
-                                  IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.NonRectangular, UpdateSourceTrigger=PropertyChanged}"
+                                  IsChecked="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.NonRectangular, UpdateSourceTrigger=PropertyChanged}"
                                   Margin="0"
                                   Style="{StaticResource FormCheckBox}"/>
                     </StackPanel>
@@ -159,7 +159,7 @@
                         AcceptApplyWeightKeyboardShortcut="True"
                         ErrorMessage="{Binding WeightErrorMessage}"
                         Style="{StaticResource OrderLookupWeightControl}"
-                        Weight="{Binding MessageBus.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                        Weight="{Binding Orchestrator.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
                     <TextBlock
                         Grid.Row="7"
@@ -181,7 +181,7 @@
                             <ComboBox.SelectedValue>
                                 <Binding
                                     Mode="TwoWay"
-                                    Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsProfileID"
+                                    Path="Orchestrator.ShipmentAdapter.Shipment.Postal.DimsProfileID"
                                     UpdateSourceTrigger="PropertyChanged" />
                             </ComboBox.SelectedValue>
                         </ui:ShipWorksComboBox>
@@ -209,7 +209,7 @@
                             Margin="0,0,5,0"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsLength, Mode=TwoWay}" />
+                            Text="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.DimsLength, Mode=TwoWay}" />
 
                         <TextBox
                             Grid.Column="1"
@@ -217,7 +217,7 @@
                             Margin="0,0,5,0"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
+                            Text="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
 
                         <TextBox
                             Grid.Column="2"
@@ -225,7 +225,7 @@
                             Margin="0,0,5,0"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
+                            Text="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
 
                         <TextBlock
                             Grid.Column="3"
@@ -252,18 +252,18 @@
                         <CheckBox
                             Grid.Column="1"
                             Margin="5,0,0,0"
-                            IsChecked="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight}"
+                            IsChecked="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.DimsAddWeight}"
                             Style="{StaticResource FormCheckBox}" />
 
                         <TextBox
                             Grid.Column="2"
                             Margin="5,0,0,0"
                             Style="{StaticResource FormTextBox}"
-                            Text="{Binding MessageBus.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding Orchestrator.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.IsEnabled>
                                 <MultiBinding Converter="{StaticResource BooleanComparisonConverter}">
                                     <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
-                                    <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.DimsAddWeight" />
+                                    <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.DimsAddWeight" />
                                 </MultiBinding>
                             </TextBox.IsEnabled>
                         </TextBox>
@@ -283,7 +283,7 @@
         <ContentControl Content="{Binding .}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                     <Binding RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
             </ContentControl.ContentTemplate>

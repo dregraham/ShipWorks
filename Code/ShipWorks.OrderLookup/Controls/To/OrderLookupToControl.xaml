@@ -18,7 +18,7 @@
             <UserControl x:Key="BaseAddressControl">
                 <local:OrderLookupAddress>
                     <local:OrderLookupAddress.IsEnabled>
-                        <Binding Mode="OneWay" Path="MessageBus.ShipmentAllowEditing" />
+                        <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
                     </local:OrderLookupAddress.IsEnabled>
                 </local:OrderLookupAddress>
             </UserControl>
@@ -52,7 +52,7 @@
                             Content="Require full address validation"
                             Style="{StaticResource FormCheckBox}">
                             <CheckBox.IsChecked>
-                                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
+                                <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
                             </CheckBox.IsChecked>
                         </CheckBox>
                     </Grid>
@@ -65,7 +65,7 @@
         <ContentControl Content="{Binding .}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
+                    <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
                     <Binding RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
             </ContentControl.ContentTemplate>

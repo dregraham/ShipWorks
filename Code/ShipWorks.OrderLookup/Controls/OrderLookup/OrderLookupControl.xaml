@@ -1,35 +1,34 @@
-﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.OrderLookupControl.OrderLookupControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
-             xmlns:controls ="clr-namespace:ShipWorks.OrderLookup.Controls"
-             xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
-             xmlns:to="clr-namespace:ShipWorks.OrderLookup.Controls.To"
-             xmlns:details="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
-             xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:labelOptions="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
-             xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
-             xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
-             xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
-             xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
-             xmlns:orderLookupControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupControl"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance orderLookupControl:OrderLookupViewModel}"
-             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.OrderLookup.OrderLookupControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customs="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:details="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+    xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
+    xmlns:labelOptions="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookup"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
+    xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
+    xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
+    xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+    xmlns:to="clr-namespace:ShipWorks.OrderLookup.Controls.To"
+    d:DataContext="{d:DesignInstance local:OrderLookupViewModel}"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type orderLookupControl:OrderLookupControl}">
+            <Style TargetType="{x:Type local:OrderLookupControl}">
                 <Setter Property="Background" Value="{StaticResource OrderLookupBackgroundColor}"/>
             </Style>
 
-            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource Expander.Style}">
-            
-            </Style>
+            <Style BasedOn="{StaticResource Expander.Style}" TargetType="{x:Type Expander}" />
             <DataTemplate DataType="{x:Type from:OrderLookupFromViewModel}">
 
                 <from:OrderLookupFromControl />
@@ -57,7 +56,7 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">
                 <Expander Header="Rates" Padding="0">
-                    <rating:OrderLookupRatingControl></rating:OrderLookupRatingControl>
+                    <rating:OrderLookupRatingControl />
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
@@ -65,20 +64,24 @@
                     <customs:OrderLookupCustomsControl />
                 </Expander>
             </DataTemplate>
-        </ResourceDictionary>        
+        </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <orderLookupSearchControl:OrderLookupSearchControl Grid.Row="0"  Margin="10" DataContext="{Binding OrderLookupSearchViewModel}" />
+            <orderLookupSearchControl:OrderLookupSearchControl
+                Grid.Row="0"
+                Margin="10"
+                DataContext="{Binding OrderLookupSearchViewModel}" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="ItemsControl">
@@ -88,11 +91,11 @@
                         <Setter Property="dd:DragDrop.IsDropTarget" Value="True" />
                     </Style>
                     <Style TargetType="GridSplitter">
-                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="HorizontalAlignment" Value="Right" />
                         <Setter Property="VerticalAlignment" Value="Stretch" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="ShowsPreview" Value="True" />
-                        <Setter Property="Width" Value="3"/>
+                        <Setter Property="Width" Value="3" />
                     </Style>
                 </Grid.Resources>
 

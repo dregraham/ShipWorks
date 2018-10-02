@@ -10,12 +10,12 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests
 {
-    public class OrderLookupDataServiceTest
+    public class ViewModelOrchestratorTest
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
 
-        public OrderLookupDataServiceTest()
+        public ViewModelOrchestratorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testMessenger = new TestMessenger();

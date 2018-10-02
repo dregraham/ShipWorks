@@ -23,17 +23,17 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Rates)]
     public class OrderLookupRatingPanelViewModel : RatingPanelViewModel
     {
-        private readonly IOrderLookupMessageBus messageBus;
+        private readonly IViewModelOrchestrator orchestrator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupRatingPanelViewModel(IOrderLookupMessageBus messageBus, 
+        public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator, 
             IMessenger messenger, 
             IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, 
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
-            this.messageBus = messageBus;
+            this.orchestrator = orchestrator;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             set
             {
                 base.SelectedRate = value;
-                messageBus.ShipmentAdapter.SelectServiceFromRate(value);
+                orchestrator.ShipmentAdapter.SelectServiceFromRate(value);
             }
         }
     }
