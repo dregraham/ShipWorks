@@ -11,13 +11,36 @@
     Height="650"
     d:DataContext="{d:DesignInstance local:OrderLookupFieldManagerDesignerViewModel,
                                      IsDesignTimeCreatable=True}"
-    Background="{x:Static SystemColors.ControlBrush}"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     ResizeMode="CanResizeWithGrip"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner"
     WindowStyle="ToolWindow"
     mc:Ignorable="d">
-    <Grid>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="./FieldManagerStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
+                <Setter Property="Margin" Value="0" />
+            </Style>
+            <Style x:Key="FieldBorder" TargetType="{x:Type Border}">
+                <Setter Property="MinHeight" Value="24" />
+                <Setter Property="BorderBrush" Value="LightGray" />
+                <Setter Property="BorderThickness" Value="0,1,0,0" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+            </Style>
+            <Style x:Key="FieldListBox" TargetType="{x:Type ItemsControl}">
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -26,45 +49,55 @@
 
         <TextBlock>Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
 
-        <ScrollViewer Grid.Row="1">
-            <ListBox ItemsSource="{Binding Sections}">
-                <ListBox.ItemTemplate>
+        <ScrollViewer Grid.Row="1" Margin="0,8">
+            <ItemsControl ItemsSource="{Binding Sections}" Style="{StaticResource FieldListBox}">
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <WrapPanel>
-                            <Expander IsEnabled="True" IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
+                        <Border Style="{StaticResource FieldBorder}">
+                            <Expander
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                IsEnabled="True"
+                                IsExpanded="{Binding Expanded}"
+                                Style="{StaticResource FieldExpander.Style}">
                                 <Expander.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}" />
-                                    </StackPanel>
+                                    <CheckBox
+                                        MinHeight="24"
+                                        VerticalContentAlignment="Center"
+                                        IsChecked="{Binding Selected}">
+                                        <TextBlock
+                                            Margin="0,2,0,0"
+                                            FontWeight="Bold"
+                                            Text="{Binding Name, Mode=OneTime}" />
+                                    </CheckBox>
                                 </Expander.Header>
-                                <StackPanel IsEnabled="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <ListView
-                                            Name="sectionFieldsList"
-                                            Margin="10"
-                                            ItemsSource="{Binding SectionFields, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <WrapPanel Orientation="Horizontal">
-                                                    <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}" />
-                                                </WrapPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding SectionFields, Mode=OneTime}" Style="{StaticResource FieldListBox}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource FieldBorder}">
+                                                <CheckBox
+                                                    Margin="30,0,0,0"
+                                                    VerticalContentAlignment="Center"
+                                                    IsChecked="{Binding Selected}">
+                                                    <TextBlock Text="{Binding Name, Mode=OneTime}" />
+                                                </CheckBox>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </Expander>
-                        </WrapPanel>
+                        </Border>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-                
-            </ListBox>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
-        
+
         <Button
             Grid.Row="2"
+            HorizontalAlignment="Right"
             Command="{Binding Save}"
-            IsDefault="True">
+            IsDefault="True"
+            Style="{StaticResource PrimaryButton}">
             Save
         </Button>
     </Grid>

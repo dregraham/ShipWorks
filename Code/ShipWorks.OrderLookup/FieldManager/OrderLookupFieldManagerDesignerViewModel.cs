@@ -19,6 +19,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 {
                     Name = "To Address",
                     Id = "ToAddress",
+                    Expanded = true,
                     SectionFields = new List<SectionFieldLayout>()
                         {
                             new SectionFieldLayout() { Id = "FullName", Name = "Full Name" },
@@ -44,6 +45,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                     Name = "Label Options",
                     Id = "LabelOptions",
                     Selected = false,
+                    Expanded = true,
                     SectionFields = new List<SectionFieldLayout>()
                     {
                         new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date" },

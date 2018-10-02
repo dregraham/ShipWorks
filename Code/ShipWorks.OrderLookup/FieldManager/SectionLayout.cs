@@ -31,6 +31,12 @@ namespace ShipWorks.OrderLookup.FieldManager
         public bool Selected { get; set; } = true;
 
         /// <summary>
+        /// Is this section expanded?
+        /// </summary>
+        [Description("Is this section expanded")]
+        public bool Expanded { get; set; } = false;
+
+        /// <summary>
         /// List of fields in this section
         /// </summary>
         [Description("List of fields in this section")]
