@@ -512,8 +512,8 @@
     <Content Include="Data\Administration\Scripts\Update\5.27\5.27.1.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.28\5.28.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.29\5.29.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.31\5.31.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.31\5.31.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.31\5.31.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.31\5.31.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\OrderLookup\ProcessedShipmentsView.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
