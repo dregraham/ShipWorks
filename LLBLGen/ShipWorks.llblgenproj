@@ -1364,7 +1364,7 @@
           <Field Name="Cost" Type="int" FieldIndex="8" />
           <Field Name="Count" Type="int" FieldIndex="9" />
           <Field Name="CountVersion" Type="long" FieldIndex="2" />
-          <Field Name="EntityExistsQuery" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="10" />
+          <Field Name="EntityExistsQuery" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="FilterNodeContentID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="InitialCalculation" Type="string" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="JoinMask" Type="int" FieldIndex="7" />
@@ -2245,7 +2245,7 @@
           <Field Name="ProcessedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="6" />
           <Field Name="ProcessedWithUiMode" Type="int" IsOptional="true" Precision="10" FieldIndex="26" />
           <Field Name="RequestedLabelFormat" Type="int" IsReadOnly="true" Precision="10" FieldIndex="20" />
-          <Field Name="Service" Type="string" IsReadOnly="true" IsOptional="true" MaxLength="50" FieldIndex="24" />
+          <Field Name="Service" Type="string" IsReadOnly="true" IsOptional="true" MaxLength="101" FieldIndex="24" />
           <Field Name="ShipAddressValidationStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="16" />
           <Field Name="ShipDate" Type="datetime" IsReadOnly="true" FieldIndex="2" />
           <Field Name="ShipmentCost" Type="decimal" IsReadOnly="true" Precision="19" Scale="4" FieldIndex="14" />
@@ -2625,6 +2625,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
+          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="4000" FieldIndex="54" />
           <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
           <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="53" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
@@ -4350,7 +4351,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-08-07T19:35:30.4887441Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-02T11:58:47.8592372Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8187,8 +8188,9 @@
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" DbType="12" Length="1000" />
+                    <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
+                    <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="4000" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -9278,7 +9280,7 @@
                     <Field Name="OrderID" Ordinal="25" DbType="0" Precision="19" />
                     <Field Name="OrderNumberComplete" Ordinal="26" DbType="12" Length="50" />
                     <Field Name="CombineSplitStatus" Ordinal="27" DbType="8" Precision="10" />
-                    <Field Name="Service" Ordinal="28" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="Service" Ordinal="28" IsOptional="true" DbType="12" Length="101" />
                   </Fields>
                 </View>
                 <View Name="ShipWorksDisabledDefaultIndexes">
@@ -12950,6 +12952,7 @@
             <FieldMapping FieldName="IParcelInsuranceProvider" TargetFieldName="iParcelInsuranceProvider" />
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
+            <FieldMapping FieldName="OrderLookupFieldLayout" TargetFieldName="OrderLookupFieldLayout" />
             <FieldMapping FieldName="ShipEngineApiKey" TargetFieldName="ShipEngineApiKey" />
             <FieldMapping FieldName="ShipmentDateCutoffJson" TargetFieldName="ShipmentDateCutoffJson" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />

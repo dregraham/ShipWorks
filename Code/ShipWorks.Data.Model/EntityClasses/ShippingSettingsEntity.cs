@@ -406,6 +406,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipEngineApiKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OrderLookupFieldLayout", fieldHashtable);
 		}
 		#endregion
 
@@ -1012,6 +1014,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, value); }
+		}
+
+		/// <summary> The OrderLookupFieldLayout property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."OrderLookupFieldLayout"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4000<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OrderLookupFieldLayout
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

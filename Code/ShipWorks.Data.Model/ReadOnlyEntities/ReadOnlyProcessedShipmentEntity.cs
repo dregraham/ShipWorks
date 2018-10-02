@@ -219,7 +219,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Service property of the Entity ProcessedShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on view field: "ProcessedShipmentsView"."Service"<br/>
-        /// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 101<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String Service { get; }
         /// <summary> The ShipUSTerritory property of the Entity ProcessedShipment<br/><br/>
