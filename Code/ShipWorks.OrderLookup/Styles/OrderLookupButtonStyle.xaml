@@ -1,5 +1,10 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style x:Key="Link" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Foreground" Value="#4a90e2" />
@@ -17,9 +22,7 @@
                 <Setter Property="Foreground" Value="Gray" />
             </Trigger>
         </Style.Triggers>
-    </Style>
-
-    
+    </Style>    
 
     <ControlTemplate x:Key="IconButtonTemplate" TargetType="{x:Type ButtonBase}">
         <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
@@ -46,4 +49,18 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <Style x:Key="OrderLookup.Button.Add" TargetType="{x:Type Button}"
+           BasedOn="{StaticResource Button.Add}">
+        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+        <Setter Property="Height" Value="28"/>
+    </Style>
+
+    <Style x:Key="OrderLookup.Button.Delete" TargetType="{x:Type Button}"
+           BasedOn="{StaticResource Button.Delete}">
+        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+        <Setter Property="Height" Value="28"/>
+    </Style>
 </ResourceDictionary>

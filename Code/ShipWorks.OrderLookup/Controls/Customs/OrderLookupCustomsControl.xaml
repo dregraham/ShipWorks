@@ -104,10 +104,10 @@
             <StackPanel Grid.Row="0" Grid.Column="1"
                             Margin="4, 0, 0, 0"
                             Orientation="Vertical">
-                <Button Style="{StaticResource Button.Add}"
+                <Button Style="{StaticResource OrderLookup.Button.Add}"
                             Margin="0, 0, 0, 4"
                             Command="{Binding AddCustomsItemCommand}" />
-                <Button Style="{StaticResource Button.Delete}"
+                <Button Style="{StaticResource OrderLookup.Button.Delete}"
                         Command="{Binding DeleteCustomsItemCommand, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
