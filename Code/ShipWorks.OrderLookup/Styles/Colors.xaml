@@ -1,5 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="OrderLookupBackgroundColor" Color="#e7eef7"/>
+
     <SolidColorBrush x:Key="BorderColor" Color="#d7d7d7"/>
     <SolidColorBrush x:Key="IconColor" Color="#4b4b4b"/>
     <SolidColorBrush x:Key="ControlTextColor" Color="#676767"/>

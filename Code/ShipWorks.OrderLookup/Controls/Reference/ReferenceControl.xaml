@@ -15,8 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5"
-          IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
+    <Grid IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -49,8 +48,10 @@
 
         <TextBlock Grid.Row="2" Grid.Column="0"
                    Style="{StaticResource FieldLabel}"
-                   Text="Memo 3"/>
+                   Text="Memo 3"
+                   Margin="0"/>
         <TextBox Grid.Row="2" Grid.Column="1"
+                 Margin="10 0 0 0"
                  Style="{StaticResource FormTextBox}">
             <TextBox.Text>
                 <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Memo3" />

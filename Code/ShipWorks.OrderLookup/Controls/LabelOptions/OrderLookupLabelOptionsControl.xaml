@@ -20,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5" IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
+    <Grid IsEnabled="{Binding MessageBus.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -76,7 +76,7 @@
                 BorderBrush="{x:Null}"
                 Width="15"
                 Height="15"
-                Margin="0 0 3 10"
+                Margin="0 0 3 0"
                 Command="{Binding OpenPrinterArticleCommand}"
                 Template="{StaticResource IconButtonTemplate}">
 
@@ -86,16 +86,18 @@
         </Button>
 
         <TextBlock Grid.Row="3"
-                Grid.Column="1"
-                TextWrapping="Wrap"
-                Text="Requested Label Format"
-                Style="{StaticResource FieldLabel}"/>
+                   Grid.Column="1"
+                   Margin="0"
+                   TextWrapping="Wrap"
+                   Text="Requested Label Format"
+                   Style="{StaticResource FieldLabel}"/>
 
         <ui:ShipWorksComboBox Grid.Row="3"
-                  Grid.Column="2" 
-                  MinWidth="100"                              
-                  ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type printers:ThermalLanguage}}"
-                  Style="{StaticResource FormComboBox}"/>
+                              Grid.Column="2" 
+                              MinWidth="100"  
+                              Margin="10 0 0 0"
+                              ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding MessageBus.ShipmentAdapter.Shipment.RequestedLabelFormat, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type printers:ThermalLanguage}}"
+                              Style="{StaticResource FormComboBox}"/>
     </Grid>
 </UserControl>
