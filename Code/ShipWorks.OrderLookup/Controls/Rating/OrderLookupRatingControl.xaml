@@ -48,8 +48,8 @@
                   ItemsSource="{Binding Rates}"
                   SelectedItem="{Binding SelectedRate}"                    
                   CanUserResizeColumns="True"                  
-                  HorizontalGridLinesBrush="{StaticResource BorderBrushColor}"
-                  VerticalGridLinesBrush="{StaticResource BorderBrushColor}">
+                  HorizontalGridLinesBrush="{StaticResource BorderColor}"
+                  VerticalGridLinesBrush="{StaticResource BorderColor}">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="IsEnabled">
@@ -83,8 +83,8 @@
             <DataGrid.ColumnHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColor}"/>
-                    <Setter Property="Foreground" Value="{StaticResource ControlTextBrushColor}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="Padding" Value="3"/>
                     <Setter Property="MinWidth" Value="75"/>
@@ -94,7 +94,7 @@
                                 <Grid Background="{TemplateBinding Background}">
                                     <Border BorderThickness=" 0 0 1 1"
                                             Height="20"
-                                            BorderBrush="{StaticResource BorderBrushColor}">
+                                            BorderBrush="{StaticResource BorderColor}">
                                         <ContentPresenter Margin="3"
                                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
@@ -113,7 +113,7 @@
                         <DataTemplate>
                             <Grid>
                                 <Border BorderThickness="0 0 1 0"
-                                        BorderBrush="{StaticResource BorderBrushColor}"
+                                        BorderBrush="{StaticResource BorderColor}"
                                         Width="26"
                                         Height="20"
                                         Margin="-3">
@@ -131,13 +131,13 @@
                 <DataGridTextColumn Header="Service"
                                 Width="*"                                
                                 Binding="{Binding Description}"                          
-                                Foreground="{StaticResource ControlTextBrushColor}"
+                                Foreground="{StaticResource ControlTextColor}"
                                 ElementStyle="{StaticResource DataGrid.Element.Default}">
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Days"
                                 Binding="{Binding Days}"
                                 Width=".2*"                                    
-                                Foreground="{StaticResource ControlTextBrushColor}"
+                                Foreground="{StaticResource ControlTextColor}"
                                 ElementStyle="{StaticResource DataGrid.Element.Default}"/>                   
                 <DataGridTemplateColumn Header="Rate"
                                 Width=".2*">
@@ -145,7 +145,7 @@
                         <DataTemplate>
                             <TextBlock Text="{Binding FormattedAmount}"
                                         Style="{StaticResource DataGrid.Element.Default}"
-                                        Foreground="{StaticResource ControlTextBrushColor}"
+                                        Foreground="{StaticResource ControlTextColor}"
                                         Visibility="{Binding Selectable, Converter={StaticResource BooleanToVisibility}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -222,8 +222,8 @@
                         Grid.RowSpan="3"
                         FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
                         FontSize="12"
-                        BorderBrush="{StaticResource BorderBrushColor}"
-                        Foreground="{StaticResource ControlTextBrushColor}"
+                        BorderBrush="{StaticResource BorderColor}"
+                        Foreground="{StaticResource ControlTextColor}"
                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
             Checking rates...
         </ui:WaitSpinner>

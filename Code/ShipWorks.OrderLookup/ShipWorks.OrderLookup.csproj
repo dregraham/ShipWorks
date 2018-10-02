@@ -289,6 +289,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupButtonStyle.xaml" />
     <Page Include="Styles\OrderLookupCheckBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -305,10 +306,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupExpanderStyle.xaml" />
     <Page Include="Styles\OrderLookupStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupTextBlockStyle.xaml" />
+    <Page Include="Styles\OrderLookupTextBoxStyle.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RobotoFontLicense.txt">
