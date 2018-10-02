@@ -67,7 +67,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             // save to the db.
             if (!((bool) e.NewValue) && e.NewValue != e.OldValue)
             {
-                orderLookupViewModel.Orchestrator.SaveToDatabase();
+                //orderLookupViewModel.Orchestrator.SaveToDatabase();
             }
         }
 
@@ -78,7 +78,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         {
             if (IsNonKeyboardInputElement(e.OriginalSource))
             {
-                orderLookupViewModel.Orchestrator.SaveToDatabase();
+                //orderLookupViewModel.Orchestrator.SaveToDatabase();
             }
         }
 

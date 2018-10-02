@@ -30,7 +30,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromViewModel(IOrderLookupMessageBus orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupFromViewModel(IViewModelOrchestrator orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)

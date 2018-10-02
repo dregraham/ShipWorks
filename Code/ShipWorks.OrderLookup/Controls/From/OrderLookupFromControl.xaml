@@ -22,6 +22,7 @@
             <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
             <UserControl x:Key="AccountLabel">
                 <StackPanel>
@@ -46,7 +47,10 @@
                             <Binding Path="Orchestrator.ShipmentAdapter.AccountId" />
                         </ComboBox.SelectedValue>
                         <ComboBox.IsEnabled>
-                            <Binding Converter="{StaticResource InvertBoolean}" Path="Orchestrator.ShipmentAdapter.SupportsRateShopping" />
+                            <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                                <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                                <Binding Converter="{StaticResource InvertBoolean}" Mode="OneWay" Path="Orchestrator.ShipmentAdapter.SupportsRateShopping" />
+                            </MultiBinding>
                         </ComboBox.IsEnabled>
                         <ComboBox.Visibility>
                             <Binding Converter="{StaticResource BooleanToVisibility}" Path="Orchestrator.ShipmentAdapter.SupportsAccounts" />
@@ -71,6 +75,9 @@
                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                         SelectedValuePath="Value"
                         Style="{StaticResource StackedFormComboBox}">
+                        <ComboBox.IsEnabled>
+                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                        </ComboBox.IsEnabled>
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"

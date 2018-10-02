@@ -5,6 +5,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Controls.AddressControl;
 
@@ -47,7 +48,7 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; private set; }        
+        public IViewModelOrchestrator Orchestrator { get; private set; }
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
@@ -77,15 +78,28 @@ namespace ShipWorks.OrderLookup.Controls.To
                 autoSave?.Dispose();
                 autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
 
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                UpdateTitle();
 
-                string isDomestic = string.Empty;
-                if (Orchestrator?.ShipmentAdapter?.IsDomestic != null)
-                {
-                    isDomestic = Orchestrator.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
-                }
-                Title = $"To {FullName} {isDomestic}";
+                handler.RaisePropertyChanged(nameof(Orchestrator));
             }
+
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            {
+                UpdateTitle();
+            }
+        }
+
+        /// <summary>
+        /// Update the title of the address
+        /// </summary>
+        private void UpdateTitle()
+        {
+            string isDomestic = string.Empty;
+            if (Orchestrator?.ShipmentAdapter?.IsDomestic != null)
+            {
+                isDomestic = Orchestrator.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
+            }
+            Title = $"To {FullName} {isDomestic}";
         }
     }
 }

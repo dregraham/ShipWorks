@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
-            
+
             <UserControl x:Key="BaseAddressControl">
                 <local:OrderLookupAddress>
                     <local:OrderLookupAddress.IsEnabled>
@@ -51,6 +51,9 @@
                             Grid.Column="1"
                             Content="Require full address validation"
                             Style="{StaticResource FormCheckBox}">
+                            <CheckBox.IsEnabled>
+                                <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                            </CheckBox.IsEnabled>
                             <CheckBox.IsChecked>
                                 <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
                             </CheckBox.IsChecked>
