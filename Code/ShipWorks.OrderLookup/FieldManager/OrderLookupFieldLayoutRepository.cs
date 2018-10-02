@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Extensions;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
@@ -31,8 +31,8 @@ namespace ShipWorks.OrderLookup.FieldManager
         {
             string jsonFieldLayouts = shippingSettings.FetchReadOnly().OrderLookupFieldLayout;
 
-            return jsonFieldLayouts.IsNullOrWhiteSpace() ? 
-                Defaults() : JsonConvert.DeserializeObject<IEnumerable<SectionLayout>>(jsonFieldLayouts);
+            IEnumerable<SectionLayout> fieldLayouts = null;
+            return jsonFieldLayouts.TryParseJson(out fieldLayouts) ? fieldLayouts : Defaults();
         }
 
         /// <summary>

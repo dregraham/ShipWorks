@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.OrderLookup.Tests
+namespace ShipWorks.OrderLookup.Tests.FieldManager
 {
     public class OrderLookupFieldLayoutRepositoryTest
     {
@@ -34,6 +34,25 @@ namespace ShipWorks.OrderLookup.Tests
             string resultsJson = JsonConvert.SerializeObject(results);
 
             Assert.Equal(json, resultsJson);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("asdf")]
+        [InlineData("[xcv]")]
+        [InlineData("{\"test\": \"1\"}")]
+        public void Fetch_ReturnsDefaults_WhenJsonIsInvalid(string testJson)
+        {
+            string expectedJson = JsonConvert.SerializeObject(Defaults());
+            shippingSettings.Setup(ss => ss.FetchReadOnly()).Returns(new ShippingSettingsEntity() { OrderLookupFieldLayout = testJson });
+
+            testObject = mock.Create<OrderLookupFieldLayoutRepository>();
+
+            var results = testObject.Fetch();
+            string resultsJson = JsonConvert.SerializeObject(results);
+
+            Assert.Equal(expectedJson, resultsJson);
         }
 
         [Fact]
