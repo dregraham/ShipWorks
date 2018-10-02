@@ -28,3 +28,26 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// </summary>
         [Description("Is this field selected")]
         public bool Selected { get; set; } = true;
+        /// <summary>
+        /// Copy the given SectionFieldLayout to this instance.
+        /// </summary>
+        public void Copy(SectionFieldLayout toCopy)
+        {
+            if (!toCopy.Id.Equals(Id, StringComparison.CurrentCultureIgnoreCase))
+            {
+                throw new InvalidOperationException("Copying SectionFieldLayouts with different Ids is not supported.");
+            }
+
+            Name = toCopy.Name;
+            Selected = toCopy.Selected;
+        }
+
+        /// <summary>
+        /// Create a clone of this SectionFieldLayout
+        /// </summary>
+        public SectionFieldLayout Clone()
+        {
+            return (SectionFieldLayout) MemberwiseClone();
+        }
+    }
+}

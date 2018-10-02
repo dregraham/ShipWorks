@@ -47,8 +47,6 @@ namespace ShipWorks.OrderLookup.FieldManager
             }
 
             Name = toCopy.Name;
-            Row = toCopy.Row;
-            Column = toCopy.Column;
             Selected = toCopy.Selected;
         }
 
