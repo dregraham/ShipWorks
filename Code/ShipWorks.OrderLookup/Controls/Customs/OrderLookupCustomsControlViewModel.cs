@@ -101,6 +101,8 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 {
                     SelectedCustomsItem.PropertyChanged += OnSelectedCustomsItemPropertyChanged;
                 }
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
             }
         }
 
@@ -189,7 +191,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             Orchestrator.RefreshShipmentFromDatabase();
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
-            DeleteCustomsItemCommand.RaiseCanExecuteChanged();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
         }
 
         /// <summary>
