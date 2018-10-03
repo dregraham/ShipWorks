@@ -50,7 +50,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap">Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
+        <TextBlock TextWrapping="Wrap">Choose which fields should be visible in the Order Lookup view.</TextBlock>
 
         <ScrollViewer Grid.Row="1" Margin="0,8">
             <ItemsControl
