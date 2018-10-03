@@ -23,17 +23,29 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Rates)]
     public class OrderLookupRatingPanelViewModel : RatingPanelViewModel
     {
-        private readonly IOrderLookupMessageBus messageBus;
+        private readonly IViewModelOrchestrator orchestrator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupRatingPanelViewModel(IOrderLookupMessageBus messageBus, 
-            IMessenger messenger, 
-            IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, 
+        public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator,
+            IMessenger messenger,
+            IEnumerable<IRatingPanelGlobalPipeline> globalPipelines,
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
-            this.messageBus = messageBus;
+            this.orchestrator = orchestrator;
+            orchestrator.PropertyChanged += OnOrchestratorPropertyChanged;
+        }
+
+        /// <summary>
+        /// Orchestrator Property Changed
+        /// </summary>
+        private void OnOrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Service" && orchestrator.ShipmentAdapter != null)
+            {
+                SelectRate(orchestrator.ShipmentAdapter);
+            }
         }
 
         /// <summary>
@@ -45,8 +57,13 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             get => base.SelectedRate;
             set
             {
+                if (base.SelectedRate == value)
+                {
+                    return;
+                }
+
                 base.SelectedRate = value;
-                messageBus.ShipmentAdapter.SelectServiceFromRate(value);
+                orchestrator.ShipmentAdapter.SelectServiceFromRate(value);
             }
         }
     }

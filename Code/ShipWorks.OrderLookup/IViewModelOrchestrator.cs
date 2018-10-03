@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -9,12 +10,12 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
-    public interface IOrderLookupMessageBus
+    public interface IViewModelOrchestrator
     {
         /// <summary>
         /// The order that's in context
         /// </summary>
-        OrderEntity Order { get; }
+        OrderEntity SelectedOrder { get; }
 
         /// <summary>
         /// Does the Shipment allow editing
@@ -25,6 +26,11 @@ namespace ShipWorks.OrderLookup
         /// The orders shipment adapter
         /// </summary>
         ICarrierShipmentAdapter ShipmentAdapter { get; }
+
+        /// <summary>
+        /// ShipmentType
+        /// </summary>
+        ShipmentTypeCode ShipmentTypeCode { get; set; }
 
         /// <summary>
         /// The pacakge adpaters for the order in context
@@ -40,5 +46,20 @@ namespace ShipWorks.OrderLookup
         /// Raise property changed event when an order property changes
         /// </summary>
         void RaisePropertyChanged(string propertyName);
+
+        /// <summary>
+        /// Saves changes to the database
+        /// </summary>
+        void SaveToDatabase();
+
+        /// <summary>
+        /// Refresh the shipment from the database
+        /// </summary>
+        void RefreshShipmentFromDatabase();
+
+        /// <summary>
+        /// Unload the order
+        /// </summary>
+        void Unload();
     }
 }

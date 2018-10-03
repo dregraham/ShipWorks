@@ -14,7 +14,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     [Component(RegistrationType.Self)]
     public class OrderLookupSearchViewModel : INotifyPropertyChanged
     {
-        private readonly IOrderLookupMessageBus messageBus;
+        private readonly IViewModelOrchestrator orchestrator;
         private readonly IMessenger messenger;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -26,11 +26,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IOrderLookupMessageBus messageBus, IMessenger messenger)
+        public OrderLookupSearchViewModel(IViewModelOrchestrator orchestrator, IMessenger messenger)
         {
-            this.messageBus = messageBus;
+            this.orchestrator = orchestrator;
             this.messenger = messenger;
-            messageBus.PropertyChanged += UpdateOrderNumber;
+            orchestrator.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
@@ -100,9 +100,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order")
+            if (e.PropertyName == "SelectedOrder")
             {
-                if (messageBus.Order == null)
+                if (orchestrator.SelectedOrder == null)
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
@@ -112,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = messageBus.Order.OrderNumberComplete;
+                    OrderNumber = orchestrator.SelectedOrder.OrderNumberComplete;
                 }
             }
         }

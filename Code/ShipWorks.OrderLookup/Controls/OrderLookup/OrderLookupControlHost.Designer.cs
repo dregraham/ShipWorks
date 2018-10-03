@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.OrderLookup.Controls
+﻿namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
     partial class OrderLookupControlHost
     {

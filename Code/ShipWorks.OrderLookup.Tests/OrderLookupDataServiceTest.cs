@@ -10,12 +10,12 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests
 {
-    public class OrderLookupDataServiceTest
+    public class ViewModelOrchestratorTest
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
 
-        public OrderLookupDataServiceTest()
+        public ViewModelOrchestratorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testMessenger = new TestMessenger();
@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup.Tests
             order.Shipments.Add(new ShipmentEntity());
             testMessenger.Send(new OrderLookupSingleScanMessage(this, order));
             
-            Assert.Equal(order, testObject.Order);
+            Assert.Equal(order, testObject.SelectedOrder);
         }
 
         [Fact]
