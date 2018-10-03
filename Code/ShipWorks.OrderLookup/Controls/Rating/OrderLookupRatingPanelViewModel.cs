@@ -28,7 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator, 
+        public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator,
             IMessenger messenger,
             IEnumerable<IRatingPanelGlobalPipeline> globalPipelines,
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
@@ -45,6 +45,11 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             get => base.SelectedRate;
             set
             {
+                if (base.SelectedRate == value)
+                {
+                    return;
+                }
+
                 base.SelectedRate = value;
                 orchestrator.ShipmentAdapter.SelectServiceFromRate(value);
             }
