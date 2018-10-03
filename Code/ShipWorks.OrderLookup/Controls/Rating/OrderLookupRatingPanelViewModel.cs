@@ -34,6 +34,18 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
             this.orchestrator = orchestrator;
+            orchestrator.PropertyChanged += OnOrchestratorPropertyChanged;
+        }
+
+        /// <summary>
+        /// Orchestrator Property Changed
+        /// </summary>
+        private void OnOrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Service" && orchestrator.ShipmentAdapter != null)
+            {
+                SelectRate(orchestrator.ShipmentAdapter);
+            }
         }
 
         /// <summary>

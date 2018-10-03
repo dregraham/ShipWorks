@@ -888,10 +888,10 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-			panelDockingArea.Controls.Remove(orderLookupControl.Control);
-            orderLookupControl.Unload();
             if (orderLookupLifetimeScope != null)
-            {                
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
                 orderLookupLifetimeScope?.Dispose();
                 orderLookupLifetimeScope = null;
             }

@@ -46,7 +46,7 @@
                   IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}"
                   Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}"
                   ItemsSource="{Binding Rates}"
-                  SelectedItem="{Binding SelectedRate}"                        
+                  SelectedItem="{Binding SelectedRate, Mode=TwoWay}"                        
                   SelectionUnit="FullRow"
                   CanUserResizeColumns="True"                  
                   HorizontalGridLinesBrush="{StaticResource BorderColor}"

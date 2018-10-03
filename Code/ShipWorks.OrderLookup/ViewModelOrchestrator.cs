@@ -153,7 +153,13 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RefreshShipmentFromDatabase()
         {
+            RemovePropertyChangedEventsFromEntities();
+
             shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
+
+            RefreshPropertiesFromOrder(SelectedOrder);
+            AddPropertyChangedEventsToEntities();
+            RaisePropertyChanged(null);
         }
 
         /// <summary>
@@ -222,9 +228,12 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RefreshPropertiesFromOrder(OrderEntity order)
         {
-            ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
-            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-            PackageAdapters = ShipmentAdapter?.GetPackageAdapters();            
+            if (order?.Shipments != null)
+            {
+                ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
+                ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+                PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
+            }     
         }
 
         /// <summary>
