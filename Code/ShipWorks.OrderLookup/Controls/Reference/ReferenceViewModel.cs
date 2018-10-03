@@ -35,7 +35,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order" && Orchestrator.Order != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
                 handler.RaisePropertyChanged(nameof(Orchestrator));
             }

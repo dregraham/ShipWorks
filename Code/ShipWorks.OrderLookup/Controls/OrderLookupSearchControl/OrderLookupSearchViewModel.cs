@@ -100,9 +100,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order")
+            if (e.PropertyName == "SelectedOrder")
             {
-                if (orchestrator.Order == null)
+                if (orchestrator.SelectedOrder == null)
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
@@ -112,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = orchestrator.Order.OrderNumberComplete;
+                    OrderNumber = orchestrator.SelectedOrder.OrderNumberComplete;
                 }
             }
         }

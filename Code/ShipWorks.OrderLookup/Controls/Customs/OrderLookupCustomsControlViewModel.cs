@@ -271,7 +271,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             CustomsAllowed = Orchestrator.ShipmentAdapter?.CustomsAllowed ?? false;
 
-            if (e.PropertyName == "Order" && Orchestrator.Order != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
                 LoadCustoms();
 

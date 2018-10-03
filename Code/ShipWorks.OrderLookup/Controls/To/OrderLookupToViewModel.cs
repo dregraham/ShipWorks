@@ -66,12 +66,12 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.Order == null)
+            if (Orchestrator.SelectedOrder == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "Order" && Orchestrator.Order != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
                 base.Load(Orchestrator.ShipmentAdapter.Shipment.ShipPerson, Orchestrator.ShipmentAdapter.Store);
 

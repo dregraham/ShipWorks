@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup.Tests
             order.Shipments.Add(new ShipmentEntity());
             testMessenger.Send(new OrderLookupSingleScanMessage(this, order));
             
-            Assert.Equal(order, testObject.Order);
+            Assert.Equal(order, testObject.SelectedOrder);
         }
 
         [Fact]

@@ -15,7 +15,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order that's in context
         /// </summary>
-        OrderEntity Order { get; }
+        OrderEntity SelectedOrder { get; }
 
         /// <summary>
         /// Does the Shipment allow editing

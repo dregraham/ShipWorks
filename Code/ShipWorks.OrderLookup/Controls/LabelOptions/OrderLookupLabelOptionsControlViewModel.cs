@@ -97,7 +97,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order" && Orchestrator.Order != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
                 ShipmentEntity shipment = Orchestrator.ShipmentAdapter.Shipment;
 

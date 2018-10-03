@@ -20,7 +20,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsOrderNumber_WhenOrderIsFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns(new OrderEntity()
+            dataService.Setup(d => d.SelectedOrder).Returns(new OrderEntity()
             {
                 OrderNumber = 123
             });
@@ -35,7 +35,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsErrorMessageToEmptyString_WhenOrderIsFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns(new OrderEntity()
+            dataService.Setup(d => d.SelectedOrder).Returns(new OrderEntity()
             {
                 OrderNumber = 123
             });
@@ -50,7 +50,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsSearchErrorToFalse_WhenOrderIsFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns(new OrderEntity()
+            dataService.Setup(d => d.SelectedOrder).Returns(new OrderEntity()
             {
                 OrderNumber = 123
             });
@@ -65,7 +65,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsOrderNumberToEmptyString_WhenNoOrderIsFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns<OrderEntity>(null);
+            dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
@@ -77,7 +77,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsErrorMessage_WhenOrderIsNotFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns<OrderEntity>(null);
+            dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
@@ -89,7 +89,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_SetsErrorToTrue_WhenOrderIsNotFound()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns<OrderEntity>(null);
+            dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
@@ -102,7 +102,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void UpdateOrder_DoesNothing_WhenPropertyChangesThatIsNotOrder()
         {
             var dataService = mock.Mock<IViewModelOrchestrator>();
-            dataService.Setup(d => d.Order).Returns(new OrderEntity()
+            dataService.Setup(d => d.SelectedOrder).Returns(new OrderEntity()
             {
                 OrderNumber = 123
             });

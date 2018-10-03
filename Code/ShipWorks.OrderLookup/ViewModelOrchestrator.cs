@@ -30,7 +30,7 @@ namespace ShipWorks.OrderLookup
         private readonly IMessageHelper messageHelper;
         private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
-        private OrderEntity order;
+        private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
 
         /// <summary>
@@ -49,13 +49,13 @@ namespace ShipWorks.OrderLookup
         /// The order that is currently in context
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OrderEntity Order
+        public OrderEntity SelectedOrder
         {
-            get => order;
+            get => selectedOrder;
             private set
             {
-                order = value;
-                RaisePropertyChanged(nameof(Order));
+                selectedOrder = value;
+                RaisePropertyChanged(nameof(SelectedOrder));
             }
         }
 
@@ -99,7 +99,7 @@ namespace ShipWorks.OrderLookup
 
                         shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
 
-                        RefreshPropertiesFromOrder(order);
+                        RefreshPropertiesFromOrder(selectedOrder);
 
                         AddPropertyChangedEventsToEntities();
 
@@ -198,7 +198,7 @@ namespace ShipWorks.OrderLookup
                 RaisePropertyChanged(nameof(ShipmentTypeCode));
             }
 
-            Order = order;
+            SelectedOrder = order;
         }
 
         private void RefreshPropertiesFromOrder(OrderEntity order)

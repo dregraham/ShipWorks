@@ -143,15 +143,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.Order != null)
+            if (Orchestrator.SelectedOrder != null)
             {
-                if (e.PropertyName == "Order")
+                if (e.PropertyName == "SelectedOrder")
                 {
                     RefreshProviders();
                     RefreshDimensionalProfiles();                    
                 }
 
-                if (e.PropertyName == "Order" || 
+                if (e.PropertyName == "SelectedOrder" || 
                     e.PropertyName == "Service" || 
                     e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || 
                     e.PropertyName == "ShipCountryCode")
@@ -159,7 +159,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == "Order" || e.PropertyName == "Service")
+                if (e.PropertyName == "SelectedOrder" || e.PropertyName == "Service")
                 {
                     handler.RaisePropertyChanged(nameof(Orchestrator));
                 }
@@ -184,18 +184,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
-                if (e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Order")
+                if (e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "SelectedOrder")
                 {
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == "Order" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Service" ||
+                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Service" ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == "Order" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) ||
+                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) ||
                     e.PropertyName == "ShipCountryCode")
                 {
                     RefreshServiceTypes();

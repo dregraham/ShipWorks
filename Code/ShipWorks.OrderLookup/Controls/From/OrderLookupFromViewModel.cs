@@ -95,13 +95,13 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.Order == null)
+            if (Orchestrator.SelectedOrder == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "Order" &&
-                Orchestrator.Order != null)
+            if (e.PropertyName == "SelectedOrder" &&
+                Orchestrator.SelectedOrder != null)
             {
                 base.Load(Orchestrator.ShipmentAdapter.Shipment.OriginPerson, Orchestrator.ShipmentAdapter.Store);
                 autoSave?.Dispose();
@@ -117,7 +117,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             if (e.PropertyName == "OriginOriginID")
             {
                 long originId = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
-                long orderId = Orchestrator.Order.OrderID;
+                long orderId = Orchestrator.SelectedOrder.OrderID;
                 long accountId = Orchestrator.ShipmentAdapter.AccountId.GetValueOrDefault();
                 ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentTypeCode;
                 StoreEntity store = Orchestrator.ShipmentAdapter.Store;
