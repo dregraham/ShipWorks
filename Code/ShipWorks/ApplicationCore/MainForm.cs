@@ -51,7 +51,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -148,9 +147,8 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
         private ICurrentUserSettings currentUserSettings;
-
-        ILifetimeScope orderLookupLifetimeScope;
-        IOrderLookup orderLookupControl;
+        private ILifetimeScope orderLookupLifetimeScope;
+        private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
@@ -162,7 +160,7 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
-            
+
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
             InitializeComponent();
@@ -316,7 +314,7 @@ namespace ShipWorks
 
             ApplyDisplaySettings();
 
-            ApplyEditingContext();            
+            ApplyEditingContext();
         }
 
         /// <summary>
@@ -1010,11 +1008,11 @@ namespace ShipWorks
         {
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
-                ToggleVisiblePanel(orderLookupControl, shipmentHistory?.Control);
+                ToggleVisiblePanel(orderLookupControl.Control, shipmentHistory?.Control);
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl);
+                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl.Control);
                 shipmentHistory.ReloadShipmentData();
             }
         }
