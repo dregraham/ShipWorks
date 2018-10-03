@@ -30,6 +30,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private readonly PropertyChangedHandler handler;
         private List<PostalCustomsContentType> customsContentTypes;
         private bool customsContentTypeAllowed;
+        private bool customsAllowed;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
@@ -50,7 +51,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         [Obfuscation(Exclude = true)]
         public IViewModelOrchestrator Orchestrator { get; }
 
-
         /// <summary>
         /// The list of customs items
         /// </summary>
@@ -59,6 +59,16 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             get => customsItems;
             private set => handler.Set(nameof(CustomsItems), ref customsItems, value);
+        }
+
+        /// <summary>
+        /// Is Customs Allowed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool CustomsAllowed
+        {
+            get => customsAllowed;
+            private set => handler.Set(nameof(CustomsAllowed), ref customsAllowed, value);
         }
         /// <summary>
         /// The selected customs item
@@ -242,16 +252,18 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 //LoadDimensionsFromSelectedPackageAdapter();
             }
         }
-        
+
         /// <summary>
         /// Update when the order changes
         /// </summary>
         private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            CustomsAllowed = Orchestrator.ShipmentAdapter?.CustomsAllowed ?? false;
+
             if (e.PropertyName == "Order" && Orchestrator.Order != null)
             {
                 LoadCustoms();
-                
+
                 handler.RaisePropertyChanged(nameof(Orchestrator));
             }
         }

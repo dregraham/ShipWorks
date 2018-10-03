@@ -58,9 +58,7 @@
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type customs:OrderLookupCustomsControlViewModel}">
-                <Expander Header="Customs" IsExpanded="True">
-                    <customs:OrderLookupCustomsControl />
-                </Expander>
+                <customs:OrderLookupCustomsControl />
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
