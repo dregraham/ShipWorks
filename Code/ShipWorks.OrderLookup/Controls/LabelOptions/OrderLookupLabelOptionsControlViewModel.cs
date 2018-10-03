@@ -44,9 +44,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
             this.fedExUtility = fedExUtility;
-            
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            
+
             OpenPrinterArticleCommand = new RelayCommand(OpenPrinterArticle);
        }
 
@@ -59,7 +59,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             get => allowStealth;
             set => handler.Set(nameof(AllowStealth), ref allowStealth, value);
         }
-        
+
         /// <summary>
         /// Requested label format for the shipment
         /// </summary>
@@ -85,7 +85,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IViewModelOrchestrator Orchestrator { get; }
-        
+
         /// <summary>
         /// Command to open the printer article
         /// </summary>
@@ -100,7 +100,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             if (e.PropertyName == "Order" && Orchestrator.Order != null)
             {
                 ShipmentEntity shipment = Orchestrator.ShipmentAdapter.Shipment;
-                
+
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
                 {
@@ -112,11 +112,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                     AllowStealth = false;
                     AllowNoPostage = false;
                 }
-                
+
                 // Set the available label formats for the new shipment
                 LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
                     .Select(x => x.Value).ToList();
-                
+
                 // Update the Orchestrator
                 handler.RaisePropertyChanged(nameof(Orchestrator));
             }
@@ -156,6 +156,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                         return false;
                     }
                     break;
+            }
+
+            if (labelFormat == ThermalLanguage.None)
+            {
+                return false;
             }
 
             return true;
