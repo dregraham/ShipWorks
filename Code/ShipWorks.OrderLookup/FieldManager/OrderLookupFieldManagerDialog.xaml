@@ -13,14 +13,10 @@
     MinHeight="300"
     d:DataContext="{d:DesignInstance local:OrderLookupFieldManagerDesignerViewModel,
                                      IsDesignTimeCreatable=True}"
-    AllowsTransparency="True"
-    Background="Transparent"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    ResizeMode="CanResizeWithGrip"
     ShowInTaskbar="False"
-    Style="{DynamicResource OrderLookupWindow}"
     WindowStartupLocation="CenterOwner"
-    WindowStyle="None"
+    WindowStyle="ToolWindow"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>

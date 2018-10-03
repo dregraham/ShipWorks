@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="http://schemas.shipworks.com/ui">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="PrimaryButton" TargetType="Button">
         <Setter Property="MinWidth" Value="50" />
@@ -183,93 +182,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-    <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type Window}">
-
-        <Border Margin="20" Background="White">
-            <Border.Effect>
-                <DropShadowEffect
-                    BlurRadius="15"
-                    RenderingBias="Performance"
-                    ShadowDepth="2" />
-            </Border.Effect>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Border Grid.Row="0" Background="Gray" ui:Drag.Window="true">
-                    <Grid Margin="16,8,8,8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Grid.Column="0"
-                            FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-                            FontSize="16"
-                            Foreground="White">
-                            Configure Fields
-                        </TextBlock>
-                        <Button
-                            Grid.Column="1"
-                            Background="Gray"
-                            BorderThickness="0"
-                            IsCancel="True"
-                            Style="{StaticResource CloseButton}">
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <AdornerDecorator Grid.Row="1">
-                    <ContentPresenter />
-                </AdornerDecorator>
-                <ResizeGrip
-                    x:Name="WindowResizeGrip"
-                    Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    IsTabStop="false"
-                    Visibility="Collapsed" />
-            </Grid>
-        </Border>
-        <ControlTemplate.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="ResizeMode" Value="CanResizeWithGrip" />
-                    <Condition Property="WindowState" Value="Normal" />
-                </MultiTrigger.Conditions>
-                <Setter TargetName="WindowResizeGrip" Property="Visibility" Value="Visible" />
-            </MultiTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <Style x:Key="OrderLookupWindow" TargetType="{x:Type Window}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Window}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <AdornerDecorator>
-                            <ContentPresenter />
-                        </AdornerDecorator>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="ResizeMode" Value="CanResizeWithGrip">
-                <Setter Property="Template" Value="{StaticResource WindowTemplateKey}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-
-
 </ResourceDictionary>

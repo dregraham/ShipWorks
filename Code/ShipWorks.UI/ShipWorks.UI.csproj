@@ -147,7 +147,6 @@
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
-    <Compile Include="AttachedProperties\Drag.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
     <Compile Include="BackgroundAsyncMessageHelper.cs" />
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
