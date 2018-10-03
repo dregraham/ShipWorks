@@ -165,7 +165,7 @@
     </Compile>
     <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
-    <Compile Include="IOrderLookupMessageBus.cs" />
+    <Compile Include="IViewModelOrchestrator.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
     <Compile Include="IOrderLookupRatingService.cs" />

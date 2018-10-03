@@ -8,10 +8,8 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -134,7 +132,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Save the current shipment to the database
         /// </summary>
-        public virtual void SaveToDatabase()
+        public void SaveToDatabase()
         {
             if (ShipmentAdapter == null || !ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
             {
@@ -148,6 +146,14 @@ namespace ShipWorks.OrderLookup
             }
 
             DisplayError(errors);
+        }
+
+        /// <summary>
+        /// Refresh the shipment from the database
+        /// </summary>
+        public void RefreshShipmentFromDatabase()
+        {
+            shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
         }
 
         /// <summary>
@@ -174,7 +180,7 @@ namespace ShipWorks.OrderLookup
             subscription = messenger.OfType<OrderLookupSingleScanMessage>()
                 .Subscribe(orderMessage => LoadOrder(orderMessage.Order));
         }
-        
+
         /// <summary>
         /// Load an order
         /// </summary>
@@ -201,6 +207,9 @@ namespace ShipWorks.OrderLookup
             SelectedOrder = order;
         }
 
+        /// <summary>
+        /// Refresh properties from the given order
+        /// </summary>
         private void RefreshPropertiesFromOrder(OrderEntity order)
         {
             ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
@@ -211,6 +220,9 @@ namespace ShipWorks.OrderLookup
             }
         }
 
+        /// <summary>
+        /// Add property change event handlers
+        /// </summary>
         private void AddPropertyChangedEventsToEntities()
         {
             if (ShipmentAdapter != null)

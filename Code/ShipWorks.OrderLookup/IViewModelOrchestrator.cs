@@ -51,5 +51,10 @@ namespace ShipWorks.OrderLookup
         /// Saves changes to the database
         /// </summary>
         void SaveToDatabase();
+
+        /// <summary>
+        /// Refresh the shipment from the database
+        /// </summary>
+        void RefreshShipmentFromDatabase();
     }
 }

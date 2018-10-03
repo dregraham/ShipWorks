@@ -44,7 +44,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
-        
+
         /// <summary>
         /// The order lookup Orechestrator
         /// </summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             private set
             {
                 bool shouldLoadCustoms = (value && !customsAllowed);
-                
+
                 handler.Set(nameof(CustomsAllowed), ref customsAllowed, value);
 
                 if (shouldLoadCustoms)
@@ -103,7 +103,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 }
             }
         }
-        
+
         /// <summary>
         /// List of available customs content types for the shipment
         /// </summary>
@@ -161,19 +161,19 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                    CustomsItems.Count > 0 &&
                    CustomsItems.Contains(SelectedCustomsItem);
         }
-        
+
         /// <summary>
         /// Load customs
         /// </summary>
         private void LoadCustoms()
         {
             ICarrierShipmentAdapter shipmentAdapter = Orchestrator.ShipmentAdapter;
-            
+
             if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed )
             {
                 return;
             }
-            
+
             CustomsContentTypeAllowed = shipmentTypeManager.IsPostal(shipmentAdapter.ShipmentTypeCode);
             if (CustomsContentTypeAllowed)
             {
@@ -183,8 +183,10 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             {
                 CustomsContentTypes = new List<PostalCustomsContentType>();
             }
-            
+
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
+
+            Orchestrator.RefreshShipmentFromDatabase();
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
             DeleteCustomsItemCommand.RaiseCanExecuteChanged();
