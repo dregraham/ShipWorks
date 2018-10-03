@@ -59,18 +59,18 @@
                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="{x:Null}">
-                <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     
     <Style x:Key="FormCheckBox" TargetType="{x:Type CheckBox}">
-        <Setter Property="Margin" Value="10 0 0 10"/>
+        <Setter Property="Margin" Value="9 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
         <Setter Property="Template" Value="{StaticResource OrderLookupCheckBoxTemplate}"/>
     </Style>
