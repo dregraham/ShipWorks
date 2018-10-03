@@ -15,7 +15,7 @@ namespace ShipWorks.OrderLookup.Tests
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
-        
+
         [Fact]
         public void UpdateOrder_SetsOrderNumber_WhenOrderIsFound()
         {
@@ -25,9 +25,9 @@ namespace ShipWorks.OrderLookup.Tests
                 OrderNumber = 123
             });
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
-            
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
-            
+
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
+
             Assert.Equal("123", testObject.OrderNumber);
         }
 
@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.Tests
             });
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
             Assert.Equal(string.Empty, testObject.SearchErrorMessage);
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.OrderLookup.Tests
             });
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
             Assert.False(testObject.SearchError);
         }
@@ -68,7 +68,7 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
             Assert.Equal(string.Empty, testObject.OrderNumber);
         }
@@ -80,7 +80,7 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
             Assert.Equal("No matching orders were found.", testObject.SearchErrorMessage);
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
 
-            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Order"));
+            dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
             Assert.True(testObject.SearchError);
         }
