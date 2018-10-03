@@ -23,6 +23,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 SectionFields = new List<SectionFieldLayout>()
                 {
                     new SectionFieldLayout() { Id = "USPSAccountSelector", Name = "USPS - Account Selector" },
+                    new SectionFieldLayout() { Id = "Origin", Name = "Origin"},
                     new SectionFieldLayout() { Id = "FullName", Name = "Full Name" },
                     new SectionFieldLayout() { Id = "Company", Name = "Company" },
                     new SectionFieldLayout() { Id = "Street", Name = "Street" },
@@ -71,7 +72,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = "LabelOptions",
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "ShipDate", Name = "ShipDate" },
+                    new SectionFieldLayout() { Id = "ShipDate", Name = "Ship Date" },
                     new SectionFieldLayout() { Id = "USPSStealthPostage", Name = "USPS - Stealth Postage" },
                     new SectionFieldLayout() { Id = "RequestedLabelFormat", Name = "Requested Label Format" }
                 }
@@ -83,7 +84,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = "ShipmentDetails",
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = "RequestedShipping", Name = "Requested Shipping" },
+                    new SectionFieldLayout() { Id = "RequestedShipping", Name = "Req. Shipping" },
                     new SectionFieldLayout() { Id = "Provider", Name = "Provider" },
                     new SectionFieldLayout() { Id = "Service", Name = "Service" },
                     new SectionFieldLayout() { Id = "Confirmation", Name = "Confirmation" },
