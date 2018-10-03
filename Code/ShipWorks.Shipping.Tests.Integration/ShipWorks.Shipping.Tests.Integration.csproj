@@ -24,12 +24,21 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj" />
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
     <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj" />
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
