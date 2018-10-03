@@ -157,6 +157,11 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
+        /// Unload the order
+        /// </summary>
+        public void Unload() => LoadOrder(null);
+
+        /// <summary>
         /// Show an error if one is associated with the current shipment
         /// </summary>
         private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
@@ -187,11 +192,10 @@ namespace ShipWorks.OrderLookup
         private void LoadOrder(OrderEntity order)
         {
             SaveToDatabase();
+            RemovePropertyChangedEventsFromEntities();
 
             if (order != null)
             {
-                RemovePropertyChangedEventsFromEntities();
-
                 RefreshPropertiesFromOrder(order);
 
                 AddPropertyChangedEventsToEntities();
@@ -202,6 +206,12 @@ namespace ShipWorks.OrderLookup
                 }
 
                 RaisePropertyChanged(nameof(ShipmentTypeCode));
+            }
+            else
+            {
+                ShipmentAdapter = null;
+                ShipmentAllowEditing = false;
+                PackageAdapters = null;
             }
 
             SelectedOrder = order;
@@ -214,10 +224,7 @@ namespace ShipWorks.OrderLookup
         {
             ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
             ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-            if (ShipmentAdapter != null)
-            {
-                PackageAdapters = ShipmentAdapter.GetPackageAdapters();
-            }
+            PackageAdapters = ShipmentAdapter?.GetPackageAdapters();            
         }
 
         /// <summary>

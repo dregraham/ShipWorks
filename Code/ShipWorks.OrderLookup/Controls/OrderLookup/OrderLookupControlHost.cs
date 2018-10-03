@@ -53,6 +53,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
+        /// Unload the order from the viewmodel orchestrator
+        /// </summary>
+        public void Unload() => orderLookupViewModel.Orchestrator.Unload();
+
+        /// <summary>
         /// Expose the Control
         /// </summary>
         public UserControl Control => this;

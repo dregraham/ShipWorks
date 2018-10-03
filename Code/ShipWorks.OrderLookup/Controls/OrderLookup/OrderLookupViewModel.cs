@@ -88,6 +88,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             get => column3;
             set => handler.Set(nameof(Column3), ref column3, value);
         }
+
+        /// <summary>
+        /// Viewmodel Orchestrator
+        /// </summary>
         public IViewModelOrchestrator Orchestrator { get; private set; }
     }
 }

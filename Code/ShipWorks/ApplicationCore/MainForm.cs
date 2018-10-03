@@ -150,7 +150,7 @@ namespace ShipWorks
         ICurrentUserSettings currentUserSettings;
 
         ILifetimeScope orderLookupLifetimeScope;
-        UserControl orderLookupControl;
+        IOrderLookup orderLookupControl;
         
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -888,11 +888,10 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-			panelDockingArea.Controls.Remove(orderLookupControl);
-		
+			panelDockingArea.Controls.Remove(orderLookupControl.Control);
+            orderLookupControl.Unload();
             if (orderLookupLifetimeScope != null)
-            {
-                panelDockingArea.Controls.Remove(orderLookupControl);
+            {                
                 orderLookupLifetimeScope?.Dispose();
                 orderLookupLifetimeScope = null;
             }
@@ -957,9 +956,9 @@ namespace ShipWorks
             ClearFilterTrees();
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScope();
-            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>().Control;
-            panelDockingArea.Controls.Add(orderLookupControl);
-            orderLookupControl.BringToFront();
+            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+            panelDockingArea.Controls.Add(orderLookupControl.Control);
+            orderLookupControl.Control.BringToFront();
 
             UIMode = UIMode.OrderLookup;
         }

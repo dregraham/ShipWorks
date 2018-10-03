@@ -56,5 +56,10 @@ namespace ShipWorks.OrderLookup
         /// Refresh the shipment from the database
         /// </summary>
         void RefreshShipmentFromDatabase();
+
+        /// <summary>
+        /// Unload the order
+        /// </summary>
+        void Unload();
     }
 }
