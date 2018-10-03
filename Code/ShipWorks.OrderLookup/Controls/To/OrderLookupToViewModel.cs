@@ -76,7 +76,7 @@ namespace ShipWorks.OrderLookup.Controls.To
                 base.Load(Orchestrator.ShipmentAdapter.Shipment.ShipPerson, Orchestrator.ShipmentAdapter.Store);
 
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
+                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
 
                 UpdateTitle();
 
