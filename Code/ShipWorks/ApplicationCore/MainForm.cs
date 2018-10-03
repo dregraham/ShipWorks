@@ -51,6 +51,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -120,7 +121,7 @@ namespace ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
-    {        
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -765,7 +766,7 @@ namespace ShipWorks
             ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(LogonToShipWorksAsyncGetLicenseStatus, "checking license status"));
 
             UserEntity user = UserSession.User;
-            
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -774,7 +775,7 @@ namespace ShipWorks
 
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
             UpdateUIMode(user, false);
-            
+
             log.InfoFormat("UI shown");
 
             // Start the dashboard.  Has to be before updating store depending UI - as that affects dashboard display.
@@ -842,7 +843,7 @@ namespace ShipWorks
         private void ChangeUIMode(UIMode uiMode)
         {
             currentUserSettings.SetUIMode(uiMode);
-            
+
             UpdateUIMode(UserSession.User, true);
         }
 
@@ -887,6 +888,8 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
+			panelDockingArea.Controls.Remove(orderLookupControl);
+		
             if (orderLookupLifetimeScope != null)
             {
                 panelDockingArea.Controls.Remove(orderLookupControl);
@@ -895,7 +898,7 @@ namespace ShipWorks
             }
 
             ToggleUiModeCheckbox(UIMode.Batch);
-            
+
             heartBeat = new UIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
@@ -930,11 +933,13 @@ namespace ShipWorks
 
         /// <summary>
         /// Switch from batch to order lookup mode
-        /// </summary> 
+        /// </summary>
         private void ToggleOrderLookupMode()
         {
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
+
             ToggleUiModeCheckbox(UIMode.OrderLookup);
-            
+
             heartBeat = new Heartbeat();
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
@@ -1418,7 +1423,7 @@ namespace ShipWorks
                 // Save the filter expand collapse state
                 settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
                 settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
-            
+
                 // Save the last active filter
                 if (gridControl.IsSearchActive)
                 {
@@ -1442,7 +1447,7 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            
+
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
             {
