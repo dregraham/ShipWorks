@@ -43,11 +43,5 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Owner = owner.Handle
             };
         }
-
-        /// <summary>
-        /// Handle when the title border is clicked so that we can allow the window to be dragged
-        /// </summary>
-        private void TitleBorderMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) =>
-            DragMove();
     }
 }

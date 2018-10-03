@@ -149,16 +149,16 @@
       <DependentUpon>OrderLookupLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControlViewModel.cs" />
-    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.cs">
+    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\OrderLookupControl\OrderLookupControlHost.Designer.cs">
+    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupControl\OrderLookupControl.xaml.cs">
+    <Compile Include="Controls\OrderLookup\OrderLookupControl.xaml.cs">
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupControl\OrderLookupViewModel.cs" />
+    <Compile Include="Controls\OrderLookup\OrderLookupViewModel.cs" />
     <Compile Include="Controls\From\OrderLookupFromControl.xaml.cs">
       <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
     </Compile>
@@ -199,7 +199,7 @@
     </Compile>
     <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
-    <Compile Include="IOrderLookupMessageBus.cs" />
+    <Compile Include="IViewModelOrchestrator.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
     <Compile Include="IOrderLookupRatingService.cs" />
@@ -222,7 +222,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\OrderLookupControl\OrderLookupControlHost.resx">
+    <EmbeddedResource Include="Controls\OrderLookup\OrderLookupControlHost.resx">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShipmentHistory\Controls\ShipmentHistoryPanel.resx">
@@ -284,7 +284,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookupControl\OrderLookupControl.xaml">
+    <Page Include="Controls\OrderLookup\OrderLookupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -332,6 +332,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupButtonStyle.xaml" />
     <Page Include="Styles\OrderLookupCheckBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -348,10 +349,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupExpanderStyle.xaml" />
     <Page Include="Styles\OrderLookupStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\OrderLookupTextBlockStyle.xaml" />
+    <Page Include="Styles\OrderLookupTextBoxStyle.xaml" />
     <Page Include="FieldManager\OrderLookupFieldManagerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls;
+using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.SingleScan;

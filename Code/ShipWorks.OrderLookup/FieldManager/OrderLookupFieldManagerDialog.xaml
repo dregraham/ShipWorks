@@ -13,14 +13,10 @@
     MinHeight="300"
     d:DataContext="{d:DesignInstance local:OrderLookupFieldManagerDesignerViewModel,
                                      IsDesignTimeCreatable=True}"
-    AllowsTransparency="True"
-    Background="Transparent"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    ResizeMode="CanResizeWithGrip"
     ShowInTaskbar="False"
-    Style="{DynamicResource OrderLookupWindow}"
     WindowStartupLocation="CenterOwner"
-    WindowStyle="None"
+    WindowStyle="ToolWindow"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
@@ -44,6 +40,7 @@
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0" />
             </Style>
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Grid.Row="1" Margin="16,8,8,8">
@@ -53,20 +50,26 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap">Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
+        <TextBlock TextWrapping="Wrap">Choose which fields should be visible in the Order Lookup view.</TextBlock>
 
         <ScrollViewer Grid.Row="1" Margin="0,8">
-            <ItemsControl ItemsSource="{Binding Sections}" Style="{StaticResource FieldListBox}">
+            <ItemsControl
+                IsTabStop="False"
+                ItemsSource="{Binding Sections}"
+                Style="{StaticResource FieldListBox}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Style="{StaticResource FieldBorder}">
-                            <Expander
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                IsEnabled="True"
-                                IsExpanded="{Binding Expanded}"
-                                Style="{StaticResource FieldExpander.Style}">
-                                <Expander.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid SnapsToDevicePixels="False">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
                                     <CheckBox
                                         MinHeight="24"
                                         VerticalContentAlignment="Center"
@@ -76,11 +79,21 @@
                                             FontWeight="Bold"
                                             Text="{Binding Name, Mode=OneTime}" />
                                     </CheckBox>
-                                </Expander.Header>
+                                    <ToggleButton
+                                        x:Name="expandButton"
+                                        Grid.Column="1"
+                                        IsChecked="{Binding Expanded}"
+                                        Style="{StaticResource FieldExpander.DownHeaderStyle}"
+                                        Visibility="{Binding HasChildren, Mode=OneTime, Converter={StaticResource BooleanToVisibility}}" />
+                                </Grid>
+
                                 <ItemsControl
+                                    Grid.Row="1"
                                     IsEnabled="{Binding Selected}"
+                                    IsTabStop="False"
                                     ItemsSource="{Binding SectionFields, Mode=OneTime}"
-                                    Style="{StaticResource FieldListBox}">
+                                    Style="{StaticResource FieldListBox}"
+                                    Visibility="{Binding IsChecked, ElementName=expandButton, Converter={StaticResource BooleanToVisibility}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Style="{StaticResource FieldBorder}">
@@ -94,20 +107,29 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </Expander>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-
-        <Button
+        <StackPanel
             Grid.Row="2"
             HorizontalAlignment="Right"
-            Command="{Binding Save}"
-            IsDefault="True"
-            Style="{StaticResource PrimaryButton}">
-            Save
-        </Button>
+            Orientation="Horizontal">
+            <Button
+                Margin="8,0,0,0"
+                IsCancel="True"
+                Style="{StaticResource SmallSecondaryButton}">
+                Cancel
+            </Button>
+            <Button
+                Margin="8,0,0,0"
+                Command="{Binding Save}"
+                IsDefault="True"
+                Style="{StaticResource PrimaryButton}">
+                Save
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

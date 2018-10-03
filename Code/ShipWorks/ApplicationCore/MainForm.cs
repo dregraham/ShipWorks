@@ -51,6 +51,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -122,7 +123,7 @@ namespace ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
-    {        
+    {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -147,7 +148,9 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
         private ICurrentUserSettings currentUserSettings;
-        private Control orderLookupControl;
+
+        ILifetimeScope orderLookupLifetimeScope;
+        IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
@@ -313,9 +316,7 @@ namespace ShipWorks
 
             ApplyDisplaySettings();
 
-            ApplyEditingContext();
-
-            orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
+            ApplyEditingContext();            
         }
 
         /// <summary>
@@ -927,7 +928,13 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-            panelDockingArea.Controls.Remove(orderLookupControl);
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope?.Dispose();
+                orderLookupLifetimeScope = null;
+            }
 
             ToggleUiModeCheckbox(UIMode.Batch);
 
@@ -965,9 +972,11 @@ namespace ShipWorks
 
         /// <summary>
         /// Switch from batch to order lookup mode
-        /// </summary> 
+        /// </summary>
         private void ToggleOrderLookupMode()
         {
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
+
             ToggleUiModeCheckbox(UIMode.OrderLookup);
 
             heartBeat = new Heartbeat();
@@ -986,8 +995,10 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
-            panelDockingArea.Controls.Add(orderLookupControl);
-            orderLookupControl.BringToFront();
+            orderLookupLifetimeScope = IoC.BeginLifetimeScope();
+            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+            panelDockingArea.Controls.Add(orderLookupControl.Control);
+            orderLookupControl.Control.BringToFront();
 
             UIMode = UIMode.OrderLookup;
         }

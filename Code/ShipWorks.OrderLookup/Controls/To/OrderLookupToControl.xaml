@@ -5,8 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DesignWidth="800"
     mc:Ignorable="d"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
@@ -16,11 +14,11 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
-            
+
             <UserControl x:Key="BaseAddressControl">
                 <local:OrderLookupAddress>
                     <local:OrderLookupAddress.IsEnabled>
-                        <Binding Mode="OneWay" Path="MessageBus.ShipmentAllowEditing" />
+                        <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
                     </local:OrderLookupAddress.IsEnabled>
                 </local:OrderLookupAddress>
             </UserControl>
@@ -53,8 +51,11 @@
                             Grid.Column="1"
                             Content="Require full address validation"
                             Style="{StaticResource FormCheckBox}">
+                            <CheckBox.IsEnabled>
+                                <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                            </CheckBox.IsEnabled>
                             <CheckBox.IsChecked>
-                                <Binding Path="MessageBus.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
+                                <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
                             </CheckBox.IsChecked>
                         </CheckBox>
                     </Grid>
@@ -63,15 +64,18 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel Style="{StaticResource PanelWrapper}" >
-        <ContentControl Content="{Binding .}">
-            <ContentControl.ContentTemplate>
-                <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="MessageBus.ShipmentAdapter.ShipmentTypeCode" />
-                    <Binding RelativeSource="{RelativeSource Self}" />
-                </MultiBinding>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
-    </StackPanel>
+    <Expander Header="{Binding Title}" IsExpanded="True">
+        <StackPanel Style="{StaticResource PanelWrapper}" >
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplate>
+                    <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
+                        <Binding Path="Orchestrator.ShipmentAdapter.ShipmentTypeCode" />
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
+    </Expander>
+
 </UserControl>
 

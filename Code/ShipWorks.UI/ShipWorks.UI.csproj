@@ -147,7 +147,6 @@
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
-    <Compile Include="AttachedProperties\Drag.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
     <Compile Include="BackgroundAsyncMessageHelper.cs" />
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
@@ -253,6 +252,7 @@
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UiModule.cs" />
+    <Compile Include="ValueConverters\BooleanAndConverter.cs" />
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
@@ -272,6 +272,7 @@
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\IsEmptyConverter.cs" />
     <Compile Include="ValueConverters\AddressKeyValueToBooleanConverter.cs" />
+    <Compile Include="ValueConverters\NullToBooleanConverter.cs" />
     <Compile Include="ValueConverters\NullVisibilityConverter.cs" />
     <Compile Include="ValueConverters\PluralizingValueConverter.cs" />
     <Compile Include="ValueConverters\RadioButtonCheckedConverter.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using GongSolutions.Wpf.DragDrop; 
 
-namespace ShipWorks.OrderLookup.Controls.OrderLookupControl
+namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
     /// <summary>
     /// Interaction logic for OrderLookupControl.xaml

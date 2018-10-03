@@ -12,33 +12,32 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     public class ReferenceViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly IOrderLookupMessageBus messageBus;
         private readonly PropertyChangedHandler handler;
 
         /// <summary>
         /// ctor
         /// </summary>
-        public ReferenceViewModel(IOrderLookupMessageBus messageBus)
+        public ReferenceViewModel(IViewModelOrchestrator orchestrator)
         {
-            this.messageBus = messageBus;
-            this.messageBus.PropertyChanged += MessageBusPropertyChanged;
+            Orchestrator = orchestrator;
+            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
-        /// The order lookup message bus
+        /// The order lookup Orchestrator
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus => messageBus;
+        public IViewModelOrchestrator Orchestrator { get; private set; }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Order" && messageBus.Order != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
-                handler.RaisePropertyChanged(nameof(MessageBus));
+                handler.RaisePropertyChanged(nameof(Orchestrator));
             }
         }
     }
