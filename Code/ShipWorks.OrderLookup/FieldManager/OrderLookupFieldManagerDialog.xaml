@@ -40,6 +40,7 @@
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0" />
             </Style>
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Grid.Row="1" Margin="16,8,8,8">
@@ -56,13 +57,16 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Style="{StaticResource FieldBorder}">
-                            <Expander
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                IsEnabled="True"
-                                IsExpanded="{Binding Expanded}"
-                                Style="{StaticResource FieldExpander.Style}">
-                                <Expander.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid SnapsToDevicePixels="False">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
                                     <CheckBox
                                         MinHeight="24"
                                         VerticalContentAlignment="Center"
@@ -72,8 +76,17 @@
                                             FontWeight="Bold"
                                             Text="{Binding Name, Mode=OneTime}" />
                                     </CheckBox>
-                                </Expander.Header>
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        x:Name="expandButton"
+                                        IsChecked="{Binding Expanded}"
+                                        Style="{StaticResource FieldExpander.DownHeaderStyle}"
+                                        Visibility="{Binding HasChildren, Mode=OneTime, Converter={StaticResource BooleanToVisibility}}" />
+                                </Grid>
+
                                 <ItemsControl
+                                    Visibility="{Binding IsChecked, ElementName=expandButton, Converter={StaticResource BooleanToVisibility}}"
+                                    Grid.Row="1"
                                     IsEnabled="{Binding Selected}"
                                     ItemsSource="{Binding SectionFields, Mode=OneTime}"
                                     Style="{StaticResource FieldListBox}">
@@ -90,7 +103,7 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </Expander>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

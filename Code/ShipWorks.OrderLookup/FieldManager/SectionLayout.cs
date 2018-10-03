@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace ShipWorks.OrderLookup.FieldManager
@@ -43,6 +44,12 @@ namespace ShipWorks.OrderLookup.FieldManager
         public IEnumerable<SectionFieldLayout> SectionFields { get; set; } = new List<SectionFieldLayout>();
 
         /// <summary>
+        /// Does the section have children
+        /// </summary>
+        [Description("Does this section have children")]
+        public bool HasChildren => SectionFields.Any();
+
+        /// <summary>
         /// Copy the given SectionLayout to this instance.  SectionFields are NOT copied.
         /// </summary>
         public void Copy(SectionLayout toCopy)
@@ -54,6 +61,7 @@ namespace ShipWorks.OrderLookup.FieldManager
 
             Name = toCopy.Name;
             Selected = toCopy.Selected;
+            Expanded = toCopy.Expanded;
         }
 
         /// <summary>

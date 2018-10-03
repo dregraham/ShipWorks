@@ -42,6 +42,12 @@ namespace ShipWorks.OrderLookup.FieldManager
                 },
                 new SectionLayout()
                 {
+                    Name = "Customs",
+                    Id = "Customs",
+                    Selected = false
+                },
+                new SectionLayout()
+                {
                     Name = "Label Options",
                     Id = "LabelOptions",
                     Selected = false,
