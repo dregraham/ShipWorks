@@ -1000,12 +1000,21 @@ namespace ShipWorks
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
                 ToggleVisiblePanel(orderLookupControl, shipmentHistory?.Control);
+                shipmentHistory.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
                 ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl);
-                shipmentHistory.ReloadShipmentData();
+                shipmentHistory.Activate();
             }
+        }
+
+        /// <summary>
+        /// True if shipping history control is active
+        /// </summary>
+        public bool IsShipmentHistoryActive()
+        {
+            return panelDockingArea.Controls.Contains(shipmentHistory.Control);
         }
 
         /// <summary>

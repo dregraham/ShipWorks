@@ -14,9 +14,14 @@ namespace ShipWorks.OrderLookup
         Control Control { get; }
 
         /// <summary>
-        /// Refresh the history
+        /// Refresh the history, load any components
         /// </summary>
-        void ReloadShipmentData();
+        void Activate();
+
+        /// <summary>
+        /// Unload any components
+        /// </summary>
+        void Deactivate();
 
         /// <summary>
         /// Save the grid column state

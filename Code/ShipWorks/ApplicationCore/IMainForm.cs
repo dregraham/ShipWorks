@@ -28,5 +28,10 @@ namespace ShipWorks.ApplicationCore
         /// True if shippingPanel is Open
         /// </summary>
         bool IsShippingPanelOpen();
+
+        /// <summary>
+        /// True if shipping history control is active
+        /// </summary>
+        bool IsShipmentHistoryActive();
     }
 }
