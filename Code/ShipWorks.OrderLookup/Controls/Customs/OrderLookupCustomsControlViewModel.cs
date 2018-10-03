@@ -68,8 +68,19 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public bool CustomsAllowed
         {
             get => customsAllowed;
-            private set => handler.Set(nameof(CustomsAllowed), ref customsAllowed, value);
+            private set
+            {
+                bool shouldLoadCustoms = (value && !customsAllowed);
+                
+                handler.Set(nameof(CustomsAllowed), ref customsAllowed, value);
+
+                if (shouldLoadCustoms)
+                {
+                    LoadCustoms();
+                }
+            }
         }
+
         /// <summary>
         /// The selected customs item
         /// </summary>
