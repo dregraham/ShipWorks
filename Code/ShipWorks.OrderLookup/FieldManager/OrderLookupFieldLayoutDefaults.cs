@@ -153,7 +153,7 @@ namespace ShipWorks.OrderLookup.FieldManager
 
             sectionLayouts.Add(new SectionLayout()
             {
-                Name = "Ontrac Reference and Instructions",
+                Name = "OnTrac - Reference and Instructions",
                 Id = "OnTracReferenceAndInstructions",
                 SectionFields = new List<SectionFieldLayout>()
                 {
