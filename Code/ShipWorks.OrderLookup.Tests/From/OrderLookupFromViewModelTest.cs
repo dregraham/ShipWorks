@@ -50,7 +50,7 @@ namespace ShipWorks.OrderLookup.Tests.From
         [Fact]
         public void Title_IsFrom_WhenNoShipmentIsLoaded()
         {
-            shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns((ICarrierShipmentAdapter)null);
+            shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns((ICarrierShipmentAdapter) null);
 
             testObject.RateShop = false;
 
