@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupButtonStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupCheckBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupEditableComboBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupExpanderStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupTextBlockStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupTextBoxStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style x:Key="PanelWrapper" TargetType="{x:Type StackPanel}">
+        <Setter Property="Margin" Value="5 5 5 5" />
+    </Style>
+    
+    <Style x:Key="FormWrapPanel" TargetType="{x:Type WrapPanel}">
+        <Setter Property="Margin" Value="10 0 0 0" />
+    </Style>
+</ResourceDictionary>

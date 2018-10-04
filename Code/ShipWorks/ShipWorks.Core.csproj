@@ -753,7 +753,8 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
-    <Compile Include="ApplicationCore\IShipmentHistory.cs" />
+    <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IShipmentHistory.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
@@ -983,6 +984,8 @@
     <Compile Include="Filters\Content\SqlGeneration\FilterQueryType.cs" />
     <Compile Include="Filters\Content\IFilterDefinition.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
+    <Compile Include="Messaging\Messages\OrderLookupSingleScanMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />

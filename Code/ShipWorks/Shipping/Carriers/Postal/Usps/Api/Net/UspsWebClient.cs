@@ -524,7 +524,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 };
             }
 
-            PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
+            PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays, ShipmentTypeCode.Usps);
 
             return new[] { baseRate }
                 .Concat(AddRatesForAddOns(uspsRate, serviceType, account));
@@ -574,7 +574,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         uspsRate.Amount + x.Amount,
                         new UspsPostalRateSelection(serviceType, x.ConfirmationType, account));
 
-                    PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
+                    PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays, ShipmentTypeCode.Usps);
 
                     return addOnRate;
                 });

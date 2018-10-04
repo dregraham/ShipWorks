@@ -27,8 +27,8 @@ namespace ShipWorks.UI.Controls.AddressControl
     {
         private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
         private readonly IAddressValidator validator;
-        private readonly PropertyChangedHandler handler;
-        private readonly IShippingOriginManager shippingOriginManager;
+        protected readonly PropertyChangedHandler handler;
+        protected readonly IShippingOriginManager shippingOriginManager;
         private readonly IMessageHelper messageHelper;
         private readonly IValidatedAddressScope validatedAddressScope;
         private readonly IAddressSelector addressSelector;

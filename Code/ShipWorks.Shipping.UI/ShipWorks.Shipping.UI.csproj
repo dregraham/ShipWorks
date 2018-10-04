@@ -389,16 +389,16 @@
     <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.Properties.cs" />
     <Compile Include="ShippingRibbon\ApplyProfileButtonWrapper.cs" />
-    <Compile Include="ShippingRibbon\CreateLabelButtonWrapper.cs"/>
+    <Compile Include="ShippingRibbon\CreateLabelButtonWrapper.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ShippingRibbon\IShippingRibbonActions.cs" />
     <Compile Include="ShippingRibbon\IShippingRibbonService.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonRegistration.cs" />
     <Compile Include="ShippingPanel\ShippingViewModelFactory.cs" />
-    <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
-    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverter.cs" />
-    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
+    <Compile Include="ValueConverters\ShipmentTypeToAccountsConverter.cs" />
     <Compile Include="Carriers\None\NoneServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -472,6 +472,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonService.cs" />
+    <Compile Include="ValueConverters\OriginAddressListConverter.cs" />
+    <Compile Include="ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

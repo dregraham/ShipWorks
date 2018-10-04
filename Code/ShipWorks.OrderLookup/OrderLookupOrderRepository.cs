@@ -1,15 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Orders;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.OrderLookup
 {
@@ -19,22 +17,21 @@ namespace ShipWorks.OrderLookup
     [Component]
     public class OrderLookupOrderRepository : IOrderLookupOrderRepository
     {
-        private readonly IOrderRepository orderRepository;
         private readonly ISqlSession sqlSession;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IOrderLoader orderLoader;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupOrderRepository(
-            IOrderRepository orderRepository, 
             ISqlSession sqlSession, 
-            ISqlAdapterFactory sqlAdapterFactory
-           )
+            ISqlAdapterFactory sqlAdapterFactory,
+            IOrderLoader orderLoader)
         {
-            this.orderRepository = orderRepository;
             this.sqlSession = sqlSession;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.orderLoader = orderLoader;
         }
 
         /// <summary>
@@ -70,11 +67,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task<OrderEntity> GetOrder(long orderID)
         {
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                EntityQuery<OrderEntity> orderQuery = new QueryFactory().Order.Where(OrderFields.OrderID == orderID);
-                return await adapter.FetchFirstAsync(orderQuery);
-            }
+            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(true);
+            return result.Shipments.First().Order;
         }
     }
 }

@@ -22922,6 +22922,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentDateCutoffJson);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.OrderLookupFieldLayout field instance</summary>
+		public static EntityField2 OrderLookupFieldLayout
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.OrderLookupFieldLayout);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

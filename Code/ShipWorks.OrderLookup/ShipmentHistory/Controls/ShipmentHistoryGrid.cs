@@ -27,7 +27,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         {
         }
 
-
         /// <summary>
         /// Constructor
         /// </summary>

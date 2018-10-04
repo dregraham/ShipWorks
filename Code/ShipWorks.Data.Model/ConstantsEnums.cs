@@ -9856,6 +9856,8 @@ namespace ShipWorks.Data.Model
 		ShipEngineApiKey,
 		///<summary>ShipmentDateCutoffJson. </summary>
 		ShipmentDateCutoffJson,
+		///<summary>OrderLookupFieldLayout. </summary>
+		OrderLookupFieldLayout,
 		/// <summary></summary>
 		AmountOfFields
 	}

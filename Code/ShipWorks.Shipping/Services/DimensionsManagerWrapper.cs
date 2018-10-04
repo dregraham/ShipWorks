@@ -27,7 +27,12 @@ namespace ShipWorks.Shipping.Services
                 }
             };
         }
-        
+
+        /// <summary>
+        /// Get the profile with the specified ID, or null if not found.
+        /// </summary>
+        public DimensionsProfileEntity GetProfile(long dimensionsProfileID) => DimensionsManager.GetProfile(dimensionsProfileID);
+
         /// <summary>
         /// Return all the dimensions profiles
         /// </summary>

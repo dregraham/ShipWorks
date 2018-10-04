@@ -60,9 +60,9 @@ namespace ShipWorks.OrderLookup
             }
 
             GenericResult<AutoPrintResult> autoPrintResult = 
-                await autoPrintService.Print(new AutoPrintServiceDto() { OrderID = orderId, MatchedOrderCount = 1 });
+                await autoPrintService.Print(new AutoPrintServiceDto() { OrderID = orderId, MatchedOrderCount = 1 }).ConfigureAwait(false);
 
-            AutoPrintCompletionResult result = await WaitForShipmentsProcessedMessage(autoPrintResult);
+            AutoPrintCompletionResult result = await WaitForShipmentsProcessedMessage(autoPrintResult).ConfigureAwait(false);
             SaveUnprocessedShipments(result);
 
             return result;
@@ -90,7 +90,7 @@ namespace ShipWorks.OrderLookup
                         (i, shipmentsProcessedMessage) => shipmentsProcessedMessage)
                     .Select(shipmentsProcessedMessage =>
                     {
-                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(shipmentsProcessedMessage, default(ShipmentsProcessedMessage)))
+                        if (IsDefaultValue(shipmentsProcessedMessage))
                         {
                             log.Info("Timeout waiting for ShipmentsProcessedMessage");
                             return new AutoPrintCompletionResult(orderId);
@@ -109,6 +109,13 @@ namespace ShipWorks.OrderLookup
             return returnResult;
         }
 
+        /// <summary>
+        /// Checks to see if the ShipmentsProcessedMessage is the default message. 
+        /// </summary>
+        private static bool IsDefaultValue(ShipmentsProcessedMessage shipmentsProcessedMessage)
+        {
+            return EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(shipmentsProcessedMessage, default(ShipmentsProcessedMessage));
+        }
 
         /// <summary>
         /// Saves any changed weights for shipments that failed to process

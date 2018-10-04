@@ -23,11 +23,14 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShipWorks.OrderLookup\ShipWorks.OrderLookup.csproj">
-      <Project>{d5b2cf61-e6c6-4a91-a4e5-9aa2515e70c4}</Project>
-      <Name>ShipWorks.OrderLookup</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
+    <ProjectReference Include="..\ShipWorks.OrderLookup\ShipWorks.OrderLookup.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
+    <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -39,6 +42,7 @@
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
     <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />

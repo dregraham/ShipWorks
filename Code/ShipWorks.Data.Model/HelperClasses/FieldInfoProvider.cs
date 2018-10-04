@@ -1583,7 +1583,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
-			this.AddElementFieldInfo("FilterNodeContentEntity", "EntityExistsQuery", typeof(System.String), false, false, false, true,  (int)FilterNodeContentFieldIndex.EntityExistsQuery, 2147483647, 0, 0);
+			this.AddElementFieldInfo("FilterNodeContentEntity", "EntityExistsQuery", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.EntityExistsQuery, 2147483647, 0, 0);
 		}
 		/// <summary>Inits FilterNodeContentDetailEntity's FieldInfo objects</summary>
 		private void InitFilterNodeContentDetailEntityInfos()
@@ -2580,7 +2580,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ActualLabelFormat", typeof(Nullable<System.Int32>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ActualLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderID", typeof(System.Int64), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderNumberComplete", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderNumberComplete, 50, 0, 0);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "Service", typeof(System.String), false, false, true, true,  (int)ProcessedShipmentFieldIndex.Service, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Service", typeof(System.String), false, false, true, true,  (int)ProcessedShipmentFieldIndex.Service, 101, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ShipUSTerritory, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
@@ -2987,6 +2987,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineApiKey", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineApiKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

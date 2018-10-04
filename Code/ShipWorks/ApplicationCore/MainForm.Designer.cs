@@ -591,6 +591,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewFields.QuickAccessKey = "O";
             this.buttonOrderLookupViewFields.Text = "Fields";
             this.buttonOrderLookupViewFields.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewFields.Activate += new System.EventHandler(this.OnManageOrderLookupFields);
             // 
             // stripLayout3
             // 
@@ -2496,6 +2497,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewManualOrder.QuickAccessKey = "OE";
             this.buttonOrderLookupViewManualOrder.Text = "Manual\r\nOrder";
             this.buttonOrderLookupViewManualOrder.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManualOrder.Activate += new System.EventHandler(this.OnOrderLookupManualOrder);
             // 
             // ribbonChunkOrderLookupViewProfiles
             // 
