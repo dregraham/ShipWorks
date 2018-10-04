@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
@@ -42,7 +43,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Service" && shipmentModel.ShipmentAdapter != null)
+            if (e.PropertyName == PostalShipmentFields.Service.Name && shipmentModel.ShipmentAdapter != null)
             {
                 SelectRate(shipmentModel.ShipmentAdapter);
             }

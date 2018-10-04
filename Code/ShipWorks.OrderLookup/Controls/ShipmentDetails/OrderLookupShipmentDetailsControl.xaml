@@ -30,13 +30,6 @@
                     Style="{StaticResource FormComboBox}" />
             </UserControl>
 
-            <ui:WeightControl x:Key="WeightControl"
-                        AcceptApplyWeightKeyboardShortcut="True"
-                        ErrorMessage="{Binding WeightErrorMessage}"
-                        Style="{StaticResource OrderLookupWeightControl}"
-                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
-
-
             <DataTemplate x:Key="default">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -65,10 +58,11 @@
                         Style="{StaticResource FieldLabel}"
                         Text="Weight" />
 
-                    <ContentControl
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Content="{StaticResource WeightControl}" />
+                    <ui:WeightControl
+                        AcceptApplyWeightKeyboardShortcut="True"
+                        ErrorMessage="{Binding WeightErrorMessage}"
+                        Style="{StaticResource OrderLookupWeightControl}"
+                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
                 </Grid>
             </DataTemplate>
 
@@ -201,12 +195,12 @@
                         Grid.Column="0"
                         Style="{StaticResource FieldLabel}"
                         Text="Weight" />
-                    <ContentControl
-                        Grid.Row="6"
-                        Grid.Column="1"
-                        Content="{StaticResource WeightControl}" />
-
-                   <TextBlock
+                    <ui:WeightControl
+                        AcceptApplyWeightKeyboardShortcut="True"
+                        ErrorMessage="{Binding WeightErrorMessage}"
+                        Style="{StaticResource OrderLookupWeightControl}"
+                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <TextBlock
                         Grid.Row="7"
                         Grid.Column="0"
                         Style="{StaticResource FieldLabel}"

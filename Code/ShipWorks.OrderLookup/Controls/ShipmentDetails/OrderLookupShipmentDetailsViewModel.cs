@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -30,10 +31,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly PropertyChangedHandler handler;
         private readonly IDimensionsManager dimensionsManager;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly ShipmentTypeProvider shipmentTypeProvider;
-
+        private readonly Func<PostalShipmentType> getPostalShipmentType;
+        private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
@@ -50,16 +51,19 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IShipmentTypeManager shipmentTypeManager,
             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IInsuranceViewModel insuranceViewModel,
-            ShipmentTypeProvider shipmentTypeProvider)
+            ShipmentTypeProvider shipmentTypeProvider, 
+            Func<PostalShipmentType> getPostalShipmentType,
+            Func<DimensionsManagerDlg> getDimensionsManagerDlg)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
-            this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.shipmentTypeProvider = shipmentTypeProvider;
+            this.getPostalShipmentType = getPostalShipmentType;
+            this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -148,19 +152,19 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == "SelectedOrder")
                 {
-                    RefreshProviders();
+                    Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
                     RefreshDimensionalProfiles();
                 }
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
-                    e.PropertyName == "Service" ||
+                    e.PropertyName == PostalShipmentFields.Service.Name ||
                     e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == "Service")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == PostalShipmentFields.Service.Name)
                 {
                     handler.RaisePropertyChanged(nameof(ShipmentModel));
                 }
@@ -190,7 +194,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == "Service" ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == PostalShipmentFields.Service.Name ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
@@ -201,18 +205,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Refresh the list of available providers
-        /// </summary>
-        private void RefreshProviders()
-        {
-            Providers = new Dictionary<ShipmentTypeCode, string>();
-            foreach(ShipmentTypeCode shipmentType in shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter))
-            {
-                Providers.Add(shipmentType, EnumHelper.GetDescription(shipmentType));
             }
         }
 
@@ -268,8 +260,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
             else
             {
-                PostalShipmentType postalShipmentType =
-                    (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+                PostalShipmentType postalShipmentType = getPostalShipmentType();
                 PostalServiceType postalServiceType = (PostalServiceType) ShipmentModel.ShipmentAdapter.ServiceType;
 
                 // See if all have confirmation as an option or not
@@ -308,7 +299,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
             else
             {
-                ServiceTypes = new List<KeyValuePair<int, string>>(updatedServices);
+                ServiceTypes = updatedServices.ToList();
             }
         }
 
@@ -317,7 +308,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ManageDimensionalProfilesAction()
         {
-            using (DimensionsManagerDlg dlg = new DimensionsManagerDlg())
+            using (DimensionsManagerDlg dlg = getDimensionsManagerDlg())
             {
                 dlg.ShowDialog();
                 RefreshDimensionalProfiles();
