@@ -28,7 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// The order lookup ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; private set; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Update when the order changes
