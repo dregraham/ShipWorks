@@ -18,7 +18,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// </summary>
         /// <remarks>
         /// If not found or unknown shipmenttypecode or no shipmenttypecode, "default" template is returned.
-        /// If not found, null is returned.
+        /// If the default template is not found, null is returned.
         /// </remarks>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

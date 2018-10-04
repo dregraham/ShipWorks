@@ -82,7 +82,7 @@ namespace ShipWorks.OrderLookup
                 if (orderId.HasValue)
                 {
                     AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
-                    order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+                    order = result.ProcessShipmentResults?.Select(x=>x.Shipment.Order).FirstOrDefault();
                     if (order == null)
                     {
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
