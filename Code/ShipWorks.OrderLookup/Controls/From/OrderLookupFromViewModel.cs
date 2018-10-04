@@ -148,7 +148,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                     originDescription = origins.First(w => w.Value == originID).Key;
                 }
 
-                string accountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
+                string accountDescription = carrierAccountRetrieverFactory.Create(shipmentTypeCode)?
                                                 .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
 
                 string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
