@@ -97,6 +97,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceOnlineUpdateCommandCreator) },
             { StoreTypeCode.Amosoft, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Bonanza, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Brightpearl, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComOnlineUpdateCommandCreator) },
             { StoreTypeCode.Cart66Lite, typeof(GenericModuleOnlineUpdateCommandCreator) },
