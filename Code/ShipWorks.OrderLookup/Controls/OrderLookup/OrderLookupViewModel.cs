@@ -18,9 +18,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
 
-        ObservableCollection<INotifyPropertyChanged> column1;
-        ObservableCollection<INotifyPropertyChanged> column2;
-        ObservableCollection<INotifyPropertyChanged> column3;
+        private ObservableCollection<INotifyPropertyChanged> leftColumn;
+        private ObservableCollection<INotifyPropertyChanged> middleColumn;
+        private ObservableCollection<INotifyPropertyChanged> rightColumn;
 
         /// <summary>
         /// Constructor
@@ -33,20 +33,20 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             Orchestrator = orchestrator;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
-            Column1 = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>()
+            LeftColumn = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>
             {
                 lookupPanels[OrderLookupPanels.From],
                 lookupPanels[OrderLookupPanels.To]
             });
 
-            Column2 = new ObservableCollection<INotifyPropertyChanged>()
+            MiddleColumn = new ObservableCollection<INotifyPropertyChanged>
             {
                 lookupPanels[OrderLookupPanels.ShipmentDetails],
                 lookupPanels[OrderLookupPanels.LabelOptions],
                 lookupPanels[OrderLookupPanels.Reference]
             };
 
-            Column3 = new ObservableCollection<INotifyPropertyChanged>()
+            RightColumn = new ObservableCollection<INotifyPropertyChanged>
             {
                 lookupPanels[OrderLookupPanels.Rates],
                 lookupPanels[OrderLookupPanels.Customs]
@@ -63,35 +63,35 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> Column1
+        public ObservableCollection<INotifyPropertyChanged> LeftColumn
         {
-            get => column1;
-            set => handler.Set(nameof(Column1), ref column1, value);
+            get => leftColumn;
+            set => handler.Set(nameof(LeftColumn), ref leftColumn, value);
         }
 
         /// <summary>
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> Column2
+        public ObservableCollection<INotifyPropertyChanged> MiddleColumn
         {
-            get => column2;
-            set => handler.Set(nameof(Column2), ref column2, value);
+            get => middleColumn;
+            set => handler.Set(nameof(MiddleColumn), ref middleColumn, value);
         }
 
         /// <summary>
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> Column3
+        public ObservableCollection<INotifyPropertyChanged> RightColumn
         {
-            get => column3;
-            set => handler.Set(nameof(Column3), ref column3, value);
+            get => rightColumn;
+            set => handler.Set(nameof(RightColumn), ref rightColumn, value);
         }
 
         /// <summary>
         /// Viewmodel Orchestrator
         /// </summary>
-        public IViewModelOrchestrator Orchestrator { get; private set; }
+        public IViewModelOrchestrator Orchestrator { get; }
     }
 }

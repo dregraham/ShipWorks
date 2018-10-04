@@ -1,18 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
-using ShipWorks.Shipping;
-using ShipWorks.UI.Controls.AddressControl;
-using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
-using System;
-using System.Reactive.Linq;
-using Interapptive.Shared.Business;
-using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.From
 {
@@ -50,8 +48,8 @@ namespace ShipWorks.OrderLookup.Controls.From
         [Obfuscation(Exclude = true)]
         public string Title
         {
-            get { return title; }
-            set { handler.Set(nameof(Title), ref title, value); }
+            get => title;
+            set => handler.Set(nameof(Title), ref title, value);
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         [Obfuscation(Exclude = true)]
         public bool RateShop
         {
-            get { return rateShop; }
+            get => rateShop;
             set
             {
                 handler.Set(nameof(RateShop), ref rateShop, value);
@@ -100,10 +98,9 @@ namespace ShipWorks.OrderLookup.Controls.From
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "SelectedOrder" &&
-                Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
             {
-                base.Load(Orchestrator.ShipmentAdapter.Shipment.OriginPerson, Orchestrator.ShipmentAdapter.Store);
+                Load(Orchestrator.ShipmentAdapter.Shipment.OriginPerson, Orchestrator.ShipmentAdapter.Store);
                 autoSave?.Dispose();
                 autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
 
@@ -122,7 +119,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentTypeCode;
                 StoreEntity store = Orchestrator.ShipmentAdapter.Store;
 
-                base.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
+                SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
 
                 UpdateTitle();
 
@@ -135,8 +132,6 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         private void UpdateTitle()
         {
-            string headerAccountText = string.Empty;
-            string AccountDescription = string.Empty;
             string newTitle = "From";
 
             if (Orchestrator.ShipmentAdapter != null)
@@ -146,20 +141,20 @@ namespace ShipWorks.OrderLookup.Controls.From
 
                 List<KeyValuePair<string, long>> origins = shipmentTypeManager.Get(shipmentTypeCode).GetOrigins();
 
-                string OriginDescription = string.Empty;
+                string originDescription = string.Empty;
                 if (origins.Any(o => o.Value == originID))
                 {
-                    OriginDescription = origins.First(w => w.Value == originID).Key;
+                    originDescription = origins.First(w => w.Value == originID).Key;
                 }
 
-                AccountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
-                    .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+                string accountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
+                                                .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
 
-                headerAccountText = RateShop ? "(Rate Shopping)" : AccountDescription;
+                string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
 
-                if (!string.IsNullOrWhiteSpace(headerAccountText) && !string.IsNullOrWhiteSpace(OriginDescription))
+                if (!string.IsNullOrWhiteSpace(headerAccountText) && !string.IsNullOrWhiteSpace(originDescription))
                 {
-                    newTitle = $"From Account: {headerAccountText}, {OriginDescription}";
+                    newTitle = $"From Account: {headerAccountText}, {originDescription}";
                 }
             }
 

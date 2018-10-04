@@ -17,7 +17,7 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Data service for the order lookup UI Mode
+    /// Orchestrates the various view models associated with order lookup mode
     /// </summary>
     [Component(SingleInstance = true)]
     public class ViewModelOrchestrator : IInitializeForCurrentUISession, INotifyPropertyChanged, IViewModelOrchestrator
@@ -74,7 +74,7 @@ namespace ShipWorks.OrderLookup
         public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
-        /// The pacakge adpaters for the order in context
+        /// The package adapters for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
@@ -123,7 +123,7 @@ namespace ShipWorks.OrderLookup
         {
             handler.RaisePropertyChanged(propertyName);
 
-            if (ShipmentAdapter != null && ShipmentAdapter.Shipment != null)
+            if (ShipmentAdapter?.Shipment != null)
             {
                 messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
             }
@@ -268,7 +268,7 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Call the RaisePropropertyChanged with propertyname
+        /// Call the RaisePropertyChanged with PropertyName
         /// </summary>
         private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(e.PropertyName);
 

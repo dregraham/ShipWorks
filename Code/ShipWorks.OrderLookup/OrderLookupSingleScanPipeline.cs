@@ -65,7 +65,7 @@ namespace ShipWorks.OrderLookup
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
                 .Do(_ => processingScan = true)
                 .Subscribe(x => OnOrderLookupSearchMessage(x).ToObservable())
-                );
+            );
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace ShipWorks.OrderLookup
 
                 if (orderId.HasValue)
                 {
-                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
+                    AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
                     order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
                     if (order == null)
                     {

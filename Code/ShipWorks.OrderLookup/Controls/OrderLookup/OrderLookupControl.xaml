@@ -93,9 +93,9 @@
                     </Style>
                 </Grid.Resources>
 
-                <ItemsControl Grid.Column="0" ItemsSource="{Binding Column1}" />
-                <ItemsControl Grid.Column="1" ItemsSource="{Binding Column2}" />
-                <ItemsControl Grid.Column="2" ItemsSource="{Binding Column3}" />
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding LeftColumn}" />
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding MiddleColumn}" />
+                <ItemsControl Grid.Column="2" ItemsSource="{Binding RightColumn}" />
 
                 <GridSplitter Grid.Column="0" />
                 <GridSplitter Grid.Column="1" />
