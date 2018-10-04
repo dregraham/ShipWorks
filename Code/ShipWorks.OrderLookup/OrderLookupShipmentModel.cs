@@ -88,9 +88,16 @@ namespace ShipWorks.OrderLookup
             get => ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
             set
             {
+                
                 if (value != ShipmentTypeCode)
                 {
+                    // The shipping manager interacts with the database when changing the shipment type so we save prior to
+                    // changing shipment types.
                     SaveToDatabase();
+
+                    // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity. 
+                    // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
+                    // then add handlers to the possibly new entities.
                     using (handler.SuppressChangeNotifications())
                     {
                         RemovePropertyChangedEventsFromEntities();
@@ -106,6 +113,7 @@ namespace ShipWorks.OrderLookup
                             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                         }
                     }
+
                     RaisePropertyChanged(nameof(OrderLookupShipmentModel));
                 }
             }
