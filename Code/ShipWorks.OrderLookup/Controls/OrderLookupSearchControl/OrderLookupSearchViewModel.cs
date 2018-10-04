@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             get => orderNumber;
             set => handler.Set(nameof(OrderNumber), ref orderNumber, value);
         }
-        
+
         /// <summary>
         /// Total cost of the shipment
         /// </summary>
@@ -94,13 +94,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
-        
+
         /// <summary>
         /// Update the order number when the order changes
         /// </summary>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder")
+            if (e.PropertyName == nameof(shipmentModel.SelectedOrder))
             {
                 if (shipmentModel.SelectedOrder == null)
                 {
@@ -116,15 +116,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 }
             }
         }
-        
+
         /// <summary>
-        /// Get the order with the current order number 
+        /// Get the order with the current order number
         /// </summary>
         private void GetOrder()
         {
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
-        
+
         /// <summary>
         /// Reset the order
         /// </summary>

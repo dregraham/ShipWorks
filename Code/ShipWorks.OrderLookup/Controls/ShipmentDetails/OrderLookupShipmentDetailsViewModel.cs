@@ -9,6 +9,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -47,8 +48,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, 
-            IInsuranceViewModel insuranceViewModel, 
+            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
+            IInsuranceViewModel insuranceViewModel,
             ShipmentTypeProvider shipmentTypeProvider)
         {
             ShipmentModel = shipmentModel;
@@ -81,7 +82,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IInsuranceViewModel InsuranceViewModel { get; }
-        
+
         /// <summary>
         /// The dimension profiles
         /// </summary>
@@ -106,7 +107,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => providers;
             set => handler.Set(nameof(Providers), ref providers, value);
-        }        
+        }
 
         /// <summary>
         /// Collection of valid PackageTypes
@@ -136,7 +137,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => serviceTypes;
             set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
-        }        
+        }
 
         /// <summary>
         /// Update when order changes
@@ -148,18 +149,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 if (e.PropertyName == "SelectedOrder")
                 {
                     RefreshProviders();
-                    RefreshDimensionalProfiles();                    
+                    RefreshDimensionalProfiles();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || 
-                    e.PropertyName == "Service" || 
-                    e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || 
-                    e.PropertyName == "ShipCountryCode")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
+                    e.PropertyName == "Service" ||
+                    e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
+                    e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == "Service")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == "Service")
                 {
                     handler.RaisePropertyChanged(nameof(ShipmentModel));
                 }
@@ -189,13 +190,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == "Service" ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == "Service" ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
                     e.PropertyName == "ShipCountryCode")
                 {
                     RefreshServiceTypes();
@@ -207,14 +208,14 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Refresh the list of available providers
         /// </summary>
         private void RefreshProviders()
-        {            
+        {
             Providers = new Dictionary<ShipmentTypeCode, string>();
             foreach(ShipmentTypeCode shipmentType in shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter))
             {
                 Providers.Add(shipmentType, EnumHelper.GetDescription(shipmentType));
             }
         }
-        
+
         /// <summary>
         /// Refreshes Insurance
         /// </summary>
@@ -237,7 +238,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
             }
         }
-        
+
         /// <summary>
         /// Refresh the package types
         /// </summary>
@@ -253,7 +254,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     .BuildPackageTypeDictionary(new[] {ShipmentModel.ShipmentAdapter.Shipment});
             }
         }
-        
+
         /// <summary>
         /// Refresh the confirmation types
         /// </summary>
@@ -281,7 +282,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                                   serviceType => EnumHelper.GetDescription(serviceType));
             }
         }
-        
+
         /// <summary>
         /// Refresh the ServiceTypes
         /// </summary>

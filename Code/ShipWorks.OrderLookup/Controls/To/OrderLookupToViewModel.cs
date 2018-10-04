@@ -71,7 +71,7 @@ namespace ShipWorks.OrderLookup.Controls.To
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 base.Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
 

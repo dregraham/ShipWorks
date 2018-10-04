@@ -35,7 +35,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }

@@ -8,6 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI.Controls.AddressControl;
@@ -98,7 +99,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
                 autoSave?.Dispose();
@@ -111,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 
-            if (e.PropertyName == "OriginOriginID")
+            if (e.PropertyName == ShipmentFields.OriginOriginID.Name)
             {
                 long originId = ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID;
                 long orderId = ShipmentModel.SelectedOrder.OrderID;
