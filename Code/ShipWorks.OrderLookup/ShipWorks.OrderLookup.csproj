@@ -313,6 +313,7 @@
     </Page>
     <Page Include="Styles\OrderLookupTextBlockStyle.xaml" />
     <Page Include="Styles\OrderLookupTextBoxStyle.xaml" />
+    <Page Include="Styles\Shapes.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RobotoFontLicense.txt">
